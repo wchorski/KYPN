@@ -1,8 +1,11 @@
 // import { uploadPrep } from "@/lib/uploadPrep"
+import Router from "next/router";
 import useForm from "@/lib/useForm"
 import { StyledForm } from "@/styles/Form.styled"
 import { gql, useMutation } from "@apollo/client"
+import { useState } from "react"
 import ErrorMessage from "../ErrorMessage"
+import { GET_ALL_PRODUCTS } from "../ProductsList"
 
 
 export const ProductCreate = () => {
@@ -17,6 +20,8 @@ export const ProductCreate = () => {
     
   // } 
 
+  const [isSuccess, setIsSuccess] = useState(false)
+
   
 
   const {inputs, handleChange, clearForm, resetForm} = useForm({
@@ -28,25 +33,32 @@ export const ProductCreate = () => {
   
   const [createProduct, {loading, error, data}] = useMutation(
     CREATE_PRODUCT_MUTATION, 
-    {variables: {data: {
-      photo: {
-        create: {
-          altText: `${inputs.name} featured image`,
-          image: {upload: inputs.image} // TODO HOW DO I DO THIS ********************
+    {
+      variables: {data: {
+        photo: {
+          create: {
+            altText: `${inputs.name} featured image`,
+            image: {upload: inputs.image}
+          },
         },
-      },
-      name: inputs.name,
-      price: inputs.price,
-      description: inputs.description,
-    }}}
+        name: inputs.name,
+        price: inputs.price,
+        description: inputs.description,
+      }},
+      // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
+      refetchQueries: [{query: GET_ALL_PRODUCTS}]
+    }
   )
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    console.log(inputs)
+    // console.log(inputs)
     const res = await createProduct()
-    console.log(res)
-    
+    // console.log('res', res)
+    if(res.data.createProduct) clearForm(); setIsSuccess(true)
+    Router.push({
+      pathname: `/shop/product/${res.data.createProduct.id}`,
+    })    
   }
 
 
@@ -56,6 +68,7 @@ export const ProductCreate = () => {
     <StyledForm onSubmit={e => handleSubmit(e)}>
 
       <ErrorMessage error={error}/>
+      {isSuccess && <p>product created</p> }
 
       <fieldset disabled={loading} aria-busy={loading} >
         <label htmlFor="image">
@@ -93,7 +106,7 @@ export const ProductCreate = () => {
         <br /> <br />
 
         <button type="button" onClick={e => clearForm()}> clear form </button>
-        <button type="button" onClick={e => resetForm()}> reset form </button>
+        {/* <button type="button" onClick={e => resetForm()}> reset form </button> */}
 
       </fieldset>
     </StyledForm>

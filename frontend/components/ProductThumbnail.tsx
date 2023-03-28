@@ -23,7 +23,7 @@ export const ProductThumbnail = ({id, name, description, price, photo}: any) => 
       {!photo && <p>No image</p>}
 
       <p>{description}</p>
-      <h3><Link href={`/product/${id}`}>{name}</Link></h3>
+      <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
     </StyledProdThumbnail>
   )
 }

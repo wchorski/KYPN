@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { ProductThumbnail } from "@/components/ProductThumbnail";
 import { useQuery, gql } from '@apollo/client'
 import styled from 'styled-components';
+import { QueryLoading } from './menus/QueryLoading';
+import { QueryError } from './menus/QueryError';
 
 export function ProductsList() {
   const { loading, error, data } = useQuery(GET_ALL_PRODUCTS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error </p>;
+  if (loading) return <QueryLoading />
+  if (error) return <QueryError />
 
   return (
     <StyledProductsList>
@@ -43,7 +45,7 @@ const StyledProductsList = styled.ul`
   }
 `
 
-const GET_ALL_PRODUCTS = gql`
+export const GET_ALL_PRODUCTS = gql`
   query Products {
     products {
       id

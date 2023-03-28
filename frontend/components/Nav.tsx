@@ -7,7 +7,7 @@ export function Nav() {
   return (
     <StyledNav>
       <ul>
-        <Link href={`store`}> Store </Link>
+        <Link href={`shop`}> Shop </Link>
         <Link href={`sell`}> sell </Link>
         <Link href={`orders`}> orders </Link>
         <Link href={`account`}> account </Link>
