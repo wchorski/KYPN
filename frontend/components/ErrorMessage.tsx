@@ -18,10 +18,14 @@ const ErrorStyles = styled.div`
   }
 `;
 
-const DisplayError = ({ error }) => {
+const ErrorMessage = ({ error }:any) => {
+
+  
   if (!error || !error.message) return null;
-  if (error.networkError && error.networkError.result && error.networkError.result.errors.length) {
-    return error.networkError.result.errors.map((error, i) => (
+  console.log('error, ', error);
+  
+  if (error.networkError && error.networkError.result && error.networkError.result.errors?.length) {
+    return error.networkError.result.errors.map((error:any, i:any) => (
       <ErrorStyles key={i}>
         <p data-test="graphql-error">
           <strong>Shoot!</strong>
@@ -40,12 +44,12 @@ const DisplayError = ({ error }) => {
   );
 };
 
-DisplayError.defaultProps = {
+ErrorMessage.defaultProps = {
   error: {},
 };
 
-DisplayError.propTypes = {
+ErrorMessage.propTypes = {
   error: PropTypes.object,
 };
 
-export default DisplayError;
+export default ErrorMessage;

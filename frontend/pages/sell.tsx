@@ -1,3 +1,4 @@
+import { ProductCreate } from "@/components/ecommerce/ProductCreate";
 
 
 export default function Sell() {
@@ -5,6 +6,7 @@ export default function Sell() {
     <>
 
       <h1>Sell</h1>
+      <ProductCreate />
 
     </>
   )

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import Nav from './Nav'
+import {Nav} from './Nav'
 import styled  from "styled-components";
 
 const StyledLogo = styled.h1`
@@ -41,13 +41,13 @@ export default function Header() {
         <StyledLogo>
           <Link href={`/`} > <h1> Sick Fits </h1> </Link>
         </StyledLogo>
+        <Nav />
       </div>
 
       <div className="sub-bar">
         <input type="text" placeholder='search...'/>
       </div>
 
-      <Nav />
 
     </StyledHeader>
   )
