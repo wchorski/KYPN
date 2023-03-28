@@ -1,0 +1,32 @@
+{
+  "name": "sick-fits-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.10",
+    "@apollo/link-error": "^2.0.0-beta.3",
+    "@keystone-6/document-renderer": "^1.1.2",
+    "@types/node": "18.15.7",
+    "@types/react": "18.0.29",
+    "@types/react-dom": "18.0.11",
+    "apollo-upload-client": "^17.0.0",
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4",
+    "next": "13.2.4",
+    "nprogress": "^0.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "styled-components": "^5.3.9",
+    "typescript": "5.0.2"
+  },
+  "devDependencies": {
+    "@types/nprogress": "^0.2.0",
+    "@types/styled-components": "^5.1.26"
+  }
+}
