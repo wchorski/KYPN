@@ -5,9 +5,19 @@ import { useQuery, gql } from '@apollo/client'
 import styled from 'styled-components';
 import { QueryLoading } from './menus/QueryLoading';
 import { QueryError } from './menus/QueryError';
+import { perPage } from '@/config';
 
-export function ProductsList() {
-  const { loading, error, data } = useQuery(GET_ALL_PRODUCTS);
+type ProdProps = {
+  page: number
+}
+
+export function ProductsList({page}:ProdProps) {
+  // const { loading, error, data } = useQuery(GET_ALL_PRODUCTS)
+  const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
+    variables: {
+      skip: page * perPage - perPage, 
+      take: perPage}
+  })
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError />
@@ -37,11 +47,36 @@ const StyledProductsList = styled.ul`
   li{
     background-color: #dcdcdc;
     padding: .3em;
+    box-shadow: #0000004d 2px 2px 8px;
   }
 
   img{
     width: 100%;
     height: auto;
+  }
+`
+
+export const GET_PAGE_PRODUCTS_QUERY = gql`
+  query Query($skip: Int!, $take: Int) {
+    products(skip: $skip, take: $take) {
+      description
+      id
+      name
+      photo {
+        altText
+        id
+        image {
+          extension
+          filesize
+          height
+          id
+          url
+          width
+        }
+      }
+      price
+      status
+    }
   }
 `
 

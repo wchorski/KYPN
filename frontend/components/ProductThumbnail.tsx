@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 import moneyFormatter from '@/lib/moneyFormatter';
+import { ProductDelete } from './ecommerce/ProductDelete';
 
 export const ProductThumbnail = ({id, name, description, price, photo}: any) => {
 
@@ -11,7 +12,7 @@ export const ProductThumbnail = ({id, name, description, price, photo}: any) => 
 
       
       <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
-      {photo && (
+      {photo?.image?.url && (
         <Image 
         src={photo?.image?.url} 
         alt={photo?.altText}
@@ -20,16 +21,29 @@ export const ProductThumbnail = ({id, name, description, price, photo}: any) => 
         />
       )}
         
-      {!photo && <p>No image</p>}
+      {!photo?.image?.url && <Image src={`/placeholder.jpg`} width={300} height={300} alt={'placeholder photo'}/>}
 
-      <p>{description}</p>
       <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
+
+      <p className='desc'>{description}</p>
+
+      <div className="menu admin">
+        <Link href={{pathname: '/shop/product/update', query: {id: id},}}> Edit ✏️ </Link>
+        <ProductDelete id={id}> Delete </ProductDelete>
+      </div>
     </StyledProdThumbnail>
   )
 }
 
 const StyledProdThumbnail = styled.article`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  p.desc{
+    flex-grow: 1;
+  }
 
   h3{
     margin: 0 1rem;
@@ -46,6 +60,12 @@ const StyledProdThumbnail = styled.article`
       color: white;
       padding: 0 1rem;
     }
+  }
+
+  .menu{
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
   }
 `
 

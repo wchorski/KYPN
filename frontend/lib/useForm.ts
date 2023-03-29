@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function useForm(initial: any = {}){
   const [inputs, setInputs] = useState(initial)
+  const initialValues = Object.values(initial).join('') //? work around to avoid dependancy loop
+
+  useEffect(() => {
+    setInputs(initial)
+  
+    // return () => 
+  }, [initialValues])
+  
 
   function handleChange(e: any){
 

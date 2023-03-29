@@ -2,8 +2,9 @@ import Link from 'next/link'
 import React from 'react'
 import {Nav} from './Nav'
 import styled  from "styled-components";
+import { SearchInput } from './menus/SearchInput';
 
-const StyledLogo = styled.h1`
+const StyledLogo = styled.div`
   background: var(--c-1);
   padding: .3em;
   margin: 0 .3em;
@@ -12,6 +13,10 @@ const StyledLogo = styled.h1`
   a{
     color: white;
     text-decoration: none;
+  }
+
+  h1{
+    font-size: 1.5rem;
   }
 `
 
@@ -30,6 +35,7 @@ const StyledHeader = styled.header`
     grid-template-columns: auto 1fr;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
 `
 
@@ -45,7 +51,7 @@ export default function Header() {
       </div>
 
       <div className="sub-bar">
-        <input type="text" placeholder='search...'/>
+        <SearchInput />
       </div>
 
 

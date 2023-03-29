@@ -9,6 +9,7 @@ import { setContext } from "apollo-link-context";
 
 
 import '@/components/styles/nprogress.css'
+import paginationField from '@/lib/paginationField';
 // import withData from '../lib/withData'
 // @ts-ignore
 const ProgressBar = dynamic(() => import('components/ProgressBar'), { ssr: false });
@@ -39,7 +40,18 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   connectToDevTools: true,
-  cache: new InMemoryCache(),
+  // cache: new InMemoryCache(), //? before I went ham on WesBos Fix
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query:{
+        fields: {
+          //@ts-ignore
+          products: paginationField()
+        }
+      }
+    }
+  }),
+  // @ts-ignore
   link: authLink.concat(middlewareUpdate),
   
   fetchOptions: {

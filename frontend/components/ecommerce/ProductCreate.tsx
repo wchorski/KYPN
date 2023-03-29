@@ -22,33 +22,12 @@ export const ProductCreate = () => {
 
   const [isSuccess, setIsSuccess] = useState(false)
 
-  
-
   const {inputs, handleChange, clearForm, resetForm} = useForm({
     image: null,
     name: 'will',
     price: 123,
     description: "mydesc"
   })
-  
-  const [createProduct, {loading, error, data}] = useMutation(
-    CREATE_PRODUCT_MUTATION, 
-    {
-      variables: {data: {
-        photo: {
-          create: {
-            altText: `${inputs.name} featured image`,
-            image: {upload: inputs.image}
-          },
-        },
-        name: inputs.name,
-        price: inputs.price,
-        description: inputs.description,
-      }},
-      // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
-      refetchQueries: [{query: GET_ALL_PRODUCTS}]
-    }
-  )
 
   async function handleSubmit(e: any) {
     e.preventDefault()
@@ -60,6 +39,28 @@ export const ProductCreate = () => {
       pathname: `/shop/product/${res.data.createProduct.id}`,
     })    
   }
+
+  
+  const [createProduct, {loading, error, data}] = useMutation(
+    CREATE_PRODUCT_MUTATION, 
+    {
+      variables: {
+        data: {
+          photo: {
+            create: {
+              altText: `${inputs.name} featured image`,
+              image: {upload: inputs.image}
+            },
+          },
+          name: inputs.name,
+          price: inputs.price,
+          description: inputs.description,
+        }
+      },
+      // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
+      refetchQueries: [{query: GET_ALL_PRODUCTS}]
+    }
+  )
 
 
   return (<>

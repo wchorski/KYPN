@@ -1,17 +1,27 @@
 import Link from 'next/link'
 import React from 'react'
 import styled from "styled-components";
-
+import { useUser } from "@/components/menus/User";
 
 export function Nav() {
+
+  const user = useUser()
+
   return (
     <StyledNav>
       <ul>
-        <Link href={`shop`}> Shop </Link>
-        <Link href={`sell`}> sell </Link>
-        <Link href={`orders`}> orders </Link>
-        <Link href={`account`}> account </Link>
-        <Link href={`blog`}> Blog </Link>
+        <Link href={`/shop`}> Shop </Link>
+        <Link href={`/blog`}> Blog </Link>
+
+        {user && (<>
+          <Link href={`/sell`}> Sell </Link>
+          <Link href={`/orders`}> Orders </Link>
+          <Link href={`/account`}> Account </Link>
+        </>)}
+
+        {!user && (
+          <Link href={`/auth/login`}> Login </Link>
+        )}
       </ul>
     </StyledNav>
   )
