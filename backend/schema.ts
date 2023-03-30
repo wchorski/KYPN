@@ -68,6 +68,7 @@ export const lists: Lists = {
     },
   }),
   Product,
+  // @ts-ignore
   ProductImage, 
 
   // Products: list({

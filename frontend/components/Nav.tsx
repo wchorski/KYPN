@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import React from 'react'
 import styled from "styled-components";
-import { useUser } from "@/components/menus/User";
+import { SessionBadge, useUser } from "@/components/menus/Session";
+import SignOutButton from './menus/SignOutButton';
 
 export function Nav() {
 
-  const user = useUser()
+  const session = useUser()
 
   return (
     <StyledNav>
@@ -13,13 +14,14 @@ export function Nav() {
         <Link href={`/shop`}> Shop </Link>
         <Link href={`/blog`}> Blog </Link>
 
-        {user && (<>
+        {session?.name && (<>
           <Link href={`/sell`}> Sell </Link>
           <Link href={`/orders`}> Orders </Link>
-          <Link href={`/account`}> Account </Link>
+          <SessionBadge session={session}/>
+          <SignOutButton />
         </>)}
 
-        {!user && (
+        {!session?.name && (
           <Link href={`/auth/login`}> Login </Link>
         )}
       </ul>
@@ -41,6 +43,8 @@ const StyledNav = styled.nav`
     display: flex;
     justify-self: end;
     font-size: 2rem;
+    flex-wrap: wrap;
+    
     a,
     button {
       padding: 1rem 3rem;

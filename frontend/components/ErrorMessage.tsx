@@ -22,7 +22,7 @@ const ErrorMessage = ({ error }:any) => {
 
   
   if (!error || !error.message) return null;
-  console.log('error, ', error);
+  // console.log('error, ', error);
   
   if (error.networkError && error.networkError.result && error.networkError.result.errors?.length) {
     return error.networkError.result.errors.map((error:any, i:any) => (

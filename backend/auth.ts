@@ -20,12 +20,19 @@ import { createAuth } from '@keystone-6/auth';
 
 // see https://keystonejs.com/docs/apis/session for the session docs
 import { statelessSessions } from '@keystone-6/core/session';
+import { config } from '@keystone-6/core';
+import { sendPasswordResetEmail } from './lib/mail';
 
 // for a stateless session, a SESSION_SECRET should always be provided
 //   especially in production (statelessSessions will throw if SESSION_SECRET is undefined)
 let sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret && process.env.NODE_ENV !== 'production') {
   sessionSecret = randomBytes(32).toString('hex');
+}
+
+const db = {
+  provider: 'postgres',
+  url: process.env.DATABASE_URL || 'postgres://admin:admin@localhost:5432/keystone'
 }
 
 // withAuth is a function we can use to wrap our base configuration
@@ -36,8 +43,14 @@ const { withAuth } = createAuth({
   // this is a GraphQL query fragment for fetching what data will be attached to a context.session
   //   this can be helpful for when you are writing your access control functions
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  sessionData: 'name createdAt',
+  sessionData: 'name createdAt', 
   secretField: 'password',
+  passwordResetLink: {
+    sendToken: async ({ itemId, identity, token, context }) => { 
+      await sendPasswordResetEmail(token, identity)
+    },
+    tokensValidForMins: 60,
+  },
 
   // WARNING: remove initFirstItem functionality in production
   //   see https://keystonejs.com/docs/config/auth#init-first-item for more
@@ -63,4 +76,5 @@ const session = statelessSessions({
   secret: sessionSecret!,
 });
 
-export { withAuth, session };
+export { withAuth, session }
+

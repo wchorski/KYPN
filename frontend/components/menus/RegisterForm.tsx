@@ -9,36 +9,39 @@ import { useGlobalContext } from "@/lib/useSessionContext";
 // import { SessionContext } from "@/pages/_app";
 // import { SessionContext } from "@/lib/sessionContext";
 
-export default function LoginForm() {
+export default function RegisterForm() {
 
   const {session, setSession} = useGlobalContext()
 
   const {inputs, handleChange, clearForm, resetForm} = useForm({
+    name: '',
     email: '',
     password: '',
   })
 
-  const [loginUser, {data, error, loading}] = useMutation(MUTATION_USER_LOGIN)
+  const [registerUser, {data, error, loading}] = useMutation(MUTATION_USER_REGSITER)
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    // console.log(inputs)
-    const res = await loginUser({
-      variables: inputs,
+    
+    if(inputs.name === '', inputs.email === '', inputs.password === '') return console.warn('inputs are empty, ', inputs);
+    
+    const res = await registerUser({
+      variables: {data: inputs},
       refetchQueries: [{query: QUERY_USER_CURRENT}]
-    })
-    // console.log('res', res)
+    }).catch(console.error)
+    console.log('res', res)
 
-    if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordFailure")
-      console.log('LOGIN FAILED, ', res.data.authenticateUserWithPassword.message)
+    if(res?.data.createUser.__typename !== "User")
+      console.log('REGy FAILED, ', res?.data.authenticateUserWithPassword.message)
       // TODO why is it creating an empty session object
       // console.log(session);
       
 
-    if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess") 
-      console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword.item)
+    if(res?.data.createUser.__typename !== "User") 
+      console.log('Regy SUCCESS, ', res?.data.createUser)
       // @ts-ignore
-      setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
+      // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
 
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
@@ -50,11 +53,21 @@ export default function LoginForm() {
 
     <StyledForm method="POST" onSubmit={handleSubmit}>
 
-      <h2> Login </h2>
+      <h2> Register </h2>
 
-      <p>{data?.authenticateUserWithPassword?.message}</p>
+      <ErrorMessage error={error}/>
 
-      <fieldset>
+      <fieldset disabled={loading} aria-busy={loading}>
+        <label htmlFor="name">
+          Name
+          <input type="text" id="name" name="name" autoComplete="name"
+            placeholder="your name..."
+            required
+            defaultValue={inputs.name} 
+            onChange={handleChange}
+          />
+        </label>
+
         <label htmlFor="email">
           Email
           <input type="email" id="email" name="email" autoComplete="email"
@@ -75,28 +88,25 @@ export default function LoginForm() {
           />
         </label>
 
-          <button type="submit"> Login </button>
+          <button type="submit"> Create Account </button>
       </fieldset>
 
     </StyledForm>
   </>)
 }
 
-const MUTATION_USER_LOGIN = gql`
-  mutation Mutation($email: String!, $password: String!) {
-    authenticateUserWithPassword(email: $email, password: $password) {
-      ... on UserAuthenticationWithPasswordSuccess {
-        item {
-          id
-          name
-          email
-          isAdmin
-        }
-        sessionToken
+const MUTATION_USER_REGSITER= gql`
+  mutation Mutation($data: UserCreateInput!) {
+    createUser(data: $data) {
+      email
+      password {
+        isSet
       }
-      ... on UserAuthenticationWithPasswordFailure {
-        message
-      }
+      name
+      isAdmin
+      id
+      createdAt
     }
   }
 `
+

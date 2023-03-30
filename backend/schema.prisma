@@ -12,13 +12,16 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid()) @postgresql.Uuid
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  isAdmin   Boolean   @default(false)
-  posts     Post[]    @relation("Post_author")
-  createdAt DateTime? @default(now())
+  id                      String    @id @default(uuid()) @postgresql.Uuid
+  name                    String    @default("")
+  email                   String    @unique @default("")
+  password                String
+  isAdmin                 Boolean   @default(false)
+  posts                   Post[]    @relation("Post_author")
+  createdAt               DateTime? @default(now())
+  passwordResetToken      String?
+  passwordResetIssuedAt   DateTime?
+  passwordResetRedeemedAt DateTime?
 }
 
 model Product {

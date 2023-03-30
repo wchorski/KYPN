@@ -10,6 +10,8 @@ import { setContext } from "apollo-link-context";
 
 import '@/components/styles/nprogress.css'
 import paginationField from '@/lib/paginationField';
+import { GlobalContextProvider } from '@/lib/useSessionContext';
+// import { SessionContext } from '@/lib/sessionContext';
 // import withData from '../lib/withData'
 // @ts-ignore
 const ProgressBar = dynamic(() => import('components/ProgressBar'), { ssr: false });
@@ -62,16 +64,17 @@ const client = new ApolloClient({
 
 function App({ Component, pageProps }: AppProps) {
 
-
   return (<>
     <GlobalStyles />
 
-    <ApolloProvider client={client}>
-      <Page>
-        <ProgressBar />
-        <Component {...pageProps} />
-      </Page>
-    </ApolloProvider>
+    <GlobalContextProvider>
+      <ApolloProvider client={client}>
+        <Page>
+          <ProgressBar />
+          <Component {...pageProps} />
+        </Page>
+      </ApolloProvider>
+      </GlobalContextProvider>
 
 
   </>)

@@ -9,7 +9,7 @@ import { useGlobalContext } from "@/lib/useSessionContext";
 // import { SessionContext } from "@/pages/_app";
 // import { SessionContext } from "@/lib/sessionContext";
 
-export default function LoginForm() {
+export default function PasswordResetForm({token}:{token:string|string[]}) {
 
   const {session, setSession} = useGlobalContext()
 
@@ -18,27 +18,35 @@ export default function LoginForm() {
     password: '',
   })
 
-  const [loginUser, {data, error, loading}] = useMutation(MUTATION_USER_LOGIN)
+  const [mutate, {data, error, loading}] = useMutation(MUTATION_REDEEM_TOKEN)
+
+  let validationError = data?.redeemUserPasswordResetToken?.code
+    ? data?.redeemUserPasswordResetToken
+    : undefined
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    // console.log(inputs)
-    const res = await loginUser({
-      variables: inputs,
+    
+    if(inputs.email === '') return console.warn('inputs are empty, ', inputs)
+    console.log(inputs)
+    
+    const res = await mutate({
+      variables: {
+        email: inputs.email,
+        token: token,
+        password: inputs.password,
+      },
       refetchQueries: [{query: QUERY_USER_CURRENT}]
-    })
-    // console.log('res', res)
+    }).catch(console.error)
+    console.log('res', res)
 
-    if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordFailure")
-      console.log('LOGIN FAILED, ', res.data.authenticateUserWithPassword.message)
-      // TODO why is it creating an empty session object
-      // console.log(session);
-      
+    // if(res?.data.redeemUserPasswordResetToken.code === "FAILURE")
+    //   console.log('pass reset FAILED, ')
+    //   validationError = res?.data.redeemUserPasswordResetToken.message
 
-    if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess") 
-      console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword.item)
-      // @ts-ignore
-      setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
+    // if(res?.data.sendUserPasswordResetLink)
+    //   console.log('pass reset success, ')
+
 
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
@@ -50,11 +58,16 @@ export default function LoginForm() {
 
     <StyledForm method="POST" onSubmit={handleSubmit}>
 
-      <h2> Login </h2>
+      <h2> Create New Password </h2>
 
-      <p>{data?.authenticateUserWithPassword?.message}</p>
+      {data?.redeemUserPasswordResetToken.code === "FAILURE" && (
+        <ErrorMessage error={error || validationError}/>
+      )}
 
-      <fieldset>
+      <ErrorMessage error={error}/>
+
+      <fieldset disabled={loading} aria-busy={loading}>
+
         <label htmlFor="email">
           Email
           <input type="email" id="email" name="email" autoComplete="email"
@@ -66,37 +79,28 @@ export default function LoginForm() {
         </label>
 
         <label htmlFor="password">
-          Email
+          Password
           <input type="password" id="password" name="password" autoComplete="password"
-            placeholder="password..."
+            placeholder="new password..."
             required
             defaultValue={inputs.password} 
             onChange={handleChange}
           />
         </label>
 
-          <button type="submit"> Login </button>
+        <button type="submit"> Send Email </button>
+
       </fieldset>
 
     </StyledForm>
   </>)
 }
 
-const MUTATION_USER_LOGIN = gql`
-  mutation Mutation($email: String!, $password: String!) {
-    authenticateUserWithPassword(email: $email, password: $password) {
-      ... on UserAuthenticationWithPasswordSuccess {
-        item {
-          id
-          name
-          email
-          isAdmin
-        }
-        sessionToken
-      }
-      ... on UserAuthenticationWithPasswordFailure {
-        message
-      }
+const MUTATION_REDEEM_TOKEN = gql`
+  mutation RedeemUserPasswordResetToken($email: String!, $token: String!, $password: String!) {
+    redeemUserPasswordResetToken(email: $email, token: $token, password: $password) {
+      code
+      message
     }
   }
 `
