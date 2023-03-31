@@ -6,6 +6,7 @@ import { QUERY_USER_CURRENT } from "./Session";
 import  ErrorMessage  from "@/components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useGlobalContext } from "@/lib/useSessionContext";
+import { useLocalStorage } from "@/lib/useLocalStorage";
 // import { SessionContext } from "@/pages/_app";
 // import { SessionContext } from "@/lib/sessionContext";
 
@@ -36,9 +37,11 @@ export default function LoginForm() {
       
 
     if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess") 
-      console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword.item)
+      console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
       // @ts-ignore
       setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
+      localStorage.setItem('session', JSON.stringify(res.data.authenticateUserWithPassword))
+      // useLocalStorage('session', JSON.stringify(res.data.authenticateUserWithPassword))
 
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,

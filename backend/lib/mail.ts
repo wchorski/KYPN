@@ -57,7 +57,8 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
     html: makeANiceEmail(`Your Password Reset Token is here!
       <a href="${process.env.FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
     `),
-  }));
+  }))
+  
   if(MAIL_USER.includes('ethereal.email')) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 

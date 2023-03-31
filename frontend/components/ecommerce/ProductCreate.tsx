@@ -31,9 +31,9 @@ export const ProductCreate = () => {
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    // console.log(inputs)
+    console.log({inputs})
     const res = await createProduct()
-    // console.log('res', res)
+    console.log('res', res)
     if(res.data.createProduct) clearForm(); setIsSuccess(true)
     Router.push({
       pathname: `/shop/product/${res.data.createProduct.id}`,

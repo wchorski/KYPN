@@ -11,6 +11,7 @@ import { useGlobalContext } from "@/lib/useSessionContext";
 
 export default function PasswordResetForm({token}:{token:string|string[]}) {
 
+  const [successMsg, setSuccessMsg] = useState<string>()
   const {session, setSession} = useGlobalContext()
 
   const {inputs, handleChange, clearForm, resetForm} = useForm({
@@ -44,8 +45,9 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
     //   console.log('pass reset FAILED, ')
     //   validationError = res?.data.redeemUserPasswordResetToken.message
 
-    // if(res?.data.sendUserPasswordResetLink)
-    //   console.log('pass reset success, ')
+    if(res?.data.redeemUserPasswordResetToken === null)
+      console.log('pass reset success, ')
+      setSuccessMsg('password successfully reset')
 
 
     // Router.push({
@@ -60,37 +62,40 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
 
       <h2> Create New Password </h2>
 
-      {data?.redeemUserPasswordResetToken.code === "FAILURE" && (
+      {data?.redeemUserPasswordResetToken?.code === "FAILURE" && (
         <ErrorMessage error={error || validationError}/>
       )}
+      {successMsg && <p>password successfully reset</p>}
 
       <ErrorMessage error={error}/>
 
-      <fieldset disabled={loading} aria-busy={loading}>
+      {!successMsg && (
+        <fieldset disabled={loading} aria-busy={loading}>
 
-        <label htmlFor="email">
-          Email
-          <input type="email" id="email" name="email" autoComplete="email"
-            placeholder="email..."
-            required
-            defaultValue={inputs.email} 
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="email">
+            Email
+            <input type="email" id="email" name="email" autoComplete="email"
+              placeholder="email..."
+              required
+              defaultValue={inputs.email} 
+              onChange={handleChange}
+            />
+          </label>
 
-        <label htmlFor="password">
-          Password
-          <input type="password" id="password" name="password" autoComplete="password"
-            placeholder="new password..."
-            required
-            defaultValue={inputs.password} 
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="password">
+            Password
+            <input type="password" id="password" name="password" autoComplete="password"
+              placeholder="new password..."
+              required
+              defaultValue={inputs.password} 
+              onChange={handleChange}
+            />
+          </label>
 
-        <button type="submit"> Send Email </button>
+          <button type="submit"> Reset Password </button>
 
-      </fieldset>
+        </fieldset>
+      )}
 
     </StyledForm>
   </>)

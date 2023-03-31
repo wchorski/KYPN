@@ -17,9 +17,11 @@
     "@types/react-dom": "18.0.11",
     "apollo-link-context": "^1.0.20",
     "apollo-upload-client": "^17.0.0",
+    "deepmerge": "^4.3.1",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "graphql-upload": "^16.0.2",
+    "lodash": "^4.17.21",
     "mime": "^3.0.0",
     "next": "13.2.4",
     "nprogress": "^0.2.0",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@types/apollo-upload-client": "^17.0.2",
+    "@types/lodash": "^4.14.192",
     "@types/nprogress": "^0.2.0",
     "@types/styled-components": "^5.1.26"
   }

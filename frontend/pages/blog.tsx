@@ -65,6 +65,7 @@ export default function Blog({ posts, error }: { posts: Post[]; error?: Error })
   );
 }
 
+// ! if I don't want to use Apollo and use Next's built in req fetching
 export async function getStaticProps() {
   try {
     const data = await fetchGraphQL(gql`
@@ -80,7 +81,7 @@ export async function getStaticProps() {
         }
       }
     `);
-    console.log('**** blog data, ', data);
+    // console.log('**** blog data, ', data);
     
 
     const posts = data?.posts || [];

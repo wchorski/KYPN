@@ -25,13 +25,12 @@ export function SessionBadge({session}: any){
 
 export function useUser(){
   // TODO GET THIS WORKING
-  // const { data } = useQuery(QUERY_USER_CURRENT)
-  // console.log('useUser, ', data);
-  // return data?.authenticatedItem
+  const { data } = useQuery(QUERY_USER_CURRENT)
+  // console.log('++++++ useUser, ', data);
+  return data?.authenticatedItem
 
-  const ctx = useGlobalContext()
-
-  return ctx?.session
+  // const ctx = useGlobalContext()
+  // return ctx?.session
 }
 
 export const QUERY_USER_CURRENT = gql`
