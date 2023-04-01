@@ -3,7 +3,7 @@
 // cred - https://felixgerschau.com/react-typescript-context/
 // cred - https://stackoverflow.com/questions/58193424/passing-state-with-usecontext-in-typescript
 
-import { createContext, useContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface DataType {
   id: string | null,

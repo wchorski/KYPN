@@ -12,26 +12,28 @@ generator client {
 }
 
 model User {
-  id                      String    @id @default(uuid()) @postgresql.Uuid
-  name                    String    @default("")
-  email                   String    @unique @default("")
+  id                      String     @id @default(uuid()) @postgresql.Uuid
+  name                    String     @default("")
+  email                   String     @unique @default("")
   password                String
-  isAdmin                 Boolean   @default(false)
-  posts                   Post[]    @relation("Post_author")
-  createdAt               DateTime? @default(now())
+  isAdmin                 Boolean    @default(false)
+  posts                   Post[]     @relation("Post_author")
+  cart                    CartItem[] @relation("CartItem_user")
+  createdAt               DateTime?  @default(now())
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
 }
 
 model Product {
-  id          String        @id @default(uuid()) @postgresql.Uuid
-  photo       ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
-  photoId     String?       @unique @map("photo") @postgresql.Uuid
-  name        String        @default("")
-  description String        @default("")
-  status      String?       @default("DRAFT")
-  price       Int?
+  id                    String        @id @default(uuid()) @postgresql.Uuid
+  photo                 ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
+  photoId               String?       @unique @map("photo") @postgresql.Uuid
+  name                  String        @default("")
+  description           String        @default("")
+  status                String?       @default("DRAFT")
+  price                 Int?
+  from_CartItem_product CartItem[]    @relation("CartItem_product")
 }
 
 model ProductImage {
@@ -43,6 +45,18 @@ model ProductImage {
   image_id        String?
   altText         String   @default("")
   product         Product? @relation("Product_photo")
+}
+
+model CartItem {
+  id        String   @id @default(uuid()) @postgresql.Uuid
+  quantity  Int      @default(1)
+  product   Product? @relation("CartItem_product", fields: [productId], references: [id])
+  productId String?  @map("product") @postgresql.Uuid
+  user      User?    @relation("CartItem_user", fields: [userId], references: [id])
+  userId    String?  @map("user") @postgresql.Uuid
+
+  @@index([productId])
+  @@index([userId])
 }
 
 model Post {

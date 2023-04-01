@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const CartStyles = styled.div`
+export const StyledShoppingCart = styled.div`
   padding: 20px;
   position: relative;
   background: white;
@@ -12,19 +12,24 @@ const CartStyles = styled.div`
   min-width: 500px;
   bottom: 0;
   transform: translateX(100%);
+
   transition: all 0.3s;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
   z-index: 5;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  ${(props) => props.open && `transform: translateX(0);`};
+  
+  &.open{
+    transform: translateX(0%);
+  }
+
   header {
-    border-bottom: 5px solid var(--black);
+    border-bottom: 5px solid black;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
   }
   footer {
-    border-top: 10px double var(--black);
+    border-top: 2px dashed black;
     margin-top: 2rem;
     padding-top: 2rem;
     display: grid;
@@ -43,5 +48,3 @@ const CartStyles = styled.div`
     overflow: scroll;
   }
 `;
-
-export default CartStyles;

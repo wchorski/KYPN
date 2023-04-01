@@ -5,7 +5,7 @@
 // If you want to learn more about how lists are configured, please read
 // - https://keystonejs.com/docs/config/lists
 
-import { list } from '@keystone-6/core';
+import { graphql, list } from '@keystone-6/core';
 import { allowAll } from '@keystone-6/core/access';
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
@@ -24,12 +24,14 @@ import { document } from '@keystone-6/fields-document';
 
 import { Product } from "./schemas/Product";
 import { ProductImage } from "./schemas/ProductImage";
+import { CartItem } from "./schemas/CartItem";
 
 // if you want to make your own fields, see https://keystonejs.com/docs/guides/custom-fields
 
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
 import type { Lists } from '.keystone/types';
+import { Context } from '.keystone/types';
 
 export const lists: Lists = {
 
@@ -60,6 +62,14 @@ export const lists: Lists = {
       // we can use this field to see what Posts this User has authored
       //   more on that in the Post list below
       posts: relationship({ ref: 'Post.author', many: true }),
+      cart: relationship({
+        ref: 'CartItem.user', 
+        many: true, 
+        ui: {
+          createView: {fieldMode: 'hidden'},
+          itemView: {fieldMode: 'hidden'}
+        }
+      }),
 
       createdAt: timestamp({
         // this sets the timestamp to Date.now() when the user is first created
@@ -70,6 +80,7 @@ export const lists: Lists = {
   Product,
   // @ts-ignore
   ProductImage, 
+  CartItem,
 
   // Products: list({
   //   access: allowAll,
@@ -172,4 +183,4 @@ export const lists: Lists = {
       posts: relationship({ ref: 'Post.tags', many: true }),
     },
   }),
-};
+}

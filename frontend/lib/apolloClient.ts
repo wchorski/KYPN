@@ -93,7 +93,11 @@ function createApolloClient() {
 
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: from([errorLink, httpLink, uploadLink]),
+    link: from([
+      errorLink, 
+      httpLink, 
+      // uploadLink //TODO FIX FILE UPLOAD WITH APOLLO
+    ]),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

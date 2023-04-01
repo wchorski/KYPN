@@ -39,8 +39,8 @@ export default function LoginForm() {
     if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess") 
       console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
       // @ts-ignore
-      setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
-      localStorage.setItem('session', JSON.stringify(res.data.authenticateUserWithPassword))
+      // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
+      // localStorage.setItem('session', JSON.stringify(res.data.authenticateUserWithPassword))
       // useLocalStorage('session', JSON.stringify(res.data.authenticateUserWithPassword))
 
     // Router.push({

@@ -17,9 +17,9 @@ export default function SignOutButton() {
 
     // TODO temporary fix
     //@ts-ignore
-    setSession({})
+    // setSession({})
 
-    localStorage.removeItem('session')
+    // localStorage.removeItem('session')
     
   } 
 

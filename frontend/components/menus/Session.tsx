@@ -41,6 +41,24 @@ export const QUERY_USER_CURRENT = gql`
         id
         isAdmin
         name
+        cart {
+          id
+          quantity
+          product {
+            id
+            price
+            name
+            description
+            photo {
+              image {
+                url
+                width
+                height
+                id
+              }
+            }
+          }
+        }
       }
     }
   }

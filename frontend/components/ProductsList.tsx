@@ -16,7 +16,8 @@ export function ProductsList({page}:ProdProps) {
   const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
     variables: {
       skip: page * perPage - perPage, 
-      take: perPage}
+      take: perPage
+    }
   })
 
   if (loading) return <QueryLoading />

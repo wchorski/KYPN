@@ -9,6 +9,7 @@ import { config } from '@keystone-6/core';
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from './schema';
+import { sampleMutationExtension } from "./mutations/sampleMutation";
 
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
@@ -19,6 +20,7 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost'
 const BACKEN_PORT = process.env.BACKEND_PORT || "3001"
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
 import { posts_seed, products_seed } from "./seed-data/seed-data";
+import { addToCart } from './mutations/addToCart';
 
 // const sessionConfig = {
 //   maxAge: 60 * 60 * 24 * 360,
@@ -71,6 +73,8 @@ export default withAuth(
       shadowDatabaseUrl: 'postgres://admin:admin@localhost:5432/shadowdb'
     },
     lists,
+    //@ts-ignore
+    addToCart,
     session,
     ui: {
       isAccessAllowed: ({session}) => {

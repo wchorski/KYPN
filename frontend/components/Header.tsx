@@ -3,6 +3,7 @@ import React from 'react'
 import {Nav} from './Nav'
 import styled  from "styled-components";
 import { SearchInput } from './menus/SearchInput';
+import ShoppingCart from './ecommerce/ShoppingCart';
 
 const StyledLogo = styled.div`
   background: var(--c-1);
@@ -54,6 +55,7 @@ export default function Header() {
         <SearchInput />
       </div>
 
+      <ShoppingCart />
 
     </StyledHeader>
   )

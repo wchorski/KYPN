@@ -3,10 +3,12 @@ import React from 'react'
 import styled from "styled-components";
 import { SessionBadge, useUser } from "@/components/menus/Session";
 import SignOutButton from './menus/SignOutButton';
+import { useCart } from '@/lib/cartState';
 
 export function Nav() {
 
   const session = useUser()
+  const {setIsOpen} = useCart()
 
   return (
     <StyledNav>
@@ -14,14 +16,15 @@ export function Nav() {
         <Link href={`/shop`}> Shop </Link>
         <Link href={`/blog`}> Blog </Link>
 
-        {session?.name && (<>
+        {session && (<>
           <Link href={`/sell`}> Sell </Link>
           <Link href={`/orders`}> Orders </Link>
           <SessionBadge session={session}/>
+          <button onClick={e => setIsOpen(true)}>My Cart</button>
           <SignOutButton />
         </>)}
 
-        {!session?.name && (
+        {!session && (
           <Link href={`/auth/login`}> Login </Link>
         )}
       </ul>
