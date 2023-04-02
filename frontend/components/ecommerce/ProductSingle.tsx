@@ -9,11 +9,13 @@ import { StyledPriceTag } from "@/styles/PriceTag.styled";
 import Head from 'next/head';
 import styled from 'styled-components';
 import Link from 'next/link';
+import AddToCart from './AddToCart';
 
 
 export default function ProductSingle({id}: any) {
 
-  const { loading, error, data:{ product: {name, photo, price, status, description}} } = useQuery(
+  // const { loading, error, data:{ product: {name, photo, price, status, description}} } = useQuery(
+  const { loading, error, data } = useQuery(
     SINGLE_PRODUCT_QUERY, {
     variables: { where: { id: id}}
   })
@@ -24,6 +26,9 @@ export default function ProductSingle({id}: any) {
   
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
+
+  const { name, photo, price, description } = data.product
+  
 
   return (<>
 
@@ -44,7 +49,7 @@ export default function ProductSingle({id}: any) {
 
         <p>{description}</p>
       </div>
-
+      <AddToCart id={id}/>
       <Link href={{pathname: '/shop/product/update', query: {id: id},}}> Edit ✏️ </Link>
 
     </StyledProductSingle>
