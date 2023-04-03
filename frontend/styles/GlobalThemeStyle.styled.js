@@ -15,6 +15,8 @@ export const GlobalStyles = createGlobalStyle`
     --c-2: orangered;
     --c-3: darkred;
     --c-bg: #454545;
+    --c-txt: black;
+    --c-txt-rev: white;
 
     --maxWidth: 1300px;
     --box-shadow: '0 12px 24px 0 rgba(0,0,0, .09)'

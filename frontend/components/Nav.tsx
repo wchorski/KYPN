@@ -4,10 +4,12 @@ import styled from "styled-components";
 import { SessionBadge, useUser } from "@/components/menus/Session";
 import SignOutButton from './menus/SignOutButton';
 import { useCart } from '@/lib/cartState';
+import CartCount from './ecommerce/CartCount';
 
 export function Nav() {
 
   const session = useUser()
+  
   const {setIsOpen} = useCart()
 
   return (
@@ -20,7 +22,13 @@ export function Nav() {
           <Link href={`/sell`}> Sell </Link>
           <Link href={`/orders`}> Orders </Link>
           <SessionBadge session={session}/>
-          <button onClick={e => setIsOpen(true)}>My Cart</button>
+          <button onClick={e => setIsOpen(true)}>
+            My Cart
+            <CartCount count={session.cart.reduce(
+              (tally:any, cartItem:any) => tally + cartItem.quantity,
+              0
+            )} />
+          </button>
           <SignOutButton />
         </>)}
 

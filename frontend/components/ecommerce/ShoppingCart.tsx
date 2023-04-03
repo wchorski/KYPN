@@ -7,6 +7,7 @@ import React from 'react'
 import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
 import { MdClose } from "react-icons/md";
+import CartCount from './CartCount'
 
 export default function ShoppingCart() {
 
@@ -23,6 +24,10 @@ export default function ShoppingCart() {
         <StyledSupreme>
           {customer.name} | Cart
         </StyledSupreme>
+        <CartCount count={customer.cart.reduce(
+          (tally:any, cartItem:any) => tally + cartItem.quantity,
+          0
+        )} />
         <button onClick={e => closeCart()}> <MdClose /></button>
       </header>
 

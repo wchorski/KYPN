@@ -1,4 +1,5 @@
 import { useMutation, gql } from '@apollo/client';
+import { MdShoppingBag } from 'react-icons/md';
 import { QUERY_USER_CURRENT } from '../menus/Session';
 
 
@@ -15,13 +16,13 @@ export default function AddToCart({id}: {id:string}) {
       refetchQueries: [{ query: QUERY_USER_CURRENT }],
     }).catch(console.error)
 
-    console.log({res});
+    // console.log({res});
     
   }
   
   return (
     <button disabled={loading} type="button" onClick={e => handleButton()}>
-      Add{loading && 'ing'} To Cart 🛒
+      Add{loading && 'ing'} To Cart <MdShoppingBag />
     </button>
   );
 }

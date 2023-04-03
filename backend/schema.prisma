@@ -43,7 +43,7 @@ model ProductImage {
   image_width     Int?
   image_height    Int?
   image_id        String?
-  altText         String   @default("")
+  altText         String   @default("Product Featured Image")
   product         Product? @relation("Product_photo")
 }
 

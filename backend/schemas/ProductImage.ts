@@ -42,7 +42,7 @@ export const ProductImage = list({
   access: allowAll,
   fields: {
     image: image({ storage: 'my_local_images'}), 
-    altText: text({validation: { isRequired: true }}),
+    altText: text({validation: { isRequired: true }, defaultValue: 'Product Featured Image'}),
     product: relationship({ref: 'Product.photo'}),
   },
   ui:{

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import moneyFormatter from '@/lib/moneyFormatter';
 import { ProductDelete } from './ecommerce/ProductDelete';
+import AddToCart from './ecommerce/AddToCart';
 
 export const ProductThumbnail = ({id, name, description, price, photo}: any) => {
 
@@ -29,6 +30,7 @@ export const ProductThumbnail = ({id, name, description, price, photo}: any) => 
 
       <div className="menu admin">
         <Link href={{pathname: '/shop/product/update', query: {id: id},}}> Edit ✏️ </Link>
+        <AddToCart id={id}/>
         <ProductDelete id={id}> Delete </ProductDelete>
       </div>
     </StyledProdThumbnail>

@@ -10,6 +10,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import Link from 'next/link';
 import AddToCart from './AddToCart';
+import { handlePhoto } from '@/lib/handleProductPhoto';
 
 
 export default function ProductSingle({id}: any) {
@@ -38,7 +39,13 @@ export default function ProductSingle({id}: any) {
 
     <StyledProductSingle>
       <picture className="img-frame">
-        <Image src={photo.image.url} alt={photo.altText} width={photo.image.width} height={photo.image.height}/>
+        <Image 
+          priority
+          src={handlePhoto(photo).image?.url} 
+          alt={handlePhoto(photo).image?.altText}
+          width={handlePhoto(photo).image?.width}
+          height={handlePhoto(photo).image?.height}
+        />
       </picture>
       
       <div className="details">

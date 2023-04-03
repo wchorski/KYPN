@@ -212,6 +212,13 @@ export const extendGraphqlSchema = graphql.extend(base => {
               }
             })
           }
+
+          return await context.db.CartItem.createOne({
+            data: {
+              product: { connect: { id: productID }},
+              user: { connect: { id: sesh.itemId }},
+            },
+          })
         }
       }),
 
