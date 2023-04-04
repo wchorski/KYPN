@@ -8,6 +8,7 @@ import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
 import { MdClose } from "react-icons/md";
 import CartCount from './CartCount'
+import Checkout from './Checkout'
 
 export default function ShoppingCart() {
 
@@ -37,6 +38,7 @@ export default function ShoppingCart() {
       </ul>
       <footer>
         <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer.cart))}</p>
+        <Checkout />
       </footer>
     </StyledShoppingCart>
   )

@@ -32,13 +32,14 @@ export const StyledShoppingCart = styled.div`
     border-top: 2px dashed black;
     margin-top: 2rem;
     padding-top: 2rem;
-    display: grid;
-    grid-template-columns: auto auto;
+    /* display: grid; */
+    /* grid-template-columns: auto auto; */
     align-items: center;
     font-size: 3rem;
     font-weight: 900;
     p {
       margin: 0;
+      font-size: 2rem;
     }
   }
   ul {
