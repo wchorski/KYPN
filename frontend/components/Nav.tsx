@@ -9,6 +9,8 @@ import CartCount from './ecommerce/CartCount';
 export function Nav() {
 
   const session = useUser()
+  // console.log({session});
+  
   
   const {setIsOpen} = useCart()
 
@@ -25,7 +27,7 @@ export function Nav() {
           <button onClick={e => setIsOpen(true)}>
             My Cart
             <CartCount count={session.cart.reduce(
-              (tally:any, cartItem:any) => tally + cartItem.quantity,
+              (tally:any, cartItem:any) => tally + (cartItem.product ? cartItem.quantity : 0),
               0
             )} />
           </button>

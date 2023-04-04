@@ -4,6 +4,7 @@ import {Nav} from './Nav'
 import styled  from "styled-components";
 import { SearchInput } from './menus/SearchInput';
 import ShoppingCart from './ecommerce/ShoppingCart';
+import SearchCarlos from './menus/SearchCarlos';
 
 const StyledLogo = styled.div`
   background: var(--c-1);
@@ -40,19 +41,23 @@ const StyledHeader = styled.header`
   }
 `
 
+const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
+
 export default function Header() {
   return (
     <StyledHeader>
 
       <div className="bar">
         <StyledLogo>
-          <Link href={`/`} > <h1> Sick Fits </h1> </Link>
+          <Link href={`/`} > <h1> {SITE_TITLE} </h1> </Link>
         </StyledLogo>
         <Nav />
       </div>
 
       <div className="sub-bar">
-        <SearchInput />
+        {/* //TODO use mine idk */}
+        {/* <SearchInput /> */}
+        <SearchCarlos />
       </div>
 
       <ShoppingCart />

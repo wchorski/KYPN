@@ -32,65 +32,62 @@ import { CartItem } from "./schemas/CartItem";
 // the generated types from '.keystone/types'
 import type { Lists } from '.keystone/types';
 import { Context } from '.keystone/types';
+import { OrderItem } from './schemas/OrderItem';
+import { User } from './schemas/User';
+import { Order } from './schemas/Order';
+import {addToCart} from './mutations/addToCart';
+import { checkout } from './mutations/checkout';
 
 export const lists: Lists = {
 
-  // Product,
-  User: list({
-    // WARNING
-    //   for this starter project, anyone can create, query, update and delete anything
-    //   if you want to prevent random people on the internet from accessing your data,
-    //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-    access: allowAll,
+  // User: list({
+  //   // WARNING
+  //   //   for this starter project, anyone can create, query, update and delete anything
+  //   //   if you want to prevent random people on the internet from accessing your data,
+  //   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
+  //   access: allowAll,
 
-    // this is the fields for our User list
-    fields: {
-      // by adding isRequired, we enforce that every User should have a name
-      //   if no name is provided, an error will be displayed
-      name: text({ validation: { isRequired: true } }),
+  //   // this is the fields for our User list
+  //   fields: {
+  //     // by adding isRequired, we enforce that every User should have a name
+  //     //   if no name is provided, an error will be displayed
+  //     name: text({ validation: { isRequired: true } }),
 
-      email: text({
-        validation: { isRequired: true },
-        // by adding isIndexed: 'unique', we're saying that no user can have the same
-        // email as another user - this may or may not be a good idea for your project
-        isIndexed: 'unique',
-      }),
+  //     email: text({
+  //       validation: { isRequired: true },
+  //       // by adding isIndexed: 'unique', we're saying that no user can have the same
+  //       // email as another user - this may or may not be a good idea for your project
+  //       isIndexed: 'unique',
+  //     }),
       
-      password: password({ validation: { isRequired: true } }),
-      isAdmin: checkbox(),
+  //     password: password({ validation: { isRequired: true } }),
+  //     isAdmin: checkbox(),
 
-      // we can use this field to see what Posts this User has authored
-      //   more on that in the Post list below
-      posts: relationship({ ref: 'Post.author', many: true }),
-      cart: relationship({
-        ref: 'CartItem.user', 
-        many: true, 
-        ui: {
-          createView: {fieldMode: 'hidden'},
-          itemView: {fieldMode: 'hidden'}
-        }
-      }),
+  //     // we can use this field to see what Posts this User has authored
+  //     //   more on that in the Post list below
+  //     posts: relationship({ ref: 'Post.author', many: true }),
+  //     cart: relationship({
+  //       ref: 'CartItem.user', 
+  //       many: true, 
+  //       ui: {
+  //         createView: {fieldMode: 'hidden'},
+  //         itemView: {fieldMode: 'hidden'}
+  //       }
+  //     }),
 
-      createdAt: timestamp({
-        // this sets the timestamp to Date.now() when the user is first created
-        defaultValue: { kind: 'now' },
-      }),
-    },
-  }),
+  //     createdAt: timestamp({
+  //       // this sets the timestamp to Date.now() when the user is first created
+  //       defaultValue: { kind: 'now' },
+  //     }),
+  //   },
+  // }),
+  User,
   Product,
   // @ts-ignore
   ProductImage, 
   CartItem,
-
-  // Products: list({
-  //   access: allowAll,
-  //   fields: {
-  //     name: text({validation: { isRequired: true }}),
-  //     description: text({ui:{
-  //       displayMode: 'textarea'
-  //     }})
-  //   }
-  // }),
+  OrderItem,
+  Order,
 
   Post: list({
     // WARNING
@@ -189,39 +186,8 @@ export const lists: Lists = {
 export const extendGraphqlSchema = graphql.extend(base => {
   return {
     mutation: {
-      
-      addToCart: graphql.field({
-        type: base.object('CartItem'),
-        args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productID: graphql.arg({ type: graphql.ID }) },
-        async resolve(source, { id, productID }, context: Context){
-          // console.log('****************** addToCart Mutation')
-          const sesh = context.session    
-              
-          if(!sesh.itemId){
-            throw new Error('!!!! you must be logged in')
-          }
-          const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: sesh.itemId } }, product: { id: {equals: productID} } }})
-          const [exisitingItem] = allCartItems
-
-          if(exisitingItem){
-            // console.log(`****** ${exisitingItem.quantity} exists in cart`);
-            return await context.db.CartItem.updateOne({
-              where: {id: exisitingItem.id},
-              data: {
-                quantity: exisitingItem.quantity+1, 
-              }
-            })
-          }
-
-          return await context.db.CartItem.createOne({
-            data: {
-              product: { connect: { id: productID }},
-              user: { connect: { id: sesh.itemId }},
-            },
-          })
-        }
-      }),
-
-    }
+      addToCart: addToCart(base),
+      checkout: checkout(base),
+    },
   }
 })

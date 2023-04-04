@@ -8,7 +8,7 @@ import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
 import { MdClose } from "react-icons/md";
 import CartCount from './CartCount'
-import Checkout from './Checkout'
+import {Checkout} from './Checkout'
 
 export default function ShoppingCart() {
 

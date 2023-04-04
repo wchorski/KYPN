@@ -16,6 +16,19 @@ export const Product = list({
       }
     }),
     name: text({validation: { isRequired: true }}),
+    slug: text({
+      validation: { isRequired: true },
+      isIndexed: 'unique',
+      hooks: {
+        validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
+          const input = resolvedData[fieldKey];
+          
+          if (!input.match(/^[a-z0-9]+(?:-[A-Za-z0-9]+)*$/)) {
+            addValidationError(`Can only contain lower case "a-z" and dash "-" characters.`);
+          }
+        },
+      }
+    }),
     description: text({ui:{
       displayMode: 'textarea'
     }}),
@@ -32,6 +45,7 @@ export const Product = list({
       }
     }),
     price: integer(),
+    stockCount: integer({ validation: { isRequired: true}, defaultValue: 0}),
     
   }
 })

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Banana Cherry",
+    "description": "Fluffy and fruity",
+    "status": "AVAILABLE",
+    "price": 3423,
+    "stockCount": 12,
+    "slug": "banana-cherry"
+  },
+  {
+    "name": "Penguin Pear",
+    "description": "Cute and fruit",
+    "status": "AVAILABLE",
+    "price": 1212,
+    "stockCount": 1,
+    "slug": "penguin-pear"
+  },
+  {
+    "name": "Sidways Pinapple",
+    "description": "Wadda head turner",
+    "status": "AVAILABLE",
+    "price": 54321,
+    "stockCount": 10,
+    "slug": "sidways-pinapple"
+  }
+]

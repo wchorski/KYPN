@@ -49,7 +49,7 @@ const { withAuth } = createAuth({
     sendToken: async ({ itemId, identity, token, context }) => { 
       await sendPasswordResetEmail(token, identity)
     },
-    tokensValidForMins: 60,
+    tokensValidForMins: 600,
   },
 
   // WARNING: remove initFirstItem functionality in production

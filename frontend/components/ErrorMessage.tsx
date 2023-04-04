@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React from 'react';
 
 import PropTypes from 'prop-types';
+import { MdError } from 'react-icons/md';
 
 const ErrorStyles = styled.div`
   padding: 2rem;
@@ -9,6 +10,8 @@ const ErrorStyles = styled.div`
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-left: 5px solid red;
+  color: #931a33;
+
   p {
     margin: 0;
     font-weight: 100;
@@ -28,7 +31,7 @@ const ErrorMessage = ({ error }:any) => {
     return error.networkError.result.errors.map((error:any, i:any) => (
       <ErrorStyles key={i}>
         <p data-test="graphql-error">
-          <strong>Shoot!</strong>
+          <strong> <MdError style={{color: 'red'}} /> </strong>
           {error.message.replace('GraphQL error: ', '')}
         </p>
       </ErrorStyles>
@@ -37,7 +40,7 @@ const ErrorMessage = ({ error }:any) => {
   return (
     <ErrorStyles>
       <p data-test="graphql-error">
-        <strong>Shoot!</strong>
+        <strong> <MdError style={{color: 'red'}} />  </strong>
         {error.message.replace('GraphQL error: ', '')}
       </p>
     </ErrorStyles>

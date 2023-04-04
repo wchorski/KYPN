@@ -1,0 +1,38 @@
+[
+  {
+    "altText": "banana cherry photo",
+    "id": "cf-1-photo",
+    "image": {
+      "extension": "png",
+      "filesize": 666,
+      "height": 300,
+      "width": 300,
+      "id": "cf-1-img",
+      "url": "`${FRONTEND_URL}/assets/images/cf-1.png`"
+    }
+  },
+  {
+    "altText": "banana cherry photo",
+    "id": "cf-2-photo",
+    "image": {
+      "extension": "png",
+      "filesize": 666,
+      "height": 300,
+      "width": 300,
+      "id": "cf-2-img",
+      "url": "`${FRONTEND_URL}/assets/images/cf-2.png`"
+    }
+  },
+  {
+    "altText": "banana cherry photo",
+    "id": "cf-3-photo",
+    "image": {
+      "extension": "png",
+      "filesize": 666,
+      "height": 300,
+      "width": 300,
+      "id": "cf-3-img",
+      "url": "`${FRONTEND_URL}/assets/images/cf-3.png`"
+    }
+  }
+]

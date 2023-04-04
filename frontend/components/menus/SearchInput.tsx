@@ -8,31 +8,11 @@ import Image from "next/image"
 import { handlePhoto } from "@/lib/handleProductPhoto"
 import { useRouter } from "next/router"
 
-const colors = [
-  'Black',
-  'Red',
-  'Green',
-  'Blue',
-  'Orange',
-  'Purple',
-  'Pink',
-  'Orchid',
-  'Aqua',
-  'Lime',
-  'Gray',
-  'Brown',
-  'Teal',
-  'Skyblue',
-]
-
 export const SearchInput = () => {
 
   const router = useRouter()
 
   const [query, {loading, data, error}] = useLazyQuery(QUERY_SEARCH_PRODUCTS, {fetchPolicy: 'no-cache'})
-  
-  // ? old way
-  // const findItemsLazy = debounce(query, 350)
 
   // constricts waterfall of queries made to the server
   const findItemsLazy = useCallback(debounce(query, 350), [query]);
@@ -54,9 +34,6 @@ export const SearchInput = () => {
   // }
 
   resetIdCounter();
-
-  // const [foundItems, setfoundItems] = useState(colors)
-  // const [foundItems, setfoundItems] = useState(data?.products || [])
 
   const foundItems = data?.products || []
 
@@ -86,12 +63,6 @@ export const SearchInput = () => {
           
         }
       })
-      
-      // setfoundItems(
-      //   // @ts-ignore
-      //   // colors.filter(c => c.toLowerCase().startsWith(inputValue.toLowerCase()))
-      //   data?.products || []
-      // )
     },
     onSelectedItemChange({selectedItem}){
       // @ts-ignore
@@ -104,7 +75,6 @@ export const SearchInput = () => {
 
   return (
     <StyledSearch>
-      {/* <StyledSearchCont> */}
       <div>
         <label
           style={{ color: selectedItem ? selectedItem : 'blue' }}
@@ -157,7 +127,7 @@ export const SearchInput = () => {
                   width={handlePhoto(item.photo).image?.width}
                   height={handlePhoto(item.photo).image?.height}
                 />
-                ----- {item.name}
+                {item.name}
               </StyledDropDownItem>
             ))}
           {isOpen && !foundItems.length && !loading && (
@@ -167,30 +137,18 @@ export const SearchInput = () => {
       </StyledDropDown>
       </div>
 
-
-      {/* <div>
-        <input type="search" placeholder='search...'/>
-        <button> search </button>
-      </div>
-      <StyledDropDown>
-        <StyledDropDownItem> 1 </StyledDropDownItem>
-        <StyledDropDownItem> 2 </StyledDropDownItem>
-        <StyledDropDownItem> 3 </StyledDropDownItem>
-      </StyledDropDown> */}
-
     </StyledSearch>
   )
 }
 
 const QUERY_SEARCH_PRODUCTS = gql`
-  query Products($where: ProductWhereInput!) {
-    products(where: $where) {
-      id
-      name
-    }
+query Products($where: ProductWhereInput!) {
+  products(where: $where) {
+    id
+    name
   }
+}
 `
-
 
 const StyledSearchCont = styled.div`
   background-color: yellow;
