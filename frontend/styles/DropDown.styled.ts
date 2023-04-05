@@ -10,16 +10,31 @@ export const StyledDropDown = styled.div`
 
 export const StyledDropDownItem  = styled.li`
   border-bottom: 1px solid grey;
-  background: ${(props) => (props.highlighted ? '#f7f7f7' : 'white')};
-  padding: 1rem;
-  transition: all 0.2s;
-  ${(props) => (props.highlighted ? 'padding-left: 2rem;' : null)};
-  display: flex;
-  align-items: center;
-  border-left: 10px solid
+  background: ${(props) => (props.highlighted ? 'whitesmoke' : 'white')};
+
+  a{
+    padding: 1rem;
+    transition: all 0.2s;
+    ${(props) => (props.highlighted ? 'padding-left: 2rem;' : null)};
+    display: flex;
+    align-items: center;
+    border-left: 10px solid
     ${(props) => (props.highlighted ? props.theme.lightgrey : 'white')};
+  }
+
+
   img {
     margin-right: 10px;
+  }
+
+  h5{
+    margin: 0;
+  }
+
+  p.description{
+    text-decoration: none;
+    color: var(--c-txt);
+    font-size: 1rem;
   }
 `;
 
@@ -35,8 +50,15 @@ const glow = keyframes`
 
 export const StyledSearch = styled.div`
   position: relative;
-  background-color: darkcyan;
-  padding: 1em;
+  /* background-color: darkcyan; */
+  /* padding: 1em; */
+  .input-cont{
+    display: flex;
+
+    button{
+      padding: 1em;
+    }
+  }
 
   input {
     width: 100%;

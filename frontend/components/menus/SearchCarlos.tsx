@@ -84,11 +84,11 @@ export default function SearchCarlos() {
 
   return (
     <StyledSearch>
-        <div>
+        <div className="input-cont"> 
             <input
               {...getInputProps({
                 type: 'search', 
-                placeholder: 'search color...',
+                placeholder: 'search...',
                 id: 'search',
                 className: loading ? 'loading' : '',
               })}
@@ -108,7 +108,7 @@ export default function SearchCarlos() {
 
         <StyledDropDown>
           <ul {...getMenuProps()}>
-              {(isOpen) &&
+              { isOpen &&
                 inputItems?.map((item, index) => (
                   <StyledDropDownItem
                     highlighted={index === highlightedIndex}
@@ -123,7 +123,10 @@ export default function SearchCarlos() {
                         width={80}
                         height={80}
                       />
-                      <div>{item.name}</div>
+                      <article>
+                        <h5>{item.name}</h5>  
+                        <p className="description">{item.description}</p>
+                      </article>
                     </Link>
 
                   </StyledDropDownItem>

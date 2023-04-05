@@ -7,6 +7,72 @@ function timestamp() {
   return new Date(stampy).toISOString();
 }
 
+export const user_seeddata = [
+  {
+    name: 'Adam',
+    email: 'adam@m.lan',
+    password: 'adam@m.lan',
+    isAdmin: true,
+  },
+  {
+    name: 'Eddy',
+    email: 'eddy@m.lan',
+    password: 'eddy@m.lan',
+    isAdmin: false,
+  },
+  {
+    name: 'Cinda',
+    email: 'cinda@m.lan',
+    password: 'cinda@m.lan',
+    isAdmin: false,
+  },
+]
+
+export const roles_seedjson = [
+  {
+    name: 'admin',
+    canManageProducts: true,
+    canSeeOtherUsers: true,
+    canManageUsers: true,
+    canManageRoles: true,
+    canManageCart: true,
+    canManageOrders: true,
+    assignedTo: {
+      connect: {
+        email: 'adam@m.lan'
+      }
+    }
+  },
+  {
+    name: 'editor',
+    canManageProducts: true,
+    canSeeOtherUsers: true,
+    canManageUsers: false,
+    canManageRoles: false,
+    canManageCart: true,
+    canManageOrders: true,
+    assignedTo: {
+      connect: {
+        email: 'eddy@m.lan'
+      }
+    }
+  },
+  {
+    name: 'client',
+    canManageProducts: false,
+    canSeeOtherUsers: false,
+    canManageUsers: false,
+    canManageRoles: false,
+    canManageCart: false,
+    canManageOrders: false,
+    assignedTo: {
+      connect: {
+        email: 'cinda@m.lan'
+      }
+    }
+  }
+]
+
 export const productImages_seeddata = [
   {
     altText: 'banana cherry photo',
@@ -21,6 +87,7 @@ export const productImages_seeddata = [
     id: 'cf-3-photo'
   }
 ]
+
 export const productImages_seeddat_2 = [
   {
     altText: 'banana cherry photo',
@@ -94,6 +161,11 @@ export const products_seed = [
       },
       altText: 'banana cherry photo',
       id: 'cf-1-photo',
+      user: {
+        connect: {
+          email: 'adam@m.lan'
+        }
+      },
     },
   },
   {
@@ -114,6 +186,11 @@ export const products_seed = [
       },
       altText: 'banana cherry photo',
       id: 'cf-2-photo',
+      user: {
+        connect: {
+          email: 'adam@m.lan'
+        }
+      },
     },
   },
   {
@@ -134,6 +211,11 @@ export const products_seed = [
       },
       altText: 'banana cherry photo',
       id: 'cf-3-photo',
+      user: {
+        connect: {
+          email: 'adam@m.lan'
+        }
+      },
     },
   },
   

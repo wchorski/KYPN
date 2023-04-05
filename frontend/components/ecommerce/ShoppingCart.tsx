@@ -17,27 +17,27 @@ export default function ShoppingCart() {
   const { isOpen, openCart, closeCart } = cartData
   
 
-  if(!customer) return <p>Login to start shopping</p>
+  // if(!customer) return <p>Login to start shopping</p>
 
   return (
     <StyledShoppingCart className={isOpen ? 'open' : ''}>
       <header>
         <StyledSupreme>
-          {customer.name} | Cart
+          {customer?.name} | Cart
         </StyledSupreme>
-        <CartCount count={customer.cart.reduce(
+        <CartCount count={customer?.cart.reduce(
           (tally:any, cartItem:any) => tally + cartItem.quantity,
           0
         )} />
         <button onClick={e => closeCart()}> <MdClose /></button>
       </header>
 
-      {customer.cart.length <= 0 && <p>Add your first item</p>}
+      {customer?.cart.length <= 0 && <p>Add your first item</p>}
       <ul>
-        {customer.cart.map((item:any) => <CartItem key={item.id} item={item} />)}
+        {customer?.cart.map((item:any) => <CartItem key={item.id} item={item} />)}
       </ul>
       <footer>
-        <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer.cart))}</p>
+        <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer?.cart))}</p>
         <Checkout />
       </footer>
     </StyledShoppingCart>

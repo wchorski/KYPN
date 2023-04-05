@@ -1,13 +1,21 @@
 import { useMutation, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useUser } from "@/components/menus/Session";
 import { MdShoppingBag } from 'react-icons/md';
 import { QUERY_USER_CURRENT } from '../menus/Session';
 
 
 export default function AddToCart({id}: {id:string}) {
 
+  const session = useUser()
+  const router = useRouter()
   const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
 
+  
   async function handleButton() {
+
+    if(!session) return router.push(`/auth/login`)
+
     const res = await addToCart({
       variables: {
         addToCartId: id,
@@ -37,4 +45,4 @@ const ADD_TO_CART_MUTATION = gql`
       }
     }
   }
-`;
+`

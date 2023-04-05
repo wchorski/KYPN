@@ -17,10 +17,13 @@ export const GlobalStyles = createGlobalStyle`
     --c-bg: #454545;
     --c-txt: black;
     --c-txt-rev: white;
+    --c-edge: #e5e5e5;
 
     --maxWidth: 1300px;
-    --box-shadow: '0 12px 24px 0 rgba(0,0,0, .09)'
-
+    --boxs-1: rgb(0 0 0 / 39%) 1px 1px 8px 0px;
+    --br-1: 5px;
+    --br-2: 10px;
+    --br-3: 20px;
   }
 
   html{

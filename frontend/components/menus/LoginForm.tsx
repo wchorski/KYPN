@@ -1,7 +1,7 @@
 import useForm from "@/lib/useForm";
 import { StyledForm } from "@/styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
-import  Router  from "next/router";
+import  Router, { useRouter }  from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
 import  ErrorMessage  from "@/components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -13,6 +13,7 @@ import { useLocalStorage } from "@/lib/useLocalStorage";
 export default function LoginForm() {
 
   const {session, setSession} = useGlobalContext()
+  const router = useRouter()
 
   const {inputs, handleChange, clearForm, resetForm} = useForm({
     email: '',
@@ -38,14 +39,12 @@ export default function LoginForm() {
 
     if(res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess") 
       console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
+      router.push(`/shop`)
       // @ts-ignore
+      // TODO setting local storage
       // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
       // localStorage.setItem('session', JSON.stringify(res.data.authenticateUserWithPassword))
       // useLocalStorage('session', JSON.stringify(res.data.authenticateUserWithPassword))
-
-    // Router.push({
-    //   pathname: `/shop/product/${res.data.createProduct.id}`,
-    // })    
   }
 
   

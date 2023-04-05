@@ -2,7 +2,7 @@
 
 import { graphql, config } from '@keystone-6/core';
 import { Context } from '.keystone/types';
-import { relationship } from '@keystone-6/core/fields';
+// import { relationship } from '@keystone-6/core/fields';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 
 export const addToCart = (base: BaseSchemaMeta) => graphql.field({

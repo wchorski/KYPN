@@ -1,10 +1,24 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
+import { isLoggedIn, rules } from "../access";
 
 
 export const Product = list({
-  access: allowAll,
+  // access: allowAll,
+  access: {
+    // filter: {
+    //   update: rules.canManageProducts
+    // },
+    operation: {
+      query: () => true,
+      create: () => true,
+      update: () => true,
+      delete: () => true,
+    }
+  },
+
+  
   fields: {
     photo: relationship({
       ref: 'ProductImage.product',
@@ -21,9 +35,10 @@ export const Product = list({
       isIndexed: 'unique',
       hooks: {
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
-          const input = resolvedData[fieldKey];
-          
-          if (!input.match(/^[a-z0-9]+(?:-[A-Za-z0-9]+)*$/)) {
+          const inputValue = resolvedData[fieldKey];
+
+          if(!inputValue) return 
+          if (!inputValue.match(/^[a-z0-9]+(?:-[A-Za-z0-9]+)*$/)) {
             addValidationError(`Can only contain lower case "a-z" and dash "-" characters.`);
           }
         },
@@ -46,6 +61,9 @@ export const Product = list({
     }),
     price: integer(),
     stockCount: integer({ validation: { isRequired: true}, defaultValue: 0}),
+    user: relationship({
+      ref: 'User.products',
+    })
     
   }
 })

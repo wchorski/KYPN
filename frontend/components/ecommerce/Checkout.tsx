@@ -65,7 +65,7 @@ function CheckoutForm() {
 
     closeCart()
 
-    router.push(`/orders/${res.data.checkout.id}`)
+    router.push(`/shop/orders/${res.data.checkout.id}`)
   }
 
   return (

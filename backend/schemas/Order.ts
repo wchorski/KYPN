@@ -1,36 +1,39 @@
 import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp, virtual } from "@keystone-6/core/fields";
+import { isLoggedIn, permissions, roles } from "../access";
 import moneyFormatter from "../lib/moneyFormatter";
 
 
 export const Order = list({
-  access: allowAll,
-  // access: {
-  //   filter: {
-  //       query: async ({ session, context, listKey, operation }) => {
-  //           if (isSignedIn(session)) return false
-  //           if (permissions.canManageOrders(session)) return true
-  //           return { user: { id: { equals: session.itemId } } };
-  //       },
-  //       update: ({ session, context, listKey, operation }) => {
-  //           if (!isSignedIn(session)) return false
-  //           if (permissions.canManageOrders) return true
-  //           return { user: { id: { equals: session.itemId } } };
-  //       },
-  //       delete: async ({ session, context, listKey, operation }) => {
-  //           if (!isSignedIn(session)) return false
-  //           if (permissions.canManageOrders) return true
-  //           return { user: { id: { equals: session.itemId } } };
-  //       },
-  //   },
-  //   operation: {
-  //       query: ({ session, context, listKey, operation }) => true,
-  //       create: ({ session, context, listKey, operation }) => true,
-  //       update: ({ session, context, listKey, operation }) => true,
-  //       delete: ({ session, context, listKey, operation }) => true,
-  //   },
-  // },
+  access: {
+    filter: {
+        query: async ({ session, context, listKey, operation }) => {
+            if(!session) return false
+            if (isLoggedIn(session)) return false
+            if (permissions.canManageOrders(session)) return true
+            return { user: { id: { equals: session.itemId } } };
+        },
+        // update: ({ session, context, listKey, operation }) => {
+        //     if (!isLoggedIn(session)) return false
+        //     if (permissions.canManageOrders) return true
+        //     return { user: { id: { equals: session.itemId } } };
+        // },
+        update: roles.isLoggedIn,
+        delete: async ({ session, context, listKey, operation }) => {
+            if (!isLoggedIn(session)) return false
+            if (permissions.canManageOrders) return true
+            return { user: { id: { equals: session.itemId } } };
+        },
+    },
+    operation: {
+        query: ({ session, context, listKey, operation }) => true,
+        create: roles.isLoggedIn,
+        update: ({ session, context, listKey, operation }) => true,
+        delete: ({ session, context, listKey, operation }) => true,
+    },
+
+},
   ui:{
     listView: {
       initialColumns: ['label', 'createdAt', 'user', 'createdAt']

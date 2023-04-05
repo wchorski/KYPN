@@ -41,6 +41,15 @@ export const User = list({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: 'now' },
     }),
-    orders: relationship({ ref: 'Order.user', many: true })
+    products: relationship({ ref: 'Product.user', many: true }),
+    orders: relationship({ ref: 'Order.user', many: true }),
+    role: relationship({
+      ref: 'Role.assignedTo',
+      // todo add access control
+      // access: {
+      //     create: permissions.canManageUsers,
+      //     update: permissions.canManageUsers,
+      // },
+    })
   },
 })

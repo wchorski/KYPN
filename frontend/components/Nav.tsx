@@ -22,7 +22,7 @@ export function Nav() {
 
         {session && (<>
           <Link href={`/sell`}> Sell </Link>
-          <Link href={`/orders`}> Orders </Link>
+          <Link href={`/shop/orders`}> Orders </Link>
           <SessionBadge session={session}/>
           <button onClick={e => setIsOpen(true)}>
             My Cart

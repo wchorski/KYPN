@@ -1,4 +1,4 @@
-import { useGlobalContext } from "@/lib/useSessionContext";
+// import { useGlobalContext } from "@/lib/useSessionContext";
 import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
 import styled from "styled-components";

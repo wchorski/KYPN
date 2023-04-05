@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { GlobalStyles } from "@/styles/GlobalThemeStyle.styled.js";
 import { ApolloProvider } from "@apollo/client";
 
-import '@/components/styles/nprogress.css'
+import '@/styles/nprogress.css'
 import { GlobalContextProvider } from '@/lib/useSessionContext';
 import { useApollo } from '@/lib/apolloClient';
 import { CartStateProvider } from '@/lib/cartState';

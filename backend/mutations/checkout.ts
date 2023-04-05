@@ -2,7 +2,7 @@
 
 import { graphql, config } from '@keystone-6/core';
 import { Context } from '.keystone/types';
-import { relationship } from '@keystone-6/core/fields';
+// import { relationship } from '@keystone-6/core/fields';
 import stripeConfig from '../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { CartItem } from '../types';
@@ -17,7 +17,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     //check if the user is logged in. If not, return an error
     const session = context.session;
     console.log('+++++ session ++++ ');
-    console.log(session);
+    // console.log(session);
     
     if (!session.itemId) {
       throw new Error('You must be logged in to create an order. :/ ');

@@ -12,8 +12,11 @@ type User {
   cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
+  role: Role
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -41,7 +44,9 @@ input UserWhereInput {
   posts: PostManyRelationFilter
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
+  products: ProductManyRelationFilter
   orders: OrderManyRelationFilter
+  role: RoleWhereInput
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
@@ -120,6 +125,12 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
 input OrderManyRelationFilter {
   every: OrderWhereInput
   some: OrderWhereInput
@@ -153,7 +164,9 @@ input UserUpdateInput {
   posts: PostRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
+  products: ProductRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
+  role: RoleRelateToOneForUpdateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -173,11 +186,24 @@ input CartItemRelateToManyForUpdateInput {
   connect: [CartItemWhereUniqueInput!]
 }
 
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
 input OrderRelateToManyForUpdateInput {
   disconnect: [OrderWhereUniqueInput!]
   set: [OrderWhereUniqueInput!]
   create: [OrderCreateInput!]
   connect: [OrderWhereUniqueInput!]
+}
+
+input RoleRelateToOneForUpdateInput {
+  create: RoleCreateInput
+  connect: RoleWhereUniqueInput
+  disconnect: Boolean
 }
 
 input UserUpdateArgs {
@@ -193,7 +219,9 @@ input UserCreateInput {
   posts: PostRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
+  products: ProductRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
+  role: RoleRelateToOneForCreateInput
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -209,9 +237,107 @@ input CartItemRelateToManyForCreateInput {
   connect: [CartItemWhereUniqueInput!]
 }
 
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
 input OrderRelateToManyForCreateInput {
   create: [OrderCreateInput!]
   connect: [OrderWhereUniqueInput!]
+}
+
+input RoleRelateToOneForCreateInput {
+  create: RoleCreateInput
+  connect: RoleWhereUniqueInput
+}
+
+type Role {
+  id: ID!
+  name: String
+  assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  assignedToCount(where: UserWhereInput! = {}): Int
+  canManageProducts: Boolean
+  canSeeOtherUsers: Boolean
+  canManageUsers: Boolean
+  canManageRoles: Boolean
+  canManageCart: Boolean
+  canManageOrders: Boolean
+}
+
+input RoleWhereUniqueInput {
+  id: ID
+}
+
+input RoleWhereInput {
+  AND: [RoleWhereInput!]
+  OR: [RoleWhereInput!]
+  NOT: [RoleWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  assignedTo: UserManyRelationFilter
+  canManageProducts: BooleanFilter
+  canSeeOtherUsers: BooleanFilter
+  canManageUsers: BooleanFilter
+  canManageRoles: BooleanFilter
+  canManageCart: BooleanFilter
+  canManageOrders: BooleanFilter
+}
+
+input UserManyRelationFilter {
+  every: UserWhereInput
+  some: UserWhereInput
+  none: UserWhereInput
+}
+
+input RoleOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  canManageProducts: OrderDirection
+  canSeeOtherUsers: OrderDirection
+  canManageUsers: OrderDirection
+  canManageRoles: OrderDirection
+  canManageCart: OrderDirection
+  canManageOrders: OrderDirection
+}
+
+input RoleUpdateInput {
+  name: String
+  assignedTo: UserRelateToManyForUpdateInput
+  canManageProducts: Boolean
+  canSeeOtherUsers: Boolean
+  canManageUsers: Boolean
+  canManageRoles: Boolean
+  canManageCart: Boolean
+  canManageOrders: Boolean
+}
+
+input UserRelateToManyForUpdateInput {
+  disconnect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input RoleUpdateArgs {
+  where: RoleWhereUniqueInput!
+  data: RoleUpdateInput!
+}
+
+input RoleCreateInput {
+  name: String
+  assignedTo: UserRelateToManyForCreateInput
+  canManageProducts: Boolean
+  canSeeOtherUsers: Boolean
+  canManageUsers: Boolean
+  canManageRoles: Boolean
+  canManageCart: Boolean
+  canManageOrders: Boolean
+}
+
+input UserRelateToManyForCreateInput {
+  create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 type Product {
@@ -223,6 +349,7 @@ type Product {
   status: String
   price: Int
   stockCount: Int
+  user: User
 }
 
 input ProductWhereUniqueInput {
@@ -242,6 +369,7 @@ input ProductWhereInput {
   status: StringNullableFilter
   price: IntNullableFilter
   stockCount: IntFilter
+  user: UserWhereInput
 }
 
 input StringNullableFilter {
@@ -313,11 +441,18 @@ input ProductUpdateInput {
   status: String
   price: Int
   stockCount: Int
+  user: UserRelateToOneForUpdateInput
 }
 
 input ProductImageRelateToOneForUpdateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
+  disconnect: Boolean
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -334,11 +469,17 @@ input ProductCreateInput {
   status: String
   price: Int
   stockCount: Int
+  user: UserRelateToOneForCreateInput
 }
 
 input ProductImageRelateToOneForCreateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type ProductImage {
@@ -449,12 +590,6 @@ input CartItemUpdateInput {
   user: UserRelateToOneForUpdateInput
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CartItemUpdateArgs {
   where: CartItemWhereUniqueInput!
   data: CartItemUpdateInput!
@@ -464,11 +599,6 @@ input CartItemCreateInput {
   quantity: Int
   product: ProductRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type OrderItem {
@@ -745,6 +875,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createRole(data: RoleCreateInput!): Role
+  createRoles(data: [RoleCreateInput!]!): [Role]
+  updateRole(where: RoleWhereUniqueInput!, data: RoleUpdateInput!): Role
+  updateRoles(data: [RoleUpdateArgs!]!): [Role]
+  deleteRole(where: RoleWhereUniqueInput!): Role
+  deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
   updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
@@ -828,6 +964,9 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
+  role(where: RoleWhereUniqueInput!): Role
+  rolesCount(where: RoleWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
