@@ -129,15 +129,17 @@ export const lists: Lists = {
     access: allowAll,
 
     // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
-    ui: {
-      isHidden: true,
-    },
+    // todo hide these again
+    // ui: {
+    //   isHidden: true,
+    // },
 
     // this is the fields for our Tag list
     fields: {
       name: text(),
       // this can be helpful to find out all the Posts associated with a Tag
       posts: relationship({ ref: 'Post.tags', many: true }),
+      products: relationship({ ref: 'Product.tags', many: true }),
     },
   }),
 }

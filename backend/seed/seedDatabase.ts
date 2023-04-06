@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { productImages_seeddata, roles_seedjson, user_seeddata } from './seed_data';
-import { prepareToUpload } from '../prepareToUpload';
+import { productImage_seedjson, products_seed, roles_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+//@ts-ignore
+import { prepareToUpload } from '../prepareToUpload.js';
 
 const seedUsers = async (context: Context) => {
   const { db } = context.sudo();
@@ -60,10 +61,28 @@ const seedPosts = async (context: Context) => {
   });
 };
 
+const seedTags = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = tags_seedjson;
+  const objectsAlreadyInDatabase = await db.Tag.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some(dbObj => dbObj.name === seedObj.name)
+  );
+
+  console.log({objsToCreate})
+
+  await db.Tag.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 const seedProducts = async (context: Context) => {
   const { db } = context.sudo();
-  const rawJSONData = fs.readFileSync(path.join(process.cwd(), './seed/products_seed.json'), 'utf-8');
-  const seedObjects: any[] = JSON.parse(rawJSONData);
+  const seedObjects: any[] = products_seed;
   const objectsAlreadyInDatabase = await db.Product.findMany({
     where: {
       slug: { in: seedObjects.map(obj => obj.slug) },
@@ -82,31 +101,41 @@ const seedProducts = async (context: Context) => {
 
 const seedProductImages = async (context: Context) => {
   const { db } = context.sudo();
-  const rawJSONData = JSON.stringify(productImages_seeddata);
-  const seedObjects: any[] = JSON.parse(rawJSONData);
+  const rawJSONData = JSON.stringify(productImage_seedjson);
+  const seedObjects: any[] = productImage_seedjson;
   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
     where: {
       altText: { in: seedObjects.map(obj => obj.altText) },
     },
   });
+  console.log({objectsAlreadyInDatabase});
+  
   const objsToCreate = seedObjects.filter(
     seedObj => !objectsAlreadyInDatabase.some(p => p.altText === seedObj.altText)
   );
 
+  console.log({objsToCreate});
+  
+
   await db.ProductImage.createMany({
-    data: objsToCreate.map(obj => ({ 
+    data: objsToCreate.map(obj => {
+      // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
+      
+
+      return ({ 
       ...obj,  
-      upload: prepareToUpload(path.join(process.cwd() + `./public/assets/images/${obj.name}.png`))
-    })),
+      upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
+    })}),
   });
 };
 
 export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
-  await seedUsers(context)
-  await seedRoles(context)
-  // await seedPosts(context);
-  // await seedProductImages(context)
-  await seedProducts(context)
+  // await seedUsers(context)
+  // await seedRoles(context)
+  await seedTags(context)
+
+  await seedProductImages(context)
+  // await seedProducts(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

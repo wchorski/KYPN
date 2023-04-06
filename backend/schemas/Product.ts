@@ -59,11 +59,31 @@ export const Product = list({
         createView: {fieldMode: 'edit'}
       }
     }),
+
     price: integer(),
+
     stockCount: integer({ validation: { isRequired: true}, defaultValue: 0}),
     user: relationship({
       ref: 'User.products',
-    })
+    }),
+
+    tags: relationship({
+      // we could have used 'Tag', but then the relationship would only be 1-way
+      ref: 'Tag.products',
+
+      // a Post can have many Tags, not just one
+      many: true,
+
+      // this is some customisations for changing how this will look in the AdminUI
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name'],
+        inlineEdit: { fields: ['name'] },
+        linkToItem: true,
+        inlineConnect: true,
+        inlineCreate: { fields: ['name'] },
+      },
+    }),
     
   }
 })

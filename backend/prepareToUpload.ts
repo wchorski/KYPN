@@ -1,18 +1,20 @@
-// cred = https://github.com/keystonejs/keystone-discussions-archive/discussions/54
-// crd - https://stackoverflow.com/questions/70645438/how-to-seed-upload-images-in-keystonejs-6
-// https://github.com/keystonejs/keystone/search?q=upload
-// @ts-nocheck
 import mime from 'mime'
 import fs from 'fs'
 import path from 'path'
-// TODO why is this library messed up?
-// import { Upload } from 'graphql-upload'
-import { createUploadLink } from "apollo-upload-client";
+// @ts-ignore
+// import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+// import  Upload  from 'graphql-upload/Upload.mjs'
+const { Upload } = import("graphql-upload/Upload.mjs")
+// import type { FileUpload as FileUploadType } from 'graphql-upload/Upload.mjs'
+//// @ts-ignore
+// import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
-
-export const prepareToUpload = (filePath: string) => {
+export const prepareToUpload = (filePath:string) => {
+  console.log('==========================');
+  console.log(filePath);
+  
   const filename = path.basename(filePath)
-  console.log({filename});
+  console.log(filename);
   
 
   const createReadStream = () => fs.createReadStream(filePath)
@@ -27,7 +29,9 @@ export const prepareToUpload = (filePath: string) => {
     encoding,
   }
 
-  const upload = new createUploadLink()
+  // const upload = new GraphQLUpload()
+  const upload = new Upload()
+  // @ts-ignore
   upload.resolve(image)
 
   return upload

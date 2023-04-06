@@ -43,6 +43,7 @@ export const ProductImage = list({
   fields: {
     image: image({ storage: 'my_local_images'}), 
     altText: text({validation: { isRequired: true }, defaultValue: 'Product Featured Image'}),
+    filename: text(),
     product: relationship({ref: 'Product.photo'}),
   },
   ui:{

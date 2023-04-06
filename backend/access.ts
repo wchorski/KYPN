@@ -10,7 +10,7 @@ export const roles = {
   isLoggedIn({ session }: ListAccessArgs) {
       return !!session;
   },
-  
+
   isAdmin({session}:ListAccessArgs){
 
     console.log('ARE YOU AN ADMIN?????')
@@ -46,8 +46,8 @@ export const rules = {
     
     // 2. If not, do they own this item?
     // todo query item.author and match session.user
-    return false
-    // return { user: { id: session?.itemId } }
+    // return false
+    return { user: { id: session?.itemId } }
   },
   canOrder({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;

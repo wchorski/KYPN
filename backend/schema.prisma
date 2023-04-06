@@ -55,6 +55,7 @@ model Product {
   stockCount            Int           @default(0)
   user                  User?         @relation("Product_user", fields: [userId], references: [id])
   userId                String?       @map("user") @postgresql.Uuid
+  tags                  Tag[]         @relation("Product_tags")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([userId])
@@ -68,6 +69,7 @@ model ProductImage {
   image_height         Int?
   image_id             String?
   altText              String      @default("Product Featured Image")
+  filename             String      @default("")
   product              Product?    @relation("Product_photo")
   from_OrderItem_photo OrderItem[] @relation("OrderItem_photo")
 }
@@ -125,7 +127,8 @@ model Post {
 }
 
 model Tag {
-  id    String @id @default(uuid()) @postgresql.Uuid
-  name  String @default("")
-  posts Post[] @relation("Post_tags")
+  id       String    @id @default(uuid()) @postgresql.Uuid
+  name     String    @default("")
+  posts    Post[]    @relation("Post_tags")
+  products Product[] @relation("Product_tags")
 }

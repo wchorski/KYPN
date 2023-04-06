@@ -350,6 +350,8 @@ type Product {
   price: Int
   stockCount: Int
   user: User
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
 }
 
 input ProductWhereUniqueInput {
@@ -370,6 +372,7 @@ input ProductWhereInput {
   price: IntNullableFilter
   stockCount: IntFilter
   user: UserWhereInput
+  tags: TagManyRelationFilter
 }
 
 input StringNullableFilter {
@@ -423,6 +426,12 @@ input IntFilter {
   not: IntFilter
 }
 
+input TagManyRelationFilter {
+  every: TagWhereInput
+  some: TagWhereInput
+  none: TagWhereInput
+}
+
 input ProductOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -442,6 +451,7 @@ input ProductUpdateInput {
   price: Int
   stockCount: Int
   user: UserRelateToOneForUpdateInput
+  tags: TagRelateToManyForUpdateInput
 }
 
 input ProductImageRelateToOneForUpdateInput {
@@ -454,6 +464,13 @@ input UserRelateToOneForUpdateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
+}
+
+input TagRelateToManyForUpdateInput {
+  disconnect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
 }
 
 input ProductUpdateArgs {
@@ -470,6 +487,7 @@ input ProductCreateInput {
   price: Int
   stockCount: Int
   user: UserRelateToOneForCreateInput
+  tags: TagRelateToManyForCreateInput
 }
 
 input ProductImageRelateToOneForCreateInput {
@@ -482,10 +500,16 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
+input TagRelateToManyForCreateInput {
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
 type ProductImage {
   id: ID!
   image: ImageFieldOutput
   altText: String
+  filename: String
   product: Product
 }
 
@@ -515,17 +539,20 @@ input ProductImageWhereInput {
   NOT: [ProductImageWhereInput!]
   id: IDFilter
   altText: StringFilter
+  filename: StringFilter
   product: ProductWhereInput
 }
 
 input ProductImageOrderByInput {
   id: OrderDirection
   altText: OrderDirection
+  filename: OrderDirection
 }
 
 input ProductImageUpdateInput {
   image: ImageFieldInput
   altText: String
+  filename: String
   product: ProductRelateToOneForUpdateInput
 }
 
@@ -550,6 +577,7 @@ input ProductImageUpdateArgs {
 input ProductImageCreateInput {
   image: ImageFieldInput
   altText: String
+  filename: String
   product: ProductRelateToOneForCreateInput
 }
 
@@ -775,12 +803,6 @@ input PostWhereInput {
   tags: TagManyRelationFilter
 }
 
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
 input PostOrderByInput {
   id: OrderDirection
   title: OrderDirection
@@ -797,13 +819,6 @@ input PostUpdateInput {
   tags: TagRelateToManyForUpdateInput
 }
 
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
 input PostUpdateArgs {
   where: PostWhereUniqueInput!
   data: PostUpdateInput!
@@ -818,16 +833,13 @@ input PostCreateInput {
   tags: TagRelateToManyForCreateInput
 }
 
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
 type Tag {
   id: ID!
   name: String
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
 }
 
 input TagWhereUniqueInput {
@@ -841,6 +853,7 @@ input TagWhereInput {
   id: IDFilter
   name: StringFilter
   posts: PostManyRelationFilter
+  products: ProductManyRelationFilter
 }
 
 input TagOrderByInput {
@@ -851,6 +864,7 @@ input TagOrderByInput {
 input TagUpdateInput {
   name: String
   posts: PostRelateToManyForUpdateInput
+  products: ProductRelateToManyForUpdateInput
 }
 
 input TagUpdateArgs {
@@ -861,6 +875,7 @@ input TagUpdateArgs {
 input TagCreateInput {
   name: String
   posts: PostRelateToManyForCreateInput
+  products: ProductRelateToManyForCreateInput
 }
 
 """
