@@ -34,13 +34,13 @@ model User {
 model Role {
   id                String  @id @default(uuid()) @postgresql.Uuid
   name              String  @default("")
-  assignedTo        User[]  @relation("User_role")
   canManageProducts Boolean @default(false)
   canSeeOtherUsers  Boolean @default(false)
   canManageUsers    Boolean @default(false)
   canManageRoles    Boolean @default(false)
   canManageCart     Boolean @default(false)
   canManageOrders   Boolean @default(false)
+  assignedTo        User[]  @relation("User_role")
 }
 
 model Product {
@@ -69,7 +69,7 @@ model ProductImage {
   image_height         Int?
   image_id             String?
   altText              String      @default("Product Featured Image")
-  filename             String      @default("")
+  filename             String      @unique @default("")
   product              Product?    @relation("Product_photo")
   from_OrderItem_photo OrderItem[] @relation("OrderItem_photo")
 }
@@ -128,7 +128,7 @@ model Post {
 
 model Tag {
   id       String    @id @default(uuid()) @postgresql.Uuid
-  name     String    @default("")
+  name     String    @unique @default("")
   posts    Post[]    @relation("Post_tags")
   products Product[] @relation("Product_tags")
 }

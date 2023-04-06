@@ -41,6 +41,14 @@ export const QUERY_USER_CURRENT = gql`
         id
         isAdmin
         name
+        role {
+          canManageCart
+          canManageOrders
+          canManageProducts
+          canManageRoles
+          canManageUsers
+          canSeeOtherUsers
+        }
         cart {
           id
           quantity

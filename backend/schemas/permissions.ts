@@ -3,7 +3,7 @@ import { checkbox } from "@keystone-6/core/fields";
 export const permissionFields = {
   canManageProducts: checkbox({
     defaultValue: false,
-    label: 'User can Update and delete any product',
+    label: 'Manage Products: User can Update and Delete any product',
   }),
   canSeeOtherUsers: checkbox({
     defaultValue: false,

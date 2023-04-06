@@ -1,20 +1,21 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
-import { isLoggedIn, rules } from "../access";
-
+import { isLoggedIn, permissions, rules } from "../access";
 
 export const Product = list({
   // access: allowAll,
   access: {
-    // filter: {
-    //   update: rules.canManageProducts
-    // },
+    filter: {
+      query: rules.canReadProducts,
+      delete: rules.canManageProducts,
+      update: rules.canManageProducts,
+    },
     operation: {
       query: () => true,
-      create: () => true,
-      update: () => true,
-      delete: () => true,
+      create: isLoggedIn,
+      update: isLoggedIn,
+      delete: isLoggedIn,
     }
   },
 
@@ -75,15 +76,27 @@ export const Product = list({
       many: true,
 
       // this is some customisations for changing how this will look in the AdminUI
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['name'],
-        inlineEdit: { fields: ['name'] },
-        linkToItem: true,
-        inlineConnect: true,
-        inlineCreate: { fields: ['name'] },
-      },
+      // ui: {
+      //   displayMode: 'cards',
+      //   cardFields: ['name'],
+      //   inlineEdit: { fields: ['name'] },
+      //   linkToItem: true,
+      //   inlineConnect: true,
+      //   inlineCreate: { fields: ['name'] },
+      // },
     }),
-    
-  }
+  },
+  hooks: {
+    // if no user set, connect to current session user
+    beforeOperation: async ({ resolvedData, context }) => {
+      try{
+        if (resolvedData && !resolvedData.user) {
+          const currentUserId = await context.session.itemId;
+          console.log({currentUserId});
+          resolvedData.user = { connect: { id: currentUserId } };
+        } 
+      } catch (err) { console.error(err) }
+      
+    }
+  },
 })

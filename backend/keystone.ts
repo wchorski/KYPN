@@ -21,7 +21,7 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost'
 const BACKEN_PORT = process.env.BACKEND_PORT || "3001"
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
 import { seedDatabase } from './seed/seedDatabase';
-import { permissionsList } from './schemas/roleFields';
+import { permissionsList } from './schemas/permissions';
 
 // const sessionConfig = {
 //   maxAge: 60 * 60 * 24 * 360,
@@ -60,13 +60,13 @@ export default withAuth(
     lists,
     extendGraphqlSchema,
     session,
-    // @ts-ignore
-    startSession: () => {
-      return {
-        // GraphQL Query
-        User: `id name email role { ${permissionsList.join(' ')} }`,
-      }
-    },
+    // @ts-ignore //todo i dont think this does anythings
+    // startSession: () => {      
+    //   return {
+    //     // GraphQL Query
+    //     User: `id name email role { ${permissionsList.join(' ')} }`,
+    //   }
+    // },
     ui: {
       isAccessAllowed: ({session}) => {
         return !!session?.data

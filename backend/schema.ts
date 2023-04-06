@@ -136,7 +136,7 @@ export const lists: Lists = {
 
     // this is the fields for our Tag list
     fields: {
-      name: text(),
+      name: text({ isIndexed: 'unique'}),
       // this can be helpful to find out all the Posts associated with a Tag
       posts: relationship({ ref: 'Post.tags', many: true }),
       products: relationship({ ref: 'Product.tags', many: true }),

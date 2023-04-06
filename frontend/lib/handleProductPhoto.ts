@@ -3,7 +3,7 @@ export function handlePhoto(photo:any){
   if(!photo){
     return {
       image: {
-        url: `/placeholder.jpg`,
+        url: `/cf-default.png`,
         altText: 'no product image',
         width: 300,
         height: 300,

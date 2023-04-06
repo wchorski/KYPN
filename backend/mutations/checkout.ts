@@ -92,7 +92,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         items: { create: orderItems },
         user: { connect: { id: user.id } },
         charge: charge.id,
-        // @ts-ignore //TODO why type error here?
+
         createdAt: now.toISOString(),
       },
     })

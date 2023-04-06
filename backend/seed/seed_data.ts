@@ -98,6 +98,9 @@ export const tags_seedjson = [
     name: 'red'
   },
   {
+    name: 'purple'
+  },
+  {
     name: 'white'
   },
   {
@@ -145,7 +148,7 @@ export const products_seed = [
     slug: 'banana-cherry',
     photo: {
       connect: {
-        altText: 'banana cherry photo'
+        filename: 'cf-1.png'
       }
     },
     user: {
@@ -154,9 +157,13 @@ export const products_seed = [
       }
     },
     tags: {
-      connect: {
-        name: ['red', 'yellow', 'two-eyes', 'nose', 'leaf']
-      }
+      connect: [
+        { name: 'red'},
+        { name: 'yellow'},
+        { name: 'two-eyes'},
+        { name: 'nose'},
+        { name: 'leaf'},
+      ],
     }
   },
   {
@@ -168,7 +175,7 @@ export const products_seed = [
     slug: 'penguin-pear',
     photo: {
       connect: {
-        altText: 'penguine pear featured photo'
+        filename: 'cf-2.png'
       }
     },
     user: {
@@ -177,9 +184,13 @@ export const products_seed = [
       }
     },
     tags: {
-      connect: {
-        name: ['red', 'white', 'two-eyes', 'nose', 'leaf', 'black']
-      }
+      connect: [
+          { name: 'red'},
+          { name: 'white'},
+          { name: 'two-eyes'},
+          { name: 'nose'},
+          { name: 'black'},
+        ]
     }
   },
   {
@@ -191,13 +202,22 @@ export const products_seed = [
     slug: 'sidways-pinapple',
     photo: {
       connect: {
-        altText: 'sideways pinapple featured photo'
+        filename: 'cf-3.png'
       }
     },
     user: {
       connect: {
         email: 'adam@m.lan'
       }
+    },
+    tags: {
+      connect: [
+          { name: 'yellow'},
+          { name: 'red'},
+          { name: 'two-eyes'},
+          { name: 'mouth'},
+          { name: 'green'},
+        ]
     },
   },
   {
@@ -209,13 +229,23 @@ export const products_seed = [
     slug: 'tiger-tomatoe',
     photo: {
       connect: {
-        altText: 'tiger tomatoe photo'
+        filename: 'cf-4.png'
       }
     },
     user: {
       connect: {
         email: 'adam@m.lan'
       }
+    },
+    tags: {
+      connect: [
+          { name: 'red'},
+          { name: 'green'},
+          { name: 'two-eyes'},
+          { name: 'mouth'},
+          { name: 'nose'},
+          { name: 'green'},
+        ]
     },
   },
   {
@@ -227,7 +257,7 @@ export const products_seed = [
     slug: 'scared-pear',
     photo: {
       connect: {
-        altText: 'scared pear photo'
+        filename: 'cf-5.png'
       }
     },
     user: {
@@ -235,6 +265,14 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'yellow'},
+        { name: 'green'},
+        { name: 'two-eyes'},
+        { name: 'stuffed'},
+      ]
+    },  
   },
   {
     name: 'Strawberry Puff',
@@ -245,7 +283,7 @@ export const products_seed = [
     slug: 'strawberry-puff',
     photo: {
       connect: {
-        altText: 'strawberry puff featured photo'
+        filename: 'cf-6.png'
       }
     },
     user: {
@@ -253,6 +291,17 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'white'},
+        { name: 'green'},
+        { name: 'two-eyes'},
+        { name: 'stuffed'},
+        { name: 'ears'},
+        { name: 'red'},
+        { name: 'leaf'},
+      ]
+    }, 
   },
   {
     name: 'Apple Pillow',
@@ -263,7 +312,7 @@ export const products_seed = [
     slug: 'apple-pillow',
     photo: {
       connect: {
-        altText: 'Apple Pillow featured photo'
+        filename: 'cf-7.png'
       }
     },
     user: {
@@ -271,6 +320,17 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'yellow'},
+        { name: 'green'},
+        { name: 'red'},
+        { name: 'two-eyes'},
+        { name: 'stuffed'},
+        { name: 'mouth'},
+        { name: 'leaf'},
+      ]
+    }, 
   },
   {
     name: 'Blue Drop',
@@ -281,7 +341,7 @@ export const products_seed = [
     slug: 'blue-drop',
     photo: {
       connect: {
-        altText: 'Blue Drop featured photo'
+        filename: 'cf-8.png'
       }
     },
     user: {
@@ -289,6 +349,19 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'blue'},
+        { name: 'yellow'},
+
+        { name: 'stuffed'},
+
+        { name: 'one-eyed'},
+
+        { name: 'leaf'},
+
+      ]
+    }, 
   },
   {
     name: 'Azure Cyclops',
@@ -299,7 +372,7 @@ export const products_seed = [
     slug: 'azure-cyclops',
     photo: {
       connect: {
-        altText: 'Azure Cyclops featured photo'
+        filename: 'cf-9.png'
       }
     },
     user: {
@@ -307,6 +380,19 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'blue'},
+        { name: 'black'},
+        { name: 'green'},
+        { name: 'stuffed'},
+        { name: 'one-eyed'},
+
+        { name: 'mouth'},
+        { name: 'leaf'},
+
+      ]
+    }, 
   },
   {
     name: 'Purple Fuzz Blob',
@@ -317,7 +403,7 @@ export const products_seed = [
     slug: 'purple-blob',
     photo: {
       connect: {
-        altText: 'Purple Blob featured photo'
+        filename: 'cf-10.png'
       }
     },
     user: {
@@ -325,6 +411,15 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'green'},
+        { name: 'purple'},
+        { name: 'stuffed'},
+        { name: 'two-eyes'},
+        { name: 'leaf'},
+      ]
+    }, 
   },
   {
     name: 'Inky Indigo',
@@ -335,7 +430,7 @@ export const products_seed = [
     slug: 'inky-indigo',
     photo: {
       connect: {
-        altText: 'Inky Indigo featured photo'
+        filename: 'cf-11.png'
       }
     },
     user: {
@@ -343,6 +438,15 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'purple'},
+        
+        { name: 'stuffed'},
+        
+        { name: 'two-eyes'},
+      ]
+    }, 
   },
   {
     name: 'Yellow Pearabol',
@@ -353,7 +457,7 @@ export const products_seed = [
     slug: 'yellow-pearabol',
     photo: {
       connect: {
-        altText: 'Yellow Pearabol featured photo'
+        filename: 'cf-12.png'
       }
     },
     user: {
@@ -361,6 +465,20 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        
+        { name: 'yellow'},
+        
+        { name: 'green'},
+        { name: 'stuffed'},
+        
+        { name: 'one-eyed'},
+        
+        { name: 'leaf'},
+
+      ]
+    }, 
   },
   {
     name: 'Kiwi Kidz',
@@ -371,7 +489,7 @@ export const products_seed = [
     slug: 'kiwi-kidz',
     photo: {
       connect: {
-        altText: 'Kiwi Kidz featured photo'
+        filename: 'cf-13.png'
       }
     },
     user: {
@@ -379,6 +497,20 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        
+
+        { name: 'green'},
+        { name: 'stuffed'},
+        
+        { name: 'two-eyes'},
+ 
+        
+        { name: 'bundle'},
+        { name: 'nose'},
+      ]
+    }, 
   },
   {
     name: 'Quad Kumquats',
@@ -389,7 +521,7 @@ export const products_seed = [
     slug: 'quad-kumquats',
     photo: {
       connect: {
-        altText: 'Quad Kumquats featured photo'
+        filename: 'cf-14.png'
       }
     },
 
@@ -398,6 +530,22 @@ export const products_seed = [
         email: 'adam@m.lan'
       }
     },
+    tags: {
+      connect: [
+        { name: 'purple'},
+        { name: 'yellow'},
+        { name: 'red'},
+
+        { name: 'green'},
+        { name: 'stuffed'},
+        { name: 'orange'},
+
+
+        { name: 'leaf'},
+        { name: 'bundle'},
+
+      ]
+    }, 
   },
   
 ]
@@ -411,52 +559,52 @@ export const productImage_seedjson = [
     altText: 'penguine pear featured photo',
     filename: 'cf-2.png'
   },
-  // {
-  //   altText: 'sideways pinapple featured photo',
-  //   filename: 'cf-3.png'
-  // },
-  // {
-  //   altText: 'tiger tomatoe photo',
-  //   filename: 'cf-4.png'
-  // },
-  // {
-  //   altText: 'scared pear photo',
-  //   filename: 'cf-5.png'
-  // },
-  // {
-  //   altText: 'strawberry puff featured photo',
-  //   filename: 'cf-6.png'
-  // },
-  // {
-  //   altText: 'Apple Pillow featured photo',
-  //   filename: 'cf-7.png'
-  // },
-  // {
-  //   altText: 'Blue Drop featured photo',
-  //   filename: 'cf-8.png'
-  // },
-  // {
-  //   altText: 'Azure Cyclops featured photo',
-  //   filename: 'cf-9.png'
-  // },
-  // {
-  //   altText: 'Purple Blob featured photo',
-  //   filename: 'cf-10.png'
-  // },
-  // {
-  //   altText: 'Inky Indigo featured photo',
-  //   filename: 'cf-11.png'
-  // },
-  // {
-  //   altText: 'Yellow Pearabol featured photo',
-  //   filename: 'cf-12.png'
-  // },
-  // {
-  //   altText: 'Kiwi Kidz featured photo',
-  //   filename: 'cf-13.png'
-  // },
-  // {
-  //   altText: 'Quad Kumquats featured photo',
-  //   filename: 'cf-14.png'
-  // },
+  {
+    altText: 'sideways pinapple featured photo',
+    filename: 'cf-3.png'
+  },
+  {
+    altText: 'tiger tomatoe photo',
+    filename: 'cf-4.png'
+  },
+  {
+    altText: 'scared pear photo',
+    filename: 'cf-5.png'
+  },
+  {
+    altText: 'strawberry puff featured photo',
+    filename: 'cf-6.png'
+  },
+  {
+    altText: 'Apple Pillow featured photo',
+    filename: 'cf-7.png'
+  },
+  {
+    altText: 'Blue Drop featured photo',
+    filename: 'cf-8.png'
+  },
+  {
+    altText: 'Azure Cyclops featured photo',
+    filename: 'cf-9.png'
+  },
+  {
+    altText: 'Purple Fuzz Blob featured photo',
+    filename: 'cf-10.png'
+  },
+  {
+    altText: 'Inky Indigo featured photo',
+    filename: 'cf-11.png'
+  },
+  {
+    altText: 'Yellow Pearabol featured photo',
+    filename: 'cf-12.png'
+  },
+  {
+    altText: 'Kiwi Kidz featured photo',
+    filename: 'cf-13.png'
+  },
+  {
+    altText: 'Quad Kumquats featured photo',
+    filename: 'cf-14.png'
+  },
 ]

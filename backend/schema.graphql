@@ -255,14 +255,14 @@ input RoleRelateToOneForCreateInput {
 type Role {
   id: ID!
   name: String
-  assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
-  assignedToCount(where: UserWhereInput! = {}): Int
   canManageProducts: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  assignedToCount(where: UserWhereInput! = {}): Int
 }
 
 input RoleWhereUniqueInput {
@@ -275,13 +275,13 @@ input RoleWhereInput {
   NOT: [RoleWhereInput!]
   id: IDFilter
   name: StringFilter
-  assignedTo: UserManyRelationFilter
   canManageProducts: BooleanFilter
   canSeeOtherUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageRoles: BooleanFilter
   canManageCart: BooleanFilter
   canManageOrders: BooleanFilter
+  assignedTo: UserManyRelationFilter
 }
 
 input UserManyRelationFilter {
@@ -303,13 +303,13 @@ input RoleOrderByInput {
 
 input RoleUpdateInput {
   name: String
-  assignedTo: UserRelateToManyForUpdateInput
   canManageProducts: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  assignedTo: UserRelateToManyForUpdateInput
 }
 
 input UserRelateToManyForUpdateInput {
@@ -326,13 +326,13 @@ input RoleUpdateArgs {
 
 input RoleCreateInput {
   name: String
-  assignedTo: UserRelateToManyForCreateInput
   canManageProducts: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  assignedTo: UserRelateToManyForCreateInput
 }
 
 input UserRelateToManyForCreateInput {
@@ -531,6 +531,7 @@ enum ImageExtension {
 
 input ProductImageWhereUniqueInput {
   id: ID
+  filename: String
 }
 
 input ProductImageWhereInput {
@@ -844,6 +845,7 @@ type Tag {
 
 input TagWhereUniqueInput {
   id: ID
+  name: String
 }
 
 input TagWhereInput {

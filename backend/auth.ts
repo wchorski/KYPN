@@ -22,6 +22,7 @@ import { createAuth } from '@keystone-6/auth';
 import { statelessSessions } from '@keystone-6/core/session';
 import { config } from '@keystone-6/core';
 import { sendPasswordResetEmail } from './lib/mail';
+import { permissionsList } from './schemas/permissions';
 
 // for a stateless session, a SESSION_SECRET should always be provided
 //   especially in production (statelessSessions will throw if SESSION_SECRET is undefined)
@@ -43,7 +44,15 @@ const { withAuth } = createAuth({
   // this is a GraphQL query fragment for fetching what data will be attached to a context.session
   //   this can be helpful for when you are writing your access control functions
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  sessionData: 'name createdAt', 
+  sessionData: `
+    name 
+    createdAt
+    role {
+      id
+      name
+      ${permissionsList.join(' ')}
+    }
+  `, 
   secretField: 'password',
   passwordResetLink: {
     sendToken: async ({ itemId, identity, token, context }) => { 
@@ -63,6 +72,7 @@ const { withAuth } = createAuth({
     // it uses context.sudo() to do this, which bypasses any access control you might have
     //   you shouldn't use this in production
   },
+
 });
 
 // statelessSessions uses cookies for session tracking

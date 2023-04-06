@@ -22,7 +22,7 @@ export const ProductThumbnail = ({id, name, description, price, photo}: any) => 
         />
       )}
         
-      {!photo?.image?.url && <Image src={`/placeholder.jpg`} width={300} height={300} alt={'placeholder photo'}/>}
+      {!photo?.image?.url && <Image src={`/cf-default.png`} width={300} height={300} alt={'placeholder photo'}/>}
 
       <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
 

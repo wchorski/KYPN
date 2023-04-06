@@ -4,7 +4,8 @@ import path from 'path'
 // @ts-ignore
 // import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 // import  Upload  from 'graphql-upload/Upload.mjs'
-const { Upload } = import("graphql-upload/Upload.mjs")
+// import { Upload }  from "graphql-upload/Upload.mjs"
+const { Upload }   = import("graphql-upload/Upload.mjs")
 // import type { FileUpload as FileUploadType } from 'graphql-upload/Upload.mjs'
 //// @ts-ignore
 // import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
@@ -30,9 +31,9 @@ export const prepareToUpload = (filePath:string) => {
   }
 
   // const upload = new GraphQLUpload()
-  const upload = new Upload()
+  const uploadfile = new Upload()
   // @ts-ignore
-  upload.resolve(image)
+  uploadfile.resolve(image)
 
-  return upload
+  return uploadfile
 }

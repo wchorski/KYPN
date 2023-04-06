@@ -105,13 +105,14 @@ const seedProductImages = async (context: Context) => {
   const seedObjects: any[] = productImage_seedjson;
   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
     where: {
-      altText: { in: seedObjects.map(obj => obj.altText) },
+      // @ts-ignore
+      filename: { in: seedObjects.map(obj => obj.filename) },
     },
   });
-  console.log({objectsAlreadyInDatabase});
   
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some(p => p.altText === seedObj.altText)
+    // @ts-ignore
+    seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
   );
 
   console.log({objsToCreate});
@@ -124,18 +125,19 @@ const seedProductImages = async (context: Context) => {
 
       return ({ 
       ...obj,  
-      upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
+      // TODO why no seed upload files work?
+      // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
     })}),
   });
 };
 
 export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
-  // await seedUsers(context)
-  // await seedRoles(context)
+  await seedUsers(context)
+  await seedRoles(context)
   await seedTags(context)
 
   await seedProductImages(context)
-  // await seedProducts(context)
+  await seedProducts(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };
