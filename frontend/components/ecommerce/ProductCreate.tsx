@@ -1,7 +1,7 @@
-// import { uploadPrep } from "@/lib/uploadPrep"
+// import { uploadPrep } from "../lib/uploadPrep"
 import Router from "next/router";
-import useForm from "@/lib/useForm"
-import { StyledForm } from "@/styles/Form.styled"
+import useForm from "../../lib/useForm"
+import { StyledForm } from "../../styles/Form.styled"
 import { gql, useMutation } from "@apollo/client"
 import { useState } from "react"
 import ErrorMessage from "../ErrorMessage"
@@ -17,12 +17,12 @@ export const ProductCreate = () => {
   // function handleOnChange(e: any){
   //   console.log('upload change');
   //   console.log(e.target.files[0]);
-    
+
   // } 
 
   const [isSuccess, setIsSuccess] = useState(false)
 
-  const {inputs, handleChange, clearForm, resetForm} = useForm({
+  const { inputs, handleChange, clearForm, resetForm } = useForm({
     image: null,
     name: 'will',
     price: 123,
@@ -31,25 +31,25 @@ export const ProductCreate = () => {
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    console.log({inputs})
+    console.log({ inputs })
     const res = await createProduct()
     console.log('res', res)
-    if(res.data.createProduct) clearForm(); setIsSuccess(true)
+    if (res.data.createProduct) clearForm(); setIsSuccess(true)
     Router.push({
       pathname: `/shop/product/${res.data.createProduct.id}`,
-    })    
+    })
   }
 
-  
-  const [createProduct, {loading, error, data}] = useMutation(
-    CREATE_PRODUCT_MUTATION, 
+
+  const [createProduct, { loading, error, data }] = useMutation(
+    CREATE_PRODUCT_MUTATION,
     {
       variables: {
         data: {
           photo: {
             create: {
               altText: `${inputs.name} featured image`,
-              image: {upload: inputs.image}
+              image: { upload: inputs.image }
             },
           },
           name: inputs.name,
@@ -58,7 +58,7 @@ export const ProductCreate = () => {
         }
       },
       // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
-      refetchQueries: [{query: GET_ALL_PRODUCTS}]
+      refetchQueries: [{ query: GET_ALL_PRODUCTS }]
     }
   )
 
@@ -68,20 +68,20 @@ export const ProductCreate = () => {
 
     <StyledForm onSubmit={e => handleSubmit(e)}>
 
-      <ErrorMessage error={error}/>
-      {isSuccess && <p>product created</p> }
+      <ErrorMessage error={error} />
+      {isSuccess && <p>product created</p>}
 
       <fieldset disabled={loading} aria-busy={loading} >
         <label htmlFor="image">
           Image
-          <input type="file" id="image" name="image" 
+          <input type="file" id="image" name="image"
             onChange={handleChange}
           />
         </label>
 
         <label htmlFor="name">
           Name
-          <input required type="text" id="name" name="name" placeholder="name..." 
+          <input required type="text" id="name" name="name" placeholder="name..."
             value={inputs.name}
             onChange={handleChange}
           />
@@ -89,7 +89,7 @@ export const ProductCreate = () => {
 
         <label htmlFor="price">
           Price
-          <input required type="number" id="price" name="price" placeholder="price..." 
+          <input required type="number" id="price" name="price" placeholder="price..."
             value={inputs.price}
             onChange={handleChange}
           />
@@ -97,13 +97,13 @@ export const ProductCreate = () => {
 
         <label htmlFor="description">
           Description
-          <textarea id="description" name="description" placeholder="description..." 
+          <textarea id="description" name="description" placeholder="description..."
             value={inputs.description}
             onChange={handleChange}
           />
         </label>
 
-        <button type="submit" > + Add </button> 
+        <button type="submit" > + Add </button>
         <br /> <br />
 
         <button type="button" onClick={e => clearForm()}> clear form </button>

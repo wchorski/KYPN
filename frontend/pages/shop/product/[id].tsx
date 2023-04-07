@@ -1,4 +1,4 @@
-import ProductSingle from '@/components/ecommerce/ProductSingle';
+import ProductSingle from '../components/ecommerce/ProductSingle';
 import { useRouter } from 'next/router'
 
 export default function ProductByID() {
@@ -7,6 +7,6 @@ export default function ProductByID() {
 
 
   return (
-    <ProductSingle id={router.query.id}/>
+    <ProductSingle id={router.query.id} />
   )
 }

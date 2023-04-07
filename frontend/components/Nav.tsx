@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import React from 'react'
 import styled from "styled-components";
-import { SessionBadge, useUser } from "@/components/menus/Session";
+import { SessionBadge, useUser } from "../components/menus/Session";
 import SignOutButton from './menus/SignOutButton';
-import { useCart } from '@/lib/cartState';
+import { useCart } from '../lib/cartState';
 import CartCount from './ecommerce/CartCount';
 
 export function Nav() {
 
   const session = useUser()
   // console.log({session});
-  
-  
-  const {setIsOpen} = useCart()
+
+
+  const { setIsOpen } = useCart()
 
   return (
     <StyledNav>
@@ -21,13 +21,13 @@ export function Nav() {
         <Link href={`/blog`}> Blog </Link>
 
         {session && (<>
-          <Link href={`/sell`}> Sell </Link>
+          <Link href={`/shop/sell`}> Sell </Link>
           <Link href={`/shop/orders`}> Orders </Link>
-          <SessionBadge session={session}/>
+          <SessionBadge session={session} />
           <button onClick={e => setIsOpen(true)}>
             My Cart
             <CartCount count={session.cart.reduce(
-              (tally:any, cartItem:any) => tally + (cartItem.product ? cartItem.quantity : 0),
+              (tally: any, cartItem: any) => tally + (cartItem.product ? cartItem.quantity : 0),
               0
             )} />
           </button>

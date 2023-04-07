@@ -1,27 +1,27 @@
-// import { useGlobalContext } from "@/lib/useSessionContext"
+// import { useGlobalContext } from "../lib/useSessionContext"
 import { gql, useMutation } from "@apollo/client"
 import { useRouter } from "next/router"
 import { QUERY_USER_CURRENT } from "./Session"
 
 export default function SignOutButton() {
 
-  const [signOut, {data, loading, error}] = useMutation(MUTATION_SIGN_OUT)
+  const [signOut, { data, loading, error }] = useMutation(MUTATION_SIGN_OUT)
   // const {setSession} = useGlobalContext()
   const router = useRouter()
 
-  async function handleSignout(){
+  async function handleSignout() {
 
     try {
       const res = await signOut({
-        refetchQueries: [{query: QUERY_USER_CURRENT}],
+        refetchQueries: [{ query: QUERY_USER_CURRENT }],
       })
       console.log(res)
 
       router.push(`/auth/signout`)
-      
+
     } catch (error) {
       console.log(error)
-      
+
     }
 
 
@@ -30,15 +30,15 @@ export default function SignOutButton() {
     // setSession({})
 
     // localStorage.removeItem('session')
-    
-  } 
+
+  }
 
   return (
-    <button 
+    <button
       type="button"
       onClick={e => handleSignout()}
-    > 
-      Sign Out 
+    >
+      Sign Out
     </button>
   )
 }

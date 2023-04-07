@@ -1,6 +1,36 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
+import { permissions } from "../access";
+
+export const ProductImage = list({
+  access: {
+    // filter: {
+    //   // query: rules.canManageUsers,
+    //   // update: rules.canManageUsers,
+    //   // delete: () => false,
+    // },
+    operation: {
+      query: () => true,
+      create: permissions.canManageProducts,
+      update: permissions.canManageProducts,
+      delete: permissions.canManageProducts,
+    },
+  },
+  fields: {
+    image: image({ storage: 'my_local_images' }),
+    altText: text({ validation: { isRequired: true }, defaultValue: 'Product Featured Image' }),
+    filename: text({ isIndexed: 'unique' }),
+    product: relationship({ ref: 'Product.photo' }),
+  },
+  ui: {
+    listView: {
+      initialColumns: ['image', 'altText', 'product']
+    }
+  }
+})
+
+
 
 // import 'dotenv/config';
 // import { relationship, text } from '@keystone-next/fields';
@@ -36,19 +66,3 @@ import { image, integer, relationship, select, text } from "@keystone-6/core/fie
 //     },
 //   },
 // });
-
-
-export const ProductImage = list({
-  access: allowAll,
-  fields: {
-    image: image({ storage: 'my_local_images'}), 
-    altText: text({validation: { isRequired: true }, defaultValue: 'Product Featured Image'}),
-    filename: text({ isIndexed: 'unique' }),
-    product: relationship({ref: 'Product.photo'}),
-  },
-  ui:{
-    listView: {
-      initialColumns: ['image', 'altText', 'product']
-    }
-  }
-})

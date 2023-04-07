@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { StyledSickButton } from "@/styles/SickButton.styled"
+import { StyledSickButton } from "../../styles/SickButton.styled"
 import { gql, useMutation } from "@apollo/client"
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
@@ -12,7 +11,9 @@ import { useCart } from "../../lib/cartState";
 import { QUERY_USER_CURRENT } from "../menus/Session"
 
 // TODO Add blocker stops stripe.com requests thinks it's X site
-const stripeLib = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO KEY IN ENV')
+const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY_IN_ENV'
+
+const stripeLib = loadStripe(STRIPE_KEY)
 
 function CheckoutForm() {
 
@@ -23,18 +24,19 @@ function CheckoutForm() {
   const stripe = useStripe()
   const elements = useElements()
 
-  const [mutate, {error, loading, data}] = useMutation(MUTATE_CHECKOUT_ORDER, {
-    refetchQueries: [{query: QUERY_USER_CURRENT}]
+  const [mutate, { error, loading, data }] = useMutation(MUTATE_CHECKOUT_ORDER, {
+    refetchQueries: [{ query: QUERY_USER_CURRENT }]
   })
 
-  async function handleSubmit(e:FormEvent){
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setIsLoading(true)
-    console.log('check me out')
 
     nProgress.start()
-    
-    const {paymentMethod, error} = await stripe.createPaymentMethod({
+
+    // @ts-ignore
+    const { paymentMethod, error } = await stripe?.createPaymentMethod({
+      // @ts-ignore
       elements,
       params: {
         billing_details: {
@@ -43,22 +45,20 @@ function CheckoutForm() {
       },
     });
 
-    console.log('payment id, ', paymentMethod.id);
-
-    if(error) {
+    if (error) {
       console.log(error);
       nProgress.done()
       setError(error)
       return //stops checkout
     }
- 
+
     const res = await mutate({
       variables: {
         token: paymentMethod.id,
       }
     })
     console.log('FINISHED ORDER', res);
-    
+
     setIsLoading(false)
     nProgress.done()
     console.log('check end')
@@ -70,20 +70,20 @@ function CheckoutForm() {
 
   return (
     <StyledCheckoutForm onSubmit={e => handleSubmit(e)}>
-      
-      {errorStripe || error && <ErrorMessage error={errorStripe || error}/>}
+
+      {errorStripe || error && <ErrorMessage error={errorStripe || error} />}
 
       <CardElement />
 
-      <StyledSickButton>
+      <StyledSickButton disabled={isLoading}>
         Checkout
       </StyledSickButton>
-      
+
     </StyledCheckoutForm>
   )
 }
 
-export function Checkout(){
+export function Checkout() {
   return (
     <Elements stripe={stripeLib}>
       <CheckoutForm />

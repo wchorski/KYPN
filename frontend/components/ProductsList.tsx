@@ -1,21 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ProductThumbnail } from "@/components/ProductThumbnail";
+import { ProductThumbnail } from "../components/ProductThumbnail";
 import { useQuery, gql } from '@apollo/client'
 import styled from 'styled-components';
 import { QueryLoading } from './menus/QueryLoading';
 import { QueryError } from './menus/QueryError';
-import { perPage } from '@/config';
+import { perPage } from '../config';
 
 type ProdProps = {
   page: number
 }
 
-export function ProductsList({page}:ProdProps) {
+export function ProductsList({ page }: ProdProps) {
   // const { loading, error, data } = useQuery(GET_ALL_PRODUCTS)
   const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
     variables: {
-      skip: page * perPage - perPage, 
+      skip: page * perPage - perPage,
       take: perPage
     }
   })

@@ -1,19 +1,19 @@
-import { datePretty } from "@/lib/dateFormatter"
-import { handlePhoto } from "@/lib/handleProductPhoto"
-import moneyFormatter from "@/lib/moneyFormatter"
-import { StyledOrderItem } from "@/styles/OrderItem.styled"
+import { datePretty } from "../lib/dateFormatter"
+import { handlePhoto } from "../lib/handleProductPhoto"
+import moneyFormatter from "../lib/moneyFormatter"
+import { StyledOrderItem } from "../styles/OrderItem.styled"
 import Image from "next/image"
 import Link from "next/link"
 
-export default function OrderItem({order}:any) {
-  
-  const {charge, createdAt, id, items, itemsCount, total, user} = order  
+export default function OrderItem({ order }: any) {
 
-  function handlePlural(name:string, count:number){
-    if(count > 1) return name + 's'
+  const { charge, createdAt, id, items, itemsCount, total, user } = order
+
+  function handlePlural(name: string, count: number) {
+    if (count > 1) return name + 's'
     return name
   }
-  
+
   return (
     <StyledOrderItem>
 
@@ -33,10 +33,10 @@ export default function OrderItem({order}:any) {
         </div>
 
         <div className="images">
-          {items.map((item:any) => (
-            <Image 
+          {items.map((item: any) => (
+            <Image
               priority
-              src={handlePhoto(item.photo).image?.url} 
+              src={handlePhoto(item.photo).image?.url}
               alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no alt text'}
               width={handlePhoto(item.photo).image?.width}
               height={handlePhoto(item.photo).image?.height}

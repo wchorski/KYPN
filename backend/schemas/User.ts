@@ -1,13 +1,27 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, password, relationship, text, timestamp } from "@keystone-6/core/fields";
+import { permissions, rules } from "../access";
 
 export const User = list({
-  // WARNING
-  //   for this starter project, anyone can create, query, update and delete anything
-  //   if you want to prevent random people on the internet from accessing your data,
-  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  access: allowAll,
+  access: {
+    filter: {
+      query: rules.canManageUsers,
+      update: rules.canManageUsers,
+      // delete: () => false,
+    },
+    operation: {
+      query: permissions.isLoggedIn,
+      create: () => true,
+      update: () => false,
+      delete: permissions.canManageUsers,
+    },
+  },
+
+  ui: {
+    // hide backend from non admins
+    hideCreate: args => !permissions.canManageUsers(args)
+  },
 
   // this is the fields for our User list
   fields: {
@@ -21,7 +35,7 @@ export const User = list({
       // email as another user - this may or may not be a good idea for your project
       isIndexed: 'unique',
     }),
-    
+
     password: password({ validation: { isRequired: true } }),
     isAdmin: checkbox(),
 
@@ -29,11 +43,11 @@ export const User = list({
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
     cart: relationship({
-      ref: 'CartItem.user', 
-      many: true, 
+      ref: 'CartItem.user',
+      many: true,
       ui: {
-        createView: {fieldMode: 'hidden'},
-        itemView: {fieldMode: 'hidden'}
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' }
       }
     }),
 
@@ -46,10 +60,14 @@ export const User = list({
     role: relationship({
       ref: 'Role.assignedTo',
       // todo add access control
-      // access: {
-      //     create: permissions.canManageUsers,
-      //     update: permissions.canManageUsers,
-      // },
+      access: {
+        create: permissions.canManageUsers,
+        update: permissions.canManageUsers
+      },
+      // ui: {
+      //   createView: { fieldMode: 'hidden' },
+      //   itemView: { fieldMode: 'hidden' }
+      // }
     })
   },
 })

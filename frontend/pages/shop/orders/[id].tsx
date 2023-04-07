@@ -1,4 +1,4 @@
-import OrderReceipt from "@/components/ecommerce/OrderReceipt";
+import OrderReceipt from "../../../components/ecommerce/OrderReceipt";
 
 
 export default function OrdersByID() {

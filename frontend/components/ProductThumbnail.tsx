@@ -2,35 +2,35 @@ import React from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
-import moneyFormatter from '@/lib/moneyFormatter';
+import moneyFormatter from '../lib/moneyFormatter';
 import { ProductDelete } from './ecommerce/ProductDelete';
 import AddToCart from './ecommerce/AddToCart';
 
-export const ProductThumbnail = ({id, name, description, price, photo}: any) => {
+export const ProductThumbnail = ({ id, name, description, price, photo }: any) => {
 
   return (
     <StyledProdThumbnail>
 
-      
+
       <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
       {photo?.image?.url && (
-        <Image 
-        src={photo?.image?.url} 
-        alt={photo?.altText}
-        width={photo?.image?.width}
-        height={photo?.image?.height}
+        <Image
+          src={photo?.image?.url}
+          alt={photo?.altText}
+          width={photo?.image?.width}
+          height={photo?.image?.height}
         />
       )}
-        
-      {!photo?.image?.url && <Image src={`/cf-default.png`} width={300} height={300} alt={'placeholder photo'}/>}
+
+      {!photo?.image?.url && <Image src={`/cf-default.png`} width={300} height={300} alt={'placeholder photo'} />}
 
       <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
 
       <p className='desc'>{description}</p>
 
       <div className="menu admin">
-        <Link href={{pathname: '/shop/product/update', query: {id: id},}}> Edit ✏️ </Link>
-        <AddToCart id={id}/>
+        <Link href={{ pathname: '/shop/product/update', query: { id: id }, }}> Edit ✏️ </Link>
+        <AddToCart id={id} />
         <ProductDelete id={id}> Delete </ProductDelete>
       </div>
     </StyledProdThumbnail>

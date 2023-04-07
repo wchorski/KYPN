@@ -1,7 +1,7 @@
 import React, { Fragment, useContext } from 'react';
 import Link from 'next/link';
-import { useGlobalContext } from '@/lib/useSessionContext';
-import { useUser } from '@/components/menus/Session';
+import { useGlobalContext } from '../lib/useSessionContext';
+import { useUser } from '../components/menus/Session';
 // import { SessionContext } from './_app';
 
 

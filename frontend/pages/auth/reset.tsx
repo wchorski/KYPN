@@ -1,13 +1,13 @@
-import PasswordResetForm from "@/components/menus/PasswordResetForm"
-import PasswordReset from "@/components/menus/PasswordResetRequest"
+import PasswordResetForm from "../components/menus/PasswordResetForm"
+import PasswordReset from "../components/menus/PasswordResetRequest"
 import { useRouter } from "next/router"
 
 
 export default function ResetPage() {
 
-  const {query} = useRouter()
+  const { query } = useRouter()
 
-  if(!query.token) return (
+  if (!query.token) return (
     <div>
       <PasswordReset />
     </div>
@@ -15,7 +15,7 @@ export default function ResetPage() {
 
   return (
     <div>
-      <PasswordResetForm token={query.token}/>
+      <PasswordResetForm token={query.token} />
     </div>
   )
 }

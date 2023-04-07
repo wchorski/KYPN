@@ -1,22 +1,22 @@
-import { StyledDropDown, StyledDropDownItem, StyledSearch } from "@/styles/DropDown.styled"
+import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../styles/DropDown.styled"
 import { gql, useLazyQuery, useQuery } from "@apollo/client"
 import { resetIdCounter, useCombobox } from "downshift"
 import { useCallback, useState } from "react"
 import styled from "styled-components"
-import {debounce} from 'lodash'
+import { debounce } from 'lodash'
 import Image from "next/image"
-import { handlePhoto } from "@/lib/handleProductPhoto"
+import { handlePhoto } from "../lib/handleProductPhoto"
 import { useRouter } from "next/router"
 
 export const SearchInput = () => {
 
   const router = useRouter()
 
-  const [query, {loading, data, error}] = useLazyQuery(QUERY_SEARCH_PRODUCTS, {fetchPolicy: 'no-cache'})
+  const [query, { loading, data, error }] = useLazyQuery(QUERY_SEARCH_PRODUCTS, { fetchPolicy: 'no-cache' })
 
   // constricts waterfall of queries made to the server
   const findItemsLazy = useCallback(debounce(query, 350), [query]);
-  
+
   // async function handleQuery(searchTerm:string) {
   //   const res = await query({
   //     fetchPolicy: 'no-cache',
@@ -39,7 +39,7 @@ export const SearchInput = () => {
 
   const { getMenuProps, getInputProps, getLabelProps, selectItem, selectedItem, getToggleButtonProps, isOpen, getItemProps, highlightedIndex } = useCombobox({
     items: foundItems,
-    onInputValueChange: ({inputValue}) => {
+    onInputValueChange: ({ inputValue }) => {
 
       // TODO why is this caps sensative?
       // console.log(selectedItem, inputValue)
@@ -60,11 +60,11 @@ export const SearchInput = () => {
               }
             ]
           }
-          
+
         }
       })
     },
-    onSelectedItemChange({selectedItem}){
+    onSelectedItemChange({ selectedItem }) {
       // @ts-ignore
       router.push({ pathname: `/shop/product/${selectedItem.id}` })
     },
@@ -86,7 +86,7 @@ export const SearchInput = () => {
         <div>
           <input
             {...getInputProps({
-              type: 'search', 
+              type: 'search',
               placeholder: 'search color...',
               id: 'search',
               className: loading ? 'loading' : '',
@@ -111,18 +111,18 @@ export const SearchInput = () => {
           </button>
 
         </div>
-      <StyledDropDown>
-        <ul {...getMenuProps()} >
-          {isOpen && foundItems.map((item:any, index:any) => (
+        <StyledDropDown>
+          <ul {...getMenuProps()} >
+            {isOpen && foundItems.map((item: any, index: any) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
                 key={index}
                 // @ts-ignore
-                {...getItemProps({ item, index,})}
+                {...getItemProps({ item, index, })}
               >
-                <Image 
+                <Image
                   priority
-                  src={handlePhoto(item.photo).image?.url} 
+                  src={handlePhoto(item.photo).image?.url}
                   alt={handlePhoto(item.photo).image?.altText}
                   width={handlePhoto(item.photo).image?.width}
                   height={handlePhoto(item.photo).image?.height}
@@ -130,11 +130,11 @@ export const SearchInput = () => {
                 {item.name}
               </StyledDropDownItem>
             ))}
-          {isOpen && !foundItems.length && !loading && (
-            <StyledDropDownItem>No items found</StyledDropDownItem>
-          )}
-        </ul>
-      </StyledDropDown>
+            {isOpen && !foundItems.length && !loading && (
+              <StyledDropDownItem>No items found</StyledDropDownItem>
+            )}
+          </ul>
+        </StyledDropDown>
       </div>
 
     </StyledSearch>

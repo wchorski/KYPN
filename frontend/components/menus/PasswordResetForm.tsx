@@ -1,25 +1,25 @@
-import useForm from "@/lib/useForm";
-import { StyledForm } from "@/styles/Form.styled";
+import useForm from "../lib/useForm";
+import { StyledForm } from "../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
-import  Router  from "next/router";
+import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
-import  ErrorMessage  from "@/components/ErrorMessage";
+import ErrorMessage from "../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "@/lib/useSessionContext";
-// import { SessionContext } from "@/pages/_app";
-// import { SessionContext } from "@/lib/sessionContext";
+import { useGlobalContext } from "../lib/useSessionContext";
+// import { SessionContext } from "../pages/_app";
+// import { SessionContext } from "../lib/sessionContext";
 
-export default function PasswordResetForm({token}:{token:string|string[]}) {
+export default function PasswordResetForm({ token }: { token: string | string[] }) {
 
   const [successMsg, setSuccessMsg] = useState<string>()
-  const {session, setSession} = useGlobalContext()
+  const { session, setSession } = useGlobalContext()
 
-  const {inputs, handleChange, clearForm, resetForm} = useForm({
+  const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',
     password: '',
   })
 
-  const [mutate, {data, error, loading}] = useMutation(MUTATION_REDEEM_TOKEN)
+  const [mutate, { data, error, loading }] = useMutation(MUTATION_REDEEM_TOKEN)
 
   let validationError = data?.redeemUserPasswordResetToken?.code
     ? data?.redeemUserPasswordResetToken
@@ -27,17 +27,17 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    
-    if(inputs.email === '') return console.warn('inputs are empty, ', inputs)
+
+    if (inputs.email === '') return console.warn('inputs are empty, ', inputs)
     console.log(inputs)
-    
+
     const res = await mutate({
       variables: {
         email: inputs.email,
         token: token,
         password: inputs.password,
       },
-      refetchQueries: [{query: QUERY_USER_CURRENT}]
+      refetchQueries: [{ query: QUERY_USER_CURRENT }]
     }).catch(console.error)
     console.log('res', res)
 
@@ -45,9 +45,9 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
     //   console.log('pass reset FAILED, ')
     //   validationError = res?.data.redeemUserPasswordResetToken.message
 
-    if(res?.data.redeemUserPasswordResetToken === null)
+    if (res?.data.redeemUserPasswordResetToken === null)
       console.log('pass reset success, ')
-      setSuccessMsg('password successfully reset')
+    setSuccessMsg('password successfully reset')
 
 
     // Router.push({
@@ -55,7 +55,7 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
     // })    
   }
 
-  
+
   return (<>
 
     <StyledForm method="POST" onSubmit={handleSubmit}>
@@ -63,11 +63,11 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
       <h2> Create New Password </h2>
 
       {data?.redeemUserPasswordResetToken?.code === "FAILURE" && (
-        <ErrorMessage error={error || validationError}/>
+        <ErrorMessage error={error || validationError} />
       )}
       {successMsg && <p>password successfully reset</p>}
 
-      <ErrorMessage error={error}/>
+      <ErrorMessage error={error} />
 
       {!successMsg && (
         <fieldset disabled={loading} aria-busy={loading}>
@@ -77,7 +77,7 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
             <input type="email" id="email" name="email" autoComplete="email"
               placeholder="email..."
               required
-              defaultValue={inputs.email} 
+              defaultValue={inputs.email}
               onChange={handleChange}
             />
           </label>
@@ -87,7 +87,7 @@ export default function PasswordResetForm({token}:{token:string|string[]}) {
             <input type="password" id="password" name="password" autoComplete="password"
               placeholder="new password..."
               required
-              defaultValue={inputs.password} 
+              defaultValue={inputs.password}
               onChange={handleChange}
             />
           </label>

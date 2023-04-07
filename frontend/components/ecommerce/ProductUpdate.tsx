@@ -1,26 +1,26 @@
-import useForm from "@/lib/useForm"
-import { StyledForm } from "@/styles/Form.styled"
+import useForm from "../lib/useForm"
+import { StyledForm } from "../styles/Form.styled"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 import { QueryLoading } from "../menus/QueryLoading"
 
-export const ProductUpdate = ({id}: any) => {
+export const ProductUpdate = ({ id }: any) => {
 
   const { loading: qLoading, error: qError, data: qData } = useQuery(
     SINGLE_PRODUCT_QUERY, {
-    variables: { where: { id: id}}
+    variables: { where: { id: id } }
   })
 
-  const {inputs, handleChange, clearForm, resetForm} = useForm(qData?.product)
+  const { inputs, handleChange, clearForm, resetForm } = useForm(qData?.product)
 
-  const [updateProduct, {loading: uLoading, error: uError, data: uData}] = useMutation(MUTATE_PRODUCT_UPDATE)
+  const [updateProduct, { loading: uLoading, error: uError, data: uData }] = useMutation(MUTATE_PRODUCT_UPDATE)
 
   async function handleSubmit(e: any) {
     e.preventDefault()
     // console.log(inputs)
     const res = await updateProduct({
       variables: {
-        where: {id: id}, 
+        where: { id: id },
         data: inputs
       }
     }).catch(console.error)
@@ -39,7 +39,7 @@ export const ProductUpdate = ({id}: any) => {
     <div>ProductUpdate {id} </div>
     <StyledForm onSubmit={e => handleSubmit(e)}>
 
-      <ErrorMessage error={qError || uError}/>
+      <ErrorMessage error={qError || uError} />
 
       <fieldset disabled={uLoading} aria-busy={uLoading} >
         {/* <label htmlFor="image">
@@ -51,7 +51,7 @@ export const ProductUpdate = ({id}: any) => {
 
         <label htmlFor="name">
           Name
-          <input required type="text" id="name" name="name" placeholder="name..." 
+          <input required type="text" id="name" name="name" placeholder="name..."
             defaultValue={inputs.name}
             onChange={handleChange}
           />
@@ -59,7 +59,7 @@ export const ProductUpdate = ({id}: any) => {
 
         <label htmlFor="price">
           Price
-          <input required type="number" id="price" name="price" placeholder="price..." 
+          <input required type="number" id="price" name="price" placeholder="price..."
             defaultValue={inputs.price}
             onChange={handleChange}
           />
@@ -67,13 +67,13 @@ export const ProductUpdate = ({id}: any) => {
 
         <label htmlFor="description">
           Description
-          <textarea id="description" name="description" placeholder="description..." 
+          <textarea id="description" name="description" placeholder="description..."
             defaultValue={inputs.description}
             onChange={handleChange}
           />
         </label>
 
-        <button type="submit" > Update Product </button> 
+        <button type="submit" > Update Product </button>
         <br /> <br />
 
 

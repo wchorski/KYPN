@@ -3,27 +3,27 @@ import { checkbox } from "@keystone-6/core/fields";
 export const permissionFields = {
   canManageProducts: checkbox({
     defaultValue: false,
-    label: 'Manage Products: User can Update and Delete any product',
+    label: 'Manage Products: Can update and delete any product',
   }),
   canSeeOtherUsers: checkbox({
     defaultValue: false,
-    label: 'User can query other users',
+    label: 'View Users: Can query any User',
   }),
   canManageUsers: checkbox({
     defaultValue: false,
-    label: 'User can Edit other users',
+    label: 'Manage Users: Can edit any User',
   }),
   canManageRoles: checkbox({
     defaultValue: false,
-    label: 'User can CRUD roles',
+    label: 'Manage Roles: Can create / read / update / delete any Role',
   }),
   canManageCart: checkbox({
     defaultValue: false,
-    label: 'User can see and manage cart and cart items',
+    label: 'Manage Cart: Can see and manage any Cart or Cart Item',
   }),
   canManageOrders: checkbox({
     defaultValue: false,
-    label: 'User can see and manage orders',
+    label: 'Manage Orders: Can see and manage any Order',
   }),
 };
 

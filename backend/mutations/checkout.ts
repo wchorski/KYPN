@@ -11,14 +11,14 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
 
   args: { token: graphql.arg({ type: graphql.nonNull(graphql.String) }) },
-    
+
   // 1. Make sure they are signed in
   async resolve(source, { token }, context: Context) {
     //check if the user is logged in. If not, return an error
     const session = context.session;
     console.log('+++++ session ++++ ');
     // console.log(session);
-    
+
     if (!session.itemId) {
       throw new Error('You must be logged in to create an order. :/ ');
     }
@@ -51,7 +51,8 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     })
     console.log('===== FOUND USER');
     console.log(user.name);
-    
+    console.log(user.cart);
+
 
     // 2. calc the total price for their order
     const totalOrder = user.cart.reduce((accumulator: number, cartItem: CartItem) => {
@@ -66,12 +67,12 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
       currency: 'USD',
       confirm: true,
       payment_method: token,
-    }).catch((err:any) => {
+    }).catch((err: any) => {
       console.log(err);
       throw new Error(err.message);
     });
     // console.log(charge)
-    console.log('CHARGE MADE , ')
+    console.log('CHARGE MADE')
 
     //Create an order based on the cart item
     const orderItems = user.cart.map((cartItem: CartItem) => {

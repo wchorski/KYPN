@@ -1,23 +1,23 @@
-import moneyFormatter from "@/lib/moneyFormatter"
-import { StyledCartItem } from "@/styles/CartItem.styled"
+import moneyFormatter from "../../lib/moneyFormatter"
+import { StyledCartItem } from "../../styles/CartItem.styled"
 import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
 
-export default function CartItem({item}:any) {
-  
+export default function CartItem({ item }: any) {
 
-  if(!item?.product) return(
+
+  if (!item?.product) return (
     <StyledCartItem>
       <p>This cart item is no longer supplied by our store</p>
     </StyledCartItem>
   )
-  
 
-  const {product:{id, description, name, price, photo, }, quantity} = item
+
+  const { product: { id, description, name, price, photo, }, quantity } = item
 
   // TODO use the external handleProductPhoto.ts file
-  function handlePhoto(){
-    if(!photo){
+  function handlePhoto() {
+    if (!photo) {
       return {
         image: {
           url: `/cf-default.png`,
@@ -27,15 +27,15 @@ export default function CartItem({item}:any) {
         }
       }
     }
-      
+
     return photo
   }
-  
+
   return (
     <StyledCartItem>
-      <Image 
+      <Image
         priority
-        src={handlePhoto().image?.url} 
+        src={handlePhoto().image?.url}
         alt={handlePhoto().image?.altText ? handlePhoto().image?.altText : 'no alt text'}
         width={handlePhoto().image?.width}
         height={handlePhoto().image?.height}
@@ -46,7 +46,7 @@ export default function CartItem({item}:any) {
         -
         <em>{quantity} &times; {moneyFormatter(price)} each</em>
       </span>
-      <CartRemoveItem id={item.id}/>
+      <CartRemoveItem id={item.id} />
     </StyledCartItem>
   )
 }

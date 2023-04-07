@@ -1,35 +1,35 @@
-import { QueryError } from '@/components/menus/QueryError';
-import { QueryLoading } from '@/components/menus/QueryLoading';
-import { ProductThumbnail } from '@/components/ProductThumbnail';
-import moneyFormatter from '@/lib/moneyFormatter';
+import { QueryError } from '../../components/menus/QueryError';
+import { QueryLoading } from '../../components/menus/QueryLoading';
+import { ProductThumbnail } from '../../components/ProductThumbnail';
+import moneyFormatter from '../../lib/moneyFormatter';
 import { gql, useQuery } from '@apollo/client';
 import Image from 'next/image';
 import ErrorMessage from '../ErrorMessage';
-import { StyledPriceTag } from "@/styles/PriceTag.styled";
+import { StyledPriceTag } from "../../styles/PriceTag.styled";
 import Head from 'next/head';
 import styled from 'styled-components';
 import Link from 'next/link';
 import AddToCart from './AddToCart';
-import { handlePhoto } from '@/lib/handleProductPhoto';
+import { handlePhoto } from '../../lib/handleProductPhoto';
 
 
-export default function ProductSingle({id}: any) {
+export function ProductSingle({ id }: any) {
 
   // const { loading, error, data:{ product: {name, photo, price, status, description}} } = useQuery(
   const { loading, error, data } = useQuery(
     SINGLE_PRODUCT_QUERY, {
-    variables: { where: { id: id}}
+    variables: { where: { id: id } }
   })
   // console.log(data);
 
   // const {name, photo, price, status, description} = data.product //? doesn't work, but above is how you destructure
-  
-  
+
+
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
   const { name, photo, price, description } = data.product
-  
+
 
   return (<>
 
@@ -39,15 +39,15 @@ export default function ProductSingle({id}: any) {
 
     <StyledProductSingle>
       <picture className="img-frame">
-        <Image 
+        <Image
           priority
-          src={handlePhoto(photo).image?.url} 
+          src={handlePhoto(photo).image?.url}
           alt={handlePhoto(photo).image?.altText}
           width={handlePhoto(photo).image?.width}
           height={handlePhoto(photo).image?.height}
         />
       </picture>
-      
+
       <div className="details">
         <h2>{name}</h2>
 
@@ -56,8 +56,8 @@ export default function ProductSingle({id}: any) {
 
         <p>{description}</p>
       </div>
-      <AddToCart id={id}/>
-      <Link href={{pathname: '/shop/product/update', query: {id: id},}}> Edit ✏️ </Link>
+      <AddToCart id={id} />
+      <Link href={{ pathname: '/shop/product/update', query: { id: id }, }}> Edit ✏️ </Link>
 
     </StyledProductSingle>
   </>)

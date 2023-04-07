@@ -1,4 +1,4 @@
-// import { useGlobalContext } from "@/lib/useSessionContext";
+// import { useGlobalContext } from "../lib/useSessionContext";
 import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
 import styled from "styled-components";
@@ -9,9 +9,9 @@ import styled from "styled-components";
 //   )
 // }
 
-export function SessionBadge({session}: any){
-  
-  return(
+export function SessionBadge({ session }: any) {
+
+  return (
     <StyledSessionBadge>
       <ul>
         <li><Link href={`/account`}> My Account </Link> </li>
@@ -23,7 +23,7 @@ export function SessionBadge({session}: any){
 }
 
 
-export function useUser(){
+export function useUser() {
   // TODO GET THIS WORKING
   const { data } = useQuery(QUERY_USER_CURRENT)
   // console.log('++++++ useUser, ', data);

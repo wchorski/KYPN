@@ -1,21 +1,21 @@
-import { calcTotalPrice } from '@/lib/calcTotalPrice'
-import { useCart } from '@/lib/cartState'
-import moneyFormatter from '@/lib/moneyFormatter'
-import { StyledShoppingCart } from '@/styles/CartStyles.styled'
-import { StyledSupreme } from '@/styles/Supreme.styled'
+import { calcTotalPrice } from '../../lib/calcTotalPrice'
+import { useCart } from '../../lib/cartState'
+import moneyFormatter from '../../lib/moneyFormatter'
+import { StyledShoppingCart } from '../../styles/CartStyles.styled'
+import { StyledSupreme } from '../../styles/Supreme.styled'
 import React from 'react'
 import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
 import { MdClose } from "react-icons/md";
 import CartCount from './CartCount'
-import {Checkout} from './Checkout'
+import { Checkout } from './Checkout'
 
 export default function ShoppingCart() {
 
   const customer = useUser()
   const cartData = useCart()
   const { isOpen, openCart, closeCart } = cartData
-  
+
 
   // if(!customer) return <p>Login to start shopping</p>
 
@@ -26,7 +26,7 @@ export default function ShoppingCart() {
           {customer?.name} | Cart
         </StyledSupreme>
         <CartCount count={customer?.cart.reduce(
-          (tally:any, cartItem:any) => tally + cartItem.quantity,
+          (tally: any, cartItem: any) => tally + cartItem.quantity,
           0
         )} />
         <button onClick={e => closeCart()}> <MdClose /></button>
@@ -34,7 +34,7 @@ export default function ShoppingCart() {
 
       {customer?.cart.length <= 0 && <p>Add your first item</p>}
       <ul>
-        {customer?.cart.map((item:any) => <CartItem key={item.id} item={item} />)}
+        {customer?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
       </ul>
       <footer>
         <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer?.cart))}</p>

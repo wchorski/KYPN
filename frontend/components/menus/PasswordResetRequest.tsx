@@ -1,40 +1,40 @@
-import useForm from "@/lib/useForm";
-import { StyledForm } from "@/styles/Form.styled";
+import useForm from "../../lib/useForm";
+import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
-import  Router  from "next/router";
+import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
-import  ErrorMessage  from "@/components/ErrorMessage";
+import ErrorMessage from "../../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "@/lib/useSessionContext";
-// import { SessionContext } from "@/pages/_app";
-// import { SessionContext } from "@/lib/sessionContext";
+import { useGlobalContext } from "../../lib/useSessionContext";
+// import { SessionContext } from "../pages/_app";
+// import { SessionContext } from "../lib/sessionContext";
 
 export default function PasswordResetRequest() {
 
-  const {session, setSession} = useGlobalContext()
+  const { session, setSession } = useGlobalContext()
 
-  const {inputs, handleChange, clearForm, resetForm} = useForm({
+  const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',
   })
 
-  const [passwordReset, {data, error, loading}] = useMutation(MUTATION_PASSWORD_RESET)
+  const [passwordReset, { data, error, loading }] = useMutation(MUTATION_PASSWORD_RESET)
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    
-    if(inputs.email === '') return console.warn('inputs are empty, ', inputs)
+
+    if (inputs.email === '') return console.warn('inputs are empty, ', inputs)
     // console.log(inputs)
-    
+
     const res = await passwordReset({
-      variables: {email: inputs.email},
-      refetchQueries: [{query: QUERY_USER_CURRENT}]
+      variables: { email: inputs.email },
+      refetchQueries: [{ query: QUERY_USER_CURRENT }]
     }).catch(console.error)
     console.log('res', res)
 
-    if(!res?.data.sendUserPasswordResetLink)
+    if (!res?.data.sendUserPasswordResetLink)
       console.log('pass reset FAILED, ')
 
-    if(res?.data.sendUserPasswordResetLink)
+    if (res?.data.sendUserPasswordResetLink)
       console.log('pass reset success, ')
 
 
@@ -43,7 +43,7 @@ export default function PasswordResetRequest() {
     // })    
   }
 
-  
+
   return (<>
 
     <StyledForm method="POST" onSubmit={handleSubmit}>
@@ -52,7 +52,7 @@ export default function PasswordResetRequest() {
 
       {data?.sendUserPasswordResetLink && <p>A reset link is on it's way to your email</p>}
 
-      <ErrorMessage error={error}/>
+      <ErrorMessage error={error} />
 
       <fieldset disabled={loading} aria-busy={loading}>
 
@@ -61,7 +61,7 @@ export default function PasswordResetRequest() {
           <input type="email" id="email" name="email" autoComplete="email"
             placeholder="email..."
             required
-            defaultValue={inputs.email} 
+            defaultValue={inputs.email}
             onChange={handleChange}
           />
         </label>

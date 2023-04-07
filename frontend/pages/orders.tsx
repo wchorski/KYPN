@@ -1,4 +1,4 @@
-import OrderReceipt from '@/components/ecommerce/OrderReceipt'
+import OrderReceipt from '../components/ecommerce/OrderReceipt'
 import React from 'react'
 
 export default function Orders() {
