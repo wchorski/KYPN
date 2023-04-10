@@ -1,5 +1,5 @@
-import PasswordResetForm from "../components/menus/PasswordResetForm"
-import PasswordReset from "../components/menus/PasswordResetRequest"
+import PasswordResetForm from "../../components/menus/PasswordResetForm"
+import PasswordReset from "../../components/menus/PasswordResetRequest"
 import { useRouter } from "next/router"
 
 

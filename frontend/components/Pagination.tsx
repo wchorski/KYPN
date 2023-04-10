@@ -18,6 +18,9 @@ export const Pagination = ({ page }: PagProps) => {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
+  console.log('pag data, ', data);
+
+
   const pageCount = Math.ceil(data.productsCount / perPage)
 
   return (<>
@@ -25,7 +28,7 @@ export const Pagination = ({ page }: PagProps) => {
       <title>Sick Fits - {page} / {pageCount} </title>
     </Head>
 
-    <StyledPagination>
+    <StyledPagination data-testid='pagination'>
 
 
       {/* <Link href={`/shop?page=${page - 1}`} aria-disabled={page <= 1}> */}
@@ -35,7 +38,9 @@ export const Pagination = ({ page }: PagProps) => {
       </Link>
 
       <span> {page} of {pageCount}</span>
-      <span>{data.productsCount} Total Products</span>
+      <span data-testid='pagination-countTotal'>
+        {data.productsCount} Total Products
+      </span>
 
       {/* <Link href={`/shop?page=${page + 1}`} aria-disabled={page > data.productsCount}> */}
       <Link href={`/shop/${page + 1}`} aria-disabled={page >= Math.ceil(data.productsCount / perPage)}>

@@ -4,9 +4,11 @@ import { gql, useMutation } from "@apollo/client";
 import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useGlobalContext } from "../../lib/useSessionContext";
+import { useState } from "react";
 
 export default function RegisterForm() {
 
+  const [successMsg, setSuccessMsg] = useState<string>()
   const { session, setSession } = useGlobalContext()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -34,8 +36,10 @@ export default function RegisterForm() {
     // console.log(session);
 
 
-    if (res?.data.createUser.__typename !== "User")
+    if (res?.data.createUser.__typename !== "User") {
       console.log('Regy SUCCESS, ', res?.data.createUser)
+      setSuccessMsg(`New Account Registered: ${inputs.email}`)
+    }
     // @ts-ignore
     // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
 
@@ -50,6 +54,8 @@ export default function RegisterForm() {
     <StyledForm method="POST" onSubmit={handleSubmit}>
 
       <h2> Register </h2>
+
+      <p>{successMsg}</p>
 
       <ErrorMessage error={error} />
 
@@ -75,7 +81,7 @@ export default function RegisterForm() {
         </label>
 
         <label htmlFor="password">
-          Email
+          Password
           <input type="password" id="password" name="password" autoComplete="password"
             placeholder="password..."
             required
@@ -91,7 +97,7 @@ export default function RegisterForm() {
   </>)
 }
 
-const MUTATION_USER_REGSITER = gql`
+export const MUTATION_USER_REGSITER = gql`
   mutation Mutation($data: UserCreateInput!) {
     createUser(data: $data) {
       email

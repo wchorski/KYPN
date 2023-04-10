@@ -74,7 +74,7 @@ export default function PasswordResetRequest() {
   </>)
 }
 
-const MUTATION_PASSWORD_RESET = gql`
+export const MUTATION_PASSWORD_RESET = gql`
   mutation SendUserPasswordResetLink($email: String!) {
     sendUserPasswordResetLink(email: $email)
   }

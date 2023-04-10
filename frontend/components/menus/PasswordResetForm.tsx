@@ -1,11 +1,11 @@
-import useForm from "../lib/useForm";
-import { StyledForm } from "../styles/Form.styled";
+import useForm from "../../lib/useForm";
+import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
 import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
-import ErrorMessage from "../components/ErrorMessage";
+import ErrorMessage from "../../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "../lib/useSessionContext";
+import { useGlobalContext } from "../../lib/useSessionContext";
 // import { SessionContext } from "../pages/_app";
 // import { SessionContext } from "../lib/sessionContext";
 
@@ -45,9 +45,10 @@ export default function PasswordResetForm({ token }: { token: string | string[] 
     //   console.log('pass reset FAILED, ')
     //   validationError = res?.data.redeemUserPasswordResetToken.message
 
-    if (res?.data.redeemUserPasswordResetToken === null)
+    if (res?.data.redeemUserPasswordResetToken === null) {
       console.log('pass reset success, ')
-    setSuccessMsg('password successfully reset')
+      setSuccessMsg("Request to reset is successfull. If that email is associated with and account, and email is on it's way to an inbox near you")
+    }
 
 
     // Router.push({
