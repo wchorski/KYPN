@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Nav /> renders minimal nav when no login 1`] = `
+<div>
+  <nav
+    class="sc-138025c3-0 eEDxSQ"
+  >
+    <ul>
+      <a
+        href="/shop"
+      >
+         Shop 
+      </a>
+      <a
+        href="/blog"
+      >
+         Blog 
+      </a>
+      <a
+        href="/auth/login"
+      >
+         Login 
+      </a>
+    </ul>
+  </nav>
+</div>
+`;

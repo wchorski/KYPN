@@ -1,3 +1,16 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/extend-expect'
+// import '@testing-library/jest-dom';
+// import { setRouter } from "next-router-mock";
 
-window.alert = console.log
+// setRouter({
+//   pathname: "/",
+//   query: {},
+//   asPath: "/",
+//   route: "/",
+// });
+
+// beforeEach(() => {
+//   jest.clearAllMocks();
+// });
+
+// window.alert = console.log;

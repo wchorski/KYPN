@@ -6,21 +6,21 @@ import moneyFormatter from "../lib/moneyFormatter";
 
 
 export const Order = list({
-  access: allowAll,
-  // access: {
-  //   filter: {
-  //     query: rules.canOrder,
-  //     update: () => false,
-  //     delete: () => false,
-  //   },
-  //   operation: {
-  //     query: permissions.isLoggedIn,
-  //     // query: () => false,
-  //     create: permissions.isLoggedIn,
-  //     update: () => false,
-  //     delete: () => false,
-  //   },
-  // },
+  // access: allowAll,
+  access: {
+    filter: {
+      query: rules.canOrder,
+      update: () => false,
+      delete: () => false,
+    },
+    operation: {
+      query: permissions.isLoggedIn,
+      // query: () => false,
+      create: permissions.isLoggedIn,
+      update: () => false,
+      delete: () => false,
+    },
+  },
 
   ui: {
     listView: {

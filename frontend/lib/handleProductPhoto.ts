@@ -1,21 +1,22 @@
 
-export function handlePhoto(photo:any){
-  if(!photo){
+export function handlePhoto(photo: any) {
+
+  let newPhoto = photo
+
+  const defImg = {
+    url: `/cf-default.png`,
+    width: 300,
+    height: 300,
+  }
+
+  if (!photo) {
     return {
-      image: {
-        url: `/cf-default.png`,
-        altText: 'no product image',
-        width: 300,
-        height: 300,
-      }
+      altText: 'no product image',
+      image: defImg
     }
   }
-  // ? couldn't figure out this obj merge so i just fixed possible error in the backend schema
-  // if(!photo.image.altText){
-  //   const newPhoto = { image: { altText: 'no product image' }}
-  //   const mergedPhoto = {...photo, ...newPhoto}
-  //   return mergedPhoto
-  // }
-    
-  return photo
+
+  if (!photo.image) newPhoto = { ...photo, image: defImg, altText: 'no product image' }
+
+  return newPhoto
 }

@@ -49,9 +49,8 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
                 }
               }`,
     })
-    console.log('===== FOUND USER');
-    console.log(user.name);
-    console.log(user.cart);
+    // console.log('===== FOUND USER');
+    // console.log(user.name);
 
 
     // 2. calc the total price for their order
@@ -72,7 +71,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
       throw new Error(err.message);
     });
     // console.log(charge)
-    console.log('CHARGE MADE')
+    // console.log('CHARGE MADE')
 
     //Create an order based on the cart item
     const orderItems = user.cart.map((cartItem: CartItem) => {
@@ -83,9 +82,10 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         quantity: cartItem.quantity,
         // productId: cartItem.product.id,
 
-        photo: { connect: { id: cartItem.product.photo.id } },
+        photo: { connect: { id: cartItem.product.photo.id || 'no-photo-id' } },
       }
     })
+
     const now = new Date
     const order = await context.db.Order.createOne({
       data: {

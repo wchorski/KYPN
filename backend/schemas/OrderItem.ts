@@ -5,18 +5,18 @@ import { permissions, rules } from "../access";
 
 
 export const OrderItem = list({
-  access: allowAll,
-  // access: {
-  //   filter: {
-  //     query: rules.canManageOrderItems,
-  //   },
-  //   operation: {
-  //     create: permissions.isLoggedIn,
-  //     query: () => true,
-  //     update: () => false,
-  //     delete: () => false,
-  //   }
-  // },
+  // access: allowAll,
+  access: {
+    filter: {
+      query: rules.canManageOrderItems,
+    },
+    operation: {
+      create: permissions.isLoggedIn,
+      query: () => true,
+      update: () => false,
+      delete: () => false,
+    }
+  },
   fields: {
     name: text({ validation: { isRequired: true } }),
     description: text({

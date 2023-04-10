@@ -13,7 +13,9 @@ const fakeItem = () => ({
     id: 'abc123',
     altText: 'dogs are best',
     image: {
-      url: 'dog.jpg',
+      url: '/cf-default.png',
+      width: 300,
+      height: 300,
     },
   },
   name: 'dogs are best',

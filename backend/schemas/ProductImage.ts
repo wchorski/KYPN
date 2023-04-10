@@ -4,6 +4,7 @@ import { image, integer, relationship, select, text } from "@keystone-6/core/fie
 import { permissions } from "../access";
 
 export const ProductImage = list({
+  // access: allowAll,
   access: {
     // filter: {
     //   // query: rules.canManageUsers,

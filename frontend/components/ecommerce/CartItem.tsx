@@ -2,6 +2,7 @@ import moneyFormatter from "../../lib/moneyFormatter"
 import { StyledCartItem } from "../../styles/CartItem.styled"
 import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
+import { handlePhoto } from "../../lib/handleProductPhoto"
 
 export default function CartItem({ item }: any) {
 
@@ -15,30 +16,15 @@ export default function CartItem({ item }: any) {
 
   const { product: { id, description, name, price, photo, }, quantity } = item
 
-  // TODO use the external handleProductPhoto.ts file
-  function handlePhoto() {
-    if (!photo) {
-      return {
-        image: {
-          url: `/cf-default.png`,
-          altText: 'no product image',
-          width: 300,
-          height: 300,
-        }
-      }
-    }
-
-    return photo
-  }
 
   return (
     <StyledCartItem>
       <Image
         priority
-        src={handlePhoto().image?.url}
-        alt={handlePhoto().image?.altText ? handlePhoto().image?.altText : 'no alt text'}
-        width={handlePhoto().image?.width}
-        height={handlePhoto().image?.height}
+        src={handlePhoto(photo).image?.url}
+        alt={handlePhoto(photo).image?.altText}
+        width={handlePhoto(photo).image?.width}
+        height={handlePhoto(photo).image?.height}
       />
       <h5>{name}</h5>
       <span className="perItemTotal">

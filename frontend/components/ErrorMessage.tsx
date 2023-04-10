@@ -21,17 +21,17 @@ const ErrorStyles = styled.div`
   }
 `;
 
-const ErrorMessage = ({ error }:any) => {
+const ErrorMessage = ({ error }: any) => {
 
-  
+
   if (!error || !error.message) return null;
   // console.log('error, ', error);
-  
+
   if (error.networkError && error.networkError.result && error.networkError.result.errors?.length) {
-    return error.networkError.result.errors.map((error:any, i:any) => (
+    return error.networkError.result.errors.map((error: any, i: any) => (
       <ErrorStyles key={i}>
-        <p data-test="graphql-error">
-          <strong> <MdError style={{color: 'red'}} /> </strong>
+        <p data-testid="graphql-error">
+          <strong> <MdError style={{ color: 'red' }} /> </strong>
           {error.message.replace('GraphQL error: ', '')}
         </p>
       </ErrorStyles>
@@ -40,7 +40,7 @@ const ErrorMessage = ({ error }:any) => {
   return (
     <ErrorStyles>
       <p data-test="graphql-error">
-        <strong> <MdError style={{color: 'red'}} />  </strong>
+        <strong> <MdError style={{ color: 'red' }} />  </strong>
         {error.message.replace('GraphQL error: ', '')}
       </p>
     </ErrorStyles>

@@ -19,18 +19,18 @@ export const Product = list({
     }
   },
 
-  
+
   fields: {
     photo: relationship({
       ref: 'ProductImage.product',
       ui: {
         displayMode: 'cards',
         cardFields: ['image', 'altText'],
-        inlineCreate: {fields: ['image', 'altText']},
-        inlineEdit: {fields: ['image', 'altText']}
+        inlineCreate: { fields: ['image', 'altText'] },
+        inlineEdit: { fields: ['image', 'altText'] }
       }
     }),
-    name: text({validation: { isRequired: true }}),
+    name: text({ validation: { isRequired: true } }),
     slug: text({
       validation: { isRequired: true },
       isIndexed: 'unique',
@@ -38,32 +38,34 @@ export const Product = list({
         validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
           const inputValue = resolvedData[fieldKey];
 
-          if(!inputValue) return 
+          if (!inputValue) return
           if (!inputValue.match(/^[a-z0-9]+(?:-[A-Za-z0-9]+)*$/)) {
             addValidationError(`Can only contain lower case "a-z" and dash "-" characters.`);
           }
         },
       }
     }),
-    description: text({ui:{
-      displayMode: 'textarea'
-    }}),
+    description: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     status: select({
       options: [
-        {label: 'Draft', value: 'DRAFT'},
-        {label: 'Available', value: 'AVAILABLE'},
-        {label: 'Out of Stock', value: 'OUT_OFF_STOCK'},
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Available', value: 'AVAILABLE' },
+        { label: 'Out of Stock', value: 'OUT_OFF_STOCK' },
       ],
       defaultValue: 'DRAFT',
-      ui:{
+      ui: {
         displayMode: 'segmented-control',
-        createView: {fieldMode: 'edit'}
+        createView: { fieldMode: 'edit' }
       }
     }),
 
     price: integer(),
 
-    stockCount: integer({ validation: { isRequired: true}, defaultValue: 0}),
+    stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
     user: relationship({
       ref: 'User.products',
     }),
@@ -89,14 +91,14 @@ export const Product = list({
   hooks: {
     // if no user set, connect to current session user
     beforeOperation: async ({ resolvedData, context }) => {
-      try{
+      try {
         if (resolvedData && !resolvedData.user) {
           const currentUserId = await context.session.itemId;
-          console.log({currentUserId});
+          console.log({ currentUserId });
           resolvedData.user = { connect: { id: currentUserId } };
-        } 
+        }
       } catch (err) { console.error(err) }
-      
+
     }
   },
 })
