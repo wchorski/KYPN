@@ -25,9 +25,9 @@ export const Product = list({
       ref: 'ProductImage.product',
       ui: {
         displayMode: 'cards',
-        cardFields: ['image', 'altText'],
-        inlineCreate: { fields: ['image', 'altText'] },
-        inlineEdit: { fields: ['image', 'altText'] }
+        cardFields: ['image', 'altText', 'filename'],
+        inlineCreate: { fields: ['image', 'altText', 'filename'] },
+        inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
     }),
     name: text({ validation: { isRequired: true } }),
@@ -89,6 +89,7 @@ export const Product = list({
     }),
   },
   hooks: {
+    // TODO use this to create a default 'slug' automatically based on product name
     // if no user set, connect to current session user
     beforeOperation: async ({ resolvedData, context }) => {
       try {

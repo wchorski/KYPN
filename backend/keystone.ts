@@ -32,14 +32,14 @@ const db: KeystoneConfig<TypeInfo>['db'] = {
 
   provider: 'postgresql',
   url: DATABASE_URL,
-  async onConnect (context: Context) { 
+  async onConnect(context: Context) {
     console.log('--- POSTGRES CONNECTED ---')
 
     // TODO why argv doesn't work?
     if (process.env.SEED_ME === 'true') {
-    // if (process.argv.includes('--seed-database')) {
+      // if (process.argv.includes('--seed-database')) {
       console.log('+++++ SEED DATA +++++');
-      
+
       await seedDatabase(context);
 
     }
@@ -47,12 +47,12 @@ const db: KeystoneConfig<TypeInfo>['db'] = {
   enableLogging: true,
   idField: { kind: 'uuid' },
   shadowDatabaseUrl: 'postgres://admin:admin@localhost:5432/shadowdb'
-    
+
 }
 
 export default withAuth(
   config({
-    server:{
+    server: {
       port: Number(BACKEN_PORT),
       cors: { origin: [FRONTEND_URL], credentials: true },
     },
@@ -68,9 +68,9 @@ export default withAuth(
     //   }
     // },
     ui: {
-      isAccessAllowed: ({session}) => {
+      isAccessAllowed: ({ session }) => {
         return !!session?.data
-        
+
       }
     },
     storage: {
@@ -80,10 +80,10 @@ export default withAuth(
         // This store is used for the image field type
         type: 'image',
         // The URL that is returned in the Keystone GraphQL API
-        generateUrl: path => `${BACKEND_URL}:${BACKEN_PORT}/images${path}`,
+        generateUrl: path => `${BACKEND_URL}:${BACKEN_PORT}/assets/images${path}`,
         // The route that will be created in Keystone's backend to serve the images
         serverRoute: {
-          path: '/images',
+          path: '/assets/images',
         },
         // Set serverRoute to null if you don't want a route to be created in Keystone
         // serverRoute: null

@@ -18,7 +18,7 @@ export const Pagination = ({ page }: PagProps) => {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  console.log('pag data, ', data);
+  // console.log('pag data, ', data);
 
 
   const pageCount = Math.ceil(data.productsCount / perPage)

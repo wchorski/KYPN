@@ -23,16 +23,48 @@ export const ProductCreate = () => {
   const [isSuccess, setIsSuccess] = useState(false)
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
-    image: null,
-    name: 'will',
-    price: 123,
-    description: "mydesc"
+    image: undefined,
+    name: '',
+    price: 0,
+    description: ''
   })
 
   async function handleSubmit(e: any) {
     e.preventDefault()
-    console.log({ inputs })
-    const res = await createProduct()
+    console.log(inputs.image)
+    // todo move this to backend
+    const autoSlug = inputs.name.toLowerCase().replace(' ', '-').replace(/[&#\@\!, +()$~%'":*?<>{}]/g, '')
+    // console.log({ autoSlug });
+
+    let inputData = {
+      name: inputs.name,
+      slug: autoSlug,
+      price: inputs.price,
+      description: inputs.description,
+    }
+
+    if (inputs.image) {
+      inputData = {
+        ...inputData,
+        // @ts-ignore
+        photo: {
+          create: {
+            altText: `${inputs.name} featured image`,
+            filename: `${inputs.name}.png`,
+            image: { upload: inputs.image }
+          },
+        },
+      }
+    }
+
+    const res = await gqlMutation({
+      variables: {
+        data: inputData
+      },
+      // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
+      refetchQueries: [{ query: GET_ALL_PRODUCTS }]
+    })
+
     console.log('res', res)
     if (res.data.createProduct) clearForm(); setIsSuccess(true)
     Router.push({
@@ -41,26 +73,7 @@ export const ProductCreate = () => {
   }
 
 
-  const [createProduct, { loading, error, data }] = useMutation(
-    CREATE_PRODUCT_MUTATION,
-    {
-      variables: {
-        data: {
-          photo: {
-            create: {
-              altText: `${inputs.name} featured image`,
-              image: { upload: inputs.image }
-            },
-          },
-          name: inputs.name,
-          price: inputs.price,
-          description: inputs.description,
-        }
-      },
-      // ? after new product is added, fetch re runs in background so client doesn't half to hard refresh
-      refetchQueries: [{ query: GET_ALL_PRODUCTS }]
-    }
-  )
+  const [gqlMutation, { loading, error, data }] = useMutation(CREATE_PRODUCT_MUTATION)
 
 
   return (<>
@@ -122,7 +135,7 @@ export const ProductCreate = () => {
 //   }
 // `;
 
-const CREATE_PRODUCT_MUTATION = gql`
+export const CREATE_PRODUCT_MUTATION = gql`
   mutation CreateProduct($data: ProductCreateInput!) {
     createProduct(data: $data) {
       name

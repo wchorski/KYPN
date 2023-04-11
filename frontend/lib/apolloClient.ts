@@ -9,14 +9,14 @@ import merge from 'deepmerge'
 import isEqual from 'lodash/isEqual'
 import { createUploadLink } from 'apollo-upload-client';
 
-const API_URI = process.env.NEXT_PUBLIC_API_URI 
+const API_URI = process.env.NEXT_PUBLIC_API_URI
 
-let sessionToken:string|undefined
+let sessionToken: string | undefined
 
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 
-let apolloClient:any
+let apolloClient: any
 
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -32,55 +32,34 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 function createApolloClient() {
 
-  // console.log({sessionToken})
-  // const [sessionState, setSession] = useLocalStorage('session', '{"sessiontoken": "no-token"}')
-
-  // let  session:any = {sessionToken: '{"sessiontoken": "no-token"}'}
-
-  // if(sessionState){
-  //   // @ts-ignore
-  //   console.log(JSON.parse(sessionState));
-    
-  //   // @ts-ignore
-  //   session = JSON.parse(sessionState)
-  //   console.log(session.sessionToken)
-
-  // }
-  
-
   const httpLink = createHttpLink({
     uri: API_URI, // Server URL (must be absolute)
     credentials: 'include', // credentials: 'same-origin' if your backend server is the same domain, as shown below, or else credentials: 'include' if your backend is a different domain.
-    // headers: {
-    //   Authorization: `Bearer ${session.sessionToken}` , //TODO !!!!!! GET SESSION TOKEN HERE
-    //   Chorski: `Bearer ${'no Will'}` 
-    // },
+
   })
 
+
   const uploadLink = createUploadLink({
-    uri: API_URI, 
+    uri: API_URI,
+    credentials: 'include',
     fetchOptions: {
       credentials: 'include',
     },
     // pass the headers along from this request. This enables SSR with logged in state
-    // headers,
+    headers: {
+      "keep-alive": "true",
+      "Apollo-Require-Preflight": "true"
+    }
   })
-  
-
-  // const httpLink = createHttpLink({
-  //   useGETForQueries: true,
-  //   uri: API_URI,
-  //   credentials: 'include'
-  // })
 
   // const authLink = setContext((_, { headers }) => {
   //   const session = localStorage.getItem("session")
   //   console.log({session});
-    
+
   //   //@ts-ignore
   //   const token = JSON.parse(session).sessionToken
   //   console.log({token})
-    
+
   //   return {
   //     headers: {
   //       ...headers,
@@ -94,9 +73,9 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: from([
-      errorLink, 
-      httpLink, 
-      // uploadLink //TODO FIX FILE UPLOAD WITH APOLLO
+      errorLink,
+      uploadLink, //TODO FIX FILE UPLOAD WITH APOLLO
+      // httpLink,
     ]),
     cache: new InMemoryCache({
       typePolicies: {
@@ -111,6 +90,7 @@ function createApolloClient() {
 }
 
 export function initializeApollo(initialState = null) {
+
   const _apolloClient = apolloClient ?? createApolloClient()
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -141,7 +121,7 @@ export function initializeApollo(initialState = null) {
   return _apolloClient
 }
 
-export function addApolloState(client:any, pageProps:any) {
+export function addApolloState(client: any, pageProps: any) {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract()
   }
@@ -149,7 +129,7 @@ export function addApolloState(client:any, pageProps:any) {
   return pageProps
 }
 
-export function useApollo(pageProps:any) {
+export function useApollo(pageProps: any) {
   const state = pageProps[APOLLO_STATE_PROP_NAME]
   const store = useMemo(() => initializeApollo(state), [state])
   return store
