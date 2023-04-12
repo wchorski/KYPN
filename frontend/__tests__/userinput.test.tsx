@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/react-testing'
-import { Nav } from '../components/Nav'
+import { Nav } from '../components/menus/Nav'
 import { fakeUser, } from '../lib/testUtils'
 import { QUERY_USER_CURRENT } from '../components/menus/Session'
 import userEvent from "@testing-library/user-event";
@@ -73,10 +73,10 @@ describe('<RegisterForm /> testing', () => {
     await userEvent.type(screen.getByLabelText(/Password/i), newPass)
 
     await userEvent.click(screen.getByText('Create Account'))
-    await screen.findByText(`New Account Registered: ${newUser.email}`)
-    const success = await screen.findByText(/success/i)
-    screen.debug(success)
-    expect(success).toBeInTheDocument()
+    await screen.findByText(`Success! New account registered: ${newUser.email}`)
+    // const success = await screen.findByText(/success/i)
+    // screen.debug(success)
+    // expect(success).toBeInTheDocument()
     // debug()
 
     // expect(container).toMatchSnapshot()

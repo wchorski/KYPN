@@ -84,8 +84,8 @@ export default function SearchCarlos() {
 
 
   return (
-    <StyledSearch>
-      <div className="input-cont">
+    <StyledSearch id="search-cont">
+      <label className="input-cont">
         <input
           {...getInputProps({
             type: 'search',
@@ -95,17 +95,18 @@ export default function SearchCarlos() {
           })}
           data-testid="combobox-input"
         />
-        {inputValue && <button
+
+        {/* {inputValue && <button
           className="absolute right-10 text-lg text-purple-dark opacity-50 hover:opacity-100 p-2 "
           aria-label="toggle menu"
           data-testid="clear-button"
           onClick={() => selectItem(null)}
         >
           <MdClose />
-        </button>}
+        </button>} */}
 
-        <button > <MdSearch /> </button>
-      </div>
+        {/* <button > <MdSearch /> </button> */}
+      </label>
 
       <StyledDropDown>
         <ul {...getMenuProps()}>

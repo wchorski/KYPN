@@ -1,4 +1,5 @@
 // cred- https://github.com/vercel/next.js/blob/canary/examples/with-apollo/lib/apolloClient.js
+// cred - https://github.com/vercel/next.js/blob/canary/examples/with-apollo/lib/apolloClient.js
 
 import { useMemo } from 'react'
 import { cookies } from 'next/headers';

@@ -20,6 +20,7 @@ const fakeItem = () => ({
   },
   name: 'dogs are best',
   description: 'dogs',
+  slug: 'dogs-arebest',
 });
 
 const fakeUser = (overrides: any | void) => ({

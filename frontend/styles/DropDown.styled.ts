@@ -8,7 +8,7 @@ export const StyledDropDown = styled.div`
   border: 1px solid var(--lightGray);
 `;
 
-export const StyledDropDownItem  = styled.li`
+export const StyledDropDownItem = styled.li`
   border-bottom: 1px solid grey;
   background: ${(props) => (props.highlighted ? 'whitesmoke' : 'white')};
 
@@ -65,6 +65,9 @@ export const StyledSearch = styled.div`
     padding: 10px;
     border: 0;
     font-size: 2rem;
+
+    transition: all 1s;
+
     &.loading {
       animation: ${glow} 0.5s ease-in-out infinite alternate;
     }

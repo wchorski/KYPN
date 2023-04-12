@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/react-testing'
-import { Nav } from '../components/Nav'
+import { Nav } from '../components/menus/Nav'
 import { fakeUser, fakeCartItem, makePaginationMocksFor } from '../lib/testUtils'
 import { CartStateProvider } from '../lib/cartState'
 import { QUERY_USER_CURRENT } from '../components/menus/Session'

@@ -116,7 +116,7 @@ export const ProductCreate = () => {
           />
         </label>
 
-        <button type="submit" > + Add </button>
+        <button type="submit" > Add </button>
         <br /> <br />
 
         <button type="button" onClick={e => clearForm()}> clear form </button>

@@ -37,10 +37,12 @@ export const Pagination = ({ page }: PagProps) => {
         Prev
       </Link>
 
-      <span> {page} of {pageCount}</span>
-      <span data-testid='pagination-countTotal'>
-        {data.productsCount} Total Products
-      </span>
+      <div className='count-cont'>
+        <span> {page} of {pageCount}</span>
+        <span data-testid='pagination-countTotal'>
+          {data.productsCount} Total Products
+        </span>
+      </div>
 
       {/* <Link href={`/shop?page=${page + 1}`} aria-disabled={page > data.productsCount}> */}
       <Link href={`/shop/${page + 1}`} aria-disabled={page >= Math.ceil(data.productsCount / perPage)}>

@@ -38,7 +38,7 @@ export default function RegisterForm() {
 
     if (res?.data.createUser.__typename !== "User") {
       console.log('Regy SUCCESS, ', res?.data.createUser)
-      setSuccessMsg(`New Account Registered: ${inputs.email}`)
+      setSuccessMsg(`Success! New account registered: ${inputs.email}`)
     }
     // @ts-ignore
     // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )

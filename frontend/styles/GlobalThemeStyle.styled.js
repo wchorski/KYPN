@@ -11,15 +11,17 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :root{
-    --c-1: orange;
+    --c-1: #a3cf03;
     --c-2: orangered;
-    --c-3: darkred;
-    --c-bg: #454545;
+    --c-3: #6c8157;
+    --c-bg: #f9faf5;
     --c-txt: black;
     --c-txt-rev: white;
     --c-edge: #e5e5e5;
+    --cg-dots: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%);
+    --c-disabled: gray;
 
-    --maxWidth: 1300px;
+    --maxWidth: 1000px;
     --boxs-1: rgb(0 0 0 / 39%) 1px 1px 8px 0px;
     --br-1: 5px;
     --br-2: 10px;
@@ -46,7 +48,7 @@ export const GlobalStyles = createGlobalStyle`
 
   a{
     color: var(--c-1);
-    transition: opacity, color 1s;
+    transition: all .3s;
   }
 
   a:hover{ 

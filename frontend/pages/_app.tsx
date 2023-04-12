@@ -9,6 +9,7 @@ import '../styles/nprogress.css'
 import { GlobalContextProvider } from '../lib/useSessionContext';
 import { useApollo } from '../lib/apolloClient';
 import { CartStateProvider } from '../lib/cartState';
+import { Layout_Wide_Width } from '../components/elements/Layouts';
 
 // @ts-ignore
 const ProgressBar = dynamic(() => import('components/ProgressBar'), { ssr: false });
@@ -23,10 +24,14 @@ function App({ Component, pageProps }: any) {
     <GlobalContextProvider>
       <ApolloProvider client={apolloClient}>
         <CartStateProvider>
-          <Page>
+
+          {/* <Page> */}
+          <Layout_Wide_Width>
             <ProgressBar />
             <Component {...pageProps} />
-          </Page>
+          </Layout_Wide_Width>
+          {/* </Page> */}
+
         </CartStateProvider>
       </ApolloProvider>
     </GlobalContextProvider>
