@@ -4,40 +4,29 @@ import Image from "next/image";
 import { resetIdCounter, useCombobox } from "downshift";
 import { useRouter } from "next/router";
 import { useLazyQuery, gql } from "@apollo/client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { debounce } from "lodash";
 import Link from "next/link";
 import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled";
 import { MdClose, MdSearch } from "react-icons/md";
 import { handlePhoto } from "../../lib/handleProductPhoto"
 import styled from "styled-components"
+import { useSearch } from "../../lib/useGlobalContext";
 // const { default: gql } = require("graphql-tag");
 
-const SEARCH_PRODUCTS_QUERY = gql`
-query SEARCH_PRODUCTS_QUERY ($searchTerm: String!){
-    products (where: {OR: [{name: {contains: $searchTerm}}, {description: {contains: $searchTerm}}]}, take: 5){
-    name
-    description
-    id
-    photo {
-      altText
-      image {
-        url
-      }
-    }
-  }
-}`
 export default function SearchCarlos() {
+
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [inputItems, setInputItems] = useState([])
   const [inputValue, setInputValue] = useState<any>()
+  const { isSearchOpen, openSearch, closeSearch } = useSearch()
 
   const router = useRouter()
   const [findItems, { loading, data, error }] = useLazyQuery(
     SEARCH_PRODUCTS_QUERY,
     {
       fetchPolicy: 'no-cache',
-
     }
   );
 
@@ -81,13 +70,20 @@ export default function SearchCarlos() {
 
   })
 
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef?.current?.focus()
+    }
 
+  }, [isSearchOpen])
 
   return (
-    <StyledSearch id="search-cont">
+    <StyledSearch id="search-cont" className={isSearchOpen ? 'open' : ''}>
+
       <label className="input-cont">
         <input
           {...getInputProps({
+            ref: searchInputRef,
             type: 'search',
             placeholder: 'search...',
             id: 'search',
@@ -96,16 +92,6 @@ export default function SearchCarlos() {
           data-testid="combobox-input"
         />
 
-        {/* {inputValue && <button
-          className="absolute right-10 text-lg text-purple-dark opacity-50 hover:opacity-100 p-2 "
-          aria-label="toggle menu"
-          data-testid="clear-button"
-          onClick={() => selectItem(null)}
-        >
-          <MdClose />
-        </button>} */}
-
-        {/* <button > <MdSearch /> </button> */}
       </label>
 
       <StyledDropDown>
@@ -140,6 +126,21 @@ export default function SearchCarlos() {
     </StyledSearch>
   )
 }
+
+const SEARCH_PRODUCTS_QUERY = gql`
+query SEARCH_PRODUCTS_QUERY ($searchTerm: String!){
+    products (where: {OR: [{name: {contains: $searchTerm}}, {description: {contains: $searchTerm}}]}, take: 5){
+    name
+    description
+    id
+    photo {
+      altText
+      image {
+        url
+      }
+    }
+  }
+}`
 
 const StyledSearchCont = styled.div`
   background-color: yellow;

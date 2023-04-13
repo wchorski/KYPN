@@ -6,7 +6,7 @@ import { GlobalStyles } from "../styles/GlobalThemeStyle.styled.js";
 import { ApolloProvider } from "@apollo/client";
 
 import '../styles/nprogress.css'
-import { GlobalContextProvider } from '../lib/useSessionContext';
+import { GlobalContextProvider } from '../lib/useGlobalContext';
 import { useApollo } from '../lib/apolloClient';
 import { CartStateProvider } from '../lib/cartState';
 import { Layout_Wide_Width } from '../components/elements/Layouts';

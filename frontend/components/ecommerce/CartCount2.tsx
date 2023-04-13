@@ -3,26 +3,16 @@ import { CSSTransition, TransitionGroup, } from 'react-transition-group';
 import { useRef } from "react";
 import { MdShoppingBag } from "react-icons/md";
 
-export default function CartCount({ count }: { count: number }) {
+export function CartCount2({ count }: { count: number }) {
 
   const nodeRef = useRef(null);
 
   return (
     <StyledAnimation>
-      <TransitionGroup>
-        <CSSTransition
-          nodeRef={nodeRef}
-          className={'count'}
-          classNames={'count'}
-          key={count}
-          timeout={{ enter: 400, exit: 400 }}
-        >
-          <StyledDot ref={nodeRef}>
-            {count}
-            <MdShoppingBag />
-          </StyledDot>
-        </CSSTransition>
-      </TransitionGroup>
+      <StyledDot ref={nodeRef}>
+        {count}
+        <MdShoppingBag />
+      </StyledDot>
     </StyledAnimation>
   )
 }

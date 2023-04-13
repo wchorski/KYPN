@@ -5,7 +5,7 @@ import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "../../lib/useSessionContext";
+import { useGlobalContext } from "../../lib/useGlobalContext";
 // import { SessionContext } from "../pages/_app";
 // import { SessionContext } from "../lib/sessionContext";
 

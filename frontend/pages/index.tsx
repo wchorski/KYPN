@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import Link from 'next/link';
-import { useGlobalContext } from '../lib/useSessionContext';
+import { useGlobalContext } from '../lib/useGlobalContext';
 import { useUser } from '../components/menus/Session';
 // import { SessionContext } from './_app';
 

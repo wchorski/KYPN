@@ -6,6 +6,7 @@ export const StyledDropDown = styled.div`
   width: 100%;
   z-index: 2;
   border: 1px solid var(--lightGray);
+
 `;
 
 export const StyledDropDownItem = styled.li`
@@ -52,8 +53,15 @@ export const StyledSearch = styled.div`
   position: relative;
   /* background-color: darkcyan; */
   /* padding: 1em; */
+  height: 0em;
+  overflow: hidden;
+  transition: all 0.5s;
+
+  &.open{
+    height: 3em;
+  }
+
   .input-cont{
-    display: flex;
 
     button{
       padding: 1em;

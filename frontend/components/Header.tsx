@@ -24,7 +24,7 @@ export default function Header() {
       {/* <SearchCarlos /> */}
       {/* </div> */}
 
-      <ShoppingCart />
+      {/* <ShoppingCart /> */}
 
     </StyledHeader>
   )

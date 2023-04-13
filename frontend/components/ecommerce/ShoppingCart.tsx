@@ -13,8 +13,7 @@ import { Checkout } from './Checkout'
 export default function ShoppingCart() {
 
   const customer = useUser()
-  const cartData = useCart()
-  const { isOpen, openCart, closeCart } = cartData
+  const { isOpen, openCart, closeCart } = useCart()
 
 
   // if(!customer) return <p>Login to start shopping</p>

@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
 import styled from "styled-components";
 import { SessionBadge, useUser } from "./Session";
 import SignOutButton from './SignOutButton';
@@ -8,7 +7,11 @@ import CartCount from '../ecommerce/CartCount';
 import { RiMenu3Line, RiMenu4Fill } from "react-icons/ri";
 import { StyledNav, StyledUtilMenu } from '../../styles/menus/Nav.styled';
 import SearchCarlos from './SearchCarlos';
-import { MdSearch } from 'react-icons/md';
+import { MdClose, MdSearch } from 'react-icons/md';
+import { useSearch } from '../../lib/useGlobalContext';
+import { useNavControl } from '../../lib/useGlobalContext';
+import { AnnouncementsMarquee } from '../elements/AnnouncementsMarquee';
+import { EmojiFade } from '../elements/EmojiFade';
 
 export function Nav() {
 
@@ -16,30 +19,47 @@ export function Nav() {
   // console.log({session});
 
 
-  const { setIsOpen } = useCart()
+  const { setIsOpen, toggleCart } = useCart()
+  const { isSearchOpen, toggleSearch } = useSearch()
+  const { isNavOpen, toggleNav } = useNavControl()
 
   return (
-    <StyledNav className='main-menu'>
+    <StyledNav className='main-menu' id='menu-main'>
+      <EmojiFade />
+
       <SearchCarlos />
 
-      <div id="search-nav-menu-cont">
+      <div id="menu-utility">
 
-        <label htmlFor="searchcheckbox" id='searchcheckbox-cont' className='toggle-menu'>
-          <input type='checkbox' id='searchcheckbox' />
-          <MdSearch />
-        </label>
+        <button
+          onClick={e => toggleSearch()}
+          className={isSearchOpen ? 'toggle-menu open' : 'toggle-menu'}
+        >
+          {isSearchOpen ? <MdClose /> : <MdSearch />}
+        </button>
 
-        <label htmlFor="navcheckbox" id='navdrawer-cont' className='toggle-menu'>
+        {session && (
+          <button
+            onClick={e => toggleCart()}
+            className={isSearchOpen ? 'toggle-menu cart open' : 'toggle-menu cart'}
+          >
+            <CartCount count={session.cart.reduce(
+              (tally: any, cartItem: any) => tally + (cartItem.product ? cartItem.quantity : 0),
+              0
+            )} />
+          </button>
+        )}
 
-          <input type='checkbox' id='navcheckbox' />
-          <RiMenu4Fill />
-          {/* <RiMenu3Line /> */}
-        </label>
+        <button
+          onClick={e => toggleNav()}
+          className={isNavOpen ? 'toggle-menu open' : 'toggle-menu'}
+        >
+          {isNavOpen ? <RiMenu4Fill /> : <RiMenu3Line />}
+        </button>
 
       </div>
 
-
-      <ul id='nav-list'>
+      <ul className={isNavOpen ? 'open' : ''}>
         {/* <StyledUtilMenu> */}
         {/* //TODO use mine idk */}
         {/* <SearchInput /> */}
@@ -49,30 +69,13 @@ export function Nav() {
 
         <Link href={`/shop`}> Shop </Link>
         <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
-        <Link href={`/shop`}> Shop </Link>
-        <Link href={`/blog`}> Blog </Link>
+
 
         {session && (<>
           <Link href={`/shop/sell`}> Sell </Link>
           <Link href={`/shop/orders`}> Orders </Link>
           <SessionBadge session={session} />
-          <button onClick={e => setIsOpen(true)}>
-            My Cart
-            <CartCount count={session.cart.reduce(
-              (tally: any, cartItem: any) => tally + (cartItem.product ? cartItem.quantity : 0),
-              0
-            )} />
-          </button>
+
           <SignOutButton />
         </>)}
 

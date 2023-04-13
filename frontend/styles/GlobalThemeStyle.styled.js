@@ -40,10 +40,33 @@ export const GlobalStyles = createGlobalStyle`
   body{
     /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
     font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    padding: 0;
-    margin: 0;
     font-size: 1.5rem;
     line-height: 2;
+  }
+
+  html, body{
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar { 
+    background: transparent;
+    width: 10px;
+    height: 10px;
+    z-index: 999999;
+  }  
+    
+  ::-webkit-scrollbar-track { 
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 999999;
+  }  
+    
+  ::-webkit-scrollbar-thumb {  
+    background: var(--c-1);  
+    border-radius: 20px;
+    z-index: 999999;
   }
 
   a{

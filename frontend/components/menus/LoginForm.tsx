@@ -3,7 +3,7 @@ import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
-import { useGlobalContext } from "../../lib/useSessionContext";
+import { useGlobalContext } from "../../lib/useGlobalContext";
 import { useLocalStorage } from "../../lib/useLocalStorage";
 
 
