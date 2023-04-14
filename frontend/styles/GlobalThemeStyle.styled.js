@@ -12,7 +12,7 @@ export const GlobalStyles = createGlobalStyle`
 
   :root{
     --c-1: #a3cf03;
-    --c-2: orangered;
+    --c-2: #7aa976;
     --c-3: #6c8157;
     --c-bg: #f9faf5;
     --c-txt: black;

@@ -1,28 +1,33 @@
+// @ts-nocheck
 import styled from "styled-components"
 import { useStyleTransitionControl } from "../../lib/useStyleTransition"
-import { useState } from "react"
 
 export function EmojiFade() {
 
-  const [state, enter, exit] = useStyleTransitionControl()
-  const [isOpen, setIsOpen] = useState(false)
+  const [state, enter, exit, enterexit] = useStyleTransitionControl(2)
 
 
   return (
-    <StyledEmoji open={isOpen}>
+    <StyledEmoji >
+
       State: {state}
 
-      <div className="emoji-cont">
+      <div className={`emoji-cont ${state}`}>
         <span role="img" aria-label="fading emoji"> 🐸 </span>
       </div>
 
-      <button onClick={e => setIsOpen(true)}>
+      <button onClick={enter}>
         Enter
       </button>
 
-      <button onClick={e => setIsOpen(false)}>
+      <button onClick={exit}>
         Exit
       </button>
+
+      <button onClick={enterexit}>
+        EnterExit
+      </button>
+
     </StyledEmoji>
   )
 }
@@ -30,8 +35,20 @@ export function EmojiFade() {
 const StyledEmoji = styled.div`
   .emoji-cont{
 
-    opacity: ${props => props.open ? '1' : '0'};
-    transition: all 1000ms ease-in-out;
+    transition: all .3s ease-in-out;
+
+    &.ent{ 
+      opacity: 1;
+    }
+    &.entd{ 
+      opacity: 1;
+    }
+    &.exit{ 
+      opacity: 0;
+    }
+    &.exitd{ 
+      opacity: 0;
+    }
 
   }
 `

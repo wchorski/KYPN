@@ -42,6 +42,9 @@ const StyledMarquee = styled.div`
 
   --c-banner: #dbdbdb;
   width: 100%;
+  border: 1px solid var(--c-1);
+  /* border-radius: 10% 0 0 0 ; */
+  border-radius:10px/40%;
 
   &.closed{
     height: 0;

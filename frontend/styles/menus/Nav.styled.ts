@@ -75,14 +75,9 @@ export const StyledNav = styled.nav`
     background-color: transparent;
     border: none;
     padding: 0.5em;
+    transition: background .3s;
 
     /* input{display: none;} */
-
-
-
-    &:hover{
-      background-color: var(--c-3);
-    }
 
     &.cart {
       margin-left: auto;
@@ -102,6 +97,10 @@ export const StyledNav = styled.nav`
         background-color: var(--c-1);
         color: var(--c-txt-rev);
       }
+    }
+
+    &:hover{
+      background: var(--c-2) !important;
     }
   }
   

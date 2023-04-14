@@ -1,24 +1,28 @@
+// @ts-nocheck
 // cred Kaylie Kwon - https://javascript.plainenglish.io/applying-css-transitions-with-react-hooks-7bd84671bc6b
+import { waitFor } from "@testing-library/react"
 import { useEffect, useState } from "react"
 
 const STATE = {
-  ENTERING: 'entering',
-  ENTERED: 'entered',
-  EXITING: 'exiting',
-  EXITED: 'exit',
+  ENTERING: 'ent',
+  ENTERED: 'entd',
+  EXITING: 'exit',
+  EXITED: 'exitd',
 }
 
-function useTransitionState(duration = 1000) {
+function useTransitionState(duration = 1) {
 
-  const [state, setState] = useState<string>()
+  const inSeconds = duration * 1000
+
+  const [state, setState] = useState<string>('')
 
   useEffect(() => {
     let timerId: any
 
     if (state === STATE.ENTERING) {
-      timerId = setTimeout(() => setState(STATE.ENTERED), duration)
+      timerId = setTimeout(() => setState(STATE.ENTERED), inSeconds)
     } else if (state === STATE.EXITING) {
-      timerId = setTimeout(() => setState(STATE.EXITED), duration)
+      timerId = setTimeout(() => setState(STATE.EXITED), inSeconds)
     }
 
     return () => timerId && clearTimeout(timerId)
@@ -29,20 +33,35 @@ function useTransitionState(duration = 1000) {
   return [state, setState]
 }
 
-export function useStyleTransitionControl(duration: number) {
-  const [state, setState] = useTransitionState(duration)
+export function useStyleTransitionControl(seconds: number) {
+  const [state, setState] = useTransitionState(seconds)
 
-  const enter = () => {
+
+  function enterexit() {
+    console.log('enter enterexit')
+
+    if (state !== STATE.EXITING) setState(STATE.ENTERING)
+
+    setTimeout(function () {
+
+      if (state !== STATE.ENTERING) setState(STATE.EXITING)
+      console.log('exit enterexit after wait')
+    }, 5000);
+
+
+  }
+
+  function enter() {
     if (state !== STATE.EXITING) {
       setState(STATE.ENTERING)
     }
   }
 
-  const exit = () => {
+  function exit() {
     if (state !== STATE.ENTERING) {
       setState(STATE.EXITING)
     }
   }
 
-  return [state, enter, exit]
+  return [state, enter, exit, enterexit]
 }
