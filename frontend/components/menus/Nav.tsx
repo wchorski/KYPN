@@ -14,6 +14,7 @@ import { AnnouncementsMarquee } from '../elements/AnnouncementsMarquee';
 import { EmojiFade } from '../elements/EmojiFade';
 import { CartCount2 } from '../ecommerce/CartCount2';
 import { LinkActive } from './LinkActive';
+import { SearchInput } from './SearchInput';
 
 export function Nav() {
 
@@ -29,6 +30,7 @@ export function Nav() {
     <StyledNav className='main-menu' id='menu-main'>
 
       <SearchCarlos />
+
 
       <div id="menu-utility">
 
@@ -48,10 +50,6 @@ export function Nav() {
               (tally: any, cartItem: any) => tally + (cartItem.product ? cartItem.quantity : 0),
               0
             )} />
-            {/* <CartCount count={session.cart.reduce(
-              (tally: any, cartItem: any) => tally + (cartItem.product ? cartItem.quantity : 0),
-              0
-            )} /> */}
           </button>
         )}
 
@@ -64,7 +62,7 @@ export function Nav() {
 
       </div>
 
-      <ul className={isNavOpen ? 'open' : ''}>
+      <ul className={isNavOpen ? 'menu-main open' : 'menu-main '}>
         <LinkActive href='/shop'> Shop </LinkActive>
         <LinkActive href='/blog'> Blog </LinkActive>
 
@@ -80,6 +78,7 @@ export function Nav() {
           <LinkActive href='/auth/login'> Login </LinkActive>
         )}
       </ul>
+
     </StyledNav>
   )
 }

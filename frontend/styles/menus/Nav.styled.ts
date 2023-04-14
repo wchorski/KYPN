@@ -16,15 +16,16 @@ export const StyledUtilMenu = styled.div`
 
 export const StyledNav = styled.nav`
 
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* flex-direction: column; */
   /* width: 100%; */
   max-width: var(--maxWidth);
-  transform: translateY();
-  z-index: 9002;
+  /* transform: translateY(); */
+  /* z-index: 9002; */
+  z-index: 100;
 
-  ul{
+  ul.menu-main {
     opacity: 0;
     pointer-events: none;
     background-color: var(--c-1);

@@ -1,11 +1,11 @@
-import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../styles/DropDown.styled"
+import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled"
 import { gql, useLazyQuery, useQuery } from "@apollo/client"
 import { resetIdCounter, useCombobox } from "downshift"
 import { useCallback, useState } from "react"
 import styled from "styled-components"
 import { debounce } from 'lodash'
 import Image from "next/image"
-import { handlePhoto } from "../lib/handleProductPhoto"
+import { handlePhoto } from "../../lib/handleProductPhoto"
 import { useRouter } from "next/router"
 
 export const SearchInput = () => {

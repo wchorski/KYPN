@@ -16,6 +16,7 @@ import { useSearch } from "../../lib/useGlobalContext";
 
 export default function SearchCarlos() {
 
+  const { setisSearchOpen } = useSearch()
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   const [inputItems, setInputItems] = useState([])
@@ -96,7 +97,7 @@ export default function SearchCarlos() {
 
       <StyledDropDown>
         <ul {...getMenuProps()}>
-          {isOpen &&
+          {
             inputItems?.map((item: any, index) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
@@ -105,7 +106,7 @@ export default function SearchCarlos() {
                 // @ts-ignore
                 {...getItemProps({ item, index, })}
               >
-                <Link href={`/shop/product/${item.id}`}>
+                <Link href={`/shop/product/${item.id}`} onClick={() => setisSearchOpen(false)}>
                   <Image
                     priority
                     src={handlePhoto(item.photo).image?.url}
@@ -122,7 +123,9 @@ export default function SearchCarlos() {
               </StyledDropDownItem>
             ))}
         </ul>
+
       </StyledDropDown>
+
     </StyledSearch>
   )
 }
@@ -140,7 +143,8 @@ query SEARCH_PRODUCTS_QUERY ($searchTerm: String!){
       }
     }
   }
-}`
+}
+`
 
 const StyledSearchCont = styled.div`
   background-color: yellow;

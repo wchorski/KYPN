@@ -4,8 +4,17 @@ import styled, { keyframes } from 'styled-components';
 export const StyledDropDown = styled.div`
   position: absolute;
   width: 100%;
-  z-index: 2;
+  z-index: 999999;
   border: 1px solid var(--lightGray);
+
+  ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: #00000022 3px 3px 3px 10px;
+    background-color: var(--c-txt-rev);
+    z-index: 9999999;
+  }
 
 `;
 
@@ -59,6 +68,7 @@ export const StyledSearch = styled.div`
 
   &.open{
     height: 3em;
+    overflow: initial;
   }
 
   .input-cont{

@@ -7,6 +7,7 @@ import Header from '../Header'
 import styled from 'styled-components'
 import { AnnouncementsMarquee } from './AnnouncementsMarquee'
 import ShoppingCart from '../ecommerce/ShoppingCart'
+import SearchCarlos from '../menus/SearchCarlos'
 
 export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 
@@ -14,7 +15,8 @@ export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 
     <StyledLayout_WideWith className='layout-wrap'>
 
-      {/* <div className="header-nav-cont"> */}
+      {/* <SearchCarlos /> */}
+
       <AnnouncementsMarquee
         message={'custom marquee message that you can all read'}
         url={'/shop'}
@@ -23,7 +25,7 @@ export function Layout_Wide_Width({ children }: { children: ReactNode }) {
       <Header />
       <ShoppingCart />
       <Nav />
-      {/* </div> */}
+
 
       <StyledMainCont>
         {children}
