@@ -88,6 +88,10 @@ export const Product = list({
       //   inlineCreate: { fields: ['name'] },
       // },
     }),
+    categories: relationship({
+      ref: 'Category.products',
+      many: true,
+    }),
   },
   hooks: {
     // TODO use this to create a default 'slug' automatically based on product name

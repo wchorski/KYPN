@@ -11,12 +11,9 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :root{
-    /* accent */
-    --c-1: #a3cf03; 
-    /* desaturated */
-    --c-2: #7aa976;
-    /* dark */
-    --c-3: #6c8157;
+    --c-1: #a3cf03;  /* accent */
+    --c-2: #7aa976; /* desaturated */
+    --c-3: #6c8157; /* contrast */
     --c-bg: #f9faf5;
     --c-txt: black;
     --c-txt-rev: white;
@@ -42,7 +39,8 @@ export const GlobalStyles = createGlobalStyle`
 
   body{
     /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
-    font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 1.5rem;
     line-height: 2;
   }

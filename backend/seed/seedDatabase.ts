@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { productImage_seedjson, products_seed, roles_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -17,7 +17,7 @@ const seedUsers = async (context: Context) => {
   const usersToCreate = seedUsers.filter(
     seedUser => !usersAlreadyInDatabase.some(u => u.email === seedUser.email)
   )
-  console.log({usersToCreate})
+  console.log({ usersToCreate })
   await db.User.createMany({
     data: usersToCreate,
   });
@@ -34,9 +34,9 @@ const seedRoles = async (context: Context) => {
     },
   });
   const itemsToCreate = seedRoles.filter(
-    seedRole => !objsAlreadyInDatabase.some((u:any) => u.name === seedRole.name)
+    seedRole => !objsAlreadyInDatabase.some((u: any) => u.name === seedRole.name)
   );
-  console.log('roles seeded, ', {itemsToCreate})
+  console.log('roles seeded, ', { itemsToCreate })
   // @ts-ignore
   await db.Role.createMany({
     data: itemsToCreate,
@@ -46,8 +46,7 @@ const seedRoles = async (context: Context) => {
 // seed posts and connect with users
 const seedPosts = async (context: Context) => {
   const { db } = context.sudo();
-  const rawJSONData = fs.readFileSync(path.join(process.cwd(), './seed/posts_seed.json'), 'utf-8');
-  const seedPosts: any[] = JSON.parse(rawJSONData);
+  const seedPosts: any[] = posts_seedjson;
   const postsAlreadyInDatabase = await db.Post.findMany({
     where: {
       slug: { in: seedPosts.map(post => post.slug) },
@@ -73,9 +72,28 @@ const seedTags = async (context: Context) => {
     seedObj => !objectsAlreadyInDatabase.some(dbObj => dbObj.name === seedObj.name)
   );
 
-  console.log({objsToCreate})
+  console.log({ objsToCreate })
 
   await db.Tag.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
+const seedCategories = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = categories_seedjson;
+  const objectsAlreadyInDatabase = await db.Category.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((dbObj: any) => dbObj.name === seedObj.name)
+  );
+
+  console.log({ objsToCreate })
+
+  await db.Category.createMany({
     data: objsToCreate.map(obj => ({ ...obj })),
   });
 };
@@ -92,7 +110,7 @@ const seedProducts = async (context: Context) => {
     seedObj => !objectsAlreadyInDatabase.some(p => p.slug === seedObj.slug)
   );
 
-  console.log('products seeded, ', {objsToCreate})
+  console.log('products seeded, ', { objsToCreate })
 
   await db.Product.createMany({
     data: objsToCreate.map(obj => ({ ...obj })),
@@ -109,25 +127,26 @@ const seedProductImages = async (context: Context) => {
       filename: { in: seedObjects.map(obj => obj.filename) },
     },
   });
-  
+
   const objsToCreate = seedObjects.filter(
     // @ts-ignore
     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
   );
 
-  console.log({objsToCreate});
-  
+  console.log({ objsToCreate });
+
 
   await db.ProductImage.createMany({
     data: objsToCreate.map(obj => {
       // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-      
 
-      return ({ 
-      ...obj,  
-      // TODO why no seed upload files work?
-      // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
-    })}),
+
+      return ({
+        ...obj,
+        // TODO why no seed upload files work?
+        // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
+      })
+    }),
   });
 };
 
@@ -135,7 +154,9 @@ export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
   await seedUsers(context)
   await seedRoles(context)
+  await seedCategories(context)
   await seedTags(context)
+  await seedPosts(context)
 
   await seedProductImages(context)
   await seedProducts(context)

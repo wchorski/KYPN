@@ -1,3 +1,4 @@
+// cred - http://facsfinalproject.weebly.com/6-categories-of-fruits.html
 
 function timestamp() {
   // sometime in the last 30 days
@@ -87,6 +88,34 @@ export const posts_seed = [
   },
 ]
 
+export const categories_seedjson = [
+  {
+    name: 'Pomes',
+    description: 'Fruits that have smooth skin and an enlarged fleshy area that surrounds the core. Examples of pomes are apples, pears, and kiwis.',
+  },
+  {
+    name: 'Drupes',
+    description: 'Fruits that contain a single seed, or pit, surrounded by juicy flesh. Examples of drupes are peaches, cherries, plums, nectarines, and apricots.',
+  },
+  {
+    name: 'Berries',
+    description: 'Fruits with a fragile cell structure, that are pulpy and juicy with tiny seeds embedded in the flesh. Examples of berries are blackberries, cranberries, strawberries, and grapes.',
+  },
+  {
+    name: 'Melons',
+    description: ': Fruits that have a hard outer surface that is either smooth or netted with a juicy flesh. Examples of melons include, cantaloupes, honeydew, watermelon, casaba, crenshaw, and muskmelon.',
+  },
+  {
+    name: 'Citrus',
+    description: ' Fruits that grow in warm regions, and have a firm rind and a pulpy flesh. Examples of citrus fruits are, oranges, grapefruits, tangerines, lemons, limes, kumquats, citrons, tengelows, and ugli fruit.',
+  },
+  {
+    name: 'Tropical',
+    description: 'Fruits that grow in very warm climates, and differ in skin composition and seed characteristics. Examples, of tropical fruits are bananas, pineapples, avocados, dates, figs, mangoes, pomegranates, and papayas.',
+  },
+
+]
+
 export const tags_seedjson = [
   {
     name: 'blue'
@@ -158,11 +187,11 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'red'},
-        { name: 'yellow'},
-        { name: 'two-eyes'},
-        { name: 'nose'},
-        { name: 'leaf'},
+        { name: 'red' },
+        { name: 'yellow' },
+        { name: 'two-eyes' },
+        { name: 'nose' },
+        { name: 'leaf' },
       ],
     }
   },
@@ -185,12 +214,12 @@ export const products_seed = [
     },
     tags: {
       connect: [
-          { name: 'red'},
-          { name: 'white'},
-          { name: 'two-eyes'},
-          { name: 'nose'},
-          { name: 'black'},
-        ]
+        { name: 'red' },
+        { name: 'white' },
+        { name: 'two-eyes' },
+        { name: 'nose' },
+        { name: 'black' },
+      ]
     }
   },
   {
@@ -212,12 +241,12 @@ export const products_seed = [
     },
     tags: {
       connect: [
-          { name: 'yellow'},
-          { name: 'red'},
-          { name: 'two-eyes'},
-          { name: 'mouth'},
-          { name: 'green'},
-        ]
+        { name: 'yellow' },
+        { name: 'red' },
+        { name: 'two-eyes' },
+        { name: 'mouth' },
+        { name: 'green' },
+      ]
     },
   },
   {
@@ -239,13 +268,13 @@ export const products_seed = [
     },
     tags: {
       connect: [
-          { name: 'red'},
-          { name: 'green'},
-          { name: 'two-eyes'},
-          { name: 'mouth'},
-          { name: 'nose'},
-          { name: 'green'},
-        ]
+        { name: 'red' },
+        { name: 'green' },
+        { name: 'two-eyes' },
+        { name: 'mouth' },
+        { name: 'nose' },
+        { name: 'green' },
+      ]
     },
   },
   {
@@ -267,12 +296,12 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'yellow'},
-        { name: 'green'},
-        { name: 'two-eyes'},
-        { name: 'stuffed'},
+        { name: 'yellow' },
+        { name: 'green' },
+        { name: 'two-eyes' },
+        { name: 'stuffed' },
       ]
-    },  
+    },
   },
   {
     name: 'Strawberry Puff',
@@ -293,15 +322,15 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'white'},
-        { name: 'green'},
-        { name: 'two-eyes'},
-        { name: 'stuffed'},
-        { name: 'ears'},
-        { name: 'red'},
-        { name: 'leaf'},
+        { name: 'white' },
+        { name: 'green' },
+        { name: 'two-eyes' },
+        { name: 'stuffed' },
+        { name: 'ears' },
+        { name: 'red' },
+        { name: 'leaf' },
       ]
-    }, 
+    },
   },
   {
     name: 'Apple Pillow',
@@ -322,15 +351,15 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'yellow'},
-        { name: 'green'},
-        { name: 'red'},
-        { name: 'two-eyes'},
-        { name: 'stuffed'},
-        { name: 'mouth'},
-        { name: 'leaf'},
+        { name: 'yellow' },
+        { name: 'green' },
+        { name: 'red' },
+        { name: 'two-eyes' },
+        { name: 'stuffed' },
+        { name: 'mouth' },
+        { name: 'leaf' },
       ]
-    }, 
+    },
   },
   {
     name: 'Blue Drop',
@@ -351,17 +380,17 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'blue'},
-        { name: 'yellow'},
+        { name: 'blue' },
+        { name: 'yellow' },
 
-        { name: 'stuffed'},
+        { name: 'stuffed' },
 
-        { name: 'one-eyed'},
+        { name: 'one-eyed' },
 
-        { name: 'leaf'},
+        { name: 'leaf' },
 
       ]
-    }, 
+    },
   },
   {
     name: 'Azure Cyclops',
@@ -382,17 +411,17 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'blue'},
-        { name: 'black'},
-        { name: 'green'},
-        { name: 'stuffed'},
-        { name: 'one-eyed'},
+        { name: 'blue' },
+        { name: 'black' },
+        { name: 'green' },
+        { name: 'stuffed' },
+        { name: 'one-eyed' },
 
-        { name: 'mouth'},
-        { name: 'leaf'},
+        { name: 'mouth' },
+        { name: 'leaf' },
 
       ]
-    }, 
+    },
   },
   {
     name: 'Purple Fuzz Blob',
@@ -413,13 +442,13 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'green'},
-        { name: 'purple'},
-        { name: 'stuffed'},
-        { name: 'two-eyes'},
-        { name: 'leaf'},
+        { name: 'green' },
+        { name: 'purple' },
+        { name: 'stuffed' },
+        { name: 'two-eyes' },
+        { name: 'leaf' },
       ]
-    }, 
+    },
   },
   {
     name: 'Inky Indigo',
@@ -440,13 +469,13 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'purple'},
-        
-        { name: 'stuffed'},
-        
-        { name: 'two-eyes'},
+        { name: 'purple' },
+
+        { name: 'stuffed' },
+
+        { name: 'two-eyes' },
       ]
-    }, 
+    },
   },
   {
     name: 'Yellow Pearabol',
@@ -467,18 +496,18 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        
-        { name: 'yellow'},
-        
-        { name: 'green'},
-        { name: 'stuffed'},
-        
-        { name: 'one-eyed'},
-        
-        { name: 'leaf'},
+
+        { name: 'yellow' },
+
+        { name: 'green' },
+        { name: 'stuffed' },
+
+        { name: 'one-eyed' },
+
+        { name: 'leaf' },
 
       ]
-    }, 
+    },
   },
   {
     name: 'Kiwi Kidz',
@@ -499,18 +528,18 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        
 
-        { name: 'green'},
-        { name: 'stuffed'},
-        
-        { name: 'two-eyes'},
- 
-        
-        { name: 'bundle'},
-        { name: 'nose'},
+
+        { name: 'green' },
+        { name: 'stuffed' },
+
+        { name: 'two-eyes' },
+
+
+        { name: 'bundle' },
+        { name: 'nose' },
       ]
-    }, 
+    },
   },
   {
     name: 'Quad Kumquats',
@@ -532,22 +561,22 @@ export const products_seed = [
     },
     tags: {
       connect: [
-        { name: 'purple'},
-        { name: 'yellow'},
-        { name: 'red'},
+        { name: 'purple' },
+        { name: 'yellow' },
+        { name: 'red' },
 
-        { name: 'green'},
-        { name: 'stuffed'},
-        { name: 'orange'},
+        { name: 'green' },
+        { name: 'stuffed' },
+        { name: 'orange' },
 
 
-        { name: 'leaf'},
-        { name: 'bundle'},
+        { name: 'leaf' },
+        { name: 'bundle' },
 
       ]
-    }, 
+    },
   },
-  
+
 ]
 
 export const productImage_seedjson = [
@@ -607,4 +636,285 @@ export const productImage_seedjson = [
     altText: 'Quad Kumquats featured photo',
     filename: 'cf-14.png'
   },
+]
+
+export const posts_seedjson = [
+  {
+    "title": "The Health Benefits of Berries",
+    "slug": "health-benefits-berries",
+    "dateCreated": "2023-05-01T10:00:00.000Z",
+    dateModified: "2023-05-01T10:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 5,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    categories: {
+      connect: [
+        { name: 'Berries' }
+      ]
+    },
+    tags: {
+      connect: [
+        { name: 'red' },
+        { name: 'yellow' },
+        { name: 'two-eyes' },
+        { name: 'nose' },
+        { name: 'leaf' },
+      ],
+    },
+    "excerpt": "Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries."
+  },
+  {
+    "title": "The World of Exotic Fruits",
+    "slug": "exotic-fruits",
+    "dateCreated": "2023-06-15T12:30:00.000Z",
+    dateModified: "2023-06-15T12:30:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 1,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: true,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    categories: {
+      connect: [
+        { name: 'Berries' },
+        { name: 'Citrus' },
+      ]
+    },
+    tags: {
+      connect: [
+        { name: 'red' },
+        { name: 'yellow' },
+        { name: 'two-eyes' },
+
+      ],
+    },
+    "excerpt": "Take a journey to discover some of the most unique and exotic fruits from around the world, including jackfruit, durian, and mangosteen."
+  },
+  {
+    "title": "Fruit Smoothies: A Healthy and Delicious Option",
+    "slug": "fruit-smoothies-healthy-delicious",
+    "dateCreated": "2023-07-10T16:45:00.000Z",
+    dateModified: "2023-07-10T16:45:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    categories: {
+      connect: [
+        { name: 'Tropical' },
+        { name: 'Pomes' },
+        { name: 'Drupes' },
+        { name: 'Melons' },
+      ]
+    },
+    tags: {
+      connect: [
+
+        { name: 'yellow' },
+        { name: 'two-eyes' },
+
+        { name: 'leaf' },
+      ],
+    },
+    "excerpt": "Find out how to make nutritious and tasty fruit smoothies using a variety of fruits, such as bananas, strawberries, and kiwis."
+  },
+  {
+    "title": "The Wonderful World of Apples",
+    "slug": "wonderful-world-apples",
+    "dateCreated": "2023-08-22T09:15:00.000Z",
+    dateModified: "2023-08-22T09:15:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Explore the diverse world of apples, from sweet and crisp varieties like Honeycrisp and Pink Lady to tart and tangy options like Granny Smith and Braeburn."
+  },
+  {
+    "title": "The Beauty of Fruit Art",
+    "slug": "fruit-art",
+    "dateCreated": "2023-09-30T14:00:00.000Z",
+    dateModified: "2023-09-30T14:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Discover the creative and beautiful world of fruit art, from simple designs like watermelon baskets to intricate sculptures made from a variety of fruits."
+  },
+  {
+    "title": "Fruity Suprise",
+    "slug": "fruity-suprise",
+    "dateCreated": "2022-08-24T14:00:00.000Z",
+    dateModified: "2022-08-24T14:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    }
+  },
+  {
+    "title": "Exploring the World of Exotic Fruits",
+    "slug": "exploring-exotic-fruits",
+    "dateCreated": "2022-08-24T14:00:00.000Z",
+    dateModified: "2023-04-17T14:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Have you ever wondered what other fruits are out there beyond the ones you see at your local grocery store? There's a whole world of exotic fruits waiting to be discovered and tasted!",
+  },
+  {
+    "title": "The Sweet and Sour World of Citrus Fruits",
+    "slug": "sweet-sour-citrus-fruits",
+    "dateCreated": "2023-04-17T14:00:00.000Z",
+    dateModified: "2024-02-28T14:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Discover the delicious and tangy world of citrus fruits, from lemons and limes to oranges and grapefruits.",
+  },
+  {
+    "title": "Fruit and Cheese Pairings for a Perfect Charcuterie Board",
+    "slug": "fruit-cheese-pairings-charcuterie-board",
+    "dateCreated": "2024-02-28T14:00:00.000Z",
+    dateModified: "2024-02-28T14:00:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Take your charcuterie board to the next level with these delicious fruit and cheese pairings, featuring combinations like figs and goat cheese and apples and cheddar."
+  },
+  {
+    "title": "The Beauty and Benefits of Dragon Fruit",
+    "slug": "dragon-fruit-beauty-benefits",
+    "dateCreated": "2024-01-12T09:15:00.000Z",
+    dateModified: "2024-01-12T09:15:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Discover the unique appearance and nutritional benefits of dragon fruit, also known as pitaya, and learn how to incorporate it into your diet."
+  },
+  {
+    "title": "The World of Tropical Fruits",
+    "slug": "tropical-fruits",
+    "dateCreated": "2023-12-05T16:45:00.000Z",
+    dateModified: "2023-12-05T16:45:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Explore the amazing diversity of tropical fruits, including mangos, pineapples, and papayas, and learn about their health benefits and culinary uses."
+  },
+  {
+    "title": "The Best Fruits for a Summer Picnic",
+    "slug": "fruits-summer-picnic",
+    "dateCreated": "2023-11-20T12:30:00.000Z",
+    dateModified: "2023-12-05T16:45:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Get ready for your next summer picnic with this guide to the best fruits to pack, including watermelon, cherries, and grapes."
+  },
+  {
+    "title": "The Many Uses of Pomegranates",
+    "slug": "uses-pomegranates",
+    "dateCreated": "2023-10-15T10:00:00.000Z",
+    dateModified: "2023-12-05T16:45:00.000Z",
+    status: "PUBLISHED",
+    template: "FULLWIDTH",
+    pinned: 0,
+    featured_image: 'https://cdn.dribbble.com/users/1326994/screenshots/6324315/e883_4x.jpg',
+    featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
+    allow_comments: false,
+    "author": {
+      "connect": {
+        "email": "adam@m.lan"
+      }
+    },
+    "excerpt": "Discover the many culinary and medicinal uses of pomegranates, including how to juice them and use their seeds in recipes."
+  }
 ]

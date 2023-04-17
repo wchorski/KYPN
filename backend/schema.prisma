@@ -56,6 +56,7 @@ model Product {
   user                  User?         @relation("Product_user", fields: [userId], references: [id])
   userId                String?       @map("user") @postgresql.Uuid
   tags                  Tag[]         @relation("Product_tags")
+  categories            Category[]    @relation("Category_products")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([userId])
@@ -114,16 +115,33 @@ model Order {
 }
 
 model Post {
-  id          String    @id @default(uuid()) @postgresql.Uuid
-  title       String    @default("")
-  slug        String    @unique @default("")
-  publishDate DateTime? @default(now())
-  content     Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  author      User?     @relation("Post_author", fields: [authorId], references: [id])
-  authorId    String?   @map("author") @postgresql.Uuid
-  tags        Tag[]     @relation("Post_tags")
+  id             String     @id @default(uuid()) @postgresql.Uuid
+  title          String     @default("")
+  slug           String     @unique @default("")
+  dateCreated    DateTime?  @default(now())
+  dateModified   DateTime?  @default(now())
+  status         String?    @default("DRAFT")
+  template       String?    @default("FULLWIDTH")
+  pinned         Int?       @default(0)
+  excerpt        String     @default("")
+  featured_image String     @default("")
+  featured_video String     @default("")
+  content        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author         User?      @relation("Post_author", fields: [authorId], references: [id])
+  authorId       String?    @map("author") @postgresql.Uuid
+  categories     Category[] @relation("Category_posts")
+  tags           Tag[]      @relation("Post_tags")
+  allow_comments Boolean    @default(false)
 
   @@index([authorId])
+}
+
+model Category {
+  id          String    @id @default(uuid()) @postgresql.Uuid
+  name        String    @unique @default("")
+  description String    @default("")
+  posts       Post[]    @relation("Category_posts")
+  products    Product[] @relation("Category_products")
 }
 
 model Tag {

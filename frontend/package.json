@@ -13,6 +13,7 @@
     "@apollo/client": "^3.7.10",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@keystone-6/document-renderer": "^1.1.2",
+    "@keystone-6/fields-document": "^7.0.0",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.52.0",
     "@types/node": "18.15.7",
