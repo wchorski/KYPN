@@ -1,8 +1,8 @@
-import { Pagination } from "../components/Pagination";
-import { BlogList } from "../components/blog/BlogList";
+import { Pagination } from "../../../components/Pagination";
+import { BlogList } from "../../../components/blog/BlogList";
 import { useRouter } from 'next/router'
 
-export default function BlogPage() {
+export default function BlogPageNumber() {
 
   const { query } = useRouter()
 

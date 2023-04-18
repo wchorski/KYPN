@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { QueryLoading } from './../menus/QueryLoading';
 import { QueryError } from './../menus/QueryError';
 import { perPage } from '../../config';
+import { datePretty } from '../../lib/dateFormatter';
+import { BlogThumbnail } from './BlogThumbnail';
 
 type ProdProps = {
   page: number
@@ -24,27 +26,25 @@ export function BlogList({ page }: ProdProps) {
   if (error) return <QueryError />
 
   return (
-    <StyledProductsList>
+    <StyledBlogList>
       {data.posts.map((item: any) => {
         return (
           <li key={item.id}>
-            <Image src={item.featured_image} alt={`post featured image`} width={200} height={200} />
-            <h3>{item.title}</h3>
-            <span>{item.dateModified}</span>
-            <span>{item.excerpt}</span>
+            <BlogThumbnail {...item} />
           </li>
         );
       })}
-    </StyledProductsList>
+    </StyledBlogList>
   )
 }
 
-const StyledProductsList = styled.ul`
+const StyledBlogList = styled.ul`
   /* display: grid; */
   /* grid-template-columns: 1fr 1fr; */
   /* grid-gap: 60px; */
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-around;
   list-style: none;
   margin: 0;
@@ -55,7 +55,7 @@ const StyledProductsList = styled.ul`
     padding: .3em;
     box-shadow: #0000004d 2px 2px 8px;
     margin: 1em;
-    width: 20em;
+    width: 100%;
   }
 
   img{

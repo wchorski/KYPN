@@ -8,13 +8,12 @@ const StorePageNumber = () => {
   const { query } = useRouter()
 
   return (<>
-    <h1>Store Page {query.page}</h1>
 
-    <Pagination page={Number(query.page) || 1} />
+    <Pagination route='/shop' page={Number(query.page) || 1} />
 
     <ProductsList page={Number(query.page) || 1} />
 
-    <Pagination page={Number(query.page) || 1} />
+    <Pagination route='/shop' page={Number(query.page) || 1} />
 
   </>)
 }

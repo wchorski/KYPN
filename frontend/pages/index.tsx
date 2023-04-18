@@ -1,9 +1,7 @@
 import React, { Fragment, useContext } from 'react';
-import Link from 'next/link';
-import { useGlobalContext } from '../lib/useGlobalContext';
 import { useUser } from '../components/menus/Session';
-import SearchCarlos from '../components/menus/SearchInput';
-// import { SessionContext } from './_app';
+
+
 
 
 export default function Home() {
@@ -13,10 +11,9 @@ export default function Home() {
 
   return (<>
     <h1>Home</h1>
-    {session?.name && (
+    {session && (
       <p>Welcome, {session.name}</p>
     )}
-    <SearchCarlos />
 
   </>)
 }

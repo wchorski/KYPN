@@ -130,7 +130,7 @@ export function SearchInput() {
             className: loading ? 'loading' : '',
             onKeyDown: event => {
               // console.log(event.target)
-
+              // todo route push to link when enter key is pressed
               switch (event.key) {
                 case 'Enter':
                   // router.push(`/shop/product/${item.id}`)

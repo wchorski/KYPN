@@ -9,9 +9,10 @@ import { perPage } from "../config";
 
 type PagProps = {
   page: number,
+  route: string,
 }
 
-export const Pagination = ({ page }: PagProps) => {
+export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 
   const { error, loading, data } = useQuery(QUERY_PRODUCTS_COUNT)
 
@@ -20,19 +21,25 @@ export const Pagination = ({ page }: PagProps) => {
 
   // console.log('pag data, ', data);
 
+  const handleItemCount = () => {
+    if (route === '/shop') return data.productsCount
+    if (route === '/blog/posts') return data.postsCount
+    return 0
+  }
 
-  const pageCount = Math.ceil(data.productsCount / perPage)
+
+  const pageCount = Math.ceil(handleItemCount() / perPage)
 
   return (<>
     <Head>
-      <title>Sick Fits - {page} / {pageCount} </title>
+      <title> {page} / {pageCount} </title>
     </Head>
 
     <StyledPagination data-testid='pagination'>
 
 
       {/* <Link href={`/shop?page=${page - 1}`} aria-disabled={page <= 1}> */}
-      <Link href={`/shop/${page - 1}`} aria-disabled={page <= 1}>
+      <Link href={`${route}/${page - 1}`} aria-disabled={page <= 1}>
         <MdKeyboardArrowLeft />
         Prev
       </Link>
@@ -40,12 +47,11 @@ export const Pagination = ({ page }: PagProps) => {
       <div className='count-cont'>
         <span> {page} of {pageCount}</span>
         <span data-testid='pagination-countTotal'>
-          {data.productsCount} Total Products
+          {handleItemCount()} Total
         </span>
       </div>
 
-      {/* <Link href={`/shop?page=${page + 1}`} aria-disabled={page > data.productsCount}> */}
-      <Link href={`/shop/${page + 1}`} aria-disabled={page >= Math.ceil(data.productsCount / perPage)}>
+      <Link href={`${route}/${page + 1}`} aria-disabled={page >= Math.ceil(handleItemCount() / perPage)}>
         Next
         <MdKeyboardArrowRight />
       </Link>
@@ -57,5 +63,7 @@ export const Pagination = ({ page }: PagProps) => {
 export const QUERY_PRODUCTS_COUNT = gql`
   query Query {
     productsCount
+    postsCount
+
   }
 `
