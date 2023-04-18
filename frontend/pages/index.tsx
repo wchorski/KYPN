@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from 'react';
 import Link from 'next/link';
 import { useGlobalContext } from '../lib/useGlobalContext';
 import { useUser } from '../components/menus/Session';
-import SearchCarlos from '../components/menus/SearchCarlos';
+import SearchCarlos from '../components/menus/SearchInput';
 // import { SessionContext } from './_app';
 
 

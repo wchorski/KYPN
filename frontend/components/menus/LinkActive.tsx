@@ -8,10 +8,17 @@ export function LinkActive({ href, children }: { href: string, children: ReactNo
   const { pathname: urlPathname, push: routerPush, asPath } = useRouter();
   const { setisNavOpen } = useNavControl()
 
-  const style = {
-    // backgroundColor: urlPathname === href ? 'var(--c-2)' : '',
-    backgroundColor: urlPathname === href || asPath === href ? 'var(--c-2)' : '',
+
+  function handleIsActive() {
+
+    if (urlPathname === href || asPath === href) {
+      return 'isActive'
+    } else {
+      return ''
+    }
+
   }
+
 
   const handleClick = (e: MouseEvent) => {
     e.preventDefault()
@@ -22,16 +29,11 @@ export function LinkActive({ href, children }: { href: string, children: ReactNo
   return (
     <Link
       href={href}
-      style={style}
       // @ts-ignore
       onClick={handleClick}
-      className='menu-item'
+      className={`menu-item ${handleIsActive()}`}
     >
       {children}
-      {/* {name} */}
-      {/* <a style={style} onClick={handleClick} className='hurdur'> 
-        {name} 
-      </a> */}
     </Link>
 
   )

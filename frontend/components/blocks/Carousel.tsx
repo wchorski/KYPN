@@ -11,12 +11,12 @@ type CarouselProps = {
 export function Carousel({ items = [] }: CarouselProps) {
   return (
     <div className={styles.carousel}>
-      {items.map(item => {
+      {items.map((item, i) => {
         return (
-          <div key={item.imageSrc} className={styles.carouselItem}>
-            <img role="presentation" src={item.imageSrc} className={styles.carouselImage} />
-            <h1 className={styles.title}>{item.title}</h1>
-          </div>
+          <figure key={i} className={styles.carouselItem}>
+            <img role="presentation" src={item.imageSrc} className={styles.carouselImage} alt={`${item.title} video thumbnail`} />
+            <figcaption className={styles.title}>{item.title}</figcaption>
+          </figure>
         );
       })}
     </div>

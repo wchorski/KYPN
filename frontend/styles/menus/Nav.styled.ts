@@ -28,7 +28,7 @@ export const StyledNav = styled.nav`
   ul.menu-main {
     opacity: 0;
     pointer-events: none;
-    background-color: var(--c-1);
+    background-color: var(--c-3);
     /* position: sticky; */
     top: 0;
     float: left;
@@ -49,6 +49,10 @@ export const StyledNav = styled.nav`
       color: var(--c-txt-rev);
       text-align: end;
     }
+  }
+
+  a.isActive{
+    background-color: var(--c-1);
   }
 
   #navdrawer-cont{

@@ -8,7 +8,7 @@ import styled from "styled-components"
 
 export function AnnouncementsMarquee({ message, url }: { message: string, url: string }) {
 
-
+  const [isFocused, setIsFocused] = useState<boolean>(false)
   const [isClosed, setisClosed] = useState<boolean>(false)
 
   function handleClose() {
@@ -17,15 +17,19 @@ export function AnnouncementsMarquee({ message, url }: { message: string, url: s
 
   return (
     <StyledMarquee
-      onMouseOver={() => console.log('mouseover')}
-      onMouseOut={() => console.log('mouse out')}
+      onMouseOver={() => setIsFocused(true)}
+      onMouseOut={() => setIsFocused(false)}
       className={isClosed ? 'closed' : ''}
     >
       <span className="msg">
         {message}
       </span>
 
-      <Link href={url} onClick={e => setisClosed(true)}> <FiExternalLink /> </Link>
+      <Link href={url} onClick={e => setisClosed(true)}
+        className={isFocused ? 'focused' : ''}
+      >
+        <FiExternalLink />
+      </Link>
 
       <button
         onClick={e => setisClosed(true)}
@@ -72,10 +76,16 @@ const StyledMarquee = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
+    transform: scale(1);
+    transition: all .3s;
 
     &:hover{
       background-color: var(--c-1);
       color: var(--c-txt-rev);
+    }
+
+    &.focused{
+      transform: scale(1.2);
     }
   }
 
@@ -89,7 +99,7 @@ const StyledMarquee = styled.div`
     font-size: 20px;
     border: none;
     background-color: transparent;
-    transition: background .3s;
+    transition: all .3s;
     
     &:hover{
       background-color: #00000064;

@@ -75,7 +75,7 @@ function createApolloClient() {
     ssrMode: typeof window === 'undefined',
     link: from([
       errorLink,
-      uploadLink, //TODO FIX FILE UPLOAD WITH APOLLO
+      uploadLink,
       // httpLink,
     ]),
     cache: new InMemoryCache({

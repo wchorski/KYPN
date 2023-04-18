@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ProductThumbnail } from "../components/ProductThumbnail";
+import { ProductThumbnail } from "../ProductThumbnail";
 import { useQuery, gql } from '@apollo/client'
 import styled from 'styled-components';
-import { QueryLoading } from './menus/QueryLoading';
-import { QueryError } from './menus/QueryError';
-import { perPage } from '../config';
+import { QueryLoading } from '../menus/QueryLoading';
+import { QueryError } from '../menus/QueryError';
+import { perPage } from '../../config';
 
 type ProdProps = {
   page: number

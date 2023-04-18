@@ -1,5 +1,5 @@
 import { Pagination } from "../components/Pagination";
-import { ProductsList } from "../components/ProductsList";
+import { ProductsList } from "../components/ecommerce/ProductsList";
 import { useRouter } from 'next/router'
 
 export default function StorePage() {

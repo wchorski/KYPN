@@ -1,101 +1,21 @@
-import React from 'react';
-import Link from 'next/link';
-import { fetchGraphQL, gql } from '../graphql';
+import { Pagination } from "../components/Pagination";
+import { BlogList } from "../components/blog/BlogList";
+import { useRouter } from 'next/router'
 
-type Post = {
-  id: string;
-  title: string;
-  slug: string;
-  publishDate: string | null;
-  author: {
-    name: string;
-  } | null;
-};
+export default function BlogPage() {
 
-function PublishDate({ publishDate }: { publishDate: Post['publishDate'] }) {
-  const formattedDate = publishDate ? new Date(publishDate).toLocaleDateString() : null;
-
-  if (!formattedDate) {
-    return null;
-  }
-  return (
-    <span>
-      <em> · Published on {formattedDate}</em>
-    </span>
-  );
-}
-
-function AuthorInfo({ author }: { author: Post['author'] }) {
-  if (!author?.name) {
-    return null;
-  }
+  const { query } = useRouter()
 
   return (
-    <span>
-      <em> · by {author?.name}</em>
-    </span>
+    <>
+      <h1>Store Page {query.page}</h1>
+
+      <Pagination page={Number(query.page) || 1} />
+
+      <BlogList page={Number(query.page) || 1} />
+
+      <Pagination page={Number(query.page) || 1} />
+
+    </>
   );
-}
-
-export default function Blog({ posts, error }: { posts: Post[]; error?: Error }) {
-  if (error) {
-    return (
-      <>
-        <h1>Something went wrong</h1>
-        <pre>{error.message}</pre>
-      </>
-    );
-  }
-
-  return (
-    <main>
-      <h1 style={{ margin: 0 }}>Posts</h1>
-      <ul>
-        {posts.map(post => {
-          return (
-            <li key={post.id}>
-              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              <PublishDate publishDate={post.publishDate} />
-              <AuthorInfo author={post.author} />
-            </li>
-          );
-        })}
-      </ul>
-    </main>
-  );
-}
-
-// ! if I don't want to use Apollo and use Next's built in req fetching
-export async function getStaticProps() {
-  try {
-    const data = await fetchGraphQL(gql`
-      query posts {
-        posts {
-          id
-          title
-          slug
-          publishDate
-          author {
-            name
-          }
-        }
-      }
-    `);
-    // console.log('**** blog data, ', data);
-    
-
-    const posts = data?.posts || [];
-    return {
-      props: {
-        posts,
-      },
-    };
-  } catch (e) {
-    return {
-      props: {
-        posts: [],
-        error: { name: (e as Error).name, message: (e as Error).message },
-      },
-    };
-  }
 }

@@ -22,7 +22,7 @@ export default function CartItem({ item }: any) {
       <Image
         priority
         src={handlePhoto(photo).image?.url}
-        alt={handlePhoto(photo).image?.altText}
+        alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no product photo'}
         width={handlePhoto(photo).image?.width}
         height={handlePhoto(photo).image?.height}
       />

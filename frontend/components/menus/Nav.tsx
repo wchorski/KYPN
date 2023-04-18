@@ -6,7 +6,7 @@ import { useCart } from '../../lib/cartState';
 import CartCount from '../ecommerce/CartCount';
 import { RiMenu3Line, RiMenu4Fill } from "react-icons/ri";
 import { StyledNav, StyledUtilMenu } from '../../styles/menus/Nav.styled';
-import SearchCarlos from './SearchCarlos';
+import { SearchInput } from './SearchInput';
 import { MdClose, MdSearch } from 'react-icons/md';
 import { useSearch } from '../../lib/useGlobalContext';
 import { useNavControl } from '../../lib/useGlobalContext';
@@ -14,7 +14,6 @@ import { AnnouncementsMarquee } from '../elements/AnnouncementsMarquee';
 import { EmojiFade } from '../elements/EmojiFade';
 import { CartCount2 } from '../ecommerce/CartCount2';
 import { LinkActive } from './LinkActive';
-import { SearchInput } from './SearchInput';
 
 export function Nav() {
 
@@ -29,7 +28,7 @@ export function Nav() {
   return (
     <StyledNav className='main-menu' id='menu-main'>
 
-      <SearchCarlos />
+      <SearchInput />
 
 
       <div id="menu-utility">

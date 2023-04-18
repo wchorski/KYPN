@@ -4,7 +4,7 @@ import { Nav } from './menus/Nav'
 import styled from "styled-components";
 import { SearchInput } from './menus/SearchInput';
 import ShoppingCart from './ecommerce/ShoppingCart';
-import SearchCarlos from './menus/SearchCarlos';
+import SearchCarlos from './menus/SearchInput';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
 

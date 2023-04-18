@@ -5,7 +5,7 @@ import { withRouter } from "next-router-mock";
 import Router from 'next/router'; // We will MOCK THIS
 import { fakeUser, fakeItem, makePaginationMocksFor } from '../lib/testUtils'
 import { ProductCreate, CREATE_PRODUCT_MUTATION } from "../components/ecommerce/ProductCreate";
-import { GET_ALL_PRODUCTS } from "../components/ProductsList";
+import { GET_ALL_PRODUCTS } from "../components/ecommerce/ProductsList";
 
 jest.mock('next/router', () => ({
   push: jest.fn(),

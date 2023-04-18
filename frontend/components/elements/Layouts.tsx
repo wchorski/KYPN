@@ -7,7 +7,7 @@ import Header from '../Header'
 import styled from 'styled-components'
 import { AnnouncementsMarquee } from './AnnouncementsMarquee'
 import ShoppingCart from '../ecommerce/ShoppingCart'
-import SearchCarlos from '../menus/SearchCarlos'
+import SearchCarlos from '../menus/SearchInput'
 
 export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 

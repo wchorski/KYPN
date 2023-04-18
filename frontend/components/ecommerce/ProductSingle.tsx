@@ -12,6 +12,8 @@ import { handlePhoto } from '../../lib/handleProductPhoto';
 import { gql, useQuery } from '@apollo/client';
 import { QueryLoading } from '../menus/QueryLoading';
 import ErrorMessage from '../ErrorMessage';
+import { TagsPool } from '../menus/TagsPool';
+import { CategoriesPool } from '../menus/CategoriesPool';
 
 
 export function ProductSingle({ id }: any) {
@@ -25,7 +27,7 @@ export function ProductSingle({ id }: any) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { name, photo, price, description, status } = data.product
+  const { name, photo, price, description, status, categories, tags } = data.product
 
 
   return (<>
@@ -56,6 +58,16 @@ export function ProductSingle({ id }: any) {
       <AddToCart id={id} />
       <Link href={{ pathname: '/shop/product/update', query: { id: id }, }}> Edit ✏️ </Link>
 
+      <footer>
+
+        <h2>Categories: </h2>
+        <CategoriesPool categories={categories} />
+
+        <h2>Tags:</h2>
+        <TagsPool tags={tags} />
+
+      </footer>
+
     </StyledProductSingle>
   </>)
 }
@@ -80,6 +92,14 @@ export const SINGLE_PRODUCT_QUERY = gql`
       price
       status
       description
+      tags {
+        name
+        id
+      }
+      categories {
+        name
+        id
+      }
     }
   }
 `

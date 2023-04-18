@@ -5,7 +5,7 @@ import { StyledForm } from "../../styles/Form.styled"
 import { gql, useMutation } from "@apollo/client"
 import { useState } from "react"
 import ErrorMessage from "../ErrorMessage"
-import { GET_ALL_PRODUCTS } from "../ProductsList"
+import { GET_ALL_PRODUCTS } from "./ProductsList"
 
 
 export const ProductCreate = () => {

@@ -1,153 +1,203 @@
-import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled"
-import { gql, useLazyQuery, useQuery } from "@apollo/client"
-import { resetIdCounter, useCombobox } from "downshift"
-import { useCallback, useState } from "react"
-import styled from "styled-components"
-import { debounce } from 'lodash'
-import Image from "next/image"
+import Image from "next/image";
+import { resetIdCounter, useCombobox } from "downshift";
+import { useRouter } from "next/router";
+import { useLazyQuery, gql } from "@apollo/client";
+import { useMemo, useState, useEffect, useRef } from "react";
+import { debounce } from "lodash";
+import Link from "next/link";
+import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled";
+import { MdClose, MdSearch } from "react-icons/md";
 import { handlePhoto } from "../../lib/handleProductPhoto"
-import { useRouter } from "next/router"
+import styled from "styled-components"
+import { useSearch } from "../../lib/useGlobalContext";
+// const { default: gql } = require("graphql-tag");
 
-export const SearchInput = () => {
+export function SearchInput() {
+
+  const { setisSearchOpen } = useSearch()
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
+  const [inputItems, setInputItems] = useState([])
+  const [inputValue, setInputValue] = useState<any>()
+  const { isSearchOpen, openSearch, closeSearch } = useSearch()
 
   const router = useRouter()
-
-  const [query, { loading, data, error }] = useLazyQuery(QUERY_SEARCH_PRODUCTS, { fetchPolicy: 'no-cache' })
-
-  // constricts waterfall of queries made to the server
-  const findItemsLazy = useCallback(debounce(query, 350), [query]);
-
-  // async function handleQuery(searchTerm:string) {
-  //   const res = await query({
-  //     fetchPolicy: 'no-cache',
-  //     variables: {
-  //       where: {
-  //         name: {
-  //           contains: searchTerm
-  //         },
-  //         description: {
-  //           contains: searchTerm
-  //         }
-  //       }
-  //     }
-  //   })
-  // }
+  const [findItems, { loading, data, error }] = useLazyQuery(
+    SEARCH_PRODUCTS_QUERY,
+    {
+      fetchPolicy: 'no-cache',
+    }
+  );
 
   resetIdCounter();
 
-  const foundItems = data?.products || []
+  const findItemsButChill = useMemo(() => debounce(findItems, 350), [findItems]);
 
-  const { getMenuProps, getInputProps, getLabelProps, selectItem, selectedItem, getToggleButtonProps, isOpen, getItemProps, highlightedIndex } = useCombobox({
-    items: foundItems,
+  const {
+    isOpen,
+    getToggleButtonProps,
+    getLabelProps,
+    getMenuProps,
+    getInputProps,
+    highlightedIndex,
+    getItemProps,
+    selectedItem,
+    selectItem,
+  } = useCombobox({
+    items: inputItems ?? [],
     onInputValueChange: ({ inputValue }) => {
+      if (inputValue === '') {
+        setInputItems([])
+        return console.log('empty search string')
+      }
 
-      // TODO why is this caps sensative?
-      // console.log(selectedItem, inputValue)
-
-      findItemsLazy({
-        variables: {
-          where: {
-            OR: [
-              {
-                name: {
-                  contains: inputValue
-                }
-              },
-              {
-                description: {
-                  contains: inputValue
-                }
-              }
-            ]
+      setInputValue(inputValue)
+      findItems(
+        {
+          variables: {
+            whereProduct: {
+              OR: [
+                {
+                  name: {
+                    contains: inputValue,
+                    mode: 'insensitive'
+                  }
+                },
+                {
+                  description: {
+                    contains: inputValue,
+                    mode: 'insensitive',
+                  }
+                },
+                {
+                  tags: {
+                    every: {
+                      name: {
+                        equals: inputValue,
+                        mode: 'insensitive'
+                      }
+                    }
+                  }
+                },
+                // TODO having cats shows all products for some reason
+                // {
+                //   categories: {
+                //     every: {
+                //       name: {
+                //         equals: inputValue,
+                //         mode: 'insensitive'
+                //       }
+                //     }
+                //   }
+                // }
+              ]
+            },
           }
-
         }
+      ).then(({ data }) => {
+        setInputItems(data.products)
       })
     },
-    onSelectedItemChange({ selectedItem }) {
-      // @ts-ignore
-      router.push({ pathname: `/shop/product/${selectedItem.id}` })
+    onSelectedItemChange: (state) => {
+      // console.log(state)
+      if (state.type == useCombobox.stateChangeTypes.InputBlur) return
+      // state.selectedItem && router.push(`/product/${state.selectedItem.id}`)
+      // selectItem(null)
+
     },
     // @ts-ignore
-    itemToString: (item) => item?.name || ''
+    itemToString: (item) => item?.name || '',
+
   })
 
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef?.current?.focus()
+    }
+
+  }, [isSearchOpen])
 
   return (
-    <StyledSearch>
-      <div>
-        <label
-          style={{ color: selectedItem ? selectedItem : 'blue' }}
-          {...getLabelProps()}
-        >
-          Choose an element:
-        </label>
+    <StyledSearch id="search-cont" className={isSearchOpen ? 'open' : ''}>
 
-        <div>
-          <input
-            {...getInputProps({
-              type: 'search',
-              placeholder: 'search color...',
-              id: 'search',
-              className: loading ? 'loading' : '',
-            })}
-            data-testid="combobox-input"
-          />
+      <label className="input-cont">
+        <input
+          {...getInputProps({
+            ref: searchInputRef,
+            type: 'search',
+            placeholder: 'search...',
+            id: 'search',
+            className: loading ? 'loading' : '',
+            onKeyDown: event => {
+              // console.log(event.target)
 
-          <button
-            aria-label="toggle menu"
-            data-testid="combobox-toggle-button"
-            {...getToggleButtonProps()}
-          >
-            {isOpen ? <>&#8593;</> : <>&#8595;</>}
-          </button>
+              switch (event.key) {
+                case 'Enter':
+                  // router.push(`/shop/product/${item.id}`)
+                  break;
 
-          <button
-            aria-label="toggle menu"
-            data-testid="clear-button"
-            onClick={() => selectItem(null)}
-          >
-            &#10007; clear
-          </button>
+                default:
+                  break;
+              }
+            }
+          })}
+          data-testid="combobox-input"
+        />
 
-        </div>
-        <StyledDropDown>
-          <ul {...getMenuProps()} >
-            {isOpen && foundItems.map((item: any, index: any) => (
+      </label>
+
+      <StyledDropDown>
+        <ul {...getMenuProps()}>
+          {
+            inputItems?.map((item: any, index) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
-                key={index}
+
+                key={item.id}
                 // @ts-ignore
                 {...getItemProps({ item, index, })}
               >
-                <Image
-                  priority
-                  src={handlePhoto(item.photo).image?.url}
-                  alt={handlePhoto(item.photo).image?.altText}
-                  width={handlePhoto(item.photo).image?.width}
-                  height={handlePhoto(item.photo).image?.height}
-                />
-                {item.name}
+                <Link href={`/shop/product/${item.id}`} onClick={() => setisSearchOpen(false)}>
+                  <Image
+                    priority
+                    src={handlePhoto(item.photo).image?.url}
+                    alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no product photo'}
+                    width={80}
+                    height={80}
+                  />
+                  <article>
+                    <h5>{item.name}</h5>
+                    <p className="description">{item.description}</p>
+                  </article>
+                </Link>
+
               </StyledDropDownItem>
             ))}
-            {isOpen && !foundItems.length && !loading && (
-              <StyledDropDownItem>No items found</StyledDropDownItem>
-            )}
-          </ul>
-        </StyledDropDown>
-      </div>
+        </ul>
+
+      </StyledDropDown>
 
     </StyledSearch>
   )
 }
 
-const QUERY_SEARCH_PRODUCTS = gql`
-query Products($where: ProductWhereInput!) {
-  products(where: $where) {
-    id
-    name
+const SEARCH_PRODUCTS_QUERY = gql`
+  query Products($whereProduct: ProductWhereInput!) {
+    products(where: $whereProduct) {
+      name
+      description
+      id
+      price
+      photo {
+        altText
+        image {
+          url
+          width
+          height
+        }
+      }
+    }
   }
-}
 `
 
 const StyledSearchCont = styled.div`
