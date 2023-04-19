@@ -7,6 +7,8 @@ type User {
   email: String
   password: PasswordState
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
@@ -41,6 +43,8 @@ input UserWhereInput {
   name: StringFilter
   email: StringFilter
   isAdmin: BooleanFilter
+  isActive: BooleanFilter
+  stripeCustomerId: StringFilter
   posts: PostManyRelationFilter
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
@@ -146,6 +150,8 @@ input UserOrderByInput {
   name: OrderDirection
   email: OrderDirection
   isAdmin: OrderDirection
+  isActive: OrderDirection
+  stripeCustomerId: OrderDirection
   createdAt: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -161,6 +167,8 @@ input UserUpdateInput {
   email: String
   password: String
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts: PostRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
@@ -216,6 +224,8 @@ input UserCreateInput {
   email: String
   password: String
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts: PostRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime

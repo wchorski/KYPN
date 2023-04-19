@@ -17,6 +17,8 @@ model User {
   email                   String     @unique @default("")
   password                String
   isAdmin                 Boolean    @default(false)
+  isActive                Boolean    @default(true)
+  stripeCustomerId        String     @default("NO_ID")
   posts                   Post[]     @relation("Post_author")
   cart                    CartItem[] @relation("CartItem_user")
   createdAt               DateTime?  @default(now())

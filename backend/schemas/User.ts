@@ -2,6 +2,8 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, password, relationship, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
+import stripeConfig from "../lib/stripe";
+
 
 export const User = list({
   access: {
@@ -37,7 +39,9 @@ export const User = list({
     }),
 
     password: password({ validation: { isRequired: true } }),
-    isAdmin: checkbox(),
+    isAdmin: checkbox({ defaultValue: false }),
+    isActive: checkbox({ defaultValue: true }),
+    stripeCustomerId: text({ defaultValue: 'NO_ID' }),
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
@@ -69,5 +73,26 @@ export const User = list({
       //   itemView: { fieldMode: 'hidden' }
       // }
     })
+  },
+  hooks: {
+    beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {
+
+      if (operation === 'create') {
+
+        const customer = await stripeConfig.customers.create({
+          email: resolvedData.email,
+          name: resolvedData.name,
+        })
+          .then(async (customer) => {
+
+            if (resolvedData && !resolvedData.user) {
+              resolvedData.stripeCustomerId = customer.id
+            }
+          })
+          .catch(err => { console.warn(err) })
+
+      }
+
+    }
   },
 })
