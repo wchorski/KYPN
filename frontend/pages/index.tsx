@@ -1,5 +1,6 @@
 import React, { Fragment, useContext } from 'react';
 import { useUser } from '../components/menus/Session';
+import { Table } from '../components/elements/Table';
 
 
 
@@ -14,6 +15,8 @@ export default function Home() {
     {session && (
       <p>Welcome, {session.name}</p>
     )}
+
+    <Table />
 
   </>)
 }
