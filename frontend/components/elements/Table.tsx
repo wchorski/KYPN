@@ -1,160 +1,61 @@
-// cred Kevin Powel - https://www.youtube.com/watch?v=czZ1PvNW5hk
-import styled from "styled-components"
+// cred - chatgpt lol
+import Link from 'next/link';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
+interface TableProps {
+  caption: string;
+  cells: object[];
+  headers?: string[];
+  route?: string;
+}
 
-export function Table({ tableData }: { tableData: any }) {
+export function Table({ caption, cells, headers, route }: TableProps) {
 
-  tableData = {
-    headers: [
-      'name',
-      'type',
-      'height (m)',
-      'weight (kg)',
-      'base Experience',
-    ],
-    cells: [
-      {
-        name: 'pikachu',
-        type: 'electric',
-        height: '0.4',
-        weight: '6.0',
-        baseExp: '112',
-      },
-      {
-        name: 'Charmander',
-        type: 'Fire',
-        height: '0.6',
-        weight: '8.5',
-        baseExp: '62',
-      }
-    ]
-  }
+  const [keys, setKeys] = useState<any>(headers)
+  const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account',]
 
-  function handleCellRender(obj: any) {
-
-    const keys = Object.keys(obj);
-    const values = Object.values(obj)
-    // console.log({ keys, values });
-
-    const element = keys.map((k, i) => {
-
-      return (
-        <tr key={i}>
-          <td data-cell={k}>
-            heyyy
-            {/* {values[i]} */}
-          </td>
-        </tr>
-      )
-    })
-    console.log(element);
-
-    return element
-  }
-
+  // ? if u want to automatically grab keys from object
+  // const [keys, setKeys] = useState<any>(Object.keys(cells[0]))
+  // // Extract the keys from the first item in the data array
+  // useState(() => {
+  //   if (cells.length > 0) {
+  //     setKeys(Object.keys(cells[0]))
+  //   }
+  // }, [cells]);
 
   return (
-
     <div role="region" aria-labelledby="Cap" tabIndex={0}>
-      <StyledTable>
-        <caption> Table Caption </caption>
+      <StyledTable role="table">
+        <caption role="caption"> {caption} </caption>
 
-        <thead>
-          <tr>
-            {tableData.headers.map((head: string) => (
-              <th key={head}> {head} </th>
+        <thead role="rowgroup">
+          <tr role="row">
+            {keys.map((key: string) => (
+              <th key={key} role="columnheader">{key}</th>
             ))}
           </tr>
         </thead>
 
-        <tbody>
-          {tableData.cells.map((cell: any) => {
-            handleCellRender(cell)
-
-          })}
-
-          <tr>
-            <td data-cell="name">Snorlax</td>
-            <td data-cell="type">Normal</td>
-            <td data-cell="height">2.1</td>
-            <td data-cell="weight">460.0</td>
-            <td data-cell="base-exp">189</td>
-          </tr>
+        <tbody role="rowgroup">
+          {cells.map((item: any, index: number) => (
+            <tr key={index} role="row">
+              {keys.map((key: string) => (
+                <td key={key} data-cell={key} role="cell">
+                  {route && linkterms.includes(key) ? (
+                    <Link href={`${route}/${item['id']}`}> {key} </Link>
+                  ) : (
+                    item[key]
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
-
-
       </StyledTable>
     </div>
-  )
+  );
 }
-// export function Table({tableData}:{tableData:any}) {
-//   return (
-//     // @ts-ignore
-//     <div role="region" aria-labelledby="Cap" tabindex="0">
-//       <StyledTable>
-//         <caption> Table Caption </caption>
-
-//         <thead>
-//           <tr>
-//             <th>Name</th>
-//             <th>Type</th>
-//             <th>Height (m)</th>
-//             <th>Weight (kg)</th>
-//             <th>Base Experience</th>
-//           </tr>
-//         </thead>
-
-//         <tbody>
-//           <tr>
-//             <td data-cell="name">Pikachu</td>
-//             <td data-cell="type">Electric</td>
-//             <td data-cell="height">0.4</td>
-//             <td data-cell="weight">6.0</td>
-//             <td data-cell="base-exp">112</td>
-//           </tr>
-//           <tr>
-//             <td data-cell="name">Charmander</td>
-//             <td data-cell="type">Fire</td>
-//             <td data-cell="height">0.6</td>
-//             <td data-cell="weight">8.5</td>
-//             <td data-cell="base-exp">62</td>
-//           </tr>
-//           <tr>
-//             <td data-cell="name">Squirtle</td>
-//             <td data-cell="type">Water</td>
-//             <td data-cell="height">0.5</td>
-//             <td data-cell="weight">9.0</td>
-//             <td data-cell="base-exp">63</td>
-//           </tr>
-//           <tr>
-//             <td data-cell="name">Bulbasaur</td>
-//             <td data-cell="type">Grass/Poison</td>
-//             <td data-cell="height">0.7</td>
-//             <td data-cell="weight">6.9</td>
-//             <td data-cell="base-exp">64</td>
-//           </tr>
-//           <tr>
-//             <td data-cell="name">Jigglypuff</td>
-//             <td data-cell="type">Normal/Fairy</td>
-//             <td data-cell="height">0.5</td>
-//             <td data-cell="weight">5.5</td>
-//             <td data-cell="base-exp">95</td>
-//           </tr>
-//           <tr>
-//             <td data-cell="name">Snorlax</td>
-//             <td data-cell="type">Normal</td>
-//             <td data-cell="height">2.1</td>
-//             <td data-cell="weight">460.0</td>
-//             <td data-cell="base-exp">189</td>
-//           </tr>
-//         </tbody>
-
-
-//       </StyledTable>
-//     </div>
-//   )
-// }
-
 
 const StyledTable = styled.table`
   background-color: #909c9f;
@@ -209,7 +110,6 @@ const StyledTable = styled.table`
     }
   }
 `
-
 function AddTableARIA() {
   try {
     var allTables = document.querySelectorAll('table');
@@ -245,5 +145,7 @@ function AddTableARIA() {
     console.log("AddTableARIA(): " + e);
   }
 }
-// todo add back later
+// todo add back later ERROR
+// client.js:1  Warning: Extra attributes from the server: role
+//     at caption
 // AddTableARIA();
