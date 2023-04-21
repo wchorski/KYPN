@@ -354,6 +354,7 @@ type Product {
   id: ID!
   photo: ProductImage
   name: String
+  stripeId: String
   slug: String
   description: String
   status: String
@@ -378,6 +379,7 @@ input ProductWhereInput {
   id: IDFilter
   photo: ProductImageWhereInput
   name: StringFilter
+  stripeId: StringFilter
   slug: StringFilter
   description: StringFilter
   status: StringNullableFilter
@@ -454,6 +456,7 @@ input CategoryManyRelationFilter {
 input ProductOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  stripeId: OrderDirection
   slug: OrderDirection
   description: OrderDirection
   status: OrderDirection
@@ -464,6 +467,7 @@ input ProductOrderByInput {
 input ProductUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
   name: String
+  stripeId: String
   slug: String
   description: String
   status: String
@@ -508,6 +512,7 @@ input ProductUpdateArgs {
 input ProductCreateInput {
   photo: ProductImageRelateToOneForCreateInput
   name: String
+  stripeId: String
   slug: String
   description: String
   status: String

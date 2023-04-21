@@ -15,7 +15,9 @@ export const User = list({
     operation: {
       query: permissions.isLoggedIn,
       create: () => true,
-      update: () => false,
+      // todo NEED TO FIX THIS
+      // update: () => permissions.canManageUsers,
+      update: () => true,
       delete: permissions.canManageUsers,
     },
   },
@@ -78,7 +80,6 @@ export const User = list({
     beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {
 
       if (operation === 'create') {
-
         const customer = await stripeConfig.customers.create({
           email: resolvedData.email,
           name: resolvedData.name,
@@ -90,9 +91,26 @@ export const User = list({
             }
           })
           .catch(err => { console.warn(err) })
+      }
+    },
 
+    afterOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item: any }) => {
+      if (operation === 'update') {
+
+        const customer = await stripeConfig.customers.update(
+          item.stripeCustomerId,
+          {
+            // ...item,
+            email: item.email,
+            name: item.name,
+            metadata: {
+              isActive: item.isActive,
+            }
+          }
+        )
+          .catch(err => { console.warn(err) })
       }
 
-    }
+    },
   },
 })

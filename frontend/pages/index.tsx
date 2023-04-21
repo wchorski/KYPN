@@ -14,7 +14,6 @@ export default function Home() {
       <p>Welcome, {session.name}</p>
     )}
 
-    {/* <Table /> */}
     <Table
       caption='Pokemon'
       route='/pokemon'

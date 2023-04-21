@@ -50,6 +50,7 @@ model Product {
   photo                 ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
   photoId               String?       @unique @map("photo") @postgresql.Uuid
   name                  String        @default("")
+  stripeId              String        @default("NO_ID")
   slug                  String        @unique @default("")
   description           String        @default("")
   status                String?       @default("DRAFT")
