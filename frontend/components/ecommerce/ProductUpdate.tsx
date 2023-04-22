@@ -94,12 +94,9 @@ const SINGLE_PRODUCT_QUERY = gql`
         altText
         id
         image {
-          extension
-          filesize
-          id
-          height
-          url
-          width
+
+          publicUrlTransformed
+
         }
       }
       price
@@ -108,6 +105,29 @@ const SINGLE_PRODUCT_QUERY = gql`
     }
   }
 `
+// const SINGLE_PRODUCT_QUERY = gql`
+//   query Query($where: ProductWhereUniqueInput!) {
+//     product(where: $where) {
+//       id
+//       name
+//       photo {
+//         altText
+//         id
+//         image {
+//           extension
+//           filesize
+//           id
+//           height
+//           url
+//           width
+//         }
+//       }
+//       price
+//       status
+//       description
+//     }
+//   }
+// `
 
 const MUTATE_PRODUCT_UPDATE = gql`
   mutation Mutation($where: ProductWhereUniqueInput!, $data: ProductUpdateInput!) {

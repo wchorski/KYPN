@@ -85,4 +85,11 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  nav{
+    ul{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
 `

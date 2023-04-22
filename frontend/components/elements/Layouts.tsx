@@ -55,7 +55,7 @@ const StyledLayout_WideWith = styled.div`
   
   header,
   main,
-  nav,
+  nav#menu-main,
   footer{
     outline: dotted 1px purple;
     border: dotted 1px purple;
@@ -67,7 +67,7 @@ const StyledLayout_WideWith = styled.div`
     position: sticky;
   }
 
-  nav{
+  nav#menu-main{
     position: sticky;
     top: 0px;
     background-color: var(--c-3);

@@ -16,6 +16,8 @@ type User {
   createdAt: DateTime
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   role: Role
@@ -49,6 +51,7 @@ input UserWhereInput {
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   products: ProductManyRelationFilter
+  subscriptions: SubscriptionPlanManyRelationFilter
   orders: OrderManyRelationFilter
   role: RoleWhereInput
   passwordResetToken: PasswordFilter
@@ -135,6 +138,12 @@ input ProductManyRelationFilter {
   none: ProductWhereInput
 }
 
+input SubscriptionPlanManyRelationFilter {
+  every: SubscriptionPlanWhereInput
+  some: SubscriptionPlanWhereInput
+  none: SubscriptionPlanWhereInput
+}
+
 input OrderManyRelationFilter {
   every: OrderWhereInput
   some: OrderWhereInput
@@ -173,6 +182,7 @@ input UserUpdateInput {
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   products: ProductRelateToManyForUpdateInput
+  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
   passwordResetToken: String
@@ -199,6 +209,13 @@ input ProductRelateToManyForUpdateInput {
   set: [ProductWhereUniqueInput!]
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input SubscriptionPlanRelateToManyForUpdateInput {
+  disconnect: [SubscriptionPlanWhereUniqueInput!]
+  set: [SubscriptionPlanWhereUniqueInput!]
+  create: [SubscriptionPlanCreateInput!]
+  connect: [SubscriptionPlanWhereUniqueInput!]
 }
 
 input OrderRelateToManyForUpdateInput {
@@ -230,6 +247,7 @@ input UserCreateInput {
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   products: ProductRelateToManyForCreateInput
+  subscriptions: SubscriptionPlanRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
   passwordResetToken: String
@@ -250,6 +268,11 @@ input CartItemRelateToManyForCreateInput {
 input ProductRelateToManyForCreateInput {
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input SubscriptionPlanRelateToManyForCreateInput {
+  create: [SubscriptionPlanCreateInput!]
+  connect: [SubscriptionPlanWhereUniqueInput!]
 }
 
 input OrderRelateToManyForCreateInput {
@@ -350,42 +373,47 @@ input UserRelateToManyForCreateInput {
   connect: [UserWhereUniqueInput!]
 }
 
-type Product {
+type SubscriptionPlan {
   id: ID!
   photo: ProductImage
   name: String
-  stripeId: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
   stockCount: Int
-  user: User
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  usersCount(where: UserWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
 }
 
-input ProductWhereUniqueInput {
+input SubscriptionPlanWhereUniqueInput {
   id: ID
   slug: String
 }
 
-input ProductWhereInput {
-  AND: [ProductWhereInput!]
-  OR: [ProductWhereInput!]
-  NOT: [ProductWhereInput!]
+input SubscriptionPlanWhereInput {
+  AND: [SubscriptionPlanWhereInput!]
+  OR: [SubscriptionPlanWhereInput!]
+  NOT: [SubscriptionPlanWhereInput!]
   id: IDFilter
   photo: ProductImageWhereInput
   name: StringFilter
-  stripeId: StringFilter
   slug: StringFilter
   description: StringFilter
   status: StringNullableFilter
   price: IntNullableFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
+  billing_interval: StringNullableFilter
   stockCount: IntFilter
-  user: UserWhereInput
+  users: UserManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
 }
@@ -453,27 +481,31 @@ input CategoryManyRelationFilter {
   none: CategoryWhereInput
 }
 
-input ProductOrderByInput {
+input SubscriptionPlanOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  stripeId: OrderDirection
   slug: OrderDirection
   description: OrderDirection
   status: OrderDirection
   price: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
+  billing_interval: OrderDirection
   stockCount: OrderDirection
 }
 
-input ProductUpdateInput {
+input SubscriptionPlanUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
   name: String
-  stripeId: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
   stockCount: Int
-  user: UserRelateToOneForUpdateInput
+  users: UserRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
 }
@@ -481,12 +513,6 @@ input ProductUpdateInput {
 input ProductImageRelateToOneForUpdateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
-  disconnect: Boolean
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -504,21 +530,23 @@ input CategoryRelateToManyForUpdateInput {
   connect: [CategoryWhereUniqueInput!]
 }
 
-input ProductUpdateArgs {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateInput!
+input SubscriptionPlanUpdateArgs {
+  where: SubscriptionPlanWhereUniqueInput!
+  data: SubscriptionPlanUpdateInput!
 }
 
-input ProductCreateInput {
+input SubscriptionPlanCreateInput {
   photo: ProductImageRelateToOneForCreateInput
   name: String
-  stripeId: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
   stockCount: Int
-  user: UserRelateToOneForCreateInput
+  users: UserRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
 }
@@ -526,11 +554,6 @@ input ProductCreateInput {
 input ProductImageRelateToOneForCreateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 input TagRelateToManyForCreateInput {
@@ -543,28 +566,162 @@ input CategoryRelateToManyForCreateInput {
   connect: [CategoryWhereUniqueInput!]
 }
 
+type Product {
+  id: ID!
+  photo: ProductImage
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  user: User
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  photo: ProductImageWhereInput
+  name: StringFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
+  slug: StringFilter
+  description: StringFilter
+  status: StringNullableFilter
+  price: IntNullableFilter
+  stockCount: IntFilter
+  user: UserWhereInput
+  tags: TagManyRelationFilter
+  categories: CategoryManyRelationFilter
+}
+
+input ProductOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
+  slug: OrderDirection
+  description: OrderDirection
+  status: OrderDirection
+  price: OrderDirection
+  stockCount: OrderDirection
+}
+
+input ProductUpdateInput {
+  photo: ProductImageRelateToOneForUpdateInput
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  user: UserRelateToOneForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  photo: ProductImageRelateToOneForCreateInput
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  user: UserRelateToOneForCreateInput
+  tags: TagRelateToManyForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
 type ProductImage {
   id: ID!
-  image: ImageFieldOutput
+  image: CloudinaryImage_File
+  url: String
   altText: String
   filename: String
   product: Product
+  subscription: SubscriptionPlan
 }
 
-type ImageFieldOutput {
-  id: ID!
-  filesize: Int!
-  width: Int!
-  height: Int!
-  extension: ImageExtension!
-  url: String!
+type CloudinaryImage_File {
+  id: ID
+  filename: String
+  originalFilename: String
+  mimetype: String
+  encoding: String
+  publicUrl: String
+  publicUrlTransformed(transformation: CloudinaryImageFormat): String
 }
 
-enum ImageExtension {
-  jpg
-  png
-  webp
-  gif
+"""
+Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
+All options are strings as they ultimately end up in a URL.
+"""
+input CloudinaryImageFormat {
+  """ Rewrites the filename to be this pretty string. Do not include `/` or `.`
+  """
+  prettyName: String
+  width: String
+  height: String
+  crop: String
+  aspect_ratio: String
+  gravity: String
+  zoom: String
+  x: String
+  y: String
+  format: String
+  fetch_format: String
+  quality: String
+  radius: String
+  angle: String
+  effect: String
+  opacity: String
+  border: String
+  background: String
+  overlay: String
+  underlay: String
+  default_image: String
+  delay: String
+  color: String
+  color_space: String
+  dpr: String
+  page: String
+  density: String
+  flags: String
+  transformation: String
 }
 
 input ProductImageWhereUniqueInput {
@@ -577,26 +734,27 @@ input ProductImageWhereInput {
   OR: [ProductImageWhereInput!]
   NOT: [ProductImageWhereInput!]
   id: IDFilter
+  url: StringFilter
   altText: StringFilter
   filename: StringFilter
   product: ProductWhereInput
+  subscription: SubscriptionPlanWhereInput
 }
 
 input ProductImageOrderByInput {
   id: OrderDirection
+  url: OrderDirection
   altText: OrderDirection
   filename: OrderDirection
 }
 
 input ProductImageUpdateInput {
-  image: ImageFieldInput
+  image: Upload
+  url: String
   altText: String
   filename: String
   product: ProductRelateToOneForUpdateInput
-}
-
-input ImageFieldInput {
-  upload: Upload!
+  subscription: SubscriptionPlanRelateToOneForUpdateInput
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -608,21 +766,34 @@ input ProductRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input SubscriptionPlanRelateToOneForUpdateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
+  disconnect: Boolean
+}
+
 input ProductImageUpdateArgs {
   where: ProductImageWhereUniqueInput!
   data: ProductImageUpdateInput!
 }
 
 input ProductImageCreateInput {
-  image: ImageFieldInput
+  image: Upload
+  url: String
   altText: String
   filename: String
   product: ProductRelateToOneForCreateInput
+  subscription: SubscriptionPlanRelateToOneForCreateInput
 }
 
 input ProductRelateToOneForCreateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
+}
+
+input SubscriptionPlanRelateToOneForCreateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
 }
 
 type CartItem {
@@ -925,6 +1096,8 @@ type Category {
   postsCount(where: PostWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
 }
 
 input CategoryWhereUniqueInput {
@@ -941,6 +1114,7 @@ input CategoryWhereInput {
   description: StringFilter
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
+  subscriptions: SubscriptionPlanManyRelationFilter
 }
 
 input CategoryOrderByInput {
@@ -954,6 +1128,7 @@ input CategoryUpdateInput {
   description: String
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
 }
 
 input CategoryUpdateArgs {
@@ -966,6 +1141,7 @@ input CategoryCreateInput {
   description: String
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  subscriptions: SubscriptionPlanRelateToManyForCreateInput
 }
 
 type Tag {
@@ -975,6 +1151,8 @@ type Tag {
   postsCount(where: PostWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
 }
 
 input TagWhereUniqueInput {
@@ -990,6 +1168,7 @@ input TagWhereInput {
   name: StringFilter
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
+  subscriptions: SubscriptionPlanManyRelationFilter
 }
 
 input TagOrderByInput {
@@ -1001,6 +1180,7 @@ input TagUpdateInput {
   name: String
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
 }
 
 input TagUpdateArgs {
@@ -1012,6 +1192,7 @@ input TagCreateInput {
   name: String
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  subscriptions: SubscriptionPlanRelateToManyForCreateInput
 }
 
 """
@@ -1032,6 +1213,12 @@ type Mutation {
   updateRoles(data: [RoleUpdateArgs!]!): [Role]
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
+  createSubscriptionPlan(data: SubscriptionPlanCreateInput!): SubscriptionPlan
+  createSubscriptionPlans(data: [SubscriptionPlanCreateInput!]!): [SubscriptionPlan]
+  updateSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!, data: SubscriptionPlanUpdateInput!): SubscriptionPlan
+  updateSubscriptionPlans(data: [SubscriptionPlanUpdateArgs!]!): [SubscriptionPlan]
+  deleteSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
+  deleteSubscriptionPlans(where: [SubscriptionPlanWhereUniqueInput!]!): [SubscriptionPlan]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
   updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
@@ -1124,6 +1311,9 @@ type Query {
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int

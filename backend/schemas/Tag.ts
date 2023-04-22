@@ -20,5 +20,6 @@ export const Tag = list({
     // this can be helpful to find out all the Posts associated with a Tag
     posts: relationship({ ref: 'Post.tags', many: true }),
     products: relationship({ ref: 'Product.tags', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionPlan.tags', many: true }),
   },
 })

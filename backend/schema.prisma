@@ -12,20 +12,21 @@ generator client {
 }
 
 model User {
-  id                      String     @id @default(uuid()) @postgresql.Uuid
-  name                    String     @default("")
-  email                   String     @unique @default("")
+  id                      String             @id @default(uuid()) @postgresql.Uuid
+  name                    String             @default("")
+  email                   String             @unique @default("")
   password                String
-  isAdmin                 Boolean    @default(false)
-  isActive                Boolean    @default(true)
-  stripeCustomerId        String     @default("NO_ID")
-  posts                   Post[]     @relation("Post_author")
-  cart                    CartItem[] @relation("CartItem_user")
-  createdAt               DateTime?  @default(now())
-  products                Product[]  @relation("Product_user")
-  orders                  Order[]    @relation("Order_user")
-  role                    Role?      @relation("User_role", fields: [roleId], references: [id])
-  roleId                  String?    @map("role") @postgresql.Uuid
+  isAdmin                 Boolean            @default(false)
+  isActive                Boolean            @default(true)
+  stripeCustomerId        String             @default("NO_ID")
+  posts                   Post[]             @relation("Post_author")
+  cart                    CartItem[]         @relation("CartItem_user")
+  createdAt               DateTime?          @default(now())
+  products                Product[]          @relation("Product_user")
+  subscriptions           SubscriptionPlan[] @relation("SubscriptionPlan_users")
+  orders                  Order[]            @relation("Order_user")
+  role                    Role?              @relation("User_role", fields: [roleId], references: [id])
+  roleId                  String?            @map("role") @postgresql.Uuid
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -45,12 +46,30 @@ model Role {
   assignedTo        User[]  @relation("User_role")
 }
 
+model SubscriptionPlan {
+  id               String        @id @default(uuid()) @postgresql.Uuid
+  photo            ProductImage? @relation("ProductImage_subscription")
+  name             String        @default("")
+  slug             String        @unique @default("")
+  description      String        @default("")
+  status           String?       @default("DRAFT")
+  price            Int?
+  stripeProductId  String        @default("NO_PROD_ID")
+  stripePriceId    String        @default("NO_PRICE_ID")
+  billing_interval String?       @default("month")
+  stockCount       Int           @default(0)
+  users            User[]        @relation("SubscriptionPlan_users")
+  tags             Tag[]         @relation("SubscriptionPlan_tags")
+  categories       Category[]    @relation("Category_subscriptions")
+}
+
 model Product {
   id                    String        @id @default(uuid()) @postgresql.Uuid
   photo                 ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
   photoId               String?       @unique @map("photo") @postgresql.Uuid
   name                  String        @default("")
-  stripeId              String        @default("NO_ID")
+  stripeProductId       String        @default("NO_PROD_ID")
+  stripePriceId         String        @default("NO_PRICE_ID")
   slug                  String        @unique @default("")
   description           String        @default("")
   status                String?       @default("DRAFT")
@@ -66,16 +85,15 @@ model Product {
 }
 
 model ProductImage {
-  id                   String      @id @default(uuid()) @postgresql.Uuid
-  image_filesize       Int?
-  image_extension      String?
-  image_width          Int?
-  image_height         Int?
-  image_id             String?
-  altText              String      @default("Product Featured Image")
-  filename             String      @unique @default("")
-  product              Product?    @relation("Product_photo")
-  from_OrderItem_photo OrderItem[] @relation("OrderItem_photo")
+  id                   String            @id @default(uuid()) @postgresql.Uuid
+  image                Json?
+  url                  String            @default("")
+  altText              String            @default("Product Featured Image")
+  filename             String            @unique @default("")
+  product              Product?          @relation("Product_photo")
+  subscription         SubscriptionPlan? @relation("ProductImage_subscription", fields: [subscriptionId], references: [id])
+  subscriptionId       String?           @unique @map("subscription") @postgresql.Uuid
+  from_OrderItem_photo OrderItem[]       @relation("OrderItem_photo")
 }
 
 model CartItem {
@@ -140,16 +158,18 @@ model Post {
 }
 
 model Category {
-  id          String    @id @default(uuid()) @postgresql.Uuid
-  name        String    @unique @default("")
-  description String    @default("")
-  posts       Post[]    @relation("Category_posts")
-  products    Product[] @relation("Category_products")
+  id            String             @id @default(uuid()) @postgresql.Uuid
+  name          String             @unique @default("")
+  description   String             @default("")
+  posts         Post[]             @relation("Category_posts")
+  products      Product[]          @relation("Category_products")
+  subscriptions SubscriptionPlan[] @relation("Category_subscriptions")
 }
 
 model Tag {
-  id       String    @id @default(uuid()) @postgresql.Uuid
-  name     String    @unique @default("")
-  posts    Post[]    @relation("Post_tags")
-  products Product[] @relation("Product_tags")
+  id            String             @id @default(uuid()) @postgresql.Uuid
+  name          String             @unique @default("")
+  posts         Post[]             @relation("Post_tags")
+  products      Product[]          @relation("Product_tags")
+  subscriptions SubscriptionPlan[] @relation("SubscriptionPlan_tags")
 }

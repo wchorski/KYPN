@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -117,9 +117,27 @@ const seedProducts = async (context: Context) => {
   });
 };
 
+const seedSubscriptions = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = subscriptions_seedjson;
+  const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
+    where: {
+      slug: { in: seedObjects.map(obj => obj.slug) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.slug === seedObj.slug)
+  );
+
+  console.log('SubscriptionPlans seeded, ', { objsToCreate })
+
+  await db.SubscriptionPlan.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 const seedProductImages = async (context: Context) => {
   const { db } = context.sudo();
-  const rawJSONData = JSON.stringify(productImage_seedjson);
   const seedObjects: any[] = productImage_seedjson;
   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
     where: {
@@ -143,6 +161,11 @@ const seedProductImages = async (context: Context) => {
 
       return ({
         ...obj,
+        // image: {
+        //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+        //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+        //   //   upload: prepareToUpload(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
+        // }
         // TODO why no seed upload files work?
         // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
       })
@@ -160,5 +183,6 @@ export const seedDatabase = async (context: Context) => {
 
   await seedProductImages(context)
   await seedProducts(context)
+  await seedSubscriptions(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

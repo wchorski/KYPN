@@ -41,10 +41,12 @@ import { Role } from './schemas/Role';
 import { Post } from './schemas/Post';
 import { Tag } from './schemas/Tag';
 import { Category } from './schemas/Category';
+import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 
 export const lists: Lists = {
   User,
   Role,
+  SubscriptionPlan,
   Product,
   // @ts-ignore
   ProductImage,

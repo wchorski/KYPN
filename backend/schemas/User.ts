@@ -62,6 +62,7 @@ export const User = list({
       defaultValue: { kind: 'now' },
     }),
     products: relationship({ ref: 'Product.user', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionPlan.users', many: true }),
     orders: relationship({ ref: 'Order.user', many: true }),
     role: relationship({
       ref: 'Role.assignedTo',
@@ -83,6 +84,9 @@ export const User = list({
         const customer = await stripeConfig.customers.create({
           email: resolvedData.email,
           name: resolvedData.name,
+          metadata: {
+            isActive: resolvedData.isActive,
+          }
         })
           .then(async (customer) => {
 

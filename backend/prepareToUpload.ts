@@ -5,18 +5,17 @@ import path from 'path'
 // import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 // import  Upload  from 'graphql-upload/Upload.mjs'
 // import { Upload }  from "graphql-upload/Upload.mjs"
-const { Upload }   = import("graphql-upload/Upload.mjs")
+const { Upload } = import("graphql-upload/Upload.mjs")
 // import type { FileUpload as FileUploadType } from 'graphql-upload/Upload.mjs'
 //// @ts-ignore
 // import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 
-export const prepareToUpload = (filePath:string) => {
+export const prepareToUpload = (filePath: string) => {
   console.log('==========================');
   console.log(filePath);
-  
+
   const filename = path.basename(filePath)
-  console.log(filename);
-  
+
 
   const createReadStream = () => fs.createReadStream(filePath)
   // @ts-ignore

@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import moneyFormatter from '../lib/moneyFormatter';
 import { ProductDelete } from './ecommerce/ProductDelete';
 import AddToCart from './ecommerce/AddToCart';
+import { handlePhoto } from '../lib/handleProductPhoto';
+import { ImageDynamic } from './elements/ImageDynamic';
 
 export const ProductThumbnail = ({ id, name, description, price, photo }: any) => {
 
@@ -13,16 +15,8 @@ export const ProductThumbnail = ({ id, name, description, price, photo }: any) =
 
 
       <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
-      {photo?.image?.url && (
-        <Image
-          src={photo?.image?.url}
-          alt={photo?.altText}
-          width={photo?.image?.width}
-          height={photo?.image?.height}
-        />
-      )}
 
-      {!photo?.image?.url && <Image src={`/cf-default.png`} width={300} height={300} alt={'placeholder photo'} />}
+      <ImageDynamic photoIn={photo} />
 
       <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
 

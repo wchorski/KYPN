@@ -191,14 +191,31 @@ const SEARCH_PRODUCTS_QUERY = gql`
       photo {
         altText
         image {
-          url
-          width
-          height
+          publicUrlTransformed
         }
       }
     }
   }
 `
+
+// const SEARCH_PRODUCTS_QUERY = gql`
+//   query Products($whereProduct: ProductWhereInput!) {
+//     products(where: $whereProduct) {
+//       name
+//       description
+//       id
+//       price
+//       photo {
+//         altText
+//         image {
+//           url
+//           width
+//           height
+//         }
+//       }
+//     }
+//   }
+// `
 
 const StyledSearchCont = styled.div`
   background-color: yellow;

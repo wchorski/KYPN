@@ -59,10 +59,7 @@ export const QUERY_USER_CURRENT = gql`
             description
             photo {
               image {
-                url
-                width
-                height
-                id
+                publicUrlTransformed
               }
             }
           }

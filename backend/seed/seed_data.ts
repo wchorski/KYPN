@@ -581,58 +581,114 @@ export const products_seed = [
 
 export const productImage_seedjson = [
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-1_vl6py2.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-1_vl6py2.png',
+    // },
     altText: 'banana cherry photo',
     filename: 'cf-1.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-2_irpljj.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-2_irpljj.png',
+    // },
     altText: 'penguine pear featured photo',
     filename: 'cf-2.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-3_jjjfad.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-3_jjjfad.png',
+    // },
     altText: 'sideways pinapple featured photo',
     filename: 'cf-3.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-4_z3zuqd.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-4_z3zuqd.png',
+    // },
     altText: 'tiger tomatoe photo',
     filename: 'cf-4.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-5_osljd5.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-5_osljd5.png',
+    // },
     altText: 'scared pear photo',
     filename: 'cf-5.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-6_dct4dt.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-6_dct4dt.png',
+    // },
     altText: 'strawberry puff featured photo',
     filename: 'cf-6.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-7_jhczgi.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118231/cutefruit/product_images/cf-7_jhczgi.png',
+    // },
     altText: 'Apple Pillow featured photo',
     filename: 'cf-7.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-8_dqp2gy.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118232/cutefruit/product_images/cf-8_dqp2gy.png',
+    // },
     altText: 'Blue Drop featured photo',
     filename: 'cf-8.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+    // },
     altText: 'Azure Cyclops featured photo',
     filename: 'cf-9.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-10_c0juxo.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-10_c0juxo.png',
+    // },
     altText: 'Purple Fuzz Blob featured photo',
     filename: 'cf-10.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-11_o8r6mg.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-11_o8r6mg.png',
+    // },
     altText: 'Inky Indigo featured photo',
     filename: 'cf-11.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-12_if5w53.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-12_if5w53.png',
+    // },
     altText: 'Yellow Pearabol featured photo',
     filename: 'cf-12.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-13_ah8qyb.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-13_ah8qyb.png',
+    // },
     altText: 'Kiwi Kidz featured photo',
     filename: 'cf-13.png'
   },
   {
+    // image: {
+    //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-14_f2xb2o.png',
+    //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-14_f2xb2o.png',
+    // },
     altText: 'Quad Kumquats featured photo',
     filename: 'cf-14.png'
   },
@@ -916,5 +972,29 @@ export const posts_seedjson = [
       }
     },
     "excerpt": "Discover the many culinary and medicinal uses of pomegranates, including how to juice them and use their seeds in recipes."
+  }
+]
+
+export const subscriptions_seedjson = [
+  {
+    "name": "The Fruit Fiesta",
+    "slug": "fruit-fiesta",
+    "description": "Join the party with a fully loaded fruit basket every month!",
+    "price": 30003,
+    "stockCount": 4
+  },
+  {
+    "name": "The Double Trouble Fruity Bundle",
+    "slug": "double-trouble-fruity-bundle",
+    "description": "Twice the fruit, twice the fun! Receive a fully loaded fruit basket every two months.",
+    "price": 160002,
+    "stockCount": 4
+  },
+  {
+    "name": "The Great Fruit Escape",
+    "slug": "great-fruit-escape",
+    "description": "Escape into the world of fresh fruit every three months with a fully loaded fruit basket!",
+    "price": 450009,
+    "stockCount": 4
   }
 ]

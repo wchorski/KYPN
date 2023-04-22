@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import 'dotenv/config'
 
 const STRIPE_SECRET = process.env.STRIPE_SECRET || 'NO_STRIPE_KEY_SET'
 // const STRIPE_SECRET = process.env.WILLIAM_C || 'NO_STRIPE_KEY_SET'

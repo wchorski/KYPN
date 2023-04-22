@@ -16,6 +16,20 @@ export function handlePhoto(photo: any) {
     }
   }
 
+  // console.log({ photo });
+
+  if (photo.publicUrlTransformed) {
+    return {
+      id: photo.id,
+      altText: photo.altText,
+      image: {
+        url: photo.publicUrlTransformed
+      },
+      width: 300,
+      height: 300,
+    }
+  }
+
   if (!photo.image) newPhoto = { ...photo, image: defImg, altText: 'no product image' }
 
   return newPhoto

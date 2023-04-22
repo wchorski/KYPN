@@ -101,9 +101,7 @@ const QUERY_ORDER_ID = gql`
           altText
           id
           image {
-            height
-            url
-            width
+            publicUrlTransformed
           }
         }
       }
@@ -113,3 +111,31 @@ const QUERY_ORDER_ID = gql`
     }
   }
 `
+// ? if using local storage
+// const QUERY_ORDER_ID = gql`
+//   query Order($where: OrderWhereUniqueInput!) {
+//     order(where: $where) {
+//       charge
+//       createdAt
+//       id
+//       items {
+//         name
+//         id
+//         price
+//         quantity
+//         photo {
+//           altText
+//           id
+//           image {
+//             height
+//             url
+//             width
+//           }
+//         }
+//       }
+//       itemsCount
+//       label
+//       total
+//     }
+//   }
+// `

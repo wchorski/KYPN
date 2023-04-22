@@ -33,7 +33,8 @@ export const Product = list({
       }
     }),
     name: text({ validation: { isRequired: true } }),
-    stripeId: text({ defaultValue: 'NO_ID' }),
+    stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
+    stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
     slug: text({
       validation: { isRequired: true },
       isIndexed: 'unique',
@@ -98,16 +99,17 @@ export const Product = list({
   hooks: {
     // TODO use this to create a default 'slug' automatically based on product name
     // if no user set, connect to current session user
-    beforeOperation: async ({ operation, resolvedData, context }) => {
+    beforeOperation: async ({ operation, resolvedData, context, item }) => {
       try {
         if (resolvedData && !resolvedData.user) {
           const currentUserId = await context.session.itemId;
-          console.log({ currentUserId });
+          // console.log({ currentUserId });
           resolvedData.user = { connect: { id: currentUserId } };
         }
-      } catch (err) { console.error(err) }
+      } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
+
 
         const res = await stripeConfig.products.create({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
@@ -115,13 +117,13 @@ export const Product = list({
           active: true,
           description: resolvedData.description,
           metadata: {
-            category: resolvedData.categories[0],
+            category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
             status: resolvedData.status,
             author: resolvedData.user.email,
           },
-          images: [
-            'https://res.cloudinary.com/dh5vxixzn/image/upload/v1681927213/samples/food/spices.jpg'
-          ],
+          // images: [
+          //   resolvedData.photo.image.publicUrlTransformed
+          // ],
           attributes: [
             'Size',
             'Color'
@@ -144,87 +146,110 @@ export const Product = list({
           .then(async (res) => {
 
             if (resolvedData && !resolvedData.product) {
-              resolvedData.stripeId = res.id
+              resolvedData.stripeProductId = res.id
+              resolvedData.stripePriceId = res.default_price
             }
           })
           .catch(err => { console.warn(err) })
+      }
 
-        // First, create a price for the product
-        // const newPrice = await stripeConfig.prices.create({
-        //   unit_amount: 1000,
-        //   currency: 'usd',
-        //   product_data: {
-        //     name: 'My Product Price',
-        //     // description: 'This is my awesome product!',
-        //     metadata: {
-        //       category: 'Widgets'
-        //     },
-        //     // images: [
-        //     //   'https://example.com/product-image.jpg'
-        //     // ],
-        //     // attributes: [
-        //     //   { name: 'Size' },
-        //     //   { name: 'Color' }
-        //     // ],
-        //     // shippable: true,
-        //     // package_dimensions: {
-        //     //   height: 10,
-        //     //   length: 20,
-        //     //   width: 30,
-        //     //   weight: 5
-        //     // },
-        //     unit_label: 'widget'
-        //   }
-        // }).then(price => {
-        //   // Once the price is created, create the product and associate the price with it
-        //   return stripeConfig.products.create({
-        //     name: 'My Product product',
-        //     description: 'This is my awesome product!',
-        //     images: [
-        //       'https://example.com/product-image.jpg'
-        //     ],
-        //     metadata: {
-        //       category: 'Widgets'
-        //     },
-        //     attributes: [
-        //       'Size',
-        //       'Color'
-        //     ],
-        //     shippable: true,
-        //     package_dimensions: {
-        //       height: 10,
-        //       length: 20,
-        //       width: 30,
-        //       weight: 5
-        //     },
-        //     unit_label: 'widget',
-        //     // @ts-ignore
-        //     price: price.id
-        //   });
-        // }).then(product => {
-        //   console.log('Product created:', product);
-        // }).catch(error => {
-        //   console.error('Error creating product:', error);
-        // });
+      if (operation === 'update') {
+
+        const photo = await context.db.ProductImage.findOne({
+          where: {
+            id: resolvedData.photoId ? resolvedData.photoId : item.photoId
+          }
+        })
+
+        const currPrice = await stripeConfig.prices.retrieve(
+          resolvedData.stripePriceId ? resolvedData.stripePriceId : item.stripePriceId
+        )
+
+
+        // todo this is ugly, but Stripe API does not support deletion or updating of a price object
+        if (currPrice.unit_amount !== item.price) {
+
+          const newPrice = await stripeConfig.prices.create({
+            unit_amount: resolvedData.price,
+            currency: 'usd',
+            product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+          })
+
+          resolvedData.stripePriceId = newPrice.id
+
+          const product = await stripeConfig.products.update(
+            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            {
+              name: resolvedData.name ? resolvedData.name : item.name,
+              description: resolvedData.description ? resolvedData.description : item.description,
+              default_price: newPrice.id,
+              images: [
+                // @ts-ignore
+                photo.image._meta.secure_url
+              ],
+              metadata: {
+                category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
+                status: resolvedData.status,
+                author: resolvedData.user.email,
+              }
+            }
+          )
+        } else if (currPrice.unit_amount === item.price) {
+
+          const product = await stripeConfig.products.update(
+            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            {
+              name: resolvedData.name ? resolvedData.name : item.name,
+              description: resolvedData.description ? resolvedData.description : item.description,
+              images: [
+                // @ts-ignore
+                photo.image._meta.secure_url
+              ],
+              metadata: {
+                category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
+                status: resolvedData.status,
+                author: resolvedData.user.email,
+              }
+            }
+          )
+        }
 
       }
 
     },
-    afterOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item: any }) => {
-      if (operation === 'update') {
+    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
 
-        const customer = await stripeConfig.products.update(
-          item.stripeId,
-          {
-            name: item.name,
-            // metadata: {
-            //   email: item.email,
-            //   name: resolvedData.name,
-            //   isActive: resolvedData.isActive,
-            // }
-          }
-        )
-          .catch(err => { console.warn(err) })
+      if (operation === 'create') {
+        try {
+          const photo = await context.db.ProductImage.findOne({
+            where: {
+              id: item.photoId
+            }
+          })
+
+          const product = await stripeConfig.products.update(
+            item.stripeProductId,
+            {
+              images: [
+                photo.image._meta.secure_url
+              ],
+            }
+          )
+        } catch (err) { console.warn(err) }
+
+      }
+
+      // if (operation === 'update') {
+      //   try {
+
+
+      //   } catch (err) { console.warn(err) }
+      // }
+
+      if (operation === 'delete') {
+        const deleted = await stripeConfig.products.del(
+          item.stripeProductId,
+        );
       }
 
     },
