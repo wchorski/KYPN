@@ -6,6 +6,7 @@ import stripeConfig from "../lib/stripe";
 import 'dotenv/config'
 
 const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
+const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 
 export const SubscriptionPlan = list({
   // access: allowAll,
@@ -34,6 +35,21 @@ export const SubscriptionPlan = list({
         inlineCreate: { fields: ['image', 'altText', 'filename'] },
         inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
+    }),
+
+    // todo does this need to be?
+    author: relationship({
+      ref: 'User.subscriptionPlans',
+
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name', 'email'],
+        inlineEdit: { fields: ['name', 'email'] },
+        linkToItem: true,
+        inlineConnect: true,
+      },
+
+      many: false,
     }),
 
     name: text({ validation: { isRequired: true } }),
@@ -87,12 +103,9 @@ export const SubscriptionPlan = list({
       }
     }),
 
+    items: relationship({ ref: 'SubscriptionItem.subscriptionPlan', many: true }),
 
     stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
-    users: relationship({
-      ref: 'User.subscriptions',
-      many: true,
-    }),
 
     tags: relationship({
       ref: 'Tag.subscriptions',
@@ -103,181 +116,143 @@ export const SubscriptionPlan = list({
       many: true,
     }),
   },
+
+
   hooks: {
-    // TODO use this to create a default 'slug' automatically based on product name
-    // if no user set, connect to current session user
+
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
+
       try {
-        if (resolvedData && !resolvedData.user) {
+        if (resolvedData && !resolvedData.author) {
           const currentUserId = await context.session.itemId;
           // console.log({ currentUserId });
-          resolvedData.user = { connect: { id: currentUserId } };
+          resolvedData.author = { connect: { id: currentUserId } };
         }
       } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
+        // console.log('resolvedData.photo.connect.id', resolvedData.photo.connect.id);
 
-        const price = await stripeConfig.prices.create({
-          unit_amount: resolvedData.price,
-          currency: 'usd',
-          recurring: { interval: resolvedData.billing_interval },
-          product_data: {
-            name: resolvedData.name,
-            active: true,
-            statement_descriptor: SITE_TITLE + ' Subscription',
-            metadata: {
-              status: resolvedData.status,
-              description: resolvedData.description,
+        let photo_url = IMG_PLACEHOLDER
+        if (resolvedData?.photo?.connect) {
+          const photo = await context.db.ProductImage.findOne({
+            where: {
+              id: resolvedData.photo.connect.id
             }
+          })
+          console.log({ photo });
+          // @ts-ignore
+          photo_url = photo.image._meta.secure_url
+        }
+
+        const res = await stripeConfig.products.create({
+          // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
+          name: resolvedData.name,
+          active: true,
+          description: resolvedData.description,
+          metadata: {
+            category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
+            status: resolvedData.status,
+            author: resolvedData.author.email,
+            type: 'subscription'
           },
-        }).then(price => {
-          console.log('price is then, ')
-          console.log({ price });
+          images: [
+            photo_url
+          ],
+          attributes: [
+            'Subscriptionattr1',
+            'Subscriptionattr2'
+          ],
+          shippable: false,
+          unit_label: 'units',
+          default_price_data: {
+            currency: 'usd',
+            unit_amount: resolvedData.price,
+            recurring: { interval: resolvedData.billing_interval },
+          },
+          url: process.env.FRONTEND_URL + '/shop/product/' + resolvedData.id
 
-        }).catch(err => console.warn(err))
+        })
+          .then(async (res) => {
 
+            if (resolvedData && !resolvedData.product) {
+              resolvedData.stripeProductId = res.id
+              resolvedData.stripePriceId = res.default_price
+            }
+          })
+          .catch(err => { console.warn(err) })
 
-        // const res = await stripeConfig.products.create({
-        //   // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
-        //   name: resolvedData.name,
-        //   active: true,
-        //   description: resolvedData.description,
-        //   metadata: {
-        //     category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
-        //     status: resolvedData.status,
-        //     author: resolvedData.user.email,
-        //   },
-        //   // images: [
-        //   //   resolvedData.photo.image.publicUrlTransformed
-        //   // ],
-        //   attributes: [
-        //     'Size',
-        //     'Color'
-        //   ],
-        //   shippable: false,
-        //   // package_dimensions: {
-        //   //   height: 10,
-        //   //   length: 20,
-        //   //   width: 30,
-        //   //   weight: 5
-        //   // },
-        //   unit_label: 'units',
-        //   default_price_data: {
-        //     currency: 'usd',
-        //     unit_amount: resolvedData.price,
-        //   },
-        //   url: process.env.FRONTEND_URL + '/shop/product/' + resolvedData.id
-
-        // })
-        //   .then(async (res) => {
-
-        //     if (resolvedData && !resolvedData.product) {
-        //       resolvedData.stripeProductId = res.id
-        //       resolvedData.stripePriceId = res.default_price
-        //     }
-        //   })
-        //   .catch(err => { console.warn(err) })
       }
 
       if (operation === 'update') {
 
-        //   const photo = await context.db.ProductImage.findOne({
-        //     where: {
-        //       id: resolvedData.photoId ? resolvedData.photoId : item.photoId
-        //     }
-        //   })
+        let photo_url = IMG_PLACEHOLDER
+        if (resolvedData?.photo?.connect) {
+          const photo = await context.db.ProductImage.findOne({
+            where: {
+              id: resolvedData.photo.connect.id
+            }
+          })
+          console.log({ photo });
+          // @ts-ignore
+          photo_url = photo.image._meta.secure_url
+        }
 
-        //   const currPrice = await stripeConfig.prices.retrieve(
-        //     resolvedData.stripePriceId ? resolvedData.stripePriceId : item.stripePriceId
-        //   )
+        const currPrice = await stripeConfig.prices.retrieve(
+          resolvedData.stripePriceId ? resolvedData.stripePriceId : item.stripePriceId
+        )
 
+        // todo this is ugly, but Stripe API does not support deletion or updating of a price object
+        if (resolvedData.price && currPrice.unit_amount !== resolvedData.price) {
 
-        //   // todo this is ugly, but Stripe API does not support deletion or updating of a price object
-        //   if (currPrice.unit_amount !== item.price) {
+          const newPrice = await stripeConfig.prices.create({
+            unit_amount: resolvedData.price,
+            currency: 'usd',
+            product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+          })
 
-        //     const newPrice = await stripeConfig.prices.create({
-        //       unit_amount: resolvedData.price,
-        //       currency: 'usd',
-        //       product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-        //     })
+          resolvedData.stripePriceId = newPrice.id
 
-        //     resolvedData.stripePriceId = newPrice.id
+          const product = await stripeConfig.products.update(
+            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            {
+              name: resolvedData.name ? resolvedData.name : item.name,
+              description: resolvedData.description ? resolvedData.description : item.description,
+              default_price: newPrice.id,
+              images: [
+                photo_url
+              ],
+              metadata: {
+                category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
+                status: resolvedData.status,
+                author: resolvedData.author.email,
+              }
+            }
+          )
+        } else if (currPrice.unit_amount === item.price) {
 
-        //     const product = await stripeConfig.products.update(
-        //       resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-        //       {
-        //         name: resolvedData.name ? resolvedData.name : item.name,
-        //         description: resolvedData.description ? resolvedData.description : item.description,
-        //         default_price: newPrice.id,
-        //         images: [
-        //           // @ts-ignore
-        //           photo.image._meta.secure_url
-        //         ],
-        //         metadata: {
-        //           category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
-        //           status: resolvedData.status,
-        //           author: resolvedData.user.email,
-        //         }
-        //       }
-        //     )
-        //   } else if (currPrice.unit_amount === item.price) {
-
-        //     const product = await stripeConfig.products.update(
-        //       resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-        //       {
-        //         name: resolvedData.name ? resolvedData.name : item.name,
-        //         description: resolvedData.description ? resolvedData.description : item.description,
-        //         images: [
-        //           // @ts-ignore
-        //           photo.image._meta.secure_url
-        //         ],
-        //         metadata: {
-        //           category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
-        //           status: resolvedData.status,
-        //           author: resolvedData.user.email,
-        //         }
-        //       }
-        //     )
-        //   }
-
+          const product = await stripeConfig.products.update(
+            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            {
+              name: resolvedData.name ? resolvedData.name : item.name,
+              description: resolvedData.description ? resolvedData.description : item.description,
+              images: [
+                photo_url
+              ],
+              metadata: {
+                category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
+                status: resolvedData.status,
+                author: resolvedData.author.email,
+              }
+            }
+          )
+        }
       }
 
     },
-    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
-
-      //   if (operation === 'create') {
-      //     try {
-      //       const photo = await context.db.ProductImage.findOne({
-      //         where: {
-      //           id: item.photoId
-      //         }
-      //       })
-
-      //       const product = await stripeConfig.products.update(
-      //         item.stripeProductId,
-      //         {
-      //           images: [
-      //             photo.image._meta.secure_url
-      //           ],
-      //         }
-      //       )
-      //     } catch (err) { console.warn(err) }
-
-      //   }
-
-      //   // if (operation === 'update') {
-      //   //   try {
+    // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
 
 
-      //   //   } catch (err) { console.warn(err) }
-      //   // }
-
-      //   if (operation === 'delete') {
-      //     const deleted = await stripeConfig.products.del(
-      //       item.stripeProductId,
-      //     );
-      //   }
-
-    },
+    // },
   },
 })

@@ -62,8 +62,9 @@ export const User = list({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: 'now' },
     }),
-    products: relationship({ ref: 'Product.user', many: true }),
-    subscriptions: relationship({ ref: 'SubscriptionPlan.users', many: true }),
+    products: relationship({ ref: 'Product.author', many: true }),
+    subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
     orders: relationship({ ref: 'Order.user', many: true }),
     role: relationship({
       ref: 'Role.assignedTo',

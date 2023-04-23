@@ -70,7 +70,8 @@ export const Product = list({
     price: integer(),
 
     stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
-    user: relationship({
+    // todo make this 'author' instead for clarity
+    author: relationship({
       ref: 'User.products',
     }),
 
@@ -101,10 +102,10 @@ export const Product = list({
     // if no user set, connect to current session user
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
       try {
-        if (resolvedData && !resolvedData.user) {
+        if (resolvedData && !resolvedData.author) {
           const currentUserId = await context.session.itemId;
           // console.log({ currentUserId });
-          resolvedData.user = { connect: { id: currentUserId } };
+          resolvedData.author = { connect: { id: currentUserId } };
         }
       } catch (err) { console.warn(err) }
 
@@ -119,7 +120,8 @@ export const Product = list({
           metadata: {
             category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
             status: resolvedData.status,
-            author: resolvedData.user.email,
+            author: resolvedData.author.email,
+            type: 'single product'
           },
           // images: [
           //   resolvedData.photo.image.publicUrlTransformed
@@ -167,7 +169,7 @@ export const Product = list({
 
 
         // todo this is ugly, but Stripe API does not support deletion or updating of a price object
-        if (currPrice.unit_amount !== item.price) {
+        if (resolvedData.price && currPrice.unit_amount !== resolvedData.price) {
 
           const newPrice = await stripeConfig.prices.create({
             unit_amount: resolvedData.price,
@@ -190,7 +192,7 @@ export const Product = list({
               metadata: {
                 category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
                 status: resolvedData.status,
-                author: resolvedData.user.email,
+                author: resolvedData.author.email,
               }
             }
           )
@@ -208,12 +210,11 @@ export const Product = list({
               metadata: {
                 category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
                 status: resolvedData.status,
-                author: resolvedData.user.email,
+                author: resolvedData.author.email,
               }
             }
           )
         }
-
       }
 
     },

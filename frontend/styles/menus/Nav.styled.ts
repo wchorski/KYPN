@@ -24,6 +24,7 @@ export const StyledNav = styled.nav`
   /* transform: translateY(); */
   /* z-index: 9002; */
   z-index: 100;
+  overflow: hidden;
 
   ul.menu-main {
     opacity: 0;

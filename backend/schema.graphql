@@ -18,8 +18,10 @@ type User {
   createdAt: DateTime
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
-  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptions(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionsCount(where: SubscriptionItemWhereInput! = {}): Int
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   role: Role
@@ -54,7 +56,8 @@ input UserWhereInput {
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   products: ProductManyRelationFilter
-  subscriptions: SubscriptionPlanManyRelationFilter
+  subscriptionPlans: SubscriptionPlanManyRelationFilter
+  subscriptions: SubscriptionItemManyRelationFilter
   orders: OrderManyRelationFilter
   role: RoleWhereInput
   passwordResetToken: PasswordFilter
@@ -153,6 +156,12 @@ input SubscriptionPlanManyRelationFilter {
   none: SubscriptionPlanWhereInput
 }
 
+input SubscriptionItemManyRelationFilter {
+  every: SubscriptionItemWhereInput
+  some: SubscriptionItemWhereInput
+  none: SubscriptionItemWhereInput
+}
+
 input OrderManyRelationFilter {
   every: OrderWhereInput
   some: OrderWhereInput
@@ -192,7 +201,8 @@ input UserUpdateInput {
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   products: ProductRelateToManyForUpdateInput
-  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptions: SubscriptionItemRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
   passwordResetToken: String
@@ -235,6 +245,13 @@ input SubscriptionPlanRelateToManyForUpdateInput {
   connect: [SubscriptionPlanWhereUniqueInput!]
 }
 
+input SubscriptionItemRelateToManyForUpdateInput {
+  disconnect: [SubscriptionItemWhereUniqueInput!]
+  set: [SubscriptionItemWhereUniqueInput!]
+  create: [SubscriptionItemCreateInput!]
+  connect: [SubscriptionItemWhereUniqueInput!]
+}
+
 input OrderRelateToManyForUpdateInput {
   disconnect: [OrderWhereUniqueInput!]
   set: [OrderWhereUniqueInput!]
@@ -265,7 +282,8 @@ input UserCreateInput {
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   products: ProductRelateToManyForCreateInput
-  subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
+  subscriptions: SubscriptionItemRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
   passwordResetToken: String
@@ -296,6 +314,11 @@ input ProductRelateToManyForCreateInput {
 input SubscriptionPlanRelateToManyForCreateInput {
   create: [SubscriptionPlanCreateInput!]
   connect: [SubscriptionPlanWhereUniqueInput!]
+}
+
+input SubscriptionItemRelateToManyForCreateInput {
+  create: [SubscriptionItemCreateInput!]
+  connect: [SubscriptionItemWhereUniqueInput!]
 }
 
 input OrderRelateToManyForCreateInput {
@@ -399,6 +422,7 @@ input UserRelateToManyForCreateInput {
 type SubscriptionPlan {
   id: ID!
   photo: ProductImage
+  author: User
   name: String
   slug: String
   description: String
@@ -407,9 +431,9 @@ type SubscriptionPlan {
   stripeProductId: String
   stripePriceId: String
   billing_interval: String
+  items(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  itemsCount(where: SubscriptionItemWhereInput! = {}): Int
   stockCount: Int
-  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
-  usersCount(where: UserWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -427,6 +451,7 @@ input SubscriptionPlanWhereInput {
   NOT: [SubscriptionPlanWhereInput!]
   id: IDFilter
   photo: ProductImageWhereInput
+  author: UserWhereInput
   name: StringFilter
   slug: StringFilter
   description: StringFilter
@@ -435,8 +460,8 @@ input SubscriptionPlanWhereInput {
   stripeProductId: StringFilter
   stripePriceId: StringFilter
   billing_interval: StringNullableFilter
+  items: SubscriptionItemManyRelationFilter
   stockCount: IntFilter
-  users: UserManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
 }
@@ -519,6 +544,7 @@ input SubscriptionPlanOrderByInput {
 
 input SubscriptionPlanUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
+  author: UserRelateToOneForUpdateInput
   name: String
   slug: String
   description: String
@@ -527,8 +553,8 @@ input SubscriptionPlanUpdateInput {
   stripeProductId: String
   stripePriceId: String
   billing_interval: String
+  items: SubscriptionItemRelateToManyForUpdateInput
   stockCount: Int
-  users: UserRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
 }
@@ -536,6 +562,12 @@ input SubscriptionPlanUpdateInput {
 input ProductImageRelateToOneForUpdateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
+  disconnect: Boolean
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -560,6 +592,7 @@ input SubscriptionPlanUpdateArgs {
 
 input SubscriptionPlanCreateInput {
   photo: ProductImageRelateToOneForCreateInput
+  author: UserRelateToOneForCreateInput
   name: String
   slug: String
   description: String
@@ -568,8 +601,8 @@ input SubscriptionPlanCreateInput {
   stripeProductId: String
   stripePriceId: String
   billing_interval: String
+  items: SubscriptionItemRelateToManyForCreateInput
   stockCount: Int
-  users: UserRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
 }
@@ -577,6 +610,11 @@ input SubscriptionPlanCreateInput {
 input ProductImageRelateToOneForCreateInput {
   create: ProductImageCreateInput
   connect: ProductImageWhereUniqueInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input TagRelateToManyForCreateInput {
@@ -587,6 +625,65 @@ input TagRelateToManyForCreateInput {
 input CategoryRelateToManyForCreateInput {
   create: [CategoryCreateInput!]
   connect: [CategoryWhereUniqueInput!]
+}
+
+type SubscriptionItem {
+  id: ID!
+  price: Int
+  subscriptionPlan: SubscriptionPlan
+  isActive: Boolean
+  user: User
+}
+
+input SubscriptionItemWhereUniqueInput {
+  id: ID
+}
+
+input SubscriptionItemWhereInput {
+  AND: [SubscriptionItemWhereInput!]
+  OR: [SubscriptionItemWhereInput!]
+  NOT: [SubscriptionItemWhereInput!]
+  id: IDFilter
+  price: IntNullableFilter
+  subscriptionPlan: SubscriptionPlanWhereInput
+  isActive: BooleanFilter
+  user: UserWhereInput
+}
+
+input SubscriptionItemOrderByInput {
+  id: OrderDirection
+  price: OrderDirection
+  isActive: OrderDirection
+}
+
+input SubscriptionItemUpdateInput {
+  price: Int
+  subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
+  isActive: Boolean
+  user: UserRelateToOneForUpdateInput
+}
+
+input SubscriptionPlanRelateToOneForUpdateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SubscriptionItemUpdateArgs {
+  where: SubscriptionItemWhereUniqueInput!
+  data: SubscriptionItemUpdateInput!
+}
+
+input SubscriptionItemCreateInput {
+  price: Int
+  subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
+  isActive: Boolean
+  user: UserRelateToOneForCreateInput
+}
+
+input SubscriptionPlanRelateToOneForCreateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
 }
 
 type Product {
@@ -600,7 +697,7 @@ type Product {
   status: String
   price: Int
   stockCount: Int
-  user: User
+  author: User
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -626,7 +723,7 @@ input ProductWhereInput {
   status: StringNullableFilter
   price: IntNullableFilter
   stockCount: IntFilter
-  user: UserWhereInput
+  author: UserWhereInput
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
 }
@@ -653,15 +750,9 @@ input ProductUpdateInput {
   status: String
   price: Int
   stockCount: Int
-  user: UserRelateToOneForUpdateInput
+  author: UserRelateToOneForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
 }
 
 input ProductUpdateArgs {
@@ -679,14 +770,9 @@ input ProductCreateInput {
   status: String
   price: Int
   stockCount: Int
-  user: UserRelateToOneForCreateInput
+  author: UserRelateToOneForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
 }
 
 type ProductImage {
@@ -789,12 +875,6 @@ input ProductRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input SubscriptionPlanRelateToOneForUpdateInput {
-  create: SubscriptionPlanCreateInput
-  connect: SubscriptionPlanWhereUniqueInput
-  disconnect: Boolean
-}
-
 input ProductImageUpdateArgs {
   where: ProductImageWhereUniqueInput!
   data: ProductImageUpdateInput!
@@ -812,11 +892,6 @@ input ProductImageCreateInput {
 input ProductRelateToOneForCreateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
-}
-
-input SubscriptionPlanRelateToOneForCreateInput {
-  create: SubscriptionPlanCreateInput
-  connect: SubscriptionPlanWhereUniqueInput
 }
 
 type CartItem {
@@ -1354,6 +1429,12 @@ type Mutation {
   updateSubscriptionPlans(data: [SubscriptionPlanUpdateArgs!]!): [SubscriptionPlan]
   deleteSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
   deleteSubscriptionPlans(where: [SubscriptionPlanWhereUniqueInput!]!): [SubscriptionPlan]
+  createSubscriptionItem(data: SubscriptionItemCreateInput!): SubscriptionItem
+  createSubscriptionItems(data: [SubscriptionItemCreateInput!]!): [SubscriptionItem]
+  updateSubscriptionItem(where: SubscriptionItemWhereUniqueInput!, data: SubscriptionItemUpdateInput!): SubscriptionItem
+  updateSubscriptionItems(data: [SubscriptionItemUpdateArgs!]!): [SubscriptionItem]
+  deleteSubscriptionItem(where: SubscriptionItemWhereUniqueInput!): SubscriptionItem
+  deleteSubscriptionItems(where: [SubscriptionItemWhereUniqueInput!]!): [SubscriptionItem]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
   updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
@@ -1455,6 +1536,9 @@ type Query {
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionItem(where: SubscriptionItemWhereUniqueInput!): SubscriptionItem
+  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
