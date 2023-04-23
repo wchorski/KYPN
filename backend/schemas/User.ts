@@ -48,6 +48,7 @@ export const User = list({
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
+    pages: relationship({ ref: 'Page.author', many: true }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,

@@ -18,6 +18,7 @@ export const Tag = list({
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
     // this can be helpful to find out all the Posts associated with a Tag
+    pages: relationship({ ref: 'Page.tags', many: true }),
     posts: relationship({ ref: 'Post.tags', many: true }),
     products: relationship({ ref: 'Product.tags', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionPlan.tags', many: true }),

@@ -20,6 +20,7 @@ model User {
   isActive                Boolean            @default(true)
   stripeCustomerId        String             @default("NO_ID")
   posts                   Post[]             @relation("Post_author")
+  pages                   Page[]             @relation("Page_author")
   cart                    CartItem[]         @relation("CartItem_user")
   createdAt               DateTime?          @default(now())
   products                Product[]          @relation("Product_user")
@@ -135,6 +136,27 @@ model Order {
   @@index([userId])
 }
 
+model Page {
+  id             String     @id @default(uuid()) @postgresql.Uuid
+  title          String     @default("")
+  slug           String     @unique @default("")
+  dateCreated    DateTime?  @default(now())
+  dateModified   DateTime?  @default(now())
+  status         String?    @default("DRAFT")
+  template       String?    @default("FULLWIDTH")
+  pinned         Int?       @default(0)
+  excerpt        String     @default("")
+  featured_image String     @default("")
+  featured_video String     @default("")
+  content        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author         User?      @relation("Page_author", fields: [authorId], references: [id])
+  authorId       String?    @map("author") @postgresql.Uuid
+  categories     Category[] @relation("Category_pages")
+  tags           Tag[]      @relation("Page_tags")
+
+  @@index([authorId])
+}
+
 model Post {
   id             String     @id @default(uuid()) @postgresql.Uuid
   title          String     @default("")
@@ -161,6 +183,7 @@ model Category {
   id            String             @id @default(uuid()) @postgresql.Uuid
   name          String             @unique @default("")
   description   String             @default("")
+  pages         Page[]             @relation("Category_pages")
   posts         Post[]             @relation("Category_posts")
   products      Product[]          @relation("Category_products")
   subscriptions SubscriptionPlan[] @relation("Category_subscriptions")
@@ -169,6 +192,7 @@ model Category {
 model Tag {
   id            String             @id @default(uuid()) @postgresql.Uuid
   name          String             @unique @default("")
+  pages         Page[]             @relation("Page_tags")
   posts         Post[]             @relation("Post_tags")
   products      Product[]          @relation("Product_tags")
   subscriptions SubscriptionPlan[] @relation("SubscriptionPlan_tags")
