@@ -3,7 +3,7 @@ import Router from "next/router";
 import useForm from "../../lib/useForm"
 import { StyledForm } from "../../styles/Form.styled"
 import { gql, useMutation } from "@apollo/client"
-import { useState } from "react"
+import { FormEvent, useState } from "react"
 import ErrorMessage from "../ErrorMessage"
 import { GET_ALL_PRODUCTS } from "./ProductsList"
 
@@ -29,7 +29,7 @@ export const ProductCreate = () => {
     description: ''
   })
 
-  async function handleSubmit(e: any) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     console.log(inputs.image)
     // todo move this to backend
@@ -79,7 +79,7 @@ export const ProductCreate = () => {
   return (<>
     {/* <input type="file" multiple required onChange={e => handleOnChange(e)} /> */}
 
-    <StyledForm onSubmit={e => handleSubmit(e)}>
+    <StyledForm onSubmit={(e: FormEvent) => handleSubmit(e)}>
 
       <ErrorMessage error={error} />
       {isSuccess && <p>product created</p>}
