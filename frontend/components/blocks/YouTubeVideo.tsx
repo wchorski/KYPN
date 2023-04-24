@@ -7,7 +7,7 @@ type YouTubeVideoProps = {
   altText: string;
 };
 
-export function YouTubeVideo({ url, altText = 'Embedded YouTube video' }: YouTubeVideoProps) {
+export function YouTubeVideo({ url = '', altText = 'Embedded YouTube video' }: YouTubeVideoProps) {
   const embedId = getYouTubeEmbedId(url);
 
   return (

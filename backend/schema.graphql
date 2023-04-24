@@ -7,13 +7,21 @@ type User {
   email: String
   password: PasswordState
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
   cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptions(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionsCount(where: SubscriptionItemWhereInput! = {}): Int
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   role: Role
@@ -31,6 +39,7 @@ scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339
 input UserWhereUniqueInput {
   id: ID
   email: String
+  stripeCustomerId: String
 }
 
 input UserWhereInput {
@@ -41,10 +50,15 @@ input UserWhereInput {
   name: StringFilter
   email: StringFilter
   isAdmin: BooleanFilter
+  isActive: BooleanFilter
+  stripeCustomerId: StringFilter
   posts: PostManyRelationFilter
+  pages: PageManyRelationFilter
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   products: ProductManyRelationFilter
+  subscriptionPlans: SubscriptionPlanManyRelationFilter
+  subscriptions: SubscriptionItemManyRelationFilter
   orders: OrderManyRelationFilter
   role: RoleWhereInput
   passwordResetToken: PasswordFilter
@@ -108,6 +122,12 @@ input PostManyRelationFilter {
   none: PostWhereInput
 }
 
+input PageManyRelationFilter {
+  every: PageWhereInput
+  some: PageWhereInput
+  none: PageWhereInput
+}
+
 input CartItemManyRelationFilter {
   every: CartItemWhereInput
   some: CartItemWhereInput
@@ -131,6 +151,18 @@ input ProductManyRelationFilter {
   none: ProductWhereInput
 }
 
+input SubscriptionPlanManyRelationFilter {
+  every: SubscriptionPlanWhereInput
+  some: SubscriptionPlanWhereInput
+  none: SubscriptionPlanWhereInput
+}
+
+input SubscriptionItemManyRelationFilter {
+  every: SubscriptionItemWhereInput
+  some: SubscriptionItemWhereInput
+  none: SubscriptionItemWhereInput
+}
+
 input OrderManyRelationFilter {
   every: OrderWhereInput
   some: OrderWhereInput
@@ -146,6 +178,8 @@ input UserOrderByInput {
   name: OrderDirection
   email: OrderDirection
   isAdmin: OrderDirection
+  isActive: OrderDirection
+  stripeCustomerId: OrderDirection
   createdAt: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -161,10 +195,15 @@ input UserUpdateInput {
   email: String
   password: String
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts: PostRelateToManyForUpdateInput
+  pages: PageRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   products: ProductRelateToManyForUpdateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptions: SubscriptionItemRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
   passwordResetToken: String
@@ -179,6 +218,13 @@ input PostRelateToManyForUpdateInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PageRelateToManyForUpdateInput {
+  disconnect: [PageWhereUniqueInput!]
+  set: [PageWhereUniqueInput!]
+  create: [PageCreateInput!]
+  connect: [PageWhereUniqueInput!]
+}
+
 input CartItemRelateToManyForUpdateInput {
   disconnect: [CartItemWhereUniqueInput!]
   set: [CartItemWhereUniqueInput!]
@@ -191,6 +237,20 @@ input ProductRelateToManyForUpdateInput {
   set: [ProductWhereUniqueInput!]
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input SubscriptionPlanRelateToManyForUpdateInput {
+  disconnect: [SubscriptionPlanWhereUniqueInput!]
+  set: [SubscriptionPlanWhereUniqueInput!]
+  create: [SubscriptionPlanCreateInput!]
+  connect: [SubscriptionPlanWhereUniqueInput!]
+}
+
+input SubscriptionItemRelateToManyForUpdateInput {
+  disconnect: [SubscriptionItemWhereUniqueInput!]
+  set: [SubscriptionItemWhereUniqueInput!]
+  create: [SubscriptionItemCreateInput!]
+  connect: [SubscriptionItemWhereUniqueInput!]
 }
 
 input OrderRelateToManyForUpdateInput {
@@ -216,10 +276,15 @@ input UserCreateInput {
   email: String
   password: String
   isAdmin: Boolean
+  isActive: Boolean
+  stripeCustomerId: String
   posts: PostRelateToManyForCreateInput
+  pages: PageRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   products: ProductRelateToManyForCreateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
+  subscriptions: SubscriptionItemRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
   passwordResetToken: String
@@ -232,6 +297,11 @@ input PostRelateToManyForCreateInput {
   connect: [PostWhereUniqueInput!]
 }
 
+input PageRelateToManyForCreateInput {
+  create: [PageCreateInput!]
+  connect: [PageWhereUniqueInput!]
+}
+
 input CartItemRelateToManyForCreateInput {
   create: [CartItemCreateInput!]
   connect: [CartItemWhereUniqueInput!]
@@ -240,6 +310,16 @@ input CartItemRelateToManyForCreateInput {
 input ProductRelateToManyForCreateInput {
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input SubscriptionPlanRelateToManyForCreateInput {
+  create: [SubscriptionPlanCreateInput!]
+  connect: [SubscriptionPlanWhereUniqueInput!]
+}
+
+input SubscriptionItemRelateToManyForCreateInput {
+  create: [SubscriptionItemCreateInput!]
+  connect: [SubscriptionItemWhereUniqueInput!]
 }
 
 input OrderRelateToManyForCreateInput {
@@ -340,40 +420,49 @@ input UserRelateToManyForCreateInput {
   connect: [UserWhereUniqueInput!]
 }
 
-type Product {
+type SubscriptionPlan {
   id: ID!
   photo: ProductImage
+  author: User
   name: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
+  items(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  itemsCount(where: SubscriptionItemWhereInput! = {}): Int
   stockCount: Int
-  user: User
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
 }
 
-input ProductWhereUniqueInput {
+input SubscriptionPlanWhereUniqueInput {
   id: ID
   slug: String
 }
 
-input ProductWhereInput {
-  AND: [ProductWhereInput!]
-  OR: [ProductWhereInput!]
-  NOT: [ProductWhereInput!]
+input SubscriptionPlanWhereInput {
+  AND: [SubscriptionPlanWhereInput!]
+  OR: [SubscriptionPlanWhereInput!]
+  NOT: [SubscriptionPlanWhereInput!]
   id: IDFilter
   photo: ProductImageWhereInput
+  author: UserWhereInput
   name: StringFilter
   slug: StringFilter
   description: StringFilter
   status: StringNullableFilter
   price: IntNullableFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
+  billing_interval: StringNullableFilter
+  items: SubscriptionItemManyRelationFilter
   stockCount: IntFilter
-  user: UserWhereInput
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
 }
@@ -441,25 +530,32 @@ input CategoryManyRelationFilter {
   none: CategoryWhereInput
 }
 
-input ProductOrderByInput {
+input SubscriptionPlanOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
   description: OrderDirection
   status: OrderDirection
   price: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
+  billing_interval: OrderDirection
   stockCount: OrderDirection
 }
 
-input ProductUpdateInput {
+input SubscriptionPlanUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
+  author: UserRelateToOneForUpdateInput
   name: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
+  items: SubscriptionItemRelateToManyForUpdateInput
   stockCount: Int
-  user: UserRelateToOneForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
 }
@@ -490,20 +586,24 @@ input CategoryRelateToManyForUpdateInput {
   connect: [CategoryWhereUniqueInput!]
 }
 
-input ProductUpdateArgs {
-  where: ProductWhereUniqueInput!
-  data: ProductUpdateInput!
+input SubscriptionPlanUpdateArgs {
+  where: SubscriptionPlanWhereUniqueInput!
+  data: SubscriptionPlanUpdateInput!
 }
 
-input ProductCreateInput {
+input SubscriptionPlanCreateInput {
   photo: ProductImageRelateToOneForCreateInput
+  author: UserRelateToOneForCreateInput
   name: String
   slug: String
   description: String
   status: String
   price: Int
+  stripeProductId: String
+  stripePriceId: String
+  billing_interval: String
+  items: SubscriptionItemRelateToManyForCreateInput
   stockCount: Int
-  user: UserRelateToOneForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
 }
@@ -528,28 +628,215 @@ input CategoryRelateToManyForCreateInput {
   connect: [CategoryWhereUniqueInput!]
 }
 
+type SubscriptionItem {
+  id: ID!
+  custom_price: Int
+  subscriptionPlan: SubscriptionPlan
+  isActive: Boolean
+  isDelinquent: Boolean
+  user: User
+}
+
+input SubscriptionItemWhereUniqueInput {
+  id: ID
+}
+
+input SubscriptionItemWhereInput {
+  AND: [SubscriptionItemWhereInput!]
+  OR: [SubscriptionItemWhereInput!]
+  NOT: [SubscriptionItemWhereInput!]
+  id: IDFilter
+  custom_price: IntNullableFilter
+  subscriptionPlan: SubscriptionPlanWhereInput
+  isActive: BooleanFilter
+  isDelinquent: BooleanFilter
+  user: UserWhereInput
+}
+
+input SubscriptionItemOrderByInput {
+  id: OrderDirection
+  custom_price: OrderDirection
+  isActive: OrderDirection
+  isDelinquent: OrderDirection
+}
+
+input SubscriptionItemUpdateInput {
+  custom_price: Int
+  subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
+  isActive: Boolean
+  isDelinquent: Boolean
+  user: UserRelateToOneForUpdateInput
+}
+
+input SubscriptionPlanRelateToOneForUpdateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
+  disconnect: Boolean
+}
+
+input SubscriptionItemUpdateArgs {
+  where: SubscriptionItemWhereUniqueInput!
+  data: SubscriptionItemUpdateInput!
+}
+
+input SubscriptionItemCreateInput {
+  custom_price: Int
+  subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
+  isActive: Boolean
+  isDelinquent: Boolean
+  user: UserRelateToOneForCreateInput
+}
+
+input SubscriptionPlanRelateToOneForCreateInput {
+  create: SubscriptionPlanCreateInput
+  connect: SubscriptionPlanWhereUniqueInput
+}
+
+type Product {
+  id: ID!
+  photo: ProductImage
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  author: User
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  photo: ProductImageWhereInput
+  name: StringFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
+  slug: StringFilter
+  description: StringFilter
+  status: StringNullableFilter
+  price: IntNullableFilter
+  stockCount: IntFilter
+  author: UserWhereInput
+  tags: TagManyRelationFilter
+  categories: CategoryManyRelationFilter
+}
+
+input ProductOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
+  slug: OrderDirection
+  description: OrderDirection
+  status: OrderDirection
+  price: OrderDirection
+  stockCount: OrderDirection
+}
+
+input ProductUpdateInput {
+  photo: ProductImageRelateToOneForUpdateInput
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  author: UserRelateToOneForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  photo: ProductImageRelateToOneForCreateInput
+  name: String
+  stripeProductId: String
+  stripePriceId: String
+  slug: String
+  description: String
+  status: String
+  price: Int
+  stockCount: Int
+  author: UserRelateToOneForCreateInput
+  tags: TagRelateToManyForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+}
+
 type ProductImage {
   id: ID!
-  image: ImageFieldOutput
+  image: CloudinaryImage_File
+  url: String
   altText: String
   filename: String
   product: Product
+  subscription: SubscriptionPlan
 }
 
-type ImageFieldOutput {
-  id: ID!
-  filesize: Int!
-  width: Int!
-  height: Int!
-  extension: ImageExtension!
-  url: String!
+type CloudinaryImage_File {
+  id: ID
+  filename: String
+  originalFilename: String
+  mimetype: String
+  encoding: String
+  publicUrl: String
+  publicUrlTransformed(transformation: CloudinaryImageFormat): String
 }
 
-enum ImageExtension {
-  jpg
-  png
-  webp
-  gif
+"""
+Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
+All options are strings as they ultimately end up in a URL.
+"""
+input CloudinaryImageFormat {
+  """ Rewrites the filename to be this pretty string. Do not include `/` or `.`
+  """
+  prettyName: String
+  width: String
+  height: String
+  crop: String
+  aspect_ratio: String
+  gravity: String
+  zoom: String
+  x: String
+  y: String
+  format: String
+  fetch_format: String
+  quality: String
+  radius: String
+  angle: String
+  effect: String
+  opacity: String
+  border: String
+  background: String
+  overlay: String
+  underlay: String
+  default_image: String
+  delay: String
+  color: String
+  color_space: String
+  dpr: String
+  page: String
+  density: String
+  flags: String
+  transformation: String
 }
 
 input ProductImageWhereUniqueInput {
@@ -562,26 +849,27 @@ input ProductImageWhereInput {
   OR: [ProductImageWhereInput!]
   NOT: [ProductImageWhereInput!]
   id: IDFilter
+  url: StringFilter
   altText: StringFilter
   filename: StringFilter
   product: ProductWhereInput
+  subscription: SubscriptionPlanWhereInput
 }
 
 input ProductImageOrderByInput {
   id: OrderDirection
+  url: OrderDirection
   altText: OrderDirection
   filename: OrderDirection
 }
 
 input ProductImageUpdateInput {
-  image: ImageFieldInput
+  image: Upload
+  url: String
   altText: String
   filename: String
   product: ProductRelateToOneForUpdateInput
-}
-
-input ImageFieldInput {
-  upload: Upload!
+  subscription: SubscriptionPlanRelateToOneForUpdateInput
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -599,10 +887,12 @@ input ProductImageUpdateArgs {
 }
 
 input ProductImageCreateInput {
-  image: ImageFieldInput
+  image: Upload
+  url: String
   altText: String
   filename: String
   product: ProductRelateToOneForCreateInput
+  subscription: SubscriptionPlanRelateToOneForCreateInput
 }
 
 input ProductRelateToOneForCreateInput {
@@ -795,6 +1085,108 @@ input OrderItemRelateToManyForCreateInput {
   connect: [OrderItemWhereUniqueInput!]
 }
 
+type Page {
+  id: ID!
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: Page_content_Document
+  author: User
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+type Page_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input PageWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input PageWhereInput {
+  AND: [PageWhereInput!]
+  OR: [PageWhereInput!]
+  NOT: [PageWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
+  status: StringNullableFilter
+  template: StringNullableFilter
+  pinned: IntNullableFilter
+  excerpt: StringFilter
+  featured_image: StringFilter
+  featured_video: StringFilter
+  author: UserWhereInput
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input PageOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+  status: OrderDirection
+  template: OrderDirection
+  pinned: OrderDirection
+  excerpt: OrderDirection
+  featured_image: OrderDirection
+  featured_video: OrderDirection
+}
+
+input PageUpdateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input PageUpdateArgs {
+  where: PageWhereUniqueInput!
+  data: PageUpdateInput!
+}
+
+input PageCreateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
 type Post {
   id: ID!
   title: String
@@ -906,10 +1298,14 @@ type Category {
   id: ID!
   name: String
   description: String
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
 }
 
 input CategoryWhereUniqueInput {
@@ -924,8 +1320,10 @@ input CategoryWhereInput {
   id: IDFilter
   name: StringFilter
   description: StringFilter
+  pages: PageManyRelationFilter
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
+  subscriptions: SubscriptionPlanManyRelationFilter
 }
 
 input CategoryOrderByInput {
@@ -937,8 +1335,10 @@ input CategoryOrderByInput {
 input CategoryUpdateInput {
   name: String
   description: String
+  pages: PageRelateToManyForUpdateInput
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
 }
 
 input CategoryUpdateArgs {
@@ -949,17 +1349,23 @@ input CategoryUpdateArgs {
 input CategoryCreateInput {
   name: String
   description: String
+  pages: PageRelateToManyForCreateInput
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  subscriptions: SubscriptionPlanRelateToManyForCreateInput
 }
 
 type Tag {
   id: ID!
   name: String
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
 }
 
 input TagWhereUniqueInput {
@@ -973,8 +1379,10 @@ input TagWhereInput {
   NOT: [TagWhereInput!]
   id: IDFilter
   name: StringFilter
+  pages: PageManyRelationFilter
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
+  subscriptions: SubscriptionPlanManyRelationFilter
 }
 
 input TagOrderByInput {
@@ -984,8 +1392,10 @@ input TagOrderByInput {
 
 input TagUpdateInput {
   name: String
+  pages: PageRelateToManyForUpdateInput
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
 }
 
 input TagUpdateArgs {
@@ -995,8 +1405,10 @@ input TagUpdateArgs {
 
 input TagCreateInput {
   name: String
+  pages: PageRelateToManyForCreateInput
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  subscriptions: SubscriptionPlanRelateToManyForCreateInput
 }
 
 """
@@ -1017,6 +1429,18 @@ type Mutation {
   updateRoles(data: [RoleUpdateArgs!]!): [Role]
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
+  createSubscriptionPlan(data: SubscriptionPlanCreateInput!): SubscriptionPlan
+  createSubscriptionPlans(data: [SubscriptionPlanCreateInput!]!): [SubscriptionPlan]
+  updateSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!, data: SubscriptionPlanUpdateInput!): SubscriptionPlan
+  updateSubscriptionPlans(data: [SubscriptionPlanUpdateArgs!]!): [SubscriptionPlan]
+  deleteSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
+  deleteSubscriptionPlans(where: [SubscriptionPlanWhereUniqueInput!]!): [SubscriptionPlan]
+  createSubscriptionItem(data: SubscriptionItemCreateInput!): SubscriptionItem
+  createSubscriptionItems(data: [SubscriptionItemCreateInput!]!): [SubscriptionItem]
+  updateSubscriptionItem(where: SubscriptionItemWhereUniqueInput!, data: SubscriptionItemUpdateInput!): SubscriptionItem
+  updateSubscriptionItems(data: [SubscriptionItemUpdateArgs!]!): [SubscriptionItem]
+  deleteSubscriptionItem(where: SubscriptionItemWhereUniqueInput!): SubscriptionItem
+  deleteSubscriptionItems(where: [SubscriptionItemWhereUniqueInput!]!): [SubscriptionItem]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
   updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
@@ -1047,6 +1471,12 @@ type Mutation {
   updateOrders(data: [OrderUpdateArgs!]!): [Order]
   deleteOrder(where: OrderWhereUniqueInput!): Order
   deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
+  createPage(data: PageCreateInput!): Page
+  createPages(data: [PageCreateInput!]!): [Page]
+  updatePage(where: PageWhereUniqueInput!, data: PageUpdateInput!): Page
+  updatePages(data: [PageUpdateArgs!]!): [Page]
+  deletePage(where: PageWhereUniqueInput!): Page
+  deletePages(where: [PageWhereUniqueInput!]!): [Page]
   createPost(data: PostCreateInput!): Post
   createPosts(data: [PostCreateInput!]!): [Post]
   updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
@@ -1109,6 +1539,12 @@ type Query {
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionItem(where: SubscriptionItemWhereUniqueInput!): SubscriptionItem
+  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
@@ -1124,6 +1560,9 @@ type Query {
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   order(where: OrderWhereUniqueInput!): Order
   ordersCount(where: OrderWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  page(where: PageWhereUniqueInput!): Page
+  pagesCount(where: PageWhereInput! = {}): Int
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
   postsCount(where: PostWhereInput! = {}): Int

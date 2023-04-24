@@ -8,7 +8,8 @@ import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
 import { MdClose } from "react-icons/md";
 import CartCount from './CartCount'
-import { Checkout } from './Checkout'
+import { CheckoutForm } from './CheckoutForm'
+import Link from 'next/link'
 
 export default function ShoppingCart() {
 
@@ -37,13 +38,18 @@ export default function ShoppingCart() {
       </ul>
       <footer>
         <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer?.cart))}</p>
-        <Checkout />
+        <Link
+          href={'/shop/checkout'}
+          onClick={() => closeCart()}
+        >
+          Checkout
+        </Link>
       </footer>
     </StyledShoppingCart>
   )
 }
 
-// TODO just query user's cart and update like this i guess. 
+// TODO just query user's cart and update like this i guess.
 // query Query($where: UserWhereUniqueInput!) {
 //   user(where: $where) {
 //     cart {

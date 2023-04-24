@@ -1,7 +1,19 @@
 import { list } from "@keystone-6/core";
+import { cloudinaryImage } from '@keystone-6/cloudinary';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { permissions } from "../access";
+
+
+import 'dotenv/config'
+
+export const cloudinary = {
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME || 'NO_CLOUD_NAME',
+  apiKey: process.env.CLOUDINARY_API_KEY || 'NO_CLOUD_KEY',
+  apiSecret: process.env.CLOUDINARY_API_SECRET || 'NO_CLOUD_SECRET',
+  folder: process.env.CLOUDINARY_API_FOLDER + '/product_images' || 'NO_CLOUD_FOLDER',
+}
+
 
 export const ProductImage = list({
   // access: allowAll,
@@ -19,51 +31,44 @@ export const ProductImage = list({
     },
   },
   fields: {
-    image: image({ storage: 'my_local_images' }),
+    // ? below is for locally saved images
+    // image: image({ storage: 'my_local_images' }),
+    image: cloudinaryImage({
+      cloudinary,
+      label: 'Source',
+    }),
+    // todo update this instead so there is a unified truth
+    url: text(),
     altText: text({ validation: { isRequired: true }, defaultValue: 'Product Featured Image' }),
-    filename: text({ isIndexed: 'unique' }),
+    filename: text({ isIndexed: 'unique', validation: { isRequired: true } }),
     product: relationship({ ref: 'Product.photo' }),
+    subscription: relationship({ ref: 'SubscriptionPlan.photo' }),
   },
   ui: {
     listView: {
       initialColumns: ['image', 'altText', 'product']
     }
+  },
+  hooks: {
+    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
+
+      // if (operation === 'create') {
+      //   try {
+      //     console.log({ item });
+
+      //   } catch (err) { console.warn(err) }
+
+      // }
+
+      // if (operation === 'update') {
+      //   console.log('&&&&&& prod image update ');
+
+      //   // try {
+      //   //   console.log({ item });
+
+      //   // } catch (err) { console.warn(err) }
+
+      // }
+    }
   }
 })
-
-
-
-// import 'dotenv/config';
-// import { relationship, text } from '@keystone-next/fields';
-// import { list } from '@keystone-next/keystone/schema';
-// import { cloudinaryImage } from '@keystone-next/cloudinary';
-// import { isSignedIn, permissions } from '../access';
-
-// export const cloudinary = {
-//   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-//   apiKey: process.env.CLOUDINARY_KEY,
-//   apiSecret: process.env.CLOUDINARY_SECRET,
-//   folder: 'sickfits',
-// };
-
-// export const ProductImage = list({
-//   access: {
-//     create: isSignedIn,
-//     read: () => true,
-//     update: permissions.canManageProducts,
-//     delete: permissions.canManageProducts,
-//   },
-//   fields: {
-//     image: cloudinaryImage({
-//       cloudinary,
-//       label: 'Source',
-//     }),
-//     altText: text(),
-//     product: relationship({ ref: 'Product.photo' }),
-//   },
-//   ui: {
-//     listView: {
-//       initialColumns: ['image', 'altText', 'product'],
-//     },
-//   },
-// });

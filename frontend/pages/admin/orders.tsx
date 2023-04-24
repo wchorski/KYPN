@@ -1,16 +1,16 @@
-import { StyledOrderItem } from '../styles/OrderItem.styled'
-import { StyledOrderReceipt } from '../styles/OrderReceipt.styled'
+import { StyledOrderItem } from '../../styles/OrderItem.styled'
+import { StyledOrderReceipt } from '../../styles/OrderReceipt.styled'
 import { gql, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import Image from "next/image"
 import React from 'react'
-import ErrorMessage from '../components/ErrorMessage'
-import { QueryLoading } from '../components/menus/QueryLoading'
-import CartItem from '../components/ecommerce/CartItem'
-import { handlePhoto } from '../lib/handleProductPhoto'
-import moneyFormatter from '../lib/moneyFormatter'
-import OrderItem from '../components/ecommerce/OrderItem'
-import { StyledCartItem } from '../styles/CartItem.styled'
+import ErrorMessage from '../../components/ErrorMessage'
+import { QueryLoading } from '../../components/menus/QueryLoading'
+import CartItem from '../../components/ecommerce/CartItem'
+import { handlePhoto } from '../../lib/handleProductPhoto'
+import moneyFormatter from '../../lib/moneyFormatter'
+import OrderItem from '../../components/ecommerce/OrderItem'
+import { StyledCartItem } from '../../styles/CartItem.styled'
 import styled from 'styled-components'
 import Head from 'next/head'
 
@@ -60,12 +60,11 @@ const QUERY_ORDERS_ALL = gql`
         id
         name
         photo {
-          image {
-            url
-            height
-            width
-          }
+          id
           altText
+          image {
+            publicUrlTransformed
+          }
         }
       }
       itemsCount

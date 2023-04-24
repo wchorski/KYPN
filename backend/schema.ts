@@ -38,19 +38,25 @@ import { Order } from './schemas/Order';
 import { addToCart } from './mutations/addToCart';
 import { checkout } from './mutations/checkout';
 import { Role } from './schemas/Role';
+import { Page } from './schemas/Page';
 import { Post } from './schemas/Post';
 import { Tag } from './schemas/Tag';
 import { Category } from './schemas/Category';
+import { SubscriptionPlan } from './schemas/SubscriptionPlan';
+import { SubscriptionItem } from './schemas/SubscriptionItem';
 
 export const lists: Lists = {
   User,
   Role,
+  SubscriptionPlan,
+  SubscriptionItem,
   Product,
   // @ts-ignore
   ProductImage,
   CartItem,
   OrderItem,
   Order,
+  Page,
   Post,
   Category,
   Tag,
