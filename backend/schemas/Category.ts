@@ -23,5 +23,6 @@ export const Category = list({
     posts: relationship({ ref: 'Post.categories', many: true }),
     products: relationship({ ref: 'Product.categories', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
+    bookings: relationship({ ref: 'Booking.categories', many: true }),
   },
 })

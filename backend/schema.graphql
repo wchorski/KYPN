@@ -420,6 +420,88 @@ input UserRelateToManyForCreateInput {
   connect: [UserWhereUniqueInput!]
 }
 
+type Booking {
+  id: ID!
+  name: String
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input BookingWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+input BookingWhereInput {
+  AND: [BookingWhereInput!]
+  OR: [BookingWhereInput!]
+  NOT: [BookingWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input CategoryManyRelationFilter {
+  every: CategoryWhereInput
+  some: CategoryWhereInput
+  none: CategoryWhereInput
+}
+
+input TagManyRelationFilter {
+  every: TagWhereInput
+  some: TagWhereInput
+  none: TagWhereInput
+}
+
+input BookingOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input BookingUpdateInput {
+  name: String
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input CategoryRelateToManyForUpdateInput {
+  disconnect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input TagRelateToManyForUpdateInput {
+  disconnect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+input BookingUpdateArgs {
+  where: BookingWhereUniqueInput!
+  data: BookingUpdateInput!
+}
+
+input BookingCreateInput {
+  name: String
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+input CategoryRelateToManyForCreateInput {
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input TagRelateToManyForCreateInput {
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
 type SubscriptionPlan {
   id: ID!
   photo: ProductImage
@@ -518,18 +600,6 @@ input IntFilter {
   not: IntFilter
 }
 
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
-input CategoryManyRelationFilter {
-  every: CategoryWhereInput
-  some: CategoryWhereInput
-  none: CategoryWhereInput
-}
-
 input SubscriptionPlanOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -572,20 +642,6 @@ input UserRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-input CategoryRelateToManyForUpdateInput {
-  disconnect: [CategoryWhereUniqueInput!]
-  set: [CategoryWhereUniqueInput!]
-  create: [CategoryCreateInput!]
-  connect: [CategoryWhereUniqueInput!]
-}
-
 input SubscriptionPlanUpdateArgs {
   where: SubscriptionPlanWhereUniqueInput!
   data: SubscriptionPlanUpdateInput!
@@ -616,16 +672,6 @@ input ProductImageRelateToOneForCreateInput {
 input UserRelateToOneForCreateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-}
-
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-input CategoryRelateToManyForCreateInput {
-  create: [CategoryCreateInput!]
-  connect: [CategoryWhereUniqueInput!]
 }
 
 type SubscriptionItem {
@@ -1306,6 +1352,8 @@ type Category {
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
 }
 
 input CategoryWhereUniqueInput {
@@ -1324,6 +1372,13 @@ input CategoryWhereInput {
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
+  bookings: BookingManyRelationFilter
+}
+
+input BookingManyRelationFilter {
+  every: BookingWhereInput
+  some: BookingWhereInput
+  none: BookingWhereInput
 }
 
 input CategoryOrderByInput {
@@ -1339,6 +1394,14 @@ input CategoryUpdateInput {
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
+}
+
+input BookingRelateToManyForUpdateInput {
+  disconnect: [BookingWhereUniqueInput!]
+  set: [BookingWhereUniqueInput!]
+  create: [BookingCreateInput!]
+  connect: [BookingWhereUniqueInput!]
 }
 
 input CategoryUpdateArgs {
@@ -1353,6 +1416,12 @@ input CategoryCreateInput {
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
+}
+
+input BookingRelateToManyForCreateInput {
+  create: [BookingCreateInput!]
+  connect: [BookingWhereUniqueInput!]
 }
 
 type Tag {
@@ -1366,6 +1435,8 @@ type Tag {
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
 }
 
 input TagWhereUniqueInput {
@@ -1383,6 +1454,7 @@ input TagWhereInput {
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
+  bookings: BookingManyRelationFilter
 }
 
 input TagOrderByInput {
@@ -1396,6 +1468,7 @@ input TagUpdateInput {
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
 }
 
 input TagUpdateArgs {
@@ -1409,6 +1482,7 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
 }
 
 """
@@ -1429,6 +1503,12 @@ type Mutation {
   updateRoles(data: [RoleUpdateArgs!]!): [Role]
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
+  createBooking(data: BookingCreateInput!): Booking
+  createBookings(data: [BookingCreateInput!]!): [Booking]
+  updateBooking(where: BookingWhereUniqueInput!, data: BookingUpdateInput!): Booking
+  updateBookings(data: [BookingUpdateArgs!]!): [Booking]
+  deleteBooking(where: BookingWhereUniqueInput!): Booking
+  deleteBookings(where: [BookingWhereUniqueInput!]!): [Booking]
   createSubscriptionPlan(data: SubscriptionPlanCreateInput!): SubscriptionPlan
   createSubscriptionPlans(data: [SubscriptionPlanCreateInput!]!): [SubscriptionPlan]
   updateSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!, data: SubscriptionPlanUpdateInput!): SubscriptionPlan
@@ -1539,6 +1619,9 @@ type Query {
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  booking(where: BookingWhereUniqueInput!): Booking
+  bookingsCount(where: BookingWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int

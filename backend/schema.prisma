@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_mdp3537jat")
+  stripeCustomerId        String             @unique @default("NO_ID_u1frjqbp1d")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   cart                    CartItem[]         @relation("CartItem_user")
@@ -46,6 +46,13 @@ model Role {
   canManageCart     Boolean @default(false)
   canManageOrders   Boolean @default(false)
   assignedTo        User[]  @relation("User_role")
+}
+
+model Booking {
+  id         String     @id @default(uuid()) @postgresql.Uuid
+  name       String     @unique @default("")
+  categories Category[] @relation("Booking_categories")
+  tags       Tag[]      @relation("Booking_tags")
 }
 
 model SubscriptionPlan {
@@ -206,6 +213,7 @@ model Category {
   posts         Post[]             @relation("Category_posts")
   products      Product[]          @relation("Category_products")
   subscriptions SubscriptionPlan[] @relation("Category_subscriptions")
+  bookings      Booking[]          @relation("Booking_categories")
 }
 
 model Tag {
@@ -215,4 +223,5 @@ model Tag {
   posts         Post[]             @relation("Post_tags")
   products      Product[]          @relation("Product_tags")
   subscriptions SubscriptionPlan[] @relation("SubscriptionPlan_tags")
+  bookings      Booking[]          @relation("Booking_tags")
 }

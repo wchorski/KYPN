@@ -44,10 +44,12 @@ import { Tag } from './schemas/Tag';
 import { Category } from './schemas/Category';
 import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 import { SubscriptionItem } from './schemas/SubscriptionItem';
+import { Booking } from './schemas/Booking';
 
 export const lists: Lists = {
   User,
   Role,
+  Booking,
   SubscriptionPlan,
   SubscriptionItem,
   Product,
