@@ -6,7 +6,13 @@ import { MdClose } from "react-icons/md"
 import { FiExternalLink } from "react-icons/fi"
 import styled from "styled-components"
 
-export function AnnouncementsMarquee({ message, url }: { message: string, url: string }) {
+interface Props {
+  message: string,
+  url: string,
+  isActive: boolean,
+}
+
+export function AnnouncementsMarquee({ message, url, isActive }: Props) {
 
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [isClosed, setisClosed] = useState<boolean>(false)
@@ -14,6 +20,8 @@ export function AnnouncementsMarquee({ message, url }: { message: string, url: s
   function handleClose() {
     setisClosed(true)
   }
+
+  if (!isActive) return null
 
   return (
     <StyledMarquee
@@ -39,6 +47,7 @@ export function AnnouncementsMarquee({ message, url }: { message: string, url: s
 
     </StyledMarquee>
   )
+
 }
 
 

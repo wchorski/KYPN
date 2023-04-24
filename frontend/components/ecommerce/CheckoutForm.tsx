@@ -8,14 +8,16 @@ import { FormEvent, useState } from "react"
 import styled from "styled-components"
 import ErrorMessage from "../ErrorMessage"
 import { useCart } from "../../lib/cartState";
-import { QUERY_USER_CURRENT } from "../menus/Session"
+import { QUERY_USER_CURRENT, useUser } from "../menus/Session"
 
 // TODO Add blocker stops stripe.com requests thinks it's X site
 const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY_IN_ENV'
 
 const stripeLib = loadStripe(STRIPE_KEY)
 
-function CheckoutForm() {
+function CheckoutFormChild() {
+
+  const session = useUser()
 
   const router = useRouter()
   const { closeCart } = useCart()
@@ -40,7 +42,8 @@ function CheckoutForm() {
       elements,
       params: {
         billing_details: {
-          name: 'Jenny Rosen',
+          name: session ? session.name : 'Anonymous Name',
+          email: session ? session.email : 'Anonymous Email',
         },
       },
     });
@@ -83,10 +86,10 @@ function CheckoutForm() {
   )
 }
 
-export function Checkout() {
+export function CheckoutForm() {
   return (
     <Elements stripe={stripeLib}>
-      <CheckoutForm />
+      <CheckoutFormChild />
     </Elements>
   )
 }

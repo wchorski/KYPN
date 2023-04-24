@@ -143,12 +143,7 @@ export const CREATE_PRODUCT_MUTATION = gql`
         altText
         id
         image {
-          extension
-          filesize
-          height
-          id
-          url
-          width
+          publicUrlTransformed
         }
       }
       id
@@ -158,3 +153,28 @@ export const CREATE_PRODUCT_MUTATION = gql`
     }
   }
 `
+
+// ? localy stored  image
+// export const CREATE_PRODUCT_MUTATION = gql`
+//   mutation CreateProduct($data: ProductCreateInput!) {
+//     createProduct(data: $data) {
+//       name
+//       photo {
+//         altText
+//         id
+//         image {
+//           extension
+//           filesize
+//           height
+//           id
+//           url
+//           width
+//         }
+//       }
+//       id
+//       description
+//       price
+//       status
+//     }
+//   }
+// `

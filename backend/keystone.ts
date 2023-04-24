@@ -5,6 +5,8 @@
 // Keystone imports the default export of this file, expecting a Keystone configuration object
 //   you can find out more at https://keystonejs.com/docs/apis/config
 
+require('dotenv').config()
+
 import type { KeystoneConfig } from '@keystone-6/core/types';
 import { config } from '@keystone-6/core';
 

@@ -59,10 +59,7 @@ export const QUERY_USER_CURRENT = gql`
             description
             photo {
               image {
-                url
-                width
-                height
-                id
+                publicUrlTransformed
               }
             }
           }
@@ -73,6 +70,8 @@ export const QUERY_USER_CURRENT = gql`
 `
 
 const StyledSessionBadge = styled.div`
+  padding: 1em;
+  text-align: right;
   ul{
     display: flex;
     flex-direction: column;

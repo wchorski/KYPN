@@ -64,6 +64,7 @@ export function Nav() {
       <ul className={isNavOpen ? 'menu-main open' : 'menu-main '}>
         <LinkActive href='/shop'> Shop </LinkActive>
         <LinkActive href='/blog'> Blog </LinkActive>
+        <LinkActive href='/about'> About </LinkActive>
 
         {session && (<>
           <LinkActive href='/shop/sell'> Sell </LinkActive>

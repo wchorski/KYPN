@@ -22,10 +22,13 @@ export function ProductsList({ page }: ProdProps) {
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError />
+  // console.log({ data });
 
   return (
     <StyledProductsList>
       {data.products.map((prod: any) => {
+        // console.log(prod);
+
         return (
           <li key={prod.id}>
             <ProductThumbnail {...prod} />
@@ -68,20 +71,15 @@ export const GET_PAGE_PRODUCTS_QUERY = gql`
       description
       id
       name
-      photo {
-        altText
-        id
-        image {
-          extension
-          filesize
-          height
-          id
-          url
-          width
-        }
-      }
       price
       status
+      photo {
+        id
+        altText
+        image {
+          publicUrlTransformed
+        }
+      }
     }
   }
 `
@@ -92,18 +90,62 @@ export const GET_ALL_PRODUCTS = gql`
       id
       description
       name
-      photo {
-        image {
-          url
-          width
-          height
-          id
-        }
-        id
-        altText
-      }
       price
       status
+      photo {
+        id
+        altText
+        image {
+          publicUrlTransformed
+        }
+      }
     }
   }
 `
+
+
+// export const GET_PAGE_PRODUCTS_QUERY = gql`
+//   query Query($skip: Int!, $take: Int) {
+//     products(skip: $skip, take: $take) {
+//       description
+//       id
+//       name
+//       photo {
+//         altText
+//         id
+//         image {
+//           extension
+//           filesize
+//           height
+//           id
+//           url
+//           width
+//         }
+//       }
+//       price
+//       status
+//     }
+//   }
+// `
+
+// export const GET_ALL_PRODUCTS = gql`
+//   query Products {
+//     products {
+//       id
+//       description
+//       name
+//       photo {
+//         image {
+//           url
+//           width
+//           height
+//           id
+//         }
+//         id
+//         altText
+//       }
+//       price
+//       status
+//     }
+//   }
+// `

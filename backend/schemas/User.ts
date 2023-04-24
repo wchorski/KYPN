@@ -2,6 +2,8 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, password, relationship, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
+import stripeConfig from "../lib/stripe";
+
 
 export const User = list({
   access: {
@@ -13,15 +15,22 @@ export const User = list({
     operation: {
       query: permissions.isLoggedIn,
       create: () => true,
-      update: () => false,
+      // todo NEED TO FIX THIS
+      // update: () => permissions.canManageUsers,
+      update: () => true,
       delete: permissions.canManageUsers,
     },
   },
 
   ui: {
     // hide backend from non admins
-    hideCreate: args => !permissions.canManageUsers(args)
+    hideCreate: args => !permissions.canManageUsers(args),
+    // listView: {
+    //   initialColumns: ['', 'createdAt', 'user', 'createdAt']
+    // },
   },
+
+
 
   // this is the fields for our User list
   fields: {
@@ -37,11 +46,14 @@ export const User = list({
     }),
 
     password: password({ validation: { isRequired: true } }),
-    isAdmin: checkbox(),
+    isAdmin: checkbox({ defaultValue: false }),
+    isActive: checkbox({ defaultValue: true }),
+    stripeCustomerId: text({ defaultValue: `NO_ID_${Math.random().toString(36).slice(2, 12)}`, isIndexed: 'unique' }),
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
+    pages: relationship({ ref: 'Page.author', many: true }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,
@@ -55,8 +67,13 @@ export const User = list({
       // this sets the timestamp to Date.now() when the user is first created
       defaultValue: { kind: 'now' },
     }),
-    products: relationship({ ref: 'Product.user', many: true }),
-    orders: relationship({ ref: 'Order.user', many: true }),
+    products: relationship({ ref: 'Product.author', many: true }),
+    subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
+    orders: relationship({
+      ref: 'Order.user',
+      many: true,
+    }),
     role: relationship({
       ref: 'Role.assignedTo',
       // todo add access control
@@ -69,5 +86,45 @@ export const User = list({
       //   itemView: { fieldMode: 'hidden' }
       // }
     })
+  },
+  hooks: {
+    beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {
+
+      if (operation === 'create') {
+        const customer = await stripeConfig.customers.create({
+          email: resolvedData.email,
+          name: resolvedData.name,
+          metadata: {
+            isActive: resolvedData.isActive,
+          }
+        })
+          .then(async (customer) => {
+
+            if (resolvedData && !resolvedData.user) {
+              resolvedData.stripeCustomerId = customer.id
+            } ``
+          })
+          .catch(err => { console.warn(err) })
+      }
+    },
+
+    afterOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item: any }) => {
+      if (operation === 'update') {
+
+        const customer = await stripeConfig.customers.update(
+          item.stripeCustomerId,
+          {
+            // ...item,
+            email: item.email,
+            name: item.name,
+            metadata: {
+              isActive: item.isActive,
+            }
+          }
+        )
+          .catch(err => { console.warn(err) })
+      }
+
+    },
   },
 })

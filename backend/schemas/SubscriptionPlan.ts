@@ -3,8 +3,12 @@ import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
+import 'dotenv/config'
 
-export const Product = list({
+const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
+const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
+
+export const SubscriptionPlan = list({
   // access: allowAll,
   access: {
     filter: {
@@ -24,7 +28,7 @@ export const Product = list({
 
   fields: {
     photo: relationship({
-      ref: 'ProductImage.product',
+      ref: 'ProductImage.subscription',
       ui: {
         displayMode: 'cards',
         cardFields: ['image', 'altText', 'filename'],
@@ -32,9 +36,23 @@ export const Product = list({
         inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
     }),
+
+    // todo does this need to be?
+    author: relationship({
+      ref: 'User.subscriptionPlans',
+
+      ui: {
+        displayMode: 'cards',
+        cardFields: ['name', 'email'],
+        inlineEdit: { fields: ['name', 'email'] },
+        linkToItem: true,
+        inlineConnect: true,
+      },
+
+      many: false,
+    }),
+
     name: text({ validation: { isRequired: true } }),
-    stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
-    stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
     slug: text({
       validation: { isRequired: true },
       isIndexed: 'unique',
@@ -54,6 +72,7 @@ export const Product = list({
         displayMode: 'textarea'
       }
     }),
+
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
@@ -68,39 +87,41 @@ export const Product = list({
     }),
 
     price: integer(),
+    stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
+    stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
+    billing_interval: select({
+      options: [
+        { label: 'Daily', value: 'day' },
+        { label: 'Weekly', value: 'week' },
+        { label: 'Monthly', value: 'month' },
+        { label: 'Yearly', value: 'year' },
+      ],
+      defaultValue: 'month',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+
+    items: relationship({ ref: 'SubscriptionItem.subscriptionPlan', many: true }),
 
     stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
-    // todo make this 'author' instead for clarity
-    author: relationship({
-      ref: 'User.products',
-    }),
 
     tags: relationship({
-      // we could have used 'Tag', but then the relationship would only be 1-way
-      ref: 'Tag.products',
-
-      // a Post can have many Tags, not just one
+      ref: 'Tag.subscriptions',
       many: true,
-
-      // this is some customisations for changing how this will look in the AdminUI
-      // ui: {
-      //   displayMode: 'cards',
-      //   cardFields: ['name'],
-      //   inlineEdit: { fields: ['name'] },
-      //   linkToItem: true,
-      //   inlineConnect: true,
-      //   inlineCreate: { fields: ['name'] },
-      // },
     }),
     categories: relationship({
-      ref: 'Category.products',
+      ref: 'Category.subscriptions',
       many: true,
     }),
   },
+
+
   hooks: {
-    // TODO use this to create a default 'slug' automatically based on product name
-    // if no user set, connect to current session user
+
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
+
       try {
         if (resolvedData && !resolvedData.author) {
           const currentUserId = await context.session.itemId;
@@ -110,7 +131,19 @@ export const Product = list({
       } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
+        // console.log('resolvedData.photo.connect.id', resolvedData.photo.connect.id);
 
+        let photo_url = IMG_PLACEHOLDER
+        if (resolvedData?.photo?.connect) {
+          const photo = await context.db.ProductImage.findOne({
+            where: {
+              id: resolvedData.photo.connect.id
+            }
+          })
+          console.log({ photo });
+          // @ts-ignore
+          photo_url = photo.image._meta.secure_url
+        }
 
         const res = await stripeConfig.products.create({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
@@ -121,26 +154,21 @@ export const Product = list({
             category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
             status: resolvedData.status,
             author: resolvedData.author.email,
-            type: 'single product'
+            type: 'subscription'
           },
-          // images: [
-          //   resolvedData.photo.image.publicUrlTransformed
-          // ],
+          images: [
+            photo_url
+          ],
           attributes: [
-            'Size',
-            'Color'
+            'Subscriptionattr1',
+            'Subscriptionattr2'
           ],
           shippable: false,
-          // package_dimensions: {
-          //   height: 10,
-          //   length: 20,
-          //   width: 30,
-          //   weight: 5
-          // },
           unit_label: 'units',
           default_price_data: {
             currency: 'usd',
             unit_amount: resolvedData.price,
+            recurring: { interval: resolvedData.billing_interval },
           },
           url: process.env.FRONTEND_URL + '/shop/product/' + resolvedData.id
 
@@ -153,20 +181,26 @@ export const Product = list({
             }
           })
           .catch(err => { console.warn(err) })
+
       }
 
       if (operation === 'update') {
 
-        const photo = await context.db.ProductImage.findOne({
-          where: {
-            id: resolvedData.photoId ? resolvedData.photoId : item.photoId
-          }
-        })
+        let photo_url = IMG_PLACEHOLDER
+        if (resolvedData?.photo?.connect) {
+          const photo = await context.db.ProductImage.findOne({
+            where: {
+              id: resolvedData.photo.connect.id
+            }
+          })
+          console.log({ photo });
+          // @ts-ignore
+          photo_url = photo.image._meta.secure_url
+        }
 
         const currPrice = await stripeConfig.prices.retrieve(
           resolvedData.stripePriceId ? resolvedData.stripePriceId : item.stripePriceId
         )
-
 
         // todo this is ugly, but Stripe API does not support deletion or updating of a price object
         if (resolvedData.price && currPrice.unit_amount !== resolvedData.price) {
@@ -175,6 +209,7 @@ export const Product = list({
             unit_amount: resolvedData.price,
             currency: 'usd',
             product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            recurring: { interval: resolvedData.billing_interval ? resolvedData.billing_interval : item.billing_interval },
           })
 
           resolvedData.stripePriceId = newPrice.id
@@ -186,8 +221,7 @@ export const Product = list({
               description: resolvedData.description ? resolvedData.description : item.description,
               default_price: newPrice.id,
               images: [
-                // @ts-ignore
-                photo.image._meta.secure_url
+                photo_url
               ],
               metadata: {
                 category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
@@ -204,8 +238,7 @@ export const Product = list({
               name: resolvedData.name ? resolvedData.name : item.name,
               description: resolvedData.description ? resolvedData.description : item.description,
               images: [
-                // @ts-ignore
-                photo.image._meta.secure_url
+                photo_url
               ],
               metadata: {
                 category: resolvedData.categories ? resolvedData.categories[0] : 'uncategorized',
@@ -218,41 +251,9 @@ export const Product = list({
       }
 
     },
-    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
-
-      if (operation === 'create') {
-        try {
-          const photo = await context.db.ProductImage.findOne({
-            where: {
-              id: item.photoId
-            }
-          })
-
-          const product = await stripeConfig.products.update(
-            item.stripeProductId,
-            {
-              images: [
-                photo.image._meta.secure_url
-              ],
-            }
-          )
-        } catch (err) { console.warn(err) }
-
-      }
-
-      // if (operation === 'update') {
-      //   try {
+    // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
 
 
-      //   } catch (err) { console.warn(err) }
-      // }
-
-      if (operation === 'delete') {
-        const deleted = await stripeConfig.products.del(
-          item.stripeProductId,
-        );
-      }
-
-    },
+    // },
   },
 })

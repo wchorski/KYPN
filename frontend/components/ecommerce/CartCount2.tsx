@@ -24,7 +24,7 @@ const StyledDot = styled.div`
   color: var(--c-txt);
   padding: 0.2rem;
   position: absolute;
-  top: -15px;
+  top: -10px;
   right: 0;
   border-radius: 100px;
   line-height: 2rem;
