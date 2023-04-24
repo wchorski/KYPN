@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 
-export function ImageDynamic(photoIn: any) {
+export function ImageDynamic({ photoIn }: any) {
 
   const [state, setState] = useState<any>(handlePhoto(photoIn))
 
@@ -17,19 +17,13 @@ export function ImageDynamic(photoIn: any) {
 
 }
 
-function handlePhoto(photoIn: any) {
+function handlePhoto(photo: any) {
 
-  // todo why is this doubled?
-  const photo = photoIn.photoIn
-
-
-  console.log(photo);
-
-  console.log(photo?.image?.publicUrlTransformed);
+  // console.log(photo)
 
   if (photo?.image?.publicUrlTransformed) {
 
-    console.log('cloudinaryyyyy');
+    // console.log('cloudinaryyyyy');
 
     return {
       id: photo.id,

@@ -10,6 +10,7 @@ import { ImageDynamic } from './elements/ImageDynamic';
 
 export const ProductThumbnail = ({ id, name, description, price, photo }: any) => {
 
+
   return (
     <StyledProdThumbnail>
 

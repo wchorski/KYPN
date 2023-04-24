@@ -11,6 +11,7 @@ import { handlePhoto } from '../../lib/handleProductPhoto'
 import moneyFormatter from '../../lib/moneyFormatter'
 import OrderItem from './OrderItem'
 import { StyledCartItem } from '../../styles/CartItem.styled'
+import { ImageDynamic } from '../elements/ImageDynamic'
 
 export default function OrderReceipt() {
 
@@ -31,6 +32,9 @@ export default function OrderReceipt() {
   // console.log(data);
 
   const { order, charge } = data
+
+  // console.log(order.items);
+
 
   return (
     <StyledOrderReceipt>
@@ -63,14 +67,10 @@ export default function OrderReceipt() {
       <ul>
         {order?.items.map((item: any) => (
           // <OrderItem key={item.id} item={item} />
-          <StyledCartItem>
-            <Image
-              priority
-              src={handlePhoto(item.photo).image?.url}
-              alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no alt text'}
-              width={handlePhoto(item.photo).image?.width}
-              height={handlePhoto(item.photo).image?.height}
-            />
+          <StyledCartItem key={item.id}>
+
+            <ImageDynamic photoIn={item.photo} />
+
             <h5>{item.name}</h5>
             <span className="perItemTotal">
               {moneyFormatter(item.price * item.quantity)}

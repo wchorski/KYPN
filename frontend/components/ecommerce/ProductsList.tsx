@@ -22,6 +22,7 @@ export function ProductsList({ page }: ProdProps) {
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError />
+  // console.log({ data });
 
   return (
     <StyledProductsList>
@@ -70,17 +71,15 @@ export const GET_PAGE_PRODUCTS_QUERY = gql`
       description
       id
       name
+      price
+      status
       photo {
         id
         altText
         image {
-
           publicUrlTransformed
-
         }
       }
-      price
-      status
     }
   }
 `
@@ -91,6 +90,8 @@ export const GET_ALL_PRODUCTS = gql`
       id
       description
       name
+      price
+      status
       photo {
         id
         altText
@@ -98,8 +99,6 @@ export const GET_ALL_PRODUCTS = gql`
           publicUrlTransformed
         }
       }
-      price
-      status
     }
   }
 `
