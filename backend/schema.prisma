@@ -71,10 +71,11 @@ model SubscriptionPlan {
 
 model SubscriptionItem {
   id                 String            @id @default(uuid()) @postgresql.Uuid
-  price              Int?
+  custom_price       Int?
   subscriptionPlan   SubscriptionPlan? @relation("SubscriptionItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
   subscriptionPlanId String?           @map("subscriptionPlan") @postgresql.Uuid
   isActive           Boolean           @default(true)
+  isDelinquent       Boolean           @default(false)
   user               User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId             String?           @map("user") @postgresql.Uuid
 

@@ -209,6 +209,7 @@ export const SubscriptionPlan = list({
             unit_amount: resolvedData.price,
             currency: 'usd',
             product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
+            recurring: { interval: resolvedData.billing_interval ? resolvedData.billing_interval : item.billing_interval },
           })
 
           resolvedData.stripePriceId = newPrice.id

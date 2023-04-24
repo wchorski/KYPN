@@ -43,7 +43,7 @@ export const User = list({
     password: password({ validation: { isRequired: true } }),
     isAdmin: checkbox({ defaultValue: false }),
     isActive: checkbox({ defaultValue: true }),
-    stripeCustomerId: text({ defaultValue: 'NO_ID' }),
+    stripeCustomerId: text({ isIndexed: 'unique' }),
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below

@@ -629,9 +629,10 @@ input CategoryRelateToManyForCreateInput {
 
 type SubscriptionItem {
   id: ID!
-  price: Int
+  custom_price: Int
   subscriptionPlan: SubscriptionPlan
   isActive: Boolean
+  isDelinquent: Boolean
   user: User
 }
 
@@ -644,22 +645,25 @@ input SubscriptionItemWhereInput {
   OR: [SubscriptionItemWhereInput!]
   NOT: [SubscriptionItemWhereInput!]
   id: IDFilter
-  price: IntNullableFilter
+  custom_price: IntNullableFilter
   subscriptionPlan: SubscriptionPlanWhereInput
   isActive: BooleanFilter
+  isDelinquent: BooleanFilter
   user: UserWhereInput
 }
 
 input SubscriptionItemOrderByInput {
   id: OrderDirection
-  price: OrderDirection
+  custom_price: OrderDirection
   isActive: OrderDirection
+  isDelinquent: OrderDirection
 }
 
 input SubscriptionItemUpdateInput {
-  price: Int
+  custom_price: Int
   subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   isActive: Boolean
+  isDelinquent: Boolean
   user: UserRelateToOneForUpdateInput
 }
 
@@ -675,9 +679,10 @@ input SubscriptionItemUpdateArgs {
 }
 
 input SubscriptionItemCreateInput {
-  price: Int
+  custom_price: Int
   subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   isActive: Boolean
+  isDelinquent: Boolean
   user: UserRelateToOneForCreateInput
 }
 

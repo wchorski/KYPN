@@ -23,7 +23,7 @@ export const SubscriptionItem = list({
 
   fields: {
 
-    price: integer(),
+    custom_price: integer(),
 
     subscriptionPlan: relationship({
       ref: 'SubscriptionPlan.items',
@@ -36,6 +36,7 @@ export const SubscriptionItem = list({
       },
     }),
     isActive: checkbox({ defaultValue: true }),
+    isDelinquent: checkbox({ defaultValue: false }),
     user: relationship({
       ref: 'User.subscriptions',
       ui: {
@@ -68,11 +69,15 @@ export const SubscriptionItem = list({
       } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
-        console.log(resolvedData.subscriptionPlan.connect)
+        // console.log(resolvedData.subscriptionPlan.connect)
 
         const currUser = await context.db.User.findOne({ where: { id: resolvedData.user.connect.id } })
         const currSub = await context.db.SubscriptionPlan.findOne({ where: { id: resolvedData.subscriptionPlan.connect.id } })
         // console.log({ currSub });
+
+        if (!resolvedData.custom_price) {
+          // todo add this for sale or other stuff
+        }
 
         const subscription = await stripeConfig.subscriptions.create({
           // @ts-ignore
@@ -82,17 +87,11 @@ export const SubscriptionItem = list({
             { price: currSub?.stripePriceId, },
           ],
         })
-
-
-
-
       }
 
       if (operation === 'update') {
 
-
       }
-
     },
     // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
 

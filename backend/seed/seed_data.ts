@@ -981,20 +981,35 @@ export const subscriptions_seedjson = [
     "slug": "fruit-fiesta",
     "description": "Join the party with a fully loaded fruit basket every month!",
     "price": 30003,
-    "stockCount": 4
+    "stockCount": 4,
+    author: {
+      connect: {
+        email: 'adam@m.lan'
+      }
+    }
   },
   {
     "name": "The Double Trouble Fruity Bundle",
     "slug": "double-trouble-fruity-bundle",
     "description": "Twice the fruit, twice the fun! Receive a fully loaded fruit basket every two months.",
     "price": 160002,
-    "stockCount": 4
+    "stockCount": 4,
+    author: {
+      connect: {
+        email: 'adam@m.lan'
+      }
+    }
   },
   {
     "name": "The Great Fruit Escape",
     "slug": "great-fruit-escape",
     "description": "Escape into the world of fresh fruit every three months with a fully loaded fruit basket!",
     "price": 450009,
-    "stockCount": 4
+    "stockCount": 4,
+    author: {
+      connect: {
+        email: 'adam@m.lan'
+      }
+    }
   }
 ]
