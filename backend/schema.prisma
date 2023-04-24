@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_jaka6z22qd")
+  stripeCustomerId        String             @unique @default("NO_ID_mdp3537jat")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   cart                    CartItem[]         @relation("CartItem_user")

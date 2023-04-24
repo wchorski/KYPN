@@ -102,7 +102,7 @@ export const User = list({
 
             if (resolvedData && !resolvedData.user) {
               resolvedData.stripeCustomerId = customer.id
-            }
+            } ``
           })
           .catch(err => { console.warn(err) })
       }
