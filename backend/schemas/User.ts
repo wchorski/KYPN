@@ -24,8 +24,13 @@ export const User = list({
 
   ui: {
     // hide backend from non admins
-    hideCreate: args => !permissions.canManageUsers(args)
+    hideCreate: args => !permissions.canManageUsers(args),
+    // listView: {
+    //   initialColumns: ['', 'createdAt', 'user', 'createdAt']
+    // },
   },
+
+
 
   // this is the fields for our User list
   fields: {
@@ -43,7 +48,7 @@ export const User = list({
     password: password({ validation: { isRequired: true } }),
     isAdmin: checkbox({ defaultValue: false }),
     isActive: checkbox({ defaultValue: true }),
-    stripeCustomerId: text({ isIndexed: 'unique' }),
+    stripeCustomerId: text({ defaultValue: `NO_ID_${Math.random().toString(36).slice(2, 12)}`, isIndexed: 'unique' }),
 
     // we can use this field to see what Posts this User has authored
     //   more on that in the Post list below
@@ -65,7 +70,10 @@ export const User = list({
     products: relationship({ ref: 'Product.author', many: true }),
     subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
-    orders: relationship({ ref: 'Order.user', many: true }),
+    orders: relationship({
+      ref: 'Order.user',
+      many: true,
+    }),
     role: relationship({
       ref: 'Role.assignedTo',
       // todo add access control

@@ -57,8 +57,8 @@ const StyledLayout_WideWith = styled.div`
   main,
   nav#menu-main,
   footer{
-    outline: dotted 1px purple;
-    border: dotted 1px purple;
+    /* outline: dotted 1px purple; */
+    /* border: dotted 1px purple; */
     width: 100%;
     /* overflow: hidden; */
   }

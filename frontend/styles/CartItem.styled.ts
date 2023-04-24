@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const StyledCartItem = styled.li`
   padding: 1em 0;
   border-bottom: 1px solid var(--c-1);
-  display: grid;
+  display: flex;
+  justify-content: space-between;
   grid-template-columns: auto 1fr auto;
 
   img{
@@ -13,11 +14,19 @@ export const StyledCartItem = styled.li`
     object-fit: contain;
   }
 
-  h3, p{
+  h5, p{
     margin: 0;
   }
 
   em{
     font-size: 1rem;
+  }
+
+  h5{
+    margin-right: auto;
+  }
+
+  .perItemTotal{
+    padding: 0 1em;
   }
 `

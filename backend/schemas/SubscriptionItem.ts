@@ -21,6 +21,12 @@ export const SubscriptionItem = list({
     }
   },
 
+  ui: {
+    listView: {
+      initialColumns: ['user', 'subscriptionPlan', 'isActive', 'isDelinquent']
+    }
+  },
+
   fields: {
 
     custom_price: integer(),

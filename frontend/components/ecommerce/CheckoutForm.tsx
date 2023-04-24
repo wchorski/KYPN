@@ -15,7 +15,7 @@ const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY
 
 const stripeLib = loadStripe(STRIPE_KEY)
 
-function CheckoutForm() {
+function CheckoutFormChild() {
 
   const session = useUser()
 
@@ -86,10 +86,10 @@ function CheckoutForm() {
   )
 }
 
-export function Checkout() {
+export function CheckoutForm() {
   return (
     <Elements stripe={stripeLib}>
-      <CheckoutForm />
+      <CheckoutFormChild />
     </Elements>
   )
 }
