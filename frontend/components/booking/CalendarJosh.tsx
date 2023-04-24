@@ -14,6 +14,7 @@ interface indexProps {
   setDatePicked: any,
   times: string[] | undefined,
   setTimes: any,
+  timePicked: string | undefined,
   setTimePicked: any,
 }
 
@@ -26,7 +27,7 @@ const BUISNESS_HOURS_START = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_START
 const BUISNESS_HOURS_END = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_END)
 const BUISNESS_MINUTES_INTERVAL = Number(process.env.NEXT_PUBLIC_BUISNESS_MINUTES_INTERVAL)
 
-export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTimePicked, setTimes }) => {
+export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTimePicked, setTimes, timePicked }) => {
 
   // const [date, setDatePicked] = useState<DateType>({
   //   justDate: null,
@@ -65,8 +66,8 @@ export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTi
 
   function getTimes() {
     setTimes([
-      '9:00',
-      '9:30',
+      '09:00',
+      '09:30',
       '10:01',
       '10:50',
       '13:33',
@@ -88,8 +89,9 @@ export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTi
 
     // @ts-ignore
     const timeString = newDate.toLocaleTimeString('en-US', options);
+    const lowCaps = timeString.replace('AM', 'am').replace('PM', 'pm')
 
-    return timeString
+    return lowCaps
   }
 
 
@@ -105,14 +107,14 @@ export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTi
           setAnimTrig(animTrig + 1)
           getTimes()
         }}
-        value={date}
+      // value={date}
       />
 
 
       <StyledTimePicker key={animTrig} className={date ? 'open' : ''}>
         {times?.map((time, i) => (
           <li key={`time-${i}`}>
-            <button type='button' onClick={() => setTimePicked(time)}>
+            <button type='button' onClick={() => setTimePicked(time)} className={time === timePicked ? 'active' : ''}>
               {handleTimeFormat(time)}
             </button>
           </li>
@@ -128,6 +130,10 @@ const StyledTimePicker = styled.ul`
   transition: all .3s;
   animation: reveal  1s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+  .active{
+    background-color: var(--c-1);
+  }
 
   @keyframes reveal {
     0% { 
@@ -298,20 +304,30 @@ const StyledCalendar = styled.div`
   }
   .react-calendar__tile--now {
     border-radius: 15px;
-    border: 2px solid var(--c-3) !important;
+    border: 2px solid lightgray !important;
+    border-bottom: 2px solid var(--c-3) !important;
     color: var(--c-3);
+    position: relative;
+
+    /* &::after{
+      content: "*";
+      position: absolute;
+      top: 20%;
+      right: 40%;
+    } */
   }
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
     background-color: rgb(238 242 255);
   }
   .react-calendar__tile--hasActive {
-    background: #76baff;
+    background: #76ff8d;
   }
   .react-calendar__tile--hasActive:enabled:hover,
   .react-calendar__tile--hasActive:enabled:focus {
-    background: #a9d4ff;
+    background: #b6cb59;
   }
+  .react-calendar__tile--active,
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {
     background: var(--c-1);

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import useForm from "../../lib/useForm"
 import { CalendarJosh } from "../../components/booking/CalendarJosh"
 import { FormEvent, useState } from "react"
+import { times } from "lodash"
 
 // export interface DateType {
 //   justDate: Date | undefined,
@@ -14,7 +15,14 @@ export function BookingForm() {
 
   const [datePicked, setDatePicked] = useState<string | undefined>()
   const [timePicked, setTimePicked] = useState<string | undefined>()
-  const [times, setTimes] = useState<string[] | undefined>()
+  const [times, setTimes] = useState<string[] | undefined>([
+    '09:00',
+    '09:30',
+    '10:01',
+    '10:50',
+    '13:33',
+    '17:12',
+  ])
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     service: 'any',
@@ -22,7 +30,7 @@ export function BookingForm() {
     date: datePicked,
     time: timePicked,
     name: '',
-    email: undefined,
+    email: '',
     notes: ''
   })
 
@@ -42,6 +50,7 @@ export function BookingForm() {
           <label htmlFor="service">
             service
             <select name="service" id="service" onChange={handleChange}>
+              <option value="consult"> Consult </option>
               <option value="consult"> Consult </option>
               <option value="dj"> DJ Service </option>
               <option value="rental"> Rental Service </option>
@@ -63,17 +72,17 @@ export function BookingForm() {
 
         <fieldset>
           <legend> The When </legend>
-          <CalendarJosh date={datePicked} setDatePicked={setDatePicked} times={times} setTimePicked={setTimePicked} setTimes={setTimes} />
+          <CalendarJosh date={datePicked} setDatePicked={setDatePicked} times={times} setTimePicked={setTimePicked} setTimes={setTimes} timePicked={timePicked} />
 
           <label htmlFor="datePicked" className="display-none">
             date
-            <input name='datePicked' type="date" id="datePicked" value={datePicked} onChange={handleChange} />
+            <input name='datePicked' type="date" id="datePicked" defaultValue={datePicked} onChange={handleChange} />
           </label>
           <br />
 
           <label htmlFor="time" className="display-none">
             time
-            <input name='time' type="time" id="time" value={timePicked} onChange={handleChange} />
+            <input name='time' type="time" id="time" defaultValue={timePicked} onChange={handleChange} />
           </label>
         </fieldset>
 
@@ -118,6 +127,15 @@ const StyledBookingForm = styled.form`
   padding: 1em;
 
   .display-none{
-    display: none;
+    display: inline-block;
   }
 `
+
+// graphql query
+// - Services provided
+// - users that are an "employee"
+
+// - Users blackout dates and times
+
+
+// need to send email out when new email is confirmed.
