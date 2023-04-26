@@ -22,6 +22,7 @@ export const Tag = list({
     posts: relationship({ ref: 'Post.tags', many: true }),
     products: relationship({ ref: 'Product.tags', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionPlan.tags', many: true }),
-    bookings: relationship({ ref: 'Booking.tags', many: true }),
+    // bookings: relationship({ ref: 'Booking.tags', many: true }),
+    services: relationship({ ref: 'Service.tags', many: true }),
   },
 })

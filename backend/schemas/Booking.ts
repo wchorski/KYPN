@@ -1,8 +1,15 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { relationship, text, } from "@keystone-6/core/fields";
+import { calendarDay, relationship, text, } from "@keystone-6/core/fields";
 
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth() + 1; // add 1 because getMonth() returns zero-based index
+const day = now.getDate();
+const today = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+console.log(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
 
+// const rightnow = new Date().toISOString()
 
 export const Booking = list({
 
@@ -15,16 +22,10 @@ export const Booking = list({
 
 
   fields: {
-    name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    date: calendarDay({ defaultValue: today }),
+    service: relationship({ ref: 'Service.bookings', many: false }),
+    employees: relationship({ ref: 'User.gigs', many: true }),
+    customer: relationship({ ref: 'User.bookings', many: false }),
 
-    categories: relationship({
-      ref: 'Category.bookings',
-      many: true,
-    }),
-
-    tags: relationship({
-      ref: 'Tag.bookings',
-      many: true,
-    }),
   },
 })

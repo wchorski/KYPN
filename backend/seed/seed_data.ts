@@ -1013,3 +1013,39 @@ export const subscriptions_seedjson = [
     }
   }
 ]
+
+export const services_seedjson = [
+  {
+    "name": "Fruit Basket Service",
+    "price": 100010,
+    "durationInHours": "1.5",
+    "employees": {
+      "connect": [
+        { "email": "adam@m.lan" },
+        { "email": "eddy@m.lan" }
+      ]
+    }
+  },
+  {
+    "name": "Citrus Platter Service",
+    "price": 220000,
+    "durationInHours": "2.5",
+    "employees": {
+      "connect": [
+        { "email": "adam@m.lan" },
+        { "email": "eddy@m.lan" }
+      ]
+    }
+  },
+  {
+    "name": "Open Smoothie Bar",
+    "price": 33320000,
+    "durationInHours": "4.5",
+    "employees": {
+      "connect": [
+        { "email": "adam@m.lan" },
+        { "email": "eddy@m.lan" }
+      ]
+    }
+  }
+]

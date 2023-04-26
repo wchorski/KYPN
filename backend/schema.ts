@@ -45,15 +45,16 @@ import { Category } from './schemas/Category';
 import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 import { SubscriptionItem } from './schemas/SubscriptionItem';
 import { Booking } from './schemas/Booking';
+import { Service } from './schemas/Service';
 
 export const lists: Lists = {
   User,
   Role,
   Booking,
+  Service,
   SubscriptionPlan,
   SubscriptionItem,
   Product,
-  // @ts-ignore
   ProductImage,
   CartItem,
   OrderItem,

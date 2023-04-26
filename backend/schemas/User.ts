@@ -54,6 +54,9 @@ export const User = list({
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
     pages: relationship({ ref: 'Page.author', many: true }),
+    services: relationship({ ref: 'Service.employees', many: true }),
+    bookings: relationship({ ref: 'Booking.customer', many: true }),
+    gigs: relationship({ ref: 'Booking.employees', many: true }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,

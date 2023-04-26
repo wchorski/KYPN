@@ -17,12 +17,17 @@ export const Category = list({
   // this is the fields for our Tag list
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
-    description: text({ validation: { isRequired: true } }),
+    description: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     // this can be helpful to find out all the Posts associated with a Tag
     pages: relationship({ ref: 'Page.categories', many: true }),
     posts: relationship({ ref: 'Post.categories', many: true }),
     products: relationship({ ref: 'Product.categories', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
-    bookings: relationship({ ref: 'Booking.categories', many: true }),
+    // bookings: relationship({ ref: 'Booking.categories', many: true }),
+    services: relationship({ ref: 'Service.categories', many: true }),
   },
 })
