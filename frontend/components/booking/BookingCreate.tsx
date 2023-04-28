@@ -2,6 +2,8 @@ import { gql, useQuery } from "@apollo/client";
 import { BookingForm } from "./BookingForm";
 import { QueryLoading } from "../menus/QueryLoading";
 import { QueryError } from "../menus/QueryError";
+import { BookingForm2 } from "./BookingForm2";
+import { AnswerReveal } from "../elements/AnswerReveal";
 
 export function BookingCreate() {
 
@@ -14,7 +16,8 @@ export function BookingCreate() {
 
   return (
     <div>
-      <BookingForm services={services} />
+      {/* <BookingForm services={services} /> */}
+      <BookingForm2 services={services}/>
     </div>
   )
 }

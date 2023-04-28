@@ -8,7 +8,9 @@ import stripeConfig from "../lib/stripe";
 export const User = list({
   access: {
     filter: {
-      query: rules.canManageUsers,
+      // todo will this cause privacy problems with clients?
+      query: () => true,
+      // query: rules.canManageUsers,
       update: rules.canManageUsers,
       // delete: () => false,
     },

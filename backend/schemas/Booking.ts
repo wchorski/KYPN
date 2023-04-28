@@ -17,10 +17,14 @@ export const Booking = list({
 
   access: allowAll,
 
-  // todo hide these again
-  // ui: {
-  //   isHidden: true,
-  // },
+
+  ui: {
+    // hide backend from non admins
+    listView: {
+      initialColumns: ['dateTime', 'service', 'customer', 'employees'],
+      initialSort: { field: 'dateTime', direction: 'DESC'}
+    },
+  },
 
 
   fields: {

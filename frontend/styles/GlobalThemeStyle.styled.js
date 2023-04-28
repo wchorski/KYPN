@@ -79,7 +79,7 @@ export const GlobalStyles = createGlobalStyle`
     opacity: .7;
   }
 
-  a, button{cursor: pointer;}
+  a, button, select{cursor: pointer;}
 
   button{
     font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

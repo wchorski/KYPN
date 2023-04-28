@@ -109,7 +109,7 @@ export async function mailBookingCreated(id: string, to: string, name: string, e
       name,
       email,
       `
-        notes from booking: ${message}
+        ${message}
       `
     ),
     // html: makeANiceEmail(`

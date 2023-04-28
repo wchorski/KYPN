@@ -3,7 +3,7 @@ import Calendar from "react-calendar"
 import styled from "styled-components"
 import useForm from "../../lib/useForm"
 import { CalendarJosh } from "./CalendarJosh"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useEffect, useRef, useState } from "react"
 import { times } from "lodash"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
@@ -17,10 +17,12 @@ import { useUser } from "../menus/Session"
 // }
 
 export function BookingForm({ services }: { services: any }) {
-  console.log(services[0]);
-  console.log(services[0].employees);
+  // console.log(services[0]);
+  // console.log(services[0].employees);
 
   const session = useUser()
+
+  const formRef = useRef<HTMLFormElement>(null)
 
   const [isSuccess, setIsSuccess] = useState(false)
   const [employeesActive, setEmployeesActive] = useState<any>(services[0].employees)
@@ -42,8 +44,12 @@ export function BookingForm({ services }: { services: any }) {
     setEmployeesActive(services.find((x: any) => x.id === e.target.value).employees)
   }
 
+  
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    if(!formRef.current) return console.warn('form is missing');
+
     console.log({ inputs })
     const formattedInputs = {
       service: {
@@ -85,20 +91,19 @@ export function BookingForm({ services }: { services: any }) {
 
     console.log({ formattedInputs });
 
+    console.log(formRef.current.reportValidity());
+    
+
 
     // TODO fill in 'the who' if a customer is already logged in
 
-    const res = await gqlMutation({
-      // variables: {
-      //   data: inputs
-      // },
-      // refetchQueries: [{ query: GET_ALL_PRODUCTS }]
-      variables: {
-        data: formattedInputs
-      }
-    })
+    // const res = await gqlMutation({
+    //   variables: {
+    //     data: formattedInputs
+    //   }
+    // })
 
-    console.log('res', res)
+    // console.log('res', res)
     // if (res.data.createProduct) clearForm(); setIsSuccess(true)
 
     // Router.push({
@@ -146,7 +151,7 @@ export function BookingForm({ services }: { services: any }) {
       <ErrorMessage error={errorMutation} />
       {isSuccess && <p>Booking Created</p>}
 
-      <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)}>
+      <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef}>
         <fieldset>
           <legend>The What</legend>
 
@@ -161,7 +166,7 @@ export function BookingForm({ services }: { services: any }) {
               ))}
             </select>
           </label>
-          <br />
+
 
           {employeesActive.length > 0 && (
             <label htmlFor="staff">
@@ -184,13 +189,18 @@ export function BookingForm({ services }: { services: any }) {
 
           <label htmlFor="datePicked" className="display-none">
             date
-            <input name='datePicked' type="date" id="datePicked" required defaultValue={datePicked} onChange={handleChange} />
+            <input name='datePicked' type="date" id="datePicked" required 
+              title="Must pick a date. It can be an estimate and can be changed later"
+              defaultValue={datePicked} onChange={handleChange} 
+            />
           </label>
-          <br />
 
           <label htmlFor="time" className="display-none">
             time
-            <input name='time' type="time" id="time" required defaultValue={timePicked} onChange={handleChange} />
+            <input name='time' type="time" id="time" required 
+              title="Must pick a start time. It can be an estimate and can be changed later"
+              defaultValue={timePicked} onChange={handleChange} 
+            />
           </label>
         </fieldset>
 
@@ -201,19 +211,17 @@ export function BookingForm({ services }: { services: any }) {
             name
             <input name='name' type="text" id="name" onChange={handleChange} />
           </label>
-          <br />
 
           <label htmlFor="email">
             email
             <input name='email' type="text" id="email" required onChange={handleChange} />
           </label>
-          <br />
 
           <label htmlFor="phone">
             phone #
             <input name='phone' type="phone" id="phone" onChange={handleChange} />
           </label>
-          <br />
+
 
           <label htmlFor="notes">
             notes
@@ -235,13 +243,15 @@ const StyledBookingForm = styled.form`
   padding: 1em;
 
   .display-none{
-    display: none;
+    /* display: none; */
+    opacity: .1;
   }
 
   label{
     display: flex;
     flex-direction: column;
     max-width: 20rem;
+    margin-bottom: .5em;
 
     .notes{
       height: 10em;
