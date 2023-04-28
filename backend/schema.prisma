@@ -18,10 +18,10 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_o48ltksf07")
+  stripeCustomerId        String             @unique @default("NO_ID_ggc9q4pivy")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
-  services                Service[]          @relation("Service_employees")
+  servicesProvided        Service[]          @relation("Service_employees")
   bookings                Booking[]          @relation("Booking_customer")
   gigs                    Booking[]          @relation("Booking_employees")
   cart                    CartItem[]         @relation("CartItem_user")
@@ -52,13 +52,14 @@ model Role {
 }
 
 model Booking {
-  id         String    @id @default(uuid()) @postgresql.Uuid
-  date       DateTime? @default("2023-04-26") @postgresql.Date
-  service    Service?  @relation("Booking_service", fields: [serviceId], references: [id])
-  serviceId  String?   @map("service") @postgresql.Uuid
-  employees  User[]    @relation("Booking_employees")
-  customer   User?     @relation("Booking_customer", fields: [customerId], references: [id])
-  customerId String?   @map("customer") @postgresql.Uuid
+  id         String   @id @default(uuid()) @postgresql.Uuid
+  dateTime   DateTime
+  service    Service? @relation("Booking_service", fields: [serviceId], references: [id])
+  serviceId  String?  @map("service") @postgresql.Uuid
+  employees  User[]   @relation("Booking_employees")
+  customer   User?    @relation("Booking_customer", fields: [customerId], references: [id])
+  customerId String?  @map("customer") @postgresql.Uuid
+  notes      String   @default("")
 
   @@index([serviceId])
   @@index([customerId])

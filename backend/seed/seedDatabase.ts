@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -136,6 +136,25 @@ const seedSubscriptions = async (context: Context) => {
   });
 };
 
+const seedServices = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = services_seedjson;
+  const objectsAlreadyInDatabase = await db.Service.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+  );
+
+  console.log('Services seeded, ', { objsToCreate })
+
+  await db.Service.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 const seedProductImages = async (context: Context) => {
   const { db } = context.sudo();
   const seedObjects: any[] = productImage_seedjson;
@@ -184,5 +203,6 @@ export const seedDatabase = async (context: Context) => {
   await seedProductImages(context)
   await seedProducts(context)
   await seedSubscriptions(context)
+  await seedServices(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

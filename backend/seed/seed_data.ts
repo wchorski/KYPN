@@ -180,7 +180,7 @@ export const products_seed = [
         filename: 'cf-1.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -207,7 +207,7 @@ export const products_seed = [
         filename: 'cf-2.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -234,7 +234,7 @@ export const products_seed = [
         filename: 'cf-3.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -261,7 +261,7 @@ export const products_seed = [
         filename: 'cf-4.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -289,7 +289,7 @@ export const products_seed = [
         filename: 'cf-5.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -315,7 +315,7 @@ export const products_seed = [
         filename: 'cf-6.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -344,7 +344,7 @@ export const products_seed = [
         filename: 'cf-7.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -373,7 +373,7 @@ export const products_seed = [
         filename: 'cf-8.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -404,7 +404,7 @@ export const products_seed = [
         filename: 'cf-9.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -435,7 +435,7 @@ export const products_seed = [
         filename: 'cf-10.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -462,7 +462,7 @@ export const products_seed = [
         filename: 'cf-11.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -489,7 +489,7 @@ export const products_seed = [
         filename: 'cf-12.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -521,7 +521,7 @@ export const products_seed = [
         filename: 'cf-13.png'
       }
     },
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }
@@ -554,7 +554,7 @@ export const products_seed = [
       }
     },
 
-    user: {
+    author: {
       connect: {
         email: 'adam@m.lan'
       }

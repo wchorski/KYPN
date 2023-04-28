@@ -34,7 +34,7 @@ export const Service = list({
         min: '.5',
       },
     }),
-    employees: relationship({ ref: 'User.services', many: true }),
+    employees: relationship({ ref: 'User.servicesProvided', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),
 
     categories: relationship({

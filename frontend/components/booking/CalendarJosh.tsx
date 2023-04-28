@@ -77,9 +77,10 @@ export const CalendarJosh: FC<indexProps> = ({ date, setDatePicked, times, setTi
 
   function handleTimeFormat(time: string) {
     const newDate = new Date()
-    const hoursMinutes = time.split(':')
+    const hours = time.split(':')[0]
+    const mins = time.split(':')[1]
 
-    newDate.setHours(Number(hoursMinutes[0]), Number(hoursMinutes[1]))
+    newDate.setHours(Number(hours), Number(mins))
 
     const options = {
       hour: 'numeric',
