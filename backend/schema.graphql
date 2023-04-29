@@ -19,6 +19,8 @@ type User {
   bookingsCount(where: BookingWhereInput! = {}): Int
   gigs(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   gigsCount(where: BookingWhereInput! = {}): Int
+  availability(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
+  availabilityCount(where: AvailabilityWhereInput! = {}): Int
   cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
@@ -63,6 +65,7 @@ input UserWhereInput {
   servicesProvided: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
+  availability: AvailabilityManyRelationFilter
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   products: ProductManyRelationFilter
@@ -149,6 +152,12 @@ input BookingManyRelationFilter {
   none: BookingWhereInput
 }
 
+input AvailabilityManyRelationFilter {
+  every: AvailabilityWhereInput
+  some: AvailabilityWhereInput
+  none: AvailabilityWhereInput
+}
+
 input CartItemManyRelationFilter {
   every: CartItemWhereInput
   some: CartItemWhereInput
@@ -223,6 +232,7 @@ input UserUpdateInput {
   servicesProvided: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
+  availability: AvailabilityRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   products: ProductRelateToManyForUpdateInput
@@ -261,6 +271,13 @@ input BookingRelateToManyForUpdateInput {
   set: [BookingWhereUniqueInput!]
   create: [BookingCreateInput!]
   connect: [BookingWhereUniqueInput!]
+}
+
+input AvailabilityRelateToManyForUpdateInput {
+  disconnect: [AvailabilityWhereUniqueInput!]
+  set: [AvailabilityWhereUniqueInput!]
+  create: [AvailabilityCreateInput!]
+  connect: [AvailabilityWhereUniqueInput!]
 }
 
 input CartItemRelateToManyForUpdateInput {
@@ -321,6 +338,7 @@ input UserCreateInput {
   servicesProvided: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
+  availability: AvailabilityRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   products: ProductRelateToManyForCreateInput
@@ -351,6 +369,11 @@ input ServiceRelateToManyForCreateInput {
 input BookingRelateToManyForCreateInput {
   create: [BookingCreateInput!]
   connect: [BookingWhereUniqueInput!]
+}
+
+input AvailabilityRelateToManyForCreateInput {
+  create: [AvailabilityCreateInput!]
+  connect: [AvailabilityWhereUniqueInput!]
 }
 
 input CartItemRelateToManyForCreateInput {
@@ -704,6 +727,89 @@ input TagRelateToManyForCreateInput {
   connect: [TagWhereUniqueInput!]
 }
 
+type Availability {
+  id: ID!
+  dateTime: DateTime
+  durationInHours: Decimal
+  employee: User
+  type: String
+  status: String
+}
+
+input AvailabilityWhereUniqueInput {
+  id: ID
+}
+
+input AvailabilityWhereInput {
+  AND: [AvailabilityWhereInput!]
+  OR: [AvailabilityWhereInput!]
+  NOT: [AvailabilityWhereInput!]
+  id: IDFilter
+  dateTime: DateTimeFilter
+  durationInHours: DecimalFilter
+  employee: UserWhereInput
+  type: StringNullableFilter
+  status: StringNullableFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
+input AvailabilityOrderByInput {
+  id: OrderDirection
+  dateTime: OrderDirection
+  durationInHours: OrderDirection
+  type: OrderDirection
+  status: OrderDirection
+}
+
+input AvailabilityUpdateInput {
+  dateTime: DateTime
+  durationInHours: Decimal
+  employee: UserRelateToOneForUpdateInput
+  type: String
+  status: String
+}
+
+input AvailabilityUpdateArgs {
+  where: AvailabilityWhereUniqueInput!
+  data: AvailabilityUpdateInput!
+}
+
+input AvailabilityCreateInput {
+  dateTime: DateTime
+  durationInHours: Decimal
+  employee: UserRelateToOneForCreateInput
+  type: String
+  status: String
+}
+
 type SubscriptionPlan {
   id: ID!
   photo: ProductImage
@@ -749,35 +855,6 @@ input SubscriptionPlanWhereInput {
   stockCount: IntFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-}
-
-input NestedStringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringNullableFilter
 }
 
 input IntFilter {
@@ -1677,6 +1754,12 @@ type Mutation {
   updateServices(data: [ServiceUpdateArgs!]!): [Service]
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
+  createAvailability(data: AvailabilityCreateInput!): Availability
+  createAvailabilities(data: [AvailabilityCreateInput!]!): [Availability]
+  updateAvailability(where: AvailabilityWhereUniqueInput!, data: AvailabilityUpdateInput!): Availability
+  updateAvailabilities(data: [AvailabilityUpdateArgs!]!): [Availability]
+  deleteAvailability(where: AvailabilityWhereUniqueInput!): Availability
+  deleteAvailabilities(where: [AvailabilityWhereUniqueInput!]!): [Availability]
   createSubscriptionPlan(data: SubscriptionPlanCreateInput!): SubscriptionPlan
   createSubscriptionPlans(data: [SubscriptionPlanCreateInput!]!): [SubscriptionPlan]
   updateSubscriptionPlan(where: SubscriptionPlanWhereUniqueInput!, data: SubscriptionPlanUpdateInput!): SubscriptionPlan
@@ -1793,6 +1876,9 @@ type Query {
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   service(where: ServiceWhereUniqueInput!): Service
   servicesCount(where: ServiceWhereInput! = {}): Int
+  availabilities(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
+  availability(where: AvailabilityWhereUniqueInput!): Availability
+  availabilitiesCount(where: AvailabilityWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlan(where: SubscriptionPlanWhereUniqueInput!): SubscriptionPlan
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int

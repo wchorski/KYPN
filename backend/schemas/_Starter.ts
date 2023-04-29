@@ -10,7 +10,12 @@ export const STARTER = list({
 
   // todo hide these again
   // ui: {
-  //   isHidden: true,
+  //   // hide backend from non admins
+  // isHidden: true,
+  //   listView: {
+  //     initialColumns: ['dateTime', 'service', 'customer', 'employees'],
+  //     initialSort: { field: 'dateTime', direction: 'DESC'}
+  //   },
   // },
 
 

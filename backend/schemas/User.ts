@@ -61,6 +61,7 @@ export const User = list({
     servicesProvided: relationship({ ref: 'Service.employees', many: true }),
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
+    availability: relationship({ ref: 'Availability.employee', many: true }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,

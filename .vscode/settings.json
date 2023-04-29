@@ -1,9 +1,9 @@
 {
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#000",
-    "titleBar.inactiveForeground": "#000000CC",
-    "titleBar.activeBackground": "#FFC600",
-    "titleBar.inactiveBackground": "#FFC600CC"
+    "titleBar.inactiveForeground": "#1f1f1fcc",
+    "titleBar.activeBackground": "#77b071",
+    "titleBar.inactiveBackground": "#a6a6a6cc"
   },
   "emmet.includeLanguages": {
     "javascript": "javascriptreact",

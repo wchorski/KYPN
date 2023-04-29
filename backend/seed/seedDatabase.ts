@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { avail_seedjson, categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -20,6 +20,23 @@ const seedUsers = async (context: Context) => {
   console.log({ usersToCreate })
   await db.User.createMany({
     data: usersToCreate,
+  });
+};
+
+const seedAvail = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjs: any[] = avail_seedjson;
+  const objsAlreadyInDatabase = await db.Availability.findMany({
+    where: {
+      dateTime: { in: seedObjs.map(obj => obj.dateTime) },
+    },
+  });
+  const objsToCreate = seedObjs.filter(
+    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.dateTime === seedObj.dateTime)
+  )
+  console.log({ objsToCreate })
+  await db.Availability.createMany({
+    data: objsToCreate,
   });
 };
 
@@ -196,6 +213,7 @@ export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
   await seedUsers(context)
   await seedRoles(context)
+  // await seedAvail(context)
   await seedCategories(context)
   await seedTags(context)
   await seedPosts(context)

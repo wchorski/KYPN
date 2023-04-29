@@ -46,12 +46,14 @@ import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 import { SubscriptionItem } from './schemas/SubscriptionItem';
 import { Booking } from './schemas/Booking';
 import { Service } from './schemas/Service';
+import { Availability } from './schemas/Availability';
 
 export const lists: Lists = {
   User,
   Role,
   Booking,
   Service,
+  Availability,
   SubscriptionPlan,
   SubscriptionItem,
   Product,

@@ -87,3 +87,27 @@ export type OrderItem = {
   productId: string,
   photo: Photo
 }
+
+export type User = {
+  id: string,
+  name: string,
+  email: string,
+  password: string,
+  isAdmin: boolean,
+  isActive: boolean,
+  stripeCustomerId: string,
+  posts: any[],
+  pages: any[],
+  servicesProvided: any[],
+  bookings: any[],
+  gigs: any[],
+  availability: any[],
+  cart: CartItem[],
+  createdAt: string,
+  products: Product[],
+  subscriptionPlans: any[],
+  subscriptions: any[],
+  orders: OrderItem[],
+  role: any,
+
+}

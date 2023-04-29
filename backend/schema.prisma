@@ -18,12 +18,13 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_bicou4i6qj")
+  stripeCustomerId        String             @unique @default("NO_ID_p7fapmuvk3")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
   bookings                Booking[]          @relation("Booking_customer")
   gigs                    Booking[]          @relation("Booking_employees")
+  availability            Availability[]     @relation("Availability_employee")
   cart                    CartItem[]         @relation("CartItem_user")
   createdAt               DateTime?          @default(now())
   products                Product[]          @relation("Product_author")
@@ -76,6 +77,18 @@ model Service {
   bookings         Booking[]  @relation("Booking_service")
   categories       Category[] @relation("Category_services")
   tags             Tag[]      @relation("Service_tags")
+}
+
+model Availability {
+  id              String   @id @default(uuid()) @postgresql.Uuid
+  dateTime        DateTime
+  durationInHours Decimal  @default("24") @postgresql.Decimal(5, 2)
+  employee        User?    @relation("Availability_employee", fields: [employeeId], references: [id])
+  employeeId      String?  @map("employee") @postgresql.Uuid
+  type            String?  @default("VACATION")
+  status          String?  @default("APPROVED")
+
+  @@index([employeeId])
 }
 
 model SubscriptionPlan {

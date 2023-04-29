@@ -1049,3 +1049,60 @@ export const services_seedjson = [
     }
   }
 ]
+
+export const avail_seedjson = [
+  {
+    dateTime: '2023-12-01T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'adam@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+  {
+    dateTime: '2023-12-02T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'adam@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+  {
+    dateTime: '2023-12-03T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'adam@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+  {
+    dateTime: '2023-05-01T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'eddy@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+  {
+    dateTime: '2023-05-02T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'eddy@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+  {
+    dateTime: '2023-05-03T00:00:00+00:00',
+    durationInHours: '24',
+    employee: {
+      connect: { email: 'eddy@m.lan'},   
+    },
+    type: 'VACATION',
+    status: 'APPROVED',
+  },
+]
