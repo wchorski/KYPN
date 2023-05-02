@@ -497,12 +497,15 @@ input UserRelateToManyForCreateInput {
 type Booking {
   id: ID!
   dateTime: DateTime
+  durationInHours: Decimal
   service: Service
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
   customer: User
   notes: String
 }
+
+scalar Decimal
 
 input BookingWhereUniqueInput {
   id: ID
@@ -514,6 +517,7 @@ input BookingWhereInput {
   NOT: [BookingWhereInput!]
   id: IDFilter
   dateTime: DateTimeFilter
+  durationInHours: DecimalFilter
   service: ServiceWhereInput
   employees: UserManyRelationFilter
   customer: UserWhereInput
@@ -531,14 +535,27 @@ input DateTimeFilter {
   not: DateTimeFilter
 }
 
+input DecimalFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalFilter
+}
+
 input BookingOrderByInput {
   id: OrderDirection
   dateTime: OrderDirection
+  durationInHours: OrderDirection
   notes: OrderDirection
 }
 
 input BookingUpdateInput {
   dateTime: DateTime
+  durationInHours: Decimal
   service: ServiceRelateToOneForUpdateInput
   employees: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
@@ -564,6 +581,7 @@ input BookingUpdateArgs {
 
 input BookingCreateInput {
   dateTime: DateTime
+  durationInHours: Decimal
   service: ServiceRelateToOneForCreateInput
   employees: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
@@ -585,7 +603,6 @@ type Service {
   name: String
   description: String
   price: Int
-  durationInHours2: Decimal
   durationInHours: Decimal
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
@@ -596,8 +613,6 @@ type Service {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
 }
-
-scalar Decimal
 
 input ServiceWhereUniqueInput {
   id: ID
@@ -612,7 +627,6 @@ input ServiceWhereInput {
   name: StringFilter
   description: StringFilter
   price: IntNullableFilter
-  durationInHours2: DecimalNullableFilter
   durationInHours: DecimalFilter
   employees: UserManyRelationFilter
   bookings: BookingManyRelationFilter
@@ -629,28 +643,6 @@ input IntNullableFilter {
   gt: Int
   gte: Int
   not: IntNullableFilter
-}
-
-input DecimalNullableFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalNullableFilter
-}
-
-input DecimalFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalFilter
 }
 
 input CategoryManyRelationFilter {
@@ -670,7 +662,6 @@ input ServiceOrderByInput {
   name: OrderDirection
   description: OrderDirection
   price: OrderDirection
-  durationInHours2: OrderDirection
   durationInHours: OrderDirection
 }
 
@@ -678,7 +669,6 @@ input ServiceUpdateInput {
   name: String
   description: String
   price: Int
-  durationInHours2: Decimal
   durationInHours: Decimal
   employees: UserRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
@@ -709,7 +699,6 @@ input ServiceCreateInput {
   name: String
   description: String
   price: Int
-  durationInHours2: Decimal
   durationInHours: Decimal
   employees: UserRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput

@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_p7fapmuvk3")
+  stripeCustomerId        String             @unique @default("NO_ID_zpzrh8t6c6")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
@@ -53,30 +53,30 @@ model Role {
 }
 
 model Booking {
-  id         String   @id @default(uuid()) @postgresql.Uuid
-  dateTime   DateTime
-  service    Service? @relation("Booking_service", fields: [serviceId], references: [id])
-  serviceId  String?  @map("service") @postgresql.Uuid
-  employees  User[]   @relation("Booking_employees")
-  customer   User?    @relation("Booking_customer", fields: [customerId], references: [id])
-  customerId String?  @map("customer") @postgresql.Uuid
-  notes      String   @default("")
+  id              String   @id @default(uuid()) @postgresql.Uuid
+  dateTime        DateTime
+  durationInHours Decimal  @default("24") @postgresql.Decimal(5, 2)
+  service         Service? @relation("Booking_service", fields: [serviceId], references: [id])
+  serviceId       String?  @map("service") @postgresql.Uuid
+  employees       User[]   @relation("Booking_employees")
+  customer        User?    @relation("Booking_customer", fields: [customerId], references: [id])
+  customerId      String?  @map("customer") @postgresql.Uuid
+  notes           String   @default("")
 
   @@index([serviceId])
   @@index([customerId])
 }
 
 model Service {
-  id               String     @id @default(uuid()) @postgresql.Uuid
-  name             String     @unique @default("")
-  description      String     @default("")
-  price            Int?       @default(0)
-  durationInHours2 Decimal?   @default("1") @postgresql.Decimal(18, 4)
-  durationInHours  Decimal    @default("1.0") @map("my_decimal") @postgresql.Decimal(2, 1)
-  employees        User[]     @relation("Service_employees")
-  bookings         Booking[]  @relation("Booking_service")
-  categories       Category[] @relation("Category_services")
-  tags             Tag[]      @relation("Service_tags")
+  id              String     @id @default(uuid()) @postgresql.Uuid
+  name            String     @unique @default("")
+  description     String     @default("")
+  price           Int?       @default(0)
+  durationInHours Decimal    @default("24") @postgresql.Decimal(5, 2)
+  employees       User[]     @relation("Service_employees")
+  bookings        Booking[]  @relation("Booking_service")
+  categories      Category[] @relation("Category_services")
+  tags            Tag[]      @relation("Service_tags")
 }
 
 model Availability {

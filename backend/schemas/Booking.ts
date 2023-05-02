@@ -3,9 +3,11 @@
 import {parseISO, isAfter, isBefore, isEqual} from 'date-fns';
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { calendarDay, relationship, text, timestamp, } from "@keystone-6/core/fields";
+import { calendarDay, decimal, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
 import { User } from '../types'
+import { dateCheckAvail } from '../lib/dateCheck';
+import { DateTime } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 
 const now = new Date();
 const year = now.getFullYear();
@@ -34,6 +36,16 @@ export const Booking = list({
   fields: {
     // date: calendarDay({ validation: { isRequired: true } }),
     dateTime: timestamp({ validation: { isRequired: true } }),
+    durationInHours: decimal({
+      defaultValue: '24',
+      precision: 5,
+      scale: 2,
+      validation: {
+        isRequired: true,
+        max: '24',
+        min: '.25',
+      },
+    }),
     service: relationship({ ref: 'Service.bookings', many: false }),
     employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
@@ -55,7 +67,7 @@ export const Booking = list({
       // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
-        console.log(resolvedData.employees.connect)
+        // console.log(resolvedData.employees.connect)
         
 
         const bookedEmployees = await context.query.User.findMany({ 
@@ -69,18 +81,27 @@ export const Booking = list({
               status
               durationInHours
             }
+            gigs {
+              dateTime
+              durationInHours
+            }
+
           `
         })
         console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
         bookedEmployees.map(emp => {
           console.log('---------')
           console.log(emp.name)
-          emp.availability.map((avail:any) => {
-            console.log(avail.dateTime, avail.type, avail.status, avail.durationInHours);
-            
-          })
-          
-          
+
+          if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.availability))
+            console.log(`+++ Date is Available for ${emp.name}`)
+           else 
+            throw new Error(`CONFLICT: vacation day for ${emp.name}`)
+
+          if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.gigs))
+            console.log(`+++ Date is Available for ${emp.name}`)
+           else 
+            throw new Error(`CONFLICT: double booking ${emp.name} `)
         })
         
         // console.log({ currSub });

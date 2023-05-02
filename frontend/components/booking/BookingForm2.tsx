@@ -246,7 +246,7 @@ export function BookingForm2({ services }: { services: any }) {
             <FormInput 
               {...handleFindProps('service')}
               value={values['service']}
-              onChange={(e:React.ChangeEvent<HTMLSelectElement>) => {
+              onChange={(e:any) => {
                 onChange(e) 
                 handleEmployeeUpdate(e)
               }}
@@ -272,33 +272,33 @@ export function BookingForm2({ services }: { services: any }) {
             <FormInput 
               {...handleFindProps('date')}
               defaultValue={values['date']}
-              disabled
+              // disabled
               onChange={onChange}
               className="hide"
             />
 
-            <CalendarTime 
+            {/* <CalendarTime 
               values={values} 
               setValues={setValues} 
               times={times} 
               setTimes={setTimes} 
               />
-            <br/> 
+            <br/>  */}
 
             <FormInput 
               {...handleFindProps('time')}
               defaultValue={values['time']}
               onChange={onChange}
-              disabled
+              // disabled
               className="hide"
             />
 
-            <TimePicker 
+            {/* <TimePicker 
               values={values} 
               setValues={setValues} 
               times={times} 
               setTimes={setTimes} 
-            />
+            /> */}
             
           </HeightReveal>
         </fieldset>

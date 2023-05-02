@@ -22,16 +22,14 @@ export const Service = list({
       }
     }),
     price: integer({ defaultValue: 0 }),
-    durationInHours2: decimal({ defaultValue: '1' }),
     durationInHours: decimal({
-      defaultValue: '1.0',
-      precision: 2,
-      scale: 1,
-      db: { map: 'my_decimal' },
+      defaultValue: '24',
+      precision: 5,
+      scale: 2,
       validation: {
         isRequired: true,
         max: '24',
-        min: '.5',
+        min: '.25',
       },
     }),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
