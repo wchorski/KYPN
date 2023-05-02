@@ -104,25 +104,11 @@ export const Booking = list({
             throw new Error(`CONFLICT: double booking ${emp.name} `)
         })
         
-        // console.log({ currSub });
-
-        // if (!resolvedData.custom_price) {
-        //   // todo add this for sale or other stuff
-        // }
-
-        // const subscription = await stripeConfig.subscriptions.create({
-        //   // @ts-ignore
-        //   customer: currUser.stripeCustomerId,
-        //   items: [
-        //     // @ts-ignore
-        //     { price: currSub?.stripePriceId, },
-        //   ],
-        // })
       }
 
-      if (operation === 'update') {
+      // if (operation === 'update') {
 
-      }
+      // }
     },
     afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
       if (operation === 'create') {
@@ -135,6 +121,8 @@ export const Booking = list({
         }
         // console.log({ item });
         // console.log({ resolvedData });
+        // todo email employees and customer too
+        
         mailBookingCreated(
           item.id,
           EMAIL_ADDRESS,

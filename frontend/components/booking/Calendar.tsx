@@ -1,100 +1,24 @@
 // cred - https://www.youtube.com/watch?v=ecjaXnL2CUs&list=PLdoAUl4PfSFs_9yDIf-HODc6nPteNCww9&index=1
-import { FC, useEffect, useState } from 'react'
+import { useState } from 'react'
 import Calendar from 'react-calendar'
 import { add, format } from "date-fns";
 import styled from 'styled-components';
-// import { DateType } from '../../pages/booking/BookingForm';
 
-// interface DateType {
-//   justDate: Date | null,
-//   dateTime: Date | null,
-// }
-interface iProps {
-  values: any | undefined,
+type iProps = {
+  blackoutStrings: string[]
   setValues: any,
-  times: string[] | undefined,
-  setTimes: any,
-}
 
-// interface DateType {
-//   justDate: Date | null,
-//   dateTime: Date | null,
-// }
+}
 
 const BUISNESS_HOURS_START = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_START)
 const BUISNESS_HOURS_END = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_END)
 const BUISNESS_MINUTES_INTERVAL = Number(process.env.NEXT_PUBLIC_BUISNESS_MINUTES_INTERVAL)
 
 
-// setValues(prev => ({...prev, date: }))
+export const CalendarDatePicker = ({ setValues, blackoutStrings}:iProps) => {
 
-export const CalendarTime: FC<iProps> = ({ values, setValues, times,  setTimes }) => {
-
-  // const [date, setDatePicked] = useState<DateType>({
-  //   justDate: null,
-  //   dateTime: null,
-  // })
+  const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
-
-  // function getTimes() {
-  //   if (!date) return
-  //   if (!BUISNESS_MINUTES_INTERVAL || !BUISNESS_HOURS_END || !BUISNESS_HOURS_START) return console.error('SET ENV VARIABLES');
-
-  //   const { justDate } = date
-
-  //   const bookStart = add(justDate, { hours: 9 })
-  //   const bookEnd = add(justDate, { hours: 12 })
-  //   const interval = BUISNESS_MINUTES_INTERVAL
-
-  //   const times = []
-  //   for (let i = bookStart; i <= bookEnd; i = add(i, { minutes: interval })) {
-  //     times.push(i)
-  //   }
-
-  //   return times
-  // }
-
-  // const times = getTimes()
-
-  // useEffect(() => {
-  //   console.log(date);
-  //   if (!date) return
-  //   // console.log(format(date, 'yyyy-MM-dd'));
-
-
-  //   // return () => 
-  // }, [date])
-
-  // function getTimes() {
-  //   setTimes([
-  //     '09:00',
-  //     '09:30',
-  //     '10:01',
-  //     '10:50',
-  //     '13:33',
-  //     '17:12',
-  //   ])
-  // }
-
-  // function handleTimeFormat(time: string) {
-  //   const newDate = new Date()
-  //   const hours = time.split(':')[0]
-  //   const mins = time.split(':')[1]
-
-  //   newDate.setHours(Number(hours), Number(mins))
-
-  //   const options = {
-  //     hour: 'numeric',
-  //     minute: 'numeric',
-  //     hour12: true
-  //   };
-
-  //   // @ts-ignore
-  //   const timeString = newDate.toLocaleTimeString('en-US', options);
-  //   const lowCaps = timeString.replace('AM', 'am').replace('PM', 'pm')
-
-  //   return lowCaps
-  // }
 
 
   return (
@@ -109,44 +33,15 @@ export const CalendarTime: FC<iProps> = ({ values, setValues, times,  setTimes }
           // setAnimTrig(animTrig + 1)
           // getTimes()
         }}
+        tileDisabled={({date}) => blackoutDates.includes(date.getDate()) }
       // value={date}
       />
-
-
-      {/* <StyledTimePicker key={animTrig} className={values['date'] ? 'open' : ''}>
-        {times?.map((time, i) => (
-          <li key={`time-${i}`}>
-            <button type='button' className={time === values['time'] ? 'active' : ''}
-              onClick={() => setValues((prev:any) => ({...prev, time: time}))} >
-              {handleTimeFormat(time)}
-            </button>
-          </li>
-        ))}
-      </StyledTimePicker> */}
-
 
     </StyledCalendar>
   )
 }
 
-// const StyledTimePicker = styled.ul`
-//   transition: all .3s;
-//   animation: reveal  1s;
-//   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
-//   .active{
-//     background-color: var(--c-1);
-//   }
-
-//   @keyframes reveal {
-//     0% { 
-//       opacity: .2;
-//     }
-//     100% { 
-//       opacity: 1;
-//     }
-//   }
-// `
 
 const StyledCalendar = styled.div`
 
@@ -212,6 +107,7 @@ const StyledCalendar = styled.div`
   .react-calendar__navigation button:disabled {
     visibility: hidden;
     background-color: #f0f0f0;
+    cursor: default;
   }
   .react-calendar__navigation button:enabled:hover,
   .react-calendar__navigation button:enabled:focus {
@@ -300,6 +196,7 @@ const StyledCalendar = styled.div`
     background-color: #f0f0f0;
     color: rgba(107 114 128 / 18%);
     text-decoration: line-through;
+    cursor: default;
   }
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {

@@ -4,10 +4,10 @@ interface iProps {
   values: any | undefined,
   setValues: any,
   times: string[] | undefined,
-  setTimes: any,
 }
 
 export function TimePicker({values, setValues, times}:iProps) {
+  
 
   function handleTimeFormat(time: string) {
     const newDate = new Date()
@@ -47,6 +47,7 @@ const StyledTimePicker = styled.ul`
   transition: all .3s;
   animation: reveal  1s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  column-count: 3;
 
   .active{
     background-color: var(--c-1);

@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, relationship, text, timestamp } from "@keystone-6/core/fields";
-
+import { decimal, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { timesArray } from "../lib/timeArrayCreator";
 
 
 export const Service = list({
@@ -23,7 +23,7 @@ export const Service = list({
     }),
     price: integer({ defaultValue: 0 }),
     durationInHours: decimal({
-      defaultValue: '24',
+      defaultValue: '6',
       precision: 5,
       scale: 2,
       validation: {
@@ -32,9 +32,24 @@ export const Service = list({
         min: '.25',
       },
     }),
+    buisnessHourOpen: select({
+      options: timesArray(),
+      defaultValue: '09:00',
+      ui: {
+        displayMode: 'select',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    buisnessHourClosed: select({
+      options: timesArray(),
+      defaultValue: '18:00',
+      ui: {
+        displayMode: 'select',
+      }
+    }),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),
-
+    
     categories: relationship({
       ref: 'Category.services',
       many: true,

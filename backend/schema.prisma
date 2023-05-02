@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_zpzrh8t6c6")
+  stripeCustomerId        String             @unique @default("NO_ID_x8rtow2pxj")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
@@ -68,15 +68,17 @@ model Booking {
 }
 
 model Service {
-  id              String     @id @default(uuid()) @postgresql.Uuid
-  name            String     @unique @default("")
-  description     String     @default("")
-  price           Int?       @default(0)
-  durationInHours Decimal    @default("24") @postgresql.Decimal(5, 2)
-  employees       User[]     @relation("Service_employees")
-  bookings        Booking[]  @relation("Booking_service")
-  categories      Category[] @relation("Category_services")
-  tags            Tag[]      @relation("Service_tags")
+  id                 String     @id @default(uuid()) @postgresql.Uuid
+  name               String     @unique @default("")
+  description        String     @default("")
+  price              Int?       @default(0)
+  durationInHours    Decimal    @default("6") @postgresql.Decimal(5, 2)
+  buisnessHourOpen   String?    @default("09:00")
+  buisnessHourClosed String?    @default("18:00")
+  employees          User[]     @relation("Service_employees")
+  bookings           Booking[]  @relation("Booking_service")
+  categories         Category[] @relation("Category_services")
+  tags               Tag[]      @relation("Service_tags")
 }
 
 model Availability {

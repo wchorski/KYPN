@@ -2,29 +2,35 @@
 import Calendar from "react-calendar"
 import styled from "styled-components"
 import useForm from "../../lib/useForm"
-import { CalendarJosh } from "./CalendarJosh"
 import { FormEvent, ReactElement, ReactNode, useEffect, useRef, useState } from "react"
-import { times } from "lodash"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 import { QueryLoading } from "../menus/QueryLoading"
 import { QueryError } from "../menus/QueryError"
 import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
-import { CalendarTime } from "./Calendar"
+import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
+import { timesArray } from "../../lib/timesArrayCreator"
+// import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
 //   justDate: Date | undefined,
 //   dateTime: Date | null,
 // }
 
+type iProps = {
+  services: any,
+  // employee: any,
+  // setEmployeeId: any,
+}
+
 enum STAFF_STATE {
   SELECTED = 'selected',
   NOT_SELECTED=  'not_selected',
 }
 
-export function BookingForm2({ services }: { services: any }) {
+export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
 
@@ -33,21 +39,17 @@ export function BookingForm2({ services }: { services: any }) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [animTrig, setAnimTrig] = useState(0)
   
+  const [pickedService, setPickedService] = useState<any>()
+  const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
-  const [datePicked, setDatePicked] = useState<string | undefined>()
-  const [timePicked, setTimePicked] = useState<string | undefined>()
-  // todo make this dynamic!!
-  const [times, setTimes] = useState<string[] | undefined>([
-    '09:00',
-    '09:30',
-    '10:01',
-    '10:50',
-    '13:33',
-    '17:12',
-  ])
+  const [blackoutDates, setBlackoutDates] = useState([])
+
+
+  const [times, setTimes] = useState<string[] | undefined>([])
   const [values, setValues] = useState({
     service: "",
     staff: "",
+    // datetime_local: '',
     date: '',
     time: '',
     name: "",
@@ -77,6 +79,14 @@ export function BookingForm2({ services }: { services: any }) {
       label: 'Staff Member',
       required: false,
     },
+    // {
+    //   id: 3,
+    //   name: 'datetime_local',
+    //   type: 'datetime-local',
+    //   label: 'Date & Start Time',
+    //   errorMessage: 'Must pick a date. It can be an estimate and can be changed later',
+    //   required: true,
+    // },
     {
       id: 3,
       name: "date",
@@ -98,7 +108,7 @@ export function BookingForm2({ services }: { services: any }) {
       id: 5,
       name: "name",
       type: "text",
-      placeholder: "name...",
+      placeholder: "John Wick...",
       errorMessage:
         "name should be 3-16 characters and shouldn't include any special character!",
       label: "name",
@@ -109,7 +119,7 @@ export function BookingForm2({ services }: { services: any }) {
       id: 6,
       name: "email",
       type: "email",
-      placeholder: "email...",
+      placeholder: "John@Wick.com...",
       errorMessage: "It should be a valid email address!",
       label: "Email",
       required: true,
@@ -118,7 +128,7 @@ export function BookingForm2({ services }: { services: any }) {
       id: 6,
       name: "phone",
       type: "phone",
-      placeholder: "123 456 7890",
+      placeholder: "123 456 7890...",
       errorMessage: 'Please format phone number to "123 456 7890" ',
       // hint: 'format "123 456 7890" ',
       // todo this only validates US numbers
@@ -137,21 +147,16 @@ export function BookingForm2({ services }: { services: any }) {
     },
   ];
 
-  // function handleEmployeeUpdate(e: React.ChangeEvent<HTMLSelectElement>) {
-  //   // console.log(e.target.value)
-  //   setEmployeeOptions(services.find((x: any) => x.id === e.target.value).employees)
-  // }
-
   
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if(!formRef.current) return console.warn('form is missing');
 
-    console.log({ values })
+    // console.log({ values })
     const formattedInputs = {
-      dateTime: `${values.date}T${values.time}:00.000Z`,
-      // notes: inputs.name + ' \n' + inputs.email + ' \n\n' + inputs.notes
+      dateTime: new Date(`${values.date}T${values.time}`).toISOString(),
+      // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
     }
 
@@ -166,8 +171,6 @@ export function BookingForm2({ services }: { services: any }) {
     }
 
     if (values.staff !== '' ) {
-      console.log('staff selected, ', values.staff);
-      
       Object.assign(formattedInputs, {
         employees: {
           connect: [
@@ -178,7 +181,6 @@ export function BookingForm2({ services }: { services: any }) {
     }
 
     if (session) {
-      console.log(session.id + ' : ' + session.name);
       Object.assign(formattedInputs, {
         customer: {
           connect: {
@@ -193,7 +195,7 @@ export function BookingForm2({ services }: { services: any }) {
     // console.log(formRef.current.reportValidity());
     
     // TODO fill in 'the who' if a customer is already logged in
-
+    console.log({ formattedInputs })
     const res = await gqlMutation({
       variables: {
         data: formattedInputs
@@ -201,8 +203,8 @@ export function BookingForm2({ services }: { services: any }) {
     })
 
     console.log('res', res)
-    // if (res.data.createProduct) clearForm(); setIsSuccess(true)
-
+    // todo show booking success message
+    if (res.data.createProduct) setIsSuccess(true)
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
     // })
@@ -211,19 +213,48 @@ export function BookingForm2({ services }: { services: any }) {
 
   const [gqlMutation, { loading: loadingMutation, error: errorMutation, data: dataMutation }] = useMutation(MUTATE_BOOKING_CREATE)
 
-  function handleEmployeeUpdate(e:React.ChangeEvent<HTMLSelectElement>){
-    const foundEmpl = services.find((x: any) => x.id === e.target.value)?.employees
-    if(!foundEmpl) return []
-    const formatted = foundEmpl.map((empl:any) => { return {value: empl.id, label: empl.name} } )
-    // console.log({formatted});
+  function handleServicePicked(id:string){
+    const foundService = services.find((x: any) => x.id === id)
+    setPickedService(foundService)
+
+    setTimes(timesArray(
+      foundService.buisnessHourOpen,
+      foundService.buisnessHourClosed,
+      foundService.durationInHours,
+    ))
+
+    handleEmployeeUpdate(id)
+  }
+
+  function handleEmployeeUpdate(id:string){
+    setServiceId(id)
+    const foundEmpls = services.find((x: any) => x.id === id)?.employees
+    if(!foundEmpls) return []
     
+    const formatted = foundEmpls.map((empl:any) => { return {value: empl.id, label: empl.name} } )
     setEmployeeOptions(formatted)
+  }
+
+  function handleBlackoutDates(id:string){
+    
+    const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
+    if(!selectedEmpl) return setBlackoutDates([])
+
+    const blackoutArray:any = []
+    
+    selectedEmpl.gigs.map((gig:any) => {blackoutArray.push(gig.dateTime)})
+    selectedEmpl.availability.map((avail:any) => {
+      if(avail.type === 'AVAILABLE') return console.warn('date is available for employee')
+      
+      blackoutArray.push(avail.dateTime)
+    })
+
+    setBlackoutDates(blackoutArray)
   }
 
   const onChange = (e: any) => {
     setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
+  }
   
   function handleFindProps(name:string){
     const foundObj = inputs.find(obj => {
@@ -237,106 +268,127 @@ export function BookingForm2({ services }: { services: any }) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && <p>Booking Created</p>}
+      {isSuccess && <p className="msg success">Booking Created</p>}
 
-      <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef} >
-        <fieldset>
-          <legend>The What</legend>
-          <HeightReveal isShown={true}>
-            <FormInput 
-              {...handleFindProps('service')}
-              value={values['service']}
-              onChange={(e:any) => {
-                onChange(e) 
-                handleEmployeeUpdate(e)
-              }}
-            />
+      {!isSuccess && (
 
-            {employeeOptions.length > 0 && (
+      
+        <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef} >
+          <fieldset>
+            <legend>The What</legend>
+            <HeightReveal className="service-staff-cont" isShown={true}>
+              <FormInput 
+                {...handleFindProps('service')}
+                value={values['service']}
+                onChange={(e:any) => {
+                  onChange(e) 
+                  handleServicePicked(e.target.value)
+                  // handleEmployeeUpdate(e.target.value)
+                }}
+              />
+
+              {employeeOptions.length > 0 && (
+
+                <FormInput 
+                  {...handleFindProps('staff')}
+                  value={values['staff']}
+                  onChange={(e:any) => {
+                    onChange(e)
+                    // setEmployeeId(e.target.value)
+                    handleBlackoutDates(e.target.value)
+                  }}
+                  key={employeeOptions}
+                />
+              )}
+
+            </HeightReveal>
+          </fieldset>
+
+          <fieldset >
+            <legend> The When </legend>
+            <HeightReveal className='datetime-cont' isShown={values.service ? true : false}>
+
+              {/* <FormInput 
+                {...handleFindProps('datetime_local')}
+                defaultValue={values['datetime_local']}
+                disabled
+                onChange={onChange}
+                // className="hide"
+              /> */}
+              <div>            
+                <FormInput 
+                  {...handleFindProps('date')}
+                  defaultValue={values['date']}
+                  disabled
+                  onChange={onChange}
+                  // className="hide"
+                />
+
+                <CalendarDatePicker 
+                  setValues={setValues} 
+                  blackoutStrings={blackoutDates}
+                  />
+                <br/> 
+              </div>
+
+              <div>
+                <FormInput 
+                  {...handleFindProps('time')}
+                  defaultValue={values['time']}
+                  onChange={onChange}
+                  disabled
+                  // className="hide"
+                />
+
+                <TimePicker 
+                  values={values} 
+                  setValues={setValues} 
+                  times={times} 
+                  // setTimes={setTimes} 
+                />
+              </div>
+              
+            </HeightReveal>
+          </fieldset>
+
+          <fieldset>
+            <legend>The Who</legend>
+
+            <HeightReveal 
+              className="contact-cont"
+              isShown={values.time ? true : false}
+            >
+              <FormInput 
+                {...handleFindProps('name')}
+                value={values['name']}
+                onChange={onChange}
+              />
 
               <FormInput 
-                {...handleFindProps('staff')}
-                value={values['staff']}
+                {...handleFindProps('email')}
+                value={values['email']}
                 onChange={onChange}
-                key={employeeOptions}
               />
-            )}
 
-          </HeightReveal>
-        </fieldset>
-
-        <fieldset >
-          <legend> The When </legend>
-          <HeightReveal isShown={values.service ? true : false}>
-
-            <FormInput 
-              {...handleFindProps('date')}
-              defaultValue={values['date']}
-              // disabled
-              onChange={onChange}
-              className="hide"
-            />
-
-            {/* <CalendarTime 
-              values={values} 
-              setValues={setValues} 
-              times={times} 
-              setTimes={setTimes} 
+              <FormInput 
+                {...handleFindProps('phone')}
+                value={values['phone']}
+                onChange={onChange}
               />
-            <br/>  */}
 
-            <FormInput 
-              {...handleFindProps('time')}
-              defaultValue={values['time']}
-              onChange={onChange}
-              // disabled
-              className="hide"
-            />
+              <FormInput 
+                {...handleFindProps('notes')}
+                value={values['notes']}
+                onChange={onChange}
+              />
 
-            {/* <TimePicker 
-              values={values} 
-              setValues={setValues} 
-              times={times} 
-              setTimes={setTimes} 
-            /> */}
-            
-          </HeightReveal>
-        </fieldset>
+            </HeightReveal>
+          </fieldset>
 
-        <fieldset>
-          <legend>The Who</legend>
+          <button type="submit"> Submit </button>
 
-          <HeightReveal isShown={values.time ? true : false}>
-            <FormInput 
-              {...handleFindProps('name')}
-              value={values['name']}
-              onChange={onChange}
-            />
-
-            <FormInput 
-              {...handleFindProps('email')}
-              value={values['email']}
-              onChange={onChange}
-            />
-
-            <FormInput 
-              {...handleFindProps('phone')}
-              value={values['phone']}
-              onChange={onChange}
-            />
-
-            <FormInput 
-              {...handleFindProps('notes')}
-              value={values['notes']}
-              onChange={onChange}
-            />
-
-          </HeightReveal>
-        </fieldset>
-
-        <button type="submit"> Submit </button>
-
-      </StyledBookingForm>
+        </StyledBookingForm>
+      )}
 
     </div>
   )
@@ -373,7 +425,7 @@ const StyledBookingForm = styled.form`
   label{
     display: flex;
     flex-direction: column;
-    max-width: 20rem;
+    /* max-width: 20rem; */
     margin-bottom: .5em;
 
     .notes{
@@ -382,7 +434,7 @@ const StyledBookingForm = styled.form`
   }
 `
 
-export function HeightReveal({children, isShown}:{children:ReactNode[]|ReactNode, isShown: boolean}){
+export function HeightReveal({children, isShown, className}:{children:ReactNode[]|ReactNode, isShown: boolean, className:string}){
   const scrollContRef = useRef<HTMLParagraphElement>(null)
   // if(!scrollContRef.current) return <p>nope</p>
   // console.log(scrollContRef.current.scrollHeight);
@@ -390,11 +442,12 @@ export function HeightReveal({children, isShown}:{children:ReactNode[]|ReactNode
 
   return (
     <StyledHeightReveal 
+      className={className}
       scrollHeight={ scrollContRef.current ? scrollContRef.current.scrollHeight + 100 : 100}
       // className={isShown ? 'cont expanded' : 'cont collapsed'} ref={scrollContRef}
     >
       <div 
-        className={isShown ? 'cont expanded' : 'cont collapsed'} ref={scrollContRef} 
+        className={isShown ? `cont  expanded ${className}` : `cont collapsed ${className}`} ref={scrollContRef} 
       >
         {children}
       </div>
@@ -402,10 +455,14 @@ export function HeightReveal({children, isShown}:{children:ReactNode[]|ReactNode
   )
 }
 
-const StyledHeightReveal = styled.div<{scrollHeight:number}>`
+const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
   /* border: solid black 1px; */
   /* padding: 1em; */
   /* margin: 1em 0; */
+
+  .datetime-cont{
+    display: flex;
+  }
 
   .cont{
     /* border: solid 1px black; */
@@ -425,6 +482,7 @@ const StyledHeightReveal = styled.div<{scrollHeight:number}>`
 
   .expanded{
     /* background-color: white; */
+    padding-top: 5px;
     max-height: ${props => props.scrollHeight}px;
   }
 `

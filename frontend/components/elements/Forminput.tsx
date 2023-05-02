@@ -13,10 +13,10 @@ export const FormInput = (props:any) => {
   };
 
   if(inputProps.type === 'textarea') return (
-    <label htmlFor="notes">
-      {label}
+    <StyledInputLabel htmlFor={inputProps.name}>
+      <span className="label">{label}</span>
       <textarea {...inputProps} onChange={onChange} onBlur={handleFocus} focused={focused.toString()}/>
-    </label>
+    </StyledInputLabel>
   )
 
   if(inputProps.type === 'select') return (
@@ -37,7 +37,7 @@ export const FormInput = (props:any) => {
 
   return (
     <StyledInputLabel className="formInput" htmlFor={inputProps.name}>
-      {label}
+      <span className="label"> {label} </span>
       <input
         {...inputProps}
         onChange={onChange}
@@ -47,8 +47,8 @@ export const FormInput = (props:any) => {
         }
         focused={focused.toString()}
       />
-      <span className="error">{errorMessage}</span>
-      <span className="hint">{hint}</span>
+      <span className="tooltip error">{errorMessage}</span>
+      <span className="tooltip hint">{hint}</span>
     </StyledInputLabel>
   )
 };
@@ -57,6 +57,7 @@ const StyledInputLabel = styled.label`
   font-size: 1rem;
   color: gray;
   margin-bottom: 0;
+  position: relative;
 
   .formInput{
     display: flex;
@@ -70,14 +71,31 @@ const StyledInputLabel = styled.label`
     border-radius: 5px;
     border: 1px solid gray;
   }
-  
 
-  span{
+  /* input, select {
+    max-width: 20rem;
+  } */
+  
+  span.label{
+    background-color: var(--c-3);
+    color: var(--c-txt-rev);
+    border-radius: 3px;
+    font-size: .8rem;
+    padding: 0 8px;
+    position: absolute;
+    left: 1%;
+    top: 0;
+    /* top: 50%; */
+    transform: translateY(-20%)
+    
+  }
+
+  span.tooltip {
     font-size: 12px;
     padding: 3px;
     display: block;
-
     transition: all .3s;
+
     max-height: 0;
     overflow: hidden;
     
@@ -98,6 +116,15 @@ const StyledInputLabel = styled.label`
   input:invalid[focused="true"] ~ span{
     /* display: block; */
     max-height: 30px;
+  }
+
+  textarea{
+    min-height: 10em;
+    padding: 1.5em;
+  }
+
+  input[type="datetime-local"]{
+    cursor: pointer;
   }
 `
 

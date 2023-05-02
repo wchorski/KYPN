@@ -604,6 +604,8 @@ type Service {
   description: String
   price: Int
   durationInHours: Decimal
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
@@ -628,6 +630,8 @@ input ServiceWhereInput {
   description: StringFilter
   price: IntNullableFilter
   durationInHours: DecimalFilter
+  buisnessHourOpen: StringNullableFilter
+  buisnessHourClosed: StringNullableFilter
   employees: UserManyRelationFilter
   bookings: BookingManyRelationFilter
   categories: CategoryManyRelationFilter
@@ -643,6 +647,35 @@ input IntNullableFilter {
   gt: Int
   gte: Int
   not: IntNullableFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
 }
 
 input CategoryManyRelationFilter {
@@ -663,6 +696,8 @@ input ServiceOrderByInput {
   description: OrderDirection
   price: OrderDirection
   durationInHours: OrderDirection
+  buisnessHourOpen: OrderDirection
+  buisnessHourClosed: OrderDirection
 }
 
 input ServiceUpdateInput {
@@ -670,6 +705,8 @@ input ServiceUpdateInput {
   description: String
   price: Int
   durationInHours: Decimal
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   employees: UserRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
@@ -700,6 +737,8 @@ input ServiceCreateInput {
   description: String
   price: Int
   durationInHours: Decimal
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   employees: UserRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
@@ -739,35 +778,6 @@ input AvailabilityWhereInput {
   employee: UserWhereInput
   type: StringNullableFilter
   status: StringNullableFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-}
-
-input NestedStringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringNullableFilter
 }
 
 input AvailabilityOrderByInput {
