@@ -24,7 +24,7 @@ export const timesArray = (start:string, end:string, duration:string) => {
   }
 
   // Print the resulting array of times
-  console.log(times);
+  // console.log(times);
 
   return times
 }

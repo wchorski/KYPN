@@ -67,8 +67,11 @@ export const Booking = list({
       // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
-        // console.log(resolvedData.employees.connect)
-        
+        const selectedService = await context.db.Service.findOne({
+          where: { id: resolvedData.service.connect.id  },
+        })
+
+        if(selectedService) resolvedData.durationInHours = selectedService.durationInHours
 
         const bookedEmployees = await context.query.User.findMany({ 
           where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
@@ -76,12 +79,14 @@ export const Booking = list({
             id 
             name
             availability{
+              id
               dateTime
               type
               status
               durationInHours
             }
             gigs {
+              id
               dateTime
               durationInHours
             }
@@ -94,12 +99,12 @@ export const Booking = list({
           console.log(emp.name)
 
           if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.availability))
-            console.log(`+++ Date is Available for ${emp.name}`)
+            console.log(`+++ Open Day no vaction set for ${emp.name}`)
            else 
             throw new Error(`CONFLICT: vacation day for ${emp.name}`)
 
           if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.gigs))
-            console.log(`+++ Date is Available for ${emp.name}`)
+            console.log(`+++ No Gigs yet set for ${emp.name}`)
            else 
             throw new Error(`CONFLICT: double booking ${emp.name} `)
         })

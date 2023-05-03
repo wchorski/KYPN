@@ -37,6 +37,7 @@ export function BookingForm2({ services }:iProps) {
   const session = useUser()
   const formRef = useRef<HTMLFormElement>(null)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [successMsg, setSuccessMsg] = useState<string>()
   const [animTrig, setAnimTrig] = useState(0)
   
   const [pickedService, setPickedService] = useState<any>()
@@ -171,6 +172,7 @@ export function BookingForm2({ services }:iProps) {
     }
 
     if (values.staff !== '' ) {
+      setSuccessMsg("A staff member was not selected. We'll check and see if an employee is available for this booking")
       Object.assign(formattedInputs, {
         employees: {
           connect: [
@@ -268,7 +270,7 @@ export function BookingForm2({ services }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && <p className="msg success">Booking Created</p>}
+      {isSuccess && <p className="msg success">Booking Created: {successMsg}</p>}
 
       {!isSuccess && (
 
@@ -339,6 +341,8 @@ export function BookingForm2({ services }:iProps) {
                   disabled
                   // className="hide"
                 />
+
+                <p>{pickedService?.durationInHours} hour duration</p>
 
                 <TimePicker 
                   values={values} 
