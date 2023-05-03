@@ -67,11 +67,16 @@ export const Booking = list({
       // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
+
+        if(!resolvedData.service) return console.log('-------- no service selected')
+
         const selectedService = await context.db.Service.findOne({
           where: { id: resolvedData.service.connect.id  },
         })
-
         if(selectedService) resolvedData.durationInHours = selectedService.durationInHours
+        
+
+        if(!resolvedData.employees) return console.log('-------- no employee selected')
 
         const bookedEmployees = await context.query.User.findMany({ 
           where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
@@ -90,7 +95,6 @@ export const Booking = list({
               dateTime
               durationInHours
             }
-
           `
         })
         console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');

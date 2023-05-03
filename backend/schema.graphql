@@ -21,6 +21,8 @@ type User {
   gigsCount(where: BookingWhereInput! = {}): Int
   availability(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availabilityCount(where: AvailabilityWhereInput! = {}): Int
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   cart(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
@@ -66,6 +68,8 @@ input UserWhereInput {
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
   availability: AvailabilityManyRelationFilter
+  buisnessHourOpen: StringNullableFilter
+  buisnessHourClosed: StringNullableFilter
   cart: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   products: ProductManyRelationFilter
@@ -158,6 +162,35 @@ input AvailabilityManyRelationFilter {
   none: AvailabilityWhereInput
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
 input CartItemManyRelationFilter {
   every: CartItemWhereInput
   some: CartItemWhereInput
@@ -210,6 +243,8 @@ input UserOrderByInput {
   isAdmin: OrderDirection
   isActive: OrderDirection
   stripeCustomerId: OrderDirection
+  buisnessHourOpen: OrderDirection
+  buisnessHourClosed: OrderDirection
   createdAt: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -233,6 +268,8 @@ input UserUpdateInput {
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
   availability: AvailabilityRelateToManyForUpdateInput
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   cart: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   products: ProductRelateToManyForUpdateInput
@@ -339,6 +376,8 @@ input UserCreateInput {
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
   availability: AvailabilityRelateToManyForCreateInput
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   cart: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   products: ProductRelateToManyForCreateInput
@@ -647,35 +686,6 @@ input IntNullableFilter {
   gt: Int
   gte: Int
   not: IntNullableFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: NestedStringNullableFilter
-}
-
-input NestedStringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  not: NestedStringNullableFilter
 }
 
 input CategoryManyRelationFilter {

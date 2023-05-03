@@ -11,7 +11,7 @@ import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
-import { timesArray } from "../../lib/timesArrayCreator"
+import { filterEmployeeTimes, filterServiceTime } from "../../lib/timesArrayCreator"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -30,6 +30,15 @@ enum STAFF_STATE {
   NOT_SELECTED=  'not_selected',
 }
 
+type SuccessfullBook = {
+  date: string,
+  time: string,
+  service: string,
+  staff: string,
+  msg: string,
+  
+}
+
 export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
@@ -37,7 +46,7 @@ export function BookingForm2({ services }:iProps) {
   const session = useUser()
   const formRef = useRef<HTMLFormElement>(null)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [successMsg, setSuccessMsg] = useState<string>()
+  const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   const [animTrig, setAnimTrig] = useState(0)
   
   const [pickedService, setPickedService] = useState<any>()
@@ -172,7 +181,7 @@ export function BookingForm2({ services }:iProps) {
     }
 
     if (values.staff !== '' ) {
-      setSuccessMsg("A staff member was not selected. We'll check and see if an employee is available for this booking")
+
       Object.assign(formattedInputs, {
         employees: {
           connect: [
@@ -180,7 +189,7 @@ export function BookingForm2({ services }:iProps) {
           ]
         },
       })
-    }
+    } 
 
     if (session) {
       Object.assign(formattedInputs, {
@@ -191,22 +200,34 @@ export function BookingForm2({ services }:iProps) {
         }
       })
     }
-
-    // console.log({ formattedInputs });
-
-    // console.log(formRef.current.reportValidity());
     
-    // TODO fill in 'the who' if a customer is already logged in
-    console.log({ formattedInputs })
+    // console.log({ formattedInputs })
     const res = await gqlMutation({
       variables: {
         data: formattedInputs
       }
     })
 
-    console.log('res', res)
+    // console.log('res', res)
     // todo show booking success message
-    if (res.data.createProduct) setIsSuccess(true)
+    if (res.data.createBooking) {
+      setIsSuccess(true)
+
+      let successObj = {
+        date: values.date,
+        time: values.time,
+        service: values.service,
+        staff: values.staff,
+        msg: ''
+      }
+
+      if(values.service === '') 
+        setSuccessfullBook({...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" })
+      if(values.staff === '') 
+        setSuccessfullBook({...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"})
+      if(values.staff === '' && values.service === '') 
+        setSuccessfullBook({...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"})
+    }
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
     // })
@@ -219,7 +240,7 @@ export function BookingForm2({ services }:iProps) {
     const foundService = services.find((x: any) => x.id === id)
     setPickedService(foundService)
 
-    setTimes(timesArray(
+    setTimes(filterServiceTime(
       foundService.buisnessHourOpen,
       foundService.buisnessHourClosed,
       foundService.durationInHours,
@@ -252,6 +273,9 @@ export function BookingForm2({ services }:iProps) {
     })
 
     setBlackoutDates(blackoutArray)
+
+    // @ts-ignore
+    setTimes(prev => filterEmployeeTimes(prev, selectedEmpl.buisnessHourOpen, selectedEmpl.buisnessHourClosed))
   }
 
   const onChange = (e: any) => {
@@ -270,7 +294,17 @@ export function BookingForm2({ services }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && <p className="msg success">Booking Created: {successMsg}</p>}
+      {isSuccess && (<>
+        <h2 className="msg success">Booking Created: </h2>
+
+        <ul>
+          <li>date: {successfullBook?.date}</li>
+          <li>time: {successfullBook?.time}</li>
+          <li>service: {successfullBook?.service}</li>
+          <li>staff: {successfullBook?.staff}</li>
+          <li>message: {successfullBook?.msg}</li>
+        </ul>
+      </>)}
 
       {!isSuccess && (
 
@@ -297,6 +331,11 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     // setEmployeeId(e.target.value)
+                    setTimes(filterServiceTime(
+                      pickedService.buisnessHourOpen,
+                      pickedService.buisnessHourClosed,
+                      pickedService.durationInHours,
+                    ))
                     handleBlackoutDates(e.target.value)
                   }}
                   key={employeeOptions}

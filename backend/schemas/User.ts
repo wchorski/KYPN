@@ -1,8 +1,9 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { checkbox, password, relationship, text, timestamp } from "@keystone-6/core/fields";
+import { checkbox, password, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
+import { timesArray } from "../lib/timeArrayCreator";
 
 
 export const User = list({
@@ -62,6 +63,21 @@ export const User = list({
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
     availability: relationship({ ref: 'Availability.employee', many: true }),
+    buisnessHourOpen: select({
+      options: timesArray(),
+      defaultValue: '09:00',
+      ui: {
+        displayMode: 'select',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    buisnessHourClosed: select({
+      options: timesArray(),
+      defaultValue: '18:00',
+      ui: {
+        displayMode: 'select',
+      }
+    }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,

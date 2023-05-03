@@ -1,4 +1,4 @@
-export const timesArray = (start:string, end:string, duration:string) => {
+export const filterServiceTime = (start:string, end:string, duration:string) => {
   console.table({
     start: start,
     end: end,
@@ -27,4 +27,20 @@ export const timesArray = (start:string, end:string, duration:string) => {
   // console.log(times);
 
   return times
+}
+
+export const filterEmployeeTimes = (serviceTimes:string[], employeeTimeOpen:string, employeeTimeClose:string) => {
+  console.log({serviceTimes})
+  
+  const timeRangeStart =  new Date(`2000-01-01T${employeeTimeOpen}.000Z`);
+  const timeRangeEnd =    new Date(`2000-01-01T${employeeTimeClose}.000Z`);
+
+
+  const filteredArray = serviceTimes.filter(timeString => {
+    const time = new Date(`2000-01-01T${timeString}.000Z`);
+    return time >= timeRangeStart && time <= timeRangeEnd;
+  });
+
+  console.log({filteredArray})
+  return filteredArray 
 }

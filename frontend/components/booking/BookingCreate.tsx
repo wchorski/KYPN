@@ -37,6 +37,8 @@ const QUERY_SERVICES_ALL = gql`
       employees {
         id
         name
+        buisnessHourOpen
+        buisnessHourClosed
         gigs {
           dateTime
         }
