@@ -7,6 +7,7 @@
 import { KeystoneGraphQLAPI, KeystoneListsAPI } from '@keystone-6/core/types';
 import type { Permission } from './schemas/fields';
 
+
 export type Session = {
   itemId: string;
   listKey: string;
@@ -51,8 +52,24 @@ export type Product = {
   id: string,
   price: number,
   name: string,
+  slug: string,
+  status: string,
+  stockCount: string,
   description: string,
-  photo: Photo
+  photo: Photo,
+  stripeProductId: string,
+  stripePriceId: string,
+  tags: Tag[],
+  categories: Category[],
+}
+
+export type ProductImage = {
+  image: any,
+  url: string,
+  altText: string,
+  filename: string,
+  product: Product,
+  subscription: any,
 }
 
 export type Photo = {
@@ -98,10 +115,10 @@ export type User = {
   stripeCustomerId: string,
   posts: any[],
   pages: any[],
-  servicesProvided: any[],
+  servicesProvided: Service[],
   bookings: any[],
   gigs: any[],
-  availability: any[],
+  availability: Availability[],
   cart: CartItem[],
   createdAt: string,
   products: Product[],
@@ -110,4 +127,125 @@ export type User = {
   orders: OrderItem[],
   role: any,
 
+}
+
+export type Availability = {
+  id: string,
+  dateTime: string,
+  durationInHours: string,
+  employee: User,
+  type: string,
+  status: string
+}
+
+export type Booking = {
+  id: string,
+  dateTime: string,
+  durationInHours: string,
+  service: Service[],
+  price: number,
+  employees: User[],
+  customer: User,
+  notes: string,
+}
+
+export type Category = {
+  id: string,
+  name: string,
+  description: string,
+  pages: Page[],
+  posts: Post[],
+  products: Product[],
+  subscriptions: any[],
+  services: Service[],
+}
+
+export type Tag = {
+  id: string,
+  name: string,
+  pages: Page[],
+  posts: Post[],
+  products: Product[],
+  subscriptions: any[],
+  services: Service[],
+}
+
+export type Page = {
+  id: string,
+  title: string,
+  slug: string,
+  dateCreated: string,
+  dateModified: string,
+  status: string,
+  template: string,
+  pinned: number,
+  excerpt: string,
+  featured_image: string,
+  featured_video: string,
+  content: any,
+  author: User,
+  categories: Category[],
+  tags: Tag[],
+}
+
+export type Post = {
+  id: string,
+  title: string,
+  slug: string,
+  dateCreated: string,
+  dateModified: string,
+  status: string,
+  template: string,
+  pinned: number,
+  excerpt: string,
+  featured_image: string,
+  featured_video: string,
+  content: any,
+  author: User,
+  categories: Category[],
+  tags: Tag[],
+}
+
+export type Role = {
+  name: string,
+  assignedTo: User,
+}
+
+export type Service = {
+  name: string,
+  description: string,
+  price: number,
+  durationInHours: string,
+  buisnessHourOpen: string,
+  buisnessHourClosed: string,
+  employees: User[],
+  bookings: Booking[],
+  categories: Category[],
+  tags: Tag[],
+}
+
+export type SubscriptionPlan = {
+  photo: ProductImage,
+  author: User,
+  name: string,
+  slug: string,
+  description: string,
+  status: string,
+  price: number,
+  stripeProductId: string,
+  stripePriceId: string,
+  billing_interval: string,
+  items: any[]
+  stockCount: number,
+  tags: Tag[],
+  categories: Category[],
+}
+
+export type SubscriptionItem = {
+  custom_price: number,
+  subscriptionPlan: SubscriptionPlan,
+  isActive: boolean,
+  isDelinquent: boolean,
+  user: User,
+  
 }

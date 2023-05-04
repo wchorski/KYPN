@@ -3,11 +3,12 @@
 import {parseISO, isAfter, isBefore, isEqual} from 'date-fns';
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { calendarDay, decimal, relationship, text, timestamp, } from "@keystone-6/core/fields";
+import { calendarDay, decimal, integer, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
 import { User } from '../types'
 import { dateCheckAvail } from '../lib/dateCheck';
 import { DateTime } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
+import { createGEvent } from '../lib/googleCalendar';
 
 const now = new Date();
 const year = now.getFullYear();
@@ -47,6 +48,7 @@ export const Booking = list({
       },
     }),
     service: relationship({ ref: 'Service.bookings', many: false }),
+    price: integer({ defaultValue: 0 }),
     employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
     notes: text({
@@ -73,7 +75,10 @@ export const Booking = list({
         const selectedService = await context.db.Service.findOne({
           where: { id: resolvedData.service.connect.id  },
         })
-        if(selectedService) resolvedData.durationInHours = selectedService.durationInHours
+        if(selectedService) {
+          resolvedData.durationInHours = selectedService.durationInHours
+          resolvedData.price = selectedService.price
+        }
         
 
         if(!resolvedData.employees) return console.log('-------- no employee selected')
@@ -97,10 +102,10 @@ export const Booking = list({
             }
           `
         })
-        console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
+        // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
         bookedEmployees.map(emp => {
-          console.log('---------')
-          console.log(emp.name)
+          // console.log('---------')
+          // console.log(emp.name)
 
           if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.availability))
             console.log(`+++ Open Day no vaction set for ${emp.name}`)
@@ -138,8 +143,33 @@ export const Booking = list({
           customer.name,
           customer.email,
           item.notes,
-
         )
+        
+        // createGEvent({
+        //   summary: 'my summary',
+        //   description: 'my desc',
+        //   start: {
+        //     dateTime: '2023-05-25T00:00:00',
+        //     timeZone: 'chicago'
+        //   },
+        //   end: {
+        //     dateTime: '2023-05-25T12:00:00',
+        //     timeZone: 'chicago'
+        //   },
+        //   reminders: {
+        //     useDefault: true,
+        //     overrides: [
+        //       {
+        //         method: 'popup',
+        //         minutes: 1,
+        //       }
+        //     ]
+        //   },
+        //   attendees: [
+        //     { email: 'cutefruit88@gmail.com', comment: 'my comment'},
+        //   ],
+        //   sendUpdates: 'all',
+        // })
 
       }
 
