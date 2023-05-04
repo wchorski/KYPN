@@ -57,6 +57,8 @@ export const Availability = list({
         createView: { fieldMode: 'edit' }
       }
     }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
     
   },
 })

@@ -61,6 +61,8 @@ export type Product = {
   stripePriceId: string,
   tags: Tag[],
   categories: Category[],
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type ProductImage = {
@@ -102,7 +104,9 @@ export type OrderItem = {
   price: number,
   quantity: number,
   productId: string,
-  photo: Photo
+  photo: Photo,
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type User = {
@@ -126,7 +130,8 @@ export type User = {
   subscriptions: any[],
   orders: OrderItem[],
   role: any,
-
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type Availability = {
@@ -135,7 +140,9 @@ export type Availability = {
   durationInHours: string,
   employee: User,
   type: string,
-  status: string
+  status: string,
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type Booking = {
@@ -147,6 +154,8 @@ export type Booking = {
   employees: User[],
   customer: User,
   notes: string,
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type Category = {
@@ -207,11 +216,13 @@ export type Post = {
 }
 
 export type Role = {
+  id: string,
   name: string,
   assignedTo: User,
 }
 
 export type Service = {
+  id: string,
   name: string,
   description: string,
   price: number,
@@ -225,6 +236,7 @@ export type Service = {
 }
 
 export type SubscriptionPlan = {
+  id: string,
   photo: ProductImage,
   author: User,
   name: string,
@@ -242,10 +254,26 @@ export type SubscriptionPlan = {
 }
 
 export type SubscriptionItem = {
+  id: string,
   custom_price: number,
   subscriptionPlan: SubscriptionPlan,
   isActive: boolean,
   isDelinquent: boolean,
   user: User,
-  
+
+}
+
+export type Addon = {
+  id: string,
+  name: string,
+  description: string,
+  price: number,
+  services: Service[],
+  bookings: Booking[],
+  categories: Category[],
+  tags: Tag[],
+}
+
+export type IDObj = {
+  id: string,
 }

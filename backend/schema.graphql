@@ -35,6 +35,8 @@ type User {
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
   role: Role
+  dateCreated: DateTime
+  dateModified: DateTime
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -77,6 +79,8 @@ input UserWhereInput {
   subscriptions: SubscriptionItemManyRelationFilter
   orders: OrderManyRelationFilter
   role: RoleWhereInput
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
@@ -246,6 +250,8 @@ input UserOrderByInput {
   buisnessHourOpen: OrderDirection
   buisnessHourClosed: OrderDirection
   createdAt: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
 }
@@ -277,6 +283,8 @@ input UserUpdateInput {
   subscriptions: SubscriptionItemRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -385,6 +393,8 @@ input UserCreateInput {
   subscriptions: SubscriptionItemRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
@@ -538,10 +548,15 @@ type Booking {
   dateTime: DateTime
   durationInHours: Decimal
   service: Service
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
+  price: Int
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
   customer: User
   notes: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 scalar Decimal
@@ -558,9 +573,13 @@ input BookingWhereInput {
   dateTime: DateTimeFilter
   durationInHours: DecimalFilter
   service: ServiceWhereInput
+  addons: AddonManyRelationFilter
+  price: IntNullableFilter
   employees: UserManyRelationFilter
   customer: UserWhereInput
   notes: StringFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input DateTimeFilter {
@@ -585,26 +604,57 @@ input DecimalFilter {
   not: DecimalFilter
 }
 
+input AddonManyRelationFilter {
+  every: AddonWhereInput
+  some: AddonWhereInput
+  none: AddonWhereInput
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input BookingOrderByInput {
   id: OrderDirection
   dateTime: OrderDirection
   durationInHours: OrderDirection
+  price: OrderDirection
   notes: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input BookingUpdateInput {
   dateTime: DateTime
   durationInHours: Decimal
   service: ServiceRelateToOneForUpdateInput
+  addons: AddonRelateToManyForUpdateInput
+  price: Int
   employees: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
   notes: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input ServiceRelateToOneForUpdateInput {
   create: ServiceCreateInput
   connect: ServiceWhereUniqueInput
   disconnect: Boolean
+}
+
+input AddonRelateToManyForUpdateInput {
+  disconnect: [AddonWhereUniqueInput!]
+  set: [AddonWhereUniqueInput!]
+  create: [AddonCreateInput!]
+  connect: [AddonWhereUniqueInput!]
 }
 
 input UserRelateToOneForUpdateInput {
@@ -622,14 +672,23 @@ input BookingCreateInput {
   dateTime: DateTime
   durationInHours: Decimal
   service: ServiceRelateToOneForCreateInput
+  addons: AddonRelateToManyForCreateInput
+  price: Int
   employees: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
   notes: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input ServiceRelateToOneForCreateInput {
   create: ServiceCreateInput
   connect: ServiceWhereUniqueInput
+}
+
+input AddonRelateToManyForCreateInput {
+  create: [AddonCreateInput!]
+  connect: [AddonWhereUniqueInput!]
 }
 
 input UserRelateToOneForCreateInput {
@@ -642,6 +701,8 @@ type Service {
   name: String
   description: String
   price: Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -668,6 +729,7 @@ input ServiceWhereInput {
   name: StringFilter
   description: StringFilter
   price: IntNullableFilter
+  addons: AddonManyRelationFilter
   durationInHours: DecimalFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
@@ -675,17 +737,6 @@ input ServiceWhereInput {
   bookings: BookingManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
 }
 
 input CategoryManyRelationFilter {
@@ -714,6 +765,7 @@ input ServiceUpdateInput {
   name: String
   description: String
   price: Int
+  addons: AddonRelateToManyForUpdateInput
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -746,6 +798,7 @@ input ServiceCreateInput {
   name: String
   description: String
   price: Int
+  addons: AddonRelateToManyForCreateInput
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -765,6 +818,72 @@ input TagRelateToManyForCreateInput {
   connect: [TagWhereUniqueInput!]
 }
 
+type Addon {
+  id: ID!
+  name: String
+  description: String
+  price: Int
+  services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
+  servicesCount(where: ServiceWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input AddonWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+input AddonWhereInput {
+  AND: [AddonWhereInput!]
+  OR: [AddonWhereInput!]
+  NOT: [AddonWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  description: StringFilter
+  price: IntNullableFilter
+  services: ServiceManyRelationFilter
+  bookings: BookingManyRelationFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input AddonOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  price: OrderDirection
+}
+
+input AddonUpdateInput {
+  name: String
+  description: String
+  price: Int
+  services: ServiceRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input AddonUpdateArgs {
+  where: AddonWhereUniqueInput!
+  data: AddonUpdateInput!
+}
+
+input AddonCreateInput {
+  name: String
+  description: String
+  price: Int
+  services: ServiceRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
 type Availability {
   id: ID!
   dateTime: DateTime
@@ -772,6 +891,8 @@ type Availability {
   employee: User
   type: String
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input AvailabilityWhereUniqueInput {
@@ -788,6 +909,8 @@ input AvailabilityWhereInput {
   employee: UserWhereInput
   type: StringNullableFilter
   status: StringNullableFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input AvailabilityOrderByInput {
@@ -796,6 +919,8 @@ input AvailabilityOrderByInput {
   durationInHours: OrderDirection
   type: OrderDirection
   status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input AvailabilityUpdateInput {
@@ -804,6 +929,8 @@ input AvailabilityUpdateInput {
   employee: UserRelateToOneForUpdateInput
   type: String
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input AvailabilityUpdateArgs {
@@ -817,6 +944,8 @@ input AvailabilityCreateInput {
   employee: UserRelateToOneForCreateInput
   type: String
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type SubscriptionPlan {
@@ -1020,6 +1149,8 @@ type Product {
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input ProductWhereUniqueInput {
@@ -1044,6 +1175,8 @@ input ProductWhereInput {
   author: UserWhereInput
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input ProductOrderByInput {
@@ -1056,6 +1189,8 @@ input ProductOrderByInput {
   status: OrderDirection
   price: OrderDirection
   stockCount: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input ProductUpdateInput {
@@ -1071,6 +1206,8 @@ input ProductUpdateInput {
   author: UserRelateToOneForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input ProductUpdateArgs {
@@ -1091,6 +1228,8 @@ input ProductCreateInput {
   author: UserRelateToOneForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type ProductImage {
@@ -1263,6 +1402,8 @@ type OrderItem {
   price: Int
   quantity: Int
   order: Order
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input OrderItemWhereUniqueInput {
@@ -1280,6 +1421,8 @@ input OrderItemWhereInput {
   price: IntNullableFilter
   quantity: IntNullableFilter
   order: OrderWhereInput
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input OrderItemOrderByInput {
@@ -1288,6 +1431,8 @@ input OrderItemOrderByInput {
   description: OrderDirection
   price: OrderDirection
   quantity: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input OrderItemUpdateInput {
@@ -1297,6 +1442,8 @@ input OrderItemUpdateInput {
   price: Int
   quantity: Int
   order: OrderRelateToOneForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input OrderRelateToOneForUpdateInput {
@@ -1317,6 +1464,8 @@ input OrderItemCreateInput {
   price: Int
   quantity: Int
   order: OrderRelateToOneForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input OrderRelateToOneForCreateInput {
@@ -1620,6 +1769,8 @@ type Category {
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
 }
 
 input CategoryWhereUniqueInput {
@@ -1639,6 +1790,7 @@ input CategoryWhereInput {
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
   services: ServiceManyRelationFilter
+  addons: AddonManyRelationFilter
 }
 
 input CategoryOrderByInput {
@@ -1655,6 +1807,7 @@ input CategoryUpdateInput {
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
+  addons: AddonRelateToManyForUpdateInput
 }
 
 input CategoryUpdateArgs {
@@ -1670,6 +1823,7 @@ input CategoryCreateInput {
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
+  addons: AddonRelateToManyForCreateInput
 }
 
 type Tag {
@@ -1685,6 +1839,8 @@ type Tag {
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
 }
 
 input TagWhereUniqueInput {
@@ -1703,6 +1859,7 @@ input TagWhereInput {
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
   services: ServiceManyRelationFilter
+  addons: AddonManyRelationFilter
 }
 
 input TagOrderByInput {
@@ -1717,6 +1874,7 @@ input TagUpdateInput {
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
+  addons: AddonRelateToManyForUpdateInput
 }
 
 input TagUpdateArgs {
@@ -1731,6 +1889,7 @@ input TagCreateInput {
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
+  addons: AddonRelateToManyForCreateInput
 }
 
 """
@@ -1763,6 +1922,12 @@ type Mutation {
   updateServices(data: [ServiceUpdateArgs!]!): [Service]
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
+  createAddon(data: AddonCreateInput!): Addon
+  createAddons(data: [AddonCreateInput!]!): [Addon]
+  updateAddon(where: AddonWhereUniqueInput!, data: AddonUpdateInput!): Addon
+  updateAddons(data: [AddonUpdateArgs!]!): [Addon]
+  deleteAddon(where: AddonWhereUniqueInput!): Addon
+  deleteAddons(where: [AddonWhereUniqueInput!]!): [Addon]
   createAvailability(data: AvailabilityCreateInput!): Availability
   createAvailabilities(data: [AvailabilityCreateInput!]!): [Availability]
   updateAvailability(where: AvailabilityWhereUniqueInput!, data: AvailabilityUpdateInput!): Availability
@@ -1885,6 +2050,9 @@ type Query {
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   service(where: ServiceWhereUniqueInput!): Service
   servicesCount(where: ServiceWhereInput! = {}): Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addon(where: AddonWhereUniqueInput!): Addon
+  addonsCount(where: AddonWhereInput! = {}): Int
   availabilities(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availability(where: AvailabilityWhereUniqueInput!): Availability
   availabilitiesCount(where: AvailabilityWhereInput! = {}): Int

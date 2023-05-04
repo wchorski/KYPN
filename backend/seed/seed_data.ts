@@ -1050,6 +1050,45 @@ export const services_seedjson = [
   }
 ]
 
+export const addons_seedjson  = [
+  {
+    name: 'Scratch and Sniff Stickers',
+    description: 'An assortment of scratch and stiff stickers with various fruity scents',
+    price: 1,
+    services: {
+      connect: [
+        { name: 'Fruit Basket Service'},
+        { name: 'Citrus Platter Service'},
+        { name: 'Open Smoothie Bar'},
+      ]
+    }
+  },
+  {
+    name: 'Zester',
+    description: 'Peel, scrape, shred to perfection.',
+    price: 2,
+    services: {
+      connect: [
+        { name: 'Fruit Basket Service'},
+        { name: 'Citrus Platter Service'},
+        { name: 'Open Smoothie Bar'},
+      ]
+    }
+  },
+  {
+    name: 'Tomato Timer',
+    description: 'Keep on schedual down the seconds and seeds.',
+    price: 3,
+    services: {
+      connect: [
+        { name: 'Fruit Basket Service'},
+        { name: 'Citrus Platter Service'},
+        { name: 'Open Smoothie Bar'},
+      ]
+    }
+  },
+]
+
 export const avail_seedjson = [
   {
     dateTime: '2023-12-01T00:00:00+00:00',

@@ -22,6 +22,7 @@ export const Service = list({
       }
     }),
     price: integer({ defaultValue: 0 }),
+    addons: relationship({ref: 'Addon.services', many: true}),
     durationInHours: decimal({
       defaultValue: '6',
       precision: 5,

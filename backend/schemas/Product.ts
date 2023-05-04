@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
+import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
 
@@ -96,6 +96,9 @@ export const Product = list({
       ref: 'Category.products',
       many: true,
     }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    
   },
   hooks: {
     // TODO use this to create a default 'slug' automatically based on product name

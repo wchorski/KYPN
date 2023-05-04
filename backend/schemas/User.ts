@@ -109,7 +109,9 @@ export const User = list({
       //   createView: { fieldMode: 'hidden' },
       //   itemView: { fieldMode: 'hidden' }
       // }
-    })
+    }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
   },
   hooks: {
     beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {

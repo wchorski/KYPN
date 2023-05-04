@@ -5,7 +5,7 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { calendarDay, decimal, integer, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
-import { User } from '../types'
+import { User, Addon, Service, IDObj } from '../types'
 import { dateCheckAvail } from '../lib/dateCheck';
 import { DateTime } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { createGEvent } from '../lib/googleCalendar';
@@ -48,6 +48,7 @@ export const Booking = list({
       },
     }),
     service: relationship({ ref: 'Service.bookings', many: false }),
+    addons: relationship({ ref: 'Addon.bookings', many: true }),
     price: integer({ defaultValue: 0 }),
     employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
@@ -56,6 +57,8 @@ export const Booking = list({
         displayMode: 'textarea'
       }
     }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
 
   },
   hooks: {
@@ -78,6 +81,19 @@ export const Booking = list({
         if(selectedService) {
           resolvedData.durationInHours = selectedService.durationInHours
           resolvedData.price = selectedService.price
+        }
+
+        const selectedAddons = await context.query.Addon.findMany({ 
+          where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
+          query: `
+            price
+          `
+        })
+
+        if(selectedAddons){
+          selectedAddons.map(addon => {
+            resolvedData.price += addon.price
+          })
         }
         
 
@@ -102,6 +118,7 @@ export const Booking = list({
             }
           `
         })
+        
         // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
         bookedEmployees.map(emp => {
           // console.log('---------')
@@ -120,9 +137,64 @@ export const Booking = list({
         
       }
 
-      // if (operation === 'update') {
+      if (operation === 'update') {
+        // todo if service / addon was removed, or change, reflect the price.
+        // console.log('%%%%%%%%%%%%%%%%% booking update')
+        // console.log({resolvedData})
+        // console.log({item})
 
-      // }
+        let currPrice:number = Number(item.price)
+  
+        if(resolvedData.service?.connect || resolvedData.service?.disconnect){
+          
+          if(item.serviceId){
+            const prevService = await context.db.Service.findOne({
+              //@ts-ignore
+              where: { id: item.serviceId  },
+            })          
+            currPrice = Math.max(currPrice - Number(prevService?.price), 0) //don't go below zero
+          }     
+
+          if(resolvedData.service?.connect){
+            const selectedService = await context.db.Service.findOne({
+              //@ts-ignore
+              where: { id: resolvedData.service.connect.id  },
+            }) 
+            currPrice = Math.max(currPrice + Number(selectedService?.price), 0) //don't go below zero
+          }
+        }
+
+        if(resolvedData.addons?.connect || resolvedData.addons?.disconnect){
+
+          if(resolvedData.addons?.disconnect){
+            const disconnectedAddons = await context.query.Addon.findMany({ 
+              where: { id: { in: resolvedData.addons.disconnect.map((addon:Addon) => addon.id) }, },
+              query: `
+                price
+              `
+            })
+
+            const prices = disconnectedAddons.map(addon => addon.price)
+            const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
+            currPrice -= priceTotal
+          }
+
+          if(resolvedData.addons?.connect){
+            const disconnectedAddons = await context.query.Addon.findMany({ 
+              where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
+              query: `
+                price
+              `
+            })
+
+            const prices = disconnectedAddons.map(addon => addon.price)
+            const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
+            currPrice += priceTotal
+          }
+        }
+
+        resolvedData.price = currPrice
+      }
     },
     afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
       if (operation === 'create') {
@@ -132,18 +204,18 @@ export const Booking = list({
         }
         if (item.customer) {
           customer = await context.db.User.findOne({ where: { id: item.customer.id } })
+          mailBookingCreated(
+            item.id,
+            EMAIL_ADDRESS,
+            customer.name,
+            customer.email,
+            item.notes,
+          )
         }
         // console.log({ item });
         // console.log({ resolvedData });
         // todo email employees and customer too
         
-        mailBookingCreated(
-          item.id,
-          EMAIL_ADDRESS,
-          customer.name,
-          customer.email,
-          item.notes,
-        )
         
         // createGEvent({
         //   summary: 'my summary',

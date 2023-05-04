@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_j0g8b9ww4p")
+  stripeCustomerId        String             @unique @default("NO_ID_b9b6h9q21x")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
@@ -35,6 +35,8 @@ model User {
   orders                  Order[]            @relation("Order_user")
   role                    Role?              @relation("User_role", fields: [roleId], references: [id])
   roleId                  String?            @map("role") @postgresql.Uuid
+  dateCreated             DateTime?          @default("2023-05-04T18:58:34.749Z")
+  dateModified            DateTime?          @default("2023-05-04T18:58:34.749Z")
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -55,15 +57,19 @@ model Role {
 }
 
 model Booking {
-  id              String   @id @default(uuid()) @postgresql.Uuid
+  id              String    @id @default(uuid()) @postgresql.Uuid
   dateTime        DateTime
-  durationInHours Decimal  @default("24") @postgresql.Decimal(5, 2)
-  service         Service? @relation("Booking_service", fields: [serviceId], references: [id])
-  serviceId       String?  @map("service") @postgresql.Uuid
-  employees       User[]   @relation("Booking_employees")
-  customer        User?    @relation("Booking_customer", fields: [customerId], references: [id])
-  customerId      String?  @map("customer") @postgresql.Uuid
-  notes           String   @default("")
+  durationInHours Decimal   @default("24") @postgresql.Decimal(5, 2)
+  service         Service?  @relation("Booking_service", fields: [serviceId], references: [id])
+  serviceId       String?   @map("service") @postgresql.Uuid
+  addons          Addon[]   @relation("Addon_bookings")
+  price           Int?      @default(0)
+  employees       User[]    @relation("Booking_employees")
+  customer        User?     @relation("Booking_customer", fields: [customerId], references: [id])
+  customerId      String?   @map("customer") @postgresql.Uuid
+  notes           String    @default("")
+  dateCreated     DateTime? @default("2023-05-04T18:58:34.991Z")
+  dateModified    DateTime? @default("2023-05-04T18:58:34.991Z")
 
   @@index([serviceId])
   @@index([customerId])
@@ -74,6 +80,7 @@ model Service {
   name               String     @unique @default("")
   description        String     @default("")
   price              Int?       @default(0)
+  addons             Addon[]    @relation("Addon_services")
   durationInHours    Decimal    @default("6") @postgresql.Decimal(5, 2)
   buisnessHourOpen   String?    @default("09:00")
   buisnessHourClosed String?    @default("18:00")
@@ -83,14 +90,27 @@ model Service {
   tags               Tag[]      @relation("Service_tags")
 }
 
+model Addon {
+  id          String     @id @default(uuid()) @postgresql.Uuid
+  name        String     @unique @default("")
+  description String     @default("")
+  price       Int?       @default(0)
+  services    Service[]  @relation("Addon_services")
+  bookings    Booking[]  @relation("Addon_bookings")
+  categories  Category[] @relation("Addon_categories")
+  tags        Tag[]      @relation("Addon_tags")
+}
+
 model Availability {
-  id              String   @id @default(uuid()) @postgresql.Uuid
+  id              String    @id @default(uuid()) @postgresql.Uuid
   dateTime        DateTime
-  durationInHours Decimal  @default("24") @postgresql.Decimal(5, 2)
-  employee        User?    @relation("Availability_employee", fields: [employeeId], references: [id])
-  employeeId      String?  @map("employee") @postgresql.Uuid
-  type            String?  @default("VACATION")
-  status          String?  @default("APPROVED")
+  durationInHours Decimal   @default("24") @postgresql.Decimal(5, 2)
+  employee        User?     @relation("Availability_employee", fields: [employeeId], references: [id])
+  employeeId      String?   @map("employee") @postgresql.Uuid
+  type            String?   @default("VACATION")
+  status          String?   @default("APPROVED")
+  dateCreated     DateTime? @default("2023-05-04T18:58:35.008Z")
+  dateModified    DateTime? @default("2023-05-04T18:58:35.008Z")
 
   @@index([employeeId])
 }
@@ -146,6 +166,8 @@ model Product {
   authorId              String?       @map("author") @postgresql.Uuid
   tags                  Tag[]         @relation("Product_tags")
   categories            Category[]    @relation("Category_products")
+  dateCreated           DateTime?     @default("2023-05-04T18:58:34.647Z")
+  dateModified          DateTime?     @default("2023-05-04T18:58:34.648Z")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([authorId])
@@ -176,15 +198,17 @@ model CartItem {
 }
 
 model OrderItem {
-  id          String        @id @default(uuid()) @postgresql.Uuid
-  name        String        @default("")
-  description String        @default("")
-  photo       ProductImage? @relation("OrderItem_photo", fields: [photoId], references: [id])
-  photoId     String?       @map("photo") @postgresql.Uuid
-  price       Int?
-  quantity    Int?
-  order       Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId     String?       @map("order") @postgresql.Uuid
+  id           String        @id @default(uuid()) @postgresql.Uuid
+  name         String        @default("")
+  description  String        @default("")
+  photo        ProductImage? @relation("OrderItem_photo", fields: [photoId], references: [id])
+  photoId      String?       @map("photo") @postgresql.Uuid
+  price        Int?
+  quantity     Int?
+  order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId      String?       @map("order") @postgresql.Uuid
+  dateCreated  DateTime?     @default("2023-05-04T18:58:34.728Z")
+  dateModified DateTime?     @default("2023-05-04T18:58:34.728Z")
 
   @@index([photoId])
   @@index([orderId])
@@ -254,6 +278,7 @@ model Category {
   products      Product[]          @relation("Category_products")
   subscriptions SubscriptionPlan[] @relation("Category_subscriptions")
   services      Service[]          @relation("Category_services")
+  addons        Addon[]            @relation("Addon_categories")
 }
 
 model Tag {
@@ -264,4 +289,5 @@ model Tag {
   products      Product[]          @relation("Product_tags")
   subscriptions SubscriptionPlan[] @relation("SubscriptionPlan_tags")
   services      Service[]          @relation("Service_tags")
+  addons        Addon[]            @relation("Addon_tags")
 }
