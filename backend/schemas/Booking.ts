@@ -1,14 +1,14 @@
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-two-servers/keystone-server/src/seed/index.ts
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-pages-directory/src/pages/index.tsx
-import {parseISO, isAfter, isBefore, isEqual} from 'date-fns';
+
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { calendarDay, decimal, integer, relationship, text, timestamp, } from "@keystone-6/core/fields";
+import { decimal, integer, json, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
-import { User, Addon, Service, IDObj } from '../types'
+import { User, Addon, Service, } from '../types'
 import { dateCheckAvail } from '../lib/dateCheck';
-import { DateTime } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { createGEvent } from '../lib/googleCalendar';
+import { createCalendarEvent } from "../lib/googleapi/calCreate";
+
 
 const now = new Date();
 const year = now.getFullYear();
@@ -28,17 +28,20 @@ export const Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['dateTime', 'service', 'customer', 'employees'],
-      initialSort: { field: 'dateTime', direction: 'DESC'}
+      initialColumns: ['start', 'service', 'customer', 'employees'],
+      initialSort: { field: 'start', direction: 'DESC'}
     },
   },
 
 
   fields: {
     // date: calendarDay({ validation: { isRequired: true } }),
-    dateTime: timestamp({ validation: { isRequired: true } }),
+    dateTime: timestamp({}),
+    start: timestamp({ validation: { isRequired: true } }),
+    end: timestamp({}),
+    summary: text({validation: { isRequired: true }}),
     durationInHours: decimal({
-      defaultValue: '24',
+      defaultValue: '23',
       precision: 5,
       scale: 2,
       validation: {
@@ -59,6 +62,14 @@ export const Booking = list({
     }),
     dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
     dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    google: json({
+      defaultValue: { 
+        id: '',
+        status: '',
+        kind: '',
+        htmlLink: '',
+      },
+    }),
 
   },
   hooks: {
@@ -73,69 +84,105 @@ export const Booking = list({
 
       if (operation === 'create') {
 
-        if(!resolvedData.service) return console.log('-------- no service selected')
+        let description = 'NOTES: ' + resolvedData.notes
 
-        const selectedService = await context.db.Service.findOne({
-          where: { id: resolvedData.service.connect.id  },
-        })
-        if(selectedService) {
-          resolvedData.durationInHours = selectedService.durationInHours
-          resolvedData.price = selectedService.price
-        }
+        resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
 
-        const selectedAddons = await context.query.Addon.findMany({ 
-          where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
-          query: `
-            price
-          `
-        })
-
-        if(selectedAddons){
-          selectedAddons.map(addon => {
-            resolvedData.price += addon.price
+        if(resolvedData.service){
+          const selectedService = await context.db.Service.findOne({
+            where: { id: resolvedData.service.connect.id  },
           })
+          if(selectedService) {
+            resolvedData.durationInHours = selectedService.durationInHours
+            resolvedData.price = selectedService.price
+            resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
+            description += '\n SERVICE: ' + selectedService.name
+          }
+        }
+
+        if(resolvedData.addons){
+          const selectedAddons = await context.query.Addon.findMany({ 
+            where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
+            query: `
+              price
+              name
+            `
+          })
+  
+          if(selectedAddons){
+            let addonNames = ''
+            selectedAddons.map(addon => {
+              resolvedData.price += addon.price
+              addonNames +=  addon.name + ', '
+            })
+            description += '\n ADDONS: ' + addonNames
+          }
         }
         
 
-        if(!resolvedData.employees) return console.log('-------- no employee selected')
+        if(resolvedData.employees){
+          const bookedEmployees = await context.query.User.findMany({ 
+            where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
+            query: `
+              id 
+              name
+              email
+              availability{
+                id
+                dateTime
+                type
+                status
+                durationInHours
+              }
+              gigs {
+                id
+                dateTime
+                start
+                durationInHours
+              }
+            `
+          })
+          
+          // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
+          let employeeNames = ''
+          bookedEmployees.map(emp => {
+            // console.log('---------')
+            // console.log(emp.name)
+  
+            if(dateCheckAvail(resolvedData.start, resolvedData.durationInHours, emp.availability))
+              console.log(`+++ Open Day no vaction set for ${emp.name}`)
+             else 
+              throw new Error(`CONFLICT: vacation day for ${emp.name}`)
+  
+            if(dateCheckAvail(resolvedData.start, resolvedData.durationInHours, emp.gigs))
+              console.log(`+++ No Gigs yet set for ${emp.name}`)
+             else 
+              throw new Error(`CONFLICT: double booking ${emp.name} `)
 
-        const bookedEmployees = await context.query.User.findMany({ 
-          where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
-          query: `
-            id 
-            name
-            availability{
-              id
-              dateTime
-              type
-              status
-              durationInHours
-            }
-            gigs {
-              id
-              dateTime
-              durationInHours
-            }
-          `
-        })
+              employeeNames +=  emp.email + ', '
+          })
+
+          description += '\n EMPLOYEES: ' + employeeNames
+        }
         
-        // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
-        bookedEmployees.map(emp => {
-          // console.log('---------')
-          // console.log(emp.name)
-
-          if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.availability))
-            console.log(`+++ Open Day no vaction set for ${emp.name}`)
-           else 
-            throw new Error(`CONFLICT: vacation day for ${emp.name}`)
-
-          if(dateCheckAvail(resolvedData.dateTime, resolvedData.durationInHours, emp.gigs))
-            console.log(`+++ No Gigs yet set for ${emp.name}`)
-           else 
-            throw new Error(`CONFLICT: double booking ${emp.name} `)
+        const calRes = await createCalendarEvent({
+          summary: resolvedData.summary,
+          description: description,
+          start: {
+            dateTime: resolvedData.start,
+            // timeZone: 'America/Chicago',
+          },
+          end: {
+            dateTime: resolvedData.end,
+            // timeZone: 'America/Chicago',
+          },
         })
-        
+        // console.log({calRes})
+  
+        resolvedData.google = calRes
       }
+
+
 
       if (operation === 'update') {
         // todo if service / addon was removed, or change, reflect the price.
@@ -202,6 +249,7 @@ export const Booking = list({
           name: 'non registered user',
           email: 'non registered user'
         }
+        // todo email employees and customer too. right now it just emails cutefruit@tawtaw.com
         if (item.customer) {
           customer = await context.db.User.findOne({ where: { id: item.customer.id } })
           mailBookingCreated(
@@ -212,39 +260,36 @@ export const Booking = list({
             item.notes,
           )
         }
+        console.log({item});
+        
         // console.log({ item });
         // console.log({ resolvedData });
-        // todo email employees and customer too
-        
-        
-        // createGEvent({
-        //   summary: 'my summary',
-        //   description: 'my desc',
+        // const calRes = await createCalendarEvent({
+        //   summary: item.summary,
+        //   description: item.notes,
         //   start: {
-        //     dateTime: '2023-05-25T00:00:00',
-        //     timeZone: 'chicago'
+        //     dateTime: item.start,
+        //     // timeZone: 'America/Chicago',
         //   },
         //   end: {
-        //     dateTime: '2023-05-25T12:00:00',
-        //     timeZone: 'chicago'
+        //     dateTime: item.end,
+        //     // timeZone: 'America/Chicago',
         //   },
-        //   reminders: {
-        //     useDefault: true,
-        //     overrides: [
-        //       {
-        //         method: 'popup',
-        //         minutes: 1,
-        //       }
-        //     ]
-        //   },
-        //   attendees: [
-        //     { email: 'cutefruit88@gmail.com', comment: 'my comment'},
-        //   ],
-        //   sendUpdates: 'all',
         // })
+        // console.log({calRes})
 
+        // item.google = calRes
+  
       }
 
     },
   }
 })
+
+
+function calcEndTime(start:string, duration:string){
+  const date = new Date(start);
+  date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000);
+  return date.toISOString();
+
+}

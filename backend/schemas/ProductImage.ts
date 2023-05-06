@@ -3,14 +3,13 @@ import { cloudinaryImage } from '@keystone-6/cloudinary';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { permissions } from "../access";
-
-
-import 'dotenv/config'
+require('dotenv').config()
 
 export const cloudinary = {
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME || 'NO_CLOUD_NAME',
-  apiKey: process.env.CLOUDINARY_API_KEY || 'NO_CLOUD_KEY',
-  apiSecret: process.env.CLOUDINARY_API_SECRET || 'NO_CLOUD_SECRET',
+  // todo WHY NOT WORKING? "Invalid cloud_name cutefruit"
+  cloudName: process.env.CLOUDINARY_NAME || 'NO_CLOUD_NAME',
+  apiKey: process.env.CLOUDINARY_KEY || 'NO_CLOUD_KEY',
+  apiSecret: process.env.CLOUDINARY_SECRET || 'NO_CLOUD_SECRET',
   folder: process.env.CLOUDINARY_API_FOLDER + '/product_images' || 'NO_CLOUD_FOLDER',
 }
 

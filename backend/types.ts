@@ -148,6 +148,9 @@ export type Availability = {
 export type Booking = {
   id: string,
   dateTime: string,
+  start: string,
+  end: string,
+  summary: string,
   durationInHours: string,
   service: Service[],
   price: number,

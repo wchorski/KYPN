@@ -1017,7 +1017,7 @@ export const subscriptions_seedjson = [
 export const services_seedjson = [
   {
     "name": "Fruit Basket Service",
-    "price": 100010,
+    "price": 10000,
     "durationInHours": "1.5",
     "employees": {
       "connect": [
@@ -1028,7 +1028,7 @@ export const services_seedjson = [
   },
   {
     "name": "Citrus Platter Service",
-    "price": 220000,
+    "price": 20000,
     "durationInHours": "2.5",
     "employees": {
       "connect": [
@@ -1039,7 +1039,7 @@ export const services_seedjson = [
   },
   {
     "name": "Open Smoothie Bar",
-    "price": 33320000,
+    "price": 30000,
     "durationInHours": "4.5",
     "employees": {
       "connect": [

@@ -546,6 +546,9 @@ input UserRelateToManyForCreateInput {
 type Booking {
   id: ID!
   dateTime: DateTime
+  start: DateTime
+  end: DateTime
+  summary: String
   durationInHours: Decimal
   service: Service
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
@@ -557,6 +560,7 @@ type Booking {
   notes: String
   dateCreated: DateTime
   dateModified: DateTime
+  google: JSON
 }
 
 scalar Decimal
@@ -570,7 +574,10 @@ input BookingWhereInput {
   OR: [BookingWhereInput!]
   NOT: [BookingWhereInput!]
   id: IDFilter
-  dateTime: DateTimeFilter
+  dateTime: DateTimeNullableFilter
+  start: DateTimeFilter
+  end: DateTimeNullableFilter
+  summary: StringFilter
   durationInHours: DecimalFilter
   service: ServiceWhereInput
   addons: AddonManyRelationFilter
@@ -624,6 +631,9 @@ input IntNullableFilter {
 input BookingOrderByInput {
   id: OrderDirection
   dateTime: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
+  summary: OrderDirection
   durationInHours: OrderDirection
   price: OrderDirection
   notes: OrderDirection
@@ -633,6 +643,9 @@ input BookingOrderByInput {
 
 input BookingUpdateInput {
   dateTime: DateTime
+  start: DateTime
+  end: DateTime
+  summary: String
   durationInHours: Decimal
   service: ServiceRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
@@ -642,6 +655,7 @@ input BookingUpdateInput {
   notes: String
   dateCreated: DateTime
   dateModified: DateTime
+  google: JSON
 }
 
 input ServiceRelateToOneForUpdateInput {
@@ -670,6 +684,9 @@ input BookingUpdateArgs {
 
 input BookingCreateInput {
   dateTime: DateTime
+  start: DateTime
+  end: DateTime
+  summary: String
   durationInHours: Decimal
   service: ServiceRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
@@ -679,6 +696,7 @@ input BookingCreateInput {
   notes: String
   dateCreated: DateTime
   dateModified: DateTime
+  google: JSON
 }
 
 input ServiceRelateToOneForCreateInput {

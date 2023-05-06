@@ -65,7 +65,7 @@ export const User = list({
     availability: relationship({ ref: 'Availability.employee', many: true }),
     buisnessHourOpen: select({
       options: timesArray(),
-      defaultValue: '09:00',
+      defaultValue: '09:00:00',
       ui: {
         displayMode: 'select',
         createView: { fieldMode: 'edit' }
@@ -73,7 +73,7 @@ export const User = list({
     }),
     buisnessHourClosed: select({
       options: timesArray(),
-      defaultValue: '18:00',
+      defaultValue: '18:00:00',
       ui: {
         displayMode: 'select',
       }

@@ -35,7 +35,7 @@ export const Service = list({
     }),
     buisnessHourOpen: select({
       options: timesArray(),
-      defaultValue: '09:00',
+      defaultValue: '09:00:00',
       ui: {
         displayMode: 'select',
         createView: { fieldMode: 'edit' }
@@ -43,7 +43,7 @@ export const Service = list({
     }),
     buisnessHourClosed: select({
       options: timesArray(),
-      defaultValue: '18:00',
+      defaultValue: '18:00:00',
       ui: {
         displayMode: 'select',
       }

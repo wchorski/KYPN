@@ -41,6 +41,6 @@ export const filterEmployeeTimes = (serviceTimes:string[], employeeTimeOpen:stri
     return time >= timeRangeStart && time <= timeRangeEnd;
   });
 
-  console.log({filteredArray})
+  // console.log({filteredArray})
   return filteredArray 
 }

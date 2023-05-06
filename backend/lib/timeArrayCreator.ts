@@ -16,11 +16,12 @@ export const timesArray = () => {
   for (let time = startDate; time <= endDate; time.setMinutes(time.getMinutes() + timeInterval)) {
 
     options.push({ 
-          label: time.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true} ), 
-          value: time.toLocaleTimeString("en-US", { hour12: false } ),
-        })
+      label: time.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true} ), 
+      value: time.toLocaleTimeString("en-US", { hour12: false } ),
+    })
   }
-  
+
+  // console.log({options});
 
   return options
 }
