@@ -79,7 +79,11 @@ export const GlobalStyles = createGlobalStyle`
     opacity: .7;
   }
 
-  a, button, select{cursor: pointer;}
+  a, 
+  button:not([disabled]), 
+  select:not([disabled]) {
+    cursor: pointer;
+  }
 
   button{
     font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

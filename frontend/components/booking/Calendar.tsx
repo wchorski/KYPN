@@ -7,15 +7,10 @@ import styled from 'styled-components';
 type iProps = {
   blackoutStrings: string[]
   setValues: any,
-
+  buisnessDays: number[],
 }
 
-const BUISNESS_HOURS_START = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_START)
-const BUISNESS_HOURS_END = Number(process.env.NEXT_PUBLIC_BUISNESS_HOURS_END)
-const BUISNESS_MINUTES_INTERVAL = Number(process.env.NEXT_PUBLIC_BUISNESS_MINUTES_INTERVAL)
-
-
-export const CalendarDatePicker = ({ setValues, blackoutStrings}:iProps) => {
+export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays}:iProps) => {
 
   const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
@@ -28,12 +23,13 @@ export const CalendarDatePicker = ({ setValues, blackoutStrings}:iProps) => {
         minDate={new Date()}
         className={'REACT-CALENDAR p-2'}
         view='month'
+        calendarType='US'
         onClickDay={(date) => {
           setValues((prev:any) => ({...prev, date: format(date, 'yyyy-MM-dd')}))
           // setAnimTrig(animTrig + 1)
           // getTimes()
         }}
-        tileDisabled={({date}) => blackoutDates.includes(date.getDate()) }
+        tileDisabled={({date}) => blackoutDates.includes(date.getDate()) || !buisnessDays.includes(date.getDay()) }
       // value={date}
       />
 

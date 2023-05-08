@@ -28,11 +28,11 @@ const seedAvail = async (context: Context) => {
   const seedObjs: any[] = avail_seedjson;
   const objsAlreadyInDatabase = await db.Availability.findMany({
     where: {
-      dateTime: { in: seedObjs.map(obj => obj.dateTime) },
+      start: { in: seedObjs.map(obj => obj.start) },
     },
   });
   const objsToCreate = seedObjs.filter(
-    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.dateTime === seedObj.dateTime)
+    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.start === seedObj.start)
   )
   console.log({ objsToCreate })
   await db.Availability.createMany({

@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { decimal, integer, multiselect, relationship, select, text } from "@keystone-6/core/fields";
 import { timesArray } from "../lib/timeArrayCreator";
 
 
@@ -47,6 +47,19 @@ export const Service = list({
       ui: {
         displayMode: 'select',
       }
+    }),
+    buisnessDays: multiselect({
+      type: 'integer',
+      options: [
+        { label: 'Sunday',    value: 0 },
+        { label: 'Monday',    value: 1 },
+        { label: 'Tuesday',   value: 2 },
+        { label: 'Wednesday', value: 3 },
+        { label: 'Thursday',  value: 4 },
+        { label: 'Friday',    value: 5 },
+        { label: 'Saturday',  value: 6 },
+      ],
+      defaultValue: [0, 1, 2, 3, 4, 5, 6]
     }),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),

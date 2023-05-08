@@ -707,8 +707,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     categories: {
@@ -739,8 +739,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: true,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     categories: {
@@ -771,8 +771,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     categories: {
@@ -806,8 +806,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Explore the diverse world of apples, from sweet and crisp varieties like Honeycrisp and Pink Lady to tart and tangy options like Granny Smith and Braeburn."
@@ -824,8 +824,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Discover the creative and beautiful world of fruit art, from simple designs like watermelon baskets to intricate sculptures made from a variety of fruits."
@@ -842,8 +842,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     }
   },
@@ -859,8 +859,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Have you ever wondered what other fruits are out there beyond the ones you see at your local grocery store? There's a whole world of exotic fruits waiting to be discovered and tasted!",
@@ -877,8 +877,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Discover the delicious and tangy world of citrus fruits, from lemons and limes to oranges and grapefruits.",
@@ -895,8 +895,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Take your charcuterie board to the next level with these delicious fruit and cheese pairings, featuring combinations like figs and goat cheese and apples and cheddar."
@@ -913,8 +913,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Discover the unique appearance and nutritional benefits of dragon fruit, also known as pitaya, and learn how to incorporate it into your diet."
@@ -931,8 +931,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Explore the amazing diversity of tropical fruits, including mangos, pineapples, and papayas, and learn about their health benefits and culinary uses."
@@ -949,8 +949,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Get ready for your next summer picnic with this guide to the best fruits to pack, including watermelon, cherries, and grapes."
@@ -967,8 +967,8 @@ export const posts_seedjson = [
     featured_video: 'https://www.youtube.com/watch?v=wzGRs-C8kqs&t=561s',
     allow_comments: false,
     "author": {
-      "connect": {
-        "email": "adam@m.lan"
+      connect: {
+        email: "adam@m.lan"
       }
     },
     "excerpt": "Discover the many culinary and medicinal uses of pomegranates, including how to juice them and use their seeds in recipes."
@@ -977,10 +977,10 @@ export const posts_seedjson = [
 
 export const subscriptions_seedjson = [
   {
-    "name": "The Fruit Fiesta",
+    name: "The Fruit Fiesta",
     "slug": "fruit-fiesta",
     "description": "Join the party with a fully loaded fruit basket every month!",
-    "price": 30003,
+    price: 30003,
     "stockCount": 4,
     author: {
       connect: {
@@ -989,10 +989,10 @@ export const subscriptions_seedjson = [
     }
   },
   {
-    "name": "The Double Trouble Fruity Bundle",
+    name: "The Double Trouble Fruity Bundle",
     "slug": "double-trouble-fruity-bundle",
     "description": "Twice the fruit, twice the fun! Receive a fully loaded fruit basket every two months.",
-    "price": 160002,
+    price: 160002,
     "stockCount": 4,
     author: {
       connect: {
@@ -1001,10 +1001,10 @@ export const subscriptions_seedjson = [
     }
   },
   {
-    "name": "The Great Fruit Escape",
+    name: "The Great Fruit Escape",
     "slug": "great-fruit-escape",
     "description": "Escape into the world of fresh fruit every three months with a fully loaded fruit basket!",
-    "price": 450009,
+    price: 450009,
     "stockCount": 4,
     author: {
       connect: {
@@ -1016,38 +1016,53 @@ export const subscriptions_seedjson = [
 
 export const services_seedjson = [
   {
-    "name": "Fruit Basket Service",
-    "price": 10000,
-    "durationInHours": "1.5",
-    "employees": {
-      "connect": [
-        { "email": "adam@m.lan" },
-        { "email": "eddy@m.lan" }
+    name: "Fruit Basket Service",
+    price: 10000,
+    durationInHours: "1.5",
+    employees: {
+      connect: [
+        { email: "adam@m.lan" },
+        { email: "eddy@m.lan" }
       ]
     }
   },
   {
-    "name": "Citrus Platter Service",
-    "price": 20000,
-    "durationInHours": "2.5",
-    "employees": {
-      "connect": [
-        { "email": "adam@m.lan" },
-        { "email": "eddy@m.lan" }
+    name: "Citrus Platter Service",
+    price: 20000,
+    durationInHours: "2.5",
+    employees: {
+      connect: [
+        { email: "adam@m.lan" },
+        { email: "eddy@m.lan" }
       ]
     }
   },
   {
-    "name": "Open Smoothie Bar",
-    "price": 30000,
-    "durationInHours": "4.5",
-    "employees": {
-      "connect": [
-        { "email": "adam@m.lan" },
-        { "email": "eddy@m.lan" }
+    name: "Open Smoothie Bar",
+    price: 30000,
+    durationInHours: "4.5",
+    buisnessDays: [0,5,6],
+    employees: {
+      connect: [
+        { email: "adam@m.lan" },
+        { email: "eddy@m.lan" }
       ]
     }
-  }
+  },
+  {
+    name: "Cantaloupe Consultation",
+    price: 30000,
+    durationInHours: "4.5",
+    buisnessHourOpen: '09:00:00',
+    buisnessHourClosed: '18:00:00',
+    buisnessDays: [1,2,3,4,5],
+    employees: {
+      connect: [
+        { email: "adam@m.lan" },
+        { email: "eddy@m.lan" }
+      ]
+    }
+  },
 ]
 
 export const addons_seedjson  = [
@@ -1091,8 +1106,8 @@ export const addons_seedjson  = [
 
 export const avail_seedjson = [
   {
-    dateTime: '2023-12-01T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-12-01T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1100,8 +1115,8 @@ export const avail_seedjson = [
     status: 'APPROVED',
   },
   {
-    dateTime: '2023-12-02T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-12-02T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1109,8 +1124,8 @@ export const avail_seedjson = [
     status: 'APPROVED',
   },
   {
-    dateTime: '2023-12-03T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-12-03T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1118,8 +1133,8 @@ export const avail_seedjson = [
     status: 'APPROVED',
   },
   {
-    dateTime: '2023-05-01T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-05-01T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },
@@ -1127,8 +1142,8 @@ export const avail_seedjson = [
     status: 'APPROVED',
   },
   {
-    dateTime: '2023-05-02T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-05-02T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },
@@ -1136,8 +1151,8 @@ export const avail_seedjson = [
     status: 'APPROVED',
   },
   {
-    dateTime: '2023-05-03T00:00:00+00:00',
-    durationInHours: '24',
+    start: '2023-05-03T00:00:00+00:00',
+    durationInHours: '23.9',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },

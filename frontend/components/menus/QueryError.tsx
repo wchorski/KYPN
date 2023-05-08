@@ -1,7 +1,15 @@
 import React from 'react'
 
-export const QueryError = () => {
+type Props = {
+  error: any
+}
+
+export const QueryError = ({error}:Props) => {
+
+  console.log({error});
+  
+
   return (
-    <p>QueryError...</p>
+    <p className='error'>QueryError. {error.message}</p>
   )
 }

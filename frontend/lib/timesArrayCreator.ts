@@ -1,9 +1,9 @@
 export const filterServiceTime = (start:string, end:string, duration:string) => {
-  console.table({
-    start: start,
-    end: end,
-    duration: Number(duration) * 60,
-  })
+  // console.table({
+  //   start: start,
+  //   end: end,
+  //   duration: Number(duration) * 60,
+  // })
   const startTime = start;
   const endTime = end;
 
@@ -30,7 +30,7 @@ export const filterServiceTime = (start:string, end:string, duration:string) => 
 }
 
 export const filterEmployeeTimes = (serviceTimes:string[], employeeTimeOpen:string, employeeTimeClose:string) => {
-  console.log({serviceTimes})
+  // console.log({serviceTimes})
   
   const timeRangeStart =  new Date(`2000-01-01T${employeeTimeOpen}.000Z`);
   const timeRangeEnd =    new Date(`2000-01-01T${employeeTimeClose}.000Z`);

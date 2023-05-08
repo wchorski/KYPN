@@ -8,7 +8,7 @@ export function BookingCreate() {
   const { loading: loadingQuery, error: errorQuery, data: dataQuery } = useQuery(QUERY_SERVICES_ALL)
   
   if (loadingQuery)  return <QueryLoading />
-  if (errorQuery)      return <QueryError />
+  if (errorQuery)      return <QueryError error={errorQuery}/>
   
   
   // console.log(dataEmployee)
@@ -33,6 +33,7 @@ const QUERY_SERVICES_ALL = gql`
       price
       buisnessHourOpen
       buisnessHourClosed
+      buisnessDays
       durationInHours
       employees {
         id
@@ -40,10 +41,11 @@ const QUERY_SERVICES_ALL = gql`
         buisnessHourOpen
         buisnessHourClosed
         gigs {
-          dateTime
+          start
         }
         availability {
-          dateTime
+          start
+          end
           type
         }
       }

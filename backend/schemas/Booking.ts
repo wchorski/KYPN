@@ -6,7 +6,7 @@ import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
 import { User, Addon, Service, } from '../types'
-import { dateCheckAvail } from '../lib/dateCheck';
+import { calcEndTime, dateCheckAvail, dayOfWeek } from '../lib/dateCheck';
 import { createCalendarEvent } from "../lib/googleapi/calCreate";
 
 
@@ -28,18 +28,16 @@ export const Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'summary', 'service', 'customer', 'employees'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
 
 
   fields: {
-    // date: calendarDay({ validation: { isRequired: true } }),
-    dateTime: timestamp({}),
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({}),
-    summary: text({validation: { isRequired: true }}),
+    summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
     durationInHours: decimal({
       defaultValue: '23',
       precision: 5,
@@ -97,6 +95,11 @@ export const Booking = list({
             resolvedData.price = selectedService.price
             resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
             description += '\n SERVICE: ' + selectedService.name
+
+            const day = resolvedData.start.getDay()
+            // console.log({day})
+            // @ts-ignore
+            if(!selectedService.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
           }
         }
 
@@ -129,15 +132,16 @@ export const Booking = list({
               email
               availability{
                 id
-                dateTime
+                start
+                end
                 type
                 status
                 durationInHours
               }
               gigs {
                 id
-                dateTime
                 start
+                end
                 durationInHours
               }
             `
@@ -149,12 +153,12 @@ export const Booking = list({
             // console.log('---------')
             // console.log(emp.name)
   
-            if(dateCheckAvail(resolvedData.start, resolvedData.durationInHours, emp.availability))
+            if(dateCheckAvail(resolvedData.start, resolvedData.end, emp.availability))
               console.log(`+++ Open Day no vaction set for ${emp.name}`)
              else 
               throw new Error(`CONFLICT: vacation day for ${emp.name}`)
   
-            if(dateCheckAvail(resolvedData.start, resolvedData.durationInHours, emp.gigs))
+            if(dateCheckAvail(resolvedData.start, resolvedData.end, emp.gigs))
               console.log(`+++ No Gigs yet set for ${emp.name}`)
              else 
               throw new Error(`CONFLICT: double booking ${emp.name} `)
@@ -185,10 +189,7 @@ export const Booking = list({
 
 
       if (operation === 'update') {
-        // todo if service / addon was removed, or change, reflect the price.
-        // console.log('%%%%%%%%%%%%%%%%% booking update')
-        // console.log({resolvedData})
-        // console.log({item})
+        // TODO still check for availablility of employee here
 
         let currPrice:number = Number(item.price)
   
@@ -241,6 +242,7 @@ export const Booking = list({
         }
 
         resolvedData.price = currPrice
+        
       }
     },
     afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
@@ -260,7 +262,7 @@ export const Booking = list({
             item.notes,
           )
         }
-        console.log({item});
+        // console.log({item});
         
         // console.log({ item });
         // console.log({ resolvedData });
@@ -285,11 +287,3 @@ export const Booking = list({
     },
   }
 })
-
-
-function calcEndTime(start:string, duration:string){
-  const date = new Date(start);
-  date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000);
-  return date.toISOString();
-
-}

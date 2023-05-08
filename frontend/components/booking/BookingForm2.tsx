@@ -2,16 +2,17 @@
 import Calendar from "react-calendar"
 import styled from "styled-components"
 import useForm from "../../lib/useForm"
-import { FormEvent, ReactElement, ReactNode, useEffect, useRef, useState } from "react"
+import { FormEvent, ReactNode, useRef, useState } from "react"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
-import { QueryLoading } from "../menus/QueryLoading"
-import { QueryError } from "../menus/QueryError"
+
 import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { filterEmployeeTimes, filterServiceTime } from "../../lib/timesArrayCreator"
+import { datePretty, timePretty } from "../../lib/dateFormatter"
+import { Availability } from "../../lib/types"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -52,7 +53,7 @@ export function BookingForm2({ services }:iProps) {
   const [pickedService, setPickedService] = useState<any>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
-  const [blackoutDates, setBlackoutDates] = useState([])
+  const [blackoutDates, setBlackoutDates] = useState<string[]>([])
 
 
   const [times, setTimes] = useState<string[] | undefined>([])
@@ -120,9 +121,11 @@ export function BookingForm2({ services }:iProps) {
       type: "text",
       placeholder: "John Wick...",
       errorMessage:
-        "name should be 3-16 characters and shouldn't include any special character!",
+        "3-30 characters. A-Z, 0-9, or '-' allowed",
       label: "name",
-      pattern: "^[A-Za-z0-9]{3,16}$",
+      pattern: "^[a-zA-Z0-9 -]+",
+      minLength: '3',
+      maxLength: '30',
       required: false,
     },
     {
@@ -165,7 +168,8 @@ export function BookingForm2({ services }:iProps) {
 
     // console.log({ values })
     const formattedInputs = {
-      dateTime: new Date(`${values.date}T${values.time}`).toISOString(),
+      start: new Date(`${values.date}T${values.time}`).toISOString(),
+      summary: `[NEW] ${values.name ? values.name : values.email}`,
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
     }
@@ -214,19 +218,21 @@ export function BookingForm2({ services }:iProps) {
       setIsSuccess(true)
 
       let successObj = {
-        date: values.date,
-        time: values.time,
+        date: datePretty(values.date),
+        time: timePretty(values.time),
         service: values.service,
         staff: values.staff,
         msg: ''
       }
 
       if(values.service === '') 
-        setSuccessfullBook({...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" })
+        successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
       if(values.staff === '') 
-        setSuccessfullBook({...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"})
+        successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
       if(values.staff === '' && values.service === '') 
-        setSuccessfullBook({...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"})
+        successObj = {...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"}
+
+      setSuccessfullBook(successObj)
     }
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
@@ -258,20 +264,36 @@ export function BookingForm2({ services }:iProps) {
     setEmployeeOptions(formatted)
   }
 
+  // todo refactor this into a lib file. skip any dates that are in the past!
   function handleBlackoutDates(id:string){
     
     const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
     if(!selectedEmpl) return setBlackoutDates([])
 
-    const blackoutArray:any = []
+    const blackoutArray:string[] = []
     
-    selectedEmpl.gigs.map((gig:any) => {blackoutArray.push(gig.dateTime)})
-    selectedEmpl.availability.map((avail:any) => {
-      if(avail.type === 'AVAILABLE') return console.warn('date is available for employee')
-      
-      blackoutArray.push(avail.dateTime)
+    // TODO assumes that any service spans less than a day. cannot book multiple gigs on one day
+    selectedEmpl.gigs.map((gig:any) => {blackoutArray.push(gig.start)})
+
+    // TODO this assumes that vacation is per day. Cannot do partial day vacations 
+    selectedEmpl.availability.map((avail:Availability) => {
+      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
+
+      const startDate = new Date(avail.start);
+      const endDate = new Date(avail.end);
+
+
+      let currentDate = startDate;
+      while (currentDate <= endDate) {
+        blackoutArray.push(new Date(currentDate).toString());
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      // blackoutArray.push(avail.start)
     })
 
+    console.log({blackoutArray});
+    
     setBlackoutDates(blackoutArray)
 
     // @ts-ignore
@@ -368,7 +390,8 @@ export function BookingForm2({ services }:iProps) {
                 <CalendarDatePicker 
                   setValues={setValues} 
                   blackoutStrings={blackoutDates}
-                  />
+                  buisnessDays={pickedService?.buisnessDays || []}
+                />
                 <br/> 
               </div>
 
@@ -425,10 +448,11 @@ export function BookingForm2({ services }:iProps) {
                 onChange={onChange}
               />
 
+              <button type="submit" disabled={values.email ? false : true}> Submit </button>
             </HeightReveal>
+            
           </fieldset>
 
-          <button type="submit"> Submit </button>
 
         </StyledBookingForm>
       )}
@@ -442,6 +466,17 @@ const StyledBookingForm = styled.form`
   background-color: #d0e4dd;
   padding: 1em;
   
+  button[type=submit]{
+    color: var(--c-3);
+    padding: 1em 2em;
+    border-radius: 3px;
+    transition: all .3s;
+    
+    &:hover:not([disabled]){
+      background-color: var(--c-3);
+      color: var(--c-txt-rev);
+    }
+  }
 
   /* fieldset{
     max-height: 0em;
@@ -534,7 +569,7 @@ const MUTATE_BOOKING_CREATE = gql`
   mutation Mutation($data: BookingCreateInput!) {
     createBooking(data: $data) {
       id
-      dateTime
+      start
     }
   }
 `

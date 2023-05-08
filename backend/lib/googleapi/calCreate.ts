@@ -57,7 +57,7 @@ export async function createCalendarEvent(event:GEvent){
       requestBody: event,
     })
 
-    console.log('googleapi cal success, ', {response});
+    console.log('googleapi cal success, ');
     
 
     return { 

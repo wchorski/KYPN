@@ -545,7 +545,6 @@ input UserRelateToManyForCreateInput {
 
 type Booking {
   id: ID!
-  dateTime: DateTime
   start: DateTime
   end: DateTime
   summary: String
@@ -574,7 +573,6 @@ input BookingWhereInput {
   OR: [BookingWhereInput!]
   NOT: [BookingWhereInput!]
   id: IDFilter
-  dateTime: DateTimeNullableFilter
   start: DateTimeFilter
   end: DateTimeNullableFilter
   summary: StringFilter
@@ -630,7 +628,6 @@ input IntNullableFilter {
 
 input BookingOrderByInput {
   id: OrderDirection
-  dateTime: OrderDirection
   start: OrderDirection
   end: OrderDirection
   summary: OrderDirection
@@ -642,7 +639,6 @@ input BookingOrderByInput {
 }
 
 input BookingUpdateInput {
-  dateTime: DateTime
   start: DateTime
   end: DateTime
   summary: String
@@ -683,7 +679,6 @@ input BookingUpdateArgs {
 }
 
 input BookingCreateInput {
-  dateTime: DateTime
   start: DateTime
   end: DateTime
   summary: String
@@ -724,6 +719,7 @@ type Service {
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
+  buisnessDays: [Int!]
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
@@ -787,6 +783,7 @@ input ServiceUpdateInput {
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
+  buisnessDays: [Int!]
   employees: UserRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
@@ -820,6 +817,7 @@ input ServiceCreateInput {
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
+  buisnessDays: [Int!]
   employees: UserRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
@@ -904,7 +902,8 @@ input AddonCreateInput {
 
 type Availability {
   id: ID!
-  dateTime: DateTime
+  start: DateTime
+  end: DateTime
   durationInHours: Decimal
   employee: User
   type: String
@@ -922,8 +921,9 @@ input AvailabilityWhereInput {
   OR: [AvailabilityWhereInput!]
   NOT: [AvailabilityWhereInput!]
   id: IDFilter
-  dateTime: DateTimeFilter
-  durationInHours: DecimalFilter
+  start: DateTimeFilter
+  end: DateTimeNullableFilter
+  durationInHours: DecimalNullableFilter
   employee: UserWhereInput
   type: StringNullableFilter
   status: StringNullableFilter
@@ -931,9 +931,21 @@ input AvailabilityWhereInput {
   dateModified: DateTimeNullableFilter
 }
 
+input DecimalNullableFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalNullableFilter
+}
+
 input AvailabilityOrderByInput {
   id: OrderDirection
-  dateTime: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
   durationInHours: OrderDirection
   type: OrderDirection
   status: OrderDirection
@@ -942,7 +954,8 @@ input AvailabilityOrderByInput {
 }
 
 input AvailabilityUpdateInput {
-  dateTime: DateTime
+  start: DateTime
+  end: DateTime
   durationInHours: Decimal
   employee: UserRelateToOneForUpdateInput
   type: String
@@ -957,7 +970,8 @@ input AvailabilityUpdateArgs {
 }
 
 input AvailabilityCreateInput {
-  dateTime: DateTime
+  start: DateTime
+  end: DateTime
   durationInHours: Decimal
   employee: UserRelateToOneForCreateInput
   type: String

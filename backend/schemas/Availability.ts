@@ -1,6 +1,7 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
+import { calcEndTime } from "../lib/dateCheck";
 
 
 
@@ -14,21 +15,22 @@ export const Availability = list({
     // todo hide these again
     // isHidden: true,
     listView: {
-      initialColumns: ['dateTime', 'employee', 'type', 'status'],
-      initialSort: { field: 'dateTime', direction: 'DESC'}
+      initialColumns: ['start', 'end', 'employee', 'type', 'status'],
+      initialSort: { field: 'start', direction: 'DESC'}
     },
   },
 
 
   fields: {
-    dateTime: timestamp({ validation: { isRequired: true } }),
+    start: timestamp({ validation: { isRequired: true } }),
+    end: timestamp({}),
     durationInHours: decimal({
-      defaultValue: '24',
+      // defaultValue: '23.9',
       precision: 5,
       scale: 2,
       validation: {
-        isRequired: true,
-        max: '24',
+        // isRequired: true,
+        // max: '24',
         min: '.25',
       },
     }),
@@ -61,4 +63,29 @@ export const Availability = list({
     dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
     
   },
+  hooks: {
+    beforeOperation: async ({ operation, resolvedData, context, item }) => {
+      // try {
+      //   if (resolvedData && !resolvedData.user) {
+      //     const currentUserId = await context.session.itemId;
+      //     // console.log({ currentUserId });
+      //     resolvedData.user = { connect: { id: currentUserId } };
+      //   }
+      // } catch (err) { console.warn(err) }
+
+      if (operation === 'create') {
+
+        if(!resolvedData.end){
+          resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
+          console.log('avail schema , ', {resolvedData});
+          
+        }
+
+        if(resolvedData.end < resolvedData.start){
+          throw new Error('End time is set before Start time')
+        }
+      }
+    }
+  }
 })
+
