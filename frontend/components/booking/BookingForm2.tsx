@@ -2,7 +2,7 @@
 import Calendar from "react-calendar"
 import styled from "styled-components"
 import useForm from "../../lib/useForm"
-import { FormEvent, ReactNode, useRef, useState } from "react"
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 
@@ -12,7 +12,8 @@ import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { filterEmployeeTimes, filterServiceTime } from "../../lib/timesArrayCreator"
 import { datePretty, timePretty } from "../../lib/dateFormatter"
-import { Availability } from "../../lib/types"
+import { Availability, User } from "../../lib/types"
+import { calcDateTimeRange, calcTimeOverlap, filterTimeAvail } from "../../lib/dateCheckCal"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -46,17 +47,19 @@ export function BookingForm2({ services }:iProps) {
 
   const session = useUser()
   const formRef = useRef<HTMLFormElement>(null)
+
   const [isSuccess, setIsSuccess] = useState(false)
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   const [animTrig, setAnimTrig] = useState(0)
   
   const [pickedService, setPickedService] = useState<any>()
+  const [pickedStaff, setPickedStaff] = useState<User>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
   const [blackoutDates, setBlackoutDates] = useState<string[]>([])
 
 
-  const [times, setTimes] = useState<string[] | undefined>([])
+  const [times, setTimes] = useState<string[]>([])
   const [values, setValues] = useState({
     service: "",
     staff: "",
@@ -173,6 +176,8 @@ export function BookingForm2({ services }:iProps) {
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
     }
+    console.log({formattedInputs});
+    
 
     if (values.service !== '' ) {
       Object.assign(formattedInputs, {
@@ -264,27 +269,131 @@ export function BookingForm2({ services }:iProps) {
     setEmployeeOptions(formatted)
   }
 
+  function handleBlackoutTimes(date:string){
+    console.log('----- handleBlackoutTimes ----');
+    
+    // console.log({date})
+    
+    if(!pickedStaff) return console.warn('no staff picked, ', pickedStaff);
+    
+    pickedStaff.availability.map((avail:Availability) => {
+      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
+      
+      // console.log({filteredTimes})
+      
+      const rangeStart = new Date(avail.start)
+      const rangeEnd = new Date(avail.end) 
+      
+      
+      
+      if(date !== rangeStart.toLocaleDateString('en-CA')
+      && date !== rangeEnd.toLocaleDateString('en-CA')){
+        
+        resetServiceSlotTimes()
+      }  else {
+        console.log('these do overlap');
+        console.log(date + ' : ' + rangeStart.toLocaleDateString('en-CA'));
+        const filteredTimes = filterTimeAvail(date, times, {start: avail.start, end: avail.end}, pickedService.durationInHours)
+        setTimes(filteredTimes)
+      }
+      // if(filteredTimes === times) return resetServiceSlotTimes()
+    })
+  }
+
+
+  function resetServiceSlotTimes(){
+    setTimes(filterServiceTime(
+      pickedService.buisnessHourOpen,
+      pickedService.buisnessHourClosed,
+      pickedService.durationInHours,
+    ))
+  }
+
   // todo refactor this into a lib file. skip any dates that are in the past!
-  function handleBlackoutDates(id:string){
+  function handleBlackoutDates(
+    id:string, 
+    // serviceRange:{start:string, end:string}
+  ){
+
+    resetServiceSlotTimes()
     
     const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
     if(!selectedEmpl) return setBlackoutDates([])
+    setPickedStaff(selectedEmpl)
 
     const blackoutArray:string[] = []
     
     // TODO assumes that any service spans less than a day. cannot book multiple gigs on one day
     selectedEmpl.gigs.map((gig:any) => {blackoutArray.push(gig.start)})
+  
 
     // TODO this assumes that vacation is per day. Cannot do partial day vacations 
     selectedEmpl.availability.map((avail:Availability) => {
       if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
 
+      // console.log('avail.start, ', avail.start);
+      
       const startDate = new Date(avail.start);
       const endDate = new Date(avail.end);
 
+      // console.log({serviceRange});
+      
+      // console.table({
+      //   start: avail.start,
+      //   end: avail.end,
+      // })
+      const localOffset = new Date().getTimezoneOffset() * 60000
+      const startLocal = new Date(startDate.getTime())
+      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
+      const endLocal = new Date(endDate.getTime())
+      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
+      
+      // const startTimeUTC  =  startUTC.getUTCHours() * 3600000 + startUTC.getUTCMinutes() * 60000 
+      // // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000 + startUTC.getUTCSeconds() * 1000 + endUTC.getUTCMilliseconds();
+      // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000
+
+      // if start is > 00:00:00.000Z -- dont blackout date, configure times
+      if(startLocalMin > 0){
+        // todo set startDate one day later and 00:00
+        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
+        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
+        // console.table({
+        //   startDate,
+        //   startLocal,
+        //   startLocalMin,
+        //   message: 'begins later than midnight on this day'
+        // })
+  
+      } else {
+        // console.table({
+        //   startDate,
+        //   startLocal,
+        //   startLocalMin,
+        //   message: 'starts at the top of the day'
+        // })
+      }
+
+      if(endLocalMin > 1439){
+        // console.table({
+        //   endDate,
+        //   endLocal,
+        //   endLocalMin,
+        //   message: 'rolls into the next day a 24 hour day'
+        // })
+
+      } else {
+        // console.table({
+        //   endDate,
+        //   endLocal,
+        //   endLocalMin,
+        //   message: 'ends on or before 23:59 of this day'
+        // })
+
+      }
 
       let currentDate = startDate;
       while (currentDate <= endDate) {
+        // todo carries start time with it to the other dates
         blackoutArray.push(new Date(currentDate).toString());
         currentDate.setDate(currentDate.getDate() + 1);
       }
@@ -292,15 +401,15 @@ export function BookingForm2({ services }:iProps) {
       // blackoutArray.push(avail.start)
     })
 
-    console.log({blackoutArray});
+    // console.log({blackoutArray});
     
     setBlackoutDates(blackoutArray)
 
-    // @ts-ignore
-    setTimes(prev => filterEmployeeTimes(prev, selectedEmpl.buisnessHourOpen, selectedEmpl.buisnessHourClosed))
+    // // @ts-ignore
+    // setTimes(prev => filterEmployeeTimes(prev, selectedEmpl.buisnessHourOpen, selectedEmpl.buisnessHourClosed))
   }
 
-  const onChange = (e: any) => {
+  const onChange = (e: any) => {    
     setValues({ ...values, [e.target.name]: e.target.value });
   }
   
@@ -311,6 +420,14 @@ export function BookingForm2({ services }:iProps) {
 
     return foundObj
   }
+
+  useEffect( () => {
+  
+    handleBlackoutTimes(values.date)
+  
+    // return () => 
+  }, [values])
+  
 
   return (
     <div>
@@ -341,6 +458,7 @@ export function BookingForm2({ services }:iProps) {
                 onChange={(e:any) => {
                   onChange(e) 
                   handleServicePicked(e.target.value)
+                  
                   // handleEmployeeUpdate(e.target.value)
                 }}
               />
@@ -353,12 +471,15 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     // setEmployeeId(e.target.value)
-                    setTimes(filterServiceTime(
-                      pickedService.buisnessHourOpen,
-                      pickedService.buisnessHourClosed,
-                      pickedService.durationInHours,
-                    ))
-                    handleBlackoutDates(e.target.value)
+                    // setTimes(filterServiceTime(
+                    //   pickedService.buisnessHourOpen,
+                    //   pickedService.buisnessHourClosed,
+                    //   pickedService.durationInHours,
+                    // ))
+                    handleBlackoutDates(
+                      e.target.value 
+                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
+                    )
                   }}
                   key={employeeOptions}
                 />
@@ -391,6 +512,7 @@ export function BookingForm2({ services }:iProps) {
                   setValues={setValues} 
                   blackoutStrings={blackoutDates}
                   buisnessDays={pickedService?.buisnessDays || []}
+                  handleBlackoutTimes={handleBlackoutTimes}
                 />
                 <br/> 
               </div>
@@ -588,6 +710,27 @@ const QUERY_SERVICES_ALL = gql`
     }
   }
 `
+
+function calcDateTimeUTC(date:string, time:string){
+  // Create a Date object from the local date-time string
+
+  const localDateTimeString = `${date}T${time}`;
+  console.log({localDateTimeString});
+  
+  return new Date(localDateTimeString).toISOString()
+  // const localDate = new Date(localDateTimeString);
+
+  // // Get the local timezone offset in minutes
+  // const localOffset = localDate.getTimezoneOffset();
+
+  // // Convert the local time to UTC by subtracting the offset in minutes
+  // const utcTime = localDate.getTime() - (localOffset * 60 * 1000);
+
+  // // Create a new Date object from the UTC time
+  // const startUTC = new Date(utcTime);
+
+  // return startUTC;
+}
 
 // graphql query
 // - Services provided

@@ -55,7 +55,7 @@ const StyledTimePicker = styled.ul`
 
   @keyframes reveal {
     0% { 
-      opacity: .2;
+      opacity: .1;
     }
     100% { 
       opacity: 1;

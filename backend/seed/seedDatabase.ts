@@ -28,6 +28,7 @@ const seedAvail = async (context: Context) => {
   const seedObjs: any[] = avail_seedjson;
   const objsAlreadyInDatabase = await db.Availability.findMany({
     where: {
+      // @ts-ignore
       start: { in: seedObjs.map(obj => obj.start) },
     },
   });

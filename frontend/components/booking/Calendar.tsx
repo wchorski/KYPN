@@ -8,11 +8,12 @@ type iProps = {
   blackoutStrings: string[]
   setValues: any,
   buisnessDays: number[],
+  handleBlackoutTimes: any,
 }
 
-export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays}:iProps) => {
+export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays, handleBlackoutTimes}:iProps) => {
 
-  const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
+  // const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
 
 
@@ -24,12 +25,14 @@ export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays}:i
         className={'REACT-CALENDAR p-2'}
         view='month'
         calendarType='US'
-        onClickDay={(date) => {
+        onClickDay={(date) => {      
+          // handleBlackoutTimes(date)
           setValues((prev:any) => ({...prev, date: format(date, 'yyyy-MM-dd')}))
           // setAnimTrig(animTrig + 1)
           // getTimes()
         }}
-        tileDisabled={({date}) => blackoutDates.includes(date.getDate()) || !buisnessDays.includes(date.getDay()) }
+        // tileDisabled={({date}) => blackoutDates.includes(date.getDate()) || !buisnessDays.includes(date.getDay()) }
+        tileDisabled={({date}) => blackoutStrings.includes(date.toString()) || !buisnessDays.includes(date.getDay()) }
       // value={date}
       />
 
