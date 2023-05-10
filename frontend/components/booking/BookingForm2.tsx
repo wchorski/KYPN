@@ -292,7 +292,6 @@ export function BookingForm2({ services }:iProps) {
         resetServiceSlotTimes()
       }  else {
         console.log('these do overlap');
-        console.log(date + ' : ' + rangeStart.toLocaleDateString('en-CA'));
         const filteredTimes = filterTimeAvail(date, times, {start: avail.start, end: avail.end}, pickedService.durationInHours)
         setTimes(filteredTimes)
       }
@@ -352,43 +351,15 @@ export function BookingForm2({ services }:iProps) {
       // // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000 + startUTC.getUTCSeconds() * 1000 + endUTC.getUTCMilliseconds();
       // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000
 
-      // if start is > 00:00:00.000Z -- dont blackout date, configure times
+
       if(startLocalMin > 0){
-        // todo set startDate one day later and 00:00
         startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
         startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
-        // console.table({
-        //   startDate,
-        //   startLocal,
-        //   startLocalMin,
-        //   message: 'begins later than midnight on this day'
-        // })
-  
-      } else {
-        // console.table({
-        //   startDate,
-        //   startLocal,
-        //   startLocalMin,
-        //   message: 'starts at the top of the day'
-        // })
-      }
+      } 
 
-      if(endLocalMin > 1439){
-        // console.table({
-        //   endDate,
-        //   endLocal,
-        //   endLocalMin,
-        //   message: 'rolls into the next day a 24 hour day'
-        // })
-
-      } else {
-        // console.table({
-        //   endDate,
-        //   endLocal,
-        //   endLocalMin,
-        //   message: 'ends on or before 23:59 of this day'
-        // })
-
+      if(endLocalMin < 1439){
+        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
+        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
       }
 
       let currentDate = startDate;

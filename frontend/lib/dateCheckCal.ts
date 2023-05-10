@@ -32,7 +32,7 @@ export function calcTimeOverlap(range1:DateRange, range2:DateRange){
 // ! filter out employees vacation days by time slots
 export function filterTimeAvail(date:string, times:string[], range:DateRange, duration:string){
   // console.log({range});
-  // console.log({date});
+  console.log({times});
   
   // const dateChosen = new Date(date)
   // const d = date.split('-')
@@ -54,15 +54,14 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
   //   chosen: new Date(date),
   //   rangeEnd: new Date(range.end)
   // })
-  
+  let filteredTimes = []
   if(date === rangeStart.toLocaleDateString('en-CA')){
-    console.log('these days match')
-    console.table({
-      date,
-      rangeStart: rangeStart.toLocaleDateString('en-CA'),
-    })
+    // console.table({
+    //   date,
+    //   rangeStart: rangeStart.toLocaleDateString('en-CA'),
+    // })
 
-    const filteredTimes = times.filter(time => {
+    const newTimes = times.filter(time => {
       const [hours, minutes, seconds] = time.split(":")
       const timeDate = new Date(range.start)
       timeDate.setHours(Number(hours))
@@ -71,12 +70,13 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
       
       return timeDate < rangeStart
       // return timeDate < rangeStart || timeDate > endOfDay(range.start)
-    });
-    console.log({times})
-    console.log({filteredTimes})
+    })
+
+    // console.log({times})
+    // console.log({filteredTimes})
     
   
-    return filteredTimes
+    filteredTimes.push(...newTimes)
     
     // const overlapSlots = filterServiceTimeSlots(range.start, endOfDay(range.start), duration)
     // console.log({overlapSlots});
@@ -85,18 +85,35 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
 
   // todo haven't set up end date avail
   if(date === rangeEnd.toLocaleDateString('en-CA')){
-    console.log('these days match')
-    console.table({
-      date,
-      rangeEnd: rangeEnd.toLocaleDateString('en-CA'),
+    // console.log('these days match range.end')
+    // console.table({
+    //   date,
+    //   rangeEnd: rangeEnd.toLocaleDateString('en-CA'),
+    // })
+
+    const newTimes = times.filter(time => {
+      const [hours, minutes, seconds] = time.split(":")
+      const timeDate = new Date(range.end)
+      timeDate.setHours(Number(hours))
+      timeDate.setMinutes(Number(minutes))
+      timeDate.setSeconds(Number(seconds))
+      
+      return timeDate > rangeEnd
+      // return timeDate < rangeStart || timeDate > endOfDay(range.start)
     })
 
+    filteredTimes.push(...newTimes)
+  }
+
+  if(filteredTimes.length > 0){
+    console.log({filteredTimes})
+    return filteredTimes
+    
+  } else {
+    console.log({times})
     return times
   }
 
-  
-
-  return times
   // // console.log({times});
   // const timeInterval = Number(duration) * 60;
 
