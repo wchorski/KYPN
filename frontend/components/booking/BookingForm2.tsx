@@ -10,10 +10,10 @@ import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
-import { filterEmployeeTimes, filterServiceTime } from "../../lib/timesArrayCreator"
+import { filterEmployeeTimes, filterServiceSlots, filterServiceTime } from "../../lib/timesArrayCreator"
 import { datePretty, timePretty } from "../../lib/dateFormatter"
 import { Availability, Booking, User } from "../../lib/types"
-import { calcDateTimeRange, calcTimeOverlap, filterTimeAvail } from "../../lib/dateCheckCal"
+import { calcDateTimeRange,  filterOutOverlapSlots, filterTimeAvail } from "../../lib/dateCheckCal"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -41,6 +41,11 @@ type SuccessfullBook = {
   
 }
 
+type Slot = {
+  start: string,
+  end: string,
+}
+
 export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
@@ -61,12 +66,15 @@ export function BookingForm2({ services }:iProps) {
 
   const [times, setTimes] = useState<string[]>([])
   const [timesPreFilter, settimesPreFilter] = useState<string[]>([])
+  const [slots, setSlots] = useState<Slot[]>([])
+  const [slotsPreFilter, setslotsPreFilter] = useState<Slot[]>([])
   const [values, setValues] = useState({
     service: "",
     staff: "",
     // datetime_local: '',
     date: '',
-    time: '',
+    timeStart: '',
+    timeEnd: '',
     name: "",
     email: "",
     phone: "",
@@ -112,15 +120,23 @@ export function BookingForm2({ services }:iProps) {
     },
     {
       id: 4,
-      name: "time",
+      name: "timeStart",
       type: "time",
-      label: "Time",
+      label: "Start Time",
+      errorMessage: 'Must pick a time. It can be an estimate and can be changed later',
+      required: true,
+    },
+    {
+      id: 5,
+      name: "timeEnd",
+      type: "time",
+      label: "End Time",
       errorMessage: 'Must pick a time. It can be an estimate and can be changed later',
       required: true,
     },
 
     {
-      id: 5,
+      id: 6,
       name: "name",
       type: "text",
       placeholder: "John Wick...",
@@ -133,7 +149,7 @@ export function BookingForm2({ services }:iProps) {
       required: false,
     },
     {
-      id: 6,
+      id: 7,
       name: "email",
       type: "email",
       placeholder: "John@Wick.com...",
@@ -142,7 +158,7 @@ export function BookingForm2({ services }:iProps) {
       required: true,
     },
     {
-      id: 6,
+      id: 8,
       name: "phone",
       type: "phone",
       placeholder: "123 456 7890...",
@@ -155,7 +171,7 @@ export function BookingForm2({ services }:iProps) {
       required: false,
     },
     {
-      id: 7,
+      id: 9,
       name: "notes",
       type: "textarea",
       errorMessage: 'Something when wrong with "notes" field. Please try submitting again',
@@ -172,7 +188,7 @@ export function BookingForm2({ services }:iProps) {
 
     // console.log({ values })
     const formattedInputs = {
-      start: new Date(`${values.date}T${values.time}`).toISOString(),
+      start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
       summary: `[NEW] ${values.name ? values.name : values.email}`,
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
@@ -225,7 +241,7 @@ export function BookingForm2({ services }:iProps) {
 
       let successObj = {
         date: datePretty(values.date),
-        time: timePretty(values.time),
+        time: timePretty(values.timeStart),
         service: pickedService?.name || '',
         staff: pickedStaff?.name || '',
         msg: ''
@@ -259,6 +275,14 @@ export function BookingForm2({ services }:iProps) {
     )
     setTimes(filteredTimes)
     settimesPreFilter(filteredTimes)
+    
+    const filteredSlots = filterServiceSlots(
+      foundService.buisnessHourOpen,
+      foundService.buisnessHourClosed,
+      foundService.durationInHours,
+    )
+    setSlots(filteredSlots)
+    setslotsPreFilter(filteredSlots) 
 
     handleEmployeeUpdate(id)
   }
@@ -280,6 +304,7 @@ export function BookingForm2({ services }:iProps) {
     if(!pickedStaff) return console.warn('no staff picked, ', pickedStaff);
 
     let timesPreFilt = timesPreFilter
+    let slotsPreFilt = slotsPreFilter
 
     // * gigs / bookings
     const staffGigsLocal = pickedStaff.gigs.map((gig:Booking) => {
@@ -296,6 +321,11 @@ export function BookingForm2({ services }:iProps) {
       
       const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
       timesPreFilt = filteredTimes
+
+      const filteredSlots = filterOutOverlapSlots({start: gig.start, end: gig.end}, slotsPreFilt, date)
+      // @ts-ignore //todo prob shouldn't ignore this
+      slotsPreFilt = filteredSlots
+      
     }
     
     // * availability
@@ -311,11 +341,13 @@ export function BookingForm2({ services }:iProps) {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       if(!avail) return console.warn('uhoh: no avail found')
-      
       const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
-      console.log({filteredTimes});
-      
       timesPreFilt = filteredTimes
+
+      const filteredSlots = filterOutOverlapSlots({start: avail.start, end: avail.end}, slotsPreFilt, date)
+      // @ts-ignore //todo prob shouldn't ignore this
+      slotsPreFilt = filteredSlots
+
     }
 
     if(!staffGigsLocal.includes(date) && !staffAvailLocal.includes(date)){
@@ -323,7 +355,7 @@ export function BookingForm2({ services }:iProps) {
 
     } else {
       setTimes(timesPreFilt)
-
+      setSlots(slotsPreFilt)
     }
 
   }
@@ -331,6 +363,12 @@ export function BookingForm2({ services }:iProps) {
 
   function resetServiceSlotTimes(){
     setTimes(filterServiceTime(
+      pickedService.buisnessHourOpen,
+      pickedService.buisnessHourClosed,
+      pickedService.durationInHours,
+    ))
+
+    setSlots(filterServiceSlots(
       pickedService.buisnessHourOpen,
       pickedService.buisnessHourClosed,
       pickedService.durationInHours,
@@ -475,6 +513,7 @@ export function BookingForm2({ services }:iProps) {
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
                   handleServicePicked(e.target.value)
                   
                   // handleEmployeeUpdate(e.target.value)
@@ -488,12 +527,7 @@ export function BookingForm2({ services }:iProps) {
                   value={values['staff']}
                   onChange={(e:any) => {
                     onChange(e)
-                    // setEmployeeId(e.target.value)
-                    // setTimes(filterServiceTime(
-                    //   pickedService.buisnessHourOpen,
-                    //   pickedService.buisnessHourClosed,
-                    //   pickedService.durationInHours,
-                    // ))
+                    setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
                     handleBlackoutDates(
                       e.target.value 
                       // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
@@ -508,7 +542,9 @@ export function BookingForm2({ services }:iProps) {
 
           <fieldset >
             <legend> The When </legend>
-            <HeightReveal className='datetime-cont' isShown={values.service ? true : false}>
+            {/* // todo turned off fancy auto height animation because times dynamically take up space */}
+            {/* <HeightReveal className='datetime-cont' isShown={values.service ? true : false}> */}
+            <div className='datetime-cont' key={values.service}>
 
               {/* <FormInput 
                 {...handleFindProps('datetime_local')}
@@ -527,6 +563,7 @@ export function BookingForm2({ services }:iProps) {
                 />
 
                 <CalendarDatePicker 
+                  key={values.staff}
                   setValues={setValues} 
                   blackoutStrings={blackoutDates}
                   buisnessDays={pickedService?.buisnessDays || []}
@@ -537,8 +574,15 @@ export function BookingForm2({ services }:iProps) {
 
               <div>
                 <FormInput 
-                  {...handleFindProps('time')}
-                  defaultValue={values['time']}
+                  {...handleFindProps('timeStart')}
+                  defaultValue={values['timeStart']}
+                  onChange={onChange}
+                  disabled
+                  // className="hide"
+                />
+                <FormInput 
+                  {...handleFindProps('timeEnd')}
+                  defaultValue={values['timeEnd']}
                   onChange={onChange}
                   disabled
                   // className="hide"
@@ -550,11 +594,14 @@ export function BookingForm2({ services }:iProps) {
                   values={values} 
                   setValues={setValues} 
                   times={times} 
+                  slots={slots}
+                  duration={pickedService?.durationInHours || 0}
                   // setTimes={setTimes} 
                 />
               </div>
               
-            </HeightReveal>
+            </div>
+            {/* </HeightReveal> */}
           </fieldset>
 
           <fieldset>
@@ -562,7 +609,7 @@ export function BookingForm2({ services }:iProps) {
 
             <HeightReveal 
               className="contact-cont"
-              isShown={values.time ? true : false}
+              isShown={values.timeStart ? true : false}
             >
               <FormInput 
                 {...handleFindProps('name')}
@@ -746,5 +793,6 @@ function calcDurationHuman(decimal:string){
   if(hours === 0  && minutes   > 0) return humanMinutes
   if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
 
+  if(!hours && !minutes) return undefined
   return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
 }
