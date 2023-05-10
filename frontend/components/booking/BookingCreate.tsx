@@ -42,6 +42,7 @@ const QUERY_SERVICES_ALL = gql`
         buisnessHourClosed
         gigs {
           start
+          end
         }
         availability {
           start

@@ -45,6 +45,9 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
   
   const rangeStart = new Date(range.start)
   const rangeEnd = new Date(range.end)
+  // console.log('rangeStart: ' ,  rangeStart.toLocaleDateString('en-CA'));
+  // console.log('rangeEnd: ' ,    rangeEnd.toLocaleDateString('en-CA'));
+  
   
   // console.table({
   //   chosen: new Date(date),
@@ -56,6 +59,7 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
   // })
   let filteredTimes = []
   if(date === rangeStart.toLocaleDateString('en-CA')){
+    // console.log('these days match range.start')
     // console.table({
     //   date,
     //   rangeStart: rangeStart.toLocaleDateString('en-CA'),
@@ -106,11 +110,13 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
   }
 
   if(filteredTimes.length > 0){
-
+    // console.log({filteredTimes});
+    
     return filteredTimes
     
   } else {
-
+    
+    // console.log({times});
     return times
   }
 

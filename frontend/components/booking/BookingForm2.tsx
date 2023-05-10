@@ -12,7 +12,7 @@ import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { filterEmployeeTimes, filterServiceTime } from "../../lib/timesArrayCreator"
 import { datePretty, timePretty } from "../../lib/dateFormatter"
-import { Availability, User } from "../../lib/types"
+import { Availability, Booking, User } from "../../lib/types"
 import { calcDateTimeRange, calcTimeOverlap, filterTimeAvail } from "../../lib/dateCheckCal"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
@@ -60,7 +60,7 @@ export function BookingForm2({ services }:iProps) {
 
 
   const [times, setTimes] = useState<string[]>([])
-  const [timesPreFilt, setTimesPreFilt] = useState<string[]>([])
+  const [timesPreFilter, settimesPreFilter] = useState<string[]>([])
   const [values, setValues] = useState({
     service: "",
     staff: "",
@@ -226,8 +226,8 @@ export function BookingForm2({ services }:iProps) {
       let successObj = {
         date: datePretty(values.date),
         time: timePretty(values.time),
-        service: values.service,
-        staff: values.staff,
+        service: pickedService?.name || '',
+        staff: pickedStaff?.name || '',
         msg: ''
       }
 
@@ -258,7 +258,7 @@ export function BookingForm2({ services }:iProps) {
       foundService.durationInHours,
     )
     setTimes(filteredTimes)
-    setTimesPreFilt(filteredTimes)
+    settimesPreFilter(filteredTimes)
 
     handleEmployeeUpdate(id)
   }
@@ -278,28 +278,54 @@ export function BookingForm2({ services }:iProps) {
     // console.log({date})
     
     if(!pickedStaff) return console.warn('no staff picked, ', pickedStaff);
-    
-    pickedStaff.availability.map((avail:Availability) => {
-      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-      
-      // console.log({filteredTimes})
-      
-      const rangeStart = new Date(avail.start)
-      const rangeEnd = new Date(avail.end) 
-      
-      
-      
-      if(date !== rangeStart.toLocaleDateString('en-CA')
-      && date !== rangeEnd.toLocaleDateString('en-CA')){
-        
-        resetServiceSlotTimes()
-      }  else {
-        console.log('these do overlap');
-        const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
-        setTimes(filteredTimes)
-      }
-      // if(filteredTimes === times) return resetServiceSlotTimes()
+
+    let timesPreFilt = timesPreFilter
+
+    // * gigs / bookings
+    const staffGigsLocal = pickedStaff.gigs.map((gig:Booking) => {
+      const start = new Date(gig.start).toLocaleDateString('en-CA')
+      const end   = new Date(gig.end).toLocaleDateString('en-CA')
+      return start || end
     })
+
+    if(staffGigsLocal.includes(date)){
+      // find the gig
+      const gig = pickedStaff.gigs.find((obj:Booking) => {
+        return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
+      })
+      
+      const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
+      timesPreFilt = filteredTimes
+    }
+    
+    // * availability
+    const staffAvailLocal = pickedStaff.availability.map((avail:Availability) => {
+      const start = new Date(avail.start).toLocaleDateString('en-CA')
+      const end   = new Date(avail.end).toLocaleDateString('en-CA')
+      return start || end
+    })
+
+    if(staffAvailLocal.includes(date)){
+      // find the gig
+      const avail = pickedStaff.availability.find((obj:Availability) => {
+        return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
+      })
+      if(!avail) return console.warn('uhoh: no avail found')
+      
+      const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
+      console.log({filteredTimes});
+      
+      timesPreFilt = filteredTimes
+    }
+
+    if(!staffGigsLocal.includes(date) && !staffAvailLocal.includes(date)){
+      resetServiceSlotTimes()
+
+    } else {
+      setTimes(timesPreFilt)
+
+    }
+
   }
 
 
@@ -326,34 +352,52 @@ export function BookingForm2({ services }:iProps) {
     const blackoutArray:string[] = []
     
     // TODO assumes that any service spans less than a day. cannot book multiple gigs on one day
-    selectedEmpl.gigs.map((gig:any) => {blackoutArray.push(gig.start)})
-  
+    selectedEmpl.gigs.map((gig:Booking) => {
+      // todo this could be condensed with 'availability' function
+      const startDate = new Date(gig.start);
+      const endDate = new Date(gig.end);
 
-    // TODO this assumes that vacation is per day. Cannot do partial day vacations 
-    selectedEmpl.availability.map((avail:Availability) => {
-      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-
-      // console.log('avail.start, ', avail.start);
-      
-      const startDate = new Date(avail.start);
-      const endDate = new Date(avail.end);
-
-      // console.log({serviceRange});
-      
-      // console.table({
-      //   start: avail.start,
-      //   end: avail.end,
-      // })
-      const localOffset = new Date().getTimezoneOffset() * 60000
       const startLocal = new Date(startDate.getTime())
       const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
       const endLocal = new Date(endDate.getTime())
       const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
       
-      // const startTimeUTC  =  startUTC.getUTCHours() * 3600000 + startUTC.getUTCMinutes() * 60000 
-      // // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000 + startUTC.getUTCSeconds() * 1000 + endUTC.getUTCMilliseconds();
-      // const endTimeUTC    =  endUTC.getUTCHours() * 3600000 + endUTC.getUTCMinutes() * 60000
 
+      if(startLocalMin > 0){
+        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
+        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
+      } 
+
+      if(endLocalMin < 1439){
+        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
+        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
+      }
+
+      let currentDate = startDate;
+      while (currentDate <= endDate) {
+        // todo carries start time with it to the other dates
+        blackoutArray.push(new Date(currentDate).toString());
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      
+      // blackoutArray.push(new Date(gig.start).toString())
+    })
+    console.log({blackoutArray});
+    
+  
+
+    // TODO this assumes that vacation is per day. Cannot do partial day vacations 
+    selectedEmpl.availability.map((avail:Availability) => {
+      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
+      
+      const startDate = new Date(avail.start);
+      const endDate = new Date(avail.end);
+
+      const startLocal = new Date(startDate.getTime())
+      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
+      const endLocal = new Date(endDate.getTime())
+      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
+      
 
       if(startLocalMin > 0){
         startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
@@ -400,7 +444,7 @@ export function BookingForm2({ services }:iProps) {
     handleBlackoutTimes(values.date)
   
     // return () => 
-  }, [values])
+  }, [values.date, values.service, values.staff])
   
 
   return (
