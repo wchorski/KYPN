@@ -60,6 +60,7 @@ export function BookingForm2({ services }:iProps) {
 
 
   const [times, setTimes] = useState<string[]>([])
+  const [timesPreFilt, setTimesPreFilt] = useState<string[]>([])
   const [values, setValues] = useState({
     service: "",
     staff: "",
@@ -251,11 +252,13 @@ export function BookingForm2({ services }:iProps) {
     const foundService = services.find((x: any) => x.id === id)
     setPickedService(foundService)
 
-    setTimes(filterServiceTime(
+    const filteredTimes = filterServiceTime(
       foundService.buisnessHourOpen,
       foundService.buisnessHourClosed,
       foundService.durationInHours,
-    ))
+    )
+    setTimes(filteredTimes)
+    setTimesPreFilt(filteredTimes)
 
     handleEmployeeUpdate(id)
   }
@@ -270,7 +273,7 @@ export function BookingForm2({ services }:iProps) {
   }
 
   function handleBlackoutTimes(date:string){
-    console.log('----- handleBlackoutTimes ----');
+    // console.log('----- handleBlackoutTimes ----');
     
     // console.log({date})
     
@@ -292,7 +295,7 @@ export function BookingForm2({ services }:iProps) {
         resetServiceSlotTimes()
       }  else {
         console.log('these do overlap');
-        const filteredTimes = filterTimeAvail(date, times, {start: avail.start, end: avail.end}, pickedService.durationInHours)
+        const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
         setTimes(filteredTimes)
       }
       // if(filteredTimes === times) return resetServiceSlotTimes()
@@ -497,7 +500,7 @@ export function BookingForm2({ services }:iProps) {
                   // className="hide"
                 />
 
-                <p>{pickedService?.durationInHours} hour duration</p>
+                <p>{ calcDurationHuman(pickedService?.durationInHours)}</p>
 
                 <TimePicker 
                   values={values} 
@@ -633,6 +636,11 @@ const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
 
   .datetime-cont{
     display: flex;
+    flex-wrap: wrap;
+
+    > * {
+      padding: .2em;
+    }
   }
 
   .cont{
@@ -682,32 +690,17 @@ const QUERY_SERVICES_ALL = gql`
   }
 `
 
-function calcDateTimeUTC(date:string, time:string){
-  // Create a Date object from the local date-time string
+function calcDurationHuman(decimal:string){
+  const inputHours = Number(decimal)
+  let hours = Math.floor(inputHours)
+  let minutes = Math.round((inputHours - hours) * 60)
 
-  const localDateTimeString = `${date}T${time}`;
-  console.log({localDateTimeString});
-  
-  return new Date(localDateTimeString).toISOString()
-  // const localDate = new Date(localDateTimeString);
+  let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
+  let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
 
-  // // Get the local timezone offset in minutes
-  // const localOffset = localDate.getTimezoneOffset();
+  if(hours > 0    && minutes === 0) return humanHours
+  if(hours === 0  && minutes   > 0) return humanMinutes
+  if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
 
-  // // Convert the local time to UTC by subtracting the offset in minutes
-  // const utcTime = localDate.getTime() - (localOffset * 60 * 1000);
-
-  // // Create a new Date object from the UTC time
-  // const startUTC = new Date(utcTime);
-
-  // return startUTC;
+  return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
 }
-
-// graphql query
-// - Services provided
-// - users that are an "employee"
-
-// - Users blackout dates and times
-
-
-// need to send email out when new email is confirmed.

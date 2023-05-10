@@ -72,6 +72,11 @@ const StyledInputLabel = styled.label`
     border: 1px solid gray;
   }
 
+  /* fixes slight offset with other inputs */
+  input[type=date]{
+    padding: 16px;
+  }
+
   /* input, select {
     max-width: 20rem;
   } */

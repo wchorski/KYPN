@@ -32,7 +32,7 @@ export function calcTimeOverlap(range1:DateRange, range2:DateRange){
 // ! filter out employees vacation days by time slots
 export function filterTimeAvail(date:string, times:string[], range:DateRange, duration:string){
   // console.log({range});
-  console.log({times});
+  // console.log({times})
   
   // const dateChosen = new Date(date)
   // const d = date.split('-')
@@ -106,11 +106,11 @@ export function filterTimeAvail(date:string, times:string[], range:DateRange, du
   }
 
   if(filteredTimes.length > 0){
-    console.log({filteredTimes})
+
     return filteredTimes
     
   } else {
-    console.log({times})
+
     return times
   }
 
