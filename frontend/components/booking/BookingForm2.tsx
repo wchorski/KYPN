@@ -452,6 +452,7 @@ export function BookingForm2({ services }:iProps) {
       const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
       
 
+      // todo what if busy day is within one day, i.e. '9am - 12pm on May 5th'?
       if(startLocalMin > 0){
         startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
         startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
