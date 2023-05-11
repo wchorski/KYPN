@@ -11,7 +11,7 @@ import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { filterEmployeeTimes, filterServiceSlots, filterServiceTime } from "../../lib/timesArrayCreator"
-import { datePretty, timePretty } from "../../lib/dateFormatter"
+import { datePretty, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
 import { Availability, Booking, User } from "../../lib/types"
 import { calcDateTimeRange,  filterOutOverlapSlots, filterTimeAvail } from "../../lib/dateCheckCal"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
@@ -59,8 +59,10 @@ export function BookingForm2({ services }:iProps) {
   
   const [pickedService, setPickedService] = useState<any>()
   const [pickedStaff, setPickedStaff] = useState<User>()
+  const [pickedLocation, setPickedLocation] = useState<any>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
+  const [locationOptions, setLocationOptions] = useState<any>([])
   const [blackoutDates, setBlackoutDates] = useState<string[]>([])
 
 
@@ -70,6 +72,7 @@ export function BookingForm2({ services }:iProps) {
   const [slotsPreFilter, setslotsPreFilter] = useState<Slot[]>([])
   const [values, setValues] = useState({
     service: "",
+    location: '',
     staff: "",
     // datetime_local: '',
     date: '',
@@ -94,6 +97,16 @@ export function BookingForm2({ services }:iProps) {
     },
     {
       id: 2,
+      name: 'location',
+      type: 'select',
+      options: locationOptions,
+      // options: services[0].employees.map((empl:any) => { return {value: empl.id, label: empl.name} } ),
+      errorMessage: 'something is wrong in the location field, please submit again',
+      label: 'Location',
+      required: false,
+    },
+    {
+      id: 3,
       name: 'staff',
       type: 'select',
       options: employeeOptions,
@@ -111,7 +124,7 @@ export function BookingForm2({ services }:iProps) {
     //   required: true,
     // },
     {
-      id: 3,
+      id: 4,
       name: "date",
       type: "date",
       label: "Date",
@@ -119,7 +132,7 @@ export function BookingForm2({ services }:iProps) {
       required: true,
     },
     {
-      id: 4,
+      id: 5,
       name: "timeStart",
       type: "time",
       label: "Start Time",
@@ -127,7 +140,7 @@ export function BookingForm2({ services }:iProps) {
       required: true,
     },
     {
-      id: 5,
+      id: 6,
       name: "timeEnd",
       type: "time",
       label: "End Time",
@@ -136,7 +149,7 @@ export function BookingForm2({ services }:iProps) {
     },
 
     {
-      id: 6,
+      id: 7,
       name: "name",
       type: "text",
       placeholder: "John Wick...",
@@ -149,7 +162,7 @@ export function BookingForm2({ services }:iProps) {
       required: false,
     },
     {
-      id: 7,
+      id: 8,
       name: "email",
       type: "email",
       placeholder: "John@Wick.com...",
@@ -158,7 +171,7 @@ export function BookingForm2({ services }:iProps) {
       required: true,
     },
     {
-      id: 8,
+      id: 9,
       name: "phone",
       type: "phone",
       placeholder: "123 456 7890...",
@@ -171,7 +184,7 @@ export function BookingForm2({ services }:iProps) {
       required: false,
     },
     {
-      id: 9,
+      id: 10,
       name: "notes",
       type: "textarea",
       errorMessage: 'Something when wrong with "notes" field. Please try submitting again',
@@ -201,6 +214,16 @@ export function BookingForm2({ services }:iProps) {
         service: {
           connect: {
             id: values.service
+          }
+        },
+      })
+    }
+
+    if (values.location !== '' ) {
+      Object.assign(formattedInputs, {
+        location: {
+          connect: {
+            id: values.location
           }
         },
       })
@@ -239,16 +262,21 @@ export function BookingForm2({ services }:iProps) {
     if (res.data.createBooking) {
       setIsSuccess(true)
 
+
+
       let successObj = {
-        date: datePretty(values.date),
-        time: timePretty(values.timeStart),
+        date: datePrettyLocalDay(values.date),
+        time: timePretty(values.timeStart) + ' - ' + timePretty(values.timeEnd),
         service: pickedService?.name || '',
+        location: pickedService?.name || '',
         staff: pickedStaff?.name || '',
         msg: ''
       }
 
       if(values.service === '') 
         successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
+      if(values.location === '') 
+        successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
       if(values.staff === '') 
         successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
       if(values.staff === '' && values.service === '') 
@@ -285,6 +313,16 @@ export function BookingForm2({ services }:iProps) {
     setslotsPreFilter(filteredSlots) 
 
     handleEmployeeUpdate(id)
+    handleLocationUpdate(id)
+  }
+
+  function handleLocationUpdate(id:string){
+    setServiceId(id)
+    const foundLocations = services.find((x: any) => x.id === id)?.locations 
+    if(!foundLocations) return []
+    
+    const formatted = foundLocations.map((obj:any) => { return {value: obj.id, label: obj.name} } )
+    setLocationOptions(formatted)
   }
 
   function handleEmployeeUpdate(id:string){
@@ -496,6 +534,7 @@ export function BookingForm2({ services }:iProps) {
           <li>date: {successfullBook?.date}</li>
           <li>time: {successfullBook?.time}</li>
           <li>service: {successfullBook?.service}</li>
+          <li>location: {services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location).name}</li>
           <li>staff: {successfullBook?.staff}</li>
           <li>message: {successfullBook?.msg}</li>
         </ul>
@@ -519,6 +558,23 @@ export function BookingForm2({ services }:iProps) {
                   // handleEmployeeUpdate(e.target.value)
                 }}
               />
+
+              {locationOptions.length > 0 && (
+
+                <FormInput 
+                  {...handleFindProps('location')}
+                  value={values['location']}
+                  onChange={(e:any) => {
+                    onChange(e)
+                    setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                    handleBlackoutDates(
+                      e.target.value 
+                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
+                    )
+                  }}
+                  key={locationOptions}
+                />
+              )}
 
               {employeeOptions.length > 0 && (
 

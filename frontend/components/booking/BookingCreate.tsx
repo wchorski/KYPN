@@ -35,6 +35,16 @@ const QUERY_SERVICES_ALL = gql`
       buisnessHourClosed
       buisnessDays
       durationInHours
+      locations {
+        id
+        name
+        address
+        rooms
+        bookings {
+          start
+          end
+        }
+      }
       employees {
         id
         name

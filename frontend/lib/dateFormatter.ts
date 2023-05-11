@@ -46,11 +46,12 @@ function datePrettyLocalFull(date:string) {
   return newDate.toLocaleTimeString("en-US", options);
 }
 
-function datePrettyLocalDay(date:string) {
+export function datePrettyLocalDay(date:string) {
   const options = {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: 'UTC', 
     // timeZone: "America/Chicago",
     // timeZoneName: "short",
     // hour: "numeric",
@@ -61,7 +62,7 @@ function datePrettyLocalDay(date:string) {
   const newDate = new Date(date);
 
   // @ts-ignore
-  return newDate.toLocaleTimeString("en-US", options);
+  return newDate.toLocaleDateString("en-US", options);
 }
 
 export function timePretty(time: string) {
