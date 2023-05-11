@@ -12,6 +12,7 @@ interface iProps {
   duration: string,
 }
 
+// todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
 export function TimePicker({values, setValues, times, slots, duration}:iProps) {
   
   // console.log('time picker input times', {times});
