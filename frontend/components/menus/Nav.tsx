@@ -65,6 +65,7 @@ export function Nav() {
         <LinkActive href='/shop'> Shop </LinkActive>
         <LinkActive href='/blog'> Blog </LinkActive>
         <LinkActive href='/about'> About </LinkActive>
+        <LinkActive href='/booking'> Book a Service </LinkActive>
 
         {session && (<>
           <LinkActive href='/shop/sell'> Sell </LinkActive>

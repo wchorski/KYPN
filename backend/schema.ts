@@ -44,14 +44,23 @@ import { Tag } from './schemas/Tag';
 import { Category } from './schemas/Category';
 import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 import { SubscriptionItem } from './schemas/SubscriptionItem';
+import { Booking } from './schemas/Booking';
+import { Service } from './schemas/Service';
+import { Location } from './schemas/Location';
+import { Availability } from './schemas/Availability';
+import { Addon } from './schemas/Addon';
 
 export const lists: Lists = {
   User,
   Role,
+  Booking,
+  Service,
+  Location,
+  Addon,
+  Availability,
   SubscriptionPlan,
   SubscriptionItem,
   Product,
-  // @ts-ignore
   ProductImage,
   CartItem,
   OrderItem,
@@ -63,7 +72,7 @@ export const lists: Lists = {
   // Post: list({
   //   // WARNING
   //   //   for this starter project, anyone can create, query, update and delete anything
-  //   //   if you want to prevent random people on the internet from accessing your data,
+  //   //   if you want to prevent` random people on the internet from accessing your data,
   //   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   //   access: allowAll,
 

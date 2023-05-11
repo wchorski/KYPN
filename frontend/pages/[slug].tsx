@@ -91,7 +91,7 @@ export default function PageBySlug() {
   )
 }
 
-const StyledPageSingle = styled.div`
+const StyledPageSingle = styled.div<{isShown: boolean}>`
   header{
     display: ${props => props.isShown ? 'none' : 'block'};
     background: var(--c-1);

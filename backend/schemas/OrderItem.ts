@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
+import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 
 
@@ -36,5 +36,7 @@ export const OrderItem = list({
     price: integer(),
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
   }
 })

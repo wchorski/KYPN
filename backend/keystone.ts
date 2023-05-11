@@ -25,11 +25,6 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
 import { seedDatabase } from './seed/seedDatabase';
 import { permissionsList } from './schemas/permissions';
 
-// const sessionConfig = {
-//   maxAge: 60 * 60 * 24 * 360,
-//   secret: process.env.COOKIE_SECRET
-// }
-
 const db: KeystoneConfig<TypeInfo>['db'] = {
 
   provider: 'postgresql',

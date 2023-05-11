@@ -21,7 +21,7 @@ export function ProductsList({ page }: ProdProps) {
   })
 
   if (loading) return <QueryLoading />
-  if (error) return <QueryError />
+  if (error) return <QueryError error={error} />
   // console.log({ data });
 
   return (

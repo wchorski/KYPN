@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { QueryLoading } from './../menus/QueryLoading';
 import { QueryError } from './../menus/QueryError';
 import { perPage } from '../../config';
-import { datePretty } from '../../lib/dateFormatter';
 import { BlogThumbnail } from './BlogThumbnail';
 
 type ProdProps = {
@@ -23,7 +22,7 @@ export function BlogList({ page }: ProdProps) {
   })
 
   if (loading) return <QueryLoading />
-  if (error) return <QueryError />
+  if (error) return <QueryError error={error} />
 
   return (
     <StyledBlogList>
