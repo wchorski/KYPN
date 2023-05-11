@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { addons_seedjson, avail_seedjson, categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -20,6 +20,24 @@ const seedUsers = async (context: Context) => {
   console.log({ usersToCreate })
   await db.User.createMany({
     data: usersToCreate,
+  });
+};
+
+const seedAvail = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjs: any[] = avail_seedjson;
+  const objsAlreadyInDatabase = await db.Availability.findMany({
+    where: {
+      // @ts-ignore
+      start: { in: seedObjs.map(obj => obj.start) },
+    },
+  });
+  const objsToCreate = seedObjs.filter(
+    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.start === seedObj.start)
+  )
+  console.log({ objsToCreate })
+  await db.Availability.createMany({
+    data: objsToCreate,
   });
 };
 
@@ -136,6 +154,44 @@ const seedSubscriptions = async (context: Context) => {
   });
 };
 
+const seedServices = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = services_seedjson;
+  const objectsAlreadyInDatabase = await db.Service.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+  );
+
+  console.log('Services seeded, ', { objsToCreate })
+
+  await db.Service.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
+const seedAddons = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = addons_seedjson;
+  const objectsAlreadyInDatabase = await db.Addon.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+  );
+
+  console.log('Addons seeded, ', { objsToCreate })
+
+  await db.Addon.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 const seedProductImages = async (context: Context) => {
   const { db } = context.sudo();
   const seedObjects: any[] = productImage_seedjson;
@@ -177,6 +233,7 @@ export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
   await seedUsers(context)
   await seedRoles(context)
+  // await seedAvail(context)
   await seedCategories(context)
   await seedTags(context)
   await seedPosts(context)
@@ -184,5 +241,7 @@ export const seedDatabase = async (context: Context) => {
   await seedProductImages(context)
   await seedProducts(context)
   await seedSubscriptions(context)
+  await seedServices(context)
+  await seedAddons(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

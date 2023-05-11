@@ -1,19 +1,24 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { checkbox, password, relationship, text, timestamp } from "@keystone-6/core/fields";
+import { checkbox, password, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
+import { timesArray } from "../lib/timeArrayCreator";
 
 
 export const User = list({
   access: {
     filter: {
-      query: rules.canManageUsers,
+      // todo will this cause privacy problems with clients?
+      query: () => true,
+      // query: rules.canManageUsers,
       update: rules.canManageUsers,
       // delete: () => false,
     },
     operation: {
-      query: permissions.isLoggedIn,
+      // todo might switch back idk
+      // query: permissions.isLoggedIn,
+      query: () => true,
       create: () => true,
       // todo NEED TO FIX THIS
       // update: () => permissions.canManageUsers,
@@ -54,6 +59,25 @@ export const User = list({
     //   more on that in the Post list below
     posts: relationship({ ref: 'Post.author', many: true }),
     pages: relationship({ ref: 'Page.author', many: true }),
+    servicesProvided: relationship({ ref: 'Service.employees', many: true }),
+    bookings: relationship({ ref: 'Booking.customer', many: true }),
+    gigs: relationship({ ref: 'Booking.employees', many: true }),
+    availability: relationship({ ref: 'Availability.employee', many: true }),
+    buisnessHourOpen: select({
+      options: timesArray(),
+      defaultValue: '09:00:00',
+      ui: {
+        displayMode: 'select',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    buisnessHourClosed: select({
+      options: timesArray(),
+      defaultValue: '18:00:00',
+      ui: {
+        displayMode: 'select',
+      }
+    }),
     cart: relationship({
       ref: 'CartItem.user',
       many: true,
@@ -85,7 +109,9 @@ export const User = list({
       //   createView: { fieldMode: 'hidden' },
       //   itemView: { fieldMode: 'hidden' }
       // }
-    })
+    }),
+    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
   },
   hooks: {
     beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {
