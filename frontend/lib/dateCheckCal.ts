@@ -5,34 +5,102 @@ type DateRange ={
   end: string,
 }
 
+function isRangesOverlap(gig:DateRange, busy:DateRange) {
+  const gigStart = new Date(gig.start).getTime();
+  const gigEnd = new Date(gig.end).getTime();
+  const busyStart = new Date(busy.start).getTime();
+  const busyEnd = new Date(busy.end).getTime();
+
+  if (gigStart <= busyEnd && gigEnd >= busyStart) {
+    return true;
+  }
+
+  if (busyStart <= gigEnd && busyEnd >= gigStart) {
+    return true;
+  }
+
+  return false;
+}
+
 export function filterOutOverlapSlots(rangeBusy:DateRange, timeSlots:DateRange[], date:string){
 
-  const filteredSlots = timeSlots.map(slot => {
-    const slotIso = {
+  const slotDateTimes = timeSlots.map(slot => {
+    return {
       start: new Date(`${date}T${slot.start}`).toISOString(),
       end: new Date(`${date}T${slot.end}`).toISOString(),
     }
+  })
+  console.log({slotDateTimes});
+  
 
-    const busyStart = new Date(rangeBusy.start)
-    const busyEnd = new Date(rangeBusy.end)
-    const slotStart = new Date(slotIso.start)
-    const slotEnd = new Date(slotIso.end)
+  const filteredSlots = slotDateTimes.filter(slot => {
+    if(!isRangesOverlap(rangeBusy, slot)) {
+      return true
+    }
 
-    // Check if the date ranges overlap
-    if (busyStart <= slotEnd && busyEnd >= slotStart) {
-    
-      return null
-    } else {
-      // No overlap, return null
-      return {
-        start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
-        end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
-      }
+    return false
+  })
+  
+  const justTimes = filteredSlots.map((slot:DateRange) => {
+    return {
+      start: time24(new Date(slot.start)),
+      end: time24(new Date(slot.end)),
     }
   })
+  console.log({justTimes});
 
-  return filteredSlots.filter((val) => { return val !== null })
+  return justTimes
+  
+  // const filteredSlots = timeSlots.map(slot => {
+  //   const slotIso = {
+  //     start: new Date(`${date}T${slot.start}`).toISOString(),
+  //     end: new Date(`${date}T${slot.end}`).toISOString(),
+  //   }
 
+  //   if(isRangesOverlap(slotIso, slot)){
+  //     return {
+  //       start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
+  //       end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
+  //     }
+  //   } else {
+  //     return {
+  //       start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
+  //       end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
+  //     }
+      
+  //   }
+
+  //   // const busyStart = new Date(rangeBusy.start)
+  //   // const busyEnd = new Date(rangeBusy.end)
+  //   // const slotStart = new Date(slotIso.start)
+  //   // const slotEnd = new Date(slotIso.end)
+
+  //   // // Check if the date ranges overlap
+  //   // if (busyStart <= slotEnd && busyEnd >= slotStart) {
+  //   //   console.log('----- these overlap ----')
+  //   //   console.table({
+  //   //     slotStart,
+  //   //     slotEnd,
+  //   //     busyStart,
+  //   //     busyEnd,
+  //   //   })
+      
+  //   //   return null
+  //   // } else {
+  //   //   // No overlap, return null
+  //   //   return {
+  //   //     start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
+  //   //     end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
+  //   //   }
+  //   // }
+  // })
+
+  // return filteredSlots.filter((val) => { return val !== null })
+
+}
+
+function time24(date:Date){
+  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
 }
 // export function filterOutOverlapSlots(rangeBusy:DateRange, rangeSlots:DateRange){
 //   // Convert input date strings to Date objects

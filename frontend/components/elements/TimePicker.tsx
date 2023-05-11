@@ -81,11 +81,7 @@ export function TimePicker({values, setValues, times, slots, duration}:iProps) {
             {handleTimeFormat(slot.start)} <br />
             to <br />
             {handleTimeFormat(slot.end)} <br /> 
-            <br />
-            <br />
-            {slot.start} <br />
-            to <br />
-            {slot.end} <br /> 
+
           </button>
         </li>
       // {times?.map((time, i) => (

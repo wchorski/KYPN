@@ -62,12 +62,12 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
       // console.log('the selected date time and the vacation day do not overlap')
       continue;
     } else {
-      console.log({
-        selectedStart: selectedStart,
-        selectedEnd: selectedEnd,
-        busyStart: busyStart,
-        busyEnd: busyEnd,
-      })
+      // console.log({
+      //   selectedStart: selectedStart,
+      //   selectedEnd: selectedEnd,
+      //   busyStart: busyStart,
+      //   busyEnd: busyEnd,
+      // })
       console.log('the selected date time and the vacation day overlap')
       console.log('gig / vacation id: ', busyRanges[i].id);
       

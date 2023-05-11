@@ -24,11 +24,10 @@ export const Booking = list({
 
   access: allowAll,
 
-
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'summary', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'end', 'summary', 'service', 'customer', 'employees'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },

@@ -36,9 +36,9 @@ type SuccessfullBook = {
   date: string,
   time: string,
   service: string,
+  location: string,
   staff: string,
   msg: string,
-  
 }
 
 type Slot = {
@@ -200,6 +200,11 @@ export function BookingForm2({ services }:iProps) {
     if(!formRef.current) return console.warn('form is missing');
 
     // console.log({ values })
+    console.table({
+      valDate: values.date,
+      valStart: values.timeStart,
+    });
+    
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
       summary: `[NEW] ${values.name ? values.name : values.email}`,
@@ -262,16 +267,18 @@ export function BookingForm2({ services }:iProps) {
     if (res.data.createBooking) {
       setIsSuccess(true)
 
-
+      const location = services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location)
 
       let successObj = {
         date: datePrettyLocalDay(values.date),
         time: timePretty(values.timeStart) + ' - ' + timePretty(values.timeEnd),
         service: pickedService?.name || '',
-        location: pickedService?.name || '',
+        location: location ? location.name : 'n/a' || '',
         staff: pickedStaff?.name || '',
         msg: ''
       }
+
+      
 
       if(values.service === '') 
         successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
@@ -344,6 +351,8 @@ export function BookingForm2({ services }:iProps) {
     let timesPreFilt = timesPreFilter
     let slotsPreFilt = slotsPreFilter
 
+    console.log({date});
+    
     // * gigs / bookings
     const staffGigsLocal = pickedStaff.gigs.map((gig:Booking) => {
       const start = new Date(gig.start).toLocaleDateString('en-CA')
@@ -356,9 +365,11 @@ export function BookingForm2({ services }:iProps) {
       const gig = pickedStaff.gigs.find((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
+      console.log('OVERLAP GIG,', {gig});
       
-      const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
-      timesPreFilt = filteredTimes
+      
+      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
+      // timesPreFilt = filteredTimes
 
       const filteredSlots = filterOutOverlapSlots({start: gig.start, end: gig.end}, slotsPreFilt, date)
       // @ts-ignore //todo prob shouldn't ignore this
@@ -379,10 +390,12 @@ export function BookingForm2({ services }:iProps) {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       if(!avail) return console.warn('uhoh: no avail found')
-      const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
-      timesPreFilt = filteredTimes
+      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
+      // timesPreFilt = filteredTimes
 
       const filteredSlots = filterOutOverlapSlots({start: avail.start, end: avail.end}, slotsPreFilt, date)
+      // console.log({filteredSlots});
+      
       // @ts-ignore //todo prob shouldn't ignore this
       slotsPreFilt = filteredSlots
 
@@ -534,7 +547,7 @@ export function BookingForm2({ services }:iProps) {
           <li>date: {successfullBook?.date}</li>
           <li>time: {successfullBook?.time}</li>
           <li>service: {successfullBook?.service}</li>
-          <li>location: {services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location).name}</li>
+          <li>location: {successfullBook?.location}</li>
           <li>staff: {successfullBook?.staff}</li>
           <li>message: {successfullBook?.msg}</li>
         </ul>
