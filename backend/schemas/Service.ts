@@ -62,6 +62,7 @@ export const Service = list({
       defaultValue: [0, 1, 2, 3, 4, 5, 6]
     }),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
+    locations: relationship({ ref: 'Location.services', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),
     
     categories: relationship({

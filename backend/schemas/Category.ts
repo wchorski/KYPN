@@ -29,6 +29,7 @@ export const Category = list({
     subscriptions: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
     // bookings: relationship({ ref: 'Booking.categories', many: true }),
     services: relationship({ ref: 'Service.categories', many: true }),
+    locations: relationship({ ref: 'Location.categories', many: true }),
     addons: relationship({ ref: 'Addon.categories', many: true }),
   },
 })

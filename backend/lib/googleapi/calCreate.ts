@@ -46,7 +46,7 @@ type GEvent = {
 
 export async function createCalendarEvent(event:GEvent){
 
-  console.log({event})
+  // console.log({event})
     
   let calendar = google.calendar('v3')
   

@@ -26,7 +26,42 @@ export function datePretty(date: string) {
   // console.log()
   const prettyDate = format(unixDate, 'MMM Lo, yyyy')
   return prettyDate
+}
 
+function datePrettyLocalFull(date:string) {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "America/Chicago",
+    timeZoneName: "short",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true
+  };
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleTimeString("en-US", options);
+}
+
+function datePrettyLocalDay(date:string) {
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    // timeZone: "America/Chicago",
+    // timeZoneName: "short",
+    // hour: "numeric",
+    // minute: "numeric",
+    // hour12: true
+  };
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleTimeString("en-US", options);
 }
 
 export function timePretty(time: string) {

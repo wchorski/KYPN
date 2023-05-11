@@ -550,6 +550,7 @@ type Booking {
   summary: String
   durationInHours: Decimal
   service: Service
+  location: Location
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   price: Int
@@ -578,6 +579,7 @@ input BookingWhereInput {
   summary: StringFilter
   durationInHours: DecimalFilter
   service: ServiceWhereInput
+  location: LocationWhereInput
   addons: AddonManyRelationFilter
   price: IntNullableFilter
   employees: UserManyRelationFilter
@@ -644,6 +646,7 @@ input BookingUpdateInput {
   summary: String
   durationInHours: Decimal
   service: ServiceRelateToOneForUpdateInput
+  location: LocationRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   price: Int
   employees: UserRelateToManyForUpdateInput
@@ -657,6 +660,12 @@ input BookingUpdateInput {
 input ServiceRelateToOneForUpdateInput {
   create: ServiceCreateInput
   connect: ServiceWhereUniqueInput
+  disconnect: Boolean
+}
+
+input LocationRelateToOneForUpdateInput {
+  create: LocationCreateInput
+  connect: LocationWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -684,6 +693,7 @@ input BookingCreateInput {
   summary: String
   durationInHours: Decimal
   service: ServiceRelateToOneForCreateInput
+  location: LocationRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
   price: Int
   employees: UserRelateToManyForCreateInput
@@ -697,6 +707,11 @@ input BookingCreateInput {
 input ServiceRelateToOneForCreateInput {
   create: ServiceCreateInput
   connect: ServiceWhereUniqueInput
+}
+
+input LocationRelateToOneForCreateInput {
+  create: LocationCreateInput
+  connect: LocationWhereUniqueInput
 }
 
 input AddonRelateToManyForCreateInput {
@@ -722,6 +737,8 @@ type Service {
   buisnessDays: [Int!]
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
+  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
+  locationsCount(where: LocationWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   bookingsCount(where: BookingWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -748,9 +765,16 @@ input ServiceWhereInput {
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
   employees: UserManyRelationFilter
+  locations: LocationManyRelationFilter
   bookings: BookingManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
+}
+
+input LocationManyRelationFilter {
+  every: LocationWhereInput
+  some: LocationWhereInput
+  none: LocationWhereInput
 }
 
 input CategoryManyRelationFilter {
@@ -785,9 +809,17 @@ input ServiceUpdateInput {
   buisnessHourClosed: String
   buisnessDays: [Int!]
   employees: UserRelateToManyForUpdateInput
+  locations: LocationRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
+}
+
+input LocationRelateToManyForUpdateInput {
+  disconnect: [LocationWhereUniqueInput!]
+  set: [LocationWhereUniqueInput!]
+  create: [LocationCreateInput!]
+  connect: [LocationWhereUniqueInput!]
 }
 
 input CategoryRelateToManyForUpdateInput {
@@ -819,9 +851,15 @@ input ServiceCreateInput {
   buisnessHourClosed: String
   buisnessDays: [Int!]
   employees: UserRelateToManyForCreateInput
+  locations: LocationRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
+}
+
+input LocationRelateToManyForCreateInput {
+  create: [LocationCreateInput!]
+  connect: [LocationWhereUniqueInput!]
 }
 
 input CategoryRelateToManyForCreateInput {
@@ -832,6 +870,73 @@ input CategoryRelateToManyForCreateInput {
 input TagRelateToManyForCreateInput {
   create: [TagCreateInput!]
   connect: [TagWhereUniqueInput!]
+}
+
+type Location {
+  id: ID!
+  name: String
+  address: String
+  rooms: Int
+  services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
+  servicesCount(where: ServiceWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input LocationWhereUniqueInput {
+  id: ID
+  name: String
+  address: String
+}
+
+input LocationWhereInput {
+  AND: [LocationWhereInput!]
+  OR: [LocationWhereInput!]
+  NOT: [LocationWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  address: StringFilter
+  rooms: IntNullableFilter
+  services: ServiceManyRelationFilter
+  bookings: BookingManyRelationFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input LocationOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  address: OrderDirection
+  rooms: OrderDirection
+}
+
+input LocationUpdateInput {
+  name: String
+  address: String
+  rooms: Int
+  services: ServiceRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input LocationUpdateArgs {
+  where: LocationWhereUniqueInput!
+  data: LocationUpdateInput!
+}
+
+input LocationCreateInput {
+  name: String
+  address: String
+  rooms: Int
+  services: ServiceRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
 }
 
 type Addon {
@@ -1801,6 +1906,8 @@ type Category {
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
+  locationsCount(where: LocationWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
 }
@@ -1822,6 +1929,7 @@ input CategoryWhereInput {
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
   services: ServiceManyRelationFilter
+  locations: LocationManyRelationFilter
   addons: AddonManyRelationFilter
 }
 
@@ -1839,6 +1947,7 @@ input CategoryUpdateInput {
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
+  locations: LocationRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
 }
 
@@ -1855,6 +1964,7 @@ input CategoryCreateInput {
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
+  locations: LocationRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
 }
 
@@ -1871,6 +1981,8 @@ type Tag {
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
+  locationsCount(where: LocationWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
 }
@@ -1891,6 +2003,7 @@ input TagWhereInput {
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
   services: ServiceManyRelationFilter
+  locations: LocationManyRelationFilter
   addons: AddonManyRelationFilter
 }
 
@@ -1906,6 +2019,7 @@ input TagUpdateInput {
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
+  locations: LocationRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
 }
 
@@ -1921,6 +2035,7 @@ input TagCreateInput {
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
+  locations: LocationRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
 }
 
@@ -1954,6 +2069,12 @@ type Mutation {
   updateServices(data: [ServiceUpdateArgs!]!): [Service]
   deleteService(where: ServiceWhereUniqueInput!): Service
   deleteServices(where: [ServiceWhereUniqueInput!]!): [Service]
+  createLocation(data: LocationCreateInput!): Location
+  createLocations(data: [LocationCreateInput!]!): [Location]
+  updateLocation(where: LocationWhereUniqueInput!, data: LocationUpdateInput!): Location
+  updateLocations(data: [LocationUpdateArgs!]!): [Location]
+  deleteLocation(where: LocationWhereUniqueInput!): Location
+  deleteLocations(where: [LocationWhereUniqueInput!]!): [Location]
   createAddon(data: AddonCreateInput!): Addon
   createAddons(data: [AddonCreateInput!]!): [Addon]
   updateAddon(where: AddonWhereUniqueInput!, data: AddonUpdateInput!): Addon
@@ -2082,6 +2203,9 @@ type Query {
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   service(where: ServiceWhereUniqueInput!): Service
   servicesCount(where: ServiceWhereInput! = {}): Int
+  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
+  location(where: LocationWhereUniqueInput!): Location
+  locationsCount(where: LocationWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addon(where: AddonWhereUniqueInput!): Addon
   addonsCount(where: AddonWhereInput! = {}): Int

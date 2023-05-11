@@ -18,7 +18,7 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_rqysczpru0")
+  stripeCustomerId        String             @unique @default("NO_ID_f4prrqosk")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
@@ -35,8 +35,8 @@ model User {
   orders                  Order[]            @relation("Order_user")
   role                    Role?              @relation("User_role", fields: [roleId], references: [id])
   roleId                  String?            @map("role") @postgresql.Uuid
-  dateCreated             DateTime?          @default("2023-05-10T15:25:20.293Z")
-  dateModified            DateTime?          @default("2023-05-10T15:25:20.293Z")
+  dateCreated             DateTime?          @default("2023-05-11T18:21:17.168Z")
+  dateModified            DateTime?          @default("2023-05-11T18:21:17.168Z")
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -64,17 +64,20 @@ model Booking {
   durationInHours Decimal   @default("23") @postgresql.Decimal(5, 2)
   service         Service?  @relation("Booking_service", fields: [serviceId], references: [id])
   serviceId       String?   @map("service") @postgresql.Uuid
+  location        Location? @relation("Booking_location", fields: [locationId], references: [id])
+  locationId      String?   @map("location") @postgresql.Uuid
   addons          Addon[]   @relation("Addon_bookings")
   price           Int?      @default(0)
   employees       User[]    @relation("Booking_employees")
   customer        User?     @relation("Booking_customer", fields: [customerId], references: [id])
   customerId      String?   @map("customer") @postgresql.Uuid
   notes           String    @default("")
-  dateCreated     DateTime? @default("2023-05-10T15:25:21.073Z")
-  dateModified    DateTime? @default("2023-05-10T15:25:21.073Z")
+  dateCreated     DateTime? @default("2023-05-11T18:21:17.872Z")
+  dateModified    DateTime? @default("2023-05-11T18:21:17.872Z")
   google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
 
   @@index([serviceId])
+  @@index([locationId])
   @@index([customerId])
 }
 
@@ -89,9 +92,21 @@ model Service {
   buisnessHourClosed String?    @default("18:00:00")
   buisnessDays       Json       @default("[0,1,2,3,4,5,6]")
   employees          User[]     @relation("Service_employees")
+  locations          Location[] @relation("Location_services")
   bookings           Booking[]  @relation("Booking_service")
   categories         Category[] @relation("Category_services")
   tags               Tag[]      @relation("Service_tags")
+}
+
+model Location {
+  id         String     @id @default(uuid()) @postgresql.Uuid
+  name       String     @unique @default("")
+  address    String     @unique @default("")
+  rooms      Int?       @default(1)
+  services   Service[]  @relation("Location_services")
+  bookings   Booking[]  @relation("Booking_location")
+  categories Category[] @relation("Category_locations")
+  tags       Tag[]      @relation("Location_tags")
 }
 
 model Addon {
@@ -114,8 +129,8 @@ model Availability {
   employeeId      String?   @map("employee") @postgresql.Uuid
   type            String?   @default("VACATION")
   status          String?   @default("APPROVED")
-  dateCreated     DateTime? @default("2023-05-10T15:25:21.091Z")
-  dateModified    DateTime? @default("2023-05-10T15:25:21.091Z")
+  dateCreated     DateTime? @default("2023-05-11T18:21:17.891Z")
+  dateModified    DateTime? @default("2023-05-11T18:21:17.891Z")
 
   @@index([employeeId])
 }
@@ -171,8 +186,8 @@ model Product {
   authorId              String?       @map("author") @postgresql.Uuid
   tags                  Tag[]         @relation("Product_tags")
   categories            Category[]    @relation("Category_products")
-  dateCreated           DateTime?     @default("2023-05-10T15:25:20.115Z")
-  dateModified          DateTime?     @default("2023-05-10T15:25:20.115Z")
+  dateCreated           DateTime?     @default("2023-05-11T18:21:17.020Z")
+  dateModified          DateTime?     @default("2023-05-11T18:21:17.020Z")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([authorId])
@@ -212,8 +227,8 @@ model OrderItem {
   quantity     Int?
   order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
   orderId      String?       @map("order") @postgresql.Uuid
-  dateCreated  DateTime?     @default("2023-05-10T15:25:20.255Z")
-  dateModified DateTime?     @default("2023-05-10T15:25:20.255Z")
+  dateCreated  DateTime?     @default("2023-05-11T18:21:17.147Z")
+  dateModified DateTime?     @default("2023-05-11T18:21:17.147Z")
 
   @@index([photoId])
   @@index([orderId])
@@ -283,6 +298,7 @@ model Category {
   products      Product[]          @relation("Category_products")
   subscriptions SubscriptionPlan[] @relation("Category_subscriptions")
   services      Service[]          @relation("Category_services")
+  locations     Location[]         @relation("Category_locations")
   addons        Addon[]            @relation("Addon_categories")
 }
 
@@ -294,5 +310,6 @@ model Tag {
   products      Product[]          @relation("Product_tags")
   subscriptions SubscriptionPlan[] @relation("SubscriptionPlan_tags")
   services      Service[]          @relation("Service_tags")
+  locations     Location[]         @relation("Location_tags")
   addons        Addon[]            @relation("Addon_tags")
 }

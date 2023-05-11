@@ -46,6 +46,7 @@ import { SubscriptionPlan } from './schemas/SubscriptionPlan';
 import { SubscriptionItem } from './schemas/SubscriptionItem';
 import { Booking } from './schemas/Booking';
 import { Service } from './schemas/Service';
+import { Location } from './schemas/Location';
 import { Availability } from './schemas/Availability';
 import { Addon } from './schemas/Addon';
 
@@ -54,6 +55,7 @@ export const lists: Lists = {
   Role,
   Booking,
   Service,
+  Location,
   Addon,
   Availability,
   SubscriptionPlan,

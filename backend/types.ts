@@ -239,6 +239,17 @@ export type Service = {
   tags: Tag[],
 }
 
+export type Location = {
+  id: string,
+  name: string,
+  address: string,
+  rooms: number,
+  services: Service[],
+  bookings: Booking[],
+  categories: Category[],
+  tags: Tag[],
+}
+
 export type SubscriptionPlan = {
   id: string,
   photo: ProductImage,

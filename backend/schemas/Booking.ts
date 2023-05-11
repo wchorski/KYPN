@@ -5,8 +5,8 @@ import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
-import { User, Addon, Service, } from '../types'
-import { calcEndTime, dateCheckAvail, dayOfWeek } from '../lib/dateCheck';
+import { User, Addon, Service, Location, } from '../types'
+import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
 import { createCalendarEvent } from "../lib/googleapi/calCreate";
 
 
@@ -49,6 +49,7 @@ export const Booking = list({
       },
     }),
     service: relationship({ ref: 'Service.bookings', many: false }),
+    location: relationship({ ref: 'Location.bookings', many: false }),
     addons: relationship({ ref: 'Addon.bookings', many: true }),
     price: integer({ defaultValue: 0 }),
     employees: relationship({ ref: 'User.gigs', many: true }),
@@ -89,7 +90,7 @@ export const Booking = list({
         if(resolvedData.service){
           const selectedService = await context.db.Service.findOne({
             where: { id: resolvedData.service.connect.id  },
-          })
+          }) as Service
           if(selectedService) {
             resolvedData.durationInHours = selectedService.durationInHours
             resolvedData.price = selectedService.price
@@ -103,6 +104,36 @@ export const Booking = list({
           }
         }
 
+        if(resolvedData.location){
+          const selectedLocation = await context.query.Location.findOne({
+            where: { id: resolvedData.location.connect.id  },
+            query: `
+              name
+              rooms
+              bookings {
+                start
+                end
+              }
+            `
+          }) as Location
+          if(selectedLocation) {
+            console.log({selectedLocation})
+
+            // check to see if this booking's start/end lands on any of the gig's start/end
+            const gig = {
+              start: resolvedData.start,
+              end: resolvedData.end
+            }
+            const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)
+            
+            // check to see if # of bookings is more than # of rooms avail
+            if(overlapCount > selectedLocation.rooms){
+              throw new Error(`CONFLICT for Location ${selectedLocation.name}: All rooms booked within this time range`)
+            }
+            
+          }
+        }
+
         if(resolvedData.addons){
           const selectedAddons = await context.query.Addon.findMany({ 
             where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
@@ -110,7 +141,7 @@ export const Booking = list({
               price
               name
             `
-          })
+          }) as Addon[]
   
           if(selectedAddons){
             let addonNames = ''
@@ -145,7 +176,7 @@ export const Booking = list({
                 durationInHours
               }
             `
-          })
+          }) as User[]
           
           // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
           let employeeNames = ''
