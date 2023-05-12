@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { generateTimesArray } from "../../lib/generateTimesArray";
 
 interface iProps {
   values: any | undefined,
   setValues: any,
-  times: string[] | undefined,
-  slots: {
-    start: string,
-    end: string,
-  }[]
-  duration: string,
+  blackouts: string[],
 }
 
+type TimeOpt = {
+  value: string,
+  label: string,
+}
+
+
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
-export function TimePicker({values, setValues, times, slots, duration}:iProps) {
+export function TimePicker({values, setValues, blackouts, }:iProps) {
+  
+  // console.log({blackouts});
   
   // console.log('time picker input times', {times});
   const [animTrig, setAnimTrig] = useState(0)
@@ -38,65 +42,27 @@ export function TimePicker({values, setValues, times, slots, duration}:iProps) {
     return lowCaps
   }
 
-  function handleCalcEnd(time:string){
-    return addHoursToTime(time, Number(duration))
-  }
-
   useEffect(() => {
     setAnimTrig(animTrig + 1)
   
     // return () => 
-  }, [times, slots])
+  }, [blackouts])
 
   const listitemStyle = (i:number) => ({
     animationDelay: `calc(${i} * 0.03s)` ,
-  })
-
-  function handleTimeUpdate(start:string, end:string){
-    setValues((prev:any) => (
-      {
-        ...prev, 
-        timeStart: start,
-        timeEnd: end,
-      }
-    ))
-  }
-  // function handleTimeUpdate(time:string){
-  //   setValues((prev:any) => (
-  //     {
-  //       ...prev, 
-  //       timeStart: time,
-  //       timeEnd: addHoursToTime(time, Number(duration)),
-  //     }
-  //   ))
-  // }
-  
+  }) 
 
   return (
     <StyledTimePicker className={values['date'] ? 'open' : ''} key={animTrig}>
-      {slots?.map((slot, i) => (
+      {generateTimesArray().map((timeobj:TimeOpt, i) => (
         <li key={`time-${i}`} style={listitemStyle(i)} >
-          <button type='button' className={slot.start === values.timeStart ? 'active' : ''}
-            onClick={() => handleTimeUpdate(slot.start, slot.end)} 
+          <button type='button' className={timeobj.value === values.timeStart ? 'active' : ''}
+            onClick={() => setValues((prev:any) => ({...prev, timeStart: timeobj.value}))} 
+            disabled={blackouts.includes(timeobj.value) ? true : false}
           >
-            {handleTimeFormat(slot.start)} <br />
-            to <br />
-            {handleTimeFormat(slot.end)} <br /> 
-
+            {timeobj.label}
           </button>
         </li>
-      // {times?.map((time, i) => (
-      //   <li key={`time-${i}`} style={listitemStyle(i)} >
-      //     <button type='button' className={time === values['time'] ? 'active' : ''}
-      //       onClick={() => handleTimeUpdate(time)} 
-      //     >
-      //       {handleTimeFormat(time)} <br />
-      //       to <br />
-      //       {handleTimeFormat(addHoursToTime(time, Number(duration)))} <br /> <br />
-      //       {addHoursToTime(time, Number(duration))} <br /> <br />
-      //       24hr: {time}
-      //     </button>
-      //   </li>
       ))}
     </StyledTimePicker>
   )
@@ -113,19 +79,11 @@ const StyledTimePicker = styled.ul`
   gap: 1em;
   /* flex-direction: column; */
 
-  /* li{
-    transition: all .3s;
-    animation-name: reveal;
-    animation-duration: 1s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    animation-delay: calc(var(--i) * 0.1s)
-  } */
   li{
     width: 5em;
     animation-duration: .3s;
     animation-name: reveal;
     animation-timing-function: ease;
-    /* animation-timing-function: cubic-bezier(0,1.11,.97,-0.38); */
   }
 
   .active{
@@ -143,21 +101,3 @@ const StyledTimePicker = styled.ul`
     }
   }
 `
-
-function addHoursToTime(time:string, hoursToAdd:number) {
-  const [hours, minutes, seconds] = time.split(':').map(Number)
-  const date = new Date()
-  
-  date.setHours(hours)
-  date.setMinutes(minutes + hoursToAdd * 60)
-  date.setSeconds(seconds)
-  
-  const options = {
-    hour12: false, 
-    hour: 'numeric', 
-    minute: 'numeric', 
-    second: 'numeric'
-  }
-  // @ts-ignore
-  return date.toLocaleTimeString('en-US', options);
-}
