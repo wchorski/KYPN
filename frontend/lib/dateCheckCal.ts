@@ -22,11 +22,11 @@ function isRangesOverlap(gig:DateRange, busy:DateRange) {
   return false;
 }
 
-export function findOverlapTimes(busyRange:DateRange, date:string){
+export function findOverlapTimes(busyRange:DateRange, currentTimes:string[], date:string){
   // console.log('findoverlaptimes');
   
-  const defaultTimes = generateTimesArray()
-  console.log({defaultTimes});
+  // const defaultTimes = generateTimesArray()
+  // console.log({defaultTimes});
   
   const datePicked = new Date(date);
   const busyStart = new Date(busyRange.start);
@@ -40,39 +40,66 @@ export function findOverlapTimes(busyRange:DateRange, date:string){
 
   // const isSameDate = datePicked.getFullYear() === busyStart.getFullYear() && datePicked.getMonth() === busyStart.getMonth() && datePicked.getDate() === busyStart.getDate();
   if(date !== busyStart.toLocaleDateString('en-CA') && date !== busyEnd.toLocaleDateString('en-CA')  ){
-    // console.log('date picked !== busyStart, !== busyEnd')
+    console.log('date picked !== busyStart, !== busyEnd.... have i done anything here?')
     
     return []
   }
   if(date === busyStart.toLocaleDateString('en-CA') && date === busyEnd.toLocaleDateString('en-CA')  ){
-    const filteredTimes = defaultTimes.filter(time => {
-      const [hours, minutes, seconds] = time.value.split(":").map(Number)
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
       const specificTime = new Date(busyStart.getFullYear(), busyStart.getMonth(), busyStart.getDate(), hours, minutes, seconds); 
 
-      console.table({
-        specificTime,
-        busyStart,
-        busyEnd,
-      });
-      if(specificTime <= busyStart && specificTime >= busyEnd){
-        
-        console.warn('!!!!!!! this overlapped: ', {specificTime});
+
+      if(specificTime < busyStart || specificTime > busyEnd){
         return true
       }
-      false
-      // return specificTime < busyStart && specificTime > busyEnd
+
+      // console.log('!!!!!!! this overlapped: ');
+      // console.table({
+      //   specificTime,
+      //   busyStart,
+      //   busyEnd,
+      //   timeValue: time,
+      // });
+      return false
+
     })
-    console.log({filteredTimes});
     
     return filteredTimes
   }
+
   if(date === busyStart.toLocaleDateString('en-CA')  ){
     // console.log('date picked === busyStart, !== busyEnd')
-    return []
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
+      const specificTime = new Date(busyStart.getFullYear(), busyStart.getMonth(), busyStart.getDate(), hours, minutes, seconds); 
+
+      if(specificTime < busyStart){
+        return true
+      }
+
+      return false
+
+    })
+    
+    return filteredTimes
   }
-  if(date !== busyStart.toLocaleDateString('en-CA')  ){
-    // console.log('date picked !== busyStart, === busyEnd')
-    return []
+
+  if(date === busyEnd.toLocaleDateString('en-CA')  ){
+    // console.log('date picked === busyStart, !== busyEnd')
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
+      const specificTime = new Date(busyEnd.getFullYear(), busyEnd.getMonth(), busyEnd.getDate(), hours, minutes, seconds); 
+
+      if(specificTime > busyEnd){
+        return true
+      }
+
+      return false
+
+    })
+      
+    return filteredTimes
   }
 
 
