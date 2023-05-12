@@ -1,4 +1,4 @@
-
+import { generateTimesArray } from "./generateTimesArray";
 
 type DateRange ={
   start: string,
@@ -20,6 +20,80 @@ function isRangesOverlap(gig:DateRange, busy:DateRange) {
   }
 
   return false;
+}
+
+export function findOverlapTimes(busyRange:DateRange, date:string){
+  // console.log('findoverlaptimes');
+  
+  const defaultTimes = generateTimesArray()
+  console.log({defaultTimes});
+  
+  const datePicked = new Date(date);
+  const busyStart = new Date(busyRange.start);
+  const busyEnd = new Date(busyRange.end);
+
+  // console.table({
+  //   datePicked: date,
+  //   busyStart: busyStart.toLocaleDateString('en-CA'),
+  //   busyEnd: busyEnd.toLocaleDateString('en-CA'),
+  // })
+
+  // const isSameDate = datePicked.getFullYear() === busyStart.getFullYear() && datePicked.getMonth() === busyStart.getMonth() && datePicked.getDate() === busyStart.getDate();
+  if(date !== busyStart.toLocaleDateString('en-CA') && date !== busyEnd.toLocaleDateString('en-CA')  ){
+    // console.log('date picked !== busyStart, !== busyEnd')
+    
+    return []
+  }
+  if(date === busyStart.toLocaleDateString('en-CA') && date === busyEnd.toLocaleDateString('en-CA')  ){
+    const filteredTimes = defaultTimes.filter(time => {
+      const [hours, minutes, seconds] = time.value.split(":").map(Number)
+      const specificTime = new Date(busyStart.getFullYear(), busyStart.getMonth(), busyStart.getDate(), hours, minutes, seconds); 
+
+      console.table({
+        specificTime,
+        busyStart,
+        busyEnd,
+      });
+      if(specificTime <= busyStart && specificTime >= busyEnd){
+        
+        console.warn('!!!!!!! this overlapped: ', {specificTime});
+        return true
+      }
+      false
+      // return specificTime < busyStart && specificTime > busyEnd
+    })
+    console.log({filteredTimes});
+    
+    return filteredTimes
+  }
+  if(date === busyStart.toLocaleDateString('en-CA')  ){
+    // console.log('date picked === busyStart, !== busyEnd')
+    return []
+  }
+  if(date !== busyStart.toLocaleDateString('en-CA')  ){
+    // console.log('date picked !== busyStart, === busyEnd')
+    return []
+  }
+
+
+  // //todo use a filter instead 
+  // const busyTimes = defaultTimes.map(time => {
+    
+  //   const [hours, minutes, seconds] = time.value.split(":").map(Number); // split the string into its components
+  //   datePicked.setHours(hours, minutes, seconds); // set the time on the date object
+
+
+  //   if (datePicked >= busyStart && datePicked <= busyEnd) {
+  //     console.log(`${time.label]} falls inside the range ${busyStart}-${busyEnd}`);
+  //   } else {
+  //     console.log(`${time.label} does not fall inside the range ${busyStart}-${busyEnd}`);
+  //   }
+  // })
+
+  // const overlap = busyRanges.map(range => {
+  //   // const [hours, minutes, seconds] = timeString.split(":"); // split the string into its components
+  //   // date.setHours(hours, minutes, seconds); // set the time on the date object
+  // })
 }
 
 export function filterOutOverlapSlots(rangeBusy:DateRange, timeSlots:DateRange[], date:string){
