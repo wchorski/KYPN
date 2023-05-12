@@ -14,6 +14,7 @@ import { filterEmployeeTimes, filterServiceSlots, filterServiceTime } from "../.
 import { datePretty, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
 import { Availability, Booking, User } from "../../lib/types"
 import { calcDateTimeRange,  filterOutOverlapSlots, filterTimeAvail, findOverlapTimes } from "../../lib/dateCheckCal"
+import { generateTimesArray } from "../../lib/generateTimesArray"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -347,66 +348,57 @@ export function BookingForm2({ services }:iProps) {
     
     // console.log({date})
     
-    if(!pickedStaff) return console.warn('no staff picked, ', pickedStaff);
+    if(!pickedStaff) return console.log('no staff picked, ', pickedStaff);
 
     let timesPreFilt = timesPreFilter
     let slotsPreFilt = slotsPreFilter
+    let currentTimes:string[] = generateTimesArray().map(t => t.value)
 
     // console.log({date});
     
     // * gigs / bookings
-    const staffGigsLocal = pickedStaff.gigs.map((gig:Booking) => {
+    const staffGigsLocal = pickedStaff.gigs.flatMap((gig:Booking) => {
       
       const start = new Date(gig.start).toLocaleDateString('en-CA')
       const end   = new Date(gig.end).toLocaleDateString('en-CA')
-      return start && end
+      return [start, end]
     })
-
     console.log({staffGigsLocal});
     
 
+
     if(staffGigsLocal.includes(date)){
       // find the gig
-      const gig = pickedStaff.gigs.find((obj:Booking) => {
+      const gigs = pickedStaff.gigs.filter((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
-      console.log('OVERLAP GIG,', {gig});
       
-      
-      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
-      // timesPreFilt = filteredTimes
-
-      const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, date)
-      console.table(filteredTimeStarts);
-      
-
-      // const filteredSlots = filterOutOverlapSlots({start: gig.start, end: gig.end}, slotsPreFilt, date)
-      // // @ts-ignore //todo prob shouldn't ignore this
-      // slotsPreFilt = filteredSlots
-      
+      gigs.map(gig => {
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date)
+        currentTimes = filteredTimeStarts || [] 
+      })
     }
     
+    
     // * availability
-    const staffAvailLocal = pickedStaff.availability.map((avail:Availability) => {
+    const staffAvailLocal = pickedStaff.availability.flatMap((avail:Availability) => {
       const start = new Date(avail.start).toLocaleDateString('en-CA')
       const end   = new Date(avail.end).toLocaleDateString('en-CA')
-      return start || end
+      
+      return [start, end]
     })
 
+
     if(staffAvailLocal.includes(date)){
-      // find the gig
-      const avail = pickedStaff.availability.find((obj:Availability) => {
+       // find the gig
+       const avails = pickedStaff.availability.filter((obj:Availability) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
-      if(!avail) return console.warn('uhoh: no avail found')
-      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
-      // timesPreFilt = filteredTimes
-
-      const filteredSlots = filterOutOverlapSlots({start: avail.start, end: avail.end}, slotsPreFilt, date)
-      // console.log({filteredSlots});
       
-      // @ts-ignore //todo prob shouldn't ignore this
-      slotsPreFilt = filteredSlots
+      avails.map(avail => {
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date)
+        currentTimes = filteredTimeStarts || []  
+      })
 
     }
 
@@ -414,7 +406,7 @@ export function BookingForm2({ services }:iProps) {
       resetServiceSlotTimes()
 
     } else {
-      setTimes(timesPreFilt)
+      setTimes(currentTimes)
       setSlots(slotsPreFilt)
     }
 
@@ -422,11 +414,8 @@ export function BookingForm2({ services }:iProps) {
 
 
   function resetServiceSlotTimes(){
-    setTimes(filterServiceTime(
-      pickedService.buisnessHourOpen,
-      pickedService.buisnessHourClosed,
-      pickedService.durationInHours,
-    ))
+    const defaultTimes = generateTimesArray().map(t => t.value)
+    setTimes(defaultTimes)
 
     setSlots(filterServiceSlots(
       pickedService.buisnessHourOpen,
@@ -438,10 +427,7 @@ export function BookingForm2({ services }:iProps) {
   }
 
   // todo refactor this into a lib file. skip any dates that are in the past!
-  function handleBlackoutDates(
-    id:string, 
-    // serviceRange:{start:string, end:string}
-  ){
+  function handleBlackoutDates( id:string ){
 
     resetServiceSlotTimes()
     
@@ -483,7 +469,7 @@ export function BookingForm2({ services }:iProps) {
       
       // blackoutArray.push(new Date(gig.start).toString())
     })
-    console.log({blackoutArray});
+
     
   
 
@@ -674,7 +660,8 @@ export function BookingForm2({ services }:iProps) {
                 <TimePicker 
                   values={values} 
                   setValues={setValues} 
-                  blackouts={blackoutTimes} 
+                  times={times} 
+                  buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
                 />
               </div>
               

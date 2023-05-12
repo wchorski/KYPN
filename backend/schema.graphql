@@ -558,6 +558,7 @@ type Booking {
   employeesCount(where: UserWhereInput! = {}): Int
   customer: User
   notes: String
+  status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -585,6 +586,7 @@ input BookingWhereInput {
   employees: UserManyRelationFilter
   customer: UserWhereInput
   notes: StringFilter
+  status: StringNullableFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -636,6 +638,7 @@ input BookingOrderByInput {
   durationInHours: OrderDirection
   price: OrderDirection
   notes: OrderDirection
+  status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -652,6 +655,7 @@ input BookingUpdateInput {
   employees: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
   notes: String
+  status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -699,6 +703,7 @@ input BookingCreateInput {
   employees: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
   notes: String
+  status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
