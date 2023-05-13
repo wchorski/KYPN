@@ -91,9 +91,10 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
     // if there is overlap starting at buisness open? - blackout date - skip next lines
     if(isFitAnotherService(startBusy, buisnessHours, serviceDurationHours)){
       startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-    } else {
-      console.warn('cannot fit another of this SERVICE before end of day, keep day blacked out', startBusy);
-    }
+    } 
+    // else {
+    //   console.log('cannot fit another of this SERVICE before end of day, keep day blacked out', startBusy);
+    // }
 
     startBusy.setHours(0); startBusy.setMinutes(0); startBusy.setSeconds(0); startBusy.setMilliseconds(0);
   } 
@@ -103,8 +104,6 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
     endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
     endDate.setHours(59); endDate.setMinutes(59); endDate.setSeconds(0); endDate.setMilliseconds(0);
   }
-
-  console.table({startBusy, endDate});
   
   let currentDate = startBusy;
   while (currentDate <= endDate) {
