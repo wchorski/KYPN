@@ -157,6 +157,7 @@ export type Booking = {
   employees: User[],
   customer: User,
   notes: string,
+  status: string,
   dateCreated: string,
   dateModified: string,
 }
