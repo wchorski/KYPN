@@ -51,7 +51,7 @@ export function TimePicker({values, setValues, times, buisnessHours, serviceDura
             onClick={() => setValues((prev:any) => ({...prev, timeStart: timeobj.value}))} 
 
             // disable any time buttons that could overlap with start or end of a gig or avail 
-            disabled={filterOutServiceOverlap(times, serviceDuration).includes(timeobj.value) ? false : true}
+            disabled={times.includes(timeobj.value) ? false : true}
 
           >
             {timeobj.label}
@@ -106,7 +106,7 @@ const StyledTimePicker = styled.ul`
 `
 
 function filterOutServiceOverlap(times:string[], durationHours:number){
-  console.table(times);
+  // console.table(times);
   
   // if times.value + duration overlaps last times (do not return)
   // if times.value - duration overlaps start times (do not return)

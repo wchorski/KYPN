@@ -9,7 +9,7 @@ import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { filterServiceSlots } from "../../lib/timesArrayCreator"
-import { datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
+import { DATE_OPTION, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
 import { Availability, Booking, Service, User } from "../../lib/types"
 import { findOverlapTimes } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
@@ -28,8 +28,8 @@ type iProps = {
 }
 
 type SuccessfullBook = {
-  date: string,
-  time: string,
+  start: string,
+  end: string,
   service: string,
   location: string,
   staff: string,
@@ -60,9 +60,6 @@ export function BookingForm2({ services }:iProps) {
 
 
   const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
-  const [timesPreFilter, settimesPreFilter] = useState<string[]>([])
-  const [slots, setSlots] = useState<Slot[]>([])
-  const [slotsPreFilter, setslotsPreFilter] = useState<Slot[]>([])
   const [values, setValues] = useState({
     service: "",
     location: '',
@@ -198,7 +195,7 @@ export function BookingForm2({ services }:iProps) {
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
     }
-    console.log({formattedInputs});
+    // console.log({formattedInputs});
     
 
     if (values.service !== '' ) {
@@ -257,20 +254,20 @@ export function BookingForm2({ services }:iProps) {
       const location = services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location)
 
       let successObj = {
-        date: datePrettyLocalDay(values.date),
-        time: timePretty(values.timeStart) + ' - ' + timePretty(values.timeEnd),
-        service: pickedService.name || '',
+        start: values.date + 'T' + values.timeStart,
+        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService.durationInHours)),
+        service: pickedService.name || 'n/a',
         location: location ? location.name : 'n/a' || '',
-        staff: pickedStaff?.name || '',
-        msg: ''
+        staff: pickedStaff?.name || 'n/a',
+        msg: "We'll reach out to confirm your booking via email"
       }
 
       
 
       if(values.service === '') 
         successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
-      if(values.location === '') 
-        successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
+      // if(values.location === '') 
+      //   successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
       if(values.staff === '') 
         successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
       if(values.staff === '' && values.service === '') 
@@ -331,15 +328,14 @@ export function BookingForm2({ services }:iProps) {
       return [start, end]
     })
     
-
-
+    
     if(staffGigsLocal.includes(date)){
       const gigs = pickedStaff.gigs.filter((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       
       gigs.map(gig => {
-        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date)
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService.durationInHours))
         currentTimes = filteredTimeStarts || [] 
       })
     }
@@ -361,7 +357,7 @@ export function BookingForm2({ services }:iProps) {
       })
       
       avails.map(avail => {
-        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date)
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService.durationInHours))
         currentTimes = filteredTimeStarts || []  
       })
 
@@ -404,7 +400,7 @@ export function BookingForm2({ services }:iProps) {
     }
     const busyDays = findBlackoutDates(selectedEmpl, buisnessHours, Number(pickedService.durationInHours))
 
-    console.log({busyDays});
+    // console.log({busyDays});
     
     setBlackoutDates(busyDays)
   }
@@ -433,16 +429,16 @@ export function BookingForm2({ services }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && (<>
+      {isSuccess && successfullBook && (<>
         <h2 className="msg success">Booking Created: </h2>
 
         <ul>
-          <li>date: {successfullBook?.date}</li>
-          <li>time: {successfullBook?.time}</li>
-          <li>service: {successfullBook?.service}</li>
-          <li>location: {successfullBook?.location}</li>
-          <li>staff: {successfullBook?.staff}</li>
-          <li>message: {successfullBook?.msg}</li>
+          <li>start: {datePrettyLocal(successfullBook.start, DATE_OPTION.FULL)}</li>
+          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService.durationInHours)), DATE_OPTION.FULL)}</li>
+          <li>service: {successfullBook.service}</li>
+          <li>location: {successfullBook.location}</li>
+          <li>staff: {successfullBook.staff}</li>
+          <li>message: {successfullBook.msg}</li>
         </ul>
       </>)}
 
@@ -720,4 +716,12 @@ function calcDurationHuman(decimal:string){
 
   if(!hours && !minutes) return undefined
   return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+}
+
+function calcEndTime(dateString:string, serviceDuration:number){
+
+  const date = new Date(dateString)
+  date.setMinutes(date.getMinutes() + (serviceDuration * 60))
+
+  return date.toISOString()
 }

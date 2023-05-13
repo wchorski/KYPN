@@ -22,20 +22,22 @@ function isRangesOverlap(gig:DateRange, busy:DateRange) {
   return false;
 }
 
-export function findOverlapTimes(busyRange:DateRange, currentTimes:string[], date:string){
+export function findOverlapTimes(busyRange:DateRange, currentTimes:string[], date:string, serviceDuration:number){
   // console.log('findoverlaptimes');
   
   // const defaultTimes = generateTimesArray()
   // console.log({defaultTimes});
   
-  const datePicked = new Date(date);
+  // todo busy start PLUS another service duration - 1min (so bookings can line up next to eachother)
   const busyStart = new Date(busyRange.start);
+  
+  busyStart.setMinutes(busyStart.getMinutes() - (serviceDuration * 60)+1)
   const busyEnd = new Date(busyRange.end);
 
   // console.table({
   //   datePicked: date,
-  //   busyStart: busyStart.toLocaleDateString('en-CA'),
-  //   busyEnd: busyEnd.toLocaleDateString('en-CA'),
+  //   busyStart: busyStart.toLocaleTimeString('en-CA'),
+  //   busyEnd: busyEnd.toLocaleTimeString('en-CA'),
   // })
 
   // const isSameDate = datePicked.getFullYear() === busyStart.getFullYear() && datePicked.getMonth() === busyStart.getMonth() && datePicked.getDate() === busyStart.getDate();
