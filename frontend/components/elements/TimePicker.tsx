@@ -10,6 +10,7 @@ interface iProps {
     start: string,
     end: string
   }
+  serviceDuration:number,
 }
 
 type TimeOpt = {
@@ -22,31 +23,13 @@ const generatedTimeStrings = generateTimesArray().map(t => t.value)
 const generatedTimes = generateTimesArray()
 
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
-export function TimePicker({values, setValues, times, buisnessHours}:iProps) {
+export function TimePicker({values, setValues, times, buisnessHours, serviceDuration}:iProps) {
   
+
   // console.log('time picker input times', {times});
   const [animTrig, setAnimTrig] = useState(0)
   const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
 
-  function handleTimeFormat(time: string) {
-    const newDate = new Date()
-    const hours = time.split(':')[0]
-    const mins = time.split(':')[1]
-
-    newDate.setHours(Number(hours), Number(mins))
-
-    const options = {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    };
-
-    // @ts-ignore
-    const timeString = newDate.toLocaleTimeString('en-US', options);
-    const lowCaps = timeString.replace('AM', 'am').replace('PM', 'pm')
-
-    return lowCaps
-  }
 
   useEffect(() => {
     setAnimTrig(animTrig + 1)
@@ -63,9 +46,13 @@ export function TimePicker({values, setValues, times, buisnessHours}:iProps) {
       {currentTimes.map((timeobj:TimeOpt, i) => (
         <li key={`time-${i}`} style={listitemStyle(i)} >
 
-          <button type='button' className={timeobj.value === values.timeStart ? 'active' : ''}
+          <button 
+            type='button' className={timeobj.value === values.timeStart ? 'active' : ''}
             onClick={() => setValues((prev:any) => ({...prev, timeStart: timeobj.value}))} 
-            disabled={times.includes(timeobj.value) ? false : true}
+
+            // disable any time buttons that could overlap with start or end of a gig or avail 
+            disabled={filterOutServiceOverlap(times, serviceDuration).includes(timeobj.value) ? false : true}
+
           >
             {timeobj.label}
           </button>
@@ -118,10 +105,37 @@ const StyledTimePicker = styled.ul`
   }
 `
 
+function filterOutServiceOverlap(times:string[], durationHours:number){
+  console.table(times);
+  
+  // if times.value + duration overlaps last times (do not return)
+  // if times.value - duration overlaps start times (do not return)
+  const startDate = new Date(`2000-01-01T${times[0]}`)
+  // todo has to be aware of when any BUSYDAY starts
+
+  // const filteredTimes = times.filter(time => {
+  //   const specificTime = new Date(`2000-01-01T${time}`)
+
+  //   if(openDate <= specificTime && specificTime <= closedDate){
+  //     return true
+  //   }
+
+  //   return false
+
+  // })
+  // console.log({filteredTimes});
+  
+  
+
+  // return filteredTimes
+  return times
+}
+
 function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:string}){
 
   const openDate = new Date(`2000-01-01T${buisnessHours.start}`)
   const closedDate = new Date(`2000-01-01T${buisnessHours.end}`)
+  // todo also remove from times ARRAY
 
   
   const filteredTimes = times.filter(time => {

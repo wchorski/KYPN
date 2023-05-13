@@ -546,6 +546,7 @@ export function BookingForm2({ services }:iProps) {
                   setValues={setValues} 
                   times={times} 
                   buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
+                  serviceDuration={Number(pickedService.durationInHours)}
                 />
               </div>
               
