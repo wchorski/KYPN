@@ -112,6 +112,10 @@ const StyledInputLabel = styled.label`
     &.hint{
       color: #858585;
     }
+
+    &:empty{
+      padding: 0;
+    }
   }
 
   input:invalid[focused="true"]{

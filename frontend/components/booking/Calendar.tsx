@@ -45,6 +45,7 @@ export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays, h
 const StyledCalendar = styled.div`
 
   .react-calendar {
+    margin: 0 auto;
     width: 450px;
     max-width: 100%;
     background: white;

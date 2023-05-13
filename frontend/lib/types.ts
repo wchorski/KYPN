@@ -235,6 +235,7 @@ export type Service = {
   buisnessDays: number[],
   employees: User[],
   bookings: Booking[],
+  status: string,
   categories: Category[],
   tags: Tag[],
 }

@@ -1,20 +1,19 @@
 // cred - kyle4real - https://stackoverflow.com/questions/70236612/prepopulate-date-input-field-with-date-react
-import Calendar from "react-calendar"
 import styled from "styled-components"
-import useForm from "../../lib/useForm"
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react"
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 
 import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
-import { filterEmployeeTimes, filterServiceSlots, filterServiceTime } from "../../lib/timesArrayCreator"
-import { datePretty, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
-import { Availability, Booking, User } from "../../lib/types"
-import { calcDateTimeRange,  filterOutOverlapSlots, filterTimeAvail, findOverlapTimes } from "../../lib/dateCheckCal"
+import { filterServiceSlots } from "../../lib/timesArrayCreator"
+import { datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
+import { Availability, Booking, Service, User } from "../../lib/types"
+import { findOverlapTimes } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
+import { findBlackoutDates } from "../../lib/filterTimeAvail"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -26,11 +25,6 @@ type iProps = {
   services: any,
   // employee: any,
   // setEmployeeId: any,
-}
-
-enum STAFF_STATE {
-  SELECTED = 'selected',
-  NOT_SELECTED=  'not_selected',
 }
 
 type SuccessfullBook = {
@@ -56,19 +50,16 @@ export function BookingForm2({ services }:iProps) {
 
   const [isSuccess, setIsSuccess] = useState(false)
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
-  const [animTrig, setAnimTrig] = useState(0)
   
-  const [pickedService, setPickedService] = useState<any>()
+  const [pickedService, setPickedService] = useState<Service>(services[0])
   const [pickedStaff, setPickedStaff] = useState<User>()
-  const [pickedLocation, setPickedLocation] = useState<any>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
   const [locationOptions, setLocationOptions] = useState<any>([])
   const [blackoutDates, setBlackoutDates] = useState<string[]>([])
-  const [blackoutTimes, setBlackoutTimes] = useState<string[]>([])
 
 
-  const [times, setTimes] = useState<string[]>([])
+  const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
   const [timesPreFilter, settimesPreFilter] = useState<string[]>([])
   const [slots, setSlots] = useState<Slot[]>([])
   const [slotsPreFilter, setslotsPreFilter] = useState<Slot[]>([])
@@ -200,12 +191,6 @@ export function BookingForm2({ services }:iProps) {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if(!formRef.current) return console.warn('form is missing');
-
-    // console.log({ values })
-    console.table({
-      valDate: values.date,
-      valStart: values.timeStart,
-    });
     
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
@@ -274,7 +259,7 @@ export function BookingForm2({ services }:iProps) {
       let successObj = {
         date: datePrettyLocalDay(values.date),
         time: timePretty(values.timeStart) + ' - ' + timePretty(values.timeEnd),
-        service: pickedService?.name || '',
+        service: pickedService.name || '',
         location: location ? location.name : 'n/a' || '',
         staff: pickedStaff?.name || '',
         msg: ''
@@ -305,22 +290,6 @@ export function BookingForm2({ services }:iProps) {
     const foundService = services.find((x: any) => x.id === id)
     setPickedService(foundService)
 
-    const filteredTimes = filterServiceTime(
-      foundService.buisnessHourOpen,
-      foundService.buisnessHourClosed,
-      foundService.durationInHours,
-    )
-    setTimes(filteredTimes)
-    settimesPreFilter(filteredTimes)
-    
-    const filteredSlots = filterServiceSlots(
-      foundService.buisnessHourOpen,
-      foundService.buisnessHourClosed,
-      foundService.durationInHours,
-    )
-    setSlots(filteredSlots)
-    setslotsPreFilter(filteredSlots) 
-
     handleEmployeeUpdate(id)
     handleLocationUpdate(id)
   }
@@ -350,8 +319,6 @@ export function BookingForm2({ services }:iProps) {
     
     if(!pickedStaff) return console.log('no staff picked, ', pickedStaff);
 
-    let timesPreFilt = timesPreFilter
-    let slotsPreFilt = slotsPreFilter
     let currentTimes:string[] = generateTimesArray().map(t => t.value)
 
     // console.log({date});
@@ -363,12 +330,10 @@ export function BookingForm2({ services }:iProps) {
       const end   = new Date(gig.end).toLocaleDateString('en-CA')
       return [start, end]
     })
-    console.log({staffGigsLocal});
     
 
 
     if(staffGigsLocal.includes(date)){
-      // find the gig
       const gigs = pickedStaff.gigs.filter((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
@@ -406,24 +371,18 @@ export function BookingForm2({ services }:iProps) {
       resetServiceSlotTimes()
 
     } else {
+      
       setTimes(currentTimes)
-      setSlots(slotsPreFilt)
     }
 
   }
 
 
   function resetServiceSlotTimes(){
+    
     const defaultTimes = generateTimesArray().map(t => t.value)
     setTimes(defaultTimes)
 
-    setSlots(filterServiceSlots(
-      pickedService.buisnessHourOpen,
-      pickedService.buisnessHourClosed,
-      pickedService.durationInHours,
-    ))
-
-    setBlackoutTimes([])
   }
 
   // todo refactor this into a lib file. skip any dates that are in the past!
@@ -435,83 +394,19 @@ export function BookingForm2({ services }:iProps) {
     if(!selectedEmpl) return setBlackoutDates([])
     setPickedStaff(selectedEmpl)
 
-    const blackoutArray:string[] = []
+    // TODOTODOTODO this is where i'm splitting all of this logic out and hopefully nail down the front end visuals
+    // console.log({pickedService});
     
-    // TODO assumes that any service spans less than a day. cannot book multiple gigs on one day
-    selectedEmpl.gigs.map((gig:Booking) => {
-      // todo this could be condensed with 'availability' function
-      const startDate = new Date(gig.start);
-      const endDate = new Date(gig.end);
-
-      const startLocal = new Date(startDate.getTime())
-      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
-      const endLocal = new Date(endDate.getTime())
-      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
-      
-
-      // todo what if busy day is within one day, i.e. '9am - 12pm on May 5th'?
-      if(startLocalMin > 0){
-        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
-      } 
-
-      if(endLocalMin < 1439){
-        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-      }
-
-      let currentDate = startDate;
-      while (currentDate <= endDate) {
-        // todo carries start time with it to the other dates
-        blackoutArray.push(new Date(currentDate).toString());
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      
-      // blackoutArray.push(new Date(gig.start).toString())
-    })
-
     
-  
+    const buisnessHours = {
+      start: pickedService.buisnessHourOpen || '',
+      end: pickedService.buisnessHourClosed || '',
+    }
+    const busyDays = findBlackoutDates(selectedEmpl, buisnessHours, Number(pickedService.durationInHours))
 
-    // TODO this assumes that vacation is per day. Cannot do partial day vacations 
-    selectedEmpl.availability.map((avail:Availability) => {
-      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-      
-      const startDate = new Date(avail.start);
-      const endDate = new Date(avail.end);
-
-      const startLocal = new Date(startDate.getTime())
-      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
-      const endLocal = new Date(endDate.getTime())
-      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
-      
-
-      if(startLocalMin > 0){
-        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
-      } 
-
-      if(endLocalMin < 1439){
-        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-      }
-
-      let currentDate = startDate;
-      while (currentDate <= endDate) {
-        // todo carries start time with it to the other dates
-        blackoutArray.push(new Date(currentDate).toString());
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      // blackoutArray.push(avail.start)
-    })
-
-    // console.log({blackoutArray});
+    console.log({busyDays});
     
-    setBlackoutDates(blackoutArray)
-
-    // // @ts-ignore
-    // setTimes(prev => filterEmployeeTimes(prev, selectedEmpl.buisnessHourOpen, selectedEmpl.buisnessHourClosed))
+    setBlackoutDates(busyDays)
   }
 
   const onChange = (e: any) => {    
@@ -556,17 +451,17 @@ export function BookingForm2({ services }:iProps) {
       
         <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef} >
           <fieldset>
+
             <legend>The What</legend>
+
             <HeightReveal className="service-staff-cont" isShown={true}>
               <FormInput 
                 {...handleFindProps('service')}
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', }))
                   handleServicePicked(e.target.value)
-                  
-                  // handleEmployeeUpdate(e.target.value)
                 }}
               />
 
@@ -580,7 +475,6 @@ export function BookingForm2({ services }:iProps) {
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
                     handleBlackoutDates(
                       e.target.value 
-                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
                     )
                   }}
                   key={locationOptions}
@@ -595,10 +489,7 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    handleBlackoutDates(
-                      e.target.value 
-                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
-                    )
+                    handleBlackoutDates(e.target.value)
                   }}
                   key={employeeOptions}
                 />
@@ -610,23 +501,16 @@ export function BookingForm2({ services }:iProps) {
           <fieldset >
             <legend> The When </legend>
             {/* // todo turned off fancy auto height animation because times dynamically take up space */}
-            {/* <HeightReveal className='datetime-cont' isShown={values.service ? true : false}> */}
-            <div className='datetime-cont' key={values.service}>
+            <HeightReveal className='datetime-cont' isShown={values.staff ? true : false} key={values.service}>
+            {/* <div className='datetime-cont' key={values.service}> */}
 
-              {/* <FormInput 
-                {...handleFindProps('datetime_local')}
-                defaultValue={values['datetime_local']}
-                disabled
-                onChange={onChange}
-                // className="hide"
-              /> */}
+
               <div>            
                 <FormInput 
                   {...handleFindProps('date')}
                   defaultValue={values['date']}
                   disabled
                   onChange={onChange}
-                  // className="hide"
                 />
 
                 <CalendarDatePicker 
@@ -640,22 +524,22 @@ export function BookingForm2({ services }:iProps) {
               </div>
 
               <div>
-                <FormInput 
-                  {...handleFindProps('timeStart')}
-                  defaultValue={values['timeStart']}
-                  onChange={onChange}
-                  disabled
-                  // className="hide"
-                />
-                <FormInput 
-                  {...handleFindProps('timeEnd')}
-                  defaultValue={values['timeEnd']}
-                  onChange={onChange}
-                  disabled
-                  // className="hide"
-                />
+                <div className="time-input-cont">
+                  <FormInput 
+                    {...handleFindProps('timeStart')}
+                    defaultValue={values['timeStart']}
+                    onChange={onChange}
+                    disabled
+                  />
+                  <FormInput 
+                    {...handleFindProps('timeEnd')}
+                    defaultValue={values['timeEnd']}
+                    onChange={onChange}
+                    disabled
+                  />
+                </div>
 
-                <p>{ calcDurationHuman(pickedService?.durationInHours)}</p>
+                <p className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)}</p>
 
                 <TimePicker 
                   values={values} 
@@ -665,8 +549,8 @@ export function BookingForm2({ services }:iProps) {
                 />
               </div>
               
-            </div>
-            {/* </HeightReveal> */}
+            {/* </div> */}
+            </HeightReveal>
           </fieldset>
 
           <fieldset>
@@ -730,28 +614,6 @@ const StyledBookingForm = styled.form`
     }
   }
 
-  /* fieldset{
-    max-height: 0em;
-    overflow: hidden;
-    transition: all 2s ease-in-out;
-
-    &.open{
-      max-height: 99999em;
-      background-color: #7fe9ad;
-    }
-  } */
-
-  .hide{
-    /* display: none; */
-    opacity: .3;
-    /* max-height: 1px;
-    overflow: hidden; */
-
-    input, select{
-      /* pointer-events: none; */
-    }
-  }
-
   label{
     display: flex;
     flex-direction: column;
@@ -762,13 +624,20 @@ const StyledBookingForm = styled.form`
       height: 10em;
     }
   }
+
+  .time-input-cont{
+    display: flex;
+    gap: 1em;
+  }
+
+  .duration-stamp{
+    padding: 0;
+    margin: 0;
+  }
 `
 
 export function HeightReveal({children, isShown, className}:{children:ReactNode[]|ReactNode, isShown: boolean, className:string}){
   const scrollContRef = useRef<HTMLParagraphElement>(null)
-  // if(!scrollContRef.current) return <p>nope</p>
-  // console.log(scrollContRef.current.scrollHeight);
-  
 
   return (
     <StyledHeightReveal 
@@ -786,9 +655,7 @@ export function HeightReveal({children, isShown, className}:{children:ReactNode[
 }
 
 const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
-  /* border: solid black 1px; */
-  /* padding: 1em; */
-  /* margin: 1em 0; */
+
 
   .datetime-cont{
     display: flex;
@@ -800,23 +667,15 @@ const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
   }
 
   .cont{
-    /* border: solid 1px black; */
-    /* border-radius: 5px; */
-
-    /* font-size: 16px; */
-    /* line-height: 38px; */
-    /* padding: 0.3em; */
     overflow-y: hidden;
     transition: all 1s ease-in-out;
   }
 
   .collapsed{
     max-height: 0;
-    /* background-color: #05052d; */
   }
 
   .expanded{
-    /* background-color: white; */
     padding-top: 5px;
     max-height: ${props => props.scrollHeight}px;
   }

@@ -24,8 +24,6 @@ const generatedTimes = generateTimesArray()
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
 export function TimePicker({values, setValues, times, buisnessHours}:iProps) {
   
-  // console.log({times});
-  
   // console.log('time picker input times', {times});
   const [animTrig, setAnimTrig] = useState(0)
   const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
@@ -64,13 +62,14 @@ export function TimePicker({values, setValues, times, buisnessHours}:iProps) {
     <StyledTimePicker className={values['date'] ? 'open' : ''} key={animTrig}>
       {currentTimes.map((timeobj:TimeOpt, i) => (
         <li key={`time-${i}`} style={listitemStyle(i)} >
+
           <button type='button' className={timeobj.value === values.timeStart ? 'active' : ''}
             onClick={() => setValues((prev:any) => ({...prev, timeStart: timeobj.value}))} 
-            // todo defaultTimes.includes(!timeobj.value) ? true : false)
             disabled={times.includes(timeobj.value) ? false : true}
           >
             {timeobj.label}
           </button>
+
         </li>
       ))}
     </StyledTimePicker>
@@ -94,6 +93,14 @@ const StyledTimePicker = styled.ul`
     animation-name: reveal;
     animation-timing-function: ease;
   }
+  li:nth-child(n+1):nth-child(-n+4),
+  li:nth-child(8n+1),
+  li:nth-child(8n+2),
+  li:nth-child(8n+3),
+  li:nth-child(8n+4) {
+    border-bottom: solid #959595 1px;
+  }
+
 
   .active{
     background-color: var(--c-1);
@@ -123,14 +130,6 @@ function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:st
     if(openDate <= specificTime && specificTime <= closedDate){
       return true
     }
-    
-    // console.log('!!!!!!! sits inside buisness hours ');
-    // console.table({
-    //   openDate: openDate.toLocaleString('en-US', { hour12: false }),
-    //   closedDate: closedDate.toLocaleString('en-US', { hour12: false }),
-    //   specificTime: specificTime.toLocaleString('en-US', { hour12: false }),
-    //   timeValue: time.value,
-    // });
 
     return false
 
