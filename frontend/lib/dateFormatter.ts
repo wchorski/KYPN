@@ -46,6 +46,41 @@ function datePrettyLocalFull(date:string) {
   return newDate.toLocaleTimeString("en-US", options);
 }
 
+export enum DATE_OPTION {
+  DAY = 'day',
+  TIME = 'time',
+  FULL = 'full',
+}
+
+export function datePrettyLocal(date:string, option:DATE_OPTION) {
+  // console.log('pretty date input, ', date);
+  
+  let options = {}
+  switch (option) {
+    case DATE_OPTION.FULL:
+      options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        // timeZone: 'UTC', 
+        // timeZone: "America/Chicago",
+        timeZoneName: "short",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true
+      };
+      break;
+  
+    default:
+      break;
+  }
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleString("en-US", options);
+}
+
 export function datePrettyLocalDay(date:string) {
   const options = {
     year: "numeric",
