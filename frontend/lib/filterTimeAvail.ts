@@ -1,3 +1,4 @@
+import { isSameCalendarDay } from "./dateCheckCal"
 import { Availability, Booking, User } from "./types"
 
 type TimeOpt = {
@@ -10,32 +11,43 @@ type Range = {
   end:string,
 }
 
-// todo
-// go through each day for 2 years out?
-// is there a gig or avail overlap?
-// if it's a full overlap - diable day
 
-// ~~if day is partial overlap~~
-// find where overlap, see if a service can fit in remaning time (IF BEFORE)
-// if no times are available for that day, disable day
-// if the service's duration can't fit in the open times, BUFFER TIME, disable day
-
-// if gig start - back up time one duration before. deleting times that would overlap
-// if gig end - already working ✅
-
-/* 
-  inputs
-  - Service
-  - defaultTimes
-  - employee
-  - 
-*/
 
 export function findBlackoutDates(employee:User, buisnessHours:Range, serviceDurationHours:number){
-  const busyDays = findEmployeeBusyDays(employee, buisnessHours, serviceDurationHours)
+  // const busyDays1 = findEmployeeBusyDays(employee, buisnessHours, serviceDurationHours)
+  const busyRanges = findEmployeeBusyRanges(employee)
+  const busyDays = busyRanges.flatMap(range => calcPartialDays(range, buisnessHours, serviceDurationHours))
 
+  console.log({busyDays});
+  
   return busyDays
   
+}
+
+function findEmployeeBusyRanges(employee:User){
+
+  const busyRanges:Range[] = []
+
+  employee.gigs.map((gig:Booking) => {
+    
+    const gigRange = {
+      start: gig.start,
+      end: gig.end,
+    }
+    busyRanges.push(gigRange)
+  })
+
+  employee.availability.map((avail:Availability) => {
+    if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
+    
+    const availRange = {
+      start: avail.start,
+      end: avail.end,
+    }
+    busyRanges.push(availRange)
+  })
+  
+  return busyRanges
 }
 
 function findEmployeeBusyDays(employee:User, buisnessHours:Range, serviceDurationHours:number) {
@@ -48,7 +60,7 @@ function findEmployeeBusyDays(employee:User, buisnessHours:Range, serviceDuratio
       start: gig.start,
       end: gig.end,
     }
-
+    
     const newDates = calcPartialDays(gigRange, buisnessHours, serviceDurationHours)
     blackoutArray.push(...newDates)
 
@@ -75,38 +87,39 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
   const newDates:string[] = []
 
   const startBusy = new Date(range.start);
-  const endDate   = new Date(range.end);
+  const endBusy   = new Date(range.end);
 
-  const startBusyTime     = new Date(startBusy.getTime())
+  const startBusyTime = new Date(startBusy.getTime())
   const startBusyMin  = (startBusyTime.getHours() * 60) + startBusyTime.getMinutes()
-  const endBusy       = new Date(endDate.getTime())
-  const endBusyMin    = (endBusy.getHours() * 60) + endBusy.getMinutes()
+  const endBusyTime   = new Date(endBusy.getTime())
+  const endBusyMin    = (endBusyTime.getHours() * 60) + endBusyTime.getMinutes()
   
+  if(isSameCalendarDay(startBusy, endBusy)) {
+    console.log('busy start end on same day');
+    
+  }
+  
+  if(!isSameCalendarDay(startBusy, endBusy)) {
+    console.log('partials are on different cal days');
+    
+  
+    if(startBusyMin > 0){
+      if(isFitAnotherServiceBefore(startBusy, buisnessHours, serviceDurationHours)){
+        startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
+      } 
 
-  if(startBusyMin > 0){
-    // TODO partial day, how do i 
-    // calc if service range doesen't fit inside available times? 
-    // service.buisnessHours Range
-    // this busyRange
-    // if there is overlap starting at buisness open? - blackout date - skip next lines
-    if(isFitAnotherService(startBusy, buisnessHours, serviceDurationHours)){
-      startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
+      startBusy.setHours(0); startBusy.setMinutes(0); startBusy.setSeconds(0); startBusy.setMilliseconds(0);
     } 
-    // else {
-    //   console.log('cannot fit another of this SERVICE before end of day, keep day blacked out', startBusy);
-    // }
 
-    startBusy.setHours(0); startBusy.setMinutes(0); startBusy.setSeconds(0); startBusy.setMilliseconds(0);
-  } 
-
-  if(endBusyMin < 1439){
-    // TODO  could reverse. have buisnessHours.end, reverse time by serviceDuration, check to see if another gig can be added
-    endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-    endDate.setHours(59); endDate.setMinutes(59); endDate.setSeconds(0); endDate.setMilliseconds(0);
+    if(endBusyMin < 1439){
+      // TODO  could reverse. have buisnessHours.end, reverse time by serviceDuration, check to see if another gig can be added
+      endBusy.setDate(endBusy.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
+      endBusy.setHours(59); endBusy.setMinutes(59); endBusy.setSeconds(0); endBusy.setMilliseconds(0);
+    }
   }
   
   let currentDate = startBusy;
-  while (currentDate <= endDate) {
+  while (currentDate <= endBusy) {
     // todo carries start time with it to the other dates
     newDates.push(new Date(currentDate).toString());
     currentDate.setDate(currentDate.getDate() + 1);
@@ -116,7 +129,7 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
 }
 
 // fit another service on day BEFORE employee is busy
-function isFitAnotherService(startBusy:Date, buisnessHours:Range, serviceDurationHours:number) {
+function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:Range, serviceDurationHours:number) {
 
   const busyDay = new Date(startBusy)
   const [hours, minutes, seconds] = buisnessHours.start.split(":").map(Number)
@@ -132,6 +145,28 @@ function isFitAnotherService(startBusy:Date, buisnessHours:Range, serviceDuratio
     //   firstServiceEnd,
     //   gigStart,
     // })
+    return false;
+  }
+
+
+  return true;
+}
+function isFitAnotherService(startBusy:Date, buisnessHours:Range, serviceDurationHours:number) {
+
+  // start at top of buisness hours
+  // create a busy block
+  // check if overlap with busyDay
+  // incriment by 15
+  // if at least one block is open, keep day open
+
+  const busyDay = new Date(startBusy)
+  const [hours, minutes, seconds] = buisnessHours.start.split(":").map(Number)
+  const buisnessOpen = new Date(busyDay.getFullYear(), busyDay.getMonth(), busyDay.getDate(), hours, minutes, seconds); 
+  const firstServiceEnd = buisnessOpen.setMinutes(buisnessOpen.getMinutes() + (serviceDurationHours * 60))
+  const gigStart = startBusy.getTime();
+  
+  
+  if (gigStart <= firstServiceEnd) {
     return false;
   }
 

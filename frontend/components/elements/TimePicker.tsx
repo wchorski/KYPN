@@ -18,8 +18,6 @@ type TimeOpt = {
   label: string,
 }
 
-
-const generatedTimeStrings = generateTimesArray().map(t => t.value)
 const generatedTimes = generateTimesArray()
 
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
