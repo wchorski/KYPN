@@ -119,3 +119,19 @@ export function timePretty(time: string) {
 
   return lowCaps
 }
+
+export function calcDurationHuman(decimal:string){
+  const inputHours = Number(decimal)
+  let hours = Math.floor(inputHours)
+  let minutes = Math.round((inputHours - hours) * 60)
+
+  let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
+  let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
+
+  if(hours > 0    && minutes === 0) return humanHours
+  if(hours === 0  && minutes   > 0) return humanMinutes
+  if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
+
+  if(!hours && !minutes) return undefined
+  return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+}

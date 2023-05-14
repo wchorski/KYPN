@@ -8,8 +8,7 @@ import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
-import { filterServiceSlots } from "../../lib/timesArrayCreator"
-import { DATE_OPTION, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
+import { DATE_OPTION, calcDurationHuman, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
 import { Availability, Booking, Service, User } from "../../lib/types"
 import { findOverlapTimes } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
@@ -395,8 +394,8 @@ export function BookingForm2({ services }:iProps) {
     
     
     const buisnessHours = {
-      start: pickedService.buisnessHourOpen || '',
-      end: pickedService.buisnessHourClosed || '',
+      start: pickedService.buisnessHourOpen,
+      end: pickedService.buisnessHourClosed,
     }
     const busyDays = findBlackoutDates(selectedEmpl, buisnessHours, Number(pickedService.durationInHours))
 
@@ -702,21 +701,21 @@ const QUERY_SERVICES_ALL = gql`
   }
 `
 
-function calcDurationHuman(decimal:string){
-  const inputHours = Number(decimal)
-  let hours = Math.floor(inputHours)
-  let minutes = Math.round((inputHours - hours) * 60)
+// function calcDurationHuman(decimal:string){
+//   const inputHours = Number(decimal)
+//   let hours = Math.floor(inputHours)
+//   let minutes = Math.round((inputHours - hours) * 60)
 
-  let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
-  let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
+//   let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
+//   let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
 
-  if(hours > 0    && minutes === 0) return humanHours
-  if(hours === 0  && minutes   > 0) return humanMinutes
-  if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
+//   if(hours > 0    && minutes === 0) return humanHours
+//   if(hours === 0  && minutes   > 0) return humanMinutes
+//   if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
 
-  if(!hours && !minutes) return undefined
-  return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-}
+//   if(!hours && !minutes) return undefined
+//   return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+// }
 
 function calcEndTime(dateString:string, serviceDuration:number){
 
