@@ -9,10 +9,11 @@ import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { DATE_OPTION, calcDurationHuman, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
-import { Availability, Booking, Service, User } from "../../lib/types"
-import { findOverlapTimes } from "../../lib/dateCheckCal"
+import { Availability, Booking, DayTimes, Service, User } from "../../lib/types"
+import { findOverlapTimes, isSameCalendarDay } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
-import { findBlackoutDates } from "../../lib/filterTimeAvail"
+import { filterBuisnessTimes, findBlackoutDates, findUniqueDays, isDateRangeAvailable } from "../../lib/filterTimeAvail"
+import { findEmployeeBusyRanges } from "../../lib/userUtils"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -35,10 +36,12 @@ type SuccessfullBook = {
   msg: string,
 }
 
-type Slot = {
-  start: string,
-  end: string,
-}
+// type Slot = {
+//   start: string,
+//   end: string,
+// }
+
+const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
@@ -55,7 +58,8 @@ export function BookingForm2({ services }:iProps) {
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
   const [locationOptions, setLocationOptions] = useState<any>([])
-  const [blackoutDates, setBlackoutDates] = useState<string[]>([])
+  const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
+  const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
 
   const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
@@ -380,29 +384,119 @@ export function BookingForm2({ services }:iProps) {
 
   }
 
-  // todo refactor this into a lib file. skip any dates that are in the past!
-  function handleBlackoutDates( id:string ){
+  function findPartialDays(id:string) {
+    // const buisnessOpen = new Date(buisnessHours.start)
+    // const currentTestStart = buisnessOpen
+    // const currentTestEnd = new Date(currentTestStart.setMinutes(currentTestStart.getMinutes() + serviceDuration * 60))
 
-    resetServiceSlotTimes()
-    
     const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
     if(!selectedEmpl) return setBlackoutDates([])
     setPickedStaff(selectedEmpl)
 
-    // TODOTODOTODO this is where i'm splitting all of this logic out and hopefully nail down the front end visuals
-    // console.log({pickedService});
-    
-    
     const buisnessHours = {
       start: pickedService.buisnessHourOpen,
       end: pickedService.buisnessHourClosed,
     }
-    const busyDays = findBlackoutDates(selectedEmpl, buisnessHours, Number(pickedService.durationInHours))
-
-    // console.log({busyDays});
+    const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
+    console.log({employeeBusyRanges});
     
-    setBlackoutDates(busyDays)
+
+    // const busyRangeDates = employeeBusyRanges.map(range => ({
+    //   start: new Date(range.start),
+    //   end: new Date(range.end)
+    // }))
+    // console.log({busyRangeDates});
+    
+
+    const buisnessTimeStrings = filterBuisnessTimes(genTimeStrings, buisnessHours)
+    // console.log({buisnessTimeStrings})
+    
+    // const uniqueBusyStrings = [...new Set(busyRangeDates.flatMap((range) => [range.start, range.end]).map((date) => new Date(date).toDateString()))]
+    // const uniqueBusyDays = uniqueBusyStrings.map((dateString) => new Date(dateString))
+    
+    // const uniqueBusyDays = busyRangeDates.flatMap(range => findUniqueDays(range.start, range.end))
+    const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
+    // console.log({uniqueBusyDays})
+    // console.log({busyDates});
+    // const uniqueBusyDays = Array.from(new Set(busyDates))
+
+    // const busyStrings = Array.from(new Set(busyDates.map(date => date.toLocaleDateString())))
+
+    const partialDays:DayTimes[] = []
+    const busyDays = uniqueBusyDays.filter((day) => {
+      const openTimes = buisnessTimeStrings.filter((time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number)
+        const testStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, seconds)
+        const testEnd = new Date(testStart)
+        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService.durationInHours) * 60)
+
+        const testRange = {
+          start: testStart,
+          end: testEnd
+        }
+        
+        // // todo filter busyRangeDates that start or end on this 'day'
+        // const sameDayBusyRanges = busyRangeDates.filter(busy => {
+        //   return isSameCalendarDay(busy.start, testRange.start,) || isSameCalendarDay(busy.end, testRange.end) || isSameCalendarDay(busy.start, testRange.end) || isSameCalendarDay(busy.end, testRange.start)
+        // })
+        // console.log({sameDayBusyRanges});
+        
+        // console.log({busyRangeDates});
+
+        return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
+      })
+
+      // console.log({openTimes})
+      partialDays.push({
+        day,
+        times: openTimes
+      })
+
+
+      return openTimes.length > 0 ? true : false
+    })
+
+    // console.log({busyDays})
+    console.log({partialDays})
+
+    // todo make filter into map and use ? :
+    const blackoutDays = partialDays.filter(d => {
+      return (d.times.length <= 0)
+    })
+    console.log({blackoutDays});
+    
+    const blackoutDts = blackoutDays.map(d => d.day)
+    console.log({blackoutDts})
+    
+    setBlackoutDates(blackoutDts)
+    setPartialDates(partialDays)
   }
+  
+
+  // // todo refactor this into a lib file. skip any dates that are in the past!
+  // function handleBlackoutDates( id:string ){
+
+  //   resetServiceSlotTimes()
+    
+  //   const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
+  //   if(!selectedEmpl) return setBlackoutDates([])
+  //   setPickedStaff(selectedEmpl)
+
+  //   // TODOTODOTODO this is where i'm splitting all of this logic out and hopefully nail down the front end visuals
+  //   // console.log({pickedService});
+    
+    
+  //   const buisnessHours = {
+  //     start: pickedService.buisnessHourOpen,
+  //     end: pickedService.buisnessHourClosed,
+  //   }
+  //   const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
+  //   const busyDays = findBlackoutDates(employeeBusyRanges, buisnessHours, Number(pickedService.durationInHours))
+
+  //   // console.log({busyDays});
+    
+  //   // setBlackoutDates(busyDays)
+  // }
 
   const onChange = (e: any) => {    
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -468,9 +562,10 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    handleBlackoutDates(
-                      e.target.value 
-                    )
+                    // handleBlackoutDates(
+                    //   e.target.value 
+                    // )
+                    findPartialDays(e.target.value)
                   }}
                   key={locationOptions}
                 />
@@ -484,7 +579,8 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    handleBlackoutDates(e.target.value)
+                    // handleBlackoutDates(e.target.value)
+                    findPartialDays(e.target.value)
                   }}
                   key={employeeOptions}
                 />
@@ -511,7 +607,7 @@ export function BookingForm2({ services }:iProps) {
                 <CalendarDatePicker 
                   key={values.staff}
                   setValues={setValues} 
-                  blackoutStrings={blackoutDates}
+                  blackoutDays={blackoutDates}
                   buisnessDays={pickedService?.buisnessDays || []}
                   handleBlackoutTimes={handleBlackoutTimes}
                 />
@@ -540,6 +636,7 @@ export function BookingForm2({ services }:iProps) {
                   values={values} 
                   setValues={setValues} 
                   times={times} 
+                  partialDates={partialDates}
                   buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
                   serviceDuration={Number(pickedService.durationInHours)}
                 />

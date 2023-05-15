@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { generateTimesArray } from "../../lib/generateTimesArray";
+import { DayTimes } from "../../lib/types";
+import { isSameCalendarDay } from "../../lib/dateCheckCal";
 
 interface iProps {
   values: any | undefined,
@@ -10,6 +12,7 @@ interface iProps {
     start: string,
     end: string
   }
+  partialDates:DayTimes[],
   serviceDuration:number,
 }
 
@@ -21,12 +24,16 @@ type TimeOpt = {
 const generatedTimes = generateTimesArray()
 
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
-export function TimePicker({values, setValues, times, buisnessHours, serviceDuration}:iProps) {
+export function TimePicker({values, setValues, times, buisnessHours, partialDates, serviceDuration}:iProps) {
   
-
-  // console.log('time picker input times', {times});
   const [animTrig, setAnimTrig] = useState(0)
   const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
+
+  // const activeDay = partialDates.filter(d => isSameCalendarDay(d.day, new Date(values.date)))
+  // const activeTimes = activeDay.map(d => d.times)
+  // console.log({activeTimes});
+  // todo could just use 'activeTimes' to check if button is disabled
+  
 
 
   useEffect(() => {
