@@ -5,17 +5,19 @@ import { add, format } from "date-fns";
 import styled from 'styled-components';
 
 type iProps = {
-  blackoutStrings: string[]
+  blackoutDays: Date[]
   setValues: any,
   buisnessDays: number[],
   handleBlackoutTimes: any,
 }
 
-export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays, handleBlackoutTimes}:iProps) => {
+export const CalendarDatePicker = ({ setValues, blackoutDays, buisnessDays, handleBlackoutTimes}:iProps) => {
 
   // const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
 
+  // todo why do i have to convert to string?
+  const blackoutStrings = blackoutDays.map(d => d.toString())
 
   return (
     <StyledCalendar>
@@ -31,7 +33,6 @@ export const CalendarDatePicker = ({ setValues, blackoutStrings, buisnessDays, h
           // setAnimTrig(animTrig + 1)
           // getTimes()
         }}
-        // tileDisabled={({date}) => blackoutDates.includes(date.getDate()) || !buisnessDays.includes(date.getDay()) }
         tileDisabled={({date}) => blackoutStrings.includes(date.toString()) || !buisnessDays.includes(date.getDay()) }
       // value={date}
       />

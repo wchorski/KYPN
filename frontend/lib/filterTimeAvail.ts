@@ -1,93 +1,187 @@
 import { isSameCalendarDay } from "./dateCheckCal"
-import { Availability, Booking, User } from "./types"
+import { DateRange, StringRange  } from "./types"
 
 type TimeOpt = {
   value: string,
   label: string,
 }
 
-type Range = {
-  start:string,
-  end:string,
-}
 
-
-
-export function findBlackoutDates(employee:User, buisnessHours:Range, serviceDurationHours:number){
+export function findBlackoutDates(busyRanges:DateRange[], buisnessHours:StringRange, serviceDurationHours:number){
   // const busyDays1 = findEmployeeBusyDays(employee, buisnessHours, serviceDurationHours)
-  const busyRanges = findEmployeeBusyRanges(employee)
+  // const busyRanges = findEmployeeBusyRanges(employee)
   const busyDays = busyRanges.flatMap(range => calcPartialDays(range, buisnessHours, serviceDurationHours))
 
   console.log({busyDays});
   
   return busyDays
-  
 }
 
-function findEmployeeBusyRanges(employee:User){
+// function* scanByDayRange(startDate:Date, endDate:Date) {
+//   let currentDate = new Date(startDate);
 
-  const busyRanges:Range[] = []
+//   while (currentDate <= endDate) {
+//     yield new Date(currentDate);
+//     currentDate.setDate(currentDate.getDate() + 1);
+//   }
+// }
 
-  employee.gigs.map((gig:Booking) => {
-    
-    const gigRange = {
-      start: gig.start,
-      end: gig.end,
-    }
-    busyRanges.push(gigRange)
-  })
 
-  employee.availability.map((avail:Availability) => {
-    if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-    
-    const availRange = {
-      start: avail.start,
-      end: avail.end,
-    }
-    busyRanges.push(availRange)
-  })
+// export const getUniqueDays = (startDate:Date, endDate:Date) => {
+//   const uniqueDays = new Set();
+
+//   for (const date of scanByDayRange(startDate, endDate)) {
+//     date.setHours(0, 0, 0)
+//     uniqueDays.add(date.toLocaleDateString())
+//   }
+//   console.log(Array.from(uniqueDays));
   
-  return busyRanges
+//   // const uniqueDays = Array.from(uniqueStrings).map(s => new Date(s+'T00:00:00'))
+//   // console.log({uniqueDays});
+//   return Array.from(uniqueDays)
+// };
+
+export function findUniqueDays(dateRanges:StringRange[]) {
+  const uniqueDays:string[] = [];
+
+
+  dateRanges.forEach(range => {
+    const startDate = new Date(range.start)
+    const endDate = new Date(range.end)
+    startDate.setHours(0,0,0)
+    endDate.setHours(0,0,0)
+
+    for (let day = startDate; day <= endDate; day.setDate(day.getDate() + 1)) {
+      const formattedDate = day.toISOString().split('T')[0];
+      if (!uniqueDays.includes(formattedDate)) {
+        // day.setHours(0,0,0)
+        uniqueDays.push(formattedDate);
+      }
+    }
+  })
+
+  return uniqueDays.map(d => new Date(d+"T00:00:00"));
 }
 
-function findEmployeeBusyDays(employee:User, buisnessHours:Range, serviceDurationHours:number) {
 
-  const blackoutArray:string[] = []
+// function findEmployeeBusyRanges(employee:User){
 
-  employee.gigs.map((gig:Booking) => {
+//   const busyRanges:Range[] = []
+
+//   employee.gigs.map((gig:Booking) => {
     
-    const gigRange = {
-      start: gig.start,
-      end: gig.end,
-    }
+//     const gigRange = {
+//       start: gig.start,
+//       end: gig.end,
+//     }
+//     busyRanges.push(gigRange)
+//   })
+
+//   employee.availability.map((avail:Availability) => {
+//     if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
     
-    const newDates = calcPartialDays(gigRange, buisnessHours, serviceDurationHours)
-    blackoutArray.push(...newDates)
-
-  })
-
-  employee.availability.map((avail:Availability) => {
-    if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-    
-    const availRange = {
-      start: avail.start,
-      end: avail.end,
-    }
-
-    const newDates = calcPartialDays(availRange, buisnessHours, serviceDurationHours)
-    blackoutArray.push(...newDates)
-
-  })
+//     const availRange = {
+//       start: avail.start,
+//       end: avail.end,
+//     }
+//     busyRanges.push(availRange)
+//   })
   
-  return blackoutArray
+//   return busyRanges
+// }
+
+// function findEmployeeBusyDays(employee:User, buisnessHours:Range, serviceDurationHours:number) {
+
+//   const blackoutArray:string[] = []
+
+//   employee.gigs.map((gig:Booking) => {
+    
+//     const gigRange = {
+//       start: gig.start,
+//       end: gig.end,
+//     }
+    
+//     const newDates = calcPartialDays(gigRange, buisnessHours, serviceDurationHours)
+//     blackoutArray.push(...newDates)
+
+//   })
+
+//   employee.availability.map((avail:Availability) => {
+//     if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
+    
+//     const availRange = {
+//       start: avail.start,
+//       end: avail.end,
+//     }
+
+//     const newDates = calcPartialDays(availRange, buisnessHours, serviceDurationHours)
+//     blackoutArray.push(...newDates)
+
+//   })
+  
+//   return blackoutArray
+// }
+
+// Function to check if a date range can fit around other busy ranges
+export function isDateRangeAvailable(testStart:Date, testEnd:Date, busyRanges: StringRange[]) {
+  return !busyRanges.some(busy => {
+    // console.log({busy});
+
+    // const testStart = new Date(test.start)
+    // const testEnd = new Date(test.end)
+    const busyStart = new Date(busy.start)
+    const busyEnd = new Date(busy.end)
+    
+    if((testStart >= busyStart && testStart < busyEnd) || (testEnd > busyStart && testEnd <= busyEnd)){
+      console.log('!*!*!*!*!!* date overlaps');
+      console.log('!*!*!*!*!!* date overlaps');
+      console.log('!*!*!*!*!!* date overlaps');
+      console.table(
+        {
+          testStart,
+          testEnd ,
+          busyStart,
+          busyEnd,
+        }
+      )
+      
+    } else {
+      // console.log(' + date is cleared');
+      // console.table(
+      //   {
+      //     testStart: test.start.toLocaleString(),
+      //     testEnd: test.end.toLocaleString(),
+      //     busyStart: busy.start.toLocaleString(),
+      //     busyEnd: busy.end.toLocaleString(),
+      //   }
+      // )
+    }
+    // todo might want to use .getTime()
+    return (testStart >= busyStart && testStart < busyEnd) || (testEnd > busyStart && testEnd <= busyEnd)
+  })
 }
 
-function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:number){
+export function filterBuisnessTimes(inputTimes:string[], buisnessTimes:StringRange) {
+  const filteredTimes = inputTimes.filter((time) => {
+    const currentTime = new Date(`2000-01-01T${time}`)
+    const start = new Date(`2000-01-01T${buisnessTimes.start}`)
+    const end = new Date(`2000-01-01T${buisnessTimes.end}`)
+    // todo might have to use .getTime()
+    return currentTime >= start && currentTime <= end
+  })
+
+  return filteredTimes
+}
+
+function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDurationHours:number){
 
   const newDates:string[] = []
 
-  const startBusy = new Date(range.start);
-  const endBusy   = new Date(range.end);
+  // todo this 'new Date()' is redundant
+  const startBusy = range.start
+  const endBusy   = range.end
+  // const startBusy = new Date(range.start);
+  // const endBusy   = new Date(range.end);
 
   const startBusyTime = new Date(startBusy.getTime())
   const startBusyMin  = (startBusyTime.getHours() * 60) + startBusyTime.getMinutes()
@@ -131,7 +225,7 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
 }
 
 // fit another service on day BEFORE employee is busy
-function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:Range, serviceDurationHours:number) {
+function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:StringRange, serviceDurationHours:number) {
 
   const busyDay = new Date(startBusy)
   const [hours, minutes, seconds] = buisnessHours.start.split(":").map(Number)
@@ -153,7 +247,7 @@ function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:Range, serviceD
 
   return true;
 }
-function isFitAnotherService(startBusy:Date, buisnessHours:Range, serviceDurationHours:number) {
+function isFitAnotherService(startBusy:Date, buisnessHours:StringRange, serviceDurationHours:number) {
 
   // start at top of buisness hours
   // create a busy block
