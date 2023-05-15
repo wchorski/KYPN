@@ -99,11 +99,13 @@ function calcPartialDays(range:Range, buisnessHours:Range, serviceDurationHours:
     
   }
   
+  // todo doesn't really work if there is a mix of partial days
   if(!isSameCalendarDay(startBusy, endBusy)) {
     console.log('partials are on different cal days');
     
   
     if(startBusyMin > 0){
+      // todo, blocks out whole day if there is 
       if(isFitAnotherServiceBefore(startBusy, buisnessHours, serviceDurationHours)){
         startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
       } 
