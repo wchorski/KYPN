@@ -7,6 +7,20 @@
 import { KeystoneGraphQLAPI, KeystoneListsAPI } from '@keystone-6/core/types';
 import type { Permission } from './schemas/fields';
 
+export type DateRange = {
+  start: Date,
+  end: Date,
+}
+
+export type StringRange = {
+  start:string,
+  end:string,
+}
+
+export type DayTimes = {
+  day: Date,
+  times: string[]
+}
 
 export type Session = {
   itemId: string;
@@ -235,6 +249,7 @@ export type Service = {
   buisnessDays: number[],
   employees: User[],
   bookings: Booking[],
+  status: string,
   categories: Category[],
   tags: Tag[],
 }

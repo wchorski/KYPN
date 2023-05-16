@@ -47,6 +47,8 @@ type GEvent = {
 export async function createCalendarEvent(event:GEvent){
 
   // console.log({event})
+  if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
+  
     
   let calendar = google.calendar('v3')
   

@@ -3,7 +3,7 @@
 
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, json, relationship, text, timestamp, } from "@keystone-6/core/fields";
+import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
@@ -56,6 +56,18 @@ export const Booking = list({
     notes: text({
       ui: {
         displayMode: 'textarea'
+      }
+    }),
+    status: select({
+      options: [
+        { label: 'Active', value: 'ACTIVE' },
+        { label: 'Postponed', value: 'POSTPONED' },
+        { label: 'Canceled', value: 'CANCELED' },
+      ],
+      defaultValue: 'ACTIVE',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
       }
     }),
     dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),

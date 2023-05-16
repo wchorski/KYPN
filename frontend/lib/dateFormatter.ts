@@ -46,6 +46,41 @@ function datePrettyLocalFull(date:string) {
   return newDate.toLocaleTimeString("en-US", options);
 }
 
+export enum DATE_OPTION {
+  DAY = 'day',
+  TIME = 'time',
+  FULL = 'full',
+}
+
+export function datePrettyLocal(date:string, option:DATE_OPTION) {
+  // console.log('pretty date input, ', date);
+  
+  let options = {}
+  switch (option) {
+    case DATE_OPTION.FULL:
+      options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        // timeZone: 'UTC', 
+        // timeZone: "America/Chicago",
+        timeZoneName: "short",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true
+      };
+      break;
+  
+    default:
+      break;
+  }
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleString("en-US", options);
+}
+
 export function datePrettyLocalDay(date:string) {
   const options = {
     year: "numeric",
@@ -83,4 +118,20 @@ export function timePretty(time: string) {
   const lowCaps = timeString.replace('AM', 'am').replace('PM', 'pm')
 
   return lowCaps
+}
+
+export function calcDurationHuman(decimal:string){
+  const inputHours = Number(decimal)
+  let hours = Math.floor(inputHours)
+  let minutes = Math.round((inputHours - hours) * 60)
+
+  let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
+  let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
+
+  if(hours > 0    && minutes === 0) return humanHours
+  if(hours === 0  && minutes   > 0) return humanMinutes
+  if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
+
+  if(!hours && !minutes) return undefined
+  return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
 }
