@@ -132,30 +132,30 @@ export function isDateRangeAvailable(testStart:Date, testEnd:Date, busyRanges: S
     const busyStart = new Date(busy.start)
     const busyEnd = new Date(busy.end)
     
-    if((testStart >= busyStart && testStart < busyEnd) || (testEnd > busyStart && testEnd <= busyEnd)){
-      console.log('!*!*!*!*!!* date overlaps');
-      console.log('!*!*!*!*!!* date overlaps');
-      console.log('!*!*!*!*!!* date overlaps');
-      console.table(
-        {
-          testStart,
-          testEnd ,
-          busyStart,
-          busyEnd,
-        }
-      )
+    // if((testStart >= busyStart && testStart < busyEnd) || (testEnd > busyStart && testEnd <= busyEnd)){
+    //   console.log('!*!*!*!*!!* date overlaps');
+    //   console.log('!*!*!*!*!!* date overlaps');
+    //   console.log('!*!*!*!*!!* date overlaps');
+    //   console.table(
+    //     {
+    //       testStart,
+    //       testEnd ,
+    //       busyStart,
+    //       busyEnd,
+    //     }
+    //   )
       
-    } else {
-      // console.log(' + date is cleared');
-      // console.table(
-      //   {
-      //     testStart: test.start.toLocaleString(),
-      //     testEnd: test.end.toLocaleString(),
-      //     busyStart: busy.start.toLocaleString(),
-      //     busyEnd: busy.end.toLocaleString(),
-      //   }
-      // )
-    }
+    // } else {
+    //   // console.log(' + date is cleared');
+    //   // console.table(
+    //   //   {
+    //   //     testStart: test.start.toLocaleString(),
+    //   //     testEnd: test.end.toLocaleString(),
+    //   //     busyStart: busy.start.toLocaleString(),
+    //   //     busyEnd: busy.end.toLocaleString(),
+    //   //   }
+    //   // )
+    // }
     // todo might want to use .getTime()
     return (testStart >= busyStart && testStart < busyEnd) || (testEnd > busyStart && testEnd <= busyEnd)
   })
@@ -176,12 +176,9 @@ export function filterBuisnessTimes(inputTimes:string[], buisnessTimes:StringRan
 function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDurationHours:number){
 
   const newDates:string[] = []
-
-  // todo this 'new Date()' is redundant
   const startBusy = range.start
   const endBusy   = range.end
-  // const startBusy = new Date(range.start);
-  // const endBusy   = new Date(range.end);
+
 
   const startBusyTime = new Date(startBusy.getTime())
   const startBusyMin  = (startBusyTime.getHours() * 60) + startBusyTime.getMinutes()
@@ -190,7 +187,6 @@ function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDura
   
   if(isSameCalendarDay(startBusy, endBusy)) {
     console.log('busy start end on same day');
-    
   }
   
   // todo doesn't really work if there is a mix of partial days
@@ -247,126 +243,11 @@ function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:StringRange, se
 
   return true;
 }
-function isFitAnotherService(startBusy:Date, buisnessHours:StringRange, serviceDurationHours:number) {
 
-  // start at top of buisness hours
-  // create a busy block
-  // check if overlap with busyDay
-  // incriment by 15
-  // if at least one block is open, keep day open
+export function calcEndTime(dateString:string, serviceDuration:number){
 
-  const busyDay = new Date(startBusy)
-  const [hours, minutes, seconds] = buisnessHours.start.split(":").map(Number)
-  const buisnessOpen = new Date(busyDay.getFullYear(), busyDay.getMonth(), busyDay.getDate(), hours, minutes, seconds); 
-  const firstServiceEnd = buisnessOpen.setMinutes(buisnessOpen.getMinutes() + (serviceDurationHours * 60))
-  const gigStart = startBusy.getTime();
-  
-  
-  if (gigStart <= firstServiceEnd) {
-    return false;
-  }
+  const date = new Date(dateString)
+  date.setMinutes(date.getMinutes() + (serviceDuration * 60))
 
-
-  return true;
-}
-
-export function findBlackoutTimes(){
-
-}
-
-// // todo refactor this into a lib file. skip any dates that are in the past!
-// function handleBlackoutDates( id:string ){
-
-//   resetServiceSlotTimes()
-  
-//   const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
-//   if(!selectedEmpl) return setBlackoutDates([])
-//   setPickedStaff(selectedEmpl)
-
-//   const blackoutArray:string[] = []
-  
-//   selectedEmpl.gigs.map((gig:Booking) => {
-//     // todo this could be condensed with 'availability' function
-//     const startBusy = new Date(gig.start);
-//     const endDate = new Date(gig.end);
-
-//     const startBusy = new Date(startBusy.getTime())
-//     const startBusyMin = (startBusy.getHours() * 60) + startBusy.getMinutes()
-//     const endBusy = new Date(endDate.getTime())
-//     const endBusyMin = (endBusy.getHours() * 60) + endBusy.getMinutes()
-    
-
-//     // todo what if busy day is within one day, i.e. '9am - 12pm on May 5th'?
-//     if(startBusyMin > 0){
-//       startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-//       startBusy.setHours(0); startBusy.setMinutes(0); startBusy.setSeconds(0); startBusy.setMilliseconds(0);
-//     } 
-
-//     if(endBusyMin < 1439){
-//       endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-//       endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-//     }
-
-//     let currentDate = startBusy;
-//     while (currentDate <= endDate) {
-//       blackoutArray.push(new Date(currentDate).toString());
-//       currentDate.setDate(currentDate.getDate() + 1);
-//     }
-
-//   })
-
-//   selectedEmpl.availability.map((avail:Availability) => {
-//     if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-    
-//     const startBusy = new Date(avail.start);
-//     const endDate = new Date(avail.end);
-
-//     const startBusy = new Date(startBusy.getTime())
-//     const startBusyMin = (startBusy.getHours() * 60) + startBusy.getMinutes()
-//     const endBusy = new Date(endDate.getTime())
-//     const endBusyMin = (endBusy.getHours() * 60) + endBusy.getMinutes()
-    
-
-//     if(startBusyMin > 0){
-//       startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-//       startBusy.setHours(0); startBusy.setMinutes(0); startBusy.setSeconds(0); startBusy.setMilliseconds(0);
-//     } 
-
-//     if(endBusyMin < 1439){
-//       endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-//       endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-//     }
-
-//     let currentDate = startBusy;
-//     while (currentDate <= endDate) {
-//       // todo carries start time with it to the other dates
-//       blackoutArray.push(new Date(currentDate).toString());
-//       currentDate.setDate(currentDate.getDate() + 1);
-//     }
-
-//   })
-  
-//   setBlackoutDates(blackoutArray)
-// }
-
-function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:string}){
-
-  const openDate = new Date(`2000-01-01T${buisnessHours.start}`)
-  const closedDate = new Date(`2000-01-01T${buisnessHours.end}`)
-
-  
-  const filteredTimes = times.filter(time => {
-    const specificTime = new Date(`2000-01-01T${time.value}`)
-
-    if(openDate <= specificTime && specificTime <= closedDate){
-      return true
-    }
-
-    return false
-
-  })
-
-  
-  return filteredTimes
-
+  return date.toISOString()
 }

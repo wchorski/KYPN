@@ -110,32 +110,6 @@ const StyledTimePicker = styled.ul`
   }
 `
 
-function filterOutServiceOverlap(times:string[], durationHours:number){
-  // console.table(times);
-  
-  // if times.value + duration overlaps last times (do not return)
-  // if times.value - duration overlaps start times (do not return)
-  const startDate = new Date(`2000-01-01T${times[0]}`)
-  // todo has to be aware of when any BUSYDAY starts
-
-  // const filteredTimes = times.filter(time => {
-  //   const specificTime = new Date(`2000-01-01T${time}`)
-
-  //   if(openDate <= specificTime && specificTime <= closedDate){
-  //     return true
-  //   }
-
-  //   return false
-
-  // })
-  // console.log({filteredTimes});
-  
-  
-
-  // return filteredTimes
-  return times
-}
-
 function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:string}){
 
   const openDate = new Date(`2000-01-01T${buisnessHours.start}`)
