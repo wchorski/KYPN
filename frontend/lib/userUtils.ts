@@ -12,10 +12,6 @@ export function findEmployeeBusyRanges(employee:User){
       start: new Date(gig.start).toString(),
       end: new Date(gig.end).toString(),
     }
-    console.log('-----gig');
-    console.table(gig);
-    console.log('---range');
-    console.table({gigRange});
     
     busyRanges.push(gigRange)
   })
