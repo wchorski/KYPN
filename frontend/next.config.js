@@ -24,6 +24,12 @@ const nextConfig = {
         port: '',
         pathname: '/dh5vxixzn/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pinimg.com',
+        port: '',
+        pathname: '/originals/**',
+      },
     ],
   },
 }

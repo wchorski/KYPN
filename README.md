@@ -24,3 +24,7 @@ following along with Wes Bos Tutorial
 
 - Anyone
   - view store items
+
+
+## Color pallet? 
+- https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

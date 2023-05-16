@@ -57,6 +57,36 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   );
 }
 
+// example component
+{/* <Table
+      caption='Pokemon'
+      route='/pokemon'
+      headers={[
+        'name',
+        'type',
+        'height',
+        'weight',
+        'baseExp',
+        'link'
+      ]}
+      cells={[
+        {
+          name: 'pikachu',
+          type: 'electric',
+          height: '0.4',
+          weight: '6.0',
+          baseExp: '112',
+        },
+        {
+          name: 'Charmander',
+          type: 'Fire',
+          height: '0.6',
+          weight: '8.5',
+          baseExp: '62',
+        },
+      ]}
+    /> */}
+
 const StyledTable = styled.table`
   background-color: #909c9f;
   color: white;
