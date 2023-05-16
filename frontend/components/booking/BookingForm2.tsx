@@ -1,19 +1,19 @@
 // cred - kyle4real - https://stackoverflow.com/questions/70236612/prepopulate-date-input-field-with-date-react
-import Calendar from "react-calendar"
 import styled from "styled-components"
-import useForm from "../../lib/useForm"
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react"
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { gql, useMutation } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 
 import { useUser } from "../menus/Session"
 import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
-import { filterEmployeeTimes, filterServiceSlots, filterServiceTime } from "../../lib/timesArrayCreator"
-import { datePretty, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
-import { Availability, Booking, User } from "../../lib/types"
-import { calcDateTimeRange,  filterOutOverlapSlots, filterTimeAvail } from "../../lib/dateCheckCal"
+import { DATE_OPTION, calcDurationHuman, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
+import { Availability, Booking, DayTimes, Service, User } from "../../lib/types"
+import { findOverlapTimes, isSameCalendarDay } from "../../lib/dateCheckCal"
+import { generateTimesArray } from "../../lib/generateTimesArray"
+import { calcEndTime, filterBuisnessTimes, findBlackoutDates, findUniqueDays, isDateRangeAvailable } from "../../lib/filterTimeAvail"
+import { findEmployeeBusyRanges } from "../../lib/userUtils"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -27,24 +27,21 @@ type iProps = {
   // setEmployeeId: any,
 }
 
-enum STAFF_STATE {
-  SELECTED = 'selected',
-  NOT_SELECTED=  'not_selected',
-}
-
 type SuccessfullBook = {
-  date: string,
-  time: string,
+  start: string,
+  end: string,
   service: string,
   location: string,
   staff: string,
   msg: string,
 }
 
-type Slot = {
-  start: string,
-  end: string,
-}
+// type Slot = {
+//   start: string,
+//   end: string,
+// }
+
+const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
@@ -55,21 +52,17 @@ export function BookingForm2({ services }:iProps) {
 
   const [isSuccess, setIsSuccess] = useState(false)
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
-  const [animTrig, setAnimTrig] = useState(0)
   
-  const [pickedService, setPickedService] = useState<any>()
+  const [pickedService, setPickedService] = useState<Service>(services[0])
   const [pickedStaff, setPickedStaff] = useState<User>()
-  const [pickedLocation, setPickedLocation] = useState<any>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
   const [locationOptions, setLocationOptions] = useState<any>([])
-  const [blackoutDates, setBlackoutDates] = useState<string[]>([])
+  const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
+  const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
 
-  const [times, setTimes] = useState<string[]>([])
-  const [timesPreFilter, settimesPreFilter] = useState<string[]>([])
-  const [slots, setSlots] = useState<Slot[]>([])
-  const [slotsPreFilter, setslotsPreFilter] = useState<Slot[]>([])
+  const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
   const [values, setValues] = useState({
     service: "",
     location: '',
@@ -198,12 +191,6 @@ export function BookingForm2({ services }:iProps) {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     if(!formRef.current) return console.warn('form is missing');
-
-    // console.log({ values })
-    console.table({
-      valDate: values.date,
-      valStart: values.timeStart,
-    });
     
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
@@ -211,7 +198,7 @@ export function BookingForm2({ services }:iProps) {
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[${values.name} | ${values.email}] -- ${values.notes}`
     }
-    console.log({formattedInputs});
+    // console.log({formattedInputs});
     
 
     if (values.service !== '' ) {
@@ -270,20 +257,20 @@ export function BookingForm2({ services }:iProps) {
       const location = services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location)
 
       let successObj = {
-        date: datePrettyLocalDay(values.date),
-        time: timePretty(values.timeStart) + ' - ' + timePretty(values.timeEnd),
-        service: pickedService?.name || '',
+        start: values.date + 'T' + values.timeStart,
+        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService.durationInHours)),
+        service: pickedService.name || 'n/a',
         location: location ? location.name : 'n/a' || '',
-        staff: pickedStaff?.name || '',
-        msg: ''
+        staff: pickedStaff?.name || 'n/a',
+        msg: "We'll reach out to confirm your booking via email"
       }
 
       
 
       if(values.service === '') 
         successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
-      if(values.location === '') 
-        successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
+      // if(values.location === '') 
+      //   successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
       if(values.staff === '') 
         successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
       if(values.staff === '' && values.service === '') 
@@ -302,22 +289,6 @@ export function BookingForm2({ services }:iProps) {
   function handleServicePicked(id:string){
     const foundService = services.find((x: any) => x.id === id)
     setPickedService(foundService)
-
-    const filteredTimes = filterServiceTime(
-      foundService.buisnessHourOpen,
-      foundService.buisnessHourClosed,
-      foundService.durationInHours,
-    )
-    setTimes(filteredTimes)
-    settimesPreFilter(filteredTimes)
-    
-    const filteredSlots = filterServiceSlots(
-      foundService.buisnessHourOpen,
-      foundService.buisnessHourClosed,
-      foundService.durationInHours,
-    )
-    setSlots(filteredSlots)
-    setslotsPreFilter(filteredSlots) 
 
     handleEmployeeUpdate(id)
     handleLocationUpdate(id)
@@ -346,58 +317,52 @@ export function BookingForm2({ services }:iProps) {
     
     // console.log({date})
     
-    if(!pickedStaff) return console.warn('no staff picked, ', pickedStaff);
+    if(!pickedStaff) return console.log('no staff picked, ', pickedStaff);
 
-    let timesPreFilt = timesPreFilter
-    let slotsPreFilt = slotsPreFilter
+    let currentTimes:string[] = generateTimesArray().map(t => t.value)
 
-    console.log({date});
+    // console.log({date});
     
     // * gigs / bookings
-    const staffGigsLocal = pickedStaff.gigs.map((gig:Booking) => {
+    const staffGigsLocal = pickedStaff.gigs.flatMap((gig:Booking) => {
+      
       const start = new Date(gig.start).toLocaleDateString('en-CA')
       const end   = new Date(gig.end).toLocaleDateString('en-CA')
-      return start || end
+      return [start, end]
     })
-
+    
+    
     if(staffGigsLocal.includes(date)){
-      // find the gig
-      const gig = pickedStaff.gigs.find((obj:Booking) => {
+      const gigs = pickedStaff.gigs.filter((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
-      console.log('OVERLAP GIG,', {gig});
       
-      
-      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: gig.start, end: gig.end}, pickedService.durationInHours)
-      // timesPreFilt = filteredTimes
-
-      const filteredSlots = filterOutOverlapSlots({start: gig.start, end: gig.end}, slotsPreFilt, date)
-      // @ts-ignore //todo prob shouldn't ignore this
-      slotsPreFilt = filteredSlots
-      
+      gigs.map(gig => {
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService.durationInHours))
+        currentTimes = filteredTimeStarts || [] 
+      })
     }
     
+    
     // * availability
-    const staffAvailLocal = pickedStaff.availability.map((avail:Availability) => {
+    const staffAvailLocal = pickedStaff.availability.flatMap((avail:Availability) => {
       const start = new Date(avail.start).toLocaleDateString('en-CA')
       const end   = new Date(avail.end).toLocaleDateString('en-CA')
-      return start || end
+      
+      return [start, end]
     })
 
+
     if(staffAvailLocal.includes(date)){
-      // find the gig
-      const avail = pickedStaff.availability.find((obj:Availability) => {
+       // find the gig
+       const avails = pickedStaff.availability.filter((obj:Availability) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
-      if(!avail) return console.warn('uhoh: no avail found')
-      // const filteredTimes = filterTimeAvail(date, timesPreFilt, {start: avail.start, end: avail.end}, pickedService.durationInHours)
-      // timesPreFilt = filteredTimes
-
-      const filteredSlots = filterOutOverlapSlots({start: avail.start, end: avail.end}, slotsPreFilt, date)
-      // console.log({filteredSlots});
       
-      // @ts-ignore //todo prob shouldn't ignore this
-      slotsPreFilt = filteredSlots
+      avails.map(avail => {
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService.durationInHours))
+        currentTimes = filteredTimeStarts || []  
+      })
 
     }
 
@@ -405,116 +370,76 @@ export function BookingForm2({ services }:iProps) {
       resetServiceSlotTimes()
 
     } else {
-      setTimes(timesPreFilt)
-      setSlots(slotsPreFilt)
+      
+      setTimes(currentTimes)
     }
 
   }
 
 
   function resetServiceSlotTimes(){
-    setTimes(filterServiceTime(
-      pickedService.buisnessHourOpen,
-      pickedService.buisnessHourClosed,
-      pickedService.durationInHours,
-    ))
+    
+    const defaultTimes = generateTimesArray().map(t => t.value)
+    setTimes(defaultTimes)
 
-    setSlots(filterServiceSlots(
-      pickedService.buisnessHourOpen,
-      pickedService.buisnessHourClosed,
-      pickedService.durationInHours,
-    ))
   }
 
-  // todo refactor this into a lib file. skip any dates that are in the past!
-  function handleBlackoutDates(
-    id:string, 
-    // serviceRange:{start:string, end:string}
-  ){
+  function findPartialDays(id:string) {
 
-    resetServiceSlotTimes()
-    
     const selectedEmpl = services.find((x: any) => x.id === serviceId)?.employees.find((x:any) => x.id === id)
     if(!selectedEmpl) return setBlackoutDates([])
     setPickedStaff(selectedEmpl)
 
-    const blackoutArray:string[] = []
+    const buisnessHours = {
+      start: pickedService.buisnessHourOpen,
+      end: pickedService.buisnessHourClosed,
+    }
+    const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
     
-    // TODO assumes that any service spans less than a day. cannot book multiple gigs on one day
-    selectedEmpl.gigs.map((gig:Booking) => {
-      // todo this could be condensed with 'availability' function
-      const startDate = new Date(gig.start);
-      const endDate = new Date(gig.end);
+    const buisnessTimeStrings = filterBuisnessTimes(genTimeStrings, buisnessHours)
+    const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
 
-      const startLocal = new Date(startDate.getTime())
-      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
-      const endLocal = new Date(endDate.getTime())
-      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
-      
+    const partialDays:DayTimes[] = []
+    const busyDays = uniqueBusyDays.filter((day) => {
+      const openTimes = buisnessTimeStrings.filter((time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number)
+        const testStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, seconds)
+        const testEnd = new Date(testStart)
+        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService.durationInHours) * 60)
 
-      // todo what if busy day is within one day, i.e. '9am - 12pm on May 5th'?
-      if(startLocalMin > 0){
-        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
-      } 
+        // ? this caused problems with reseting a Date's time to 00:00:00
+        // const testRange = {
+        //   start: testStart,
+        //   end: testEnd
+        // }
+        
+        // todo filter busyRangeDates that start or end on this 'day'
+        // const sameDayBusyRanges = busyRangeDates.filter(busy => {
+        //   return isSameCalendarDay(busy.start, testRange.start,) || isSameCalendarDay(busy.end, testRange.end) || isSameCalendarDay(busy.start, testRange.end) || isSameCalendarDay(busy.end, testRange.start)
+        // })
 
-      if(endLocalMin < 1439){
-        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-      }
 
-      let currentDate = startDate;
-      while (currentDate <= endDate) {
-        // todo carries start time with it to the other dates
-        blackoutArray.push(new Date(currentDate).toString());
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      
-      // blackoutArray.push(new Date(gig.start).toString())
-    })
-    console.log({blackoutArray});
-    
-  
+        return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
+      })
 
-    // TODO this assumes that vacation is per day. Cannot do partial day vacations 
-    selectedEmpl.availability.map((avail:Availability) => {
-      if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
-      
-      const startDate = new Date(avail.start);
-      const endDate = new Date(avail.end);
+      // console.log({openTimes})
+      partialDays.push({
+        day,
+        times: openTimes
+      })
 
-      const startLocal = new Date(startDate.getTime())
-      const startLocalMin = (startLocal.getHours() * 60) + startLocal.getMinutes()
-      const endLocal = new Date(endDate.getTime())
-      const endLocalMin = (endLocal.getHours() * 60) + endLocal.getMinutes()
-      
 
-      if(startLocalMin > 0){
-        startDate.setDate(startDate.getDate() + 1) // do not include partial vacation day, move to next day, zero time
-        startDate.setHours(0); startDate.setMinutes(0); startDate.setSeconds(0); startDate.setMilliseconds(0);
-      } 
-
-      if(endLocalMin < 1439){
-        endDate.setDate(endDate.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
-        endDate.setHours(0); endDate.setMinutes(0); endDate.setSeconds(0); endDate.setMilliseconds(0);
-      }
-
-      let currentDate = startDate;
-      while (currentDate <= endDate) {
-        // todo carries start time with it to the other dates
-        blackoutArray.push(new Date(currentDate).toString());
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      // blackoutArray.push(avail.start)
+      return openTimes.length > 0 ? true : false
     })
 
-    // console.log({blackoutArray});
-    
-    setBlackoutDates(blackoutArray)
 
-    // // @ts-ignore
-    // setTimes(prev => filterEmployeeTimes(prev, selectedEmpl.buisnessHourOpen, selectedEmpl.buisnessHourClosed))
+    const blackoutDays = partialDays.filter(d => {
+      return (d.times.length <= 0)
+    })
+    const blackoutDts = blackoutDays.map(d => d.day)
+    
+    setBlackoutDates(blackoutDts)
+    setPartialDates(partialDays)
   }
 
   const onChange = (e: any) => {    
@@ -541,16 +466,16 @@ export function BookingForm2({ services }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && (<>
+      {isSuccess && successfullBook && (<>
         <h2 className="msg success">Booking Created: </h2>
 
         <ul>
-          <li>date: {successfullBook?.date}</li>
-          <li>time: {successfullBook?.time}</li>
-          <li>service: {successfullBook?.service}</li>
-          <li>location: {successfullBook?.location}</li>
-          <li>staff: {successfullBook?.staff}</li>
-          <li>message: {successfullBook?.msg}</li>
+          <li>start: {datePrettyLocal(successfullBook.start, DATE_OPTION.FULL)}</li>
+          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService.durationInHours)), DATE_OPTION.FULL)}</li>
+          <li>service: {successfullBook.service}</li>
+          <li>location: {successfullBook.location}</li>
+          <li>staff: {successfullBook.staff}</li>
+          <li>message: {successfullBook.msg}</li>
         </ul>
       </>)}
 
@@ -559,17 +484,17 @@ export function BookingForm2({ services }:iProps) {
       
         <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef} >
           <fieldset>
+
             <legend>The What</legend>
+
             <HeightReveal className="service-staff-cont" isShown={true}>
               <FormInput 
                 {...handleFindProps('service')}
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', }))
                   handleServicePicked(e.target.value)
-                  
-                  // handleEmployeeUpdate(e.target.value)
                 }}
               />
 
@@ -581,10 +506,7 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    handleBlackoutDates(
-                      e.target.value 
-                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
-                    )
+                    findPartialDays(e.target.value)
                   }}
                   key={locationOptions}
                 />
@@ -598,10 +520,7 @@ export function BookingForm2({ services }:iProps) {
                   onChange={(e:any) => {
                     onChange(e)
                     setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    handleBlackoutDates(
-                      e.target.value 
-                      // calcDateTimeRange(values.date, values.time, pickedService.durationInHours), 
-                    )
+                    findPartialDays(e.target.value)
                   }}
                   key={employeeOptions}
                 />
@@ -612,30 +531,20 @@ export function BookingForm2({ services }:iProps) {
 
           <fieldset >
             <legend> The When </legend>
-            {/* // todo turned off fancy auto height animation because times dynamically take up space */}
-            {/* <HeightReveal className='datetime-cont' isShown={values.service ? true : false}> */}
-            <div className='datetime-cont' key={values.service}>
+            <HeightReveal className='datetime-cont' isShown={values.staff ? true : false} key={values.service}>
 
-              {/* <FormInput 
-                {...handleFindProps('datetime_local')}
-                defaultValue={values['datetime_local']}
-                disabled
-                onChange={onChange}
-                // className="hide"
-              /> */}
               <div>            
                 <FormInput 
                   {...handleFindProps('date')}
                   defaultValue={values['date']}
                   disabled
                   onChange={onChange}
-                  // className="hide"
                 />
 
                 <CalendarDatePicker 
                   key={values.staff}
                   setValues={setValues} 
-                  blackoutStrings={blackoutDates}
+                  blackoutDays={blackoutDates}
                   buisnessDays={pickedService?.buisnessDays || []}
                   handleBlackoutTimes={handleBlackoutTimes}
                 />
@@ -643,35 +552,34 @@ export function BookingForm2({ services }:iProps) {
               </div>
 
               <div>
-                <FormInput 
-                  {...handleFindProps('timeStart')}
-                  defaultValue={values['timeStart']}
-                  onChange={onChange}
-                  disabled
-                  // className="hide"
-                />
-                <FormInput 
-                  {...handleFindProps('timeEnd')}
-                  defaultValue={values['timeEnd']}
-                  onChange={onChange}
-                  disabled
-                  // className="hide"
-                />
+                <div className="time-input-cont">
+                  <FormInput 
+                    {...handleFindProps('timeStart')}
+                    defaultValue={values['timeStart']}
+                    onChange={onChange}
+                    disabled
+                  />
+                  <FormInput 
+                    {...handleFindProps('timeEnd')}
+                    defaultValue={values['timeEnd']}
+                    onChange={onChange}
+                    disabled
+                  />
+                </div>
 
-                <p>{ calcDurationHuman(pickedService?.durationInHours)}</p>
+                <p className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)}</p>
 
                 <TimePicker 
                   values={values} 
                   setValues={setValues} 
                   times={times} 
-                  slots={slots}
-                  duration={pickedService?.durationInHours || 0}
-                  // setTimes={setTimes} 
+                  partialDates={partialDates}
+                  buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
+                  serviceDuration={Number(pickedService.durationInHours)}
                 />
               </div>
               
-            </div>
-            {/* </HeightReveal> */}
+            </HeightReveal>
           </fieldset>
 
           <fieldset>
@@ -735,28 +643,6 @@ const StyledBookingForm = styled.form`
     }
   }
 
-  /* fieldset{
-    max-height: 0em;
-    overflow: hidden;
-    transition: all 2s ease-in-out;
-
-    &.open{
-      max-height: 99999em;
-      background-color: #7fe9ad;
-    }
-  } */
-
-  .hide{
-    /* display: none; */
-    opacity: .3;
-    /* max-height: 1px;
-    overflow: hidden; */
-
-    input, select{
-      /* pointer-events: none; */
-    }
-  }
-
   label{
     display: flex;
     flex-direction: column;
@@ -767,13 +653,20 @@ const StyledBookingForm = styled.form`
       height: 10em;
     }
   }
+
+  .time-input-cont{
+    display: flex;
+    gap: 1em;
+  }
+
+  .duration-stamp{
+    padding: 0;
+    margin: 0;
+  }
 `
 
 export function HeightReveal({children, isShown, className}:{children:ReactNode[]|ReactNode, isShown: boolean, className:string}){
   const scrollContRef = useRef<HTMLParagraphElement>(null)
-  // if(!scrollContRef.current) return <p>nope</p>
-  // console.log(scrollContRef.current.scrollHeight);
-  
 
   return (
     <StyledHeightReveal 
@@ -791,9 +684,7 @@ export function HeightReveal({children, isShown, className}:{children:ReactNode[
 }
 
 const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
-  /* border: solid black 1px; */
-  /* padding: 1em; */
-  /* margin: 1em 0; */
+
 
   .datetime-cont{
     display: flex;
@@ -805,23 +696,15 @@ const StyledHeightReveal = styled.div<{scrollHeight:number, className:string}>`
   }
 
   .cont{
-    /* border: solid 1px black; */
-    /* border-radius: 5px; */
-
-    /* font-size: 16px; */
-    /* line-height: 38px; */
-    /* padding: 0.3em; */
     overflow-y: hidden;
     transition: all 1s ease-in-out;
   }
 
   .collapsed{
     max-height: 0;
-    /* background-color: #05052d; */
   }
 
   .expanded{
-    /* background-color: white; */
     padding-top: 5px;
     max-height: ${props => props.scrollHeight}px;
   }
@@ -835,34 +718,3 @@ const MUTATE_BOOKING_CREATE = gql`
     }
   }
 `
-
-const QUERY_SERVICES_ALL = gql`
-  query Query {
-    services {
-      id
-      name
-      description
-      price
-      employees {
-        name
-        id
-      }
-    }
-  }
-`
-
-function calcDurationHuman(decimal:string){
-  const inputHours = Number(decimal)
-  let hours = Math.floor(inputHours)
-  let minutes = Math.round((inputHours - hours) * 60)
-
-  let humanHours    = `${hours} hour${hours !== 1 ? 's' : ''}`
-  let humanMinutes  = `${minutes} minute${minutes !== 1 ? 's' : ''}`
-
-  if(hours > 0    && minutes === 0) return humanHours
-  if(hours === 0  && minutes   > 0) return humanMinutes
-  if(hours > 0  && minutes   > 0) return humanHours + ' ' + humanMinutes
-
-  if(!hours && !minutes) return undefined
-  return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-}

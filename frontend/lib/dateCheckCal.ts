@@ -1,4 +1,4 @@
-
+import { generateTimesArray } from "./generateTimesArray";
 
 type DateRange ={
   start: string,
@@ -22,205 +22,211 @@ function isRangesOverlap(gig:DateRange, busy:DateRange) {
   return false;
 }
 
-export function filterOutOverlapSlots(rangeBusy:DateRange, timeSlots:DateRange[], date:string){
+export function findOverlapTimes(busyRange:DateRange, currentTimes:string[], date:string, serviceDuration:number){
 
-  const slotDateTimes = timeSlots.map(slot => {
-    return {
-      start: new Date(`${date}T${slot.start}`).toISOString(),
-      end: new Date(`${date}T${slot.end}`).toISOString(),
-    }
-  })
-  console.log({slotDateTimes});
   
-
-  const filteredSlots = slotDateTimes.filter(slot => {
-    if(!isRangesOverlap(rangeBusy, slot)) {
-      return true
-    }
-
-    return false
-  })
+  // todo busy start PLUS another service duration - 1min (so bookings can line up next to eachother)
+  const busyStart = new Date(busyRange.start);
   
-  const justTimes = filteredSlots.map((slot:DateRange) => {
-    return {
-      start: time24(new Date(slot.start)),
-      end: time24(new Date(slot.end)),
-    }
-  })
-  console.log({justTimes});
+  busyStart.setMinutes(busyStart.getMinutes() - (serviceDuration * 60)+1)
+  const busyEnd = new Date(busyRange.end);
 
-  return justTimes
-  
-  // const filteredSlots = timeSlots.map(slot => {
-  //   const slotIso = {
-  //     start: new Date(`${date}T${slot.start}`).toISOString(),
-  //     end: new Date(`${date}T${slot.end}`).toISOString(),
-  //   }
-
-  //   if(isRangesOverlap(slotIso, slot)){
-  //     return {
-  //       start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
-  //       end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
-  //     }
-  //   } else {
-  //     return {
-  //       start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
-  //       end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
-  //     }
-      
-  //   }
-
-  //   // const busyStart = new Date(rangeBusy.start)
-  //   // const busyEnd = new Date(rangeBusy.end)
-  //   // const slotStart = new Date(slotIso.start)
-  //   // const slotEnd = new Date(slotIso.end)
-
-  //   // // Check if the date ranges overlap
-  //   // if (busyStart <= slotEnd && busyEnd >= slotStart) {
-  //   //   console.log('----- these overlap ----')
-  //   //   console.table({
-  //   //     slotStart,
-  //   //     slotEnd,
-  //   //     busyStart,
-  //   //     busyEnd,
-  //   //   })
-      
-  //   //   return null
-  //   // } else {
-  //   //   // No overlap, return null
-  //   //   return {
-  //   //     start: slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
-  //   //     end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
-  //   //   }
-  //   // }
+  // console.table({
+  //   datePicked: date,
+  //   busyStart: busyStart.toLocaleTimeString('en-CA'),
+  //   busyEnd: busyEnd.toLocaleTimeString('en-CA'),
   // })
 
-  // return filteredSlots.filter((val) => { return val !== null })
 
+  if(date !== busyStart.toLocaleDateString('en-CA') && date !== busyEnd.toLocaleDateString('en-CA')  ){
+    console.log('date picked !== busyStart, !== busyEnd.... have i done anything here?')
+    
+    return []
+  }
+  if(date === busyStart.toLocaleDateString('en-CA') && date === busyEnd.toLocaleDateString('en-CA')  ){
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
+      const specificTime = new Date(busyStart.getFullYear(), busyStart.getMonth(), busyStart.getDate(), hours, minutes, seconds); 
+
+
+      if(specificTime < busyStart || specificTime > busyEnd){
+        return true
+      }
+
+      // console.log('!!!!!!! this overlapped: ');
+      // console.table({
+      //   specificTime,
+      //   busyStart,
+      //   busyEnd,
+      //   timeValue: time,
+      // });
+      return false
+
+    })
+    
+    return filteredTimes
+  }
+
+  if(date === busyStart.toLocaleDateString('en-CA')  ){
+
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
+      const specificTime = new Date(busyStart.getFullYear(), busyStart.getMonth(), busyStart.getDate(), hours, minutes, seconds); 
+
+      if(specificTime < busyStart){
+        return true
+      }
+
+      return false
+    })
+    
+    return filteredTimes
+  }
+
+  if(date === busyEnd.toLocaleDateString('en-CA')  ){
+
+    const filteredTimes = currentTimes.filter(time => {
+      const [hours, minutes, seconds] = time.split(":").map(Number)
+      const specificTime = new Date(busyEnd.getFullYear(), busyEnd.getMonth(), busyEnd.getDate(), hours, minutes, seconds); 
+
+      if(specificTime > busyEnd){
+        return true
+      }
+
+      return false
+    })
+      
+    return filteredTimes
+  }
 }
+
+// export function filterOutOverlapSlots(rangeBusy:DateRange, timeSlots:DateRange[], date:string){
+
+//   const slotDateTimes = timeSlots.map(slot => {
+//     return {
+//       start: new Date(`${date}T${slot.start}`).toISOString(),
+//       end: new Date(`${date}T${slot.end}`).toISOString(),
+//     }
+//   })
+//   console.log({slotDateTimes});
+  
+
+//   const filteredSlots = slotDateTimes.filter(slot => {
+//     if(!isRangesOverlap(rangeBusy, slot)) {
+//       return true
+//     }
+
+//     return false
+//   })
+  
+//   const justTimes = filteredSlots.map((slot:DateRange) => {
+//     return {
+//       start: time24(new Date(slot.start)),
+//       end: time24(new Date(slot.end)),
+//     }
+//   })
+//   console.log({justTimes});
+
+//   return justTimes
+// }
 
 function time24(date:Date){
   return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
 }
-// export function filterOutOverlapSlots(rangeBusy:DateRange, rangeSlots:DateRange){
-//   // Convert input date strings to Date objects
-//   const busyStart = new Date(rangeBusy.start)
-//   const busyEnd = new Date(rangeBusy.end)
-//   const slotStart = new Date(rangeSlots.start)
-//   const slotEnd = new Date(rangeSlots.end)
 
+
+// // ! filter out employees vacation days by time slots
+// export function filterTimeAvail(date:string, times:string[], range:DateRange, duration:string){
+//   // console.log({range});
+//   // console.log({times})
   
-//   let clearedSlot = {}
-//   // Check if the date ranges overlap
-//   if (busyStart <= slotEnd && busyEnd >= slotStart) {
+//   // const dateChosen = new Date(date)
+//   // const d = date.split('-')
+//   // const n = d.map(Number)
+//   // console.log({n});
+  
+//   // const dateChosen = new Date(Date.UTC(n[0], n[1], n[2]))
+//   // console.log({dateChosen});
+  
+  
+//   const rangeStart = new Date(range.start)
+//   const rangeEnd = new Date(range.end)
+//   // console.log('rangeStart: ' ,  rangeStart.toLocaleDateString('en-CA'));
+//   // console.log('rangeEnd: ' ,    rangeEnd.toLocaleDateString('en-CA'));
+  
+  
+//   // console.table({
+//   //   chosen: new Date(date),
+//   //   rangeStart
+//   // })
+//   // console.table({
+//   //   chosen: new Date(date),
+//   //   rangeEnd: new Date(range.end)
+//   // })
+//   let filteredTimes = []
+//   if(date === rangeStart.toLocaleDateString('en-CA')){
+//     // console.log('these days match range.start')
+//     // console.table({
+//     //   date,
+//     //   rangeStart: rangeStart.toLocaleDateString('en-CA'),
+//     // })
 
-//     console.log('slot conflict');
+//     const newTimes = times.filter(time => {
+//       const [hours, minutes, seconds] = time.split(":")
+//       const timeDate = new Date(range.start)
+//       timeDate.setHours(Number(hours))
+//       timeDate.setMinutes(Number(minutes))
+//       timeDate.setSeconds(Number(seconds))
+      
+//       return timeDate < rangeStart
+//       // return timeDate < rangeStart || timeDate > endOfDay(range.start)
+//     })
+
+//     // console.log({times})
+//     // console.log({filteredTimes})
     
-
-//   } else {
-//     // No overlap, return null
-//     clearedSlot = {
-//       start: 'clear: ' + slotStart.getHours().toString().padStart(2, '0') + ':' + slotStart.getMinutes().toString().padStart(2, '0'),
-//       end: slotEnd.getHours().toString().padStart(2, '0') + ':' + slotEnd.getMinutes().toString().padStart(2, '0'),
-//     }
+  
+//     filteredTimes.push(...newTimes)
+    
+//     // const overlapSlots = filterServiceTimeSlots(range.start, endOfDay(range.start), duration)
+//     // console.log({overlapSlots});
+//     // return times.filter(el => overlapSlots.includes(el));
 //   }
 
-//   return clearedSlot
+//   // todo haven't set up end date avail
+//   if(date === rangeEnd.toLocaleDateString('en-CA')){
+//     // console.log('these days match range.end')
+//     // console.table({
+//     //   date,
+//     //   rangeEnd: rangeEnd.toLocaleDateString('en-CA'),
+//     // })
+
+//     const newTimes = times.filter(time => {
+//       const [hours, minutes, seconds] = time.split(":")
+//       const timeDate = new Date(range.end)
+//       timeDate.setHours(Number(hours))
+//       timeDate.setMinutes(Number(minutes))
+//       timeDate.setSeconds(Number(seconds))
+      
+//       return timeDate > rangeEnd
+//       // return timeDate < rangeStart || timeDate > endOfDay(range.start)
+//     })
+
+//     filteredTimes.push(...newTimes)
+//   }
+
+//   if(filteredTimes.length > 0){
+//     // console.log({filteredTimes});
+    
+//     return filteredTimes
+    
+//   } else {
+    
+//     // console.log({times});
+//     return times
+//   }
 
 // }
-
-// ! filter out employees vacation days by time slots
-export function filterTimeAvail(date:string, times:string[], range:DateRange, duration:string){
-  // console.log({range});
-  // console.log({times})
-  
-  // const dateChosen = new Date(date)
-  // const d = date.split('-')
-  // const n = d.map(Number)
-  // console.log({n});
-  
-  // const dateChosen = new Date(Date.UTC(n[0], n[1], n[2]))
-  // console.log({dateChosen});
-  
-  
-  const rangeStart = new Date(range.start)
-  const rangeEnd = new Date(range.end)
-  // console.log('rangeStart: ' ,  rangeStart.toLocaleDateString('en-CA'));
-  // console.log('rangeEnd: ' ,    rangeEnd.toLocaleDateString('en-CA'));
-  
-  
-  // console.table({
-  //   chosen: new Date(date),
-  //   rangeStart
-  // })
-  // console.table({
-  //   chosen: new Date(date),
-  //   rangeEnd: new Date(range.end)
-  // })
-  let filteredTimes = []
-  if(date === rangeStart.toLocaleDateString('en-CA')){
-    // console.log('these days match range.start')
-    // console.table({
-    //   date,
-    //   rangeStart: rangeStart.toLocaleDateString('en-CA'),
-    // })
-
-    const newTimes = times.filter(time => {
-      const [hours, minutes, seconds] = time.split(":")
-      const timeDate = new Date(range.start)
-      timeDate.setHours(Number(hours))
-      timeDate.setMinutes(Number(minutes))
-      timeDate.setSeconds(Number(seconds))
-      
-      return timeDate < rangeStart
-      // return timeDate < rangeStart || timeDate > endOfDay(range.start)
-    })
-
-    // console.log({times})
-    // console.log({filteredTimes})
-    
-  
-    filteredTimes.push(...newTimes)
-    
-    // const overlapSlots = filterServiceTimeSlots(range.start, endOfDay(range.start), duration)
-    // console.log({overlapSlots});
-    // return times.filter(el => overlapSlots.includes(el));
-  }
-
-  // todo haven't set up end date avail
-  if(date === rangeEnd.toLocaleDateString('en-CA')){
-    // console.log('these days match range.end')
-    // console.table({
-    //   date,
-    //   rangeEnd: rangeEnd.toLocaleDateString('en-CA'),
-    // })
-
-    const newTimes = times.filter(time => {
-      const [hours, minutes, seconds] = time.split(":")
-      const timeDate = new Date(range.end)
-      timeDate.setHours(Number(hours))
-      timeDate.setMinutes(Number(minutes))
-      timeDate.setSeconds(Number(seconds))
-      
-      return timeDate > rangeEnd
-      // return timeDate < rangeStart || timeDate > endOfDay(range.start)
-    })
-
-    filteredTimes.push(...newTimes)
-  }
-
-  if(filteredTimes.length > 0){
-    // console.log({filteredTimes});
-    
-    return filteredTimes
-    
-  } else {
-    
-    // console.log({times});
-    return times
-  }
-
-}
 
 
 export function calcDateTimeRange(startDate:string, startTime:string, duration:string){
@@ -292,6 +298,12 @@ function endOfDay(date:string){
   lastMinuteOfDay.setMilliseconds(0)
 
   return lastMinuteOfDay
+}
+
+export function isSameCalendarDay(date1:Date, date2:Date) {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
 }
 
 // type BusyDay = {

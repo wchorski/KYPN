@@ -1,102 +1,68 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { generateTimesArray } from "../../lib/generateTimesArray";
+import { DayTimes } from "../../lib/types";
+import { isSameCalendarDay } from "../../lib/dateCheckCal";
 
 interface iProps {
   values: any | undefined,
   setValues: any,
-  times: string[] | undefined,
-  slots: {
+  times: string[],
+  buisnessHours: {
     start: string,
-    end: string,
-  }[]
-  duration: string,
+    end: string
+  }
+  partialDates:DayTimes[],
+  serviceDuration:number,
 }
 
+type TimeOpt = {
+  value: string,
+  label: string,
+}
+
+const generatedTimes = generateTimesArray()
+
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
-export function TimePicker({values, setValues, times, slots, duration}:iProps) {
+export function TimePicker({values, setValues, times, buisnessHours, partialDates, serviceDuration}:iProps) {
   
-  // console.log('time picker input times', {times});
   const [animTrig, setAnimTrig] = useState(0)
+  const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
 
-  function handleTimeFormat(time: string) {
-    const newDate = new Date()
-    const hours = time.split(':')[0]
-    const mins = time.split(':')[1]
+  // const activeDay = partialDates.filter(d => isSameCalendarDay(d.day, new Date(values.date)))
+  // const activeTimes = activeDay.map(d => d.times)
+  // console.log({activeTimes});
+  // todo could just use 'activeTimes' to check if button is disabled
+  
 
-    newDate.setHours(Number(hours), Number(mins))
-
-    const options = {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true
-    };
-
-    // @ts-ignore
-    const timeString = newDate.toLocaleTimeString('en-US', options);
-    const lowCaps = timeString.replace('AM', 'am').replace('PM', 'pm')
-
-    return lowCaps
-  }
-
-  function handleCalcEnd(time:string){
-    return addHoursToTime(time, Number(duration))
-  }
 
   useEffect(() => {
     setAnimTrig(animTrig + 1)
   
     // return () => 
-  }, [times, slots])
+  }, [times])
 
   const listitemStyle = (i:number) => ({
-    animationDelay: `calc(${i} * 0.03s)` ,
-  })
-
-  function handleTimeUpdate(start:string, end:string){
-    setValues((prev:any) => (
-      {
-        ...prev, 
-        timeStart: start,
-        timeEnd: end,
-      }
-    ))
-  }
-  // function handleTimeUpdate(time:string){
-  //   setValues((prev:any) => (
-  //     {
-  //       ...prev, 
-  //       timeStart: time,
-  //       timeEnd: addHoursToTime(time, Number(duration)),
-  //     }
-  //   ))
-  // }
-  
+    animationDelay: `calc(${i} * 0.005s)` ,
+  }) 
 
   return (
     <StyledTimePicker className={values['date'] ? 'open' : ''} key={animTrig}>
-      {slots?.map((slot, i) => (
+      {currentTimes.map((timeobj:TimeOpt, i) => (
         <li key={`time-${i}`} style={listitemStyle(i)} >
-          <button type='button' className={slot.start === values.timeStart ? 'active' : ''}
-            onClick={() => handleTimeUpdate(slot.start, slot.end)} 
-          >
-            {handleTimeFormat(slot.start)} <br />
-            to <br />
-            {handleTimeFormat(slot.end)} <br /> 
 
+          <button 
+            type='button' className={timeobj.value === values.timeStart ? 'active' : ''}
+            onClick={() => setValues((prev:any) => ({...prev, timeStart: timeobj.value}))} 
+
+            // disable any time buttons that could overlap with start or end of a gig or avail 
+            disabled={times.includes(timeobj.value) ? false : true}
+
+          >
+            {timeobj.label}
           </button>
+
         </li>
-      // {times?.map((time, i) => (
-      //   <li key={`time-${i}`} style={listitemStyle(i)} >
-      //     <button type='button' className={time === values['time'] ? 'active' : ''}
-      //       onClick={() => handleTimeUpdate(time)} 
-      //     >
-      //       {handleTimeFormat(time)} <br />
-      //       to <br />
-      //       {handleTimeFormat(addHoursToTime(time, Number(duration)))} <br /> <br />
-      //       {addHoursToTime(time, Number(duration))} <br /> <br />
-      //       24hr: {time}
-      //     </button>
-      //   </li>
       ))}
     </StyledTimePicker>
   )
@@ -110,23 +76,23 @@ const StyledTimePicker = styled.ul`
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 1em;
+  gap: .1em;
   /* flex-direction: column; */
 
-  /* li{
-    transition: all .3s;
-    animation-name: reveal;
-    animation-duration: 1s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    animation-delay: calc(var(--i) * 0.1s)
-  } */
   li{
     width: 5em;
     animation-duration: .3s;
     animation-name: reveal;
     animation-timing-function: ease;
-    /* animation-timing-function: cubic-bezier(0,1.11,.97,-0.38); */
   }
+  li:nth-child(n+1):nth-child(-n+4),
+  li:nth-child(8n+1),
+  li:nth-child(8n+2),
+  li:nth-child(8n+3),
+  li:nth-child(8n+4) {
+    border-bottom: solid #959595 1px;
+  }
+
 
   .active{
     background-color: var(--c-1);
@@ -144,20 +110,25 @@ const StyledTimePicker = styled.ul`
   }
 `
 
-function addHoursToTime(time:string, hoursToAdd:number) {
-  const [hours, minutes, seconds] = time.split(':').map(Number)
-  const date = new Date()
+function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:string}){
+
+  const openDate = new Date(`2000-01-01T${buisnessHours.start}`)
+  const closedDate = new Date(`2000-01-01T${buisnessHours.end}`)
+  // todo also remove from times ARRAY
+
   
-  date.setHours(hours)
-  date.setMinutes(minutes + hoursToAdd * 60)
-  date.setSeconds(seconds)
+  const filteredTimes = times.filter(time => {
+    const specificTime = new Date(`2000-01-01T${time.value}`)
+
+    if(openDate <= specificTime && specificTime <= closedDate){
+      return true
+    }
+
+    return false
+
+  })
+
   
-  const options = {
-    hour12: false, 
-    hour: 'numeric', 
-    minute: 'numeric', 
-    second: 'numeric'
-  }
-  // @ts-ignore
-  return date.toLocaleTimeString('en-US', options);
+  return filteredTimes
+
 }
