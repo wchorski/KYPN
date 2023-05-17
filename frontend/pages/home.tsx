@@ -83,10 +83,109 @@ export default function HomePage() {
     },
   ]
 
+  const mediatexts = [
+    {
+      bg: `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`,
+      mediaWidth: '50%',
+      rowReverse: false,
+      content: {
+        document: [
+        {
+          type: "heading",
+          level: 2,
+          children: [
+            {
+              text: "Whats the Pitch?"
+            }
+          ]
+        },
+        {
+          type: "paragraph",
+          children: [
+            {
+              text: "Pitch!? Please… we don’t hire salespeople, we don’t use gimmicks and we don’t have a ‘sales pitch’. We hire real DJs, we shoot straight and we let our work speak for itself (see our raves). Weddings, clubs, bars and more… we’ve ‘been there, DJ’d that’. Be it a graceful and traditional dinner reception, an all-out floor-shaking dance party or both, we’ve got a performer that will bring the vibe that’s right for you!"
+            }
+          ]
+        },
+      ]}
+    },
+    {
+      bg: `https://cdn.pixabay.com/photo/2020/01/14/10/55/cartoon-4764726_960_720.png`,
+      mediaWidth: '50%',
+      rowReverse: true,
+      content: {
+        document: [
+        {
+          type: "heading",
+          level: 2,
+          children: [
+            {
+              text: "Why Vibe With Us?"
+            }
+          ]
+        },
+        {
+          type: "paragraph",
+          children: [
+            {
+              text: "We are ACTUAL DJs! From the first song to the last, we creatively mix through your favorite music with finesse. Party Vibe DJs are true artists that will leave your guests speechless with a combination of elegance and raw skill!"
+            }
+          ]
+        },
+        {
+          type: "heading",
+          level: 2,
+          children: [
+            {
+              text: "Prove it."
+            }
+          ]
+        },
+        {
+          type: "paragraph",
+          children: [
+            {
+              text: "Can do. We stream LIVE performances straight from this website every month. Check the calendar for our next public performance! You can also read our ‘About Us‘ page to get to know us a little better!"
+            }
+          ]
+        },
+      ]}
+    },
+    {
+      bg: `https://cdn.pixabay.com/photo/2022/05/19/19/09/avocado-7207993_960_720.jpg`,
+      mediaWidth: '50%',
+      rowReverse: false,
+      content: {
+        document: [
+          {
+            type: "heading",
+            level: 2,
+            children: [
+              {
+                text: "What if I Have to postpone?"
+              }
+            ]
+          },
+          {
+            type: "paragraph",
+            children: [
+              {
+                text: "Do it. Our rescheduling policy is extremely lenient. You can reschedule for any extraordinary circumstance, even if you have to postpone more than once. "
+              }
+            ]
+          },
+      ]}
+    },
+    
+  ]
+
   return (<>
     {/* <Slider slides={slides} parentWidth={1000}/> */}
-    <MediaText />
-    <SliderSlick slides={slides} settings={sliderSettings}/>
+    {mediatexts.map(mt => (
+      <MediaText mediatext={mt} />
+    ))}
+
+    {/* <SliderSlick slides={slides} settings={sliderSettings}/> */}
     {/* <Carousel items={items} /> */}
   </>)
 }

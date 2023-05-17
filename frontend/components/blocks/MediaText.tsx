@@ -1,22 +1,40 @@
 import Image from "next/image";
 import styled from "styled-components";
+import { BlockRenderer } from '../../components/blocks/BlocksRenderer';
 
-const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`
+// const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`
 
-export default function MediaText() {
+type Props = {
+  mediatext: tMediaText
+}
 
+type tMediaText = {
+  bg: string,
+  mediaWidth: string,
+  rowReverse: boolean,
+  content: {
+    document: any[]
+  },
+}
+
+export default function MediaText({mediatext}:Props) {
+
+  function handleContentRender(content:any){
+    return <BlockRenderer document={content.document} />
+  }
   
   return (
-    <StyledMediaText bg={bg}>
+    <StyledMediaText bg={mediatext.bg} rowReverse={mediatext.rowReverse}>
       <div className="text-cont">
-        <h3>Whats the Pitch?</h3>
-        <p>{"Pitch!? Please… we don’t hire salespeople, we don’t use gimmicks and we don’t have a ‘sales pitch’. We hire real DJs, we shoot straight and we let our work speak for itself (see our raves). Weddings, clubs, bars and more… we’ve ‘been there, DJ’d that’. Be it a graceful and traditional dinner reception, an all-out floor-shaking dance party or both, we’ve got a performer that will bring the vibe that’s right for you!"}</p>
+
+        {handleContentRender(mediatext.content)}
+
       </div>
 
       <div>
         <figure>
           <Image 
-            src={bg}
+            src={mediatext.bg}
             width={100}
             height={100}
             alt="accompaning image"
@@ -28,24 +46,27 @@ export default function MediaText() {
 }
 
 
-const StyledMediaText = styled.div<{bg:string}>`
+const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
   display: flex;
+  flex-direction: ${p => (p.rowReverse ? 'row-reverse' : 'row')};
+  flex-wrap: wrap;
 
   > * {
     width: 50%;
+    min-width: 20em;
   }
 
   .text-cont{
 
-    > * {
+    article > * {
       margin: 0;
       padding: 2em;
     }
 
-    > *:nth-child(odd){
+    article > *:nth-child(odd){
       background-color: var(--c-2);
     }
-    > *:nth-child(even){
+    article > *:nth-child(even){
       background-color: var(--c-3);
     }
 
@@ -59,7 +80,7 @@ const StyledMediaText = styled.div<{bg:string}>`
     background: blue;
     margin: 0;
     /* background-image: url('https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg'); */
-    background-image: ${p => (p.bg ? `url(${bg})` : '')};
+    background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
     background-position: 50% 50%;
     background-size: cover;
     height: 100%;
