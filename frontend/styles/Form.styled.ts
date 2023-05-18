@@ -14,12 +14,17 @@ const loading = keyframes`
 
 export const StyledForm = styled.form`
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
+  background: var(--c-txt-rev);
   border: 5px solid white;
   padding: 20px;
   font-size: 1.5rem;
   line-height: 1.5;
   font-weight: 600;
+
+  max-width: 20em;
+  margin: 0 auto;
+
+
   label {
     display: block;
     margin-bottom: 1rem;
@@ -35,6 +40,10 @@ export const StyledForm = styled.form`
       outline: 0;
       border-color: var(--c-1);
     }
+
+    border-radius: 3px;
+    border: solid var(--c-2) 1px;
+    box-shadow: #0000002b 2px 2px 8px;
   }
   button,
   input[type='submit'] {
@@ -45,6 +54,11 @@ export const StyledForm = styled.form`
     font-size: 2rem;
     font-weight: 600;
     padding: 0.5rem 1.2rem;
+    transition: background .3s;
+
+    &:hover{
+      background-color: var(--c-3);
+    }
   }
   fieldset {
     border: 0;
@@ -68,6 +82,10 @@ export const StyledForm = styled.form`
       background-size: 50% auto;
       animation: ${loading} 0.5s linear infinite;
     }
+  }
+
+  textarea{
+    min-height: 10em;
   }
 `;
 

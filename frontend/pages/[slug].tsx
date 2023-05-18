@@ -11,6 +11,7 @@ import { YouTubeVideo } from '../components/blocks/YouTubeVideo';
 import { datePretty } from '../lib/dateFormatter';
 import { TagsPool } from '../components/menus/TagsPool';
 import { CategoriesPool } from '../components/menus/CategoriesPool';
+import Error404 from './404';
 
 
 export default function PageBySlug() {
@@ -25,6 +26,7 @@ export default function PageBySlug() {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
+  if (!data.page) return <Error404 />
 
   const {
     id,

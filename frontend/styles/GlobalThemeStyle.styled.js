@@ -73,6 +73,18 @@ export const GlobalStyles = createGlobalStyle`
   a{
     color: var(--c-1);
     transition: all .3s;
+
+    &.button{
+      background-color: var(--c-3);
+      color: var(--c-txt-rev);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      border-radius: 1em;
+      padding: 1em 2em;
+      justify-content: center;
+    }
   }
 
   a:hover{ 
