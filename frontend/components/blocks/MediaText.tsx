@@ -17,7 +17,7 @@ type tMediaText = {
   },
 }
 
-export default function MediaText({mediatext}:Props) {
+export function MediaText({mediatext}:Props) {
 
   function handleContentRender(content:any){
     return <BlockRenderer document={content.document} />

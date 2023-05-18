@@ -1,7 +1,13 @@
 import { Carousel } from "../components/blocks/Carousel";
-import MediaText from "../components/blocks/MediaText";
+import { ContactForm } from "../components/blocks/ContactForm";
+import { InfoCard } from "../components/blocks/InfoCard";
+import { InfoCardParallax } from "../components/blocks/InfoCardParallax";
+import {MediaText} from "../components/blocks/MediaText";
 import { Slider } from "../components/blocks/SliderCustom";
 import SliderSlick from "../components/blocks/SliderSlick";
+import { FlexList } from "../components/elements/FlexList";
+import { Section } from "../components/elements/Section";
+import { EventCard } from "../components/events/EventCard";
 
 const slides = [
   {
@@ -95,7 +101,7 @@ export default function HomePage() {
           level: 2,
           children: [
             {
-              text: "Whats the Pitch?"
+              text: "Experience the Benefits"
             }
           ]
         },
@@ -103,7 +109,7 @@ export default function HomePage() {
           type: "paragraph",
           children: [
             {
-              text: "Pitch!? Please… we don’t hire salespeople, we don’t use gimmicks and we don’t have a ‘sales pitch’. We hire real DJs, we shoot straight and we let our work speak for itself (see our raves). Weddings, clubs, bars and more… we’ve ‘been there, DJ’d that’. Be it a graceful and traditional dinner reception, an all-out floor-shaking dance party or both, we’ve got a performer that will bring the vibe that’s right for you!"
+              text: "Are you ready to enhance your overall well-being? Look no further than the natural goodness of fresh fruits. Incorporating a variety of fruits into your daily diet brings a plethora of benefits that can significantly improve your health."
             }
           ]
         },
@@ -120,7 +126,7 @@ export default function HomePage() {
           level: 2,
           children: [
             {
-              text: "Why Vibe With Us?"
+              text: "Elevate Your Lifestyle with Fruits"
             }
           ]
         },
@@ -128,7 +134,7 @@ export default function HomePage() {
           type: "paragraph",
           children: [
             {
-              text: "We are ACTUAL DJs! From the first song to the last, we creatively mix through your favorite music with finesse. Party Vibe DJs are true artists that will leave your guests speechless with a combination of elegance and raw skill!"
+              text: "Are you looking to transform your lifestyle and achieve optimal vitality? Look no further than the incredible power of fruits. Bursting with natural goodness, fruits are an essential component of a healthy and balanced lifestyle. "
             }
           ]
         },
@@ -137,7 +143,7 @@ export default function HomePage() {
           level: 2,
           children: [
             {
-              text: "Prove it."
+              text: "Vitamins and Minerals "
             }
           ]
         },
@@ -145,7 +151,7 @@ export default function HomePage() {
           type: "paragraph",
           children: [
             {
-              text: "Can do. We stream LIVE performances straight from this website every month. Check the calendar for our next public performance! You can also read our ‘About Us‘ page to get to know us a little better!"
+              text: "Nourish your body from within. Fruits are also a fantastic source of dietary fiber, aiding in digestion, promoting satiety, and maintaining a healthy weight. Incorporating fruits into your daily routine can also enhance your mental well-being, as they have been linked to a reduced risk of depression and improved cognitive function."
             }
           ]
         },
@@ -162,7 +168,7 @@ export default function HomePage() {
             level: 2,
             children: [
               {
-                text: "What if I Have to postpone?"
+                text: "a Flavorful Journey to Good Health"
               }
             ]
           },
@@ -170,7 +176,7 @@ export default function HomePage() {
             type: "paragraph",
             children: [
               {
-                text: "Do it. Our rescheduling policy is extremely lenient. You can reschedule for any extraordinary circumstance, even if you have to postpone more than once. "
+                text: "Discover the incredible taste and extraordinary health benefits that fruits have to offer. With an array of flavors ranging from sweet to tangy, fruits are a delightful way to nourish your body and delight your taste buds. Rich in natural sugars, fruits provide a healthier alternative to processed sweets, satisfying your cravings without the guilt."
               }
             ]
           },
@@ -179,11 +185,106 @@ export default function HomePage() {
     
   ]
 
+  const events = [
+    {
+      link: '/events/1',
+      title: 'Avocado Rave',
+      img: 'https://cdn.pixabay.com/photo/2022/05/19/19/09/avocado-7207993_960_720.jpg',
+      datetime: '2011-11-18T14:00:00.000',
+      location: {
+        name: 'Party Town',
+        link: '/locations/1',
+      }
+    },
+    {
+      link: '/events/2',
+      title: 'Fruity Givaway',
+      img: 'https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg',
+      datetime: '2023-03-15T14:00:00.000',
+      location: {
+        name: 'Party Town',
+        link: '/locations/1',
+      }
+    },
+    {
+      link: '/events/3',
+      title: 'Poolside Pinnaple',
+      img: 'https://cdn.pixabay.com/photo/2020/01/14/10/55/cartoon-4764726_960_720.png',
+      datetime: '2023-08-01T09:00:00.000',
+      location: {
+        name: 'Party Town',
+        link: '/locations/1',
+      }
+    },
+  ]
+
+  const fruitCards = [
+    {
+      title: "Berrylicious Summer Festival",
+      bg: '/assets/textures/pexels-adrien-olichon-2387532.jpg',
+      color: '#ffffffd9',
+      link: '/services/1',
+      content: "Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!"
+    },
+    {
+      title: "Citrus Delight Yoga Retreat",
+      bg: '/assets/textures/pexels-adrien-olichon-2387793.jpg',
+      color: '#ffffffd9',
+      link: '/services/1',
+      content: "Refresh your mind, body, and spirit at our Citrus Delight Yoga Retreat. Immerse yourself in the invigorating essence of citrus fruits as you practice yoga amidst lush orange groves. Experience rejuvenating citrus-infused spa treatments, guided meditation sessions, and nutritious citrus-inspired meals. This retreat offers a perfect blend of relaxation and energizing activities, leaving you feeling revitalized and ready to embrace life with zest!"
+    },
+    {
+      title: "Mango Madness Food Fiesta",
+      bg: '/assets/textures/pexels-anni-roenkae-2832432.jpg',
+      color: '#ffffffd9',
+      link: '/services/1',
+      content: "Get ready for a tantalizing journey into the world of mangoes at the Mango Madness Food Fiesta. Sample an assortment of mango dishes from around the globe, including mango salsas, mango sticky rice, and mango lassis. Watch live cooking demonstrations by renowned chefs as they showcase innovative ways to incorporate mangoes into your culinary creations. Don't miss the mango eating contest and the chance to explore the diverse flavors and textures of this tropical fruit!"
+    },
+    {
+      title: "Apple Harvest Fair",
+      bg: '/assets/textures/pexels-jonny-lew-1121123.jpg',
+      color: '#ffffffd9',
+      link: '/services/1',
+      content: "Celebrate the bountiful apple harvest at our Apple Harvest Fair. Enjoy a day filled with apple-themed activities, including apple picking, cider pressing, and apple pie baking competitions. Delight in freshly made apple fritters, caramel apples, and hot apple cider. Explore local crafts and artisanal products, and let the kids have fun in the apple-themed playground. Immerse yourself in the crisp and fragrant atmosphere of the orchard as you savor the essence of autumn!"
+    },
+    {
+      title: "Pineapple Paradise Beach Party",
+      bg: '/assets/textures/pexels-sasha-martynov-1260727.jpg',
+      color: '#ffffffd9',
+      link: '/services/1',
+      content: "Escape to a tropical paradise at our Pineapple Paradise Beach Party! Dance the night away to the rhythm of island music while sipping on refreshing pineapple cocktails. Enjoy a sumptuous buffet featuring an array of pineapple-infused dishes, such as grilled pineapple skewers and pineapple upside-down cake. Participate in limbo contests, beach volleyball, and other exciting beach games. Get ready to soak up the sun, feel the sand between your toes, and experience the ultimate pineapple-themed beach extravaganza!"
+    }
+  ];
+
   return (<>
     {/* <Slider slides={slides} parentWidth={1000}/> */}
+    <Section bg='/assets/textures/pexels-aleksandr-slobodianyk-989941.jpg'>
+      <ContactForm 
+        title="Contact Us"
+        submitText="Submit"
+        color="white"
+      />
+    </Section>
     {mediatexts.map(mt => (
       <MediaText mediatext={mt} />
     ))}
+    <Section bg="/assets/textures/pexels-sasha-martynov-1260727.jpg">
+      <h2> Events </h2>
+      {events.map((event, i) => (
+        <EventCard {...event} key={i}/>
+      ))}
+    </Section>
+    
+    <Section>
+      <FlexList>
+        {fruitCards.map((info, i) => (
+          <li key={i}>
+            <InfoCard {...info}/>
+            {/* <InfoCardParallax {...info}/> */}
+          </li>
+        ))}
+      </FlexList>
+    </Section>
 
     {/* <SliderSlick slides={slides} settings={sliderSettings}/> */}
     {/* <Carousel items={items} /> */}

@@ -100,6 +100,39 @@ export function datePrettyLocalDay(date:string) {
   return newDate.toLocaleDateString("en-US", options);
 }
 
+export function datePrettyLocalDayShort(date:string) {
+  const options = {
+    // year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: 'UTC', 
+  };
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleDateString("en-US", options);
+}
+
+export function datePrettyLocalTime(date:string) {
+  const options = {
+    // year: "numeric",
+    // month: "long",
+    // day: "numeric",
+    // timeZone: 'UTC', 
+    // timeZone: "America/Chicago",
+    // timeZoneName: "short",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true
+  };
+
+  const newDate = new Date(date);
+
+  // @ts-ignore
+  return newDate.toLocaleTimeString("en-US", options);
+}
+
 export function timePretty(time: string) {
   const newDate = new Date()
   const hours = time.split(':')[0]
