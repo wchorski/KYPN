@@ -25,6 +25,7 @@ export const Location = list({
     rooms: integer({ defaultValue: 1 }),
     services: relationship({ ref: 'Service.locations', many: true }),
     bookings: relationship({ ref: 'Booking.location', many: true }),
+    events: relationship({ ref: 'Event.location', many: true }),
     
     categories: relationship({
       ref: 'Category.locations',

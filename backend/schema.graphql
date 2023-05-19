@@ -19,6 +19,8 @@ type User {
   bookingsCount(where: BookingWhereInput! = {}): Int
   gigs(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   gigsCount(where: BookingWhereInput! = {}): Int
+  gigevents(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  gigeventsCount(where: EventWhereInput! = {}): Int
   availability(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availabilityCount(where: AvailabilityWhereInput! = {}): Int
   buisnessHourOpen: String
@@ -34,6 +36,8 @@ type User {
   subscriptionsCount(where: SubscriptionItemWhereInput! = {}): Int
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
+  tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
+  ticketsCount(where: TicketWhereInput! = {}): Int
   role: Role
   dateCreated: DateTime
   dateModified: DateTime
@@ -69,6 +73,7 @@ input UserWhereInput {
   servicesProvided: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
+  gigevents: EventManyRelationFilter
   availability: AvailabilityManyRelationFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
@@ -78,6 +83,7 @@ input UserWhereInput {
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   subscriptions: SubscriptionItemManyRelationFilter
   orders: OrderManyRelationFilter
+  tickets: TicketManyRelationFilter
   role: RoleWhereInput
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
@@ -160,6 +166,12 @@ input BookingManyRelationFilter {
   none: BookingWhereInput
 }
 
+input EventManyRelationFilter {
+  every: EventWhereInput
+  some: EventWhereInput
+  none: EventWhereInput
+}
+
 input AvailabilityManyRelationFilter {
   every: AvailabilityWhereInput
   some: AvailabilityWhereInput
@@ -236,6 +248,12 @@ input OrderManyRelationFilter {
   none: OrderWhereInput
 }
 
+input TicketManyRelationFilter {
+  every: TicketWhereInput
+  some: TicketWhereInput
+  none: TicketWhereInput
+}
+
 input PasswordFilter {
   isSet: Boolean!
 }
@@ -273,6 +291,7 @@ input UserUpdateInput {
   servicesProvided: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
+  gigevents: EventRelateToManyForUpdateInput
   availability: AvailabilityRelateToManyForUpdateInput
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -282,6 +301,7 @@ input UserUpdateInput {
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   subscriptions: SubscriptionItemRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
+  tickets: TicketRelateToManyForUpdateInput
   role: RoleRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -316,6 +336,13 @@ input BookingRelateToManyForUpdateInput {
   set: [BookingWhereUniqueInput!]
   create: [BookingCreateInput!]
   connect: [BookingWhereUniqueInput!]
+}
+
+input EventRelateToManyForUpdateInput {
+  disconnect: [EventWhereUniqueInput!]
+  set: [EventWhereUniqueInput!]
+  create: [EventCreateInput!]
+  connect: [EventWhereUniqueInput!]
 }
 
 input AvailabilityRelateToManyForUpdateInput {
@@ -360,6 +387,13 @@ input OrderRelateToManyForUpdateInput {
   connect: [OrderWhereUniqueInput!]
 }
 
+input TicketRelateToManyForUpdateInput {
+  disconnect: [TicketWhereUniqueInput!]
+  set: [TicketWhereUniqueInput!]
+  create: [TicketCreateInput!]
+  connect: [TicketWhereUniqueInput!]
+}
+
 input RoleRelateToOneForUpdateInput {
   create: RoleCreateInput
   connect: RoleWhereUniqueInput
@@ -383,6 +417,7 @@ input UserCreateInput {
   servicesProvided: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
+  gigevents: EventRelateToManyForCreateInput
   availability: AvailabilityRelateToManyForCreateInput
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -392,6 +427,7 @@ input UserCreateInput {
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   subscriptions: SubscriptionItemRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
+  tickets: TicketRelateToManyForCreateInput
   role: RoleRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -418,6 +454,11 @@ input ServiceRelateToManyForCreateInput {
 input BookingRelateToManyForCreateInput {
   create: [BookingCreateInput!]
   connect: [BookingWhereUniqueInput!]
+}
+
+input EventRelateToManyForCreateInput {
+  create: [EventCreateInput!]
+  connect: [EventWhereUniqueInput!]
 }
 
 input AvailabilityRelateToManyForCreateInput {
@@ -448,6 +489,11 @@ input SubscriptionItemRelateToManyForCreateInput {
 input OrderRelateToManyForCreateInput {
   create: [OrderCreateInput!]
   connect: [OrderWhereUniqueInput!]
+}
+
+input TicketRelateToManyForCreateInput {
+  create: [TicketCreateInput!]
+  connect: [TicketWhereUniqueInput!]
 }
 
 input RoleRelateToOneForCreateInput {
@@ -886,6 +932,8 @@ type Location {
   servicesCount(where: ServiceWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   bookingsCount(where: BookingWhereInput! = {}): Int
+  events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  eventsCount(where: EventWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -908,6 +956,7 @@ input LocationWhereInput {
   rooms: IntNullableFilter
   services: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
+  events: EventManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
 }
@@ -925,6 +974,7 @@ input LocationUpdateInput {
   rooms: Int
   services: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
+  events: EventRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
 }
@@ -940,6 +990,7 @@ input LocationCreateInput {
   rooms: Int
   services: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
+  events: EventRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
 }
@@ -1897,6 +1948,164 @@ input PostCreateInput {
   allow_comments: Boolean
 }
 
+type Event {
+  id: ID!
+  summary: String
+  location: Location
+  start: DateTime
+  end: DateTime
+  price: Int
+  employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  employeesCount(where: UserWhereInput! = {}): Int
+  tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
+  ticketsCount(where: TicketWhereInput! = {}): Int
+  seats: Int
+  photo: String
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input EventWhereUniqueInput {
+  id: ID
+}
+
+input EventWhereInput {
+  AND: [EventWhereInput!]
+  OR: [EventWhereInput!]
+  NOT: [EventWhereInput!]
+  id: IDFilter
+  summary: StringFilter
+  location: LocationWhereInput
+  start: DateTimeFilter
+  end: DateTimeNullableFilter
+  price: IntNullableFilter
+  employees: UserManyRelationFilter
+  tickets: TicketManyRelationFilter
+  seats: IntFilter
+  photo: StringFilter
+  status: StringNullableFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input EventOrderByInput {
+  id: OrderDirection
+  summary: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
+  price: OrderDirection
+  seats: OrderDirection
+  photo: OrderDirection
+  status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+}
+
+input EventUpdateInput {
+  summary: String
+  location: LocationRelateToOneForUpdateInput
+  start: DateTime
+  end: DateTime
+  price: Int
+  employees: UserRelateToManyForUpdateInput
+  tickets: TicketRelateToManyForUpdateInput
+  seats: Int
+  photo: String
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input EventUpdateArgs {
+  where: EventWhereUniqueInput!
+  data: EventUpdateInput!
+}
+
+input EventCreateInput {
+  summary: String
+  location: LocationRelateToOneForCreateInput
+  start: DateTime
+  end: DateTime
+  price: Int
+  employees: UserRelateToManyForCreateInput
+  tickets: TicketRelateToManyForCreateInput
+  seats: Int
+  photo: String
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+type Ticket {
+  id: ID!
+  qrcode: String
+  event: Event
+  user: User
+  status: String
+}
+
+input TicketWhereUniqueInput {
+  id: ID
+}
+
+input TicketWhereInput {
+  AND: [TicketWhereInput!]
+  OR: [TicketWhereInput!]
+  NOT: [TicketWhereInput!]
+  id: IDFilter
+  qrcode: StringFilter
+  event: EventWhereInput
+  user: UserWhereInput
+  status: StringNullableFilter
+}
+
+input TicketOrderByInput {
+  id: OrderDirection
+  qrcode: OrderDirection
+  status: OrderDirection
+}
+
+input TicketUpdateInput {
+  qrcode: String
+  event: EventRelateToOneForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  status: String
+}
+
+input EventRelateToOneForUpdateInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TicketUpdateArgs {
+  where: TicketWhereUniqueInput!
+  data: TicketUpdateInput!
+}
+
+input TicketCreateInput {
+  qrcode: String
+  event: EventRelateToOneForCreateInput
+  user: UserRelateToOneForCreateInput
+  status: String
+}
+
+input EventRelateToOneForCreateInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
+}
+
 type Category {
   id: ID!
   name: String
@@ -1909,6 +2118,8 @@ type Category {
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  eventsCount(where: EventWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
   locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
@@ -1933,6 +2144,7 @@ input CategoryWhereInput {
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
+  events: EventManyRelationFilter
   services: ServiceManyRelationFilter
   locations: LocationManyRelationFilter
   addons: AddonManyRelationFilter
@@ -1951,6 +2163,7 @@ input CategoryUpdateInput {
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  events: EventRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
@@ -1968,6 +2181,7 @@ input CategoryCreateInput {
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  events: EventRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
@@ -1984,6 +2198,8 @@ type Tag {
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  eventsCount(where: EventWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
   locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
@@ -2007,6 +2223,7 @@ input TagWhereInput {
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
   subscriptions: SubscriptionPlanManyRelationFilter
+  events: EventManyRelationFilter
   services: ServiceManyRelationFilter
   locations: LocationManyRelationFilter
   addons: AddonManyRelationFilter
@@ -2023,6 +2240,7 @@ input TagUpdateInput {
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
   subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  events: EventRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
@@ -2039,6 +2257,7 @@ input TagCreateInput {
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
   subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  events: EventRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
@@ -2146,6 +2365,18 @@ type Mutation {
   updatePosts(data: [PostUpdateArgs!]!): [Post]
   deletePost(where: PostWhereUniqueInput!): Post
   deletePosts(where: [PostWhereUniqueInput!]!): [Post]
+  createEvent(data: EventCreateInput!): Event
+  createEvents(data: [EventCreateInput!]!): [Event]
+  updateEvent(where: EventWhereUniqueInput!, data: EventUpdateInput!): Event
+  updateEvents(data: [EventUpdateArgs!]!): [Event]
+  deleteEvent(where: EventWhereUniqueInput!): Event
+  deleteEvents(where: [EventWhereUniqueInput!]!): [Event]
+  createTicket(data: TicketCreateInput!): Ticket
+  createTickets(data: [TicketCreateInput!]!): [Ticket]
+  updateTicket(where: TicketWhereUniqueInput!, data: TicketUpdateInput!): Ticket
+  updateTickets(data: [TicketUpdateArgs!]!): [Ticket]
+  deleteTicket(where: TicketWhereUniqueInput!): Ticket
+  deleteTickets(where: [TicketWhereUniqueInput!]!): [Ticket]
   createCategory(data: CategoryCreateInput!): Category
   createCategories(data: [CategoryCreateInput!]!): [Category]
   updateCategory(where: CategoryWhereUniqueInput!, data: CategoryUpdateInput!): Category
@@ -2245,6 +2476,12 @@ type Query {
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
   postsCount(where: PostWhereInput! = {}): Int
+  events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  event(where: EventWhereUniqueInput!): Event
+  eventsCount(where: EventWhereInput! = {}): Int
+  tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
+  ticket(where: TicketWhereUniqueInput!): Ticket
+  ticketsCount(where: TicketWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   category(where: CategoryWhereUniqueInput!): Category
   categoriesCount(where: CategoryWhereInput! = {}): Int

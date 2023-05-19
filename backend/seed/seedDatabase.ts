@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Context } from '.keystone/types';
-import { addons_seedjson, avail_seedjson, categories_seedjson, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 
@@ -156,6 +156,25 @@ const seedSubscriptions = async (context: Context) => {
 
 const seedServices = async (context: Context) => {
   const { db } = context.sudo();
+  const seedObjects: any[] = events_seeddata;
+  const objectsAlreadyInDatabase = await db.Event.findMany({
+    where: {
+      summary: { in: seedObjects.map(obj => obj.summary) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.summary === seedObj.summary)
+  );
+
+  console.log('Events seeded, ', { objsToCreate })
+
+  await db.Event.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
+const seedEvents = async (context: Context) => {
+  const { db } = context.sudo();
   const seedObjects: any[] = services_seedjson;
   const objectsAlreadyInDatabase = await db.Service.findMany({
     where: {
@@ -237,6 +256,7 @@ export const seedDatabase = async (context: Context) => {
   await seedCategories(context)
   await seedTags(context)
   await seedPosts(context)
+  await seedEvents(context)
 
   await seedProductImages(context)
   await seedProducts(context)

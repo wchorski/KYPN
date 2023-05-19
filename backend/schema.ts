@@ -25,6 +25,8 @@ import { document } from '@keystone-6/fields-document';
 import { Product } from "./schemas/Product";
 import { ProductImage } from "./schemas/ProductImage";
 import { CartItem } from "./schemas/CartItem";
+import { Event } from "./schemas/Event";
+import { Ticket } from "./schemas/Ticket";
 
 // if you want to make your own fields, see https://keystonejs.com/docs/guides/custom-fields
 
@@ -68,6 +70,8 @@ export const lists: Lists = {
   Order,
   Page,
   Post,
+  Event,
+  Ticket,
   Category,
   Tag,
   // Post: list({

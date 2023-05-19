@@ -7,6 +7,49 @@ function timestamp() {
   return new Date(stampy).toISOString();
 }
 
+export const events_seeddata = [
+  {
+    summary: 'Apple Harvest Festival',
+    start: '2023-09-30T10:00:00.000Z',
+    end: '2023-09-30T18:00:00.000Z',
+    seats: 20,
+    price: 100,
+    photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg'
+  },
+  {
+    summary: 'Berrylicious Smoothie Workshop',
+    start: '2023-07-15T15:00:00.000Z',
+    end: '2023-07-15T17:00:00.000Z',
+    seats: 20,
+    price: 100,
+    photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290024/cutefruit/product_images/clgu01m7x0004dwsv0b05di5c.png'
+  },
+  {
+    summary: 'Citrus Yoga Retreat',
+    start: '2023-06-10T08:00:00.000Z',
+    end: '2023-06-12T18:00:00.000Z',
+    seats: 20,
+    price: 100,
+    photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg'
+  },
+  {
+    summary: 'Tropical Fruit Tasting Tour',
+    start: '2023-08-05T11:00:00.000Z',
+    end: '2023-08-05T15:00:00.000Z',
+    seats: 20,
+    price: 100,
+    photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png'
+  },
+  {
+    summary: 'Watermelon Summer Bash',
+    start: '2023-07-01T16:00:00.000Z',
+    end: '2023-07-01T20:00:00.000Z',
+    seats: 20,
+    price: 100,
+    photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682274836/cutefruit/product_images/clgtr03ia0000gksv9qx8g9iz.jpg'
+  }
+]
+
 export const user_seeddata = [
   {
     name: 'Adam',
