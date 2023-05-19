@@ -3,6 +3,8 @@ import { datePrettyLocalDay, datePrettyLocalTime, datePrettyLocalDayShort } from
 import { IoMdTime } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
 import Link from "next/link";
+import { ImageDynamic } from "../elements/ImageDynamic";
+
 // import Image from "next/image";
 
 // const img = 'https://cdn.pixabay.com/photo/2022/05/19/19/09/avocado-7207993_960_720.jpg'
@@ -18,46 +20,51 @@ import Link from "next/link";
 // const url = '/events/1'
 
 type Event = {
-  img:string,
-  datetime:string,
-  title:string,
-  location: {
+  photo:string,
+  start:string,
+  summary:string,
+  location?: {
     name:string,
-    link:string,
+    id:string,
   }
-  link:string,
+  id:string,
 }
 
-export function EventCard({img, datetime, title, location, link}:Event) {
+export function EventCard({photo, start, summary, location, id}:Event) {
   return (
     <StyledEventCard>
       <div>
-        <img src={img} alt='event thumbnail' />
+        <ImageDynamic photoIn={photo}/>
       </div>
 
       <div>
-        <time dateTime={datetime} className="date-short"> {datePrettyLocalDayShort(datetime)} </time>
+        <time dateTime={start} className="date-short"> 
+          {datePrettyLocalDayShort(start)} 
+        </time>
       </div>
 
-      <Link href={link} className="details">
-        <h4> {title} </h4>
+      <Link href={`/events/e/${id}`} className="details">
+        <h4> {summary} </h4>
 
-        <time dateTime={datetime}> 
+        <time dateTime={start}> 
           <IoMdTime />
-          {datePrettyLocalDay(datetime)} 
-          @ {datePrettyLocalTime(datetime)}
+          {/* {datePrettyLocalDay(start)}  */}
+          {/* @  */}
+          {datePrettyLocalTime(start)}
         </time>
 
-        <address>
-          <MdLocationOn />
-          {location.name} <br />
-          {/* {address.street} <br /> */}
-          {/* {address.town} <br /> */}
-          {/* {address.country} <br /> */}
-        </address>
+        {location && (
+          <address>
+            <MdLocationOn />
+            {location?.name} <br />
+            {/* {address.street} <br /> */}
+            {/* {address.town} <br /> */}
+            {/* {address.country} <br /> */}
+          </address>
+        )}
       </Link>
 
-      <a href={link} className="button"> view </a>
+      <a href={`/events/e/${id}`} className="button"> view </a>
 
     </StyledEventCard>
   )
@@ -76,6 +83,7 @@ const StyledEventCard = styled.article`
 
   img{
     width: 5em;
+    height: auto;
   }
 
   time.date-short{

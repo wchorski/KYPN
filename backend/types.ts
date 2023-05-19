@@ -48,6 +48,31 @@ export type CartItem = {
 
 }
 
+export type Event = {
+  summary:string,
+  location:Location,
+  start: string,
+  end:string,
+  price:number,
+  employees:User[],
+  tickets: any[],
+  seats:number,
+  photo:string,
+  status:string,
+  dateCreated:string,
+  dateModified:string,
+  tags: Tag[],
+  categories: Category[],
+}
+
+export type Ticket = {
+  qrcode:string,
+  event: Event,
+  holder: User,
+  status: string,
+  
+}
+
 export type Product = {
   id: string,
   price: number,

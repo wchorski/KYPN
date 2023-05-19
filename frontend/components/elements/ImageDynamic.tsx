@@ -3,6 +3,7 @@ import { useState } from "react";
 
 
 export function ImageDynamic({ photoIn }: any) {
+  
 
   const [state, setState] = useState<any>(handlePhoto(photoIn))
 
@@ -36,7 +37,18 @@ function handlePhoto(photo: any) {
     }
   }
 
-  if (!photo?.image) {
+  if(photo) {
+    return {
+      altText: 'default image',
+      image: {
+        url: photo,
+        width: 300,
+        height: 300,
+      }
+    }
+  }
+
+  if (!photo) {
     return {
       altText: 'no product image',
       image: {
