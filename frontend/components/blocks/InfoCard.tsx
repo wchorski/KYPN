@@ -77,9 +77,9 @@ const StyledInfoCard = styled.article<{bg:string, color:string, mousePosition:{x
 
   border-radius: 1em;
   margin: 1em;
-  padding: 1em;
+  padding: 1em 1em;
 
-  width: 25em;
+  max-width: 25em;
   position: relative;
   
   /* overflow: hidden; */
@@ -141,5 +141,9 @@ const StyledInfoCard = styled.article<{bg:string, color:string, mousePosition:{x
     background-size: cover;
     transform: translateZ(-50px);
     box-shadow: #00000070 7px 9px 16px 7px;
+  }
+
+  @media (max-width: 500px){
+    padding: 1em 0;
   }
 `
