@@ -139,7 +139,7 @@ export const QUERY_BLOG_SINGLE = gql`
 
 const StyledBlogSingle = styled.article`
   header{
-    background: var(--c-1);
+    background: var(--c-accent);
     position: relative;
     /* background-blend-mode: overlay; */
 

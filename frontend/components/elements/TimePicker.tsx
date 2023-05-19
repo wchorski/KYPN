@@ -95,7 +95,7 @@ const StyledTimePicker = styled.ul`
 
 
   .active{
-    background-color: var(--c-1);
+    background-color: var(--c-accent);
   }
 
   @keyframes reveal {

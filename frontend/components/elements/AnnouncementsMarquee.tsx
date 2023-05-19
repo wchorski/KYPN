@@ -55,7 +55,7 @@ const StyledMarquee = styled.div`
 
   --c-banner: #dbdbdb;
   width: 100%;
-  border: 1px solid var(--c-1);
+  border: 1px solid var(--c-accent);
   /* border-radius: 10% 0 0 0 ; */
   border-radius:10px/40%;
 
@@ -80,7 +80,7 @@ const StyledMarquee = styled.div`
   a{
     font-size: 3rem;
 
-    border-bottom: 10px dashed var(--c-1);
+    border-bottom: 10px dashed var(--c-accent);
     padding: 1em;
     height: 100%;
     display: flex;
@@ -89,7 +89,7 @@ const StyledMarquee = styled.div`
     transition: all .3s;
 
     &:hover{
-      background-color: var(--c-1);
+      background-color: var(--c-accent);
       color: var(--c-txt-rev);
     }
 
@@ -152,7 +152,7 @@ const StyledMarquee = styled.div`
     left: 0%;
     width: 0px;
     height: 0px;
-    border-bottom: 70px solid var(--c-1);
+    border-bottom: 70px solid var(--c-accent);
     border-left: 70px solid transparent;
     box-shadow: 7px 2px 7px rgba(0,0,0,0.3);
   }

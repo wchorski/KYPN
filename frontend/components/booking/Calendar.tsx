@@ -231,7 +231,7 @@ const StyledCalendar = styled.div`
   .react-calendar__tile--active,
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus {
-    background: var(--c-1);
+    background: var(--c-accent);
     color: white;
   }
   .react-calendar--selectRange .react-calendar__tile--hover {

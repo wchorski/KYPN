@@ -28,7 +28,6 @@ export default function CartCount({ count }: { count: number }) {
 }
 
 const StyledDot = styled.div`
-  /* background-color: var(--c-1); */
   /* color: var(--c-txt-rev); */
   padding: 0.5rem;
   border-radius: 50px;

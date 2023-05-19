@@ -119,7 +119,7 @@ const StyledProductSingle = styled.article`
     display: grid;
     grid-template-rows: minmax(0,1fr) auto;
     resize: both;
-    border: 2px dashed var(--c-1);
+    border: 2px dashed var(--c-accent);
     
     img{
       width: 100%;

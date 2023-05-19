@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledCartItem = styled.li`
   padding: 1em 0;
-  border-bottom: 1px solid var(--c-1);
+  border-bottom: 1px solid var(--c-accent);
   display: flex;
   justify-content: space-between;
   grid-template-columns: auto 1fr auto;
