@@ -2165,6 +2165,7 @@ type Mutation {
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   addToCart(id: ID!, productID: ID): CartItem
   checkout(token: String!): CartItem
+  contact(name: String!, email: String!, phone: String!, notes: String!): Booking
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure

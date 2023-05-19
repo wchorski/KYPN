@@ -63,6 +63,7 @@ export const Booking = list({
         { label: 'Active', value: 'ACTIVE' },
         { label: 'Postponed', value: 'POSTPONED' },
         { label: 'Canceled', value: 'CANCELED' },
+        { label: 'Lead', value: 'LEAD' },
       ],
       defaultValue: 'ACTIVE',
       ui: {
