@@ -49,6 +49,7 @@ import { Service } from './schemas/Service';
 import { Location } from './schemas/Location';
 import { Availability } from './schemas/Availability';
 import { Addon } from './schemas/Addon';
+import { contact } from './mutations/contact';
 
 export const lists: Lists = {
   User,
@@ -170,6 +171,7 @@ export const extendGraphqlSchema = graphql.extend(base => {
     mutation: {
       addToCart: addToCart(base),
       checkout: checkout(base),
+      contact: contact(base),
     },
   }
 })
