@@ -14,15 +14,17 @@ const loading = keyframes`
 
 export const StyledForm = styled.form`
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: var(--c-txt-rev);
-  border: 5px solid white;
-  padding: 20px;
+  background-color: rgba(var(--c-cont-light), 0.6);
+  backdrop-filter: blur(14px);
+  border-radius: 1em;
+  /* border: 5px solid white; */
+  padding: 1em;
   font-size: 1.5rem;
   line-height: 1.5;
   font-weight: 600;
 
   max-width: 20em;
-  margin: 0 auto;
+  margin: 1em auto;
 
 
   label {
@@ -73,10 +75,11 @@ export const StyledForm = styled.form`
       display: block;
       background-image: linear-gradient(
         to right,
-        #ff3019 0%,
-        #e2b04a 50%,
-        #ff3019 100%
+        var(--c-1) 0%,
+        var(--c-2) 50%,
+        var(--c-3) 100%
       );
+      margin-bottom: 1em;
     }
     &[aria-busy='true']::before {
       background-size: 50% auto;
@@ -86,6 +89,12 @@ export const StyledForm = styled.form`
 
   textarea{
     min-height: 10em;
+  }
+
+  .hidden{
+    visibility: hidden;
+    height: 0;
+    display: none;
   }
 `;
 

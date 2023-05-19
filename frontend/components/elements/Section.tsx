@@ -4,9 +4,10 @@ import styled from "styled-components"
 type Props = {
   children:ReactNode|ReactNode[]
   bg?:string,
+  color?:string,
 }
 
-export function Section({bg, children}:Props) {
+export function Section({color, bg, children}:Props) {
   return (
     <StyledSection color={bg} bg={bg}>
       {children}
@@ -16,7 +17,6 @@ export function Section({bg, children}:Props) {
 
 
 const StyledSection = styled.section<{bg?:string}>`
-  background-color: #a3a3d8;
   background-color: ${p => p.color};
   background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
   background-position: center;

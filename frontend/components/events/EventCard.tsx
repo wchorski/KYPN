@@ -65,6 +65,7 @@ export function EventCard({img, datetime, title, location, link}:Event) {
 
 const StyledEventCard = styled.article`
   display: flex;
+  flex-wrap: wrap;
   border: solid white 1px;
   padding: 1em;
   transition: border .2s ease-in;
@@ -103,4 +104,12 @@ const StyledEventCard = styled.article`
   &:hover, &:focus{
     border-left: solid white 4px;
   }
+
+  /* @media (max-width: 500px){
+    flex-direction: column;
+
+    .content-cont, .media-cont{
+      width: 100%;
+    }
+  } */
 `

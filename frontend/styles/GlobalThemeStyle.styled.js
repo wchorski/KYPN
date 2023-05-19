@@ -11,11 +11,14 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :root{
-    --c-1: #a3cf03;  /* accent */
-    --c-2: #7aa976; /* desaturated */
-    --c-3: #6c8157; /* contrast */
-    --c-bg: #f9faf5;
-    --c-txt: black;
+    --c-1: whitesmoke;
+    --c-accent: #a1d7e2;  /* accent */
+    --c-2: #d7e2a1; /* desaturated */
+    --c-3: #8baf72; /* contrast */
+    --c-bg: #eff6f4;
+    --c-cont-light: 255, 255, 255;
+    --c-cont-dark: 0, 0, 0;
+    --c-txt: #140611;
     --c-txt-rev: white;
     --c-edge: #e5e5e5;
     --cg-dots: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%);
@@ -88,7 +91,8 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a:hover{ 
-    opacity: .7;
+    background-color: var(--c-2);
+    color: var(--c-txt);
   }
 
   a, 
@@ -98,7 +102,14 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   button{
-    font-family: 'radnika_next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    &:is([disabled]){
+      background-color: var(--c-disabled);
+      cursor: not-allowed;
+
+      &:hover{
+        background-color: var(--c-disabled);
+      }
+    }
   }
 
   nav{

@@ -25,13 +25,13 @@ export function MediaText({mediatext}:Props) {
   
   return (
     <StyledMediaText bg={mediatext.bg} rowReverse={mediatext.rowReverse}>
-      <div className="text-cont">
+      <div className="content-cont">
 
         {handleContentRender(mediatext.content)}
 
       </div>
 
-      <div>
+      <div className="media-cont">
         <figure>
           <Image 
             src={mediatext.bg}
@@ -49,14 +49,24 @@ export function MediaText({mediatext}:Props) {
 const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
   display: flex;
   flex-direction: ${p => (p.rowReverse ? 'row-reverse' : 'row')};
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 
   > * {
-    width: 50%;
-    min-width: 20em;
+    /* flex-grow: 0; */
+    flex: 1;
+  }
+  
+  .media-cont{
+    /* container-type: inline-size; */
+    /* width: 50%; */
+  }
+  
+  .content-cont{
+    /* container-type: inline-size; */
+    /* width: 50%; */
   }
 
-  .text-cont{
+  .content-cont{
 
     article > * {
       margin: 0;
@@ -73,6 +83,11 @@ const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
     h3{
       text-align: center;
       /* padding: 3em 0; */
+    }
+
+    p{
+      max-width: 60ch;
+      min-width: 20ch;
     }
   }
 
@@ -95,6 +110,12 @@ const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
   }
 
   /* // todo media query column */
-  /* // todo property that flips text-media media-text */
+  @media (max-width: 500px){
+    flex-direction: column;
+
+    .content-cont, .media-cont{
+      width: 100%;
+    }
+  }
 
 `

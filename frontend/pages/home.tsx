@@ -263,11 +263,16 @@ export default function HomePage() {
         title="Contact Us"
         submitText="Submit"
         color="white"
+        isPhone={false}
       />
     </Section>
-    {mediatexts.map(mt => (
-      <MediaText mediatext={mt} />
-    ))}
+
+    <Section>
+      {mediatexts.map(mt => (
+        <MediaText mediatext={mt} />
+      ))}
+    </Section>
+
     <Section bg="/assets/textures/pexels-sasha-martynov-1260727.jpg">
       <h2> Events </h2>
       {events.map((event, i) => (
@@ -280,7 +285,6 @@ export default function HomePage() {
         {fruitCards.map((info, i) => (
           <li key={i}>
             <InfoCard {...info}/>
-            {/* <InfoCardParallax {...info}/> */}
           </li>
         ))}
       </FlexList>
