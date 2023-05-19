@@ -26,7 +26,6 @@ const StyledFooter = styled.footer`
   } */
   &::after{
     content: 'after todo';
-    /* background-image: linear-gradient(95deg,var(--c-bg),var(--c-1)); */
     background: 
       linear-gradient(90deg, 
         var(--c-bg) 0%, 

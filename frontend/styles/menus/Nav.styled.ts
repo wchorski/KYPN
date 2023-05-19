@@ -53,7 +53,7 @@ export const StyledNav = styled.nav`
   }
 
   a.isActive{
-    background-color: var(--c-1);
+    background-color: var(--c-accent);
   }
 
   #navdrawer-cont{
@@ -92,7 +92,7 @@ export const StyledNav = styled.nav`
     svg{
       cursor: pointer;
       border-radius: 50%;
-      color: var(--c-1);
+      color: var(--c-txt-rev);
       font-size: 5rem;
       padding: .1em;
       transition: all .5s, opacity .3s;
@@ -100,7 +100,7 @@ export const StyledNav = styled.nav`
 
     &.open{
       svg{
-        background-color: var(--c-1);
+        background-color: var(--c-2);
         color: var(--c-txt-rev);
       }
     }

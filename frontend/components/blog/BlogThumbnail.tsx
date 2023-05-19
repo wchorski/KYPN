@@ -68,7 +68,7 @@ const StyledBlogThumbnail = styled.article`
     margin-top: -3rem;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
     a {
-      background: var(--c-1);
+      background: var(--c-accent);
       display: inline;
       line-height: 1.3;
       font-size: 4rem;
