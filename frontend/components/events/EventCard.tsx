@@ -70,7 +70,7 @@ export function EventCard({photo, start, summary, location, id}:Event) {
   )
 }
 
-const StyledEventCard = styled.article`
+export const StyledEventCard = styled.article`
   display: flex;
   flex-wrap: wrap;
   border: solid white 1px;
@@ -105,7 +105,7 @@ const StyledEventCard = styled.article`
     margin-right: .2em;
   }
 
-  a.button {
+  .actions-cont {
     margin-left: auto;
   }
 

@@ -1,6 +1,9 @@
 import { useState } from "react"
-import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop } from "react-icons/md"
+import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop,  } from "react-icons/md"
+import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
+import { Table } from "../elements/Table"
+import { User } from "../../lib/types"
 
 
 enum DASH_STATE {
@@ -8,18 +11,18 @@ enum DASH_STATE {
   ORDERS = 'orders',
   SUBSCRIPTIONS = 'subscriptions',
   DOWNLOADS = 'downloads',
+  TICKETS = 'tickets',
 }
 
 
-export function AccountDetails({ session }: any) {
+export function AccountDetails({ name, email, tickets }: User) {
 
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
-
 
   return (
     <StyledAccountCard>
       <StyledAccountNav>
-        <ul>
+        <nav>
           <li>
             <button onClick={() => setState(DASH_STATE.DASHBOARD)} className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
               Dashboard <MdOutlineAccountBox />
@@ -40,21 +43,30 @@ export function AccountDetails({ session }: any) {
               Downloads <MdOutlineDownload />
             </button>
           </li>
-        </ul>
+          <li>
+            <button onClick={() => setState(DASH_STATE.TICKETS)} className={state === DASH_STATE.TICKETS ? 'active' : ''}>
+              Tickets <HiOutlineTicket />
+            </button>
+          </li>
+        </nav>
       </StyledAccountNav>
 
       <div className="dash-cont">
 
         <article className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
           <h3>Dashboard</h3>
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
-          <a> dashboard 1 </a> <br />
+          <table>
+            <tbody>
+              <tr>
+                <td>email: </td>
+                <td>{email}</td>
+              </tr>
+              <tr>
+                <td>name: </td>
+                <td>{name}</td>
+              </tr>
+            </tbody>
+          </table>
         </article>
 
         <article className={state === DASH_STATE.ORDERS ? 'active' : ''}>
@@ -89,6 +101,19 @@ export function AccountDetails({ session }: any) {
           <a> orddfdfdfdfdfder 1 </a> <br />
 
         </article>
+
+        <article className={state === DASH_STATE.TICKETS ? 'active' : ''}>
+          <h3> Tickets </h3>
+          <ul>
+            {tickets.map(tick => (
+              <li key={tick.id}>
+                {tick.event.summary}
+              </li>
+            ))}
+          </ul>
+
+        </article>
+        
 
       </div>
     </StyledAccountCard>

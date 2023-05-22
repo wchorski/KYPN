@@ -5,7 +5,7 @@ import { QueryError } from '../menus/QueryError'
 import { perPage } from '../../config';
 import { EventCard } from './EventCard';
 import styled from 'styled-components';
-import { Event } from '../../lib/types';
+// import { Event } from '../../lib/types';
 
 type Props = {
   page: number
@@ -33,7 +33,7 @@ export default function EventList({page}:Props) {
   
   return (
     <StyledEventList>
-      {data.events.map((event: any) => {
+      {data.events.map((event:any) => {
         // console.log(prod);
 
         return (
@@ -52,7 +52,7 @@ const StyledEventList = styled.ul`
   margin: 0;
 `
 
-const QUERY_EVENTS_ALL = gql`
+export const QUERY_EVENTS_ALL = gql`
   query Events($orderBy: [EventOrderByInput!]!) {
     events(orderBy: $orderBy) {
       start

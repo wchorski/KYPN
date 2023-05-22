@@ -299,22 +299,22 @@ export type IDObj = {
 }
 
 export type Event = {
-  id:string,
-  summary:string,
-  location:Location,
-  start: string,
-  end:string,
-  price:number,
-  employees:User[],
-  tickets: any[],
-  seats:number,
-  photo:string,
-  description: string,
-  status:string,
-  dateCreated:string,
-  dateModified:string,
-  tags: Tag[],
-  categories: Category[],
+  id?:string,
+  summary?:string,
+  location?:Location,
+  start?: string,
+  end?:string,
+  price?:number,
+  employees?:User[],
+  tickets?: any[],
+  seats?:number,
+  photo?:string,
+  description?: string,
+  status?:string,
+  dateCreated?:string,
+  dateModified?:string,
+  tags?: Tag[],
+  categories?: Category[],
 }
 
 export type Ticket = {

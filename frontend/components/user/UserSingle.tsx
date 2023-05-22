@@ -3,6 +3,8 @@ import { User } from "../../lib/types"
 import { QueryLoading } from "../menus/QueryLoading"
 import ErrorMessage from "../ErrorMessage"
 import { AccountDetails } from "../menus/AccountDetails"
+import EventList from "../events/EventList"
+import { UserEvents } from "./UserEvents"
 
 
 export function UserSingle({id}:{id:string}) {  
@@ -14,16 +16,15 @@ export function UserSingle({id}:{id:string}) {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-
-  console.log(data);
   
   const {name, email, isAdmin, tickets, dateCreated, dateModified,}:User = data?.user
   
 
   return (
-    <div>
-      <AccountDetails />
-    </div>
+    <>
+      <AccountDetails {...data.user}/>
+      <UserEvents user={data.user}/>
+    </>
   )
 }
 

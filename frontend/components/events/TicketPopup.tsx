@@ -4,14 +4,16 @@ import { gql, useMutation } from '@apollo/client'
 import { useRef, useEffect, Dispatch, SetStateAction } from 'react'
 import { RiCloseFill } from 'react-icons/ri'
 import styled from 'styled-components'
+import { Event, User } from '../../lib/types'
 
 type Props = {
   isShown: boolean,
   setIsShown: Dispatch<SetStateAction<boolean>>,
-  eventId: string,
+  event?: Event|undefined,
+  user?: User|undefined,
 }
 
-export default function TicketPopup({isShown, setIsShown, eventId}:Props) {
+export default function TicketPopup({isShown, setIsShown, event, user}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
@@ -34,9 +36,14 @@ export default function TicketPopup({isShown, setIsShown, eventId}:Props) {
           data: {
             event: {
               connect: {
-                id: eventId,
+                id: event?.id || '',
               }
-            }
+            },
+            holder: {
+              connect: {
+                id: user?.id || '',
+              }
+            },
           }
         }
       })
@@ -66,6 +73,11 @@ export default function TicketPopup({isShown, setIsShown, eventId}:Props) {
         <RiCloseFill />
       </button>
       <h2> Purchase Tickets </h2>
+      <ul>
+        <li>{user?.name}</li>
+        <li>{user?.email}</li>
+        <li>{event?.summary}</li>
+      </ul>
 
       <button disabled={loading} onClick={handleSubmit}> 
         {loading ? 'Wait' : 'Buy'}
