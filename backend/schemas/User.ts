@@ -100,7 +100,7 @@ export const User = list({
       many: true,
     }),
     tickets: relationship({
-      ref: 'Ticket.user',
+      ref: 'Ticket.holder',
       many: true,
     }),
     role: relationship({

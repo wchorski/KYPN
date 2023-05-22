@@ -14,6 +14,7 @@ export const events_seeddata = [
     end: '2023-09-30T18:00:00.000Z',
     seats: 20,
     price: 100,
+    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg'
   },
   {
@@ -22,6 +23,7 @@ export const events_seeddata = [
     end: '2023-07-15T17:00:00.000Z',
     seats: 20,
     price: 100,
+    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290024/cutefruit/product_images/clgu01m7x0004dwsv0b05di5c.png'
   },
   {
@@ -30,6 +32,7 @@ export const events_seeddata = [
     end: '2023-06-12T18:00:00.000Z',
     seats: 20,
     price: 100,
+    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg'
   },
   {
@@ -38,6 +41,7 @@ export const events_seeddata = [
     end: '2023-08-05T15:00:00.000Z',
     seats: 20,
     price: 100,
+    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png'
   },
   {
@@ -46,6 +50,7 @@ export const events_seeddata = [
     end: '2023-07-01T20:00:00.000Z',
     seats: 20,
     price: 100,
+    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682274836/cutefruit/product_images/clgtr03ia0000gksv9qx8g9iz.jpg'
   }
 ]

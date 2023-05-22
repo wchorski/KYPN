@@ -146,6 +146,7 @@ export type User = {
   role: any,
   dateCreated: string,
   dateModified: string,
+  tickets:Ticket[],
 }
 
 export type Availability = {
@@ -298,6 +299,7 @@ export type IDObj = {
 }
 
 export type Event = {
+  id:string,
   summary:string,
   location:Location,
   start: string,
@@ -307,6 +309,7 @@ export type Event = {
   tickets: any[],
   seats:number,
   photo:string,
+  description: string,
   status:string,
   dateCreated:string,
   dateModified:string,
@@ -315,9 +318,30 @@ export type Event = {
 }
 
 export type Ticket = {
+  id:string,
   qrcode:string,
   event: Event,
   holder: User,
   status: string,
-  
 }
+
+enum TICKET_STATUS {
+  ACTIVE = 'ACTIVE',
+  REDEEMED = 'REDEEMED',
+  CANCELED = 'CANCELED',
+}
+
+export const TicketStatus = [
+  {
+    label: TICKET_STATUS.ACTIVE,
+    value: TICKET_STATUS.ACTIVE,
+  },
+  {
+    label: TICKET_STATUS.REDEEMED,
+    value: TICKET_STATUS.REDEEMED,
+  },
+  {
+    label: TICKET_STATUS.CANCELED,
+    value: TICKET_STATUS.CANCELED,
+  },
+]

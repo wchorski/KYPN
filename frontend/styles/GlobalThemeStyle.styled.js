@@ -68,13 +68,13 @@ export const GlobalStyles = createGlobalStyle`
   }  
     
   ::-webkit-scrollbar-thumb {  
-    background: var(--c-1);  
+    background: var(--c-3);  
     border-radius: 20px;
     z-index: 999999;
   }
 
   a{
-    color: var(--c-1);
+    color: var(--c-accent);
     transition: all .3s;
 
     &.button{
@@ -96,12 +96,13 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a, 
-  button:not([disabled]), 
-  select:not([disabled]) {
+  button, 
+  select,
+  input {
     cursor: pointer;
   }
 
-  button{
+  button, select, input{
     &:is([disabled]){
       background-color: var(--c-disabled);
       cursor: not-allowed;
@@ -117,6 +118,26 @@ export const GlobalStyles = createGlobalStyle`
       list-style: none;
       padding: 0;
       margin: 0;
+    }
+  }
+
+  .card{
+    background-color: var(--c-3);
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: black 1px 1px 3px 0px;
+
+    &.call-to-action{
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button{
+        border-radius: 5em;
+        padding: 0 2em;
+        height: 40px;
+      }
     }
   }
 `

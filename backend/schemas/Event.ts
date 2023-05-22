@@ -37,6 +37,11 @@ export const Event = list({
     tickets: relationship({ ref: 'Ticket.event', many: true }),
     seats: integer({ validation: { isRequired: true} }),
     photo: text(),
+    description: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     status: select({
       options: [
         { label: 'Active', value: 'ACTIVE' },
