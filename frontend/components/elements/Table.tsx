@@ -15,6 +15,10 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   const [keys, setKeys] = useState<any>(headers)
   const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account',]
 
+  console.log({cells});
+  console.log({headers});
+  
+
   // ? if u want to automatically grab keys from object
   // const [keys, setKeys] = useState<any>(Object.keys(cells[0]))
   // // Extract the keys from the first item in the data array
@@ -38,14 +42,14 @@ export function Table({ caption, cells, headers, route }: TableProps) {
         </thead>
 
         <tbody role="rowgroup">
-          {cells.map((item: any, index: number) => (
-            <tr key={index} role="row">
+          {cells.map((item: any, i: number) => (
+            <tr key={i} role="row">
               {keys.map((key: string) => (
                 <td key={key} data-cell={key} role="cell">
                   {route && linkterms.includes(key) ? (
                     <Link href={`${route}/${item['id']}`}> {key} </Link>
                   ) : (
-                    item[key]
+                    item[key] + 'supfam' 
                   )}
                 </td>
               ))}

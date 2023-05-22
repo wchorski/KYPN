@@ -14,7 +14,7 @@ export default function Account() {
     <>
 
       <h1>Account | {session.name}</h1>
-      <AccountDetails session={session} />
+      <AccountDetails {...session.user} />
 
     </>
   )
