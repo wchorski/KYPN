@@ -1961,6 +1961,7 @@ type Event {
   ticketsCount(where: TicketWhereInput! = {}): Int
   seats: Int
   photo: String
+  description: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -1988,6 +1989,7 @@ input EventWhereInput {
   tickets: TicketManyRelationFilter
   seats: IntFilter
   photo: StringFilter
+  description: StringFilter
   status: StringNullableFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
@@ -2003,6 +2005,7 @@ input EventOrderByInput {
   price: OrderDirection
   seats: OrderDirection
   photo: OrderDirection
+  description: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -2018,6 +2021,7 @@ input EventUpdateInput {
   tickets: TicketRelateToManyForUpdateInput
   seats: Int
   photo: String
+  description: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2040,6 +2044,7 @@ input EventCreateInput {
   tickets: TicketRelateToManyForCreateInput
   seats: Int
   photo: String
+  description: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2051,7 +2056,7 @@ type Ticket {
   id: ID!
   qrcode: String
   event: Event
-  user: User
+  holder: User
   status: String
 }
 
@@ -2066,7 +2071,7 @@ input TicketWhereInput {
   id: IDFilter
   qrcode: StringFilter
   event: EventWhereInput
-  user: UserWhereInput
+  holder: UserWhereInput
   status: StringNullableFilter
 }
 
@@ -2079,7 +2084,7 @@ input TicketOrderByInput {
 input TicketUpdateInput {
   qrcode: String
   event: EventRelateToOneForUpdateInput
-  user: UserRelateToOneForUpdateInput
+  holder: UserRelateToOneForUpdateInput
   status: String
 }
 
@@ -2097,7 +2102,7 @@ input TicketUpdateArgs {
 input TicketCreateInput {
   qrcode: String
   event: EventRelateToOneForCreateInput
-  user: UserRelateToOneForCreateInput
+  holder: UserRelateToOneForCreateInput
   status: String
 }
 

@@ -8,6 +8,7 @@ import SliderSlick from "../components/blocks/SliderSlick";
 import { FlexList } from "../components/elements/FlexList";
 import { Section } from "../components/elements/Section";
 import { EventCard } from "../components/events/EventCard";
+import EventList from "../components/events/EventList";
 
 const slides = [
   {
@@ -275,9 +276,10 @@ export default function HomePage() {
 
     <Section bg="/assets/textures/pexels-sasha-martynov-1260727.jpg">
       <h2> Events </h2>
-      {events.map((event, i) => (
+      {/* {events.map((event, i) => (
         <EventCard {...event} key={i}/>
-      ))}
+      ))} */}
+      <EventList page={1}/>
     </Section>
     
     <Section>
