@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client"
+import { useQuery, gql, useMutation } from "@apollo/client"
 import { perPage } from "../../config"
 import { QueryError } from "../menus/QueryError"
 import { QueryLoading } from "../menus/QueryLoading"
@@ -11,7 +11,8 @@ import Link from "next/link"
 import { StyledEventCard } from "../events/EventCard"
 import TicketPopup from "../events/TicketPopup"
 import { useState } from "react"
-import { User } from "../../lib/types"
+import { Ticket, User } from "../../lib/types"
+import { QUERY_USER_SINGLE } from "./UserSingle"
 
 
 type Props = {
@@ -26,10 +27,13 @@ type RSVPData = {
 
 export function UserEvents({user, page = 1}:Props) {
 
+  const [animTrig, setAnimTrig] = useState(0)
   const [isShown, setIsShown] = useState(false)
   const [pickedEvent, setPickedEvent] = useState<Event|undefined>(undefined)
   const [ticketIds, setTicketIds] = useState(user.tickets.map(t => t.event.id))
   // const [pickedUser, setPickedUser] = useState('')
+
+  const [deleteTicket, {loading: loadingTicket, error: errorTicket, data: dataTicket}] = useMutation(DELETE_TICKET)
   
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
@@ -43,6 +47,32 @@ export function UserEvents({user, page = 1}:Props) {
     },
   })
 
+  async function handleTicketDelete(id:string){
+    console.log({id});
+    
+
+    try {
+      const res = await deleteTicket({
+        variables: {
+          where: {
+            id: id
+          }
+        },
+        refetchQueries:  [{ query: QUERY_USER_SINGLE, variables: { where: { id: user.id }}, }],
+        // update: handleUpdate,
+      })
+
+      setAnimTrig(animTrig + 1)
+      
+    } catch (error) {
+      console.warn('ticket delete error: ', error)
+    }
+  }
+
+  function handleUpdate(cache:any, payload:any) {
+    cache.evict(cache.identify(payload.data.deleteTicket))
+  }
+
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 
@@ -53,6 +83,20 @@ export function UserEvents({user, page = 1}:Props) {
 
       <h2>Admin Events Quick Edit</h2>
 
+      <h3>User Tickets </h3>
+
+      <ul key={animTrig}>
+        {user.tickets.map((tic:Ticket) => (
+          <li key={tic.id}>
+            <h4>{tic?.event?.summary}</h4>
+            <button onClick={() => handleTicketDelete(tic.id)} disabled={loadingTicket ? true : false}>
+              remove
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      {/* // todo compare and only show events not attending */}
       <ul>
         {data.events.map((event:any) => (
           <li key={event.id}>
@@ -95,11 +139,13 @@ export function UserEvents({user, page = 1}:Props) {
                 </label> */}
 
                 {ticketIds.includes(event.id) ? (
-                  <button> Remove </button>
+                  <p> 
+                    Attending 
+                  </p>
                 ) : (
                   <button 
                     className="button" 
-                    onClick={() => {setPickedEvent(event); setIsShown(true)}}
+                    onClick={() => {setPickedEvent(event); setIsShown(true); setTicketIds(prev => [...prev, event.id])}}
                   > 
                     RSVP 
                   </button>
@@ -114,3 +160,12 @@ export function UserEvents({user, page = 1}:Props) {
     </div>
   )
 }
+
+
+const DELETE_TICKET = gql`
+  mutation Mutation($where: TicketWhereUniqueInput!) {
+    deleteTicket(where: $where) {
+      id
+    }
+  }
+`

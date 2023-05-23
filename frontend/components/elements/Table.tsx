@@ -47,9 +47,9 @@ export function Table({ caption, cells, headers, route }: TableProps) {
               {keys.map((key: string) => (
                 <td key={key} data-cell={key} role="cell">
                   {route && linkterms.includes(key) ? (
-                    <Link href={`${route}/${item['id']}`}> {key} </Link>
+                    <Link href={`${route}/${item[key]}`}> {key} </Link>
                   ) : (
-                    item[key] + 'supfam' 
+                    item[key]
                   )}
                 </td>
               ))}
@@ -96,6 +96,7 @@ const StyledTable = styled.table`
   color: white;
   border-collapse: collapse;
   padding: 1rem;
+  width: 100%;
 
   th, td, caption {
     padding: .1rem 1rem;

@@ -5,6 +5,8 @@ import { useRef, useEffect, Dispatch, SetStateAction } from 'react'
 import { RiCloseFill } from 'react-icons/ri'
 import styled from 'styled-components'
 import { Event, User } from '../../lib/types'
+import { QUERY_EVENTS_ALL } from './EventList'
+import { QUERY_USER_SINGLE } from '../user/UserSingle'
 
 type Props = {
   isShown: boolean,
@@ -45,7 +47,8 @@ export default function TicketPopup({isShown, setIsShown, event, user}:Props) {
               }
             },
           }
-        }
+        },
+        refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },]
       })
 
       console.log('tieckt success, ', {res});
