@@ -11,7 +11,7 @@ import { QUERY_USER_SINGLE } from '../user/UserSingle'
 type Props = {
   isShown: boolean,
   setIsShown: Dispatch<SetStateAction<boolean>>,
-  event?: Event|undefined,
+  event?: Event,
   user?: User|undefined,
 }
 

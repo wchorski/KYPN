@@ -85,7 +85,19 @@ export const StyledForm = styled.form`
       background-size: 50% auto;
       animation: ${loading} 0.5s linear infinite;
     }
+
+    &.radio-cont{
+      background-color: orange;
+      display: flex;
+      flex-direction: column;
+
+      input[type='radio']{
+        width: inherit;
+      }
+    }
   }
+
+  
 
   textarea{
     min-height: 10em;
