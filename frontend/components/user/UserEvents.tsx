@@ -29,7 +29,7 @@ export function UserEvents({user, page = 1}:Props) {
 
   const [animTrig, setAnimTrig] = useState(0)
   const [isShown, setIsShown] = useState(false)
-  const [pickedEvent, setPickedEvent] = useState<Event|undefined>(undefined)
+  const [pickedEvent, setPickedEvent] = useState()
   const [ticketIds, setTicketIds] = useState(user.tickets.map(t => t.event.id))
   // const [pickedUser, setPickedUser] = useState('')
 

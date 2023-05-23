@@ -26,12 +26,12 @@ export default function EventSingle({id}:{id:string}) {
 
   // console.log(data);
   
-  const {photo, summary, description, tickets, price}:Event = data?.event
+  const {photo, summary, description, tickets = [], price}:Event = data?.event
   
   return (
     <StyledEventSingle>
 
-      <TicketPopup setIsShown={setIsShown} isShown={isShown} eventId={id}/>
+      <TicketPopup setIsShown={setIsShown} isShown={isShown} event={data?.event}/>
 
       <aside>
         <div className="cont">

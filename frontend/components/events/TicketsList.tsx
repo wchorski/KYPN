@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import { Ticket, TicketStatus } from '../../lib/types'
 import { gql, useMutation } from "@apollo/client";
 import useForm from '../../lib/useForm';
+import ErrorMessage from '../ErrorMessage';
+import { QueryLoading } from '../menus/QueryLoading';
+import { StyledForm } from '../../styles/Form.styled';
 
 type Props ={ 
   tickets:Ticket[]
@@ -34,7 +37,7 @@ export default function TicketsList({tickets = []}:Props) {
         }
       })
 
-      console.log({res})
+      // console.log({res})
 
       
     } catch (error) {
@@ -43,27 +46,30 @@ export default function TicketsList({tickets = []}:Props) {
     
   }
 
-  const [updateTicket, {loading, error, data}] = useMutation(UPDATE_TICKET)
+  const [updateTicket, {loading, error}] = useMutation(UPDATE_TICKET)
 
 
+  if (loading) return <QueryLoading />
+  if (error) return <ErrorMessage error={error} />
+  
   if(tickets.length === 0) return (
     <p> no tickets have been purchased for this event </p>
   )
 
   return (
     <StyledTicketList>
-      {tickets.map(t => (
-        <li key={t.id} className='card'>
+      {tickets.map((t, i) => (
+        <li key={i} className='card'>
           <div>
             <span>{t.holder?.name}</span> <br />
             <span>{t.holder?.email}</span>
           </div>
 
-        <form onSubmit={e => handleSubmit(e, t.id)}>
-          <fieldset>
+        <StyledForm onSubmit={e => handleSubmit(e, t.id)}>
+          <fieldset disabled={loading} className='radio-cont'>
             <legend>status</legend>
-            {TicketStatus.map((stat, i) => (<>
-              <label htmlFor="status">
+            {TicketStatus.map((stat, i) => (
+              <label htmlFor="status" key={i}>
                 <input 
                   type="radio"
                   name="status"  
@@ -76,15 +82,14 @@ export default function TicketsList({tickets = []}:Props) {
                 {stat.value === t.status ? <strong>{stat.label}</strong> : <span> {stat.label} </span>}
                 {/* <span> {stat.label} </span> */}
               </label>
-              <br />
-            </>))}
+            ))}
           </fieldset>
 
-          <button type='submit'>
+          <button type='submit' disabled={loading}>
             Update
           </button>
 
-        </form>
+        </StyledForm>
 
         </li>
       ))}

@@ -306,7 +306,7 @@ export type Event = {
   end?:string,
   price?:number,
   employees?:User[],
-  tickets?: any[],
+  tickets?: Ticket[],
   seats?:number,
   photo?:string,
   description?: string,
