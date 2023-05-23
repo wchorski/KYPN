@@ -29,7 +29,7 @@ export function UserSingle({id}:{id:string}) {
 }
 
 
-const QUERY_USER_SINGLE = gql`
+export const QUERY_USER_SINGLE = gql`
   query User($where: UserWhereUniqueInput!) {
     user(where: $where) {
       id
