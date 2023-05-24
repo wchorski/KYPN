@@ -7,83 +7,144 @@ import styled from 'styled-components'
 import { Event, User } from '../../lib/types'
 import { QUERY_EVENTS_ALL } from './EventList'
 import { QUERY_USER_SINGLE } from '../user/UserSingle'
+import { QUERY_EVENT } from './EventSingle'
 
 type Props = {
-  isShown: boolean,
-  setIsShown: Dispatch<SetStateAction<boolean>>,
+  isPopup: boolean,
+  setIsPopup: Dispatch<SetStateAction<boolean>>,
   event?: Event,
   user?: User|undefined,
+  setAnimTrig:Dispatch<SetStateAction<number>>,
+  isDelete?:boolean,
+  ticketId?:string,
 }
 
-export default function TicketPopup({isShown, setIsShown, event, user}:Props) {
+export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=true, ticketId=''}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
-  const [mutate, { loading }] = useMutation(MUTATE_TICKET_CREATE)
+  const [createTicket, { loading }] = useMutation(MUTATE_TICKET_CREATE)
+  const [deleteTicket, { loading: loadingDelete }] = useMutation(TICKET_DELETE)
 
   function handleOnClick(e:React.MouseEvent<HTMLDialogElement, MouseEvent>) {
     e.stopPropagation()
     const { left, right, top, bottom } = e.currentTarget.getBoundingClientRect();
     // if clicked outside of modal's rect
     if (e.clientX < left || e.clientX > right || e.clientY < top || e.clientY > bottom) {
-      setIsShown(false)
+      setIsPopup(false)
     }
   }
 
   async function handleSubmit(e:any) {
     // e.preventDefault()
-    try {
-      const res = await mutate({
-        variables: {
-          data: {
-            event: {
-              connect: {
-                id: event?.id || '',
-              }
-            },
-            holder: {
-              connect: {
-                id: user?.id || '',
-              }
-            },
-          }
-        },
-        refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },]
-      })
 
-      console.log('tieckt success, ', {res});
-      setIsShown(false)
+    if(isDelete){
+      try {
+        const res = await deleteTicket({
+          variables: {
+            where: { id: ticketId }
+          },
+          refetchQueries: [
+            { query: QUERY_EVENTS_ALL, variables: {orderBy: [{start: 'desc'}] } }, 
+            { query: QUERY_EVENT, variables: { where: { id: event?.id }}, }, 
+            { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },
+          ]
+        })
+  
+        console.log('tieckt success, ', {res});
+        setIsPopup(false)
+        setAnimTrig(prev => prev + 1)
+  
+      } catch (err) {
+        console.warn('ticket error: ', err);
+      }
+    }
 
-    } catch (err) {
-      console.warn('ticket error: ', err);
-      
+    if(!isDelete){
+      try {
+        const res = await createTicket({
+          variables: {
+            data: {
+              event: {
+                connect: {
+                  id: event?.id || '',
+                }
+              },
+              holder: {
+                connect: {
+                  id: user?.id || '',
+                }
+              },
+            }
+          },
+          refetchQueries: [
+            { query: QUERY_EVENTS_ALL, variables: {orderBy: [{start: 'desc'}] } }, 
+            { query: QUERY_EVENT, variables: { where: { id: event?.id }}, }, 
+            { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },
+          ]
+        })
+  
+        console.log('tieckt success, ', {res});
+        setIsPopup(false)
+        setAnimTrig(prev => prev + 1)
+  
+      } catch (err) {
+        console.warn('ticket error: ', err);
+      }
     }
   }
   
   useEffect(() => {
-    if(isShown) return ticketPopupRef.current?.showModal()
-    if(!isShown) return ticketPopupRef.current?.close()
+    if(isPopup) return ticketPopupRef.current?.showModal()
+    if(!isPopup) return ticketPopupRef.current?.close()
     // return () =>
-  }, [isShown])
+  }, [isPopup])
   
   
+  if(isDelete) return (
+    <StyledPopup 
+      ref={ticketPopupRef}
+      onClick={handleOnClick}
+    >
+      <button onClick={e => setIsPopup(false)} disabled={loading}> 
+        <RiCloseFill />
+      </button>
+
+      <h2> Purchase Ticket </h2>
+
+      <h3>{event?.summary}</h3>
+
+      <ul>
+        <li>User Name: {user?.name}</li>
+        <li>User Email: {user?.email}</li>
+      </ul>
+
+      <button disabled={loading} onClick={handleSubmit}> 
+        {loading ? 'Wait...' : 'Assign Ticket'}
+      </button>
+    </StyledPopup>
+  )
+
   return (
     <StyledPopup 
       ref={ticketPopupRef}
       onClick={handleOnClick}
     >
-      <button onClick={e => setIsShown(false)} disabled={loading}> 
+      <button onClick={e => setIsPopup(false)} disabled={loading}> 
         <RiCloseFill />
       </button>
-      <h2> Purchase Tickets </h2>
+
+      <h2> REMOVE Ticket </h2>
+
+      <h3>{event?.summary}</h3>
+
       <ul>
-        <li>{user?.name}</li>
-        <li>{user?.email}</li>
-        <li>{event?.summary}</li>
+        <li>User Name: {user?.name}</li>
+        <li>User Email: {user?.email}</li>
       </ul>
 
       <button disabled={loading} onClick={handleSubmit}> 
-        {loading ? 'Wait' : 'Buy'}
+        {loading ? 'Wait...' : 'Assign Ticket'}
       </button>
     </StyledPopup>
   )
@@ -110,6 +171,18 @@ const MUTATE_TICKET_CREATE = gql`
         id
       }
       id
+    }
+  }
+`
+
+const TICKET_DELETE = gql`
+  mutation Mutation($where: TicketWhereUniqueInput!) {
+    deleteTicket(where: $where) {
+      id
+      holder {
+        id
+        name
+      }
     }
   }
 `

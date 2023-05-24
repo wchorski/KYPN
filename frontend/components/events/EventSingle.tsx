@@ -7,14 +7,17 @@ import { QueryLoading } from "../menus/QueryLoading"
 import ErrorMessage from "../ErrorMessage"
 import TicketPopup from "./TicketPopup"
 import { useRef, useState } from "react"
-import { Event } from "../../lib/types"
+import { Event, User } from "../../lib/types"
 import TicketsList from "./TicketsList"
 import moneyFormatter from "../../lib/moneyFormatter"
 import styled from "styled-components"
+import { SearchUserTicket } from "../../pages/events/SearchUserTicket"
 
 export default function EventSingle({id}:{id:string}) {
 
-  const [isShown, setIsShown] = useState(false)
+  const [isPopup, setIsPopup] = useState(false)
+  const [animTrig, setAnimTrig] = useState(0)
+  const [pickedUser, setPickedUser] = useState<User>()
 
   const { loading, error, data } = useQuery(
     QUERY_EVENT, {
@@ -31,7 +34,13 @@ export default function EventSingle({id}:{id:string}) {
   return (
     <StyledEventSingle>
 
-      <TicketPopup setIsShown={setIsShown} isShown={isShown} event={data?.event}/>
+      <TicketPopup 
+        setIsPopup={setIsPopup} 
+        isPopup={isPopup} 
+        event={data?.event} 
+        user={pickedUser}
+        setAnimTrig={setAnimTrig}
+      />
 
       <aside>
         <div className="cont">
@@ -53,7 +62,7 @@ export default function EventSingle({id}:{id:string}) {
             <small>sub text</small> 
           </div>
 
-          <button onClick={() => setIsShown(true)} className="ticket"> 
+          <button onClick={() => setIsPopup(true)} className="ticket"> 
             <span>{moneyFormatter(price)}</span>
             per Ticket
           </button>
@@ -64,7 +73,10 @@ export default function EventSingle({id}:{id:string}) {
         <p>{description}</p>
 
         <h2>All Ticket Holders</h2>
-        <TicketsList tickets={tickets}/>
+        <TicketsList tickets={tickets} key={animTrig}/>
+
+        <h2>Edit Attendees</h2>
+        <SearchUserTicket ticketId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser}/>
 
       </article>
     </StyledEventSingle>
@@ -99,7 +111,7 @@ const StyledEventSingle = styled.div`
 `
 
 
-const QUERY_EVENT = gql`
+export const QUERY_EVENT = gql`
   query Event($where: EventWhereUniqueInput!) {
     event(where: $where) {
       categories {
