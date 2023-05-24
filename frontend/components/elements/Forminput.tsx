@@ -35,6 +35,7 @@ export const FormInput = (props:any) => {
     </StyledInputLabel>
   )
 
+  // ? for any other input type
   return (
     <StyledInputLabel className="formInput" htmlFor={inputProps.name}>
       <span className="label"> {label} </span>
@@ -61,7 +62,7 @@ const StyledInputLabel = styled.label`
 
   .formInput{
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     width: 280px;
   }
 
@@ -80,6 +81,9 @@ const StyledInputLabel = styled.label`
   /* input, select {
     max-width: 20rem;
   } */
+  label{
+    display: block;
+  }
   
   span.label{
     background-color: var(--c-3);
@@ -87,10 +91,11 @@ const StyledInputLabel = styled.label`
     border-radius: 3px;
     font-size: .8rem;
     padding: 0 8px;
+    /* display: block; */
     position: absolute;
-    left: 1%;
-    top: 0;
-    /* top: 50%; */
+    white-space: nowrap;
+    
+    left: 5px;
     transform: translateY(-20%)
     
   }
@@ -123,17 +128,12 @@ const StyledInputLabel = styled.label`
   }
 
   input:invalid[focused="true"] ~ span{
-    /* display: block; */
     max-height: 30px;
   }
 
   textarea{
     min-height: 10em;
-    padding: 1.5em;
-  }
-
-  input[type="datetime-local"]{
-    cursor: pointer;
+    padding: 2em 1em;
   }
 `
 

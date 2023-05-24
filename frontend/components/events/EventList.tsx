@@ -5,7 +5,7 @@ import { QueryError } from '../menus/QueryError'
 import { perPage } from '../../config';
 import { EventCard } from './EventCard';
 import styled from 'styled-components';
-// import { Event } from '../../lib/types';
+import { Event } from '../../lib/types';
 
 type Props = {
   page: number

@@ -19,7 +19,7 @@ export default function TicketPopup({isShown, setIsShown, event, user}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
-  const [mutate, { loading }] = useMutation(MUTATE_TICKET_ADD)
+  const [mutate, { loading }] = useMutation(MUTATE_TICKET_CREATE)
 
   function handleOnClick(e:React.MouseEvent<HTMLDialogElement, MouseEvent>) {
     e.stopPropagation()
@@ -100,7 +100,7 @@ const StyledPopup = styled.dialog`
   }
 `
 
-const MUTATE_TICKET_ADD = gql`
+const MUTATE_TICKET_CREATE = gql`
   mutation CreateTicket($data: TicketCreateInput!) {
     createTicket(data: $data) {
       holder {
