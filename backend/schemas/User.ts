@@ -42,6 +42,7 @@ export const User = list({
     // by adding isRequired, we enforce that every User should have a name
     //   if no name is provided, an error will be displayed
     name: text({ validation: { isRequired: true } }),
+    nameLast: text(),
 
     email: text({
       validation: { isRequired: true },

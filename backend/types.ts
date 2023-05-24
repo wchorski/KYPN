@@ -137,6 +137,7 @@ export type OrderItem = {
 export type User = {
   id: string,
   name: string,
+  nameLast:string,
   email: string,
   password: string,
   isAdmin: boolean,

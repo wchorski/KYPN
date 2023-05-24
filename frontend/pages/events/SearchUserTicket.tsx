@@ -1,30 +1,30 @@
 import Image from "next/image";
 import { resetIdCounter, useCombobox } from "downshift";
 import { useLazyQuery, gql } from "@apollo/client";
-import { useMemo, useState, useEffect, useRef } from "react";
-// import { debounce } from "lodash";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled";
-import { MdClose, MdSearch } from "react-icons/md";
-import { handlePhoto } from "../../lib/handleProductPhoto"
+
 import styled from "styled-components"
 import { useSearch } from "../../lib/useGlobalContext";
-// const { default: gql } = require("graphql-tag");
+import { Ticket, User } from "../../lib/types";
 
-export function SearchInput() {
+type Props = {
+  ticketId:string
+  setIsPopup:Dispatch<SetStateAction<boolean>>,
+  setPickedUser: Dispatch<SetStateAction<User|undefined>>,
+}
+
+export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Props) {
 
   const searchInputRef = useRef<HTMLInputElement>(null)
-
   const [inputItems, setInputItems] = useState([])
   const [inputValue, setInputValue] = useState<any>()
-  const { isSearchOpen, openSearch, closeSearch, setisSearchOpen } = useSearch()
 
-  const [findItems, { loading, data, error }] = useLazyQuery(
-    SEARCH_PRODUCTS_QUERY,
-    {
-      fetchPolicy: 'no-cache',
-    }
-  );
+  const [searchUsers, { loading, data, error }] = useLazyQuery(
+    QUERY_USERS_SEARCH,
+    {fetchPolicy: 'no-cache',}
+  )
 
   resetIdCounter();
 
@@ -49,10 +49,9 @@ export function SearchInput() {
       }
 
       setInputValue(inputValue)
-      findItems(
-        {
+      searchUsers({
           variables: {
-            whereProduct: {
+            where: {
               OR: [
                 {
                   name: {
@@ -61,38 +60,18 @@ export function SearchInput() {
                   }
                 },
                 {
-                  description: {
+                  email: {
                     contains: inputValue,
                     mode: 'insensitive',
                   }
                 },
-                {
-                  tags: {
-                    every: {
-                      name: {
-                        equals: inputValue,
-                        mode: 'insensitive'
-                      }
-                    }
-                  }
-                },
-                // TODO having cats shows all products for some reason
-                // {
-                //   categories: {
-                //     every: {
-                //       name: {
-                //         equals: inputValue,
-                //         mode: 'insensitive'
-                //       }
-                //     }
-                //   }
-                // }
               ]
             },
           }
-        }
-      ).then(({ data }) => {
-        setInputItems(data.products)
+      }).then(({ data }) => {
+        
+        if(!data.users) return console.log('searching users failed');
+        setInputItems(data.users)
       })
     },
     onSelectedItemChange: (state) => {
@@ -107,22 +86,24 @@ export function SearchInput() {
 
   })
 
-  useEffect(() => {
-    if (isSearchOpen) {
-      searchInputRef?.current?.focus()
-    }
+  function handleEventsAttending(tickets:Ticket[]){
+    return tickets.flatMap(t => t.event.id)
+  }
 
-  }, [isSearchOpen])
+  function handlePopup(user:User){
+    setIsPopup(true)
+    setPickedUser(user)
+  }
 
   return (
-    <StyledSearch id="search-cont" className={isSearchOpen ? 'open' : ''}>
+    <StyledSearch id="search-cont" className={'open'}>
 
       <label className="input-cont">
         <input
           {...getInputProps({
             ref: searchInputRef,
             type: 'search',
-            placeholder: 'search...',
+            placeholder: 'search users...',
             id: 'search',
             className: loading ? 'loading' : '',
             onKeyDown: event => {
@@ -146,7 +127,7 @@ export function SearchInput() {
       <StyledDropDown>
         <ul {...getMenuProps()}>
           {
-            inputItems?.map((item: any, index) => (
+            inputItems?.map((item: User, index) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
 
@@ -154,19 +135,33 @@ export function SearchInput() {
                 // @ts-ignore
                 {...getItemProps({ item, index, })}
               >
-                <Link href={`/shop/product/${item.id}`} onClick={() => setisSearchOpen(false)}>
-                  <Image
+                  {/* <Image
                     priority
                     src={handlePhoto(item.photo).image?.url}
                     alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no product photo'}
                     width={80}
                     height={80}
-                  />
+                  /> */}
                   <article>
-                    <h5>{item.name}</h5>
-                    <p className="description">{item.description}</p>
+                    <Link 
+                      href={`/users/${item.id}`} 
+                      // onClick={() => setisSearchOpen(false)}
+                    >
+                      <h5>{item.name} {item.nameLast}</h5>
+                    </Link>
+
+                    <span className="email">{item.email}</span>
+
+                    {handleEventsAttending(item.tickets).includes(ticketId) ? (
+                      <button>
+                        remove
+                      </button>
+                    ) : (
+                      <button onClick={() => handlePopup(item)}>
+                        rsvp
+                      </button>
+                    )}
                   </article>
-                </Link>
 
               </StyledDropDownItem>
             ))}
@@ -178,30 +173,21 @@ export function SearchInput() {
   )
 }
 
-const SEARCH_PRODUCTS_QUERY = gql`
-  query Products($whereProduct: ProductWhereInput!) {
-    products(where: $whereProduct) {
-      name
-      description
+
+const QUERY_USERS_SEARCH = gql`
+  query Users($where: UserWhereInput!) {
+    users(where: $where) {
       id
-      price
-      photo {
-        altText
-        image {
-          publicUrlTransformed
+      name
+      nameLast
+      email
+      tickets {
+        id
+        event {
+          id
+          summary
         }
       }
     }
-  }
-`
-
-const StyledSearchCont = styled.div`
-  background-color: yellow;
-  width: 100%;
-  display: flex;
-
-  input{
-    width: 100%;
-    padding: 1em;
   }
 `
