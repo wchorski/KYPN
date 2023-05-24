@@ -345,3 +345,26 @@ export const TicketStatus = [
     value: TICKET_STATUS.CANCELED,
   },
 ]
+
+export enum INPUT_TYPES {
+  TEXT = 'text',
+  TEXTAREA = 'textarea',
+  TIME = 'time',
+  DATE = 'date',
+  SELECT = 'select',
+  NUMBER = 'number',
+  DATETIME= 'datetime-local',
+}
+
+export type InputObj = {
+  name:string,
+  type: INPUT_TYPES,
+  label: string,
+  placeholder?:string,
+  pattern?:string,
+  minLength?:string,
+  maxLength?:string
+  errorMessage:string,
+  required: boolean,
+  initial: string
+}

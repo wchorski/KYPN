@@ -10,6 +10,6 @@ export default function EventsPage() {
   return (<>
     <h1>Events</h1>
     <EventList page={Number(query.page) || 1} />
-    <Pagination route='/shop' page={Number(query.page) || 1} />
+    <Pagination route='/events' page={Number(query.page) || 1} />
   </>)
 }
