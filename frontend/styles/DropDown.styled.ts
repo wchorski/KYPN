@@ -11,7 +11,6 @@ export const StyledDropDown = styled.div`
     list-style: none;
     margin: 0;
     padding: 0;
-    box-shadow: #00000022 3px 3px 3px 10px;
     background-color: var(--c-txt-rev);
     z-index: 9999999;
   }
@@ -22,14 +21,22 @@ export const StyledDropDownItem = styled.li`
   border-bottom: 1px solid grey;
   background: ${(props) => (props.highlighted ? 'whitesmoke' : 'white')};
 
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  ${(props) => (props.highlighted ? 'padding-left: 2rem;' : null)};
+  transition: all 0.2s;
+  /* border-left: 10px solid white; */
+  ${(props) => (props.highlighted ? 'border-left: 10px solid white;' : '')} 
+  padding: 1rem;
+  
+  /* div.meta{
+    margin-left: 2em;
+  } */
+
   a{
-    padding: 1rem;
-    transition: all 0.2s;
-    ${(props) => (props.highlighted ? 'padding-left: 2rem;' : null)};
-    display: flex;
+    /* display: flex; */
     align-items: center;
-    border-left: 10px solid
-    ${(props) => (props.highlighted ? props.theme.lightgrey : 'white')};
   }
 
 
@@ -45,6 +52,10 @@ export const StyledDropDownItem = styled.li`
     text-decoration: none;
     color: var(--c-txt);
     font-size: 1rem;
+  }
+
+  .edit-button-cont{
+    margin: 0 1em 0 auto;
   }
 `;
 
@@ -88,6 +99,20 @@ export const StyledSearch = styled.div`
 
     &.loading {
       animation: ${glow} 0.5s ease-in-out infinite alternate;
+    }
+  }
+
+  /* ul{
+    opacity: .3;
+    pointer-events: none;
+  } */
+
+  &:has(input:focus){
+    
+    ul{
+      opacity: 1;
+      pointer-events: all;
+      box-shadow: #00000022 3px 3px 3px 10px;
     }
   }
 `

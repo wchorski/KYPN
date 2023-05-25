@@ -50,7 +50,7 @@ export const StyledForm = styled.form`
   button,
   input[type='submit'] {
     width: auto;
-    background: var(--c-1);
+    background: var(--c-3);
     color: white;
     border: 0;
     font-size: 2rem;
@@ -87,7 +87,6 @@ export const StyledForm = styled.form`
     }
 
     &.radio-cont{
-      background-color: orange;
       display: flex;
       flex-direction: column;
 

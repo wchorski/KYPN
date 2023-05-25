@@ -1,56 +1,26 @@
-import React, { FormEvent } from 'react'
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
-import { Ticket, TicketStatus } from '../../lib/types'
+import { Ticket } from '../../lib/types'
 import { gql, useMutation } from "@apollo/client";
 import useForm from '../../lib/useForm';
 import ErrorMessage from '../ErrorMessage';
 import { QueryLoading } from '../menus/QueryLoading';
-import { StyledForm } from '../../styles/Form.styled';
+import { CgMenuRound } from "react-icons/cg";
+import { TicketListItem } from './TicketListItem';
+import { tTicketPopup } from './TicketPopup';
 
 type Props ={ 
-  tickets:Ticket[]
+  tickets:Ticket[],
+  setIsPopup: Dispatch<SetStateAction<boolean>>,
+  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
 }
 
-export default function TicketsList({tickets = []}:Props) {
+export default function TicketsList({tickets = [], setIsPopup, setTicketPopupData}:Props) {
   
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     id: '',
     status: '',
   })
-
-
-  async function handleSubmit(e:FormEvent<HTMLFormElement>, id:string){
-    e.preventDefault()
-
-    console.log({inputs});
-    
-
-    try {
-      const res = await updateTicket({
-        variables: {  
-          where: {
-            id: id
-          },
-          data: {
-            status: inputs.status
-          }
-        }
-      })
-
-      // console.log({res})
-
-      
-    } catch (error) {
-      console.warn('ticket update error, ', error)
-    }
-    
-  }
-
-  const [updateTicket, {loading, error}] = useMutation(UPDATE_TICKET)
-
-
-  if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
   
   if(tickets.length === 0) return (
     <p> no tickets have been purchased for this event </p>
@@ -58,45 +28,12 @@ export default function TicketsList({tickets = []}:Props) {
 
   return (
     <StyledTicketList>
-      {tickets.map((t, i) => (
-        <li key={i} className='card'>
-          <div>
-            <span>{t.holder?.name}</span> <br />
-            <span>{t.holder?.email}</span>
-          </div>
-
-        <StyledForm onSubmit={e => handleSubmit(e, t.id)}>
-          <fieldset disabled={loading} className='radio-cont'>
-            <legend>status</legend>
-            {TicketStatus.map((stat, i) => (
-              <label htmlFor="status" key={i}>
-                <input 
-                  type="radio"
-                  name="status"  
-                  id={stat.value + '-' + i}
-                  value={stat.value}
-                  defaultChecked={stat.value === t.status ? true : false}
-                  onChange={handleChange}
-                  // checked={stat.value === t.status ? true : false}
-                />
-                {stat.value === t.status ? <strong>{stat.label}</strong> : <span> {stat.label} </span>}
-                {/* <span> {stat.label} </span> */}
-              </label>
-            ))}
-          </fieldset>
-
-          <button type='submit' disabled={loading}>
-            Update
-          </button>
-
-        </StyledForm>
-
-        </li>
+      {tickets.map(ticket => (
+        <TicketListItem ticket={ticket} key={ticket.id} setIsPopup={setIsPopup} setTicketPopupData={setTicketPopupData}/>
       ))}
     </StyledTicketList>
   )
 }
-
 
 const StyledTicketList = styled.ul`
   
@@ -107,6 +44,8 @@ const StyledTicketList = styled.ul`
     margin-bottom: 1em;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    line-height: normal;
 
     /* label span{
       text-transform: lowercase;  
@@ -116,13 +55,49 @@ const StyledTicketList = styled.ul`
       text-transform: uppercase;
     } */
   }
-`
 
-const UPDATE_TICKET = gql`
-  mutation UpdateTicket($where: TicketWhereUniqueInput!, $data: TicketUpdateInput!) {
-    updateTicket(where: $where, data: $data) {
-      id
-      status
+  /* button.edit{
+    position: relative;
+    border-radius: 50px;
+    padding: .1em;
+    border: none;
+    margin-right: -2rem;
+    margin-left: 1rem;
+    background-color: var(--c-3);
+    transition: all .3s;
+
+
+    &:hover, &:focus{
+      color: var(--c-txt-rev);
+      box-shadow: black 1px 1px 1px;
+      transform: translateY(-2px);
     }
-  }
+
+    svg{
+      font-size: 3rem;
+    }
+
+    &::before{
+      --scale: 0;
+      content: attr(data-tooltip);
+      position: absolute;
+      top: -.25rem;
+      left: 50%;
+      height: 25px;
+      background-color: var(--c-txt);
+      color: var(--c-txt-rev);
+      transform: translate(-50%, -100%) scale(var(--scale));
+      padding: .5rem;
+      width: max-content;
+      max-width: 100%;
+      border-radius: .3rem;
+      text-align: center;
+      transition: transform ease-in .1s 1s;
+    }
+
+    &:hover::before, &:focus::before{
+      --scale: 1;
+      transform: translate(-50%, -100%) scale(var(--scale));
+    }
+  } */
 `

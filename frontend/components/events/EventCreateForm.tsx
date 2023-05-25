@@ -1,162 +1,213 @@
 import styled from "styled-components"
-import { INPUT_TYPES, InputObj } from "../../lib/types"
+import { Event, INPUT_TYPES, InputObj } from "../../lib/types"
 import { useState } from "react";
 import useForm2 from "../../lib/useForm2";
 import { FormInput } from "../elements/Forminput";
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
+import { QUERY_EVENTS_ALL } from "./EventList";
+import { QUERY_EVENT } from "./EventSingle";
 
-const inputs:InputObj[] = [
-  {
-    name: 'summary',
-    type: INPUT_TYPES.TEXT,
-    placeholder: '', 
-    label: 'Summary',
-    errorMessage: 'summary error',
-    required: true,
-    initial: '',
-  },
-  {
-    name: 'start',
-    type: INPUT_TYPES.DATETIME,
-    placeholder: '', 
-    label: 'Start',
-    errorMessage: 'start error',
-    required: true,
-    initial: '',
-  },
-  {
-    name: 'end',
-    type: INPUT_TYPES.DATETIME,
-    placeholder: '', 
-    label: 'End',
-    errorMessage: 'end error',
-    required: true,
-    initial: '',
-  },
-  {
-    name: 'price',
-    type: INPUT_TYPES.NUMBER,
-    placeholder: '', 
-    label: 'Price per Ticket',
-    errorMessage: 'price error',
-    required: true,
-    initial: '',
-  },
-  {
-    name: 'seats',
-    type: INPUT_TYPES.NUMBER,
-    placeholder: '', 
-    label: 'Number of Seats',
-    errorMessage: 'seats error',
-    required: true,
-    initial: '',
-  },
-  {
-    name: 'description',
-    type: INPUT_TYPES.TEXTAREA,
-    placeholder: '', 
-    label: 'Description',
-    errorMessage: 'description error',
-    required: false,
-    initial: '',
-  },
-]
+type Props = {
+  event?:Event
+}
 
-export function EventCreateForm() {
+export function EventCreateForm({event}:Props) {
+
+  const router = useRouter()
+  // console.log(event?.start);
+  // console.log(convertISOtoLocale(event?.start));
+  
+
+  const inputs:InputObj[] = [
+    {
+      name: 'summary',
+      type: INPUT_TYPES.TEXT,
+      placeholder: '', 
+      label: 'Summary',
+      errorMessage: 'summary error',
+      required: true,
+      initial: event?.summary || '',
+    },
+    {
+      name: 'start',
+      type: INPUT_TYPES.DATETIME,
+      placeholder: '', 
+      label: 'Start',
+      errorMessage: 'start error',
+      required: true,
+      initial: convertISOtoLocale(event?.start),
+    },
+    {
+      name: 'end',
+      type: INPUT_TYPES.DATETIME,
+      placeholder: '', 
+      label: 'End',
+      errorMessage: 'end error',
+      required: true,
+      initial: convertISOtoLocale(event?.end),
+    },
+    {
+      name: 'price',
+      type: INPUT_TYPES.NUMBER,
+      placeholder: '', 
+      label: 'Price per Ticket',
+      errorMessage: 'price error',
+      required: true,
+      initial: String(event?.price) || '',
+    },
+    {
+      name: 'seats',
+      type: INPUT_TYPES.NUMBER,
+      placeholder: '', 
+      label: 'Number of Seats',
+      errorMessage: 'seats error',
+      required: true,
+      initial: String(event?.seats) || '',
+    },
+    {
+      name: 'description',
+      type: INPUT_TYPES.TEXTAREA,
+      placeholder: '', 
+      label: 'Description',
+      errorMessage: 'description error',
+      required: false,
+      initial: event?.description || '',
+    },
+  ]
 
   const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
 
   const [createEvent, { loading }] = useMutation(EVENT_CREATE)
+  const [updateEvent, { loading: updating, data }] = useMutation(EVENT_UPDATE)
   
   async function handleSubmit(e:any) {
     e.preventDefault()
 
     try {
-
+      
       const formattedValues = {
         ...values,
         ...{
           start: new Date(values.start).toISOString(),
           end: new Date(values.end).toISOString(),
+          seats: Number(values.seats),
+          price: Number(values.price)
         }
       }
-
-      const res = await createEvent({
-        variables: {
-          data: formattedValues
-        },
-        // refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },]
-      })
-
-      console.log('create event success, ', {res});
-      // setIsShown(false)
-
-    } catch (err) {
-      console.warn('create event error: ', err);
       
-    }
-  }
+      // if id exists, then update existing event
+      if(event){
+        const res = await updateEvent({
+          variables: {
+            where: {
+              id: event.id
+            },
+            data: formattedValues,
+            refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_EVENT, variables: { where: { id: event?.id }}, },]
+          },
+        })
+        console.log('update event success, ', {res});
+        router.push(`/events/e/${res.data.updateEvent.id}`)
+
+      } else {
+        const res = await createEvent({
+          variables: {
+            data: formattedValues
+          },
+          // refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },]
+        })
+        console.log('create event success, ', {res});
+        router.push(`/events/e/${res.data.createEvent.id}`)
+      }
+        // setIsShown(false)
   
-  return (
-    <StyledEventForm onSubmit={handleSubmit}>
-      <fieldset>
-        <legend> essential </legend>
+      } catch (err) {
+        console.warn('create event error: ', err);
+      }
+    }
+  
+    return (
+      <StyledEventForm onSubmit={handleSubmit}>
+        <fieldset>
+          <legend> essential </legend>
 
-        <FormInput 
-          {...handleFindProps('summary')}
-          value={values['summary']}
-          onChange={handleChange}
-        />
-
-        <FormInput 
-          {...handleFindProps('start')}
-          value={values['start']}
-          onChange={handleChange}
-        />
-
-        <FormInput 
-          {...handleFindProps('end')}
-          value={values['end']}
-          onChange={handleChange}
-        />
-      </fieldset>
-
-      <fieldset>
-        <legend> Info </legend>
-
-        <FormInput 
-          {...handleFindProps('price')}
-          value={values['price']}
-          onChange={handleChange}
+          <FormInput 
+            {...handleFindProps('summary')}
+            value={values['summary']}
+            onChange={handleChange}
           />
 
-        <FormInput 
-          {...handleFindProps('seats')}
-          value={values['seats']}
-          onChange={handleChange}
+          <FormInput 
+            {...handleFindProps('start')}
+            value={values['start']}
+            // onChange={handleChange}
+            onChange={(e:any) => {
+              handleChange(e)
+              console.log(e.target.value);
+              
+            }}
           />
 
-        <FormInput 
-          className='textarea'
-          {...handleFindProps('description')}
-          value={values['description']}
-          onChange={handleChange}
-        />
-      </fieldset>
+          <FormInput 
+            {...handleFindProps('end')}
+            value={values['end']}
+            onChange={handleChange}
+          />
+        </fieldset>
 
-      <button type="submit" disabled={loading}>
-        Create Event
-      </button>
+        <fieldset>
+          <legend> Info </legend>
 
-    </StyledEventForm>
-  )
-}
+          <FormInput 
+            {...handleFindProps('price')}
+            value={values['price']}
+            onChange={handleChange}
+            />
+
+          <FormInput 
+            {...handleFindProps('seats')}
+            value={values['seats']}
+            onChange={handleChange}
+            />
+
+          <FormInput 
+            className='textarea'
+            {...handleFindProps('description')}
+            value={values['description']}
+            onChange={handleChange}
+          />
+        </fieldset>
+
+        <button type="submit" disabled={loading || updating} className="medium">
+          {event ? 'Update' : 'Create'} Event
+        </button>
+
+      </StyledEventForm>
+    )
+  }
 
 
 const EVENT_CREATE = gql`
   mutation Mutation($data: EventCreateInput!) {
     createEvent(data: $data) {
       id
+    }
+  }
+`
+
+const EVENT_UPDATE = gql`
+  mutation UpdateEvent($where: EventWhereUniqueInput!, $data: EventUpdateInput!) {
+    updateEvent(where: $where, data: $data) {
+      id
+      summary
+      start
+      end
+      price
+      seats
+      status
+      description
+      dateModified
     }
   }
 `
@@ -212,3 +263,23 @@ const StyledEventForm = styled.form`
     }
   }
 `
+
+function convertISOtoLocale(isoString:string|undefined){
+
+  if(!isoString) return ''
+
+  const date = new Date(isoString);
+
+  const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    // timeZone: 'local',
+  };
+
+  // @ts-ignore
+  return date.toLocaleString('en-CA', options).replace(', ', 'T');
+}
