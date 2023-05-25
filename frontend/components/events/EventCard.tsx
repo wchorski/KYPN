@@ -101,6 +101,10 @@ export const StyledEventCard = styled.article`
     }    
   }
 
+  a.button{
+    margin-left: auto;
+  }
+
   svg{
     margin-right: .2em;
   }

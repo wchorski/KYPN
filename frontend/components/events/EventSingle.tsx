@@ -5,17 +5,22 @@ import Image from "next/image"
 import { ImageDynamic } from "../elements/ImageDynamic"
 import { QueryLoading } from "../menus/QueryLoading"
 import ErrorMessage from "../ErrorMessage"
-import TicketPopup from "./TicketPopup"
+import TicketPopup, { tTicketPopup } from "./TicketPopup"
 import { useRef, useState } from "react"
-import { Event, User } from "../../lib/types"
+import { Event, Ticket, User } from "../../lib/types"
 import TicketsList from "./TicketsList"
 import moneyFormatter from "../../lib/moneyFormatter"
 import styled from "styled-components"
 import { SearchUserTicket } from "../../pages/events/SearchUserTicket"
+import { datePrettyLocalDay } from "../../lib/dateFormatter"
+import { RiFileEditFill } from "react-icons/ri"
+import Link from "next/link"
+
 
 export default function EventSingle({id}:{id:string}) {
 
   const [isPopup, setIsPopup] = useState(false)
+  const [ticketPopupData, setTicketPopupData] = useState<tTicketPopup>()
   const [animTrig, setAnimTrig] = useState(0)
   const [pickedUser, setPickedUser] = useState<User>()
 
@@ -29,12 +34,14 @@ export default function EventSingle({id}:{id:string}) {
 
   // console.log(data);
   
-  const {photo, summary, description, tickets = [], price}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, seats}:Event = data?.event
   
   return (
     <StyledEventSingle>
 
       <TicketPopup 
+        ticketPopupData={ticketPopupData}
+        setTicketPopupData={setTicketPopupData}
         setIsPopup={setIsPopup} 
         isPopup={isPopup} 
         event={data?.event} 
@@ -48,11 +55,19 @@ export default function EventSingle({id}:{id:string}) {
             <ImageDynamic photoIn={photo} />
           </picture>
           <strong>{summary}</strong>
+          <br />
+          <small>{datePrettyLocalDay(start || '')}</small>
         </div>
       </aside>
 
       <article>
-        <h1>{summary}</h1>
+        <header>
+          <h1>{summary}</h1>
+          <ul className="meta">
+            <li>{datePrettyLocalDay(start || '')}</li>
+            <li># of seats: {seats}</li>
+          </ul>
+        </header>
 
         <div className="card call-to-action">
           
@@ -72,11 +87,22 @@ export default function EventSingle({id}:{id:string}) {
         <h2>About</h2>
         <p>{description}</p>
 
-        <h2>All Ticket Holders</h2>
-        <TicketsList tickets={tickets} key={animTrig}/>
+        <hr />
+        
+        <div className="admin-panel">
+          <Link href={`/events/edit/${id}`} className="medium">
+            <RiFileEditFill />
+            Edit Event Details
+          </Link>
 
-        <h2>Edit Attendees</h2>
-        <SearchUserTicket ticketId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser}/>
+          <h2>Edit Attendees</h2>
+          <SearchUserTicket eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+          
+          <h2>All Ticket Holders</h2>
+          <TicketsList tickets={tickets} key={animTrig} setIsPopup={setIsPopup} setTicketPopupData={setTicketPopupData}/>
+        </div>
+
+
 
       </article>
     </StyledEventSingle>
@@ -101,6 +127,14 @@ const StyledEventSingle = styled.div`
 
   article{
     flex: 3 1 60%;
+
+    header{
+      margin-bottom: 1em;
+
+      h1{
+        margin-bottom: 0;
+      }
+    }
   }
 
   button.ticket{
@@ -154,6 +188,10 @@ export const QUERY_EVENT = gql`
           id
           name
           email
+        }
+        event{
+          id
+          summary
         }
       }
     }

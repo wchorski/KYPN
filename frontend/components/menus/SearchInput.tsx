@@ -40,6 +40,8 @@ export function SearchInput() {
     getItemProps,
     selectedItem,
     selectItem,
+    reset,
+    closeMenu,
   } = useCombobox({
     items: inputItems ?? [],
     onInputValueChange: ({ inputValue }) => {
@@ -125,6 +127,7 @@ export function SearchInput() {
             placeholder: 'search...',
             id: 'search',
             className: loading ? 'loading' : '',
+            onBlur: () => closeMenu(),
             onKeyDown: event => {
               // console.log(event.target)
               // todo route push to link when enter key is pressed
@@ -145,8 +148,7 @@ export function SearchInput() {
 
       <StyledDropDown>
         <ul {...getMenuProps()}>
-          {
-            inputItems?.map((item: any, index) => (
+          {isOpen && inputItems?.map((item: any, index) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
 
@@ -204,4 +206,5 @@ const StyledSearchCont = styled.div`
     width: 100%;
     padding: 1em;
   }
+
 `

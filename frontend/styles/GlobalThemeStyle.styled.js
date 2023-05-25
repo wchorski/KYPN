@@ -12,6 +12,7 @@ export const GlobalStyles = createGlobalStyle`
 
   :root{
     --c-1: whitesmoke;
+    --c-error: red;
     --c-accent: #a1d7e2;  /* accent */
     --c-2: #d7e2a1; /* desaturated */
     --c-3: #8baf72; /* contrast */
@@ -24,11 +25,12 @@ export const GlobalStyles = createGlobalStyle`
     --cg-dots: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%);
     --c-disabled: gray;
 
+
     --maxWidth: 1000px;
     --boxs-1: rgb(0 0 0 / 39%) 1px 1px 8px 0px;
-    --br-1: 5px;
-    --br-2: 10px;
-    --br-3: 20px;
+    --br-sharp: 5px;
+    --br-dull: 10px;
+    --br-soft: 20px;
   }
 
   html{
@@ -99,7 +101,96 @@ export const GlobalStyles = createGlobalStyle`
   button, 
   select,
   input {
+    transition: background-color, color, border .3s ;
     cursor: pointer;
+  }
+
+  [data-tooltip]{
+    &::before{
+      --scale: 0;
+      content: attr(data-tooltip);
+      position: absolute;
+      top: -.25rem;
+      left: 50%;
+      height: 25px;
+      background-color: var(--c-txt);
+      color: var(--c-txt-rev);
+      transform: translate(-50%, -100%) scale(var(--scale));
+      padding: .5rem;
+      width: max-content;
+      max-width: 100%;
+      border-radius: .3rem;
+      text-align: center;
+      transition: transform ease-in .1s 1s;
+    }
+
+    &:hover::before, &:focus::before{
+      --scale: 1;
+      transform: translate(-50%, -100%) scale(var(--scale));
+    }
+  }
+
+  button, a{
+    
+    
+    &.medium{
+      padding: 1em 2em;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      color: var(--c-3);
+      border: solid 3px var(--c-3);
+      border-radius: var(--br-dull);
+      transition-property: color, background, border;
+      transition-duration: .1s;
+      transition-timing-function: linear;
+      text-decoration: none;
+      
+      &:hover, &:focus{
+        color: var(--c-txt-rev);
+        background-color: var(--c-3);
+        border: solid 3px var(--c-accent);
+        border-radius: var(--br-dull);
+      }
+
+
+      svg{
+        margin-right: .3em;
+      }
+    }
+  }
+
+  button.edit{
+    position: relative;
+    border-radius: 50px;
+    padding: .1em;
+    border: none;
+    margin-right: -2rem;
+    margin-left: 1rem;
+    background-color: var(--c-3);
+    transition: all .3s;
+
+
+    &:hover, &:focus{
+      color: var(--c-txt-rev);
+      box-shadow: black 1px 1px 1px;
+      transform: translateY(-2px);
+    }
+
+    svg{
+      font-size: 3rem;
+    }
+  }
+
+  button.delete{
+    background-color: var(--c-error);
+    color: white;
+
+    &:hover, &:focus{
+      background-color: white;
+      color: var(--c-error);
+      border: solid red 2px;
+    }
   }
 
   button, select, input{
@@ -140,4 +231,12 @@ export const GlobalStyles = createGlobalStyle`
       }
     }
   }
+
+  .admin-panel{
+    border: solid 2px var(--c-3);
+    padding: 1em;
+    border-radius: 5px;
+    margin-bottom: 1em;
+  }
+
 `

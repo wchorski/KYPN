@@ -1,25 +1,28 @@
 import Image from "next/image";
 import { resetIdCounter, useCombobox } from "downshift";
 import { useLazyQuery, gql } from "@apollo/client";
-import { useState, useRef, Dispatch, SetStateAction } from "react";
+import { useState, useRef, Dispatch, SetStateAction, useEffect } from "react";
 import Link from "next/link";
 import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/DropDown.styled";
 
 import styled from "styled-components"
 import { useSearch } from "../../lib/useGlobalContext";
 import { Ticket, User } from "../../lib/types";
+import { tTicketPopup } from "../../components/events/TicketPopup";
 
 type Props = {
-  ticketId:string
+  eventId:string
   setIsPopup:Dispatch<SetStateAction<boolean>>,
   setPickedUser: Dispatch<SetStateAction<User|undefined>>,
+  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
 }
 
-export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Props) {
+export function SearchUserTicket({eventId = '', setIsPopup, setPickedUser, setTicketPopupData}:Props) {
 
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const [animTrig, setAnimTrig] = useState(0)
   const [inputItems, setInputItems] = useState([])
-  const [inputValue, setInputValue] = useState<any>()
+  const [inputValueState, setInputValueState] = useState<any>()
 
   const [searchUsers, { loading, data, error }] = useLazyQuery(
     QUERY_USERS_SEARCH,
@@ -40,6 +43,8 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
     getItemProps,
     selectedItem,
     selectItem,
+    reset,
+    closeMenu,
   } = useCombobox({
     items: inputItems ?? [],
     onInputValueChange: ({ inputValue }) => {
@@ -48,7 +53,8 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
         return console.log('empty search string')
       }
 
-      setInputValue(inputValue)
+      setInputValueState(inputValue)
+      
       searchUsers({
           variables: {
             where: {
@@ -90,10 +96,19 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
     return tickets.flatMap(t => t.event.id)
   }
 
-  function handlePopup(user:User){
-    setIsPopup(true)
-    setPickedUser(user)
+  function handlePopup(tixPopupData:tTicketPopup){
+    setAnimTrig(animTrig+1)
+    // setIsPopup(true)
+    // setPickedUser(user)
+    setTicketPopupData(tixPopupData)
   }
+
+  useEffect(() => {
+    reset()
+    closeMenu()
+    // return () => 
+  }, [animTrig])
+  
 
   return (
     <StyledSearch id="search-cont" className={'open'}>
@@ -106,9 +121,10 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
             placeholder: 'search users...',
             id: 'search',
             className: loading ? 'loading' : '',
+            onBlur: () => {reset(); closeMenu()},
             onKeyDown: event => {
               // console.log(event.target)
-              // todo route push to link when enter key is pressed
+              // todo route push to link when enter key is pressed, or better yet simulate mouse right click if a whole link
               switch (event.key) {
                 case 'Enter':
                   // router.push(`/shop/product/${item.id}`)
@@ -126,14 +142,13 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
 
       <StyledDropDown>
         <ul {...getMenuProps()}>
-          {
-            inputItems?.map((item: User, index) => (
+          {isOpen && inputItems?.map((item: User, index) => (
               <StyledDropDownItem
                 highlighted={index === highlightedIndex}
 
                 key={item.id}
                 // @ts-ignore
-                {...getItemProps({ item, index, })}
+                {...getItemProps({ item, index,})}
               >
                   {/* <Image
                     priority
@@ -142,7 +157,7 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
                     width={80}
                     height={80}
                   /> */}
-                  <article>
+                  <div className='meta'>
                     <Link 
                       href={`/users/${item.id}`} 
                       // onClick={() => setisSearchOpen(false)}
@@ -152,16 +167,24 @@ export function SearchUserTicket({ticketId = '', setIsPopup, setPickedUser}:Prop
 
                     <span className="email">{item.email}</span>
 
-                    {handleEventsAttending(item.tickets).includes(ticketId) ? (
-                      <button>
+                  </div>
+                  <div className='edit-button-cont'>
+                    {handleEventsAttending(item.tickets).includes(eventId) ? (
+                      <button 
+                        onClick={() => handlePopup( {isDelete: true, ticket: item.tickets.find(t => t.event.id === eventId)}) }
+                        className="delete"
+                      >
                         remove
                       </button>
                     ) : (
-                      <button onClick={() => handlePopup(item)}>
+                      <button 
+                        onClick={() => handlePopup({user: item})} 
+                      >
                         rsvp
                       </button>
                     )}
-                  </article>
+                  </div>
+  
 
               </StyledDropDownItem>
             ))}
@@ -186,6 +209,11 @@ const QUERY_USERS_SEARCH = gql`
         event {
           id
           summary
+        }
+        holder{
+          id
+          name
+          email
         }
       }
     }
