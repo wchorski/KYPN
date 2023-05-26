@@ -84,7 +84,7 @@ export function datePrettyLocal(date:string, option:DATE_OPTION) {
 export function datePrettyLocalDay(date:string) {
   const options = {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
     timeZone: 'UTC', 
     // timeZone: "America/Chicago",

@@ -3,13 +3,14 @@ import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
 import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useGlobalContext } from "../../lib/useGlobalContext";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function RegisterForm() {
 
+  const router = useRouter()
   const [successMsg, setSuccessMsg] = useState<string>()
-  const { session, setSession } = useGlobalContext()
+  // const { session, setSession } = useGlobalContext()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     name: '',
@@ -36,8 +37,9 @@ export default function RegisterForm() {
     // console.log(session);
 
 
-    if (res?.data.createUser.__typename !== "User") {
+    if (res?.data.createUser.__typename === "User") {
       console.log('Regy SUCCESS, ', res?.data.createUser)
+      router.push(`/users/${res.data.createUser.id}`)
       setSuccessMsg(`Success! New account registered: ${inputs.email}`)
     }
     // @ts-ignore
@@ -58,40 +60,42 @@ export default function RegisterForm() {
       <p>{successMsg}</p>
 
       <ErrorMessage error={error} />
+      {!successMsg && (
 
-      <fieldset disabled={loading} aria-busy={loading}>
-        <label htmlFor="name">
-          Name
-          <input type="text" id="name" name="name" autoComplete="name"
-            placeholder="your name..."
-            required
-            defaultValue={inputs.name}
-            onChange={handleChange}
-          />
-        </label>
+        <fieldset disabled={loading} aria-busy={loading}>
+          <label htmlFor="name">
+            Name
+            <input type="text" id="name" name="name" autoComplete="name"
+              placeholder="your name..."
+              required
+              defaultValue={inputs.name}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label htmlFor="email">
-          Email
-          <input type="email" id="email" name="email" autoComplete="email"
-            placeholder="email..."
-            required
-            defaultValue={inputs.email}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="email">
+            Email
+            <input type="email" id="email" name="email" autoComplete="email"
+              placeholder="email..."
+              required
+              defaultValue={inputs.email}
+              onChange={handleChange}
+            />
+          </label>
 
-        <label htmlFor="password">
-          Password
-          <input type="password" id="password" name="password" autoComplete="password"
-            placeholder="password..."
-            required
-            defaultValue={inputs.password}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="password">
+            Password
+            <input type="password" id="password" name="password" autoComplete="password"
+              placeholder="password..."
+              required
+              defaultValue={inputs.password}
+              onChange={handleChange}
+            />
+          </label>
 
-        <button type="submit"> Create Account </button>
-      </fieldset>
+          <button type="submit"> Create Account </button>
+        </fieldset>
+      )}
 
     </StyledForm>
   </>)

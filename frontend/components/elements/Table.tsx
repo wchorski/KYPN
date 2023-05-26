@@ -14,9 +14,6 @@ export function Table({ caption, cells, headers, route }: TableProps) {
 
   const [keys, setKeys] = useState<any>(headers)
   const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account',]
-
-  console.log({cells});
-  console.log({headers});
   
 
   // ? if u want to automatically grab keys from object
@@ -92,18 +89,17 @@ export function Table({ caption, cells, headers, route }: TableProps) {
     /> */}
 
 const StyledTable = styled.table`
-  background-color: #909c9f;
-  color: white;
+  background-color: #ededed;
   border-collapse: collapse;
   padding: 1rem;
   width: 100%;
+  margin-bottom: 1em;
 
   th, td, caption {
     padding: .1rem 1rem;
   }
 
   caption{
-    background-color: #479282;
     font-size: 1.5rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -111,11 +107,12 @@ const StyledTable = styled.table`
 
   th {
     text-align: left;
-    background-color: hsl( 0 0% 0% / 0.5);
+    background-color: var(--c-3);
     border-right: solid 1px black;
+    color: white;
   }
   tr:nth-of-type(2n) {
-    background-color: hsl( 0 0% 0% / 0.1);
+    background-color: var(--c-txt-rev);
   }
 
   @media (max-width: 650px) {
