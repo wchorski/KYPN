@@ -17,18 +17,18 @@ export type tTicketPopup = {
 }|undefined
 
 type Props = {
-  isPopup: boolean,
-  setIsPopup: Dispatch<SetStateAction<boolean>>,
+  isPopup?: boolean,
+  setIsPopup?: Dispatch<SetStateAction<boolean>>,
   event?: Event,
   user?: User|undefined,
   setAnimTrig:Dispatch<SetStateAction<number>>,
   isDelete?:boolean,
   ticketId?:string,
-  ticketPopupData: tTicketPopup,
+  popupData: tTicketPopup,
   setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>
 }
 
-export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', ticketPopupData, setTicketPopupData}:Props) {
+export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', popupData, setTicketPopupData}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
@@ -40,27 +40,28 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
     const { left, right, top, bottom } = e.currentTarget.getBoundingClientRect();
     // if clicked outside of modal's rect
     if (e.clientX < left || e.clientX > right || e.clientY < top || e.clientY > bottom) {
-      setIsPopup(false)
+      // setIsPopup(false)
+      setTicketPopupData(undefined)
     }
   }
 
   async function handleDelete(){
-    console.log({ticketPopupData});
+    // console.log({popupData});
     
     try {
       const res = await deleteTicket({
         variables: {
-          where: { id: ticketPopupData?.ticket?.id }
+          where: { id: popupData?.ticket?.id }
         },
         refetchQueries: [
           { query: QUERY_EVENTS_ALL, variables: {orderBy: [{start: 'desc'}] } }, 
-          { query: QUERY_EVENT, variables: { where: { id: ticketPopupData?.ticket?.event?.id }}, }, 
-          { query: QUERY_USER_SINGLE, variables: { where: { id: ticketPopupData?.ticket?.holder?.id }}, },
+          { query: QUERY_EVENT, variables: { where: { id: popupData?.ticket?.event?.id }}, }, 
+          { query: QUERY_USER_SINGLE, variables: { where: { id: popupData?.ticket?.holder?.id }}, },
         ]
       })
 
       console.log('ticket deleted, ', {res});
-      setIsPopup(false)
+      // setIsPopup(false)
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
 
@@ -77,25 +78,25 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
           data: {
             event: {
               connect: {
-                id: event?.id || '',
+                id: popupData?.event?.id || '',
               }
             },
             holder: {
               connect: {
-                id: ticketPopupData?.user?.id || '',
+                id: popupData?.user?.id || '',
               }
             },
           }
         },
         refetchQueries: [
-          { query: QUERY_EVENTS_ALL, variables: {orderBy: [{start: 'desc'}] } }, 
-          { query: QUERY_EVENT, variables: { where: { id: event?.id }}, }, 
-          { query: QUERY_USER_SINGLE, variables: { where: { id: user?.id }}, },
+          { query: QUERY_EVENTS_ALL,  variables: { orderBy: [{start: 'desc'}] } }, 
+          { query: QUERY_EVENT,       variables: { where: { id: popupData?.event?.id }}, }, 
+          { query: QUERY_USER_SINGLE, variables: { where: { id: popupData?.user?.id }}, },
         ]
       })
 
-      console.log('tieckt success, ', {res});
-      setIsPopup(false)
+      // console.log('tieckt success, ', {res});
+      // setIsPopup(false)
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
 
@@ -105,31 +106,31 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
   }
   
   useEffect(() => {
-    if(ticketPopupData) return ticketPopupRef.current?.showModal()
-    if(!ticketPopupData) return ticketPopupRef.current?.close()
+    if(popupData) return ticketPopupRef.current?.showModal()
+    if(!popupData) return ticketPopupRef.current?.close()
     // if(isPopup) return ticketPopupRef.current?.showModal()
     // if(!isPopup) return ticketPopupRef.current?.close()
     // return () =>
-  }, [ticketPopupData])  
+  }, [popupData])  
   
-  if(ticketPopupData?.isDelete && ticketPopupData?.ticket) return (
+  if(popupData?.isDelete && popupData?.ticket) return (
     <StyledPopup 
       ref={ticketPopupRef}
       onClick={handleOnClick}
     >
-      <button onClick={e => setIsPopup(false)} disabled={loading} data-tooltip={'close'} className='edit'> 
+      <button onClick={() => setTicketPopupData(undefined)} disabled={loading} data-tooltip={'close'} className='edit'> 
         <RiCloseFill />
       </button>
 
       <h2> Delete Ticket </h2>
 
-      <h3>{ticketPopupData.ticket.event?.summary}</h3>
+      <h3>{popupData.ticket.event?.summary}</h3>
 
       <ul>
-        <li>User Name: {ticketPopupData.ticket.holder?.name}</li>
-        <li>User Email: {ticketPopupData.ticket.holder?.email}</li>
-        <li>Event: {ticketPopupData.ticket.event?.summary}</li>
-        <li>Ticket: {ticketPopupData.ticket.id}</li>
+        <li>User Name: {popupData.ticket.holder?.name}</li>
+        <li>User Email: {popupData.ticket.holder?.email}</li>
+        <li>Event: {popupData.ticket.event?.summary}</li>
+        <li>Ticket: {popupData.ticket.id}</li>
       </ul>
 
       <button disabled={loading} onClick={handleDelete} className='delete'> 
@@ -138,6 +139,7 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
     </StyledPopup>
   )
 
+  // ? if it's user & event show RSVP
   return (
     <StyledPopup 
       ref={ticketPopupRef}
@@ -152,8 +154,8 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
       <h3>{event?.summary}</h3>
 
       <ul>
-        <li>User Name: {ticketPopupData?.user?.name}</li>
-        <li>User Email: {ticketPopupData?.user?.email}</li>
+        <li>User Name: {popupData?.user?.name}</li>
+        <li>User Email: {popupData?.user?.email}</li>
       </ul>
 
       <button disabled={loading} onClick={handleCreate}> 

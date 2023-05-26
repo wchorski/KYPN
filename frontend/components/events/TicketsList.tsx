@@ -11,11 +11,10 @@ import { tTicketPopup } from './TicketPopup';
 
 type Props ={ 
   tickets:Ticket[],
-  setIsPopup: Dispatch<SetStateAction<boolean>>,
-  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
+  setPopupData: Dispatch<SetStateAction<tTicketPopup>>,
 }
 
-export default function TicketsList({tickets = [], setIsPopup, setTicketPopupData}:Props) {
+export default function TicketsList({tickets = [], setPopupData}:Props) {
   
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     id: '',
@@ -29,7 +28,7 @@ export default function TicketsList({tickets = [], setIsPopup, setTicketPopupDat
   return (
     <StyledTicketList>
       {tickets.map(ticket => (
-        <TicketListItem ticket={ticket} key={ticket.id} setIsPopup={setIsPopup} setTicketPopupData={setTicketPopupData}/>
+        <TicketListItem ticket={ticket} key={ticket.id} setPopupData={setPopupData}/>
       ))}
     </StyledTicketList>
   )

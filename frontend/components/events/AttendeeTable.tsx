@@ -18,7 +18,7 @@ export function AttendeeTable({event, className}:Props) {
     email: t.holder.email,
   }))
   
-  console.log({tickets});
+  // console.log({tickets});
 
 
   return (<>

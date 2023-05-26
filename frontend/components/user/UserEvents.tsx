@@ -9,10 +9,12 @@ import { IoMdTime } from "react-icons/io"
 import { datePrettyLocalDayShort, datePrettyLocalTime } from "../../lib/dateFormatter"
 import Link from "next/link"
 import { StyledEventCard } from "../events/EventCard"
-import TicketPopup from "../events/TicketPopup"
+import TicketPopup, { tTicketPopup } from "../events/TicketPopup"
 import { useState } from "react"
 import { Ticket, User } from "../../lib/types"
 import { QUERY_USER_SINGLE } from "./UserSingle"
+import TicketsList from "../events/TicketsList"
+import styled from "styled-components"
 
 
 type Props = {
@@ -27,10 +29,11 @@ type RSVPData = {
 
 export function UserEvents({user, page = 1}:Props) {
 
+  const [popupData, setPopupData] = useState<tTicketPopup>()
   const [animTrig, setAnimTrig] = useState(0)
   const [isShown, setIsShown] = useState(false)
   const [pickedEvent, setPickedEvent] = useState()
-  const [ticketIds, setTicketIds] = useState(user.tickets.map(t => t.event.id))
+  const [attendingEventIds, setAttendingEventIds] = useState(user.tickets.map(t => t.event.id))
   // const [pickedUser, setPickedUser] = useState('')
 
   const [deleteTicket, {loading: loadingTicket, error: errorTicket, data: dataTicket}] = useMutation(DELETE_TICKET)
@@ -73,91 +76,92 @@ export function UserEvents({user, page = 1}:Props) {
     cache.evict(cache.identify(payload.data.deleteTicket))
   }
 
+  function userEventIds(tickets:Ticket[]){
+
+  }
+
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 
   return (
-    <div>
+    <StyledUserEvents>
 
-      <TicketPopup setIsShown={setIsShown} isShown={isShown} event={pickedEvent} user={user}/>
-
+      <TicketPopup 
+        popupData={popupData} 
+        setTicketPopupData={setPopupData} 
+        setAnimTrig={setAnimTrig}
+        event={pickedEvent} 
+        user={user}
+      />
+      
       <h2>Admin Events Quick Edit</h2>
 
       <h3>User Tickets </h3>
+      <TicketsList tickets={user.tickets} setPopupData={setPopupData}/>
 
-      <ul key={animTrig}>
-        {user.tickets.map((tic:Ticket) => (
-          <li key={tic.id}>
-            <h4>{tic?.event?.summary}</h4>
-            <button onClick={() => handleTicketDelete(tic.id)} disabled={loadingTicket ? true : false}>
-              remove
-            </button>
-          </li>
-        ))}
-      </ul>
-
+      <h3> Upcoming Events </h3>
       {/* // todo compare and only show events not attending */}
+
       <ul>
-        {data.events.map((event:any) => (
-          <li key={event.id}>
-            <StyledEventCard>
-              <div>
-                <ImageDynamic photoIn={event.photo}/>
-              </div>
+        {data.events.map((event:any) => {
+          if(!attendingEventIds.includes(event.id)){
+           return (
+            <li key={event.id}>
+              <StyledEventCard>
+                <div>
+                  <ImageDynamic photoIn={event.photo}/>
+                </div>
 
-              <div>
-                <time dateTime={event.start} className="date-short"> 
-                  {datePrettyLocalDayShort(event.start)} 
-                </time>
-              </div>
+                <div>
+                  <time dateTime={event.start} className="date-short"> 
+                    {datePrettyLocalDayShort(event.start)} 
+                  </time>
+                </div>
 
-              <Link href={`/events/e/${event.id}`} className="details">
-                <h4> {event.summary} </h4>
+                <Link href={`/events/e/${event.id}`} className="details">
+                  <h4> {event.summary} </h4>
 
-                <time dateTime={event.start}> 
-                  <IoMdTime />
-                  {/* {datePrettyLocalDay(start)}  */}
-                  {/* @  */}
-                  {datePrettyLocalTime(event.start)}
-                </time>
+                  <time dateTime={event.start}> 
+                    <IoMdTime />
+                    {/* {datePrettyLocalDay(start)}  */}
+                    {/* @  */}
+                    {datePrettyLocalTime(event.start)}
+                  </time>
 
-                {location && (
-                  <address>
-                    <MdLocationOn />
-                    {event.location?.name} <br />
-                    {/* {address.street} <br /> */}
-                    {/* {address.town} <br /> */}
-                    {/* {address.country} <br /> */}
-                  </address>
-                )}
-              </Link>
+                  {location && (
+                    <address>
+                      <MdLocationOn />
+                      {event.location?.name} <br />
+                      {/* {address.street} <br /> */}
+                      {/* {address.town} <br /> */}
+                      {/* {address.country} <br /> */}
+                    </address>
+                  )}
+                </Link>
 
-              <div className="actions-cont"> 
-                {/* <label>
-                  <input type="checkbox"/>
-                  RSVP
-                </label> */}
+                <div className="actions-cont"> 
 
-                {ticketIds.includes(event.id) ? (
-                  <p> 
-                    Attending 
-                  </p>
-                ) : (
                   <button 
                     className="button" 
-                    onClick={() => {setPickedEvent(event); setIsShown(true); setTicketIds(prev => [...prev, event.id])}}
+                    onClick={() => {
+                      setPopupData({event: event, user: user})
+                      // setPickedEvent(event); 
+                      // setIsShown(true); 
+                      setAttendingEventIds(prev => [...prev, event.id])}}
                   > 
-                    RSVP 
+                    RSVP {user.name}
                   </button>
-                )}
-                
-              </div>
 
-            </StyledEventCard>
-          </li>
-        ))}
+                </div>
+
+              </StyledEventCard>
+            </li>
+           )
+          } 
+        })}
       </ul>
-    </div>
+
+    </StyledUserEvents>
   )
 }
 
@@ -167,5 +171,12 @@ const DELETE_TICKET = gql`
     deleteTicket(where: $where) {
       id
     }
+  }
+`
+
+const StyledUserEvents = styled.div`
+  ul{
+    list-style: none;
+    padding: 0;
   }
 `
