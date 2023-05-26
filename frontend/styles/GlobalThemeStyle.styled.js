@@ -242,4 +242,8 @@ export const GlobalStyles = createGlobalStyle`
     margin-bottom: 1em;
   }
 
+  .display-none{
+    display: none;
+  }
+
 `

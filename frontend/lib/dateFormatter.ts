@@ -81,6 +81,13 @@ export function datePrettyLocal(date:string, option:DATE_OPTION) {
   return newDate.toLocaleString("en-US", options);
 }
 
+export function dateLocaleFileName(dateString:string){
+  const date = new Date(dateString)
+  console.log(date.toLocaleString('en-CA', {hour12:false}));
+  
+  return date.toLocaleString('en-CA', {hour12:false})
+}
+
 export function datePrettyLocalDay(date:string) {
   const options = {
     year: "numeric",

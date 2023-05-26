@@ -1,10 +1,11 @@
 import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 
 type Props = {
+  filename:string,
   tableData:any[],
 }
 
-const TableExport = ({tableData = []}:Props) => {
+const TableExport = ({filename, tableData = []}:Props) => {
   // const tableData = [
   //   ["Name", "Age", "Country"],
   //   ["John Doe", "25", "USA"],
@@ -19,7 +20,7 @@ const TableExport = ({tableData = []}:Props) => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "table.csv");
+    link.setAttribute("download", `${filename}table.csv`);
     document.body.appendChild(link);
     link.click();
   };

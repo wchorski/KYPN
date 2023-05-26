@@ -1,13 +1,14 @@
-import { datePrettyLocalDay } from "../../lib/dateFormatter"
+import { dateLocaleFileName, datePrettyLocalDay } from "../../lib/dateFormatter"
 import { Event } from "../../lib/types"
 import { Table } from "../elements/Table"
 import TableExport from "../elements/TableExport"
 
 type Props = {
   event:Event,
+  className:string,
 }
 
-export function AttendeeTable({event}:Props) {
+export function AttendeeTable({event, className}:Props) {
 
   const tickets = event.tickets?.map(t => ({
     status: t.status,
@@ -21,20 +22,22 @@ export function AttendeeTable({event}:Props) {
 
 
   return (<>
-    <TableExport tableData={tickets || []}/>
+    <TableExport tableData={tickets || []} filename={dateLocaleFileName(event.start || '') + ' ' + event.summary}/>
 
-    <Table 
-      caption={event.summary + ' ' + datePrettyLocalDay(event.start || '') || ''}
-      route='/users'
-      headers={[
-        'status',
-        'userId',
-        'name',
-        'nameLast',
-        'email',
-      ]}
-      cells={tickets || []}
-    />
-    
+    <div className={className}>
+      <Table 
+        caption={event.summary + ' ' + datePrettyLocalDay(event.start || '') || ''}
+        route='/users'
+        headers={[
+          'status',
+          'userId',
+          'name',
+          'nameLast',
+          'email',
+        ]}
+        cells={tickets || []}
+      />
+      
+    </div>
   </>)
 }

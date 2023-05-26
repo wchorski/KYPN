@@ -12,7 +12,7 @@ import TicketsList from "./TicketsList"
 import moneyFormatter from "../../lib/moneyFormatter"
 import styled from "styled-components"
 import { SearchUserTicket } from "../../pages/events/SearchUserTicket"
-import { datePrettyLocalDay } from "../../lib/dateFormatter"
+import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import { RiFileEditFill } from "react-icons/ri"
 import { BsFileEarmarkSpreadsheet } from "react-icons/bs"
 import Link from "next/link"
@@ -67,6 +67,7 @@ export default function EventSingle({id}:{id:string}) {
           <h1>{summary}</h1>
           <ul className="meta">
             <li>{datePrettyLocalDay(start || '')}</li>
+            <li>{datePrettyLocalTime(start || '')}</li>
             <li># of seats: {seats}</li>
           </ul>
         </header>
@@ -99,14 +100,12 @@ export default function EventSingle({id}:{id:string}) {
             <RiFileEditFill />
             Edit Event Details
           </Link>
-          <br />
-
-          <AttendeeTable event={data.event}/>
 
           <h2>Edit Attendees</h2>
-          <SearchUserTicket eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+          <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
           
           <h2>All Ticket Holders</h2>
+          <AttendeeTable event={data.event} className="display-none" />
           <TicketsList tickets={tickets} key={animTrig} setIsPopup={setIsPopup} setTicketPopupData={setTicketPopupData}/>
         </div>
 
