@@ -1,4 +1,4 @@
-import { EventCreateForm } from "../../components/events/EventCreateForm";
+import { EventCreateForm } from "../../components/events/EventCreateUpdateForm";
 
 
 export default function EventCreate() {

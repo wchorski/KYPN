@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { EventCreateForm } from "../../../components/events/EventCreateForm";
+import { EventCreateForm } from "../../../components/events/EventCreateUpdateForm";
 import { QUERY_EVENT } from "../../../components/events/EventSingle";
 import { QueryLoading } from "../../../components/menus/QueryLoading";
 import ErrorMessage from "../../../components/ErrorMessage";

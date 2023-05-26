@@ -23,7 +23,12 @@ export function UserSingle({id}:{id:string}) {
   return (
     <>
       <AccountDetails {...data.user}/>
-      <UserEvents user={data.user}/>
+
+      <hr />
+      
+      <div className="admin-panel">
+        <UserEvents user={data.user}/>
+      </div>
     </>
   )
 }

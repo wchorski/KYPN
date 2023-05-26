@@ -14,7 +14,9 @@ import styled from "styled-components"
 import { SearchUserTicket } from "../../pages/events/SearchUserTicket"
 import { datePrettyLocalDay } from "../../lib/dateFormatter"
 import { RiFileEditFill } from "react-icons/ri"
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs"
 import Link from "next/link"
+import { AttendeeTable } from "./AttendeeTable"
 
 
 export default function EventSingle({id}:{id:string}) {
@@ -43,7 +45,7 @@ export default function EventSingle({id}:{id:string}) {
         ticketPopupData={ticketPopupData}
         setTicketPopupData={setTicketPopupData}
         setIsPopup={setIsPopup} 
-        isPopup={isPopup} 
+        isPopup={isPopup}   
         event={data?.event} 
         user={pickedUser}
         setAnimTrig={setAnimTrig}
@@ -78,8 +80,11 @@ export default function EventSingle({id}:{id:string}) {
           </div>
 
           <button onClick={() => setIsPopup(true)} className="ticket"> 
-            <span>{moneyFormatter(price)}</span>
-            per Ticket
+            {price && price > 0 ? (
+              <span>{moneyFormatter(price)} per Ticket</span>
+            ) : (
+              <span> Free </span>
+            )}
           </button>
 
         </div>
@@ -94,6 +99,9 @@ export default function EventSingle({id}:{id:string}) {
             <RiFileEditFill />
             Edit Event Details
           </Link>
+          <br />
+
+          <AttendeeTable event={data.event}/>
 
           <h2>Edit Attendees</h2>
           <SearchUserTicket eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>

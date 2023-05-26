@@ -196,10 +196,13 @@ export const GlobalStyles = createGlobalStyle`
   button, select, input{
     &:is([disabled]){
       background-color: var(--c-disabled);
+      color: var(--c-txt-rev);
+      border: none;
       cursor: not-allowed;
 
       &:hover{
         background-color: var(--c-disabled);
+        border: none;
       }
     }
   }

@@ -62,6 +62,7 @@ export function Nav() {
       </div>
 
       <ul className={isNavOpen ? 'menu-main open' : 'menu-main '}>
+        <LinkActive href='/admin'> Admin </LinkActive>
         <LinkActive href='/shop'> Shop </LinkActive>
         <LinkActive href='/blog'> Blog </LinkActive>
         <LinkActive href='/about'> About </LinkActive>

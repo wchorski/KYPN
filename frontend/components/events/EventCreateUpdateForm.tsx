@@ -12,7 +12,7 @@ type Props = {
   event?:Event
 }
 
-export function EventCreateForm({event}:Props) {
+export function EventCreateUpdateForm({event}:Props) {
 
   const router = useRouter()
   // console.log(event?.start);
