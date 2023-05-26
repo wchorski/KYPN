@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export const StyledMainCont = styled.main`
 
   background-color: var(--c-bg);
-  padding: 0 1em;
+  /* padding: 0 1em; */
   /* max-width: var(--width-cont); */
   /* margin: 0 auto;  */
   margin-right: auto; 

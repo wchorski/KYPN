@@ -33,12 +33,14 @@ export const Ticket = list({
     }),
     status: select({
       options: [
-        { label: 'Active', value: 'ACTIVE' },
-        { label: 'Redeemed', value: 'REDEEMED' },
+        { label: 'Pending', value: 'PENDING' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
+        { label: 'Attended', value: 'ATTENDED' },
         { label: 'Canceled', value: 'CANCELED' },
+        { label: 'Rejected', value: 'REJECTED' },
         { label: 'Past', value: 'PAST' },
       ],
-      defaultValue: 'ACTIVE',
+      defaultValue: 'CONFIRMED',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

@@ -26,5 +26,8 @@ following along with Wes Bos Tutorial
   - view store items
 
 
+## TODO
+- [ ] create a special admin input search for Users & Events that hot swaps with main search at top
+
 ## Color pallet? 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

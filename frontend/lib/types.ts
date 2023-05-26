@@ -299,6 +299,17 @@ export type IDObj = {
   id: string,
 }
 
+export type Location = {
+  name?: string,
+  address?:string,
+  rooms?:number,
+  services?: Service[],
+  bookings?:Booking[],
+  events?:Event[],
+  tags?: Tag[],
+  categories?: Category[],
+}
+
 export type Event = {
   id?:string,
   summary?:string,
@@ -327,23 +338,33 @@ export type Ticket = {
 }
 
 enum TICKET_STATUS {
-  ACTIVE = 'ACTIVE',
-  REDEEMED = 'REDEEMED',
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  ATTENDED = 'ATTENDED',
   CANCELED = 'CANCELED',
+  REJECTED = 'REJECTED',
 }
 
 export const TicketStatus = [
   {
-    label: TICKET_STATUS.ACTIVE,
-    value: TICKET_STATUS.ACTIVE,
+    label: TICKET_STATUS.PENDING,
+    value: TICKET_STATUS.PENDING,
   },
   {
-    label: TICKET_STATUS.REDEEMED,
-    value: TICKET_STATUS.REDEEMED,
+    label: TICKET_STATUS.CONFIRMED,
+    value: TICKET_STATUS.CONFIRMED,
+  },
+  {
+    label: TICKET_STATUS.ATTENDED,
+    value: TICKET_STATUS.ATTENDED,
   },
   {
     label: TICKET_STATUS.CANCELED,
     value: TICKET_STATUS.CANCELED,
+  },
+  {
+    label: TICKET_STATUS.REJECTED,
+    value: TICKET_STATUS.REJECTED,
   },
 ]
 

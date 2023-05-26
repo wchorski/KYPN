@@ -33,16 +33,17 @@ export default function EventSingle({id}:{id:string}) {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-
   // console.log(data);
-  
+  // console.log(id);
+  if(!data.event) return <p> 404: Event not found </p>
+
   const {photo, summary, description, tickets = [], price, start, seats}:Event = data?.event
   
   return (
     <StyledEventSingle>
 
       <TicketPopup 
-        ticketPopupData={ticketPopupData}
+        popupData={ticketPopupData}
         setTicketPopupData={setTicketPopupData}
         setIsPopup={setIsPopup} 
         isPopup={isPopup}   
@@ -106,7 +107,7 @@ export default function EventSingle({id}:{id:string}) {
           
           <h2>All Ticket Holders</h2>
           <AttendeeTable event={data.event} className="display-none" />
-          <TicketsList tickets={tickets} key={animTrig} setIsPopup={setIsPopup} setTicketPopupData={setTicketPopupData}/>
+          <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/>
         </div>
 
 

@@ -4,6 +4,9 @@ import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
 import { Table } from "../elements/Table"
 import { User } from "../../lib/types"
+import TicketsList from "../events/TicketsList"
+import { datePrettyLocalDay } from "../../lib/dateFormatter"
+import Link from "next/link"
 
 
 enum DASH_STATE {
@@ -107,7 +110,13 @@ export function AccountDetails({ name, email, tickets }: User) {
           <ul>
             {tickets.map(tick => (
               <li key={tick.id}>
-                {tick.event.summary}
+                  <Link href={`/events/e/${tick.event.id}`}>
+                    <strong>{tick.event.summary}</strong>
+                  </Link>
+                  <br />
+                  <small>{datePrettyLocalDay(tick.event.start || '')}</small>
+                  <br />
+                  <small>{tick.event.location?.name}</small>
               </li>
             ))}
           </ul>

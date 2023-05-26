@@ -178,7 +178,7 @@ export function SearchUserTicket({eventId = '', setIsPopup, setPickedUser, setTi
                       </button>
                     ) : (
                       <button 
-                        onClick={() => handlePopup({user: item})} 
+                        onClick={() => handlePopup({user: item, event: {id: eventId}})} 
                       >
                         rsvp
                       </button>

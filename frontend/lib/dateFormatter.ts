@@ -83,7 +83,7 @@ export function datePrettyLocal(date:string, option:DATE_OPTION) {
 
 export function dateLocaleFileName(dateString:string){
   const date = new Date(dateString)
-  console.log(date.toLocaleString('en-CA', {hour12:false}));
+  // console.log(date.toLocaleString('en-CA', {hour12:false}));
   
   return date.toLocaleString('en-CA', {hour12:false})
 }

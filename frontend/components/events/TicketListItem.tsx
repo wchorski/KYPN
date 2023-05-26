@@ -8,15 +8,15 @@ import { QUERY_EVENTS_ALL } from "./EventList";
 import { QUERY_EVENT } from "./EventSingle";
 import { QUERY_USER_SINGLE } from "../user/UserSingle";
 import { tTicketPopup } from "./TicketPopup";
+import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter";
 
 type Props = {
   ticket:Ticket,
-  setIsPopup: Dispatch<SetStateAction<boolean>>,
-  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
+  setPopupData: Dispatch<SetStateAction<tTicketPopup>>,
 }
 
 
-export  function TicketListItem({ticket, setIsPopup, setTicketPopupData}:Props) {
+export  function TicketListItem({ticket, setPopupData}:Props) {
 
   const [isEditing, setIsEditing] = useState(false)
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -51,7 +51,7 @@ export  function TicketListItem({ticket, setIsPopup, setTicketPopupData}:Props) 
   }
 
   function handlePopupDelete(){
-    setTicketPopupData({
+    setPopupData({
       ticket: ticket,
       isDelete: true,
     })
@@ -60,8 +60,15 @@ export  function TicketListItem({ticket, setIsPopup, setTicketPopupData}:Props) 
   return (
     <li className='card'>
       <div>
-        <strong>{ticket.holder?.name}</strong> <br />
-        <small>{ticket.holder?.email}</small>
+        {ticket.holder ? (<>
+          <strong>{ticket.holder?.name}</strong> <br />
+          <small>{ticket.holder?.email}</small>
+        </>) : (<>
+          <strong>{ticket.event.summary}</strong> <br />
+          <small> {datePrettyLocalDay(ticket.event.start || '') } </small> <br />
+          <small> {datePrettyLocalTime(ticket.event.start || '')} </small> <br />
+          <small>{ticket.event.location?.name}</small>
+        </>)}
       </div>
 
       {!isEditing ? (

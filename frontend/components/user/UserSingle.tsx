@@ -22,13 +22,15 @@ export function UserSingle({id}:{id:string}) {
 
   return (
     <>
-      <AccountDetails {...data.user}/>
+      <section>
+        <AccountDetails {...data.user}/>
+      </section>
 
       <hr />
       
-      <div className="admin-panel">
+      <section className="admin-panel">
         <UserEvents user={data.user}/>
-      </div>
+      </section>
     </>
   )
 }
@@ -47,6 +49,8 @@ export const QUERY_USER_SINGLE = gql`
         event {
           summary
           id
+          start
+          end
           location {
             name
             id
