@@ -116,7 +116,9 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
   )
 }
 
-const StyledFormMini = styled.form`
+export const StyledFormMini = styled.form`
+  max-width: 15em;
+
   fieldset{
     display: flex;
     flex-direction: column;
@@ -129,7 +131,7 @@ const StyledFormMini = styled.form`
   }
 `
 
-const UPDATE_TICKET = gql`
+export const UPDATE_TICKET = gql`
   mutation UpdateTicket($where: TicketWhereUniqueInput!, $data: TicketUpdateInput!) {
     updateTicket(where: $where, data: $data) {
       id
