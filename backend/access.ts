@@ -89,7 +89,17 @@ export const rules = {
     
     // 2. If not, are they a host of this event?
     // todo if ticket's event's host === session.user.id return true
-    return false
+    return { 
+      event: {
+        hosts: { 
+          some: {
+            id: { 
+              in: [session?.itemId]
+            }
+          }
+        } 
+      }
+    }
     // return { host: { id: { equals: session?.itemId }} }
   },
 

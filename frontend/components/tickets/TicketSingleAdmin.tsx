@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/client"
 import useForm2 from "../../lib/useForm2"
 import { StyledFormMini, UPDATE_TICKET } from "../events/TicketListItem"
 import { QUERY_TICKET } from "./TicketSingle"
+import ErrorMessage from "../ErrorMessage"
 
 type Props = {
   ticket:Ticket,
@@ -50,6 +51,8 @@ export function TicketSingleAdmin({ticket}:Props) {
 
       {/* <button className="medium"> Redeem </button>
       <br /> */}
+
+      <ErrorMessage error={error}/>
 
       <StyledFormMini onSubmit={handleSubmit}>
         <fieldset>

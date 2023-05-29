@@ -1,13 +1,29 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, } from "@keystone-6/core/fields";
+import { permissions, rules } from "../access";
 
 
 
 export const Ticket = list({
 
   // todo only employees of event are allowed to update
-  access: allowAll,
+  // access: allowAll,
+  access: {
+    filter: {
+      // query: rules.canReadProducts,
+      // todo only query if ticket is the holder
+      query: () => true,
+      delete: rules.canManageTickets,
+      update: rules.canManageTickets,
+    },
+    operation: {
+      query: () => true,
+      create: permissions.isLoggedIn,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
 
   // todo hide these again
   // ui: {
