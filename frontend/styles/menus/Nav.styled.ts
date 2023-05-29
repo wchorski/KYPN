@@ -24,7 +24,7 @@ export const StyledNav = styled.nav`
   /* transform: translateY(); */
   /* z-index: 9002; */
   z-index: 100;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   ul.menu-main {
     opacity: 0;
@@ -85,9 +85,9 @@ export const StyledNav = styled.nav`
 
     /* input{display: none;} */
 
-    &.cart {
+    /* &.cart {
       margin-left: auto;
-    }
+    } */
 
     svg{
       cursor: pointer;
@@ -107,6 +107,33 @@ export const StyledNav = styled.nav`
 
     &:hover{
       background: var(--c-2) !important;
+    }
+  }
+
+  @media (min-width: 1000px){
+
+    button#navwich{
+      display: none;
+    }
+
+    ul.menu-main{
+      position: sticky;
+      top: 0px;
+      /* background-color: blue; */
+      flex-direction: row;
+      position: initial;
+      height: inherit !important;
+      /* overflow: hidden !important; */
+      opacity: 1;
+      pointer-events: all;
+
+      > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex: 1;
+      }
     }
   }
   

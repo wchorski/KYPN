@@ -40,7 +40,8 @@ export function Nav() {
           {isSearchOpen ? <MdClose /> : <MdSearch />}
         </button>
 
-        {session && (
+        {session && (<>
+          <SessionBadge session={session} />
           <button
             onClick={e => toggleCart()}
             className={isOpen ? 'toggle-menu cart open' : 'toggle-menu cart'}
@@ -50,10 +51,11 @@ export function Nav() {
               0
             )} />
           </button>
-        )}
+        </>)}
 
         <button
           onClick={e => toggleNav()}
+          id='navwich'
           className={isNavOpen ? 'toggle-menu open' : 'toggle-menu'}
         >
           {isNavOpen ? <RiMenu4Fill /> : <RiMenu3Line />}
@@ -74,9 +76,6 @@ export function Nav() {
         {session && (<>
           <LinkActive href='/shop/sell'> Sell </LinkActive>
           <LinkActive href='/shop/orders'> Orders </LinkActive>
-          <SessionBadge session={session} />
-
-          <SignOutButton />
         </>)}
 
         {!session && (
