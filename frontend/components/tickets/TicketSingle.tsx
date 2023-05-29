@@ -8,6 +8,7 @@ import { datePretty, datePrettyLocalDay } from "../../lib/dateFormatter"
 import { Ticket } from "../../lib/types"
 import { QRCode } from "./QRCode"
 import { TicketSingleAdmin } from "./TicketSingleAdmin"
+import { useUser } from "../menus/Session"
 
 type Props = {
   id:string,
@@ -15,6 +16,7 @@ type Props = {
 
 export  function TicketSingle({id}:Props) {
 
+  const session = useUser()
   const { loading, error, data } = useQuery(
     QUERY_TICKET, {
     variables: { where: { id: id } }
@@ -30,6 +32,7 @@ console.log(data.ticket);
   const {event, status, holder}:Ticket = data?.ticket
   
   return (<>
+  
     <StyledTicketSingle>
       <div className="meta-short">
         <strong>{datePrettyLocalDay(event.start || '')}</strong>
@@ -52,7 +55,9 @@ console.log(data.ticket);
     </StyledTicketSingle>
 
     {/* // TODO only show if session user is admin or employee to event */}
-    <TicketSingleAdmin ticket={data?.ticket}/>
+    {session && (event?.hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
+      <TicketSingleAdmin ticket={data?.ticket}/>
+    )}
   </> )
 }
 
@@ -150,6 +155,9 @@ export const QUERY_TICKET = gql`
         location {
           name
           address
+          id
+        }
+        hosts{
           id
         }
         start
