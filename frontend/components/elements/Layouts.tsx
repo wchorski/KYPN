@@ -78,16 +78,6 @@ const StyledLayout_WideWith = styled.div`
     padding-top: 1em;
   }
 
-  @media (min-width: 1000px){
-
-    nav#menu-main{
-      position: sticky;
-      top: 0px;
-      background-color: blue;
-      flex-direction: row;
-      height: inherit;
-      opacity: 1;
-    }
-  }
+  
 
 `
