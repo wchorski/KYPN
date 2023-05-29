@@ -5,6 +5,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Manage Products: Can update and delete any product',
   }),
+  canManageEvents: checkbox({
+    defaultValue: false,
+    label: 'Manage Events: Can update and delete any event',
+  }),
   canSeeOtherUsers: checkbox({
     defaultValue: false,
     label: 'View Users: Can query any User',

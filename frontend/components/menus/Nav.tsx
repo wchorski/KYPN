@@ -18,7 +18,7 @@ import { LinkActive } from './LinkActive';
 export function Nav() {
 
   const session = useUser()
-  // console.log({session});
+  console.log({session});
 
 
   const { toggleCart, isOpen } = useCart()
@@ -62,7 +62,9 @@ export function Nav() {
       </div>
 
       <ul className={isNavOpen ? 'menu-main open' : 'menu-main '}>
-        <LinkActive href='/admin'> Admin </LinkActive>
+        {session && session.isAdmin && (
+          <LinkActive href='/admin'> Admin </LinkActive>
+        )}
         <LinkActive href='/shop'> Shop </LinkActive>
         <LinkActive href='/blog'> Blog </LinkActive>
         <LinkActive href='/about'> About </LinkActive>

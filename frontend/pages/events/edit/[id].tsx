@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { EventCreateForm } from "../../../components/events/EventCreateUpdateForm";
+import { EventCreateUpdateForm } from "../../../components/events/EventCreateUpdateForm";
 import { QUERY_EVENT } from "../../../components/events/EventSingle";
 import { QueryLoading } from "../../../components/menus/QueryLoading";
 import ErrorMessage from "../../../components/ErrorMessage";
@@ -21,7 +21,7 @@ export default function EventEditById() {
   return (
     <>
       <h1> Edit Event </h1>
-      <EventCreateForm event={data.event || undefined} />
+      <EventCreateUpdateForm event={data.event || undefined} />
     </>
   )
 }

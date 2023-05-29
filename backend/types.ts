@@ -13,6 +13,7 @@ export type Session = {
   listKey: string;
   data: {
     name: string;
+    isAdmin: boolean;
     role?: {
       id: string;
       name: string;
@@ -37,6 +38,7 @@ export type AccessControl = {
 export type ListAccessArgs = {
   itemId?: string;
   session?: Session;
+  context?: any,
 };
 
 export type CartItem = {
@@ -54,7 +56,7 @@ export type Event = {
   start: string,
   end:string,
   price:number,
-  employees:User[],
+  hosts:User[],
   tickets: any[],
   seats:number,
   photo:string,

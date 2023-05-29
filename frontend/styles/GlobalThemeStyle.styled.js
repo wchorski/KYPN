@@ -26,7 +26,7 @@ export const GlobalStyles = createGlobalStyle`
     --c-disabled: gray;
 
 
-    --maxWidth: 1000px;
+    --maxWidth: 1800px;
     --boxs-1: rgb(0 0 0 / 39%) 1px 1px 8px 0px;
     --br-sharp: 5px;
     --br-dull: 10px;
@@ -235,11 +235,26 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
 
-  .admin-panel{
+  section.admin-panel{
+
     border: solid 2px var(--c-3);
-    padding: 1em;
+    /* padding: 1em; */
     border-radius: 5px;
     margin-bottom: 1em;
+
+    > * {
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+
+    > h2 {
+      margin: 0;
+      margin-bottom: 1em;
+      padding: 0 1em;
+      background-color: var(--c-3);
+      color: var(--c-txt-rev);
+    }
+    
   }
 
   .display-none{

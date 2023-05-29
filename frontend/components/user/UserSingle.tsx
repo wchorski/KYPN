@@ -29,6 +29,7 @@ export function UserSingle({id}:{id:string}) {
       <hr />
       
       <section className="admin-panel">
+        <h2>Admin Events Quick Edit</h2>
         <UserEvents user={data.user}/>
       </section>
     </>

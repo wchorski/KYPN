@@ -118,6 +118,7 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
 
 export const StyledFormMini = styled.form`
   max-width: 15em;
+  padding-bottom: 1em;
 
   fieldset{
     display: flex;

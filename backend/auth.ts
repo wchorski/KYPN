@@ -47,6 +47,7 @@ const { withAuth } = createAuth({
   sessionData: `
     name 
     createdAt
+    isAdmin
     role {
       id
       name

@@ -63,7 +63,8 @@ export const User = list({
     servicesProvided: relationship({ ref: 'Service.employees', many: true }),
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
-    gigevents: relationship({ ref: 'Event.employees', many: true }),
+    eventsHost: relationship({ ref: 'Event.host', many: true }),
+    eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
     availability: relationship({ ref: 'Availability.employee', many: true }),
     buisnessHourOpen: select({
       options: timesArray(),
