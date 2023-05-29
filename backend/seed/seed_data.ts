@@ -80,6 +80,7 @@ export const roles_seedjson = [
   {
     name: 'admin',
     canManageProducts: true,
+    canManageEvents: true,
     canSeeOtherUsers: true,
     canManageUsers: true,
     canManageRoles: true,
@@ -94,6 +95,7 @@ export const roles_seedjson = [
   {
     name: 'editor',
     canManageProducts: true,
+    canManageEvents: true,
     canSeeOtherUsers: true,
     canManageUsers: false,
     canManageRoles: false,

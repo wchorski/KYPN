@@ -7,6 +7,7 @@ import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { QUERY_EVENTS_ALL } from "./EventList";
 import { QUERY_EVENT } from "./EventSingle";
+import ErrorMessage from "../ErrorMessage";
 
 type Props = {
   event?:Event
@@ -78,8 +79,8 @@ export function EventCreateUpdateForm({event}:Props) {
 
   const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
 
-  const [createEvent, { loading }] = useMutation(EVENT_CREATE)
-  const [updateEvent, { loading: updating, data }] = useMutation(EVENT_UPDATE)
+  const [createEvent, { loading, error }] = useMutation(EVENT_CREATE)
+  const [updateEvent, { loading: updating, error: updateError }] = useMutation(EVENT_UPDATE)
   
   async function handleSubmit(e:any) {
     e.preventDefault()
@@ -129,6 +130,9 @@ export function EventCreateUpdateForm({event}:Props) {
   
     return (
       <StyledEventForm onSubmit={handleSubmit}>
+
+        <ErrorMessage error={error || updateError} />
+        
         <fieldset>
           <legend> essential </legend>
 

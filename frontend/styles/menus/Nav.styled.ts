@@ -110,5 +110,4 @@ export const StyledNav = styled.nav`
     }
   }
   
-  
 `

@@ -20,8 +20,10 @@ type User {
   bookingsCount(where: BookingWhereInput! = {}): Int
   gigs(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   gigsCount(where: BookingWhereInput! = {}): Int
-  gigevents(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
-  gigeventsCount(where: EventWhereInput! = {}): Int
+  eventsHost(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  eventsHostCount(where: EventWhereInput! = {}): Int
+  eventsCohost(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
+  eventsCohostCount(where: EventWhereInput! = {}): Int
   availability(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availabilityCount(where: AvailabilityWhereInput! = {}): Int
   buisnessHourOpen: String
@@ -75,7 +77,8 @@ input UserWhereInput {
   servicesProvided: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
-  gigevents: EventManyRelationFilter
+  eventsHost: EventManyRelationFilter
+  eventsCohost: EventManyRelationFilter
   availability: AvailabilityManyRelationFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
@@ -295,7 +298,8 @@ input UserUpdateInput {
   servicesProvided: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
-  gigevents: EventRelateToManyForUpdateInput
+  eventsHost: EventRelateToManyForUpdateInput
+  eventsCohost: EventRelateToManyForUpdateInput
   availability: AvailabilityRelateToManyForUpdateInput
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -422,7 +426,8 @@ input UserCreateInput {
   servicesProvided: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
-  gigevents: EventRelateToManyForCreateInput
+  eventsHost: EventRelateToManyForCreateInput
+  eventsCohost: EventRelateToManyForCreateInput
   availability: AvailabilityRelateToManyForCreateInput
   buisnessHourOpen: String
   buisnessHourClosed: String
@@ -510,6 +515,7 @@ type Role {
   id: ID!
   name: String
   canManageProducts: Boolean
+  canManageEvents: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -530,6 +536,7 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   canManageProducts: BooleanFilter
+  canManageEvents: BooleanFilter
   canSeeOtherUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageRoles: BooleanFilter
@@ -548,6 +555,7 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   canManageProducts: OrderDirection
+  canManageEvents: OrderDirection
   canSeeOtherUsers: OrderDirection
   canManageUsers: OrderDirection
   canManageRoles: OrderDirection
@@ -558,6 +566,7 @@ input RoleOrderByInput {
 input RoleUpdateInput {
   name: String
   canManageProducts: Boolean
+  canManageEvents: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -581,6 +590,7 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   canManageProducts: Boolean
+  canManageEvents: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -1960,8 +1970,9 @@ type Event {
   start: DateTime
   end: DateTime
   price: Int
-  employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
-  employeesCount(where: UserWhereInput! = {}): Int
+  host: User
+  cohosts(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  cohostsCount(where: UserWhereInput! = {}): Int
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketsCount(where: TicketWhereInput! = {}): Int
   seats: Int
@@ -1990,7 +2001,8 @@ input EventWhereInput {
   start: DateTimeFilter
   end: DateTimeNullableFilter
   price: IntNullableFilter
-  employees: UserManyRelationFilter
+  host: UserWhereInput
+  cohosts: UserManyRelationFilter
   tickets: TicketManyRelationFilter
   seats: IntFilter
   photo: StringFilter
@@ -2022,7 +2034,8 @@ input EventUpdateInput {
   start: DateTime
   end: DateTime
   price: Int
-  employees: UserRelateToManyForUpdateInput
+  host: UserRelateToOneForUpdateInput
+  cohosts: UserRelateToManyForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
   seats: Int
   photo: String
@@ -2045,7 +2058,8 @@ input EventCreateInput {
   start: DateTime
   end: DateTime
   price: Int
-  employees: UserRelateToManyForCreateInput
+  host: UserRelateToOneForCreateInput
+  cohosts: UserRelateToManyForCreateInput
   tickets: TicketRelateToManyForCreateInput
   seats: Int
   photo: String

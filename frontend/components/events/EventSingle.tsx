@@ -17,10 +17,14 @@ import { RiFileEditFill } from "react-icons/ri"
 import { BsFileEarmarkSpreadsheet } from "react-icons/bs"
 import Link from "next/link"
 import { AttendeeTable } from "./AttendeeTable"
+import { useUser } from "../menus/Session"
 
 
 export default function EventSingle({id}:{id:string}) {
 
+  const session = useUser()
+  console.log({session});
+  
   const [isPopup, setIsPopup] = useState(false)
   const [ticketPopupData, setTicketPopupData] = useState<tTicketPopup>()
   const [animTrig, setAnimTrig] = useState(0)
@@ -37,7 +41,7 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, seats}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, seats, host}:Event = data?.event
   
   return (
     <StyledEventSingle>
@@ -95,20 +99,34 @@ export default function EventSingle({id}:{id:string}) {
         <p>{description}</p>
 
         <hr />
-        
-        <div className="admin-panel">
-          <Link href={`/events/edit/${id}`} className="medium">
-            <RiFileEditFill />
-            Edit Event Details
-          </Link>
+        {/* //todo have multiple hosts */}
+        {session && (host?.id === session.id || session.isAdmin) && (
+        // {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
+          <section className="admin-panel">
+            <h2> Host Panel </h2>
 
-          <h2>Edit Attendees</h2>
-          <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
-          
-          <h2>All Ticket Holders</h2>
-          <AttendeeTable event={data.event} className="display-none" />
-          <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/>
-        </div>
+            <h3>Hosts</h3>
+            <ul>
+              {/* {hosts?.map(host => ( */}
+                <li key={host?.id}>
+                  <Link href={`/users/${host?.id}`}> {host?.name} | {host?.email} </Link>
+                </li>
+              {/* ))} */}
+            </ul>
+
+            <Link href={`/events/edit/${id}`} className="medium">
+              <RiFileEditFill />
+              Edit Event Details
+            </Link>
+
+            <h3>Edit Attendees</h3>
+            <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+            
+            <h3>All Ticket Holders</h3>
+            <AttendeeTable event={data.event} className="display-none" />
+            <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/>
+          </section>
+        )} 
 
 
 
@@ -163,9 +181,9 @@ export const QUERY_EVENT = gql`
       categoriesCount
       dateCreated
       dateModified
-      employees {
-        email
+      host {
         id
+        email
         name
       }
       photo

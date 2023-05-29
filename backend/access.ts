@@ -44,8 +44,29 @@ export const rules = {
     
     // 2. If not, do they own this item?
     // todo query item.author and match session.user
+    
     // return false
     return { user: { id: { equals: session?.itemId }} }
+  },
+
+  canManageEvents({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    console.log('=========== SESSION');
+    console.log({session});
+    // todo why context return undefined?
+    // console.log('=========== CONTEXT');
+    // console.log({context});
+
+    
+    if(session?.data.isAdmin) return true
+    // 1. compair against permissions checkbox
+    if (permissions.canManageEvents({ session })) return true;
+    
+    // 2. If not, are they a host of this event?
+    //todo have multiple hosts
+    // todo query item.hosts.id and match session.user.id
+    // return false
+    return { host: { id: { equals: session?.itemId }} }
   },
 
 

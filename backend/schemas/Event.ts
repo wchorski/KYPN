@@ -1,12 +1,27 @@
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
+import { isLoggedIn, rules } from "../access";
 
 
 
 export const Event = list({
 
-  access: allowAll,
+  // access: allowAll,
+  access: {
+    filter: {
+      // query: rules.canReadProducts,
+      query: () => true,
+      delete: rules.canManageEvents,
+      update: rules.canManageEvents,
+    },
+    operation: {
+      query: () => true,
+      create: isLoggedIn,
+      update: isLoggedIn,
+      delete: isLoggedIn,
+    }
+  },
 
   // todo hide these again
   // ui: {
@@ -21,7 +36,7 @@ export const Event = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'summary', 'location', 'employees', 'status'],
+      initialColumns: ['start', 'summary', 'location', 'host', 'status'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -33,7 +48,9 @@ export const Event = list({
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({}),
     price: integer({defaultValue: 0}),
-    employees: relationship({ ref: 'User.gigevents', many: true }),
+    // todo have multiple hosts
+    host: relationship({ ref: 'User.eventsHost', many: false }),
+    cohosts: relationship({ ref: 'User.eventsCohost', many: true }),
     tickets: relationship({ ref: 'Ticket.event', many: true }),
     seats: integer({ validation: { isRequired: true} }),
     photo: text(),

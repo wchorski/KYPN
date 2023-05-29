@@ -93,8 +93,6 @@ export function UserEvents({user, page = 1}:Props) {
         event={pickedEvent} 
         user={user}
       />
-      
-      <h2>Admin Events Quick Edit</h2>
 
       <h3>User Tickets </h3>
       <TicketsList tickets={user.tickets} setPopupData={setPopupData}/>
