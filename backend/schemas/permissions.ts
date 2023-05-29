@@ -9,6 +9,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Manage Events: Can update and delete any event',
   }),
+  canManageTickets: checkbox({
+    defaultValue: false,
+    label: 'Manage Tickets: Can update and delete any Ticket',
+  }),
   canSeeOtherUsers: checkbox({
     defaultValue: false,
     label: 'View Users: Can query any User',

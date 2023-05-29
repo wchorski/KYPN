@@ -19,13 +19,13 @@ model User {
   password                String
   isAdmin                 Boolean            @default(false)
   isActive                Boolean            @default(true)
-  stripeCustomerId        String             @unique @default("NO_ID_ofhq304mzy")
+  stripeCustomerId        String             @unique @default("NO_ID_geab7xtty3")
   posts                   Post[]             @relation("Post_author")
   pages                   Page[]             @relation("Page_author")
   servicesProvided        Service[]          @relation("Service_employees")
   bookings                Booking[]          @relation("Booking_customer")
   gigs                    Booking[]          @relation("Booking_employees")
-  eventsHost              Event[]            @relation("Event_host")
+  eventsHost              Event[]            @relation("Event_hosts")
   eventsCohost            Event[]            @relation("Event_cohosts")
   availability            Availability[]     @relation("Availability_employee")
   buisnessHourOpen        String?            @default("09:00:00")
@@ -39,8 +39,8 @@ model User {
   tickets                 Ticket[]           @relation("Ticket_holder")
   role                    Role?              @relation("User_role", fields: [roleId], references: [id])
   roleId                  String?            @map("role") @postgresql.Uuid
-  dateCreated             DateTime?          @default("2023-05-28T19:47:41.198Z")
-  dateModified            DateTime?          @default("2023-05-28T19:47:41.198Z")
+  dateCreated             DateTime?          @default("2023-05-29T09:41:36.175Z")
+  dateModified            DateTime?          @default("2023-05-29T09:41:36.175Z")
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -53,6 +53,7 @@ model Role {
   name              String  @default("")
   canManageProducts Boolean @default(false)
   canManageEvents   Boolean @default(false)
+  canManageTickets  Boolean @default(false)
   canSeeOtherUsers  Boolean @default(false)
   canManageUsers    Boolean @default(false)
   canManageRoles    Boolean @default(false)
@@ -78,8 +79,8 @@ model Booking {
   customerId      String?   @map("customer") @postgresql.Uuid
   notes           String    @default("")
   status          String?   @default("ACTIVE")
-  dateCreated     DateTime? @default("2023-05-28T19:47:42.050Z")
-  dateModified    DateTime? @default("2023-05-28T19:47:42.050Z")
+  dateCreated     DateTime? @default("2023-05-29T09:41:36.993Z")
+  dateModified    DateTime? @default("2023-05-29T09:41:36.993Z")
   google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
 
   @@index([serviceId])
@@ -136,8 +137,8 @@ model Availability {
   employeeId      String?   @map("employee") @postgresql.Uuid
   type            String?   @default("VACATION")
   status          String?   @default("APPROVED")
-  dateCreated     DateTime? @default("2023-05-28T19:47:42.073Z")
-  dateModified    DateTime? @default("2023-05-28T19:47:42.073Z")
+  dateCreated     DateTime? @default("2023-05-29T09:41:37.017Z")
+  dateModified    DateTime? @default("2023-05-29T09:41:37.017Z")
 
   @@index([employeeId])
 }
@@ -193,8 +194,8 @@ model Product {
   authorId              String?       @map("author") @postgresql.Uuid
   tags                  Tag[]         @relation("Product_tags")
   categories            Category[]    @relation("Category_products")
-  dateCreated           DateTime?     @default("2023-05-28T19:47:41.010Z")
-  dateModified          DateTime?     @default("2023-05-28T19:47:41.010Z")
+  dateCreated           DateTime?     @default("2023-05-29T09:41:36.003Z")
+  dateModified          DateTime?     @default("2023-05-29T09:41:36.003Z")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([authorId])
@@ -234,8 +235,8 @@ model OrderItem {
   quantity     Int?
   order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
   orderId      String?       @map("order") @postgresql.Uuid
-  dateCreated  DateTime?     @default("2023-05-28T19:47:41.171Z")
-  dateModified DateTime?     @default("2023-05-28T19:47:41.171Z")
+  dateCreated  DateTime?     @default("2023-05-29T09:41:36.148Z")
+  dateModified DateTime?     @default("2023-05-29T09:41:36.148Z")
 
   @@index([photoId])
   @@index([orderId])
@@ -304,21 +305,19 @@ model Event {
   start        DateTime
   end          DateTime?
   price        Int?       @default(0)
-  host         User?      @relation("Event_host", fields: [hostId], references: [id])
-  hostId       String?    @map("host") @postgresql.Uuid
+  hosts        User[]     @relation("Event_hosts")
   cohosts      User[]     @relation("Event_cohosts")
   tickets      Ticket[]   @relation("Ticket_event")
   seats        Int
   photo        String     @default("")
   description  String     @default("")
   status       String?    @default("ACTIVE")
-  dateCreated  DateTime?  @default("2023-05-28T19:47:41.168Z")
-  dateModified DateTime?  @default("2023-05-28T19:47:41.168Z")
+  dateCreated  DateTime?  @default("2023-05-29T09:41:36.148Z")
+  dateModified DateTime?  @default("2023-05-29T09:41:36.148Z")
   categories   Category[] @relation("Category_events")
   tags         Tag[]      @relation("Event_tags")
 
   @@index([locationId])
-  @@index([hostId])
 }
 
 model Ticket {

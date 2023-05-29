@@ -516,6 +516,7 @@ type Role {
   name: String
   canManageProducts: Boolean
   canManageEvents: Boolean
+  canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -537,6 +538,7 @@ input RoleWhereInput {
   name: StringFilter
   canManageProducts: BooleanFilter
   canManageEvents: BooleanFilter
+  canManageTickets: BooleanFilter
   canSeeOtherUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageRoles: BooleanFilter
@@ -556,6 +558,7 @@ input RoleOrderByInput {
   name: OrderDirection
   canManageProducts: OrderDirection
   canManageEvents: OrderDirection
+  canManageTickets: OrderDirection
   canSeeOtherUsers: OrderDirection
   canManageUsers: OrderDirection
   canManageRoles: OrderDirection
@@ -567,6 +570,7 @@ input RoleUpdateInput {
   name: String
   canManageProducts: Boolean
   canManageEvents: Boolean
+  canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -591,6 +595,7 @@ input RoleCreateInput {
   name: String
   canManageProducts: Boolean
   canManageEvents: Boolean
+  canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
@@ -1970,7 +1975,8 @@ type Event {
   start: DateTime
   end: DateTime
   price: Int
-  host: User
+  hosts(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  hostsCount(where: UserWhereInput! = {}): Int
   cohosts(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   cohostsCount(where: UserWhereInput! = {}): Int
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
@@ -2001,7 +2007,7 @@ input EventWhereInput {
   start: DateTimeFilter
   end: DateTimeNullableFilter
   price: IntNullableFilter
-  host: UserWhereInput
+  hosts: UserManyRelationFilter
   cohosts: UserManyRelationFilter
   tickets: TicketManyRelationFilter
   seats: IntFilter
@@ -2034,7 +2040,7 @@ input EventUpdateInput {
   start: DateTime
   end: DateTime
   price: Int
-  host: UserRelateToOneForUpdateInput
+  hosts: UserRelateToManyForUpdateInput
   cohosts: UserRelateToManyForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
   seats: Int
@@ -2058,7 +2064,7 @@ input EventCreateInput {
   start: DateTime
   end: DateTime
   price: Int
-  host: UserRelateToOneForCreateInput
+  hosts: UserRelateToManyForCreateInput
   cohosts: UserRelateToManyForCreateInput
   tickets: TicketRelateToManyForCreateInput
   seats: Int

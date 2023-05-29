@@ -41,7 +41,7 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, seats, host}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, seats, hosts}:Event = data?.event
   
   return (
     <StyledEventSingle>
@@ -100,18 +100,18 @@ export default function EventSingle({id}:{id:string}) {
 
         <hr />
         {/* //todo have multiple hosts */}
-        {session && (host?.id === session.id || session.isAdmin) && (
-        // {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
+        {/* {session && (host?.id === session.id || session.isAdmin) && ( */}
+        {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
           <section className="admin-panel">
             <h2> Host Panel </h2>
 
             <h3>Hosts</h3>
             <ul>
-              {/* {hosts?.map(host => ( */}
+              {hosts?.map(host => (
                 <li key={host?.id}>
                   <Link href={`/users/${host?.id}`}> {host?.name} | {host?.email} </Link>
                 </li>
-              {/* ))} */}
+              ))}
             </ul>
 
             <Link href={`/events/edit/${id}`} className="medium">
@@ -181,7 +181,7 @@ export const QUERY_EVENT = gql`
       categoriesCount
       dateCreated
       dateModified
-      host {
+      hosts {
         id
         email
         name
