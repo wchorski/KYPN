@@ -81,6 +81,7 @@ export const roles_seedjson = [
     name: 'admin',
     canManageProducts: true,
     canManageEvents: true,
+    canManageTickets: true,
     canSeeOtherUsers: true,
     canManageUsers: true,
     canManageRoles: true,
@@ -101,6 +102,15 @@ export const roles_seedjson = [
     canManageRoles: false,
     canManageCart: true,
     canManageOrders: true,
+    assignedTo: {
+      connect: {
+        email: 'eddy@m.lan'
+      }
+    }
+  },
+  {
+    name: 'ticket taker',
+    canManageTickets: true,
     assignedTo: {
       connect: {
         email: 'eddy@m.lan'

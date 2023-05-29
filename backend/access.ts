@@ -66,7 +66,31 @@ export const rules = {
     //todo have multiple hosts
     // todo query item.hosts.id and match session.user.id
     // return false
-    return { host: { id: { equals: session?.itemId }} }
+    return { 
+      hosts: { 
+        some: {
+          id: { 
+            in: [session?.itemId]
+          }
+        }
+      } 
+    }
+  },
+  canManageTickets({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    // console.log('=========== SESSION');
+    // console.log({session});
+    // todo why context return undefined?
+    // console.log('=========== CONTEXT');
+    // console.log({context});
+
+    // 1. compair against permissions checkbox
+    if (permissions.canManageTickets({ session })) return true;
+    
+    // 2. If not, are they a host of this event?
+    // todo if ticket's event's host === session.user.id return true
+    return false
+    // return { host: { id: { equals: session?.itemId }} }
   },
 
 

@@ -36,7 +36,7 @@ export const Event = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'summary', 'location', 'host', 'status'],
+      initialColumns: ['start', 'summary', 'location', 'hosts', 'status'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -49,7 +49,7 @@ export const Event = list({
     end: timestamp({}),
     price: integer({defaultValue: 0}),
     // todo have multiple hosts
-    host: relationship({ ref: 'User.eventsHost', many: false }),
+    hosts: relationship({ ref: 'User.eventsHost', many: true }),
     cohosts: relationship({ ref: 'User.eventsCohost', many: true }),
     tickets: relationship({ ref: 'Ticket.event', many: true }),
     seats: integer({ validation: { isRequired: true} }),
