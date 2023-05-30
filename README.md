@@ -30,6 +30,8 @@ following along with Wes Bos Tutorial
 - copy these files
   - `/frontend/components/elements/Layouts.init.tsx` -> `/frontend/components/elements/Layouts.tsx`
   - `/frontend/styles/GlobalThemeStyle.styled.init.js` -> `/frontend/styles/GlobalThemeStyle.styled.js`
+  - `/backend/seed/seed_data.init.ts` -> `/backend/seed/seed_data.ts`
+
 
 
 ## TODO
