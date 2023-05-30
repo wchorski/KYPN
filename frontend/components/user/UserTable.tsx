@@ -5,6 +5,7 @@ import { QueryLoading } from "../menus/QueryLoading";
 import { QueryError } from "../menus/QueryError";
 import { User } from "../../lib/types";
 import { TablePagination } from "../elements/TablePagination";
+import { UsersSearch } from "./UsersSearch";
 
 export function UserTable() {
 
@@ -32,6 +33,7 @@ export function UserTable() {
     const cells = data.users.map((user:User) => ({
       name: user.name,
       email: user.email,
+      role: user.role?.name,
       account: user.id,
     }))
 
@@ -45,12 +47,15 @@ export function UserTable() {
   
   return (<>
 
+    <UsersSearch />
+
     <Table 
       caption="All Users"
       route="/events/e"
       headers={[
         'name',
         'email',
+        'role',
         'account',
       ]}
       cells={cellsState}
@@ -68,6 +73,9 @@ const QUERY_USERS_ALL = gql`
       name
       nameLast
       email
+      role {
+        name
+      }
     }
   }
 `

@@ -1,13 +1,12 @@
 import React, { ReactNode } from 'react'
-import { Nav } from '../../components/menus/Nav'
+import { Nav } from '../menus/Nav'
 // import { TableOfContents } from 'components/TableOfContents';
-import { Footer } from '../../components/menus/Footer'
+import { Footer } from '../menus/Footer'
 import { StyledMainCont } from '../../styles/elements/MainCont.styled'
 import Header from '../Header'
 import styled from 'styled-components'
 import { AnnouncementsMarquee } from './AnnouncementsMarquee'
 import ShoppingCart from '../ecommerce/ShoppingCart'
-import { NavL150 } from '../private/NavL150'
 
 export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 
@@ -26,8 +25,7 @@ export function Layout_Wide_Width({ children }: { children: ReactNode }) {
         isSiteTitle: true,
       }}/>
       <ShoppingCart />
-      {/* <Nav /> */}
-      <NavL150 />
+      <Nav />
 
 
       <StyledMainCont>

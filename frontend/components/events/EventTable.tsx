@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Event } from "../../lib/types";
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter";
 import { TablePagination } from "../elements/TablePagination";
+import { EventsSearch } from "./EventsSearch";
 
 export function EventTable() {
 
@@ -47,6 +48,7 @@ export function EventTable() {
 
 
   return (<>
+    <EventsSearch />
     <Table 
       caption="All Events"
       route="/events/e"

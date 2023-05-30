@@ -1,3 +1,4 @@
+import Link from "next/link"
 import styled from "styled-components"
 
 
@@ -5,9 +6,7 @@ export function Footer() {
   return (
     <StyledFooter>
 
-      <p>hey</p>
-      <p>what's</p>
-      <p>up</p>
+      <p>powered by <Link href={`https://www.tawtaw.site`}> {"There's a Will There's a Website"}</Link> </p>
 
     </StyledFooter>
   )
@@ -20,18 +19,20 @@ const StyledFooter = styled.footer`
   justify-content: space-around;
   margin: 0 auto;
   position: relative;
+  color: var(--c-txt-rev);
 
   /* &::before{
     content: 'before';
   } */
   &::after{
-    content: 'after todo';
-    background: 
+    content: '';
+    background-color: var(--c-dark);
+    /* background: 
       linear-gradient(90deg, 
         var(--c-bg) 0%, 
         var(--c-3) 25%, 
         var(--c-3) 75%, 
-        var(--c-bg) 100%);
+        var(--c-bg) 100%); */
     position: absolute;
     z-index: -1;
     inset: 0px;

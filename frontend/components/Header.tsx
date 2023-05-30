@@ -1,17 +1,35 @@
+import Image from 'next/image';
 import Link from 'next/link'
 import React from 'react'
 import styled from "styled-components";
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
 
-export default function Header() {
+type Props = {
+  options: {
+    isLogo?:boolean,
+    isSiteTitle?:boolean,
+  }
+}
+
+const default_options = {
+  isLogo: true,
+  isSiteTitle: true,
+}
+
+export default function Header({options = default_options}:Props) {
 
 
   return (
     <StyledHeader>
 
       <StyledLogo>
-        <Link href={`/`} > <h1> {SITE_TITLE} </h1> </Link>
+        {options.isLogo && (
+          <Image src={'/assets/private/logo.svg'} width={100} height={100} alt='site logo'/>
+        )}
+        {options.isSiteTitle && (
+          <Link href={`/`} > <h1> {SITE_TITLE} </h1> </Link>
+        )}
       </StyledLogo>
 
     </StyledHeader>
@@ -23,19 +41,26 @@ const StyledLogo = styled.div`
   margin: 0;
   /* transform: skew(-17deg); */
   /* background-color: var(--c-accent); */
-  background-image: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%);
+  /* background-image: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%); */
   background-position: 0 0, 50px 50px;
   background-size: 20px 20px;
+  display: flex;
+  align-items: center;
 
   &::before{
     background-color: blue;
     width: 100px;
   }
+
+  img{
+    margin: 0 1em;
+  }
   
   a{
     color: var(--c-txt-rev);
-    outline: auto var(--c-accent);
+    /* outline: auto var(--c-accent); */
     text-decoration: none;
+    flex: 1;
   }
   
   h1{
