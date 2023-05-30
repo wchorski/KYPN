@@ -25,6 +25,9 @@ following along with Wes Bos Tutorial
 - Anyone
   - view store items
 
+## Init
+- pop a `logo.svg` & `logo.png` into `/frontend/public/assets/private/*`
+- copy `/frontend/components/elements/Layouts.init.tsx` to `/frontend/components/elements/Layouts.tsx`
 
 ## TODO
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top

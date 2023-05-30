@@ -16,6 +16,7 @@ export const GlobalStyles = createGlobalStyle`
     --c-accent: #a1d7e2;  /* accent */
     --c-2: #d7e2a1; /* desaturated */
     --c-3: #8baf72; /* contrast */
+    --c-dark: #4b4f4c; /* dark */
     --c-bg: #eff6f4;
     --c-cont-light: 255, 255, 255;
     --c-cont-dark: 0, 0, 0;
@@ -205,6 +206,28 @@ export const GlobalStyles = createGlobalStyle`
         border: none;
       }
     }
+  }
+
+  input[type="search"]{
+    padding: .3em 1em;
+    position: relative;
+  }
+
+  label{
+    position: relative;
+  }
+
+  label:has(input[type="search"]) svg{
+    position: absolute;
+    top: 25%;
+    right: 0;
+    pointer-events: none;
+  }
+  label:has(input[type="search"]:focus) svg{
+    position: absolute;
+    top: 25%;
+    right: 0;
+    opacity: 0;
   }
 
   nav{
