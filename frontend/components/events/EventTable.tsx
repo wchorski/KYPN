@@ -7,12 +7,13 @@ import { QUERY_EVENTS_ALL } from "./EventList";
 import { useEffect, useState } from "react";
 import { Event } from "../../lib/types";
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter";
+import { TablePagination } from "../elements/TablePagination";
 
 export function EventTable() {
 
   const [cellsState, setCellsState] = useState([])
-
-  const page = 1
+  const [page, setPage] = useState(1)
+  const [perPage, setPerPage] = useState(25)
 
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
@@ -45,7 +46,7 @@ export function EventTable() {
   if (error) return <QueryError error={error} />
 
 
-  return (
+  return (<>
     <Table 
       caption="All Events"
       route="/events/e"
@@ -57,5 +58,6 @@ export function EventTable() {
       ]}
       cells={cellsState}
     />
-  )
+    <TablePagination currPage={page} setPage={setPage} dataCount={data.eventsCount} perPage={perPage} setPerPage={setPerPage}/>
+  </>)
 }

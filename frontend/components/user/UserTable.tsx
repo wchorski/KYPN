@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { Table } from "../elements/Table";
 import { gql, useQuery } from "@apollo/client";
-import { perPage } from "../../config";
 import { QueryLoading } from "../menus/QueryLoading";
 import { QueryError } from "../menus/QueryError";
 import { User } from "../../lib/types";
+import { TablePagination } from "../elements/TablePagination";
 
 export function UserTable() {
 
   const [cellsState, setCellsState] = useState([])
-
-  const page = 1
+  const [page, setPage] = useState(1)
+  const [perPage, setPerPage] = useState(25)
 
   const { loading, error, data } = useQuery(QUERY_USERS_ALL, {
     variables: {
       skip: page * perPage - perPage,
       take: perPage,
+      // skip: page * perPage - perPage,
+      // take: perPage,
       orderBy: [
         {
           name: 'asc'
@@ -41,7 +43,8 @@ export function UserTable() {
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
   
-  return (
+  return (<>
+
     <Table 
       caption="All Users"
       route="/events/e"
@@ -52,12 +55,15 @@ export function UserTable() {
       ]}
       cells={cellsState}
     />
-  )
+
+    <TablePagination currPage={page} setPage={setPage} dataCount={data.usersCount} perPage={perPage} setPerPage={setPerPage}/>
+  </>)
 }
 
 const QUERY_USERS_ALL = gql`
-  query Users($orderBy: [UserOrderByInput!]!) {
-    users(orderBy: $orderBy) {
+  query Users($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+    usersCount
+    users(take: $take, skip: $skip, orderBy: $orderBy) {
       id
       name
       nameLast

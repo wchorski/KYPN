@@ -49,6 +49,7 @@ export const StyledNav = styled.nav`
       border-bottom: 1px solid black;
       color: var(--c-txt-rev);
       text-align: end;
+      text-decoration: none;
     }
   }
 
@@ -133,6 +134,7 @@ export const StyledNav = styled.nav`
         justify-content: center;
         text-align: center;
         flex: 1;
+        padding: 0 .1em;
       }
     }
   }
