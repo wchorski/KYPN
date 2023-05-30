@@ -27,7 +27,10 @@ following along with Wes Bos Tutorial
 
 ## Init
 - pop a `logo.svg` & `logo.png` into `/frontend/public/assets/private/*`
-- copy `/frontend/components/elements/Layouts.init.tsx` to `/frontend/components/elements/Layouts.tsx`
+- copy these files
+  - `/frontend/components/elements/Layouts.init.tsx` -> `/frontend/components/elements/Layouts.tsx`
+  - `/frontend/styles/GlobalThemeStyle.styled.init.js` -> `/frontend/styles/GlobalThemeStyle.styled.js`
+
 
 ## TODO
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top

@@ -14,6 +14,7 @@ type PagProps = {
 
 export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 
+  // todo make this modular with other Schema types
   const { error, loading, data } = useQuery(QUERY_PRODUCTS_COUNT)
 
   if (loading) return <QueryLoading />
