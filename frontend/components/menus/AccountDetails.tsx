@@ -7,6 +7,9 @@ import { User } from "../../lib/types"
 import TicketsList from "../events/TicketsList"
 import { datePrettyLocalDay } from "../../lib/dateFormatter"
 import Link from "next/link"
+import { FiEdit } from "react-icons/fi"
+import { PopupModal } from "../elements/PopupModal"
+import { UserUpdateForm } from "../user/UserUpdateForm"
 
 
 enum DASH_STATE {
@@ -18,11 +21,16 @@ enum DASH_STATE {
 }
 
 
-export function AccountDetails({ name, email, tickets }: User) {
+export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
+  const [userData, setUserData] = useState<User|undefined>()
 
-  return (
+  return (<>
+    <PopupModal data={userData} setData={setUserData}>
+     <UserUpdateForm user={{ id, name, nameLast, email, tickets }} setUser={setUserData}/>
+    </PopupModal>
+    
     <StyledAccountCard>
       <StyledAccountNav>
         <nav>
@@ -66,10 +74,15 @@ export function AccountDetails({ name, email, tickets }: User) {
               </tr>
               <tr>
                 <td>name: </td>
-                <td>{name}</td>
+                <td>{name} {nameLast}</td>
               </tr>
             </tbody>
           </table>
+    
+          <button data-tooltip={'edit'} onClick={() => setUserData({name: 'yo', email: 'yo@bro.lan'})}>
+            <FiEdit />
+          </button>
+
         </article>
 
         <article className={state === DASH_STATE.ORDERS ? 'active' : ''}>
@@ -126,7 +139,7 @@ export function AccountDetails({ name, email, tickets }: User) {
 
       </div>
     </StyledAccountCard>
-  )
+  </> )
 }
 
 const StyledAccountCard = styled.div`

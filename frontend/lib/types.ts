@@ -370,6 +370,7 @@ export const TicketStatus = [
 
 export enum INPUT_TYPES {
   TEXT = 'text',
+  EMAIL = 'email',
   TEXTAREA = 'textarea',
   TIME = 'time',
   DATE = 'date',

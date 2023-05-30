@@ -42,6 +42,7 @@ export const QUERY_USER_SINGLE = gql`
     user(where: $where) {
       id
       name
+      nameLast
       email
       isAdmin
       isActive
