@@ -3,13 +3,13 @@ import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
-import { useGlobalContext } from "../../lib/useGlobalContext";
-import { useLocalStorage } from "../../lib/useLocalStorage";
+// import { useGlobalContext } from "../../lib/useGlobalContext";
+// import { useLocalStorage } from "../../lib/useLocalStorage";
 
 
 export default function LoginForm() {
 
-  const { session, setSession } = useGlobalContext()
+  // const { session, setSession } = useGlobalContext()
   const router = useRouter()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -34,9 +34,10 @@ export default function LoginForm() {
     // console.log(session);
 
 
-    if (res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess")
+    if (res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess"){
       console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
-    router.push(`/shop`)
+      router.push(`/`)
+    }
     // @ts-ignore
     // TODO setting local storage
     // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )

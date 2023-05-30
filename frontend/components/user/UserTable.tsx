@@ -51,7 +51,7 @@ export function UserTable() {
 
     <Table 
       caption="All Users"
-      route="/events/e"
+      route="/users"
       headers={[
         'name',
         'email',

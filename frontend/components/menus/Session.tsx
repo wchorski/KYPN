@@ -95,6 +95,7 @@ const StyledSessionBadge = styled.button`
     box-shadow: var(--boxs-1);
     transform: translateY(10px);
     transition: all linear .1s;
+    right: 0;
   }
 
   a{
