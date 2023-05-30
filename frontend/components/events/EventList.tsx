@@ -54,6 +54,7 @@ const StyledEventList = styled.ul`
 
 export const QUERY_EVENTS_ALL = gql`
   query Events($orderBy: [EventOrderByInput!]!) {
+    eventsCount
     events(orderBy: $orderBy) {
       start
       status

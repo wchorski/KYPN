@@ -18,9 +18,7 @@ import { LinkActive } from './LinkActive';
 export function Nav() {
 
   const session = useUser()
-  console.log({session});
-
-
+  
   const { toggleCart, isOpen } = useCart()
   const { isSearchOpen, toggleSearch } = useSearch()
   const { isNavOpen, toggleNav } = useNavControl()

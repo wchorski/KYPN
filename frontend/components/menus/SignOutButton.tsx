@@ -34,12 +34,12 @@ export default function SignOutButton() {
   }
 
   return (
-    <button
+    <a
       type="button"
       onClick={e => handleSignout()}
     >
       Sign Out
-    </button>
+    </a>
   )
 }
 
