@@ -1,7 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 **/private/**
+!**/private/README.md
 /components/elements/Layouts.tsx
+/components/elements/Test.tsx
 /styles/GlobalThemeStyle.styled.js
 
 # dependencies
