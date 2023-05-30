@@ -16,7 +16,6 @@ export const GlobalStyles = createGlobalStyle`
     --c-accent: #a1d7e2;  /* accent */
     --c-2: #d7e2a1; /* desaturated */
     --c-3: #8baf72; /* contrast */
-    --c-desaturated: #e3e8df; /* contrast */
     --c-dark: #4b4f4c; /* dark */
     --c-bg: #eff6f4;
     --c-cont-light: 255, 255, 255;

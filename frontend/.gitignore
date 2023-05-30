@@ -2,6 +2,7 @@
 
 **/private/**
 /components/elements/Layouts.tsx
+/styles/GlobalThemeStyle.styled.js
 
 # dependencies
 /node_modules

@@ -40,8 +40,11 @@ export default function AdminPage() {
         </button>
 
       </div>
+      <hr />
+
       
       <EventTable />
+      <hr />
 
       <UserTable />
 

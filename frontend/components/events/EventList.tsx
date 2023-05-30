@@ -11,25 +11,33 @@ type Props = {
   page: number
 }
 
+const today = new Date().toISOString()
+
 export default function EventList({page}:Props) {
+
 
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
+      where: {
+        start: {
+          gte: today,
+        }
+      },
       skip: page * perPage - perPage,
       take: perPage,
       orderBy: [
         {
           start: 'desc'
         }
-      ]
+      ],
     },
   })
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 
-  const filterevents = data.events.map((event:Event) => ({start: event.start, summary: event.summary}))
-  console.table(filterevents)
+  // const filterevents = data.events.map((event:Event) => ({start: event.start, summary: event.summary}))
+  // console.table(filterevents)
   
   return (
     <StyledEventList>
@@ -53,9 +61,9 @@ const StyledEventList = styled.ul`
 `
 
 export const QUERY_EVENTS_ALL = gql`
-  query Events($orderBy: [EventOrderByInput!]!) {
+  query Events($where: EventWhereInput!, $orderBy: [EventOrderByInput!]!) {
     eventsCount
-    events(orderBy: $orderBy) {
+    events(where: $where, orderBy: $orderBy) {
       start
       status
       end
