@@ -21,53 +21,65 @@ const range = (end:number) => {
   return result;
 }
 
-function getDaysInMonth(year:number, month:number){
-  return new Date(year, month + 1, 0).getDate()
-}
+// function getDaysInMonth(year:number, month:number){
+//   return new Date(year, month + 1, 0).getDate()
+// }
+function getDaysInMonth(date:Date){
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+};
 
-function getSortedDays(year:number, month:number){
-  const dayIndex = new Date(year, month, 1).getDay()
-  return [...DAYS.slice(dayIndex), ...DAYS.slice(0, dayIndex)]
-}
 
 function getDateObj(year:number, month:number, day:number){
   return new Date(year, month, day)
 }
 
-function isDatesTheSame(date1:Date, date2:Date){
-
+function isDatesSameDay(date1:Date, date2:Date){
+  
   return date1.getFullYear() === date2.getFullYear() 
-    && date1.getMonth() === date2.getMonth()
-    && date1.getDate() === date2.getDate()
+  && date1.getMonth() === date2.getMonth()
+  && date1.getDate() === date2.getDate()
 }
 // ? other way to write above code
 // const range = (end) => {
-//   let result =[1];
-//   for(let i = 2; i <= end; i++){
-//       result.push(i)
-//   }
-//   return result
-// }
+  //   let result =[1];
+  //   for(let i = 2; i <= end; i++){
+    //       result.push(i)
+    //   }
+    //   return result
+    // }
+    
+function sortDays(date:Date){
+  const daysInMonth = range(getDaysInMonth(date))
+  const index = new Date(date.getFullYear(), date.getMonth(), 1).getDay()
+  return [...Array(index === 0 ? 6 : index - 0), ...daysInMonth] //? - zero, bug from tut, how do i make this dynamic to the Locale
+}
+const getSortedDays = (date:Date) => {
+  const daysInMonth = range(getDaysInMonth(date));
+  const index = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  return [...Array(index === 0 ? 6 : index - 1), ...daysInMonth];
+};
 
 type Props = {
   initDate?:Date,
   // events: Event[],
 }
 
-// TODO why do days of the week keep getting shuffled on month move
+const today = new Date()
+const thisMonth = new Date(today.getFullYear(), today.getMonth())
 
 export function EventsCalendar({initDate = new Date()}:Props) {
 
-  const [currMonth, setCurrMonth] = useState(initDate.getMonth())
-  const [currYear, setCurrYear] = useState(initDate.getFullYear())
-  const DAYSINAMONTH = getDaysInMonth(currYear, currMonth)
+  const [currentDate, setCurrentDate] = useState(thisMonth);
+  // const [currMonth, setCurrMonth] = useState(initDate.getMonth())
+  // const [currYear, setCurrYear] = useState(initDate.getFullYear())
+  // const DAYSINAMONTH = getDaysInMonth(currYear, currMonth)
 
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
       where: {
         start: {
-          gte: new Date(currYear, currMonth).toISOString(),
-          lt: new Date(currYear, currMonth + 1).toISOString()
+          gte: new Date(currentDate.getFullYear(), currentDate.getMonth()).toISOString(),
+          lt: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1).toISOString()
         }
       },
       orderBy: [
@@ -84,23 +96,29 @@ export function EventsCalendar({initDate = new Date()}:Props) {
   const {events} = data
 
 
-  function prevMonth(){
-    if(currMonth > 0){
-      setCurrMonth(prev => prev - 1)
-    } else {
-      setCurrMonth(11)
-      setCurrYear(prev => prev - 1)
-    }
-  }
-
   function nextMonth(){
-    if(currMonth < 11){
-      setCurrMonth(prev => prev + 1)
+    const curDate = currentDate
+    const mon = curDate.getMonth();
+    if (mon < 11) {
+      curDate.setMonth(mon + 1);
     } else {
-      setCurrMonth(0)
-      setCurrYear(prev => prev + 1)
+      curDate.setMonth(0);
+      curDate.setFullYear(curDate.getFullYear() + 1);
     }
-  }
+    setCurrentDate(new Date(curDate));
+  };
+  
+  function prevMonth(){
+    const curDate = currentDate
+    const mon = curDate.getMonth();
+    if (mon > 0) {
+      curDate.setMonth(mon - 1);
+    } else {
+      curDate.setMonth(11);
+      curDate.setFullYear(curDate.getFullYear() - 1);
+    }
+    setCurrentDate(new Date(curDate));
+  };
 
   return (
     <StyledEventsCalender>
@@ -109,26 +127,29 @@ export function EventsCalendar({initDate = new Date()}:Props) {
           <MdOutlineKeyboardArrowLeft />
         </button>
         
-        <p>{MONTHS[currMonth]} {currYear}</p>
+        <p>{getMonthYear(currentDate)}</p>
 
         <button onClick={nextMonth}>
           <MdOutlineKeyboardArrowRight />
         </button>
       </CalenderHead>
+
       <GridSevenCol>
-        {getSortedDays(currYear, currMonth).map(day => (
-          <DayHead key={day}>{day}</DayHead>
+        {DAYS.map((day) => (
+          <HeadDays className="nonDRAG">{day}</HeadDays>
         ))}
       </GridSevenCol>
 
-      <CalendarBody 
-        fourCol={DAYSINAMONTH === 28}
+      <GridSevenCol
+        fullheight={true}
+        is28Days={getDaysInMonth(currentDate) === 28}
+        className="calendar-body"
       >
-        {range(DAYSINAMONTH).map(day => 
-          <StyledDay active={isDatesTheSame(new Date(), getDateObj(currYear, currMonth, day))} key={day}>
+        {sortDays(currentDate).map(day => 
+          <StyledDay active={isDatesSameDay(new Date(), getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day))} key={day}>
             <label>{day}</label>
             {events.map((event:Event) => {
-              if(isDatesTheSame(getDateObj(currYear, currMonth, day), new Date(event.start || '')))
+              if(isDatesSameDay(getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day), new Date(event.start || '')))
                 return <StyledEvent key={event.id}>
                   <Link href={`/events/e/${event.id}`}>
                     {event.summary} @ {datePrettyLocalTime(event.start || '')}
@@ -138,10 +159,32 @@ export function EventsCalendar({initDate = new Date()}:Props) {
             )}
           </StyledDay>
         )}
-      </CalendarBody>
+      </GridSevenCol>
+
+      {/* <CalendarBody >
+        {sortDays(currentDate).map(day => 
+          <StyledDay active={isDatesSameDay(new Date(), getDateObj(currYear, currMonth, day))} key={day}>
+            <label>{day}</label>
+            {events.map((event:Event) => {
+              if(isDatesSameDay(getDateObj(currYear, currMonth, day), new Date(event.start || '')))
+                return <StyledEvent key={event.id}>
+                  <Link href={`/events/e/${event.id}`}>
+                    {event.summary} @ {datePrettyLocalTime(event.start || '')}
+                  </Link>
+                </StyledEvent>
+              }
+            )}
+          </StyledDay>
+        )}
+      </CalendarBody> */}
     </StyledEventsCalender>
   )
 }
+
+function getMonthYear(date:Date) {
+  const d = date.toDateString().split(" ");
+  return `${d[1]} ${d[3]}`;
+};
 
 export const QUERY_EVENTS_ALL = gql`
   query Events($where: EventWhereInput!, $orderBy: [EventOrderByInput!]!) {
@@ -175,10 +218,28 @@ const CalenderHead = styled.div`
   font-size: 2rem;
 `
 
-const GridSevenCol = styled.div`
+const HeadDays = styled.span`
+  text-align: center;
+  border: 1px solid;
+  /* height: 30px; */
+  padding: 5px;
+  background: var(--c-3);
+  color: white;
+`;
+
+const GridSevenCol = styled.div<{fullheight?:boolean, is28Days?:boolean}>`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  ${(props) => props.fullheight && `height: calc(100% - 75px);`}
+  ${(props) =>
+    props.fullheight &&
+    `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
+
+  & .calendar-cell{
+    height: calc(100% - 27px - 40px);
+  
+  }
 `
 
 const DayHead = styled.span`
@@ -188,12 +249,11 @@ const DayHead = styled.span`
   font-size: 1.3rem;
 `
 
-const CalendarBody = styled.div<{fourCol:boolean}>`
+const CalendarBody = styled.div`
   height: calc(100% - 27px - 40px);
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
-  /* grid-template-rows: repeat(${p => p.fourCol ? 4 : 5}, 1fr); */
 `
 
 const StyledDay = styled.span<{active:boolean}>`
