@@ -18,6 +18,9 @@ export function EventTable() {
 
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
+      where: {
+        // no filter
+      },
       skip: page * perPage - perPage,
       take: perPage,
       orderBy: [

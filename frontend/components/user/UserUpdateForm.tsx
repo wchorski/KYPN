@@ -11,7 +11,7 @@ import { FormInput } from "../elements/Forminput";
 
 type Props = {
   user:User,
-  setUser:Dispatch<SetStateAction<User>>|undefined,
+  setUser: any,
 }
 
 export function UserUpdateForm({user, setUser}:Props) {

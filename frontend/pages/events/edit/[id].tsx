@@ -3,8 +3,8 @@ import { EventCreateUpdateForm } from "../../../components/events/EventCreateUpd
 import { QUERY_EVENT } from "../../../components/events/EventSingle";
 import { QueryLoading } from "../../../components/menus/QueryLoading";
 import ErrorMessage from "../../../components/ErrorMessage";
-import { useQuery } from "@apollo/client";
-
+import { gql, useQuery } from "@apollo/client";
+import { Location } from "../../../lib/types"
 
 export default function EventEditById() {
   
@@ -14,14 +14,31 @@ export default function EventEditById() {
     QUERY_EVENT, {
     variables: { where: { id: router.query.id } }
   })
+  const { loading: loadingLocations, error: errorLocations, data: dataLocations } = useQuery(QUERY_LOCATIONS)
+  
+  function getLocationOptions(locations:Location[]){
+    return dataLocations.locations.map((loc:Location) => ({value: loc.id, label: loc.name}))
+  }
 
-  if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
+  if (loading || loadingLocations) return <QueryLoading />
+  if (error || errorLocations) return <ErrorMessage error={error || errorLocations} />
 
   return (
     <>
       <h1> Edit Event </h1>
-      <EventCreateUpdateForm event={data.event || undefined} />
+      <EventCreateUpdateForm 
+        event={data.event || undefined} 
+        locationOptions={getLocationOptions(dataLocations)}
+      />
     </>
   )
 }
+
+export const QUERY_LOCATIONS = gql`
+  query Locations {
+    locations {
+      id
+      name
+    }
+  }
+`

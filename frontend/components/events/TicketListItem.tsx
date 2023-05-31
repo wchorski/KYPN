@@ -67,7 +67,11 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
           <strong>{ticket.event.summary}</strong> <br />
           <small> {datePrettyLocalDay(ticket.event.start || '') } </small> <br />
           <small> {datePrettyLocalTime(ticket.event.start || '')} </small> <br />
-          <small>{ticket.event.location?.name}</small>
+          <small>
+            {ticket.event.location?.name}
+            <br />
+            {ticket.event.location?.address}
+          </small>
         </>)}
       </div>
 

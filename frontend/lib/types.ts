@@ -125,29 +125,29 @@ export type OrderItem = {
 
 export type User = {
   id: string,
-  name: string,
-  nameLast:string,
-  email: string,
-  password: string,
-  isAdmin: boolean,
-  isActive: boolean,
-  stripeCustomerId: string,
-  posts: any[],
-  pages: any[],
-  servicesProvided: Service[],
-  bookings: any[],
-  gigs: any[],
-  availability: Availability[],
-  cart: CartItem[],
-  createdAt: string,
-  products: Product[],
-  subscriptionPlans: any[],
-  subscriptions: any[],
-  orders: OrderItem[],
-  role: any,
-  dateCreated: string,
-  dateModified: string,
-  tickets:Ticket[],
+  name?: string,
+  nameLast?:string,
+  email?: string,
+  password?: string,
+  isAdmin?: boolean,
+  isActive?: boolean,
+  stripeCustomerId?: string,
+  posts?: any[],
+  pages?: any[],
+  servicesProvided?: Service[],
+  bookings?: any[],
+  gigs?: any[],
+  availability?: Availability[],
+  cart?: CartItem[],
+  createdAt?: string,
+  products?: Product[],
+  subscriptionPlans?: any[],
+  subscriptions?: any[],
+  orders?: OrderItem[],
+  role?: any,
+  dateCreated?: string,
+  dateModified?: string,
+  tickets?:Ticket[],
 }
 
 export type Availability = {
@@ -300,6 +300,7 @@ export type IDObj = {
 }
 
 export type Location = {
+  id:string,
   name?: string,
   address?:string,
   rooms?:number,
@@ -389,5 +390,9 @@ export type InputObj = {
   maxLength?:string
   errorMessage:string,
   required: boolean,
-  initial: string
+  initial: string,
+  options?: {
+    label:string,
+    value:string,
+  }[]
 }

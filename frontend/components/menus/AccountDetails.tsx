@@ -24,7 +24,7 @@ enum DASH_STATE {
 export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
-  const [userData, setUserData] = useState<User|undefined>()
+  const [userData, setUserData] = useState<User>()
 
   return (<>
     <PopupModal data={userData} setData={setUserData}>
@@ -79,7 +79,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
             </tbody>
           </table>
     
-          <button data-tooltip={'edit'} onClick={() => setUserData({name: 'yo', email: 'yo@bro.lan'})}>
+          <button data-tooltip={'edit'} onClick={() => setUserData({id: '123', name: 'yo', email: 'yo@bro.lan'})}>
             <FiEdit />
           </button>
 
@@ -121,7 +121,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
         <article className={state === DASH_STATE.TICKETS ? 'active' : ''}>
           <h3> Tickets </h3>
           <ul>
-            {tickets.map(tick => (
+            {tickets && tickets.map(tick => (
               <li key={tick.id}>
                   <Link href={`/events/e/${tick.event.id}`}>
                     <strong>{tick.event.summary}</strong>

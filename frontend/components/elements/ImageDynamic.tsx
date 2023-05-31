@@ -52,7 +52,7 @@ function handlePhoto(photo: any) {
     return {
       altText: 'no product image',
       image: {
-        url: `/assets/product-placeholder.png`,
+        url: `/assets/private/placeholder.png`,
         width: 300,
         height: 300,
       }

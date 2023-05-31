@@ -26,11 +26,16 @@ following along with Wes Bos Tutorial
   - view store items
 
 ## Init
-- pop a `logo.svg` & `logo.png` into `/frontend/public/assets/private/*`
+- create site unique assets for your brand
+  - `/frontend/public/assets/private/logo.svg`
+  - `/frontend/public/assets/private/logo.png`
+  - `/frontend/public/assets/private/placeholder.png`
+
 - copy these files
   - `/frontend/components/elements/Layouts.init.tsx` -> `/frontend/components/elements/Layouts.tsx`
   - `/frontend/styles/GlobalThemeStyle.styled.init.js` -> `/frontend/styles/GlobalThemeStyle.styled.js`
   - `/backend/seed/seed_data.init.ts` -> `/backend/seed/seed_data.ts`
+
 
 
 

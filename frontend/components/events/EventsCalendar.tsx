@@ -11,13 +11,6 @@ import Link from "next/link"
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const EVENTS = [
-  {start: new Date(2023, 4, 4).toISOString(), summary: 'appointment'},
-  {start: new Date(2023, 4, 4).toISOString(), summary: 'appointment'},
-  {start: new Date(2023, 4, 10).toISOString(), summary: 'event'},
-  {start: new Date(2023, 4, 11).toISOString(), summary: 'stuff'},
-  {start: new Date(2023, 4, 11).toISOString(), summary: 'very long summary to fit into one line'},
-]
 
 const range = (end:number) => {
   const {result} = Array.from({length: end}).reduce(({result, current}) => ({
@@ -60,6 +53,8 @@ type Props = {
   initDate?:Date,
   // events: Event[],
 }
+
+// TODO why do days of the week keep getting shuffled on month move
 
 export function EventsCalendar({initDate = new Date()}:Props) {
 
