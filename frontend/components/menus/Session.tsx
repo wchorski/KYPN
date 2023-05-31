@@ -79,6 +79,7 @@ const StyledSessionBadge = styled.button`
   position: relative;
   margin-left: auto;
 
+
   /* svg{
     font-size: 2rem;
   } */
@@ -96,6 +97,10 @@ const StyledSessionBadge = styled.button`
     transform: translateY(10px);
     transition: all linear .1s;
     right: 0;
+  }
+
+  li{
+    margin-bottom: 1em;
   }
 
   a{

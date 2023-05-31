@@ -4,6 +4,7 @@ import { IoMdTime } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
 import Link from "next/link";
 import { ImageDynamic } from "../elements/ImageDynamic";
+import { Event } from "../../lib/types";
 
 // import Image from "next/image";
 
@@ -19,16 +20,16 @@ import { ImageDynamic } from "../elements/ImageDynamic";
 // }
 // const url = '/events/1'
 
-type Event = {
-  photo:string,
-  start:string,
-  summary:string,
-  location?: {
-    name:string,
-    id:string,
-  }
-  id:string,
-}
+// type Event = {
+//   photo:string,
+//   start:string,
+//   summary:string,
+//   location?: {
+//     name:string,
+//     id:string,
+//   }
+//   id:string,
+// }
 
 export function EventCard({photo, start, summary, location, id}:Event) {
   return (
@@ -39,7 +40,7 @@ export function EventCard({photo, start, summary, location, id}:Event) {
 
       <div>
         <time dateTime={start} className="date-short"> 
-          {datePrettyLocalDayShort(start)} 
+          {datePrettyLocalDayShort(start || '')} 
         </time>
       </div>
 
@@ -50,13 +51,15 @@ export function EventCard({photo, start, summary, location, id}:Event) {
           <IoMdTime />
           {/* {datePrettyLocalDay(start)}  */}
           {/* @  */}
-          {datePrettyLocalTime(start)}
+          {datePrettyLocalTime(start || '')}
         </time>
 
         {location && (
           <address>
             <MdLocationOn />
-            {location?.name} <br />
+            {location?.name} 
+            <br />
+            {location?.address}
             {/* {address.street} <br /> */}
             {/* {address.town} <br /> */}
             {/* {address.country} <br /> */}

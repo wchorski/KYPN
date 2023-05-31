@@ -10,12 +10,26 @@ import { EventCreateUpdateForm } from "../components/events/EventCreateUpdateFor
 import styled from "styled-components";
 import { EventTable } from "../components/events/EventTable";
 import { UserTable } from "../components/user/UserTable";
+import { useQuery } from "@apollo/client";
+import { QUERY_LOCATIONS } from "./events/edit/[id]";
+import { Location } from "../lib/types"
+import { QueryLoading } from "../components/menus/QueryLoading";
+import ErrorMessage from "../components/ErrorMessage";
 
 // list of users
 export default function AdminPage() {
 
   const [registerData, setRegisterData] = useState<any>()
   const [eventData, setEventData] = useState<any>()
+
+  const { loading: loadingLocations, error: errorLocations, data: dataLocations } = useQuery(QUERY_LOCATIONS)
+  function getLocationOptions(locations:Location[]){
+    return dataLocations.locations.map((loc:Location) => ({value: loc.id, label: loc.name}))
+  }
+
+  if (loadingLocations) return <QueryLoading />
+  if (errorLocations) return <ErrorMessage error={errorLocations} />
+
 
   return (<>
     <StyledAdminDash>
@@ -24,7 +38,7 @@ export default function AdminPage() {
       </PopupModal>
 
       <PopupModal data={eventData} setData={setEventData}>
-        <EventCreateUpdateForm />
+        <EventCreateUpdateForm locationOptions={getLocationOptions(dataLocations)}/>
       </PopupModal>
 
       <h2>Quick Edit</h2>

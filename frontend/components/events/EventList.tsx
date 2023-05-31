@@ -72,8 +72,10 @@ export const QUERY_EVENTS_ALL = gql`
       dateModified
       id
       location {
-        name
         id
+        name
+        address
+        rooms
       }
       price
       seats

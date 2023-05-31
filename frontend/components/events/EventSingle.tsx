@@ -41,7 +41,7 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, seats, hosts}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, seats, hosts, location}:Event = data?.event
   
   return (
     <StyledEventSingle>
@@ -64,6 +64,11 @@ export default function EventSingle({id}:{id:string}) {
           <strong>{summary}</strong>
           <br />
           <small>{datePrettyLocalDay(start || '')}</small>
+          <address>
+            {location?.name}
+            <br />
+            {location?.address}
+          </address>
         </div>
       </aside>
 
@@ -74,6 +79,13 @@ export default function EventSingle({id}:{id:string}) {
             <li>{datePrettyLocalDay(start || '')}</li>
             <li>{datePrettyLocalTime(start || '')}</li>
             <li># of seats: {seats}</li>
+            <li>
+              <address>
+                {location?.name}
+                <br />
+                {location?.address}
+              </address>
+            </li>
           </ul>
         </header>
 

@@ -1,25 +1,24 @@
 import styled from "styled-components"
-import { Event, INPUT_TYPES, InputObj } from "../../lib/types"
+import { Event, INPUT_TYPES, InputObj, Location } from "../../lib/types"
 import { useState } from "react";
 import useForm2 from "../../lib/useForm2";
 import { FormInput } from "../elements/Forminput";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { QUERY_EVENTS_ALL } from "./EventList";
 import { QUERY_EVENT } from "./EventSingle";
 import ErrorMessage from "../ErrorMessage";
 
 type Props = {
-  event?:Event
+  event?:Event,
+  locationOptions: any[],
 }
 
-export function EventCreateUpdateForm({event}:Props) {
+export function EventCreateUpdateForm({event, locationOptions}:Props) {
 
   const router = useRouter()
   // console.log(event?.start);
   // console.log(convertISOtoLocale(event?.start));
-  
-
   const inputs:InputObj[] = [
     {
       name: 'summary',
@@ -47,6 +46,16 @@ export function EventCreateUpdateForm({event}:Props) {
       errorMessage: 'end error',
       required: true,
       initial: convertISOtoLocale(event?.end),
+    },
+    {
+      name: 'location',
+      type: INPUT_TYPES.SELECT,
+      placeholder: '', 
+      label: 'Location',
+      errorMessage: 'location error',
+      required: true,
+      options: locationOptions, 
+      initial: '',
     },
     {
       name: 'price',
@@ -79,6 +88,7 @@ export function EventCreateUpdateForm({event}:Props) {
 
   const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
 
+  // const {data: dataLocations, loading: loadingLocations, error: errorLocations} = useQuery(QUERY_LOCATIONS)
   const [createEvent, { loading, error }] = useMutation(EVENT_CREATE)
   const [updateEvent, { loading: updating, error: updateError }] = useMutation(EVENT_UPDATE)
   
@@ -96,6 +106,21 @@ export function EventCreateUpdateForm({event}:Props) {
           price: Number(values.price)
         }
       }
+
+      
+      
+      // todo connect location if it exists
+      if (values.location !== '' ) {
+        Object.assign(formattedValues, {
+          location: {
+            connect: {
+              id: values.location
+            }
+          },
+        })
+      }
+      console.log({values});
+      console.log({formattedValues});
       
       // if id exists, then update existing event
       if(event){
@@ -126,70 +151,84 @@ export function EventCreateUpdateForm({event}:Props) {
       } catch (err) {
         console.warn('create event error: ', err);
       }
-    }
-  
-    return (
-      <StyledEventForm onSubmit={handleSubmit}>
-
-        <ErrorMessage error={error || updateError} />
-        
-        <fieldset>
-          <legend> essential </legend>
-
-          <FormInput 
-            {...handleFindProps('summary')}
-            value={values['summary']}
-            onChange={handleChange}
-          />
-
-          <FormInput 
-            {...handleFindProps('start')}
-            value={values['start']}
-            // onChange={handleChange}
-            onChange={(e:any) => {
-              handleChange(e)
-              console.log(e.target.value);
-              
-            }}
-          />
-
-          <FormInput 
-            {...handleFindProps('end')}
-            value={values['end']}
-            onChange={handleChange}
-          />
-        </fieldset>
-
-        <fieldset>
-          <legend> Info </legend>
-
-          <FormInput 
-            {...handleFindProps('price')}
-            value={values['price']}
-            onChange={handleChange}
-            />
-
-          <FormInput 
-            {...handleFindProps('seats')}
-            value={values['seats']}
-            onChange={handleChange}
-            />
-
-          <FormInput 
-            className='textarea'
-            {...handleFindProps('description')}
-            value={values['description']}
-            onChange={handleChange}
-          />
-        </fieldset>
-
-        <button type="submit" disabled={loading || updating} className="medium">
-          {event ? 'Update' : 'Create'} Event
-        </button>
-
-      </StyledEventForm>
-    )
   }
+
+  // function getLocationOptions(){
+  //   return dataLocations.locations.map((loc:Location) => ({value: loc.id, label: loc.name}))
+  // }
+
+  // const locationOptions = dataLocations.locations.map((loc:Location) => ({value: loc.id, label: loc.name}))
+  // console.log({locationOptions});
+   
+  
+  return (
+    <StyledEventForm onSubmit={handleSubmit}>
+
+      <ErrorMessage error={error || updateError} />
+      
+      <fieldset>
+        <legend> essential </legend>
+
+        <FormInput 
+          {...handleFindProps('summary')}
+          value={values['summary']}
+          onChange={handleChange}
+        />
+
+        <FormInput 
+          {...handleFindProps('start')}
+          value={values['start']}
+          // onChange={handleChange}
+          onChange={(e:any) => {
+            handleChange(e)
+            console.log(e.target.value);
+            
+          }}
+        />
+
+        <FormInput 
+          {...handleFindProps('end')}
+          value={values['end']}
+          onChange={handleChange}
+        />
+
+        <FormInput 
+          {...handleFindProps('location')}
+          value={values['location']}
+          onChange={handleChange}
+        />
+      </fieldset>
+
+      <fieldset>
+        <legend> Info </legend>
+
+        <FormInput 
+          {...handleFindProps('price')}
+          value={values['price']}
+          onChange={handleChange}
+          />
+
+        <FormInput 
+          {...handleFindProps('seats')}
+          value={values['seats']}
+          onChange={handleChange}
+        />
+
+        <FormInput 
+          className='textarea'
+          {...handleFindProps('description')}
+          value={values['description']}
+          onChange={handleChange}
+        />
+      </fieldset>
+
+      <button type="submit" disabled={loading || updating} className="medium">
+        {event ? 'Update' : 'Create'} Event
+      </button>
+
+    </StyledEventForm>
+  )
+}
 
 
 const EVENT_CREATE = gql`
@@ -212,9 +251,22 @@ const EVENT_UPDATE = gql`
       status
       description
       dateModified
+      location{
+        id
+        name
+      }
     }
   }
 `
+
+// const QUERY_LOCATIONS = gql`
+//   query Locations {
+//     locations {
+//       id
+//       name
+//     }
+//   }
+// `
 
 const StyledEventForm = styled.form`
   box-shadow: #0000004f 1px 1px 3px;
