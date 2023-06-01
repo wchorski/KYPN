@@ -135,8 +135,8 @@ export function EventsCalendar({initDate = new Date()}:Props) {
       </CalenderHead>
 
       <GridSevenCol>
-        {DAYS.map((day) => (
-          <HeadDays className="nonDRAG">{day}</HeadDays>
+        {DAYS.map((day, i) => (
+          <HeadDays key={i} className="nonDRAG">{day}</HeadDays>
         ))}
       </GridSevenCol>
 
