@@ -113,6 +113,7 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
       
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
+      // @ts-ignorew
       setAttendingEventIds(prev => [...prev, popupData?.event?.id])
 
     } catch (err) {
