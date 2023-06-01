@@ -139,6 +139,8 @@ const StyledAccountCard = styled.div`
     }
 
     article{
+      height: 30em;
+      overflow-y: scroll;
       opacity: .3;
       transition: all .3s;
       background-color: var(--c-txt-rev);
@@ -174,6 +176,7 @@ const StyledAccountNav = styled.nav`
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
+  
 
   li{
     display: flex;

@@ -21,7 +21,7 @@ export const FormInput = (props:any) => {
 
   if(inputProps.type === 'select') return (
     <StyledInputLabel htmlFor={inputProps.name}>
-      {label}
+      <span className="label">{label}</span>
       <select 
         {...inputProps}
         // onChange={handleChange}
@@ -54,6 +54,8 @@ export const FormInput = (props:any) => {
   )
 };
 
+
+
 const StyledInputLabel = styled.label`
   font-size: 1rem;
   color: gray;
@@ -76,6 +78,11 @@ const StyledInputLabel = styled.label`
   /* fixes slight offset with other inputs */
   input[type=date]{
     padding: 16px;
+  }
+
+  select{
+    padding: 1em;
+    margin-top: 1em;
   }
 
   /* input, select {
