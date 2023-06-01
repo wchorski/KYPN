@@ -9,10 +9,15 @@ export default function EventsPage() {
   const { query } = useRouter()
   
   return (<>
-    <h1>Events</h1>
-    <EventsCalendar />
-    <h2>Upcoming</h2>
-    <EventList page={Number(query.page) || 1} />
+    <section className='pad'>
+      <h1>Events</h1>
+      <EventsCalendar />
+    </section>
+
+    <section className='pad'>
+      <h2>Upcoming</h2>
+      <EventList page={Number(query.page) || 1} />
+    </section>
     {/* <Pagination route='/events' page={Number(query.page) || 1} /> */}
   </>)
 }

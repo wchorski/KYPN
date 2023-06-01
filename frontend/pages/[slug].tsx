@@ -50,10 +50,6 @@ export default function PageBySlug() {
 
   return (
     <>
-      <div>
-        <Link href="/">&larr; back home</Link>
-      </div>
-
       <StyledPageSingle isShown >
         <header
           style={{
@@ -115,6 +111,12 @@ const StyledPageSingle = styled.div<{isShown: boolean}>`
       margin-bottom: .1em;
       font-size: 1.2rem;
     }
+  }
+
+  p{
+    text-align: center;
+    max-width: 60ch;
+    margin: 1em auto;
   }
 `
 

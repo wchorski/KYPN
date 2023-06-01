@@ -161,6 +161,7 @@ const SEARCH_USERS = gql`
     users(where: $where) {
       id
       name
+      nameLast
       email
       role {
         name

@@ -11,7 +11,7 @@ export const QueryError = ({error}:Props) => {
   
 
   return (<>
-    <h2>Query Error: </h2>
+    <h3>Query Error: </h3>
     <p className='error'>{error.message}</p>
     <p>Please contact <strong>{EMAIL}</strong> if problem persists</p>
   </>)

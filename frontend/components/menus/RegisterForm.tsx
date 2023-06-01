@@ -14,6 +14,7 @@ export default function RegisterForm() {
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     name: '',
+    nameLast: '',
     email: '',
     password: '',
   })
@@ -64,18 +65,28 @@ export default function RegisterForm() {
 
         <fieldset disabled={loading} aria-busy={loading}>
           <label htmlFor="name">
-            Name
+            First Name
             <input type="text" id="name" name="name" autoComplete="name"
-              placeholder="your name..."
+              placeholder="Jake..."
               required
               defaultValue={inputs.name}
               onChange={handleChange}
             />
           </label>
 
+          <label htmlFor="nameLast">
+            Last Name
+            <input type="text" id="nameLast" name="nameLast" 
+              placeholder="Smith..."
+              required
+              defaultValue={inputs.nameLast}
+              onChange={handleChange}
+            />
+          </label>
+
           <label htmlFor="email">
             Email
-            <input type="email" id="email" name="email" autoComplete="email"
+            <input type="email" id="email" name="email" 
               placeholder="email..."
               required
               defaultValue={inputs.email}
@@ -85,7 +96,7 @@ export default function RegisterForm() {
 
           <label htmlFor="password">
             Password
-            <input type="password" id="password" name="password" autoComplete="password"
+            <input type="password" id="password" name="password" 
               placeholder="password..."
               required
               defaultValue={inputs.password}

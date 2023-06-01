@@ -24,12 +24,14 @@ export default function Header({options = default_options}:Props) {
     <StyledHeader>
 
       <StyledLogo>
+        <Link href={`/home`} > 
         {options.isLogo && (
           <Image src={'/assets/private/logo.svg'} width={100} height={100} alt='site logo'/>
         )}
         {options.isSiteTitle && (
-          <Link href={`/`} > <h1> {SITE_TITLE} </h1> </Link>
+          <h1> {SITE_TITLE} </h1> 
         )}
+        </Link>
       </StyledLogo>
 
     </StyledHeader>

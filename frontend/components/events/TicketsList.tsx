@@ -10,11 +10,12 @@ import { TicketListItem } from './TicketListItem';
 import { tTicketPopup } from './TicketPopup';
 
 type Props ={ 
-  tickets:Ticket[],
+  tickets:Ticket[]|undefined,
   setPopupData: Dispatch<SetStateAction<tTicketPopup>>,
+  attendingEventIds:(string|undefined)[]|undefined,
 }
 
-export default function TicketsList({tickets = [], setPopupData}:Props) {
+export default function TicketsList({tickets = [], setPopupData, attendingEventIds}:Props) {
   
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     id: '',
@@ -22,14 +23,18 @@ export default function TicketsList({tickets = [], setPopupData}:Props) {
   })
   
   if(tickets.length === 0) return (
-    <p> no tickets have been purchased for this event </p>
+    <p> no tickets  </p>
   )
 
   return (
     <StyledTicketList>
-      {tickets.map(ticket => (
-        <TicketListItem ticket={ticket} key={ticket.id} setPopupData={setPopupData}/>
-      ))}
+      {tickets.map(ticket => {
+        // if(attendingEventIds?.includes(ticket.event.id)){
+          return (
+            <TicketListItem ticket={ticket} key={ticket.id} setPopupData={setPopupData}/>
+          )
+        // }
+      })}
     </StyledTicketList>
   )
 }

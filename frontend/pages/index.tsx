@@ -17,24 +17,5 @@ export default function IndexPage() {
       <p>Welcome, {session.name}</p>
     )}
 
-    {/* <SearchSite /> */}
-
-    <StyledDropDownItem>
-      <div className='meta'>
-        <Link  href={`/users/1`} >
-          <h5> My name</h5>
-        </Link>
-        <span className="email"> me@mail.lan</span>
-      </div>
-
-
-      <div className='edit-button-cont'>
-        <button className="delete">
-          remove
-        </button>
-      </div>
-            
-    </StyledDropDownItem>
-
   </>)
 }

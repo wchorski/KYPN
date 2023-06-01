@@ -52,6 +52,8 @@ export const QUERY_USER_CURRENT = gql`
           canManageRoles
           canManageUsers
           canSeeOtherUsers
+          canManageTickets
+          canManageEvents
         }
         cart {
           id

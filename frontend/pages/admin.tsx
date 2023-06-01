@@ -41,32 +41,38 @@ export default function AdminPage() {
         <EventCreateUpdateForm locationOptions={getLocationOptions(dataLocations)}/>
       </PopupModal>
 
-      <h2>Quick Edit</h2>
+      <section className="pad">
+        <h2>Quick Edit</h2>
 
-      <div className="quick-edit">
+        <div className="quick-edit">
 
-        <button onClick={() => setRegisterData({hey: 'sup'})} className="medium">
-          Register User
-        </button>
+          <button onClick={() => setRegisterData({hey: 'sup'})} className="medium">
+            Register User
+          </button>
 
-        <button onClick={() => setEventData({hey: 'sup'})} className="medium">
-          Create Event
-        </button>
+          <button onClick={() => setEventData({hey: 'sup'})} className="medium">
+            Create Event
+          </button>
 
-      </div>
+        </div>
+      </section>
       <hr />
 
-      
-      <EventTable />
-      <hr />
+      <section className="pad">
+        <EventTable />
+        <hr />
 
-      <UserTable />
+        <UserTable />
+      </section>
 
     </StyledAdminDash>
   </>)
 }
 
 const StyledAdminDash = styled.div`
+
+  
+
   .quick-edit{
     display: flex;
     flex-wrap: wrap;

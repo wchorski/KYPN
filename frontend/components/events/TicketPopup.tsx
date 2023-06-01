@@ -25,10 +25,14 @@ type Props = {
   isDelete?:boolean,
   ticketId?:string,
   popupData: tTicketPopup,
-  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>
+  setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
+  attendingEventIds:(string|undefined)[]|undefined,
+  setAttendingEventIds:Dispatch<SetStateAction<(string|undefined)[]|undefined>>,
 }
 
-export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', popupData, setTicketPopupData}:Props) {
+const today = new Date().toISOString()
+
+export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', popupData, setTicketPopupData, attendingEventIds, setAttendingEventIds}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
@@ -46,7 +50,7 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
   }
 
   async function handleDelete(){
-    // console.log({popupData});
+    console.log({popupData});
     
     try {
       const res = await deleteTicket({
@@ -54,13 +58,21 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
           where: { id: popupData?.ticket?.id }
         },
         refetchQueries: [
-          { query: QUERY_EVENTS_ALL, variables: {orderBy: [{start: 'desc'}] } }, 
+          { query: QUERY_EVENTS_ALL, variables: {where:{
+            start: {
+              gte: today,
+            }
+          }, orderBy: [{start: 'desc'}] } }, 
           { query: QUERY_EVENT, variables: { where: { id: popupData?.ticket?.event?.id }}, }, 
           { query: QUERY_USER_SINGLE, variables: { where: { id: popupData?.ticket?.holder?.id }}, },
         ]
       })
 
       console.log('ticket deleted, ', {res});
+      // @ts-ignore
+      // const updatedEventIds = attendingEventIds.filter(id => id !== event.id);
+      // setAttendingEventIds(updatedEventIds)
+      setAttendingEventIds(prev => prev.filter(id => id !== popupData?.ticket?.event.id))
       // setIsPopup(false)
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
@@ -97,8 +109,11 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
 
       // console.log('tieckt success, ', {res});
       // setIsPopup(false)
+      console.log(event);
+      
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
+      setAttendingEventIds(prev => [...prev, popupData?.event?.id])
 
     } catch (err) {
       console.warn('ticket error: ', err);

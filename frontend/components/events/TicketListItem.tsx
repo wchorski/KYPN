@@ -16,7 +16,7 @@ type Props = {
 }
 
 
-export  function TicketListItem({ticket, setPopupData}:Props) {
+export  function TicketListItem({ticket, setPopupData}:Props) {  
 
   const [isEditing, setIsEditing] = useState(false)
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -57,20 +57,21 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
     })
   }
 
+  // todo using the `ticket.holder.name` check is a bit hacky but using it for now
   return (
     <li className='card'>
       <div>
-        {ticket.holder ? (<>
+        {ticket.holder.name ? (<>
           <strong>{ticket.holder?.name}</strong> <br />
           <small>{ticket.holder?.email}</small>
         </>) : (<>
-          <strong>{ticket.event.summary}</strong> <br />
-          <small> {datePrettyLocalDay(ticket.event.start || '') } </small> <br />
-          <small> {datePrettyLocalTime(ticket.event.start || '')} </small> <br />
+          <strong>{ticket.event?.summary}</strong> <br />
+          <small> {datePrettyLocalDay(ticket.event?.start || '') } </small> <br />
+          <small> {datePrettyLocalTime(ticket.event?.start || '')} </small> <br />
           <small>
-            {ticket.event.location?.name}
+            {ticket.event?.location?.name}
             <br />
-            {ticket.event.location?.address}
+            {ticket.event?.location?.address}
           </small>
         </>)}
       </div>

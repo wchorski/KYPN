@@ -144,7 +144,16 @@ export type User = {
   subscriptionPlans?: any[],
   subscriptions?: any[],
   orders?: OrderItem[],
-  role?: any,
+  role?: {
+    canManageCart?:boolean,
+    canManageOrders?:boolean,
+    canManageProducts?:boolean,
+    canManageRoles?:boolean,
+    canManageUsers?:boolean,
+    canSeeOtherUsers?:boolean,
+    canManageTickets?:boolean,
+    canManageEvents?:boolean,
+  }
   dateCreated?: string,
   dateModified?: string,
   tickets?:Ticket[],

@@ -5,9 +5,12 @@ import ErrorMessage from "../ErrorMessage"
 import { AccountDetails } from "../menus/AccountDetails"
 import EventList from "../events/EventList"
 import { UserEvents } from "./UserEvents"
+import { useUser } from "../menus/Session"
 
 
 export function UserSingle({id}:{id:string}) {  
+
+  const session:User =  useUser()
 
   const { loading, error, data } = useQuery(
     QUERY_USER_SINGLE, {
@@ -22,16 +25,18 @@ export function UserSingle({id}:{id:string}) {
 
   return (
     <>
-      <section>
+      <section className="pad">
         <AccountDetails {...data.user}/>
       </section>
 
       <hr />
       
-      <section className="admin-panel">
-        <h2>Admin Events Quick Edit</h2>
-        <UserEvents user={data.user}/>
-      </section>
+      {session && session.role?.canManageTickets && (
+        <section className="admin-panel marg">
+          <h2>Admin Events Quick Edit</h2>
+          <UserEvents user={data.user}/>
+        </section>
+      )}
     </>
   )
 }
@@ -48,6 +53,10 @@ export const QUERY_USER_SINGLE = gql`
       isActive
       tickets {
         id
+        status
+        holder{
+          id
+        }
         event {
           summary
           id
@@ -59,7 +68,6 @@ export const QUERY_USER_SINGLE = gql`
             address
           }
         }
-        status
       }
       role {
         id
