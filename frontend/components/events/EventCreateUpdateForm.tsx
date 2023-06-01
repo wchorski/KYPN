@@ -163,7 +163,6 @@ export function EventCreateUpdateForm({event, locationOptions}:Props) {
   
   return (
     <StyledEventForm onSubmit={handleSubmit}>
-
       <ErrorMessage error={error || updateError} />
       
       <fieldset>

@@ -135,6 +135,8 @@ export const StyledFormMini = styled.form`
     display: flex;
     justify-content: space-between;
   }
+
+  
 `
 
 export const UPDATE_TICKET = gql`
