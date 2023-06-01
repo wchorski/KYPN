@@ -1,18 +1,18 @@
 import useForm from "../../lib/useForm";
 import { StyledForm } from "../../styles/Form.styled";
 import { gql, useMutation } from "@apollo/client";
-import Router from "next/router";
+// import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "../../lib/useGlobalContext";
+// import { useGlobalContext } from "../../lib/useGlobalContext";
 // import { SessionContext } from "../pages/_app";
 // import { SessionContext } from "../lib/sessionContext";
 
 export default function PasswordResetForm({ token }: { token: string | string[] }) {
 
   const [successMsg, setSuccessMsg] = useState<string>()
-  const { session, setSession } = useGlobalContext()
+  // const { session, setSession } = useGlobalContext()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',

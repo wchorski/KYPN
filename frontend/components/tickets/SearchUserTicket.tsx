@@ -8,7 +8,7 @@ import { StyledDropDown, StyledDropDownItem, StyledSearch } from "../../styles/D
 import styled from "styled-components"
 import { useSearch } from "../../lib/useGlobalContext";
 import { Ticket, User } from "../../lib/types";
-import { tTicketPopup } from "../../components/events/TicketPopup";
+import { tTicketPopup } from "../events/TicketPopup";
 
 type Props = {
   eventId:string
@@ -169,9 +169,9 @@ export function SearchUserTicket({eventId = '', setIsPopup, setPickedUser, setTi
 
                   </div>
                   <div className='edit-button-cont'>
-                    {handleEventsAttending(item.tickets).includes(eventId) ? (
+                    {item.tickets && handleEventsAttending(item.tickets).includes(eventId) ? (
                       <button 
-                        onClick={() => handlePopup( {isDelete: true, ticket: item.tickets.find(t => t.event.id === eventId)}) }
+                        onClick={() => handlePopup( {isDelete: true, ticket: item.tickets?.find(t => t.event.id === eventId)}) }
                         className="delete"
                       >
                         remove

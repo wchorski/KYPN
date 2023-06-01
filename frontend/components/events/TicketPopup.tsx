@@ -26,13 +26,12 @@ type Props = {
   ticketId?:string,
   popupData: tTicketPopup,
   setTicketPopupData: Dispatch<SetStateAction<tTicketPopup>>,
-  attendingEventIds:(string|undefined)[]|undefined,
-  setAttendingEventIds:Dispatch<SetStateAction<(string|undefined)[]|undefined>>,
+  setAttendingEventIds?:Dispatch<SetStateAction<(string|undefined)[]|undefined>>,
 }
 
 const today = new Date().toISOString()
 
-export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', popupData, setTicketPopupData, attendingEventIds, setAttendingEventIds}:Props) {
+export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTrig, isDelete=false, ticketId='', popupData, setTicketPopupData, setAttendingEventIds}:Props) {
 
   const ticketPopupRef = useRef<HTMLDialogElement>(null)
 
@@ -109,12 +108,13 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
 
       // console.log('tieckt success, ', {res});
       // setIsPopup(false)
-      console.log(event);
       
       setTicketPopupData(undefined)
       setAnimTrig(prev => prev + 1)
-      // @ts-ignorew
-      setAttendingEventIds(prev => [...prev, popupData?.event?.id])
+      if(setAttendingEventIds){
+        //@ts-ignore
+        setAttendingEventIds(prev => [...prev, popupData?.event?.id])
+      }
 
     } catch (err) {
       console.warn('ticket error: ', err);

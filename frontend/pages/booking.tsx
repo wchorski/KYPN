@@ -1,5 +1,4 @@
 import { BookingCreate } from "../components/booking/BookingCreate"
-import { BookingForm } from "../components/booking/BookingForm"
 
 export default function BookingPage() {
 

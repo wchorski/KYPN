@@ -64,13 +64,14 @@ export const filterServiceSlots = (start:string, end:string, duration:string) =>
   return slots
 }
 
-function addHoursToTime(inputDate: typeof date, hoursToAdd:number) {
+function addHoursToTime(inputDate:Date, hoursToAdd:number) {
   const options = {
     hour12: false, 
     hour: 'numeric', 
     minute: 'numeric', 
     second: 'numeric'
   }
+  // @ts-ignore
   const time = inputDate.toLocaleTimeString('en-US', options)
 
   const [hours, minutes, seconds] = time.split(':').map(Number)

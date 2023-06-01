@@ -5,13 +5,13 @@ import Router from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useGlobalContext } from "../../lib/useGlobalContext";
+// import { useGlobalContext } from "../../lib/useGlobalContext";
 // import { SessionContext } from "../pages/_app";
 // import { SessionContext } from "../lib/sessionContext";
 
 export default function PasswordResetRequest() {
 
-  const { session, setSession } = useGlobalContext()
+  // const { session, setSession } = useGlobalContext()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',
