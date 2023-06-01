@@ -1,21 +1,15 @@
-FROM node:16
-
-RUN mkdir /app
-
+FROM node:16-alpine
 WORKDIR /app
 
+# # Install dependencies based on the preferred package manager
+# COPY package.json yarn.lock* ./
+# # KEYSTONE file required for post install scripts
+# COPY keystone.ts schema.* auth.ts ./
+COPY . .
 
-COPY package.json ./
-COPY yarn.lock ./
+RUN yarn
 
-RUN yarn install
 
-COPY . ./
+EXPOSE 3000
 
-RUN yarn build
-
-EXPOSE 3001
-ENV NODE_ENV production
-ENV PORT 3001
-
-CMD ["yarn", "start"]
+CMD ["yarn", "dev"]

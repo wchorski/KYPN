@@ -21,8 +21,7 @@ services:
     container_name: myapp-kypn-backend
     image: myapp-kypn:latest # rename ALL 'myapp-kypn' to a unique name 
     restart: unless-stopped
-    build:
-      dockerfile: ./backend/Dockerfile
+    build: ./backend
     # ports: # expose this if you're not using a proxy
     #   - 8889:3001
     networks:
@@ -35,8 +34,7 @@ services:
     container_name: myapp-kypn-frontend
     image: myapp-kypn:latest # rename ALL 'myapp-kypn' to a unique name 
     restart: unless-stopped
-    build:
-      dockerfile: ./frontend/Dockerfile
+    build: ./frontend
     # ports: # expose this if you're not using a proxy
     #   - 8888:3000
     networks:
