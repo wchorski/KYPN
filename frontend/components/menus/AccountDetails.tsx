@@ -33,7 +33,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     
     <StyledAccountCard>
       <StyledAccountNav>
-        <nav>
+ 
           <li>
             <button onClick={() => setState(DASH_STATE.DASHBOARD)} className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
               Dashboard <MdOutlineAccountBox />
@@ -59,7 +59,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
               Tickets <HiOutlineTicket />
             </button>
           </li>
-        </nav>
+      
       </StyledAccountNav>
 
       <div className="dash-cont">
@@ -87,34 +87,17 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
         <article className={state === DASH_STATE.ORDERS ? 'active' : ''}>
           <h3>Orders</h3>
-          <a> order 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> order 1 </a> <br />
+
 
         </article>
 
         <article className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
           <h3>Subscriptions</h3>
-          <a> d 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> d 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> d 1 </a> <br />
-          <a> order 1 </a> <br />
 
         </article>
 
         <article className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}>
           <h3>Downloads</h3>
-          <a> d 1 </a> <br />
-          <a> order 1 </a> <br />
-          <a> d 1 </a> <br />
-          <a> orsdfdfdfder 1 </a> <br />
-          <a> d 1 </a> <br />
-          <a> orddfdfdfdfdfder 1 </a> <br />
 
         </article>
 
@@ -123,13 +106,13 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
           <ul>
             {tickets && tickets.map(tick => (
               <li key={tick.id}>
-                  <Link href={`/events/e/${tick.event.id}`}>
-                    <strong>{tick.event.summary}</strong>
+                  <Link href={`/events/e/${tick.event?.id}`}>
+                    <strong>{tick.event?.summary}</strong>
                   </Link>
                   <br />
-                  <small>{datePrettyLocalDay(tick.event.start || '')}</small>
+                  <small>{datePrettyLocalDay(tick.event?.start || '')}</small>
                   <br />
-                  <small>{tick.event.location?.name}</small>
+                  <small>{tick.event?.location?.name}</small>
               </li>
             ))}
           </ul>
@@ -186,14 +169,15 @@ const StyledAccountCard = styled.div`
 
 
 const StyledAccountNav = styled.nav`
-  background-color: #cbcbe2;
+  /* background-color: #cbcbe2; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: start;
 
   li{
     display: flex;
+    width: 100%;
   }
   
   

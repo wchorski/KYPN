@@ -10,7 +10,7 @@ import { datePrettyLocalDayShort, datePrettyLocalTime } from "../../lib/dateForm
 import Link from "next/link"
 import { StyledEventCard } from "../events/EventCard"
 import TicketPopup, { tTicketPopup } from "../events/TicketPopup"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Ticket, User } from "../../lib/types"
 import { QUERY_USER_SINGLE } from "./UserSingle"
 import TicketsList from "../events/TicketsList"
@@ -27,19 +27,26 @@ type RSVPData = {
   userId:string,
 }
 
+const today = new Date()
+
 export function UserEvents({user, page = 1}:Props) {
 
   const [popupData, setPopupData] = useState<tTicketPopup>()
   const [animTrig, setAnimTrig] = useState(0)
   const [isShown, setIsShown] = useState(false)
   const [pickedEvent, setPickedEvent] = useState()
-  const [attendingEventIds, setAttendingEventIds] = useState(user.tickets.map(t => t.event.id))
+  const [attendingEventIds, setAttendingEventIds] = useState(user.tickets?.map(t => t.event?.id))
   // const [pickedUser, setPickedUser] = useState('')
 
   const [deleteTicket, {loading: loadingTicket, error: errorTicket, data: dataTicket}] = useMutation(DELETE_TICKET)
   
   const { loading, error, data } = useQuery(QUERY_EVENTS_ALL, {
     variables: {
+      where:{
+        start:{
+          gte: today.toISOString(),
+        }
+      },
       // skip: page * perPage - perPage,
       // take: perPage,
       orderBy: [
@@ -76,9 +83,12 @@ export function UserEvents({user, page = 1}:Props) {
     cache.evict(cache.identify(payload.data.deleteTicket))
   }
 
-  function userEventIds(tickets:Ticket[]){
+  useEffect(() => {
+    console.log(attendingEventIds);
+    // return () => 
+  }, [attendingEventIds])
+  
 
-  }
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
@@ -92,17 +102,19 @@ export function UserEvents({user, page = 1}:Props) {
         setAnimTrig={setAnimTrig}
         event={pickedEvent} 
         user={user}
+        attendingEventIds={attendingEventIds}
+        setAttendingEventIds={setAttendingEventIds}
       />
 
       <h3>User Tickets </h3>
-      <TicketsList tickets={user.tickets} setPopupData={setPopupData}/>
+      <TicketsList tickets={user.tickets} setPopupData={setPopupData} attendingEventIds={attendingEventIds}/>
 
       <h3> Upcoming Events </h3>
       {/* // todo compare and only show events not attending */}
 
       <ul>
         {data.events.map((event:any) => {
-          if(!attendingEventIds.includes(event.id)){
+          if(!attendingEventIds?.includes(event.id)){
            return (
             <li key={event.id}>
               <StyledEventCard>
@@ -145,7 +157,9 @@ export function UserEvents({user, page = 1}:Props) {
                       setPopupData({event: event, user: user})
                       // setPickedEvent(event); 
                       // setIsShown(true); 
-                      setAttendingEventIds(prev => [...prev, event.id])}}
+                      // @ts-ignore
+                      // setAttendingEventIds(prev => [...prev, event.id])
+                    }}
                   > 
                     RSVP {user.name}
                   </button>

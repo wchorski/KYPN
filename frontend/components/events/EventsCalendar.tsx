@@ -123,13 +123,13 @@ export function EventsCalendar({initDate = new Date()}:Props) {
   return (
     <StyledEventsCalender>
       <CalenderHead>
-        <button onClick={prevMonth}>
+        <button onClick={prevMonth} className="arrow left">
           <MdOutlineKeyboardArrowLeft />
         </button>
         
         <p>{getMonthYear(currentDate)}</p>
 
-        <button onClick={nextMonth}>
+        <button onClick={nextMonth} className="arrow right">
           <MdOutlineKeyboardArrowRight />
         </button>
       </CalenderHead>
@@ -161,22 +161,6 @@ export function EventsCalendar({initDate = new Date()}:Props) {
         )}
       </GridSevenCol>
 
-      {/* <CalendarBody >
-        {sortDays(currentDate).map(day => 
-          <StyledDay active={isDatesSameDay(new Date(), getDateObj(currYear, currMonth, day))} key={day}>
-            <label>{day}</label>
-            {events.map((event:Event) => {
-              if(isDatesSameDay(getDateObj(currYear, currMonth, day), new Date(event.start || '')))
-                return <StyledEvent key={event.id}>
-                  <Link href={`/events/e/${event.id}`}>
-                    {event.summary} @ {datePrettyLocalTime(event.start || '')}
-                  </Link>
-                </StyledEvent>
-              }
-            )}
-          </StyledDay>
-        )}
-      </CalendarBody> */}
     </StyledEventsCalender>
   )
 }
@@ -216,6 +200,17 @@ const CalenderHead = styled.div`
   justify-content: space-around;
   align-items: center;
   font-size: 2rem;
+
+  .arrow{
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    transition: all .3s;
+
+    &:hover{
+      color: var(--c-accent);
+    }
+  }
 `
 
 const HeadDays = styled.span`

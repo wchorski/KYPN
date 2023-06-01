@@ -64,13 +64,13 @@ export const QUERY_EVENTS_ALL = gql`
   query Events($where: EventWhereInput!, $orderBy: [EventOrderByInput!]!) {
     eventsCount
     events(where: $where, orderBy: $orderBy) {
+      id
       start
       status
       end
       photo
       dateCreated
       dateModified
-      id
       location {
         id
         name
