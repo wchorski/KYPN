@@ -12,10 +12,10 @@ import { tTicketPopup } from './TicketPopup';
 type Props ={ 
   tickets:Ticket[]|undefined,
   setPopupData: Dispatch<SetStateAction<tTicketPopup>>,
-  attendingEventIds:(string|undefined)[]|undefined,
+
 }
 
-export default function TicketsList({tickets = [], setPopupData, attendingEventIds}:Props) {
+export default function TicketsList({tickets = [], setPopupData}:Props) {
   
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     id: '',

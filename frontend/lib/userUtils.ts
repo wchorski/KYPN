@@ -6,7 +6,7 @@ export function findEmployeeBusyRanges(employee:User){
 
   const busyRanges:StringRange[] = []
 
-  employee.gigs.map((gig:Booking) => {
+  employee.gigs?.map((gig:Booking) => {
 
     const gigRange = {
       start: new Date(gig.start).toString(),
@@ -16,7 +16,7 @@ export function findEmployeeBusyRanges(employee:User){
     busyRanges.push(gigRange)
   })
 
-  employee.availability.map((avail:Availability) => {
+  employee.availability?.map((avail:Availability) => {
     if(avail.type === 'AVAILABLE') return console.log('date is of type AVAILABLE')
     
     const availRange = {

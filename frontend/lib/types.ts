@@ -145,6 +145,7 @@ export type User = {
   subscriptions?: any[],
   orders?: OrderItem[],
   role?: {
+    name:string,
     canManageCart?:boolean,
     canManageOrders?:boolean,
     canManageProducts?:boolean,

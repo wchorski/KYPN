@@ -1,5 +1,5 @@
-import useForm from "../lib/useForm"
-import { StyledForm } from "../styles/Form.styled"
+import useForm from "../../lib/useForm"
+import { StyledForm } from "../../styles/Form.styled"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
 import { QueryLoading } from "../menus/QueryLoading"

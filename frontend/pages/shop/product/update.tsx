@@ -1,5 +1,5 @@
-import { ProductUpdate } from '../components/ecommerce/ProductUpdate'
-import { QueryLoading } from '../components/menus/QueryLoading'
+import { ProductUpdate } from '../../../components/ecommerce/ProductUpdate'
+import { QueryLoading } from '../../../components/menus/QueryLoading'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 

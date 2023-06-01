@@ -1,7 +1,7 @@
-import { datePretty } from "../lib/dateFormatter"
-import { handlePhoto } from "../lib/handleProductPhoto"
-import moneyFormatter from "../lib/moneyFormatter"
-import { StyledOrderItem } from "../styles/OrderItem.styled"
+import { datePretty } from "../../lib/dateFormatter"
+import { handlePhoto } from "../../lib/handleProductPhoto"
+import moneyFormatter from "../../lib/moneyFormatter"
+import { StyledOrderItem } from "../../styles/OrderItem.styled"
 import Image from "next/image"
 import Link from "next/link"
 

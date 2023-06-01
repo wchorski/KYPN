@@ -43,7 +43,7 @@ export function UsersAll({page = 1}:Props) {
         cells={data.users.map((user:User) => ({
           name: user.name,
           email: user.email,
-          role: user.role.name,
+          role: user.role?.name,
           account: user.id,
         }))}
       />

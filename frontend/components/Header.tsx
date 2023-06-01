@@ -6,7 +6,7 @@ import styled from "styled-components";
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
 
 type Props = {
-  options: {
+  options?: {
     isLogo?:boolean,
     isSiteTitle?:boolean,
   }

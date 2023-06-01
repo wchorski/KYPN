@@ -324,7 +324,7 @@ export function BookingForm2({ services }:iProps) {
     // console.log({date});
     
     // * gigs / bookings
-    const staffGigsLocal = pickedStaff.gigs.flatMap((gig:Booking) => {
+    const staffGigsLocal = pickedStaff.gigs?.flatMap((gig:Booking) => {
       
       const start = new Date(gig.start).toLocaleDateString('en-CA')
       const end   = new Date(gig.end).toLocaleDateString('en-CA')
@@ -332,12 +332,12 @@ export function BookingForm2({ services }:iProps) {
     })
     
     
-    if(staffGigsLocal.includes(date)){
-      const gigs = pickedStaff.gigs.filter((obj:Booking) => {
+    if(staffGigsLocal?.includes(date)){
+      const gigs = pickedStaff.gigs?.filter((obj:Booking) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       
-      gigs.map(gig => {
+      gigs?.map(gig => {
         const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService.durationInHours))
         currentTimes = filteredTimeStarts || [] 
       })
@@ -345,7 +345,7 @@ export function BookingForm2({ services }:iProps) {
     
     
     // * availability
-    const staffAvailLocal = pickedStaff.availability.flatMap((avail:Availability) => {
+    const staffAvailLocal = pickedStaff.availability?.flatMap((avail:Availability) => {
       const start = new Date(avail.start).toLocaleDateString('en-CA')
       const end   = new Date(avail.end).toLocaleDateString('en-CA')
       
@@ -353,20 +353,20 @@ export function BookingForm2({ services }:iProps) {
     })
 
 
-    if(staffAvailLocal.includes(date)){
+    if(staffAvailLocal?.includes(date)){
        // find the gig
-       const avails = pickedStaff.availability.filter((obj:Availability) => {
+       const avails = pickedStaff.availability?.filter((obj:Availability) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       
-      avails.map(avail => {
+      avails?.map(avail => {
         const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService.durationInHours))
         currentTimes = filteredTimeStarts || []  
       })
 
     }
 
-    if(!staffGigsLocal.includes(date) && !staffAvailLocal.includes(date)){
+    if(!staffGigsLocal?.includes(date) && !staffAvailLocal?.includes(date)){
       resetServiceSlotTimes()
 
     } else {

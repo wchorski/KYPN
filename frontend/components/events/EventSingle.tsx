@@ -11,7 +11,7 @@ import { Event, Ticket, User } from "../../lib/types"
 import TicketsList from "./TicketsList"
 import moneyFormatter from "../../lib/moneyFormatter"
 import styled from "styled-components"
-import { SearchUserTicket } from "../../pages/events/SearchUserTicket"
+import { SearchUserTicket } from "../tickets/SearchUserTicket"
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import { RiFileEditFill } from "react-icons/ri"
 import { BsFileEarmarkSpreadsheet } from "react-icons/bs"
@@ -23,7 +23,6 @@ import { useUser } from "../menus/Session"
 export default function EventSingle({id}:{id:string}) {
 
   const session = useUser()
-  console.log({session});
   
   const [isPopup, setIsPopup] = useState(false)
   const [ticketPopupData, setTicketPopupData] = useState<tTicketPopup>()
@@ -54,6 +53,7 @@ export default function EventSingle({id}:{id:string}) {
         event={data?.event} 
         user={pickedUser}
         setAnimTrig={setAnimTrig}
+        
       />
 
       <aside>

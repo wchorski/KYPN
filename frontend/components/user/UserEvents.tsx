@@ -102,12 +102,11 @@ export function UserEvents({user, page = 1}:Props) {
         setAnimTrig={setAnimTrig}
         event={pickedEvent} 
         user={user}
-        attendingEventIds={attendingEventIds}
         setAttendingEventIds={setAttendingEventIds}
       />
 
       <h3>User Tickets </h3>
-      <TicketsList tickets={user.tickets} setPopupData={setPopupData} attendingEventIds={attendingEventIds}/>
+      <TicketsList tickets={user.tickets} setPopupData={setPopupData} />
 
       <h3> Upcoming Events </h3>
       {/* // todo compare and only show events not attending */}
