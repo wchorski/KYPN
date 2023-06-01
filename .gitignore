@@ -9,4 +9,5 @@ variables.env
 *.env
 .keystone
 *.db
+compose.yml
 db/postgres/*
