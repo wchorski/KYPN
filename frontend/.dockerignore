@@ -3,6 +3,7 @@ Dockerfile
 node_modules
 npm-debug.log
 README.md
+package-lock.json
 .next
 .git
 .env.prod
