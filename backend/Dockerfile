@@ -7,9 +7,10 @@ WORKDIR /app
 # COPY keystone.ts schema.* auth.ts ./
 COPY . .
 
-RUN yarn
+RUN yarn install
+RUN yarn build
 
 
-EXPOSE 3000
+EXPOSE 3001
 
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]
