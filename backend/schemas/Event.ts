@@ -13,7 +13,9 @@ export const Event:Lists.Event = list({
     filter: {
       // query: rules.canReadProducts,
       query: () => true,
+      // @ts-ignore //todo might cause problems
       delete: rules.canManageEvents,
+      // @ts-ignore //todo might cause problems
       update: rules.canManageEvents,
     },
     operation: {

@@ -143,7 +143,7 @@ export const User: Lists.User = list({
       }
     },
 
-    afterOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item: any }) => {
+    afterOperation: async ({ operation, resolvedData, item }) => {
       if (operation === 'update') {
 
         const customer = await stripeConfig.customers.update(
@@ -153,7 +153,8 @@ export const User: Lists.User = list({
             email: item.email,
             name: item.name,
             metadata: {
-              isActive: item.isActive,
+              // isActive: item.isActive,
+              isActive: String(item.isActive),
             }
           }
         )
