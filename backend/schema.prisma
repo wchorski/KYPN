@@ -39,8 +39,8 @@ model User {
   tickets                 Ticket[]           @relation("Ticket_holder")
   role                    Role?              @relation("User_role", fields: [roleId], references: [id])
   roleId                  String?            @map("role") @postgresql.Uuid
-  dateCreated             DateTime?          @default("2023-06-01T21:36:11.729Z")
-  dateModified            DateTime?          @default("2023-06-01T21:36:11.729Z")
+  dateCreated             DateTime?          @default("2023-06-02T02:23:11.314Z")
+  dateModified            DateTime?          @default("2023-06-02T02:23:11.314Z")
   passwordResetToken      String?
   passwordResetIssuedAt   DateTime?
   passwordResetRedeemedAt DateTime?
@@ -79,8 +79,8 @@ model Booking {
   customerId      String?   @map("customer") @postgresql.Uuid
   notes           String    @default("")
   status          String?   @default("ACTIVE")
-  dateCreated     DateTime? @default("2023-06-01T21:36:12.497Z")
-  dateModified    DateTime? @default("2023-06-01T21:36:12.497Z")
+  dateCreated     DateTime? @default("2023-06-02T02:23:12.731Z")
+  dateModified    DateTime? @default("2023-06-02T02:23:12.731Z")
   google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
 
   @@index([serviceId])
@@ -137,8 +137,8 @@ model Availability {
   employeeId      String?   @map("employee") @postgresql.Uuid
   type            String?   @default("VACATION")
   status          String?   @default("APPROVED")
-  dateCreated     DateTime? @default("2023-06-01T21:36:12.516Z")
-  dateModified    DateTime? @default("2023-06-01T21:36:12.516Z")
+  dateCreated     DateTime? @default("2023-06-02T02:23:12.766Z")
+  dateModified    DateTime? @default("2023-06-02T02:23:12.766Z")
 
   @@index([employeeId])
 }
@@ -194,8 +194,8 @@ model Product {
   authorId              String?       @map("author") @postgresql.Uuid
   tags                  Tag[]         @relation("Product_tags")
   categories            Category[]    @relation("Category_products")
-  dateCreated           DateTime?     @default("2023-06-01T21:36:11.570Z")
-  dateModified          DateTime?     @default("2023-06-01T21:36:11.570Z")
+  dateCreated           DateTime?     @default("2023-06-02T02:23:11.059Z")
+  dateModified          DateTime?     @default("2023-06-02T02:23:11.059Z")
   from_CartItem_product CartItem[]    @relation("CartItem_product")
 
   @@index([authorId])
@@ -235,8 +235,8 @@ model OrderItem {
   quantity     Int?
   order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
   orderId      String?       @map("order") @postgresql.Uuid
-  dateCreated  DateTime?     @default("2023-06-01T21:36:11.694Z")
-  dateModified DateTime?     @default("2023-06-01T21:36:11.694Z")
+  dateCreated  DateTime?     @default("2023-06-02T02:23:11.275Z")
+  dateModified DateTime?     @default("2023-06-02T02:23:11.275Z")
 
   @@index([photoId])
   @@index([orderId])
@@ -312,8 +312,8 @@ model Event {
   photo        String     @default("")
   description  String     @default("")
   status       String?    @default("ACTIVE")
-  dateCreated  DateTime?  @default("2023-06-01T21:36:11.694Z")
-  dateModified DateTime?  @default("2023-06-01T21:36:11.694Z")
+  dateCreated  DateTime?  @default("2023-06-02T02:23:11.275Z")
+  dateModified DateTime?  @default("2023-06-02T02:23:11.275Z")
   categories   Category[] @relation("Category_events")
   tags         Tag[]      @relation("Event_tags")
 

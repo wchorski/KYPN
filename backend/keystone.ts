@@ -19,22 +19,25 @@ import { withAuth, session } from './auth';
 import { Context, TypeInfo } from '.keystone/types';
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgres://admin:admin@localhost:5432/keystone'
-const DB_PROTOCOL   = process.env.DB_PROTOCOL
-const DB_USER       = process.env.DB_USER
-const DB_PASSWORD   = process.env.DB_PASSWORD
-const DB_DOMAIN     = process.env.DB_DOMAIN
-const DB_PORT       = process.env.DB_PORT
-const DB_COLLECTION = process.env.DB_COLLECTION
+const DB_PROTOCOL   = process.env.DB_PROTOCOL || 'nodbprotocol'
+const DB_USER       = process.env.DB_USER || 'nodbuser'
+const DB_PASSWORD   = process.env.DB_PASSWORD || 'nodbpassword'
+const DB_DOMAIN     = process.env.DB_DOMAIN || 'nodbdomain'
+const DB_PORT       = ':' + process.env.DB_PORT || ''
+const DB_COLLECTION = process.env.DB_COLLECTION || 'nodbcollection'
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost'
 const BACKEN_PORT = process.env.BACKEND_PORT || "3001"
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000'
 import { seedDatabase } from './seed/seedDatabase';
 import { permissionsList } from './schemas/permissions';
 
-const DB_URL = DB_PROTOCOL + DB_USER + ':' + DB_PASSWORD + '@' + DB_DOMAIN + ':' + DB_PORT + '/' 
+const DB_URL = DB_PROTOCOL + DB_USER + ':' + DB_PASSWORD + '@' + DB_DOMAIN + DB_PORT + '/' 
+console.log('=====' + DB_URL + DB_COLLECTION);
+
 
 const db: KeystoneConfig<TypeInfo>['db'] = {
 
+  
   provider: 'postgresql',
   url: DB_URL + DB_COLLECTION,
   async onConnect(context: Context) {
@@ -51,7 +54,7 @@ const db: KeystoneConfig<TypeInfo>['db'] = {
   },
   enableLogging: true,
   idField: { kind: 'uuid' },
-  shadowDatabaseUrl: DB_COLLECTION + 'shadowdb'
+  shadowDatabaseUrl: DB_URL + 'shadowdb'
 
 }
 
