@@ -1,4 +1,5 @@
 import { graphql } from "@keystone-6/core";
+// @ts-ignore //todo might cause problems
 import { Context } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema";
 
 export const sampleMutationExtension = graphql.extend(base => {

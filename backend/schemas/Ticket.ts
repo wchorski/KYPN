@@ -15,7 +15,9 @@ export const Ticket:Lists.Ticket = list({
       // query: rules.canReadProducts,
       // todo only query if ticket is the holder
       query: () => true,
+      // @ts-ignore //todo might cause problems
       delete: rules.canManageTickets,
+      // @ts-ignore //todo might cause problems
       update: rules.canManageTickets,
     },
     operation: {

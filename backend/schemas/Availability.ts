@@ -77,12 +77,12 @@ export const Availability:Lists.Availability = list({
       if (operation === 'create') {
 
         if(!resolvedData.end){
-          resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
+          resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
           console.log('avail schema , ', {resolvedData});
           
         }
 
-        if(resolvedData.end < resolvedData.start){
+        if(resolvedData.start && resolvedData.end < resolvedData.start ){
           throw new Error('End time is set before Start time')
         }
       }

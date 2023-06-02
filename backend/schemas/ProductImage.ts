@@ -50,7 +50,7 @@ export const ProductImage:Lists.ProductImage = list({
     }
   },
   hooks: {
-    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
+    afterOperation: async ({ operation, resolvedData, item, context }) => {
 
       // if (operation === 'create') {
       //   try {

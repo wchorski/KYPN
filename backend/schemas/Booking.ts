@@ -98,19 +98,19 @@ export const Booking:Lists.Booking = list({
 
         let description = 'NOTES: ' + resolvedData.notes
 
-        resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
+        resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
 
         if(resolvedData.service){
-          const selectedService = await context.db.Service.findOne({
-            where: { id: resolvedData.service.connect.id  },
-          }) as Service
+          const selectedService= await context.db.Service.findOne({
+            where: { id: resolvedData.service.connect?.id  },
+          }) 
           if(selectedService) {
             resolvedData.durationInHours = selectedService.durationInHours
             resolvedData.price = selectedService.price
-            resolvedData.end = calcEndTime(resolvedData.start, resolvedData.durationInHours)
+            resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
             description += '\n SERVICE: ' + selectedService.name
 
-            const day = resolvedData.start.getDay()
+            const day = new Date(resolvedData.start || '').getDay()
             // console.log({day})
             // @ts-ignore
             if(!selectedService.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
@@ -119,7 +119,7 @@ export const Booking:Lists.Booking = list({
 
         if(resolvedData.location){
           const selectedLocation = await context.query.Location.findOne({
-            where: { id: resolvedData.location.connect.id  },
+            where: { id: resolvedData.location.connect?.id  },
             query: `
               name
               rooms
@@ -134,7 +134,7 @@ export const Booking:Lists.Booking = list({
 
             // check to see if this booking's start/end lands on any of the gig's start/end
             const gig = {
-              start: resolvedData.start,
+              start: String(resolvedData.start),
               end: resolvedData.end
             }
             const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)
@@ -149,6 +149,7 @@ export const Booking:Lists.Booking = list({
 
         if(resolvedData.addons){
           const selectedAddons = await context.query.Addon.findMany({ 
+            // @ts-ignore //todo might cause problems
             where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
             query: `
               price
@@ -159,6 +160,7 @@ export const Booking:Lists.Booking = list({
           if(selectedAddons){
             let addonNames = ''
             selectedAddons.map(addon => {
+              // @ts-ignore //todo might cause problems
               resolvedData.price += addon.price
               addonNames +=  addon.name + ', '
             })
@@ -169,6 +171,7 @@ export const Booking:Lists.Booking = list({
 
         if(resolvedData.employees){
           const bookedEmployees = await context.query.User.findMany({ 
+            // @ts-ignore //todo might cause problems
             where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
             query: `
               id 
@@ -197,12 +200,12 @@ export const Booking:Lists.Booking = list({
             // console.log('---------')
             // console.log(emp.name)
   
-            if(dateCheckAvail(resolvedData.start, resolvedData.end, emp.availability))
+            if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.availability))
               console.log(`+++ Open Day no vaction set for ${emp.name}`)
              else 
               throw new Error(`CONFLICT: vacation day for ${emp.name}`)
   
-            if(dateCheckAvail(resolvedData.start, resolvedData.end, emp.gigs))
+            if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.gigs))
               console.log(`+++ No Gigs yet set for ${emp.name}`)
              else 
               throw new Error(`CONFLICT: double booking ${emp.name} `)
@@ -214,10 +217,10 @@ export const Booking:Lists.Booking = list({
         }
         
         const calRes = await createCalendarEvent({
-          summary: resolvedData.summary,
+          summary: resolvedData.summary || '',
           description: description,
           start: {
-            dateTime: resolvedData.start,
+            dateTime: String(resolvedData.start),
             // timeZone: 'America/Chicago',
           },
           end: {
@@ -226,7 +229,7 @@ export const Booking:Lists.Booking = list({
           },
         })
         // console.log({calRes})
-  
+        // @ts-ignore //todo might cause problems
         resolvedData.google = calRes
       }
 
@@ -260,6 +263,7 @@ export const Booking:Lists.Booking = list({
 
           if(resolvedData.addons?.disconnect){
             const disconnectedAddons = await context.query.Addon.findMany({ 
+              // @ts-ignore //todo might cause problems
               where: { id: { in: resolvedData.addons.disconnect.map((addon:Addon) => addon.id) }, },
               query: `
                 price
@@ -273,6 +277,7 @@ export const Booking:Lists.Booking = list({
 
           if(resolvedData.addons?.connect){
             const disconnectedAddons = await context.query.Addon.findMany({ 
+              // @ts-ignore //todo might cause problems
               where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
               query: `
                 price
@@ -289,15 +294,16 @@ export const Booking:Lists.Booking = list({
         
       }
     },
-    afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
+    afterOperation: async ({ operation, resolvedData, item, context }) => {
       if (operation === 'create') {
         let customer = {
           name: 'non registered user',
           email: 'non registered user'
         }
         // todo email employees and customer too. right now it just emails cutefruit@tawtaw.com
-        if (item.customer) {
-          customer = await context.db.User.findOne({ where: { id: item.customer.id } })
+        if (item?.customerId) {
+          // @ts-ignore //todo might cause problems
+          customer = await context.db.User.findOne({ where: { id: item?.customerId } })
           mailBookingCreated(
             item.id,
             EMAIL_ADDRESS,

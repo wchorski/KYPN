@@ -80,8 +80,8 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       if (operation === 'create') {
         // console.log(resolvedData.subscriptionPlan.connect)
 
-        const currUser = await context.db.User.findOne({ where: { id: resolvedData.user.connect.id } })
-        const currSub = await context.db.SubscriptionPlan.findOne({ where: { id: resolvedData.subscriptionPlan.connect.id } })
+        const currUser = await context.db.User.findOne({ where: { id: resolvedData.user?.connect?.id } })
+        const currSub = await context.db.SubscriptionPlan.findOne({ where: { id: resolvedData.subscriptionPlan?.connect?.id } })
         // console.log({ currSub });
 
         if (!resolvedData.custom_price) {
