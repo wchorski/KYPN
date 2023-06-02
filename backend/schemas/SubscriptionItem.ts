@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
@@ -7,7 +8,7 @@ import stripeConfig from "../lib/stripe";
 import 'dotenv/config'
 
 
-export const SubscriptionItem = list({
+export const SubscriptionItem:Lists.SubscriptionItem = list({
   // access: allowAll,
   access: {
     filter: {

@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
@@ -8,7 +9,7 @@ import 'dotenv/config'
 const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
 const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 
-export const SubscriptionPlan = list({
+export const SubscriptionPlan:Lists.SubscriptionPlan = list({
   // access: allowAll,
   access: {
     filter: {

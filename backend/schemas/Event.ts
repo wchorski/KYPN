@@ -1,11 +1,12 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { isLoggedIn, rules } from "../access";
 
 
 
-export const Event = list({
+export const Event:Lists.Event = list({
 
   // access: allowAll,
   access: {
@@ -72,8 +73,8 @@ export const Event = list({
         createView: { fieldMode: 'edit' }
       }
     }),
-    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
-    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
     categories: relationship({
       ref: 'Category.events',
       many: true,

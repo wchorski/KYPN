@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { cloudinaryImage } from '@keystone-6/cloudinary';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
@@ -14,7 +15,7 @@ export const cloudinary = {
 }
 
 
-export const ProductImage = list({
+export const ProductImage:Lists.ProductImage = list({
   // access: allowAll,
   access: {
     // filter: {

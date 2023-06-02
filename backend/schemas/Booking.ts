@@ -2,6 +2,7 @@
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-pages-directory/src/pages/index.tsx
 
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
@@ -20,7 +21,7 @@ const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS || 'no_email_set'
 
 // const rightnow = new Date().toISOString()
 
-export const Booking = list({
+export const Booking:Lists.Booking = list({
 
   access: allowAll,
 
@@ -71,8 +72,8 @@ export const Booking = list({
         createView: { fieldMode: 'edit' }
       }
     }),
-    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
-    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
     google: json({
       defaultValue: { 
         id: '',

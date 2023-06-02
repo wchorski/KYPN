@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, relationship, text } from "@keystone-6/core/fields";
 import { permissions } from "../access";
@@ -6,7 +7,7 @@ import { permissionFields } from "./permissions";
 // import { permissionFields } from "./authFields";
 
 
-export const Role = list({
+export const Role:Lists.Role = list({
   // todo modern keystone 6 way of doing permissions
   // access: allowAll, 
   access: {
