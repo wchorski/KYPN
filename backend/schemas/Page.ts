@@ -1,11 +1,12 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer, checkbox } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 // @ts-ignore
 import { componentBlocks } from "../blocks";
 
-export const Page = list({
+export const Page:Lists.Page = list({
 
   access: allowAll,
 
@@ -13,13 +14,8 @@ export const Page = list({
   fields: {
     title: text({ validation: { isRequired: true } }),
     slug: text({ isIndexed: 'unique', validation: { isRequired: true } }),
-    dateCreated: timestamp({
-      // this sets the timestamp to Date.now() when the user is first created
-      defaultValue: { kind: 'now' },
-    }),
-    dateModified: timestamp({
-      defaultValue: { kind: 'now' },
-    }),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },

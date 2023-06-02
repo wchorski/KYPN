@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, password, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
@@ -6,7 +7,7 @@ import stripeConfig from "../lib/stripe";
 import { timesArray } from "../lib/timeArrayCreator";
 
 
-export const User = list({
+export const User: Lists.User = list({
   access: {
     filter: {
       // todo will this cause privacy problems with clients?
@@ -118,8 +119,8 @@ export const User = list({
       //   itemView: { fieldMode: 'hidden' }
       // }
     }),
-    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
-    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
   hooks: {
     beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {

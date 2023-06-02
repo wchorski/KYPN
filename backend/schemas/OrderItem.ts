@@ -1,10 +1,11 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 
 
-export const OrderItem = list({
+export const OrderItem:Lists.OrderItem = list({
   // access: allowAll,
   access: {
     filter: {
@@ -36,7 +37,7 @@ export const OrderItem = list({
     price: integer(),
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),
-    dateCreated: timestamp({defaultValue: String(new Date().toISOString())}),
-    dateModified: timestamp({defaultValue: String(new Date().toISOString())}),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   }
 })

@@ -1,10 +1,11 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer, } from "@keystone-6/core/fields";
 
 
 
-export const Category = list({
+export const Category:Lists.Category = list({
 
   access: allowAll,
 

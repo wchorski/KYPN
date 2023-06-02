@@ -1,10 +1,11 @@
 import { list } from "@keystone-6/core";
+import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, multiselect, relationship, select, text } from "@keystone-6/core/fields";
 import { timesArray } from "../lib/timeArrayCreator";
 
 
-export const Service = list({
+export const Service:Lists.Service = list({
 
   access: allowAll,
 
