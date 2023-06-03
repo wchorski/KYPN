@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     build: .
     ports: # expose this if you're not using a proxy
-      - 8881:3000
+      - 8881:3001
     networks:
       - this
       # - proxy # TODO turn back on when using proxy

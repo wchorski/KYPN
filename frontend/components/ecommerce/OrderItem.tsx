@@ -33,8 +33,9 @@ export default function OrderItem({ order }: any) {
         </div>
 
         <div className="images">
-          {items.map((item: any) => (
+          {items.map((item: any, i:number) => (
             <Image
+              key={i}
               priority
               src={handlePhoto(item.photo).image?.url}
               alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no alt text'}
