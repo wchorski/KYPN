@@ -37,6 +37,9 @@ following along with Wes Bos Tutorial
   - `/backend/seed/seed_data.init.ts` -> `/backend/seed/seed_data.ts`
 
 
+## Production
+- Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments 
+
 
 
 ## TODO

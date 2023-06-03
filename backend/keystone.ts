@@ -32,14 +32,14 @@ import { seedDatabase } from './seed/seedDatabase';
 import { permissionsList } from './schemas/permissions';
 
 const DB_URL = DB_PROTOCOL + DB_USER + ':' + DB_PASSWORD + '@' + DB_DOMAIN + DB_PORT + '/' 
-console.log('=====' + DB_URL + DB_COLLECTION);
+console.log('💾' + DB_URL + DB_COLLECTION);
 
 
 const db: KeystoneConfig<TypeInfo>['db'] = {
 
   
   provider: 'postgresql',
-  url: DB_URL + DB_COLLECTION,
+  url: DB_URL + DB_COLLECTION + '?connect_timeout=300',
   async onConnect(context: Context) {
     console.log('--- POSTGRES CONNECTED ---')
 
