@@ -39,6 +39,11 @@ following along with Wes Bos Tutorial
 
 ## Production
 - Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments 
+- **self hosting** isn't strait forward. Here is my work around
+  - create a seperate `docker container` that runs `postgres`
+  - run your dev environment to create the tables and edit the schemas
+  - now you can `build` and `run` your app within a `docker container`
+
 
 
 
