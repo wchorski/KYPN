@@ -1,14 +1,17 @@
 import Image from "next/image";
 import { useState } from "react";
 
+const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URI
 
+// todo idk, just gonna not use the 'optimized' version on production for now
 export function ImageDynamic({ photoIn }: any) {
   
 
   const [state, setState] = useState<any>(handlePhoto(photoIn))
 
+
   return (
-    <Image
+    <img
       src={state.image.url}
       alt={state.altText}
       width={state.image.width}
