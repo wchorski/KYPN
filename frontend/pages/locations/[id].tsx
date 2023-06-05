@@ -8,7 +8,9 @@ export default function LocationById() {
 
   return (
     <>
-      <LocationSingle id={String(router.query.id)}/>
+      <section className="pad">
+        <LocationSingle id={String(router.query.id)}/>
+      </section>
     </>
   )
 }

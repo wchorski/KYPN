@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { QUERY_EVENTS_ALL } from "./EventList";
 import { QUERY_EVENT } from "./EventSingle";
 import ErrorMessage from "../ErrorMessage";
+import { RiDeleteBin2Fill } from "react-icons/ri";
 
 type Props = {
   event?:Event,
@@ -87,6 +88,7 @@ export function EventCreateUpdateForm({event, locationOptions}:Props) {
   ]
 
   const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
+  const [deleteEvent, {loading: loadingDelete}] = useMutation(EVENT_DELETE)
 
   // const {data: dataLocations, loading: loadingLocations, error: errorLocations} = useQuery(QUERY_LOCATIONS)
   const [createEvent, { loading, error }] = useMutation(EVENT_CREATE)
@@ -151,6 +153,30 @@ export function EventCreateUpdateForm({event, locationOptions}:Props) {
       } catch (err) {
         console.warn('create event error: ', err);
       }
+  }
+
+  async function handleDelete() {
+
+    if(! confirm('delete product?')) return 
+
+    try {
+      const res = await deleteEvent({
+        variables: {where: {id: event?.id}},
+        update: handleCache,
+      })
+      console.log({res});
+      if(res.data.deleteEvent) return router.push(`/events`)
+      
+      
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+  function handleCache(cache:any, payload:any) {
+    // console.log({payload})
+    cache.evict(cache.identify(payload.data.deleteEvent))
+    
   }
 
   // function getLocationOptions(){
@@ -221,9 +247,18 @@ export function EventCreateUpdateForm({event, locationOptions}:Props) {
         />
       </fieldset>
 
-      <button type="submit" disabled={loading || updating} className="medium">
-        {event ? 'Update' : 'Create'} Event
-      </button>
+      <div className="toolbar">
+        <button type="submit" disabled={loading || updating} className="medium">
+          {event?.id ? 'Update' : 'Create'} Event
+        </button>
+
+        <button type="button" disabled={loading || updating} 
+          className="medium delete" data-tooltip="delete event"
+          onClick={handleDelete}
+        >
+          <RiDeleteBin2Fill />
+        </button>
+      </div>
 
     </StyledEventForm>
   )
@@ -254,6 +289,15 @@ const EVENT_UPDATE = gql`
         id
         name
       }
+    }
+  }
+`
+
+const EVENT_DELETE = gql`
+  mutation DeleteEvent($where: EventWhereUniqueInput!) {
+    deleteEvent(where: $where) {
+      id
+      summary
     }
   }
 `
@@ -315,6 +359,13 @@ const StyledEventForm = styled.form`
         left: 0.5em;
         margin-right: -50%;
       }
+    }
+  }
+
+  button.delete{
+    margin-left: auto;
+    svg{
+      font-size: 2rem;
     }
   }
 `

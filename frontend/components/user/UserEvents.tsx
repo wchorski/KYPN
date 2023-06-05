@@ -83,10 +83,10 @@ export function UserEvents({user, page = 1}:Props) {
     cache.evict(cache.identify(payload.data.deleteTicket))
   }
 
-  useEffect(() => {
-    console.log(attendingEventIds);
-    // return () => 
-  }, [attendingEventIds])
+  // useEffect(() => {
+  //   console.log(attendingEventIds);
+  //   // return () => 
+  // }, [attendingEventIds])
   
 
 

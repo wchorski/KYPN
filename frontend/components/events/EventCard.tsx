@@ -44,8 +44,10 @@ export function EventCard({photo, start, summary, location, id}:Event) {
         </time>
       </div>
 
-      <Link href={`/events/e/${id}`} className="details">
-        <h4> {summary} </h4>
+      <div className="details">
+        <Link href={`/events/e/${id}`}>
+          <h4> {summary} </h4>
+        </Link>
 
         <time dateTime={start}> 
           <IoMdTime />
@@ -55,17 +57,19 @@ export function EventCard({photo, start, summary, location, id}:Event) {
         </time>
 
         {location && (
-          <address>
-            <MdLocationOn />
-            {location?.name} 
-            <br />
-            {location?.address}
-            {/* {address.street} <br /> */}
-            {/* {address.town} <br /> */}
-            {/* {address.country} <br /> */}
-          </address>
+          <Link href={`/locations/${location.id}`}>
+              <address>
+                <MdLocationOn />
+                {location?.name} 
+                <br />
+                {location?.address}
+                {/* {address.street} <br /> */}
+                {/* {address.town} <br /> */}
+                {/* {address.country} <br /> */}
+              </address>
+          </Link>
         )}
-      </Link>
+      </div>
 
       <a href={`/events/e/${id}`} className="button"> view </a>
 
