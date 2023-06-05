@@ -32,7 +32,6 @@ console.log(data.ticket);
   const {event, status, holder}:Ticket = data?.ticket
   
   return (<>
-  
     <StyledTicketSingle>
       <div className="meta-short">
         <strong>{datePrettyLocalDay(event.start || '')}</strong>
@@ -44,7 +43,8 @@ console.log(data.ticket);
         <h2>{event.summary}</h2>
         <p>{datePretty(event.start || '')}</p>
         <p>{event.location?.name}</p>
-        <p>{holder?.name}</p>
+        <p>{holder?.name} {holder?.nameLast}</p>
+        <p>{holder?.email}</p>
       </div>
 
       <div className="qrcode-cont">
@@ -53,6 +53,8 @@ console.log(data.ticket);
 
       <span className="status">{status}</span>
     </StyledTicketSingle>
+
+    <hr />
 
     {/* // TODO only show if session user is admin or employee to event */}
     {session && (event?.hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
@@ -148,6 +150,8 @@ export const QUERY_TICKET = gql`
       holder {
         id
         name
+        nameLast
+        email
       }
       event {
         id

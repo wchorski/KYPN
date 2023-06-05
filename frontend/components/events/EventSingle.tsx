@@ -43,7 +43,7 @@ export default function EventSingle({id}:{id:string}) {
   const {photo, summary, description, tickets = [], price, start, seats, hosts, location}:Event = data?.event
   
   return (
-    <StyledEventSingle>
+    <StyledEventSingle className="pad">
 
       <TicketPopup 
         popupData={ticketPopupData}
@@ -56,7 +56,7 @@ export default function EventSingle({id}:{id:string}) {
         
       />
 
-      <aside>
+      {/* <aside>
         <div className="cont">
           <picture>
             <ImageDynamic photoIn={photo} />
@@ -70,10 +70,15 @@ export default function EventSingle({id}:{id:string}) {
             {location?.address}
           </address>
         </div>
-      </aside>
+      </aside> */}
 
       <article>
         <header>
+          <div className="container">
+          <picture>
+            <ImageDynamic photoIn={photo} />
+          </picture>
+
           <h1>{summary}</h1>
           <ul className="meta">
             <li>{datePrettyLocalDay(start || '')}</li>
@@ -87,58 +92,63 @@ export default function EventSingle({id}:{id:string}) {
               </address>
             </li>
           </ul>
+          </div>
         </header>
 
-        <div className="card call-to-action">
-          
-          <div className="info-cont">
-            <strong>Purchase Ticket</strong> 
-            <br/>
-            <small>sub text</small> 
+        <div className="content">
+
+          <div className="card call-to-action">
+            
+            <div className="info-cont">
+              <strong>Purchase Ticket</strong> 
+              <br/>
+              <small>sub text</small> 
+            </div>
+
+            <button onClick={() => setIsPopup(true)} className="ticket"> 
+              {price && price > 0 ? (
+                <span>{moneyFormatter(price)} per Ticket</span>
+              ) : (
+                <span> Free </span>
+              )}
+            </button>
+
           </div>
 
-          <button onClick={() => setIsPopup(true)} className="ticket"> 
-            {price && price > 0 ? (
-              <span>{moneyFormatter(price)} per Ticket</span>
-            ) : (
-              <span> Free </span>
-            )}
-          </button>
+          <h2>About</h2>
+          <p>{description}</p>
 
+          <hr />
+          {/* //todo have multiple hosts */}
+          {/* {session && (host?.id === session.id || session.isAdmin) && ( */}
+          {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
+            <section className="admin-panel">
+              <h2> Host Panel </h2>
+
+              <h3>Hosts</h3>
+              <ul>
+                {hosts?.map(host => (
+                  <li key={host?.id}>
+                    <Link href={`/users/${host?.id}`}> {host?.name} | {host?.email} </Link>
+                  </li>
+                ))}
+              </ul>
+
+              <Link href={`/events/edit/${id}`} className="medium">
+                <RiFileEditFill />
+                Edit Event Details
+              </Link>
+
+              <h3>Edit Attendees</h3>
+              <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+              
+              <h3>All Ticket Holders</h3>
+              <AttendeeTable event={data.event} className="display-none" />
+              <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/>
+            </section>
+          )} 
         </div>
 
-        <h2>About</h2>
-        <p>{description}</p>
-
-        <hr />
-        {/* //todo have multiple hosts */}
-        {/* {session && (host?.id === session.id || session.isAdmin) && ( */}
-        {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
-          <section className="admin-panel">
-            <h2> Host Panel </h2>
-
-            <h3>Hosts</h3>
-            <ul>
-              {hosts?.map(host => (
-                <li key={host?.id}>
-                  <Link href={`/users/${host?.id}`}> {host?.name} | {host?.email} </Link>
-                </li>
-              ))}
-            </ul>
-
-            <Link href={`/events/edit/${id}`} className="medium">
-              <RiFileEditFill />
-              Edit Event Details
-            </Link>
-
-            <h3>Edit Attendees</h3>
-            <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
-            
-            <h3>All Ticket Holders</h3>
-            <AttendeeTable event={data.event} className="display-none" />
-            <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/>
-          </section>
-        )} 
 
 
 
@@ -147,11 +157,11 @@ export default function EventSingle({id}:{id:string}) {
   )
 }
 
-const StyledEventSingle = styled.div`
+const StyledEventSingle = styled.section`
   
-  display: flex;
+  /* display: flex; */
 
-  aside{
+  /* aside{
     margin-right: 1em;
     flex: 1 6 20%;
 
@@ -161,23 +171,41 @@ const StyledEventSingle = styled.div`
       float: left;
 
     }
-  }
+  } */
 
   article{
-    flex: 3 1 60%;
+    display: flex;
+    gap: 1em;
 
     header{
       margin-bottom: 1em;
+      flex: 1 6 20%;
+
+      .container{
+        position: sticky;
+        top: 2em;
+        float: left;
+      }
 
       h1{
         margin-bottom: 0;
       }
+    }
+
+    .content{
+      flex: 3 1 80%;
     }
   }
 
   button.ticket{
     span{
       margin-right: .4em;
+    }
+  }
+
+  @media (max-width: 700px){
+    article{
+      flex-direction: column;
     }
   }
 `

@@ -10,6 +10,7 @@ import Link from "next/link"
 import { FiEdit } from "react-icons/fi"
 import { PopupModal } from "../elements/PopupModal"
 import { UserUpdateForm } from "../user/UserUpdateForm"
+import { BsQrCode } from "react-icons/bs"
 
 
 enum DASH_STATE {
@@ -103,9 +104,10 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
         <article className={state === DASH_STATE.TICKETS ? 'active' : ''}>
           <h3> Tickets </h3>
-          <ul>
+          <StyledTicketList>
             {tickets && tickets.map(tick => (
               <li key={tick.id}>
+                <div className="meta">
                   <Link href={`/events/e/${tick.event?.id}`}>
                     <strong>{tick.event?.summary}</strong>
                   </Link>
@@ -113,9 +115,16 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
                   <small>{datePrettyLocalDay(tick.event?.start || '')}</small>
                   <br />
                   <small>{tick.event?.location?.name}</small>
+                  <br />
+                </div>
+
+                <Link href={`/tickets/${tick.id}`} data-tooltip="ticket link QR code" className="button qrbutton"> 
+                  <BsQrCode />
+                </Link>
+
               </li>
             ))}
-          </ul>
+          </StyledTicketList>
 
         </article>
         
@@ -124,6 +133,23 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     </StyledAccountCard>
   </> )
 }
+
+const StyledTicketList = styled.ul`
+  padding: 0;
+
+  li{
+    border: solid 1px var(--c-3);
+    margin-bottom: .2em;
+    border-radius: var(--br-dull);
+    padding: .5em;
+
+    display: flex;
+
+    .qrbutton{
+      margin-left: auto;
+    }
+  }
+`
 
 const StyledAccountCard = styled.div`
   display: flex;
@@ -141,7 +167,7 @@ const StyledAccountCard = styled.div`
     article{
       height: 30em;
       overflow-y: scroll;
-      opacity: .3;
+      opacity: 0;
       transition: all .3s;
       background-color: var(--c-txt-rev);
       padding: 0 1em;

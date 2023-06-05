@@ -145,16 +145,18 @@ export function EventsCalendar({initDate = new Date()}:Props) {
         is28Days={getDaysInMonth(currentDate) === 28}
         className="calendar-body"
       >
-        {sortDays(currentDate).map(day => 
-          <StyledDay active={isDatesSameDay(new Date(), getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day))} key={day}>
+        {sortDays(currentDate).map((day, i) => 
+          <StyledDay active={isDatesSameDay(new Date(), getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day))} key={i}>
             <label>{day}</label>
             {events.map((event:Event) => {
               if(isDatesSameDay(getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day), new Date(event.start || '')))
-                return <StyledEvent key={event.id}>
-                  <Link href={`/events/e/${event.id}`}>
-                    {event.summary} @ {datePrettyLocalTime(event.start || '')}
-                  </Link>
-                </StyledEvent>
+                return (
+                  <StyledEvent key={event.id}>
+                    <Link href={`/events/e/${event.id}`}>
+                      {event.summary} @ {datePrettyLocalTime(event.start || '')}
+                    </Link>
+                  </StyledEvent>
+                )
               }
             )}
           </StyledDay>

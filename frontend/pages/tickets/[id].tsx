@@ -9,7 +9,9 @@ export default function TicketById() {
   
   return (
     <>
+    <section className="pad">
       <TicketSingle id={String(router.query.id)}/>
+    </section>
     </>
   )
 }
