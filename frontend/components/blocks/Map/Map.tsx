@@ -9,13 +9,18 @@ const DynamicMap = dynamic(() => import('./DynamicMap'), {
 // but also help avoid layout shift
 
 const DEFAULT_WIDTH = 600;
-const DEFAULT_HEIGHT = 600;
+const DEFAULT_HEIGHT = 400;
 
-const Map = (props:any) => {
-  const { width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT } = props;
+export type tMap = {
+  address:string,
+}
+
+const Map = ({address}:tMap) => {
+
+
   return (
-    <div style={{ aspectRatio: width / height }}>
-      <DynamicMap {...props} />
+    <div style={{ aspectRatio: DEFAULT_WIDTH / DEFAULT_HEIGHT }}>
+      <DynamicMap address={address}/>
     </div>
   )
 }

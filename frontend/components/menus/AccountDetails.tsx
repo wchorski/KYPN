@@ -114,7 +114,9 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
                   <br />
                   <small>{datePrettyLocalDay(tick.event?.start || '')}</small>
                   <br />
-                  <small>{tick.event?.location?.name}</small>
+                  <Link href={`/locations/${tick.event?.location?.id}`}>
+                    <small>{tick.event?.location?.name}</small>
+                  </Link>
                   <br />
                 </div>
 
