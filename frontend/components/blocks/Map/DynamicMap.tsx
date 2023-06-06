@@ -56,8 +56,8 @@ const Map = ({  address,  }:tMap) => {
       className={mapClassName} 
       // @ts-ignore
       center={coordinance} 
-      zoom={17} 
-      width="800" height="400"
+      zoom={14} 
+      // width="800" height="400"
       // @ts-ignore
       key={coordinance}
     >

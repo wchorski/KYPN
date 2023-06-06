@@ -24,6 +24,7 @@ export const StyledNav = styled.nav`
   /* transform: translateY(); */
   /* z-index: 9002; */
   z-index: 100;
+  display: flex;
   /* overflow: hidden; */
 
   ul.menu-main {
@@ -109,6 +110,10 @@ export const StyledNav = styled.nav`
     &:hover{
       background: var(--c-2) !important;
     }
+  }
+
+  button#navwich{
+    margin-left: auto;
   }
 
   @media (min-width: 1000px){
