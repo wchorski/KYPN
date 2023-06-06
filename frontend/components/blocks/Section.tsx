@@ -3,13 +3,15 @@ import styled from "styled-components"
 
 type Props = {
   children:ReactNode|ReactNode[]
-  bg?:string,
+  imageSrc?:string,
   color?:string,
+  content: ReactNode,
 }
 
-export function Section({color, bg, children}:Props) {
+export function Section({color, imageSrc, content, children}:Props) {
   return (
-    <StyledSection color={bg} bg={bg}>
+    <StyledSection color={color} bg={imageSrc}>
+      {content}
       {children}
     </StyledSection>
   )
@@ -21,6 +23,10 @@ const StyledSection = styled.section<{bg?:string}>`
   background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
   background-position: center;
   background-size: cover;
-  background-size: cover;
+  padding: 3em 1em;
+
+  > * {
+    margin-top: 0;
+  }
 
 `
