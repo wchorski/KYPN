@@ -114,7 +114,7 @@ const StyledPageSingle = styled.div<{isShown: boolean}>`
   }
 
   p{
-    text-align: center;
+    /* text-align: center; */
     max-width: 60ch;
     margin: 1em auto;
   }

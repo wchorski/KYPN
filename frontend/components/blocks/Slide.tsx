@@ -11,21 +11,18 @@ function formatImgURL(url:string){
 }
 
 export type tSlide = {
-  id:string,
+  id:number,
   template: number,
   color: string,
   title?: string,
   content?: any,
   bg?: string,
   excerpt?:string,
-  button?: {
-    link:string,
-    text:string,
-    template:number,
-  }
+  buttonLink?: string,
+  buttonText?: string,
 }
 
-export function Slide ({template, color, title, content, bg, excerpt, button}:tSlide){
+export function Slide ({template, color, title, content, bg, excerpt, buttonLink, buttonText}:tSlide){
 
 
   return (
@@ -48,21 +45,18 @@ export function Slide ({template, color, title, content, bg, excerpt, button}:tS
         }
       >
         <div className={`template--${template}`}>
+          
           <h3 className='title'>{title}</h3> 
 
-          {content !== '' && 
-            <>
-         
-                <p>{excerpt}</p>  
-                {button && (
-                  <Link href={button.link} className='button'>
-                    {button.text}
-                  </Link>
-                )}
-          
-         
-            </>
-          }
+          <p className='excerpt'>{excerpt}</p> 
+
+
+          {buttonLink && (
+            <Link href={buttonLink} className='button'>
+              {buttonText}
+            </Link>
+          )}
+  
         </div>
 
           {/* <ul className='meta-data'>

@@ -242,7 +242,7 @@ const GridSevenCol = styled.div<{fullheight?:boolean, is28Days?:boolean}>`
 const DayHead = styled.span`
   text-align: center;
   background: var(--c-3);
-  color: var(--c-txt-rev);
+  color: var(--c-txt);
   font-size: 1.3rem;
 `
 
@@ -262,6 +262,7 @@ const StyledDay = styled.span<{active:boolean}>`
   label{
     padding: 5px;
     border-radius: 50%;
+    color: var(--c-desaturated);
     ${p => p.active && `background-color: var(--c-3); color: white;`}
   }
 `
@@ -274,7 +275,7 @@ const StyledEvent = styled.span`
     margin-bottom: 5px;
     background-color: var(--c-3);
     text-decoration: none;
-    color: var(--c-txt-rev);
+    color: var(--c-txt-primary);
     padding: 0px 8px;
     border-radius: var(--br-sharp);
     font-size: small;
