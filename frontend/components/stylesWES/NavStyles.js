@@ -6,6 +6,7 @@ const NavStyles = styled.ul`
   display: flex;
   justify-self: end;
   font-size: 2rem;
+
   a,
   button {
     padding: 1rem 3rem;
@@ -17,6 +18,7 @@ const NavStyles = styled.ul`
     font-size: 1em;
     background: none;
     border: 0;
+
     cursor: pointer;
     @media (max-width: 700px) {
       font-size: 10px;
@@ -57,6 +59,11 @@ const NavStyles = styled.ul`
       }
     }
   }
+
+  #navwich{
+    margin-left: auto;
+  }
+  
   @media (max-width: 1300px) {
     border-top: 1px solid var(--lightGray);
     width: 100%;

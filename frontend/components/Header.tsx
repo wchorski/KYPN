@@ -28,11 +28,12 @@ export default function Header({options = default_options}:Props) {
         {options.isLogo && (
           <Image src={'/assets/private/logo.svg'} width={100} height={100} alt='site logo'/>
         )}
-        {options.isSiteTitle && (
-          <h1> {SITE_TITLE} </h1> 
-        )}
         </Link>
       </StyledLogo>
+
+      {options.isSiteTitle && (
+        <h1> {SITE_TITLE} </h1> 
+      )}
 
     </StyledHeader>
   )
@@ -65,17 +66,23 @@ const StyledLogo = styled.div`
     flex: 1;
   }
   
+`
+
+const StyledHeader = styled.header`
+  max-width: var(--maxWidth);
+  display: flex;
+
+
   h1{
     /* font-size: 3rem; */
     background-color: var(--c-accent);
     text-shadow: #00000040 1px 1px 10px;
     padding: 0 1em;
     font-size: 1.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
   }
-`
-
-const StyledHeader = styled.header`
-  max-width: var(--maxWidth);
 
   .bar{
     display: grid;
@@ -92,4 +99,5 @@ const StyledHeader = styled.header`
     align-items: center;
     width: 100%;
   }
+  
 `

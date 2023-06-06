@@ -81,7 +81,10 @@ export function LocationSingle({id}:{id:string}) {
 }
 
 const StyledLocation = styled.article`
-  
+  .leaflet-container{
+    max-width: 90em;
+    margin: 0 auto;
+  }
 `
 
 const QUERY_LOCATION = gql`
