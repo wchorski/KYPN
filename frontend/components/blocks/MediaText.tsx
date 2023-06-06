@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { BlockRenderer } from '../../components/blocks/BlocksRenderer';
+import { ReactNode } from "react";
 
 // const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`
 
@@ -9,35 +10,46 @@ type Props = {
 }
 
 type tMediaText = {
-  bg: string,
+  imageSrc: string,
+  imageAlt:string,
   mediaWidth: string,
   rowReverse: boolean,
-  content: {
-    document: any[]
-  },
+  content: ReactNode,
 }
+// type tMediaText = {
+//   bg: string,
+//   mediaWidth: string,
+//   rowReverse: boolean,
+//   content: {
+//     document: any[]
+//   },
+// }
 
-export function MediaText({mediatext}:Props) {
-
-  function handleContentRender(content:any){
-    return <BlockRenderer document={content.document} />
-  }
+export function MediaText({imageSrc, imageAlt, content, rowReverse = false}:tMediaText) {
+  
+  console.log(rowReverse);
+  
+  //? this is when i was manually entering data 
+  // function handleContentRender(content:any){
+  //   return <BlockRenderer document={content.document} />
+  // }
   
   return (
-    <StyledMediaText bg={mediatext.bg} rowReverse={mediatext.rowReverse}>
+    <StyledMediaText bg={imageSrc} rowReverse={rowReverse}>
       <div className="content-cont">
-
-        {handleContentRender(mediatext.content)}
+        <article>
+          {content}
+        </article>
 
       </div>
 
       <div className="media-cont">
         <figure>
           <Image 
-            src={mediatext.bg}
+            src={imageSrc}
             width={100}
             height={100}
-            alt="accompaning image"
+            alt={imageAlt}
           />
         </figure>
       </div>
@@ -74,14 +86,16 @@ const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
     }
 
     article > *:nth-child(odd){
-      background-color: var(--c-2);
+      background-color: var(--c-light);
     }
     article > *:nth-child(even){
       background-color: var(--c-3);
     }
 
-    h3{
+    h2, h3{
       text-align: center;
+      font-size: 4rem;
+      text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
       /* padding: 3em 0; */
     }
 

@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+// @ts-ignore
 import { Context } from '.keystone/types';
 import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
+import { Category, Post, Product, Tag, User } from '../types';
 
 const seedUsers = async (context: Context) => {
   const { db } = context.sudo();
@@ -15,7 +17,7 @@ const seedUsers = async (context: Context) => {
     },
   });
   const usersToCreate = seedUsers.filter(
-    seedUser => !usersAlreadyInDatabase.some(u => u.email === seedUser.email)
+    seedUser => !usersAlreadyInDatabase.some((u:User) => u.email === seedUser.email)
   )
   console.log({ usersToCreate })
   await db.User.createMany({
@@ -71,7 +73,7 @@ const seedPosts = async (context: Context) => {
     },
   });
   const postsToCreate = seedPosts.filter(
-    seedPost => !postsAlreadyInDatabase.some(p => p.slug === seedPost.slug)
+    seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
   );
   await db.Post.createMany({
     data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
@@ -87,7 +89,7 @@ const seedTags = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some(dbObj => dbObj.name === seedObj.name)
+    seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
   );
 
   console.log({ objsToCreate })
@@ -106,7 +108,7 @@ const seedCategories = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((dbObj: any) => dbObj.name === seedObj.name)
+    seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
   );
 
   console.log({ objsToCreate })
@@ -125,7 +127,7 @@ const seedProducts = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some(p => p.slug === seedObj.slug)
+    seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
   );
 
   console.log('products seeded, ', { objsToCreate })
@@ -274,9 +276,9 @@ export const seedDatabase = async (context: Context) => {
   await seedCategories(context)
   await seedTags(context)
   await seedPosts(context)
-  await seedEvents(context)
   await seedLocations(context)
-
+  
+  await seedEvents(context)
   await seedProductImages(context)
   await seedProducts(context)
   await seedSubscriptions(context)

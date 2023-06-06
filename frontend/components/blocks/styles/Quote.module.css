@@ -6,6 +6,13 @@
   border-radius: 6px;
 }
 
+.quote p {
+  color: black;
+  text-align: left !important;
+  padding: .8em 0 !important;
+  margin: 0 !important;
+}
+
 .quote::after {
   content: '\201C';
   position: absolute;

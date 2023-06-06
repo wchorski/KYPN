@@ -51,6 +51,18 @@ const nextConfig = {
         port: '',
         pathname: '/photo/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cloutdrive.williamusic.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

@@ -48,7 +48,7 @@ export const StyledNav = styled.nav`
     a{
       padding: 1em 2em;
       border-bottom: 1px solid black;
-      color: var(--c-txt-rev);
+      color: var(--c-txt-primary);
       text-align: end;
       text-decoration: none;
     }
@@ -94,7 +94,7 @@ export const StyledNav = styled.nav`
     svg{
       cursor: pointer;
       border-radius: 50%;
-      color: var(--c-txt-rev);
+      color: var(--c-txt-primary);
       font-size: 5rem;
       padding: .1em;
       transition: all .5s, opacity .3s;
@@ -103,7 +103,7 @@ export const StyledNav = styled.nav`
     &.open{
       svg{
         background-color: var(--c-2);
-        color: var(--c-txt-rev);
+        color: var(--c-txt-primary);
       }
     }
 

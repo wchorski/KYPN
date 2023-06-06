@@ -83,6 +83,7 @@ export const StyledEventCard = styled.article`
   border: solid white 1px;
   padding: 1em;
   transition: border .2s ease-in;
+  color: var(--c-txt);
 
   h4{
     margin: 0;

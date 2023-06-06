@@ -7,6 +7,8 @@ import { Carousel } from './Carousel';
 import { Tweet } from './Tweet';
 import { YouTubeVideo } from './YouTubeVideo';
 import styled from 'styled-components';
+import SliderSlick from './SliderSlick';
+import { MediaText } from './MediaText';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -51,6 +53,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   carousel: props => {
     return <Carousel {...props} />;
+  },
+  slider: props => {
+    return <SliderSlick {...props}/>
+  },
+  mediatext: props => {
+    return <MediaText {...props}/>
   },
   tweet: props => {
     return <Tweet {...props} />;
