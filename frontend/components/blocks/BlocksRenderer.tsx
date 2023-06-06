@@ -9,6 +9,8 @@ import { YouTubeVideo } from './YouTubeVideo';
 import styled from 'styled-components';
 import SliderSlick from './SliderSlick';
 import { MediaText } from './MediaText';
+import { Section } from './Section';
+import { EventsUpcoming } from './EventsUpcoming';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -56,6 +58,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   slider: props => {
     return <SliderSlick {...props}/>
+  },
+  section: props => {
+    return <Section {...props}/>
+  },
+  eventsupcoming: props => {
+    return <EventsUpcoming {...props}/>
   },
   mediatext: props => {
     return <MediaText {...props}/>
