@@ -12,6 +12,8 @@ import { slider } from './slider';
 import { mediatext } from './mediatext';
 import { section } from './section';
 import { eventsupcoming } from './eventsupcoming';
+import { postslist } from './postslist';
+import { infocard } from './infocard';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -21,6 +23,8 @@ export const componentBlocks = {
   mediatext,
   section,
   eventsupcoming,
+  postslist,
+  infocard,
   hero,
   carousel,
   quote,

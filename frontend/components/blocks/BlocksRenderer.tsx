@@ -11,6 +11,9 @@ import SliderSlick from './SliderSlick';
 import { MediaText } from './MediaText';
 import { Section } from './Section';
 import { EventsUpcoming } from './EventsUpcoming';
+import { PostsList } from './PostsList';
+import { InfoCard } from './InfoCard';
+import { BlockLayout } from './BlockLayout';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -21,6 +24,9 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
     // we can override that to whatever wrapper we want
     // for eg. using React.Fragment wraps the component with nothing
     block: React.Fragment,
+    layout: props => {
+      return <BlockLayout {...props} />
+    },
     // customise blockquote elements with your own styles
     blockquote({ children }) {
       return <blockquote className={`blockquote`}>{children}</blockquote>;
@@ -64,6 +70,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   eventsupcoming: props => {
     return <EventsUpcoming {...props}/>
+  },
+  postslist: props => {
+    return <PostsList {...props}/>
+  },
+  infocard: props => {
+    return <InfoCard {...props}/>
   },
   mediatext: props => {
     return <MediaText {...props}/>

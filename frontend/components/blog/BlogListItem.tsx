@@ -6,9 +6,22 @@ import { datePretty } from '../../lib/dateFormatter';
 import { FiCalendar } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 import { ImageDynamic } from '../elements/ImageDynamic';
+import { User } from '../../lib/types';
+
+type Props = {
+  id:string,
+  slug:string,
+  title:string,
+  excerpt:string,
+  featured_image:string,
+  dateModified:string,
+  author:User,
 
 
-export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateModified, author, buttonText = 'read more...' }: any) => {
+  buttonText:string,
+}
+
+export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateModified, author, buttonText = 'read more...' }: Props) => {
 
   return (
     <StyledBlogItem>
@@ -93,6 +106,7 @@ const StyledBlogItem = styled.article`
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
     margin: 0;
     line-height: 1.3em;
+    min-height: 3em;
 
     a {
       /* background: var(--c-accent); */
