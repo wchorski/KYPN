@@ -7,16 +7,16 @@ import { QueryLoading } from "../menus/QueryLoading"
 import nProgress from "nprogress"
 
 type Form = {
-  title:string,
+  header:string,
   color:string,
-  submitText:string,
+  buttonLabel:string,
   isName?: boolean,
   isPhone?: boolean,
   isDate?: boolean,
   isNotes?: boolean,
 }
 
-export function ContactForm({title, color, submitText, isName=true, isPhone=true, isDate=true, isNotes=true}:Form) {
+export function ContactForm({header, color, buttonLabel, isName=true, isPhone=true, isDate=true, isNotes=true}:Form) {
 
   const [successMsg, setSuccessMsg] = useState<string|undefined>(undefined)
   // const [error, setError] = useState({message: ''})
@@ -59,10 +59,12 @@ export function ContactForm({title, color, submitText, isName=true, isPhone=true
   if(loading) return <QueryLoading />
 
   return (
-    <StyledForm onSubmit={(e: FormEvent) => handleSubmit(e)}>
+    <StyledForm onSubmit={(e: FormEvent) => handleSubmit(e)} style={{
+      background: color,
+    }}>
 
 
-      <h2>{title}</h2>
+      <h2>{header}</h2>
 
       {successMsg && <p>{successMsg}</p>}
 
@@ -109,7 +111,7 @@ export function ContactForm({title, color, submitText, isName=true, isPhone=true
           />
         </label>
 
-        <button type="submit" disabled={loading || successMsg ? true : false}> {submitText} </button>
+        <button type="submit" disabled={loading || successMsg ? true : false}> {buttonLabel} </button>
       </fieldset>
     </StyledForm>
   )
