@@ -171,7 +171,7 @@ const StyledAccountCard = styled.div`
       overflow-y: scroll;
       opacity: 0;
       transition: all .3s;
-      background-color: var(--c-txt-rev);
+      background-color: var(--c-desaturated);
       padding: 0 1em;
 
       grid-column: 1;

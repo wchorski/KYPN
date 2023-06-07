@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { QueryLoading } from './../menus/QueryLoading';
 import { QueryError } from './../menus/QueryError';
 import { perPage } from '../../config';
-import { BlogThumbnail } from './BlogThumbnail';
+import { BlogListItem } from './BlogListItem';
 
 type ProdProps = {
   page: number
@@ -29,7 +29,7 @@ export function BlogList({ page }: ProdProps) {
       {data.posts.map((item: any) => {
         return (
           <li key={item.id}>
-            <BlogThumbnail {...item} />
+            <BlogListItem {...item} buttonText="Press Play"/>
           </li>
         );
       })}
@@ -38,22 +38,24 @@ export function BlogList({ page }: ProdProps) {
 }
 
 const StyledBlogList = styled.ul`
-  /* display: grid; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1em;
   /* grid-template-columns: 1fr 1fr; */
   /* grid-gap: 60px; */
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-around; */
   list-style: none;
   margin: 0;
   padding: 0;
 
   li{
-    background-color: #dcdcdc;
-    padding: .3em;
+    background-color: var(--c-desaturated);
+    /* padding: .3em; */
     box-shadow: #0000004d 2px 2px 8px;
-    margin: 1em;
+    /* margin: 1em; */
     width: 100%;
   }
 
