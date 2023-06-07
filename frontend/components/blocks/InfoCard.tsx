@@ -5,10 +5,11 @@ import { useState } from "react";
 import styled from "styled-components"
 
 type InfoCard = {
-  title:string,
+  header:string,
   content:string,
-  link:string,
-  bg:string,
+  buttonLink:string,
+  buttonText:string,
+  imageSrc:string,
   color:string,
 }
 
@@ -17,7 +18,7 @@ type MousePosition = {
   y: number;
 }
 
-export function InfoCard({content, link, title, bg, color}:InfoCard) {
+export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color}:InfoCard) {
 
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
 
@@ -46,20 +47,20 @@ export function InfoCard({content, link, title, bg, color}:InfoCard) {
 
   return (
     <StyledInfoCard 
-      bg={bg} 
+      imageSrc={imageSrc} 
       color={color} 
       mousePosition={mousePosition}
       onMouseMove={handleRotation}
       onMouseLeave={handleMouseLeave}
     >
-      {/* <div className="bg"></div> */}
+      {/* <div className="imageSrc"></div> */}
 
-      <h4> {title} </h4>
+      <h4> {header} </h4>
 
       <div className="container">
         <p>{content}</p>
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
-        <Link href={link} className="button"> view more </Link>
+        <Link href={buttonLink} className="button"> {buttonText} </Link>
       </div>
       
 
@@ -67,16 +68,17 @@ export function InfoCard({content, link, title, bg, color}:InfoCard) {
   )
 }
 
-const StyledInfoCard = styled.article<{bg:string, color:string, mousePosition:{x:number,y:number}}>`
+const StyledInfoCard = styled.article<{imageSrc:string, color:string, mousePosition:{x:number,y:number}}>`
 
-
+  
   --rot-x: ${p => p.mousePosition.x}deg;
   --rot-y: ${p => p.mousePosition.y}deg;
   /* --rot-xoff: ${p => p.mousePosition.x * -.5}deg; */
   /* --rot-yoff: ${p => p.mousePosition.y * -.5}deg; */
 
   border-radius: 1em;
-  margin: 1em;
+  margin: 1em auto;
+  
   padding: 1em 1em;
 
   max-width: 25em;
@@ -108,9 +110,9 @@ const StyledInfoCard = styled.article<{bg:string, color:string, mousePosition:{x
     box-shadow: #9c9c9c -4px 3px 9px 3px;
   }
 
-  /* .bg{
+  /* .imageSrc{
     background-color: ${p => p.color};
-    background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
+    background-image: ${p => (p.imageSrc ? `url(${p.imageSrc})` : '')};
     background-position: center;
     background-size: cover;
     position: absolute;
@@ -136,7 +138,7 @@ const StyledInfoCard = styled.article<{bg:string, color:string, mousePosition:{x
   &::after{
     inset: -1rem;
     background-color: ${p => p.color};
-    background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
+    background-image: ${p => (p.imageSrc ? `url(${p.imageSrc})` : '')};
     background-position: center;
     background-size: cover;
     transform: translateZ(-50px);

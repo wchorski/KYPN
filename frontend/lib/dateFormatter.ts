@@ -20,7 +20,7 @@ export function datePretty(date: string) {
   // return dateObj.toLocaleTimeString('en-US', options);
 
   const unixDate = Date.parse(date)
-  console.log({unixDate});
+  // console.log({unixDate});
   
 
   // console.log()

@@ -9,15 +9,42 @@ import { perPage } from '../../config';
 import { BlogListItem } from './BlogListItem';
 
 type ProdProps = {
-  page: number
+  page: number,
+  categories?: {id:string}[],
 }
 
-export function BlogList({ page }: ProdProps) {
+export function BlogList({ page, categories = [] }: ProdProps) {
+
+  const catArray = categories.map(cat => ({categories: { some: { id: { equals: cat.id }}}}))
 
   const { loading, error, data } = useQuery(QUERY_POSTS_PAGINATED, {
     variables: {
       skip: page * perPage - perPage,
-      take: perPage
+      take: perPage,
+      orderBy: [
+        {
+          dateModified: "desc"
+        }
+      ],
+      where: {
+        OR: catArray,
+        NOT: [
+          {
+            OR: [
+              {
+                status: {
+                  equals: "DRAFT"
+                }
+              },
+              {
+                status: {
+                  equals: "PRIVATE"
+                }
+              },
+            ]
+          }
+        ]
+      },
     }
   })
 
@@ -66,22 +93,31 @@ const StyledBlogList = styled.ul`
 `
 
 export const QUERY_POSTS_PAGINATED = gql`
-  query Query($skip: Int!, $take: Int) {
-    posts(skip: $skip, take: $take) {
-      author{
-        id
-        name
-      }
-      dateCreated
-      dateModified
-      excerpt
+  query Posts($where: PostWhereInput!, $orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int!) {
+    posts(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+      id
+      title
       featured_image
       featured_video
-      id
+      author {
+        id
+        name
+        nameLast
+      }
+      dateModified
+      excerpt
       pinned
       slug
       status
-      title
+      template
+      tags {
+        id
+        name
+      }
+      categories {
+        id
+        name
+      }
     }
   }
 `
