@@ -14,6 +14,8 @@ import { EventsUpcoming } from './EventsUpcoming';
 import { PostsList } from './PostsList';
 import { InfoCard } from './InfoCard';
 import { BlockLayout } from './BlockLayout';
+import { ContactForm } from './ContactForm';
+import { SocialLinkNav } from './SocialLinkNav';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -76,6 +78,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   infocard: props => {
     return <InfoCard {...props}/>
+  },
+  contactform: props => {
+    return <ContactForm {...props}/>
+  },
+  sociallinknav: props => {
+    return <SocialLinkNav {...props}/>
   },
   mediatext: props => {
     return <MediaText {...props}/>

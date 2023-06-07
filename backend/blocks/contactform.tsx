@@ -5,23 +5,12 @@
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 
-export const infocard = component({
-  label: 'Info Card',
+export const contactform = component({
+  label: 'Contact Form',
   schema: {
-    content: fields.child({
-      kind: 'block',
-      placeholder: 'content...',
-      formatting: { inlineMarks: 'inherit', softBreaks: 'inherit', alignment: 'inherit' },
-      links: 'inherit',
-    }),
+
     header: fields.text({
       label: 'Header Title',
-    }),
-    buttonLink: fields.text({
-      label: 'Button Link',
-    }),
-    buttonText: fields.text({
-      label: 'Button Label',
     }),
     imageSrc: fields.url({
       label: 'Image URL',
@@ -31,21 +20,25 @@ export const infocard = component({
       label: 'Fallback background color',
       defaultValue: 'gray'
     }),
+
+    buttonLabel: fields.text({
+      label: 'Button Label',
+    }),
+    isName: fields.checkbox({ label: 'Name Field', defaultValue: true }),
+    isPhone: fields.checkbox({ label: 'Phone Number Field', defaultValue: true }),
+    isDate: fields.checkbox({ label: 'Calendar Date Field', defaultValue: true }),
+    isNotes: fields.checkbox({ label: 'General Notes Field', defaultValue: true }),
   },
   preview: function Quote(props) {
     return (
 
         <article style={{
-          padding: '1em',
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
         }}>
 
-          <h4>{props.fields.header.value}</h4>
+          <h2>{props.fields.header.value}</h2>
 
-          <p>{props.fields.content.element}</p>
-
-          <button> {props.fields.buttonText.value} </button>
           
         </article>
     );
