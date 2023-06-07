@@ -22,7 +22,6 @@ export const section = component({
       label: 'Fallback background color',
       defaultValue: 'gray'
     }),
-    attribution: fields.child({ kind: 'inline', placeholder: 'Attribution...' }),
   },
   preview: function Preview(props) {
     return (

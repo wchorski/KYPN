@@ -36,7 +36,7 @@ export const mediatext = component({
           flexDirection: props.fields.rowReverse ? 'row-reverse' : 'row',
         }}
       >
-        <div css={{ fontStyle: 'italic', color: '#4A5568', flex: '1',}}>
+        <div css={{ fontStyle: 'italic', color: '#4A5568', flex: '1', padding: '10px'}}>
           {props.fields.content.element}
         </div>
         <div 
