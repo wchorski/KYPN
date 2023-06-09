@@ -9,12 +9,13 @@ type Props = {
   mediatext: tMediaText
 }
 
-type tMediaText = {
-  imageSrc: string,
-  imageAlt:string,
-  mediaWidth: string,
-  rowReverse: boolean,
-  content: ReactNode,
+export type tMediaText = {
+  imageSrc?: string,
+  imageAlt?:string,
+  mediaWidth?: string,
+  rowReverse?: boolean,
+  content?: ReactNode,
+  children: ReactNode,
 }
 // type tMediaText = {
 //   bg: string,
@@ -25,7 +26,7 @@ type tMediaText = {
 //   },
 // }
 
-export function MediaText({imageSrc, imageAlt, content, rowReverse = false}:tMediaText) {
+export function MediaText({imageSrc, imageAlt, content, rowReverse = false, children}:tMediaText) {
   
   console.log(rowReverse);
   
@@ -39,6 +40,7 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false}:tMed
       <div className="content-cont">
         <article>
           {content}
+          {children}
         </article>
 
       </div>
@@ -99,10 +101,10 @@ const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
       /* padding: 3em 0; */
     }
 
-    p{
+    /* p{
       max-width: 60ch;
       min-width: 20ch;
-    }
+    } */
   }
 
   figure{

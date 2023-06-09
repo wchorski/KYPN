@@ -2,17 +2,18 @@ import EventList from "../events/EventList";
 
 type Props = {
   header:string,
-  imageSrc:string,
-  color:string
+  imageSrc?:string,
+  color?:string
 }
 
-export function EventsUpcoming({header, color, imageSrc}:Props) {
+export function EventsUpcoming({header, color = "transparent", imageSrc}:Props) {
   return (
     <section style={{
       backgroundColor: color,
       backgroundImage: `url(${imageSrc})`,
       backgroundPosition: 'center',
       backgroundSize: 'cover',
+      padding: '2em 1em',
     }}>
       <h2 style={{textAlign: 'center'}}> 
         {header}

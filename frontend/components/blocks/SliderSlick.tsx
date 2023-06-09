@@ -12,6 +12,7 @@ const sliderDefaults = {
   accessibility: true,
   fade: false,
   dots: true,
+  appendDots: (dots:any) => <ul className='dot-cont'>{dots}</ul>,
   infinite: true,
   autoplay: true,
   autoplaySpeed: 1000 * 4,
@@ -20,7 +21,7 @@ const sliderDefaults = {
   slidesToScroll: 1,
   pauseOnFocus: true,
   pauseOnHover: true,
-  // arrows: true,
+  arrows: true,
   prevArrow: <PrevArrow />,
   nextArrow: <NextArrow />,
   // centerMode: true,
@@ -32,6 +33,7 @@ const sliderDefaults = {
 type Settings = {
   fade: boolean,
   dots: boolean,
+  // appendDots: '#dot-cont',
   infinite: boolean,
   autoplay: boolean,
   autoplaySpeed: number,
@@ -43,25 +45,26 @@ type Settings = {
 }
 
 type Props = {
-  settings:Settings,
-  slides: tSlide[],
+  settings?:Settings,
+  // slides: tSlide[],
   items: {
-    title: string,
-    excerpt: string,
+    title?: string,
+    excerpt?: string,
     color: string,
-    imageSrc: string,
-    template: number,
-    buttonLink: string,
-    buttonText: string,
+    imageSrc?: string,
+    template?: number,
+    buttonLink?: string,
+    buttonText?: string,
   }[];
 }
 
-export default function SliderSlick({items = [], settings = sliderDefaults, slides}:Props) {
+export default function SliderSlick({items = [], settings = sliderDefaults}:Props) {
   
 
   return (
-    <StyledSlickSlider>
-    <Slider {...settings}>
+    <StyledSlickSlider {...settings}>
+
+    {/* <Slider {...settings}> */}
 
       {items.map( (s, i) => (
         <Slide 
@@ -79,7 +82,8 @@ export default function SliderSlick({items = [], settings = sliderDefaults, slid
         />
       ))}
 
-    </Slider>
+    {/* </Slider> */}
+
     </StyledSlickSlider>
   )
 }
@@ -87,60 +91,50 @@ export default function SliderSlick({items = [], settings = sliderDefaults, slid
 function PrevArrow(props:any) {
   const { className, style, onClick } = props;
   return (
-    <div
-      className={className}
+    <button
+      className={className + ' arrow-cont'}
       onClick={onClick}
       style={{ ...style, 
         display: "block", 
         fontSize: '4em', 
         zIndex: '10' ,
-        color: 'var(--c-accent)',
-        // transform: 'translateY(-50%)',
+        
       }}
-    >
+      >
       <BiLeftArrow style={{
         position: 'absolute',
         left: '2rem',
+        transform: 'translateY(-50%)',
       }}/>
-    </div>
+    </button>
   );
 }
 
 function NextArrow(props:any) {
   const { className, styles, onClick } = props;
   return (
-    <div
+    <button
       className={className + ' nextArrw'}
       onClick={onClick}
       style={{ ...styles, 
         display: "block", 
         fontSize: '4em', 
         zIndex: '10' ,
-        color: 'var(--c-accent)',
-        // transform: 'translateY(-50%)',
       }}
-    >
+      >
       <BiRightArrow style={{
         position: 'absolute',
         right: '2rem',
+        transform: 'translateY(-50%)',
       }}/>
-    </div>
+    </button>
   );
 }
 
-const StyledSlickSlider = styled.div`
+const StyledSlickSlider = styled(Slider)`
   .slick-track{
     display: flex;
-
-
-    .slick-slide{
-      margin: auto 0;
-    }
-
-    .slick-arrow{
-      box-shadow: black 2px 2px 3px;
-      font-size: 2rem;
-    }
+    
 
     /* .slick-prev, .slick-next{
       z-index: 10;
@@ -162,5 +156,32 @@ const StyledSlickSlider = styled.div`
       right: 1em;
       color: red !important;
     } */
+  }
+
+  .slick-slide{
+    margin: auto 0;
+  }
+
+  .slick-arrow{
+    box-shadow: black 2px 2px 3px;
+    color: white;
+    font-size: 2rem;
+  }
+
+  .slick-arrow::before{
+    content: '';
+  }
+
+  .slick-dots{
+    bottom: 10px;
+
+    button::before{
+      /* color: red; */
+      font-size: 15px;
+    }
+
+    li.slick-active button::before{
+      color: white;
+    }
   }
 `

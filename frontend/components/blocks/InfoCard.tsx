@@ -1,12 +1,13 @@
 // cred - Kevin Powell - https://www.youtube.com/watch?v=Z-3tPXf9a7M&t=388s
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
 import Link from "next/link"
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import styled from "styled-components"
 
 type InfoCard = {
   header:string,
-  content:string,
+  content?:string,
+  children?:ReactNode,
   buttonLink:string,
   buttonText:string,
   imageSrc:string,
@@ -18,7 +19,7 @@ type MousePosition = {
   y: number;
 }
 
-export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color}:InfoCard) {
+export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color, children}:InfoCard) {
 
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
 
@@ -58,7 +59,10 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
       <h4> {header} </h4>
 
       <div className="container">
-        <p>{content}</p>
+        {content && (
+          <p>{content}</p>
+        )}
+        {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
         <Link href={buttonLink} className="button"> {buttonText} </Link>
       </div>

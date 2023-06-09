@@ -22,9 +22,9 @@ export const StyledForm = styled.form`
   font-size: 1.5rem;
   line-height: 1.5;
   font-weight: 600;
-
-  max-width: 20em;
-  margin: 1em auto;
+  min-width: 25em;
+  max-width: 30em;
+  /* margin: 1em auto; */
 
 
   label {
