@@ -77,6 +77,10 @@ const StyledBlogItem = styled.article`
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: var(--c-desaturated);
+  box-shadow: #0000004d 2px 2px 8px;
+  border-radius: var(--br-sharp);
+  overflow: hidden;
 
   .meta-cont{
     padding: 1em;

@@ -2,26 +2,28 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { FaFacebook, FaInstagram, FaBandcamp, FaTwitch, FaTwitter, FaYoutube, FaGithub, FaLinkedin, FaLink } from "react-icons/fa";
+import { SiBandlab } from "react-icons/si";
 
 type Props = {
   color:string,
-  facebook:string,
-  instagram:string,
-  bandcamp:string,
-  twitch:string,
-  twitter:string,
-  youtube:string,
-  github:string,
-  linkedin:string,
-  custom1:string,
+  facebook?:string,
+  instagram?:string,
+  bandcamp?:string,
+  bandlab?:string,
+  twitch?:string,
+  twitter?:string,
+  youtube?:string,
+  github?:string,
+  linkedin?:string,
+  custom1?:string,
   
 }
 
-export function SocialLinkNav({color, facebook, instagram, bandcamp, twitch, twitter, youtube, github, linkedin, custom1}:Props) {
+export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, twitch, twitter, youtube, github, linkedin, custom1}:Props) {
 
   console.log(bandcamp);
   
-  function handleRender(type:string){
+  function handleRender(type:string = ''){
 
     let icon:ReactNode
 
@@ -36,6 +38,9 @@ export function SocialLinkNav({color, facebook, instagram, bandcamp, twitch, twi
         break;
       case type.includes('bandcamp'):
         icon = <FaBandcamp />
+        break;
+      case type.includes('bandlab'):
+        icon = <SiBandlab />
         break;
       case type.includes('twitch'):
         icon = <FaTwitch />
@@ -77,6 +82,7 @@ export function SocialLinkNav({color, facebook, instagram, bandcamp, twitch, twi
       {handleRender(facebook)}
       {handleRender(instagram)}
       {handleRender(bandcamp)}
+      {handleRender(bandlab)}
       {handleRender(twitch)}
       {handleRender(twitter)}
       {handleRender(youtube)}

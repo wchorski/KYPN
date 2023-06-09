@@ -79,9 +79,7 @@ const StyledBlogList = styled.ul`
   padding: 0;
 
   li{
-    background-color: var(--c-desaturated);
-    /* padding: .3em; */
-    box-shadow: #0000004d 2px 2px 8px;
+    
     /* margin: 1em; */
     width: 100%;
   }

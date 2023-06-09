@@ -18,10 +18,12 @@ export function PostsList({header, color, colorOverlay, imageSrc, categories}:Pr
       backgroundPosition: 'center',
       backgroundSize: 'cover',
     }}>
-      <div className="overlay" style={{backgroundColor: colorOverlay, padding: '1em',}}>
+      <div className="overlay" style={{backgroundColor: colorOverlay, padding: '5em 1em',}}>
         <h2 style={{textAlign: 'center'}}> 
           {header}
         </h2>
+        <br />
+        <br />
         <BlogList page={1} categories={categories}/>
       </div>
     </section>

@@ -7,16 +7,16 @@ import { QueryLoading } from "../menus/QueryLoading"
 import nProgress from "nprogress"
 
 type Form = {
-  header:string,
-  color:string,
-  buttonLabel:string,
+  header?:string,
+  color?:string,
+  buttonLabel?:string,
   isName?: boolean,
   isPhone?: boolean,
   isDate?: boolean,
   isNotes?: boolean,
 }
 
-export function ContactForm({header, color, buttonLabel, isName=true, isPhone=true, isDate=true, isNotes=true}:Form) {
+export function ContactForm({header, color, buttonLabel = 'submit', isName=true, isPhone=true, isDate=true, isNotes=true}:Form) {
 
   const [successMsg, setSuccessMsg] = useState<string|undefined>(undefined)
   // const [error, setError] = useState({message: ''})

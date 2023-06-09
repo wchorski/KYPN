@@ -71,7 +71,7 @@ export function EventCard({photo, start, summary, location, id}:Event) {
         )}
       </div>
 
-      <a href={`/events/e/${id}`} className="button"> view </a>
+      <a href={`/events/e/${id}`} className="view button medium"> view </a>
 
     </StyledEventCard>
   )
@@ -111,6 +111,10 @@ export const StyledEventCard = styled.article`
 
   a.button{
     margin-left: auto;
+  }
+
+  a.view{
+    background-color: transparent;
   }
 
   svg{

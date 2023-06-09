@@ -16,6 +16,7 @@ import { InfoCard } from './InfoCard';
 import { BlockLayout } from './BlockLayout';
 import { ContactForm } from './ContactForm';
 import { SocialLinkNav } from './SocialLinkNav';
+import { IFrame } from './IFrame';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -69,6 +70,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   section: props => {
     return <Section {...props}/>
+  },
+  iframe: props => {
+    return <IFrame {...props}/>
   },
   eventsupcoming: props => {
     return <EventsUpcoming {...props}/>

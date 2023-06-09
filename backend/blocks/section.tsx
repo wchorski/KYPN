@@ -20,7 +20,7 @@ export const section = component({
     }),
     color: fields.text({
       label: 'Fallback background color',
-      defaultValue: 'gray'
+      defaultValue: 'transparent'
     }),
   },
   preview: function Preview(props) {
