@@ -1,5 +1,5 @@
 // docs - https://react-slick.neostack.com/docs/api
-
+// cred - https://stackoverflow.com/questions/49028877/slick-carousel-force-slides-to-have-the-same-height
 import * as React from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Slide, tSlide } from "./Slide";
 import styled from 'styled-components';
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
+import { ReactNode } from 'react';
 
 const sliderDefaults = {
   accessibility: true,
@@ -47,7 +48,8 @@ type Settings = {
 type Props = {
   settings?:Settings,
   // slides: tSlide[],
-  items: {
+  children?: ReactNode,
+  items?: {
     title?: string,
     excerpt?: string,
     color: string,
@@ -55,16 +57,16 @@ type Props = {
     template?: number,
     buttonLink?: string,
     buttonText?: string,
+    
   }[];
 }
 
-export default function SliderSlick({items = [], settings = sliderDefaults}:Props) {
+export default function SliderSlick({items = [], settings = sliderDefaults, children}:Props) {
   
+  const settingsCat = {...sliderDefaults, ...settings}
 
   return (
-    <StyledSlickSlider {...settings}>
-
-    {/* <Slider {...settings}> */}
+    <StyledSlickSlider {...settingsCat}>
 
       {items.map( (s, i) => (
         <Slide 
@@ -81,8 +83,7 @@ export default function SliderSlick({items = [], settings = sliderDefaults}:Prop
           
         />
       ))}
-
-    {/* </Slider> */}
+      {children}
 
     </StyledSlickSlider>
   )
@@ -132,8 +133,9 @@ function NextArrow(props:any) {
 }
 
 const StyledSlickSlider = styled(Slider)`
+
   .slick-track{
-    display: flex;
+    display: flex !important;
     
 
     /* .slick-prev, .slick-next{
@@ -160,12 +162,25 @@ const StyledSlickSlider = styled(Slider)`
 
   .slick-slide{
     margin: auto 0;
+    height: inherit !important;
+
+    > div {
+      /* padding-bottom: 3em; */
+      height: 100%;
+    }
   }
 
   .slick-arrow{
     box-shadow: black 2px 2px 3px;
     color: white;
+    opacity: 0.6;
     font-size: 2rem;
+    transition: all .3s;
+
+    &:hover, &:focus{
+      opacity: 1;
+      /* transform: translateX(10px); */
+    }
   }
 
   .slick-arrow::before{
@@ -175,9 +190,15 @@ const StyledSlickSlider = styled(Slider)`
   .slick-dots{
     bottom: 10px;
 
+    
     button::before{
       /* color: red; */
+      outline: solid white 1px;
+      border-radius: 50%;
       font-size: 15px;
+      padding: 1.4px;
+      color: transparent;
+      /* top: 10px; */
     }
 
     li.slick-active button::before{

@@ -96,11 +96,16 @@ const StyledInfoCard = styled.article<{imageSrc:string, color:string, mousePosit
     rotateY(var(--rot-x)) 
     rotateX(var(--rot-y));
   
+  display: flex;
+  flex-direction: column;
   
   .container{
     background-color: ${p => p.color};
     padding: 1em;
     border-radius: 1em;
+    flex: 1 0 10em;
+    display: flex;
+    flex-direction: column;
   }
 
   h4{
@@ -112,6 +117,8 @@ const StyledInfoCard = styled.article<{imageSrc:string, color:string, mousePosit
 
   a.button{
     box-shadow: #9c9c9c -4px 3px 9px 3px;
+    margin-top: auto;
+    /* align-self: flex-start; */
   }
 
   /* .imageSrc{
