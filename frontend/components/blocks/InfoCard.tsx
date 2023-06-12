@@ -106,10 +106,11 @@ const StyledInfoCard = styled.article<{imageSrc:string, color:string, mousePosit
     flex: 1 0 10em;
     display: flex;
     flex-direction: column;
+    min-height: 15em;
   }
 
   h4{
-    color: var(--c-txt-rev);
+    color: var(--c-txt);
     font-size: 2rem;
     text-align: center;
     text-shadow: 4px 2px 20px white;
