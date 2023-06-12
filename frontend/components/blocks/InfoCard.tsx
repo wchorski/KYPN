@@ -113,11 +113,12 @@ const StyledInfoCard = styled.article<{imageSrc:string, color:string, mousePosit
     color: var(--c-txt);
     font-size: 2rem;
     text-align: center;
-    text-shadow: 4px 2px 20px white;
+    text-shadow: 4px 2px 20px rgba(255 255 255 /35% );
   }
 
   a.button{
-    box-shadow: #9c9c9c -4px 3px 9px 3px;
+    /* box-shadow: #9c9c9c -4px 3px 9px 3px; */
+    border: solid 1px var(--c-desaturated);
     margin-top: auto;
     /* align-self: flex-start; */
   }
