@@ -1,3 +1,4 @@
+// cred - Jose Flores - https://codepen.io/joseflores8082/details/bNqGgx
 import styled from "styled-components"
 
 type Props = {
@@ -61,6 +62,7 @@ const StyledRotatingWords = styled.div`
       right:0;
       left:0;
       top: 0;
+      opacity: 0;
       color: white;
       font-weight: bolder;
       /* opacity: 0; */

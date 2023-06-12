@@ -40,11 +40,11 @@ export const StyledForm = styled.form`
     border: 1px solid black;
     &:focus {
       outline: 0;
-      border-color: var(--c-1);
+      border-color: var(--c-accent);
     }
 
     border-radius: 3px;
-    border: solid var(--c-2) 1px;
+    border: solid var(--c-3) 1px;
     box-shadow: #0000002b 2px 2px 8px;
   }
   button,
@@ -75,8 +75,8 @@ export const StyledForm = styled.form`
       display: block;
       background-image: linear-gradient(
         to right,
-        var(--c-1) 0%,
-        var(--c-2) 50%,
+        var(--c-accent) 0%,
+        var(--c-desaturated) 50%,
         var(--c-3) 100%
       );
       margin-bottom: 1em;
