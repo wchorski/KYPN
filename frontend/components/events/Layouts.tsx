@@ -23,7 +23,7 @@ export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 
       <Header options={{
         isLogo: true,
-        isSiteTitle: true,
+        isSiteTitle: false,
       }}/>
      
       <Nav />

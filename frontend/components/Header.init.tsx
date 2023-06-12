@@ -2,11 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link'
 import React from 'react'
 import styled from "styled-components";
-import { AnnouncementsMarquee } from './elements/AnnouncementsMarquee';
-import { RotatingWords } from './blocks/RotatingWords';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
-const SUB_TITLE = process.env.NEXT_PUBLIC_SUB_TITLE || ""
 
 type Props = {
   options?: {
@@ -29,43 +26,14 @@ export default function Header({options = default_options}:Props) {
       <StyledLogo>
         <Link href={`/home`} > 
         {options.isLogo && (
-          <Image src={'/assets/private/logo.png'} width={552} height={221} alt='site logo'/>
+          <Image src={'/assets/private/logo.svg'} width={100} height={100} alt='site logo'/>
         )}
         </Link>
-        <span className='sub-title'>{SUB_TITLE}</span>
       </StyledLogo>
 
       {options.isSiteTitle && (
         <h1> {SITE_TITLE} </h1> 
       )}
-
-      <center>
-        <h6> Real DJs For </h6>
-        
-        <RotatingWords words={[
-          {
-            label: 'Real Parties',
-            color: 'white',
-          },
-          {
-            label: 'World-Class Weddings',
-            color: '#fcd701',
-          },
-          {
-            label: 'Magnificent Mitzvahs',
-            color: '#5bff00',
-          },
-          {
-            label: 'Captivating Company Parties',
-            color: 'cyan',
-          },
-          {
-            label: 'Raging Dancefloors',
-            color: '#ea4ce0',
-          },
-        ]}/>
-      </center>
-
 
     </StyledHeader>
   )
@@ -80,14 +48,7 @@ const StyledLogo = styled.div`
   background-position: 0 0, 50px 50px;
   background-size: 20px 20px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  border: solid white 1px;
-  border-radius: var(--br-soft);
-  background-color: #0000006e;
-  padding: 1em;
-  max-width: 30em;
-  margin: 2em auto 0 auto;
 
   &::before{
     background-color: blue;
@@ -96,8 +57,6 @@ const StyledLogo = styled.div`
 
   img{
     margin: 0 1em;
-    /* aspect-ratio: 16/9; */
-    width: 100%;
   }
   
   a{
@@ -106,22 +65,12 @@ const StyledLogo = styled.div`
     text-decoration: none;
     flex: 1;
   }
-
-  .sub-title{
-    color: var(--c-accent);
-    word-spacing: 2ch;
-    font-size: small;
-  }
   
 `
 
 const StyledHeader = styled.header`
   max-width: var(--maxWidth);
   display: flex;
-  flex-direction: column;
-  background: rgb(138,93,192);
-  background: linear-gradient(180deg, rgba(138,93,192,1) 0%, rgba(77,0,142,1) 100%);
-  /* background-color: blue; */
 
 
   h1{
@@ -133,10 +82,6 @@ const StyledHeader = styled.header`
     width: 100%;
     display: flex;
     align-items: center;
-  }
-
-  h6{
-    margin-bottom: 0;
   }
 
   .bar{
