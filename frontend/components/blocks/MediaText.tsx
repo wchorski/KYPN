@@ -15,7 +15,7 @@ export type tMediaText = {
   mediaWidth?: string,
   rowReverse?: boolean,
   content?: ReactNode,
-  children: ReactNode,
+  children?: ReactNode,
 }
 // type tMediaText = {
 //   bg: string,
@@ -48,10 +48,10 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false, chil
       <div className="media-cont">
         <figure>
           <Image 
-            src={imageSrc}
+            src={imageSrc || ''}
             width={100}
             height={100}
-            alt={imageAlt}
+            alt={imageAlt || 'no alt caption'}
           />
         </figure>
       </div>
@@ -60,7 +60,7 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false, chil
 }
 
 
-const StyledMediaText = styled.div<{bg:string, rowReverse:boolean}>`
+const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
   display: flex;
   flex-direction: ${p => (p.rowReverse ? 'row-reverse' : 'row')};
   /* flex-wrap: wrap; */
