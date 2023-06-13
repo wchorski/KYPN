@@ -52,6 +52,7 @@ export default function PageBySlug() {
     <>
       <StyledPageSingle isShown >
         <header
+          className='page'
           style={{
             backgroundImage: `url(${featured_image})`,
             backgroundPosition: 'center',
@@ -90,7 +91,7 @@ export default function PageBySlug() {
 }
 
 const StyledPageSingle = styled.div<{isShown: boolean}>`
-  header{
+  header.page{
     display: ${props => props.isShown ? 'none' : 'block'};
     background: var(--c-accent);
     position: relative;

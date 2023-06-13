@@ -21,13 +21,10 @@ type Props = {
 
 export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, twitch, twitter, youtube, github, linkedin, custom1}:Props) {
 
-  console.log(bandcamp);
   
   function handleRender(type:string = ''){
 
     let icon:ReactNode
-
-    console.log(type);
     
     switch (true) {
       case type.includes('facebook'):

@@ -290,4 +290,8 @@ export const GlobalStyles = createGlobalStyle`
     margin-bottom: 1em;
   }
 
+  header{
+    display: block;
+  }
+
 `

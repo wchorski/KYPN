@@ -18,7 +18,7 @@ export const iframe = component({
       defaultValue: ''
     }),
     height: fields.text({
-      label: 'Embed Source Link',
+      label: 'Viewport Height',
       defaultValue: '800px'
     }),
   },
