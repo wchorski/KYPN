@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MdAccountCircle } from "react-icons/md";
 import styled from "styled-components";
 import SignOutButton from "./SignOutButton";
+import { LinkActive } from "./LinkActive";
 
 // export const User = () => {
 //   return (
@@ -11,15 +12,26 @@ import SignOutButton from "./SignOutButton";
 //   )
 // }
 
-export function SessionBadge({ session }: any) {
+type Props = {
+  session:any,
+  label:string,
+}
+
+export function SessionBadge({ session, label }: Props) {
 
   return (
-    <StyledSessionBadge className="toggle-menu">
+    <StyledSessionBadge href="/account" className="toggle-menu button">
       <MdAccountCircle />
+      <span>{label}</span>
       <ul>
         <li><Link href={`/account`}> My Account </Link> </li>
-        <li>{session.name}</li>
-        <li>{session.email}</li>
+        <li>{session?.name}</li>
+        <li>{session?.email}</li>
+        {session.isAdmin && (
+            <li>
+              <LinkActive href='/admin' className="button"> Admin Panel </LinkActive>
+            </li>
+          )}
         <li><SignOutButton /></li>
       </ul>
     </StyledSessionBadge>
@@ -75,7 +87,7 @@ export const QUERY_USER_CURRENT = gql`
   }
 `
 
-const StyledSessionBadge = styled.button`
+const StyledSessionBadge = styled.a`
   padding: 1em;
   text-align: right;
   position: relative;
@@ -91,7 +103,7 @@ const StyledSessionBadge = styled.button`
     position: absolute;
     pointer-events: none;
     top: 100%;
-    background-color: var(--c-txt-rev);
+    background-color: var(--c-desaturated);
     display: flex;
     flex-direction: column;
     padding: .5em;
@@ -99,10 +111,13 @@ const StyledSessionBadge = styled.button`
     transform: translateY(10px);
     transition: all linear .1s;
     right: 0;
+    z-index: 999;
   }
 
   li{
     margin-bottom: 1em;
+    padding: 0;
+    text-align: right;
   }
 
   a{

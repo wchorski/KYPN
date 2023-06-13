@@ -202,6 +202,7 @@ const StyledSearchCont = styled.div`
   width: 100%;
   display: flex;
 
+
   input{
     width: 100%;
     padding: 1em;

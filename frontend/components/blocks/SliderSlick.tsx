@@ -99,12 +99,12 @@ function PrevArrow(props:any) {
         display: "block", 
         fontSize: '4em', 
         zIndex: '10' ,
-        
+        left: '0',
       }}
       >
       <BiLeftArrow style={{
         position: 'absolute',
-        left: '2rem',
+        left: '0rem',
         transform: 'translateY(-50%)',
       }}/>
     </button>
@@ -121,11 +121,12 @@ function NextArrow(props:any) {
         display: "block", 
         fontSize: '4em', 
         zIndex: '10' ,
+        right: '0',
       }}
       >
       <BiRightArrow style={{
         position: 'absolute',
-        right: '2rem',
+        right: '0rem',
         transform: 'translateY(-50%)',
       }}/>
     </button>
@@ -171,7 +172,7 @@ const StyledSlickSlider = styled(Slider)`
   }
 
   .slick-arrow{
-    box-shadow: black 2px 2px 3px;
+    /* box-shadow: black 2px 2px 3px; */
     color: white;
     opacity: 0.6;
     font-size: 2rem;
@@ -203,6 +204,14 @@ const StyledSlickSlider = styled(Slider)`
 
     li.slick-active button::before{
       color: white;
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    .slick-arrow{
+
+      font-size: 1.2rem !important;
+
     }
   }
 `

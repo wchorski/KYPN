@@ -3,7 +3,9 @@ import Link from 'next/link'
 import { ReactNode } from 'react';
 import { useNavControl } from '../../lib/useGlobalContext';
 
-export function LinkActive({ href, children }: { href: string, children: ReactNode }) {
+
+
+export function LinkActive({ href, children, className }: { href: string, children: ReactNode, className?:string }) {
 
   const { pathname: urlPathname, push: routerPush, asPath } = useRouter();
   const { setisNavOpen } = useNavControl()
@@ -31,7 +33,7 @@ export function LinkActive({ href, children }: { href: string, children: ReactNo
       href={href}
       // @ts-ignore
       onClick={handleClick}
-      className={`menu-item ${handleIsActive()}`}
+      className={`menu-item ${handleIsActive()} ${className}`}
     >
       {children}
     </Link>

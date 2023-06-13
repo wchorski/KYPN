@@ -36,7 +36,7 @@ export default function LoginForm() {
 
     if (res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess"){
       console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
-      router.push(`/`)
+      router.push(`/home`)
     }
     // @ts-ignore
     // TODO setting local storage
