@@ -19,6 +19,7 @@ import { sociallinknav } from './sociallinknav';
 import { iframe } from './iframe';
 import { pricetable } from './pricetable';
 import { infocardlist } from './infocardlist';
+import { imagelinklist } from './imagelinklist';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -31,6 +32,7 @@ export const componentBlocks = {
   postslist,
   infocard,
   infocardlist,
+  imagelinklist,
   contactform,
   sociallinknav,
   iframe,
