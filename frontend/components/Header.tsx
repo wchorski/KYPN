@@ -4,6 +4,8 @@ import React from 'react'
 import styled from "styled-components";
 import { AnnouncementsMarquee } from './elements/AnnouncementsMarquee';
 import { RotatingWords } from './blocks/RotatingWords';
+import { MdAccountCircle } from 'react-icons/md';
+import { SessionBadge, useUser } from './menus/Session';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
 const SUB_TITLE = process.env.NEXT_PUBLIC_SUB_TITLE || ""
@@ -21,25 +23,39 @@ const default_options = {
 }
 
 export default function Header({options = default_options}:Props) {
-
+  
+  const session = useUser()
 
   return (
     <StyledHeader>
 
-      <StyledLogo>
-        <Link href={`/home`} > 
-        {options.isLogo && (
-          <Image src={'/assets/private/logo.png'} width={552} height={221} alt='site logo'/>
+      
+      <StyledUtilNav className='desktop-only'>
+        {session ? (
+          <SessionBadge session={session} label='My Account'/>
+        ) : (
+          <Link href={`/auth/login`} className='button '> Login </Link>
         )}
-        </Link>
-        <span className='sub-title'>{SUB_TITLE}</span>
-      </StyledLogo>
+
+      </StyledUtilNav>
+
+      
+      <div className="logo-cont">
+        <StyledLogo>
+          <Link href={`/home`} > 
+          {options.isLogo && (
+            <Image src={'/assets/private/logo.png'} width={552} height={221} alt='site logo'/>
+          )}
+          </Link>
+          <span className='sub-title'>{SUB_TITLE}</span>
+        </StyledLogo>
+      </div>
 
       {options.isSiteTitle && (
         <h1> {SITE_TITLE} </h1> 
       )}
 
-      <center>
+      <center style={{width: '100%'}}>
         <h6> Real DJs For </h6>
         
         <RotatingWords words={[
@@ -71,9 +87,26 @@ export default function Header({options = default_options}:Props) {
   )
 }
 
+const StyledUtilNav = styled.nav`
+  position: absolute;
+  right: 1em;
+  top: 1em;
+
+  ul{
+    display: flex;
+    padding: 0;
+
+  }
+  
+  li{
+    padding: 1em;
+  }
+`
+
+
 const StyledLogo = styled.div`
   padding: .3em;
-  margin: 0;
+  margin: 1rem;
   /* transform: skew(-17deg); */
   /* background-color: var(--c-accent); */
   /* background-image: radial-gradient(#7272723b 20%, transparent 20%), radial-gradient(#fafafa2e 20%, transparent 20%); */
@@ -87,7 +120,6 @@ const StyledLogo = styled.div`
   background-color: #0000006e;
   padding: 1em;
   max-width: 30em;
-  margin: 2em auto 0 auto;
 
   &::before{
     background-color: blue;
@@ -98,6 +130,8 @@ const StyledLogo = styled.div`
     margin: 0 1em;
     /* aspect-ratio: 16/9; */
     width: 100%;
+    height: auto;
+    margin: 0 auto;
   }
   
   a{
@@ -105,24 +139,37 @@ const StyledLogo = styled.div`
     /* outline: auto var(--c-accent); */
     text-decoration: none;
     flex: 1;
+    transition: all .3s;
+
+    &:hover, &:focus{
+      opacity: .7;
+      outline: none;
+    }
   }
 
   .sub-title{
     color: var(--c-accent);
     word-spacing: 2ch;
     font-size: small;
+    text-align: center;
   }
   
 `
 
 const StyledHeader = styled.header`
+  position: relative;
   max-width: var(--maxWidth);
   display: flex;
+  justify-content: center;
   flex-direction: column;
+  align-items: center;
   background: rgb(138,93,192);
   background: linear-gradient(180deg, rgba(138,93,192,1) 0%, rgba(77,0,142,1) 100%);
   /* background-color: blue; */
 
+  .logo-cont{
+
+  }
 
   h1{
     /* font-size: 3rem; */
@@ -153,6 +200,16 @@ const StyledHeader = styled.header`
     justify-content: space-between;
     align-items: center;
     width: 100%;
+  }
+
+  .desktop-only{
+    display: none;
+  }
+
+  @media (min-width: 1000px){
+    .desktop-only{
+      display: inherit;
+    }
   }
   
 `

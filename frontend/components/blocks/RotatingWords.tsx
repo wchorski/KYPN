@@ -28,7 +28,8 @@ export function RotatingWords({words = defaultWords}:Props) {
     <StyledRotatingWords>
       <div className="words-cont">
         {words.map((w, i) => (
-          <span 
+          <span
+            key={i} 
             style={{
               color: w.color,
               animationDuration: `${(words.length * 3)}s`,
@@ -65,6 +66,7 @@ const StyledRotatingWords = styled.div`
       opacity: 0;
       color: white;
       font-weight: bolder;
+      line-height: 2rem;
       /* opacity: 0; */
       /* overflow: hidden; */
       /* border: solid yellow 2px; */

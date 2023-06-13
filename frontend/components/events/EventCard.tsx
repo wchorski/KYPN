@@ -129,6 +129,14 @@ export const StyledEventCard = styled.article`
     border-left: solid white 4px;
   }
 
+  address{
+    overflow:hidden;
+    width: 100%; //can also use calc function as per Yudi's answer
+    display: inline-block;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
   /* @media (max-width: 500px){
     flex-direction: column;
 

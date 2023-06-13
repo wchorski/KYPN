@@ -40,7 +40,9 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateMod
      
 
       <div className='meta-cont'>
-        <h3><Link href={`/blog/${slug}`}>{title}</Link></h3>
+        <Link href={`/blog/${slug}`}>
+          <h3> {title} </h3>
+        </Link>
     
           {author && (
             <small className='author'> 
@@ -101,6 +103,16 @@ const StyledBlogItem = styled.article`
     flex-grow: 1;
     /* padding: 1em; */
   }
+  
+  a {
+    /* background: var(--c-accent); */
+    display: inline;
+    /* font-size: 4rem; */
+    /* text-align: left; */
+    color: var(--c-txt);
+    text-decoration: none;
+    /* padding: 0 1rem; */
+  }
 
   h3{
     /* margin: 0 1rem; */
@@ -112,15 +124,6 @@ const StyledBlogItem = styled.article`
     line-height: 1.3em;
     min-height: 3em;
 
-    a {
-      /* background: var(--c-accent); */
-      display: inline;
-      /* font-size: 4rem; */
-      /* text-align: left; */
-      color: var(--c-txt);
-      text-decoration: none;
-      /* padding: 0 1rem; */
-    }
 
   }
 

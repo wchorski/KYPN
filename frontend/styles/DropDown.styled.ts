@@ -70,7 +70,9 @@ const glow = keyframes`
 `;
 
 export const StyledSearch = styled.div`
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   /* background-color: darkcyan; */
   /* padding: 1em; */
   height: 0em;

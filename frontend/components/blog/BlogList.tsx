@@ -66,7 +66,7 @@ export function BlogList({ page, categories = [] }: ProdProps) {
 
 const StyledBlogList = styled.ul`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1em;
   /* grid-template-columns: 1fr 1fr; */
   /* grid-gap: 60px; */

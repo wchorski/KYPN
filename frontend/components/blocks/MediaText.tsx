@@ -84,7 +84,7 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
 
     article > * {
       margin: 0;
-      padding: 2em;
+      padding: 2em ;
     }
 
     article > *:nth-child(odd){
@@ -96,9 +96,8 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
 
     h2, h3{
       text-align: center;
-      font-size: 4rem;
+      /* font-size: 4rem; */
       text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
-      /* padding: 3em 0; */
     }
 
     /* p{
@@ -126,7 +125,7 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
   }
 
   /* // todo media query column */
-  @media (max-width: 500px){
+  @media screen and (max-width: 500px){
     flex-direction: column;
 
     .content-cont, .media-cont{

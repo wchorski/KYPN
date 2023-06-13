@@ -37,25 +37,43 @@ export const StyledNav = styled.nav`
     z-index: 90001;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     width: 100%;
     max-width: var(--maxWidth);
     margin: 0;
     padding: 0;
     height: 0vh;
     transition: all .5s, opacity .3s;
+    position: absolute;
+    top: 4em;
     /* transition: all .5s; */
     
+    li{
+      flex-grow: 1;
+    }
+    
     a{
-      padding: 1em 2em;
-      border-bottom: 1px solid black;
-      color: var(--c-txt-primary);
-      text-align: end;
+      flex-grow: 1;
+      color: var(--c-txt);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      height: 100px;
+      padding: 0 1rem;
       text-decoration: none;
+      transition: all .3s;
+      /* outline: solid 1px white; */
+
     }
   }
 
   a.isActive{
     background-color: var(--c-accent);
+  }
+
+  a:hover, &:focus{
+    background-color: var(--c-desaturated);
   }
 
   #navdrawer-cont{
@@ -75,6 +93,7 @@ export const StyledNav = styled.nav`
   #menu-utility{
     display: flex;
     justify-content: space-between;
+    margin-left: auto;
   }
 
   button.toggle-menu{
@@ -107,8 +126,8 @@ export const StyledNav = styled.nav`
       }
     }
 
-    &:hover{
-      background: var(--c-2) !important;
+    &:hover, &:focus{
+      background: var(--c-desaturated) !important;
     }
   }
 
@@ -116,7 +135,7 @@ export const StyledNav = styled.nav`
     margin-left: auto;
   }
 
-  @media (min-width: 1000px){
+  @media screen and (min-width: 1000px){
 
     button#navwich{
       display: none;
@@ -128,7 +147,9 @@ export const StyledNav = styled.nav`
       /* background-color: blue; */
       flex-direction: row;
       position: initial;
-      height: inherit !important;
+      /* // todo why is this adding tiny bit of offset below nav */
+      /* height: inherit !important; */
+      height: 100%;
       /* overflow: hidden !important; */
       opacity: 1;
       pointer-events: all;
@@ -141,7 +162,27 @@ export const StyledNav = styled.nav`
         flex: 1;
         padding: 0 .1em;
       }
+
+      .mobile-only{
+        display: none;
+      }
+
+      
     }
   }
-  
+
+  .button.utility{
+    background-color: var(--c-desaturated);
+  }
+/* 
+  .mobile-only{
+    display: none;
+  }
+
+  @media screen and (max-width: 1000px ){
+    .mobile-only{
+      display: inherit;
+    }
+  }
+   */
 `
