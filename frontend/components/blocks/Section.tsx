@@ -24,6 +24,7 @@ const StyledSection = styled.section<{bg?:string}>`
   background-position: center;
   background-size: cover;
   padding: 3em 1em;
+  color: var(--c-txt);
 
   > * {
     margin-top: 0;

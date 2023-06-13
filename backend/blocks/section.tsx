@@ -13,6 +13,7 @@ export const section = component({
       placeholder: 'content...',
       formatting: 'inherit',
       links: 'inherit',
+      dividers: 'inherit',
     }),
     imageSrc: fields.url({
       label: 'Image URL',

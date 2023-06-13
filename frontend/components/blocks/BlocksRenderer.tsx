@@ -17,6 +17,7 @@ import { BlockLayout } from './BlockLayout';
 import { ContactForm } from './ContactForm';
 import { SocialLinkNav } from './SocialLinkNav';
 import { IFrame } from './IFrame';
+import { PriceTable } from './PriceTable';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -91,6 +92,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   mediatext: props => {
     return <MediaText {...props}/>
+  },
+  pricetable: props => {
+    return <PriceTable {...props}/>
   },
   tweet: props => {
     return <Tweet {...props} />;

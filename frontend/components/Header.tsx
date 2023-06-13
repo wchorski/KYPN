@@ -56,7 +56,7 @@ export default function Header({options = default_options}:Props) {
       )}
 
       <center style={{width: '100%'}}>
-        <h6> Real DJs For </h6>
+        <h6 style={{marginTop: '0'}}> Real DJs For </h6>
         
         <RotatingWords words={[
           {
