@@ -59,9 +59,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
       <h4> {header} </h4>
 
       <div className="container">
-        {content && (
-          <p>{content}</p>
-        )}
+        {content && <>{content}</>}
         {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
         <Link href={buttonLink} className="button"> {buttonText} </Link>

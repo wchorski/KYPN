@@ -28,6 +28,10 @@ export function datePretty(date: string) {
   return prettyDate
 }
 
+export function formatHours(time:string){
+  return time.replace('.00', '')
+}
+
 function datePrettyLocalFull(date:string) {
   const options = {
     year: "numeric",

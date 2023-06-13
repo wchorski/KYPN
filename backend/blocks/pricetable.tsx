@@ -1,19 +1,22 @@
-// @ts-nocheck
+
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
 import { Box, jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable, } from '@keystone-6/fields-document/component-blocks';
+import moneyFormatter from '../lib/moneyFormatter';
 
 export const pricetable = component({
   label: 'Price Table',
   schema: {
     items: fields.array(
       fields.object({
-        title: fields.text({ label: 'Title' }),
         imageSrc: fields.url({
           label: 'Image URL',
           defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
+        }),
+        title: fields.text({
+          label: 'Title',
         }),
         service: fields.relationship({
           label: 'Service',
@@ -31,7 +34,7 @@ export const pricetable = component({
         }),
         content: fields.child({
           kind: 'block',
-          placeholder: 'Quote...',
+          placeholder: 'description...',
           formatting: 'inherit',
           links: 'inherit',
           dividers: 'inherit',
@@ -41,6 +44,7 @@ export const pricetable = component({
     ),
   },
   preview: function Preview(props) {
+    
     
     return (
       // <NotEditable>
@@ -67,6 +71,7 @@ export const pricetable = component({
                   background: '#eff3f6',
                 }}
               >
+                <NotEditable>
 
                 <img
                   role="presentation"
@@ -78,7 +83,7 @@ export const pricetable = component({
                     width: '100%',
                     borderRadius: 4,
                   }}
-                />
+                  />
 
                 <h3
                   css={{
@@ -88,14 +93,20 @@ export const pricetable = component({
                       marginTop: 8,
                     },
                   }}
-                >
-                  {item.fields.title.value ? item.fields.title.value : item.fields.service.name}
+                  >
+                  {item.fields.title.value || item.fields.service.value?.data.name}
                 </h3>
-                <h4>{item.fields.service.name}</h4>
+
+                <div >
+                  <h6 > {moneyFormatter(item.fields.service.value?.data.price)} </h6> <span>{item.fields.service.value?.data.durationInHours} <small>hours</small></span>
+                </div>
+                </NotEditable>
 
                 <div css={{ color: '#99a4b6', lineHeight: '30px' }}> {item.fields.content.element} </div>
 
-                <button>{item.fields.buttonLabel.value}</button>
+                <NotEditable>
+                  <button>{item.fields.buttonLabel.value}</button>
+                </NotEditable>
               </Box>
             );
           })}
