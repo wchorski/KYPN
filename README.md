@@ -30,6 +30,7 @@ following along with Wes Bos Tutorial
   - `/frontend/public/assets/private/logo.svg`
   - `/frontend/public/assets/private/logo.png`
   - `/frontend/public/assets/private/placeholder.png`
+  - `/frontend/public/favicon.ico`
 
 - copy these files
   - `/frontend/components/elements/Layouts.init.tsx` -> `/frontend/components/elements/Layouts.tsx`

@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ReactNode } from "react"
 import styled from "styled-components"
 import moneyFormatter from "../../lib/moneyFormatter"
+import { formatHours } from "../../lib/dateFormatter"
 
 type Props = {
   items: {
@@ -11,27 +12,27 @@ type Props = {
     buttonLabel:string,
     content:ReactNode,
     price:number,
-    service:{
+    service: { data:{
       id:string,
       name:string,
       price:number,
       durationInHours:string,
-    }
+    }}
   }[]
 }
 
 export function PriceTable({items = []}:Props) {
-  console.log(items);
+  console.log(items[0].service.data.name);
   
   return (<>
     <StyledPriceTable>
       <thead>
         <tr>
-          {items.map(item => (
-            <th>
+          {items.map((item, i) => (
+            <th key={i}>
               <StyledHeader>
                 <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure>
-                <h3>{item.service.name}</h3>
+                <h3>{ item.title || item.service.data.name}</h3>
               </StyledHeader>
             </th>
           ))}
@@ -40,16 +41,20 @@ export function PriceTable({items = []}:Props) {
 
       <tbody>
         <tr>
-          {items.map(item => (
+          {items.map((item,i) => (
             <td 
-              data-title={item.title} 
-              data-price={moneyFormatter(1231231)} 
+              key={i}
+              data-title={item.service.data.name} 
+              data-price={moneyFormatter(item.service.data.price)} 
               data-button={item.buttonLabel}
             > 
               <StyledHeader className="mobile-only">
                 <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure>
-                <h3>{item.service.name}</h3>
-                <h6 className="price"> {moneyFormatter(2034000)} </h6>
+                <h3>{item.title || item.service.data.name}</h3>
+                <div className="meta">
+                  <h6 className="price"> {moneyFormatter(item.service.data.price)} </h6> 
+                  <span>{formatHours(item.service.data.durationInHours) } <small>hours</small></span>
+                </div>
                 <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link>
               </StyledHeader>
 
@@ -63,10 +68,14 @@ export function PriceTable({items = []}:Props) {
 
       <tfoot>
         <tr>
-          {items.map(item => (
-            <td>
+          {items.map((item,i) => (
+            <td key={i}>
               <StyledFooter>
-                <h6 className="price"> {moneyFormatter(2034000)} </h6>
+                <div className="meta">
+                  <span> <strong>{formatHours(item.service.data.durationInHours)}</strong>  <small>hours</small></span>
+                  <h6 className="price"> {moneyFormatter(item.service.data.price)} </h6> 
+                </div>
+   
                 <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link>
               </StyledFooter>
             </td>
@@ -101,6 +110,21 @@ const StyledPriceTable = styled.table`
 
   --border: solid 1px var(--c-3);
   border-collapse: separate;
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: rgba(255, 255, 255, 0.03);
+    z-index: 1;
+    transform: skewY(-5deg) scale(1.5);
+    pointer-events: none;
+  }
 
   th, td{
     vertical-align: top;
@@ -161,6 +185,7 @@ const StyledPriceTable = styled.table`
       font-size: 2rem;
       margin: 1rem;
       text-align: center;
+      display: inline-block;
     }
 
     .mobile-only{display: block; }
@@ -187,6 +212,9 @@ const StyledPriceTable = styled.table`
 const StyledHeader = styled.header`
   /* display: block !important; */
   /* background: transparent !important; */
+  .meta{
+    text-align: center;
+  }
 
   figure{
     /* width: 100%; */
@@ -214,10 +242,13 @@ const StyledFooter = styled.footer`
   padding: 1rem;
   margin-top: auto;
 
-  .price{
+  .meta{
+    color: var(--c-txt);
     text-align: right;
+  }
+  .price{
     font-size: 1.5rem;
-    margin: 1rem 0;
+    margin: 0;
   }
 `
 

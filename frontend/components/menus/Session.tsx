@@ -20,7 +20,7 @@ type Props = {
 export function SessionBadge({ session, label }: Props) {
 
   return (
-    <StyledSessionBadge href="/account" className="toggle-menu button">
+    <StyledSessionBadge className="toggle-menu button">
       <MdAccountCircle />
       <span>{label}</span>
       <ul>
@@ -87,11 +87,22 @@ export const QUERY_USER_CURRENT = gql`
   }
 `
 
-const StyledSessionBadge = styled.a`
+const StyledSessionBadge = styled.button`
   padding: 1em;
   text-align: right;
   position: relative;
   margin-left: auto;
+  background-color: var(--c-3);
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  color: var(--c-txt);
+  border: none;
+
+  svg{
+    margin-right: .5rem;
+    font-size: .8rem;
+  }
 
 
   /* svg{

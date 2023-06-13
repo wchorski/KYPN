@@ -43,7 +43,7 @@ export const infocard = component({
 
           <h4>{props.fields.header.value}</h4>
 
-          <p>{props.fields.content.element}</p>
+          <div>{props.fields.content.element}</div>
 
           <button> {props.fields.buttonText.value} </button>
           

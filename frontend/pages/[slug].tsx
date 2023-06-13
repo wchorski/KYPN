@@ -136,7 +136,7 @@ export const QUERY_PAGE_SINGLE = gql`
       }
       status
       content {
-        document
+        document(hydrateRelationships: true)
       }
     }
   }
