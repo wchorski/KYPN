@@ -19,6 +19,7 @@ import { SocialLinkNav } from './SocialLinkNav';
 import { IFrame } from './IFrame';
 import { PriceTable } from './PriceTable';
 import { InfoCardList } from './InfoCardList';
+import { ImageLinkList } from './ImageLinkList';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -87,6 +88,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   infocardlist: props => {
     return <InfoCardList {...props}/>
+  },
+  imagelinklist: props => {
+    return <ImageLinkList {...props}/>
   },
   contactform: props => {
     return <ContactForm {...props}/>
