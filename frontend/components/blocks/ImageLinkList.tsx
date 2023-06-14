@@ -63,7 +63,7 @@ function Card({item}:{item:InfoCard}){
       </div> */}
       {item.buttonLink && (
         <Link href={item.buttonLink} target="#" className="button">
-          {item.buttonLabel}
+          {item.buttonLabel && <span> {item.buttonLabel} </span> }
           <LuExternalLink />
         </Link>
       )}
@@ -156,8 +156,12 @@ const StyledCard = styled.div`
     position: absolute;
     bottom: 5px;
 
+    span{
+      margin-right: .7rem;
+    }
+
     svg{
-      margin-left: .7rem;
+      margin: .1rem 0;
     }
   }
 
