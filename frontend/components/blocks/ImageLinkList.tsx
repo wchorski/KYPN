@@ -10,6 +10,7 @@ type InfoCard = {
   buttonLink:string,
   buttonLabel:string,
   imageSrc:string,
+  imageSize:string,
   color:string,
 }
 
@@ -44,7 +45,7 @@ function Card({item}:{item:InfoCard}){
           // todo maybe do a blur?
             // style={{backgroundImage: `url(${item.imageSrc})`}}
           >
-            <img src={item.imageSrc}/>
+            <img src={item.imageSrc} width={item.imageSize}/>
           </figure>
         </Link>
       ) : (
@@ -53,7 +54,7 @@ function Card({item}:{item:InfoCard}){
           // todo maybe do a blur?
             // style={{backgroundImage: `url(${item.imageSrc})`}}
           >
-            <img src={item.imageSrc}/>
+            <img src={item.imageSrc} width={item.imageSize}/>
           </figure>
         </div>
       )}
@@ -128,9 +129,9 @@ const StyledCard = styled.div`
     padding-bottom: 1rem;
     /* filter: drop-shadow(1px 1px 3px white); */
 
-    img{
+    /* img{
       width: 250px;
-    }
+    } */
   }
 
   .content{
