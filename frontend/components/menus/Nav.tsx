@@ -24,7 +24,7 @@ export function Nav() {
   const { isNavOpen, toggleNav } = useNavControl()
 
   return (
-    <StyledNav className='main-menu' id='menu-main'>
+    <StyledNav className='main-menu' id='menu-main' aria-label='primary menu'>
 
       <SearchInput />
 
@@ -39,7 +39,7 @@ export function Nav() {
         </button>
 
         {session && (<>
-          <SessionBadge session={session} />
+          <SessionBadge session={session} label='My Account'/>
           <button
             onClick={e => toggleCart()}
             className={isOpen ? 'toggle-menu cart open' : 'toggle-menu cart'}

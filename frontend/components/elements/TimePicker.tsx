@@ -93,9 +93,15 @@ const StyledTimePicker = styled.ul`
     border-bottom: solid #959595 1px;
   }
 
+  button{
+    border-radius: 50px;
+    border: solid 2px var(--c-txt);
+  }
+
 
   .active{
     background-color: var(--c-accent);
+    border: solid 2px var(--c-accent);
   }
 
   @keyframes reveal {

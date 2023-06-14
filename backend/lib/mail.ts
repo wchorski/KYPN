@@ -89,9 +89,9 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
     html: makeANiceEmail(`Your Password Reset Token is here!
       <a href="${process.env.FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
     `),
-  }))
+  }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
 
-  if (MAIL_USER.includes('ethereal.email')) {
+  if (MAIL_USER.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }
@@ -121,9 +121,9 @@ export async function mailBookingCreated(id: string, to: string, name: string, e
 
     //   <a href="${process.env.FRONTEND_URL}/booking/${id}> View Booking | Admin Dashboard </a>
     // `),
-  }))
+  }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
 
-  if (MAIL_USER.includes('ethereal.email')) {
+  if (MAIL_USER.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }

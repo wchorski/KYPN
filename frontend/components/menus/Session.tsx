@@ -20,7 +20,7 @@ type Props = {
 export function SessionBadge({ session, label }: Props) {
 
   return (
-    <StyledSessionBadge className="toggle-menu button">
+    <StyledSessionBadge className="toggle-menu button" aria-label='account menu link'>
       <MdAccountCircle />
       <span>{label}</span>
       <ul>

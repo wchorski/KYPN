@@ -17,7 +17,8 @@ const month = now.getMonth() + 1; // add 1 because getMonth() returns zero-based
 const day = now.getDate();
 const today = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
 // console.log(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
-const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS || 'no_email_set'
+const EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_email_set'
+// const EMAIL_ADDRESS = 'y@m'
 
 // const rightnow = new Date().toISOString()
 
@@ -130,7 +131,7 @@ export const Booking:Lists.Booking = list({
             `
           }) as Location
           if(selectedLocation) {
-            console.log({selectedLocation})
+            // console.log({selectedLocation})
 
             // check to see if this booking's start/end lands on any of the gig's start/end
             const gig = {
@@ -304,6 +305,14 @@ export const Booking:Lists.Booking = list({
         if (item?.customerId) {
           // @ts-ignore //todo might cause problems
           customer = await context.db.User.findOne({ where: { id: item?.customerId } })
+          mailBookingCreated(
+            item.id,
+            EMAIL_ADDRESS,
+            customer.name,
+            customer.email,
+            item.notes,
+          )
+        } else if(item){
           mailBookingCreated(
             item.id,
             EMAIL_ADDRESS,
