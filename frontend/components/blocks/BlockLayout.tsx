@@ -1,26 +1,22 @@
 import { ReactNode } from "react"
+import styles from './styles/BlockLayout.module.scss'
 
 type Props = {
-  children: ReactNode,
+  children: ReactNode[],
+  layout:number[],
 }
 
-export function BlockLayout({children}:Props) {
+export function BlockLayout({children, layout}:Props) {
 
+  // layout [1,1] [1,2] [2,1] [1,1,1]
   // console.log(props);
   
-
   return (
 
-    <div style={{
-      display: 'grid',
-      gap: '1em',
-      padding: '5em 0',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
-    }}>
+    <div className={styles.grid}>
 
-      {children}
+      {children.map((child, i) => <div key={i}> {child} </div>) }
      
-
     </div>
   )
 }
