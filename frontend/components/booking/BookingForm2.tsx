@@ -196,7 +196,7 @@ export function BookingForm2({ services }:iProps) {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
       summary: `[NEW] ${values.name ? values.name : values.email}`,
       // dateTime: new Date(values.datetime_local).toISOString(),
-      notes: `[${values.name} | ${values.email}] -- ${values.notes}`
+      notes: `[name: ${values.name}, email: ${values.email}] -- ${values.notes}`
     }
     // console.log({formattedInputs});
     
@@ -466,7 +466,7 @@ export function BookingForm2({ services }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && successfullBook && (<>
+      {isSuccess && successfullBook && (<div className="card">
         <h2 className="msg success">Booking Created: </h2>
 
         <ul>
@@ -477,7 +477,7 @@ export function BookingForm2({ services }:iProps) {
           <li>staff: {successfullBook.staff}</li>
           <li>message: {successfullBook.msg}</li>
         </ul>
-      </>)}
+      </div>)}
 
       {!isSuccess && (
 
@@ -567,7 +567,7 @@ export function BookingForm2({ services }:iProps) {
                   />
                 </div>
 
-                <p className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)}</p>
+                <h6 className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)} Service</h6>
 
                 <TimePicker 
                   values={values} 
@@ -662,6 +662,7 @@ const StyledBookingForm = styled.form`
   .duration-stamp{
     padding: 0;
     margin: 0;
+    color: var(--c-txt-rev);
   }
 `
 

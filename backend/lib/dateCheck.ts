@@ -52,8 +52,8 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
 
   for (let i = 0; i < busyRanges.length; i++) {
 
-    console.log('busyRanges[i].start, ', busyRanges[i].start);
-    console.log('busyRanges[i].end, ', busyRanges[i].end);
+    // console.log('busyRanges[i].start, ', busyRanges[i].start);
+    // console.log('busyRanges[i].end, ', busyRanges[i].end);
     
     const busyStart = new Date(busyRanges[i].start);
     const busyEnd = new Date(busyRanges[i].end)

@@ -70,11 +70,14 @@ export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, tw
   }
 
   return (
-    <nav style={{
-      display: 'flex',
-      gap: '1em',
-      padding: '1em',
-    }}>
+    <nav 
+      aria-label='social link menu'
+      style={{
+        display: 'flex',
+        gap: '1em',
+        padding: '1em',
+      }}
+    >
 
       {handleRender(facebook)}
       {handleRender(instagram)}

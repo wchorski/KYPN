@@ -58,7 +58,7 @@ export const FormInput = (props:any) => {
 
 const StyledInputLabel = styled.label`
   font-size: 1rem;
-  color: gray;
+  /* color: var(--c-desaturated); */
   margin-bottom: 0;
   position: relative;
 
@@ -94,9 +94,9 @@ const StyledInputLabel = styled.label`
   
   span.label{
     background-color: var(--c-3);
-    color: var(--c-txt-rev);
-    border-radius: 3px;
-    font-size: .8rem;
+    color: var(--c-label);
+    border-radius: var(--br-sharp);
+    font-size: .5rem;
     padding: 0 8px;
     /* display: block; */
     position: absolute;
