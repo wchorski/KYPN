@@ -3,8 +3,15 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+
+type SelectOpt = {
+  label:string,
+  value:string,
+  isSelected:boolean,
+}
+
 export const FormInput = (props:any) => {
-  const { label, errorMessage, onChange, id, hint, ...inputProps } = props;
+  const { value, label, errorMessage, onChange, id, hint, ...inputProps } = props;
 
   const [focused, setFocused] = useState(false);
 
@@ -26,10 +33,11 @@ export const FormInput = (props:any) => {
         {...inputProps}
         // onChange={handleChange}
         onChange={onChange}
+        value={value}
       >
         <option key={0} value={''}> -- Select a {label} -- </option>
-        {inputProps.options.map((opt: any, i:number) => (
-          <option key={i+1} value={opt.value}> {opt.label} </option>
+        {inputProps.options.map((opt:SelectOpt, i:number) => (
+          <option key={i+1} value={opt.value} > {opt.label} </option>
         ))}
       </select>
     </StyledInputLabel>

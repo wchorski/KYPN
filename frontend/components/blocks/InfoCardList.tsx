@@ -55,6 +55,7 @@ const StyledList = styled.ul`
   align-items: stretch;
   gap: 1rem;
   padding: 0 1rem;
+  list-style: none;
 
   li{
     min-width: 16rem;

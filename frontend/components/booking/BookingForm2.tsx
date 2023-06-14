@@ -14,6 +14,7 @@ import { findOverlapTimes, isSameCalendarDay } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
 import { calcEndTime, filterBuisnessTimes, findBlackoutDates, findUniqueDays, isDateRangeAvailable } from "../../lib/filterTimeAvail"
 import { findEmployeeBusyRanges } from "../../lib/userUtils"
+import { useRouter } from "next/router"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -46,13 +47,15 @@ const genTimeStrings = generateTimesArray().map((t) => t.value)
 export function BookingForm2({ services }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
-
+  const {query} = useRouter()
+  
   const session = useUser()
   const formRef = useRef<HTMLFormElement>(null)
 
   const [isSuccess, setIsSuccess] = useState(false)
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   
+  const [serviceIdState, setServiceIdState] = useState(query?.serviceId ? query.serviceId : "")
   const [pickedService, setPickedService] = useState<Service>(services[0])
   const [pickedStaff, setPickedStaff] = useState<User>()
   const [serviceId, setServiceId] = useState('')
@@ -61,10 +64,12 @@ export function BookingForm2({ services }:iProps) {
   const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
+  // console.log(pickedService);
+  
 
   const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
   const [values, setValues] = useState({
-    service: "",
+    service: query?.serviceId ? query.serviceId : "",
     location: '',
     staff: "",
     // datetime_local: '',
@@ -76,15 +81,20 @@ export function BookingForm2({ services }:iProps) {
     phone: "",
     notes: "",
   });
+  
+  const serviceOptions = services.map((serv:any) => { return {value: serv.id, label: serv.name,} })
 
+  console.log(values.service);
+  
   const inputs = [
     {
       id: 1,
       name: 'service',
       type: 'select',
-      options: services.map((serv:any) => { return {value: serv.id, label: serv.name} } ),
+      options: serviceOptions,
       errorMessage: 'must select a service',
       label: 'Service',
+      value: values.service,
       // defaultValue: "",
       required: true,
     },

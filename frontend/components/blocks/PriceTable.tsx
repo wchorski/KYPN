@@ -77,6 +77,7 @@ export function PriceTable({items = []}:Props) {
                 </div>
    
                 <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link>
+                <Link href={`/booking?serviceId=${item.service.data.id}`} className="button"> actuwally book </Link>
               </StyledFooter>
             </td>
           ))}
