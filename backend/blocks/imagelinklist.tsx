@@ -31,6 +31,10 @@ export const imagelinklist = component({
           label: 'Image URL',
           defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
         }),
+        imageSize: fields.text({
+          label: 'Image Size',
+          defaultValue: '250px',
+        }),
         color: fields.text({
           label: 'Fallback background color',
           defaultValue: 'paleblue'
