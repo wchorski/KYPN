@@ -76,8 +76,8 @@ export function PriceTable({items = []}:Props) {
                   <h6 className="price"> {moneyFormatter(item.service.data.price)} </h6> 
                 </div>
    
-                <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link>
-                <Link href={`/booking?serviceId=${item.service.data.id}`} className="button"> actuwally book </Link>
+                {/* <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link> */}
+                <Link href={`/booking?serviceId=${item.service.data.id}`} className="button"> {item.buttonLabel}  </Link>
               </StyledFooter>
             </td>
           ))}

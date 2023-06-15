@@ -61,6 +61,7 @@ export function BookingForm2({ services }:iProps) {
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
   const [locationOptions, setLocationOptions] = useState<any>([])
+  const [addonsOptions, setAddonsOptions] = useState([])
   const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
@@ -118,6 +119,15 @@ export function BookingForm2({ services }:iProps) {
       label: 'Staff Member',
       required: false,
     },
+    // {
+    //   id: 11,
+    //   name: 'addons',
+    //   type: 'checkboxes',
+    //   options: [{value: '111', label: 'ONE', name: 'one'}, {value: '222', label: 'two'}],
+    //   errorMessage: 'something is wrong in the addons field, please submit again',
+    //   label: 'Add-Ons',
+    //   required: false,
+    // },
     // {
     //   id: 3,
     //   name: 'datetime_local',
@@ -302,6 +312,7 @@ export function BookingForm2({ services }:iProps) {
 
     handleEmployeeUpdate(id)
     handleLocationUpdate(id)
+    handleAddonsUpdate(id)
   }
 
   function handleLocationUpdate(id:string){
@@ -320,6 +331,16 @@ export function BookingForm2({ services }:iProps) {
     
     const formatted = foundEmpls.map((empl:any) => { return {value: empl.id, label: empl.name} } )
     setEmployeeOptions(formatted)
+  }
+
+  function handleAddonsUpdate(id:string){
+    const foundAddons = services.find((x: any) => x.id === id)?.addons
+    if(!foundAddons) return []
+    
+    
+    const formatted = foundAddons.map((addon:any) => { return {value: addon.id, label: addon.name, name: addon.name.toLowerCase().replace(/\s/g, "")} } )
+    console.log(formatted);
+    setAddonsOptions(formatted)
   }
 
   function handleBlackoutTimes(date:string){
@@ -532,6 +553,22 @@ export function BookingForm2({ services }:iProps) {
                 }}
                 // key={employeeOptions}
               />
+
+              <h3> Add-Ons </h3>
+              <ul>
+                {addonsOptions.map((opt:any) => (
+                  <li key={opt.name}>
+                    <FormInput 
+                      {...{name: opt.name, value: opt.value, label: opt.label, type: 'checkbox'}}
+                    />
+                    <span>{opt.label}</span>
+                  </li>
+                  // <label htmlFor={opt.name} key={opt.name}>
+                  //   <input type="checkbox" name={opt.name} value={opt.value}/>
+                  //   <span>{opt.label}</span>
+                  // </label>
+                ))}
+              </ul>
              
             </div>
           </fieldset>

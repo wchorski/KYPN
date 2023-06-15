@@ -184,6 +184,7 @@ const StyledHeader = styled.header`
 
   h6{
     margin-bottom: 0;
+    font-size: .7rem;
   }
 
   .bar{
