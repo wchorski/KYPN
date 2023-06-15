@@ -74,28 +74,36 @@ const StyledTimePicker = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: .1em;
   /* flex-direction: column; */
 
   li{
-    width: 5em;
+    /* width: 6em; */
     animation-duration: .3s;
     animation-name: reveal;
     animation-timing-function: ease;
   }
-  li:nth-child(n+1):nth-child(-n+4),
+  /* li:nth-child(n+1):nth-child(-n+4),
   li:nth-child(8n+1),
   li:nth-child(8n+2),
   li:nth-child(8n+3),
   li:nth-child(8n+4) {
     border-bottom: solid #959595 1px;
-  }
+  } */
 
   button{
     border-radius: 50px;
+    min-width: 5rem;
     border: solid 2px var(--c-txt);
+    
+    &:hover, &focus{
+      border: solid 2px var(--c-accent);
+      
+    }
   }
 
 

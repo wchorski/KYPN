@@ -75,6 +75,7 @@ const StyledCard = styled.article`
 
   h3{
     padding: 0 1rem;
+    margin-bottom: 0;
   }
 
   figure{

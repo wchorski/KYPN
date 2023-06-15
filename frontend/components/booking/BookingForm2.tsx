@@ -84,7 +84,7 @@ export function BookingForm2({ services }:iProps) {
   
   const serviceOptions = services.map((serv:any) => { return {value: serv.id, label: serv.name,} })
 
-  console.log(values.service);
+  // console.log(values.service);
   
   const inputs = [
     {
@@ -497,57 +497,54 @@ export function BookingForm2({ services }:iProps) {
 
             <legend>The What</legend>
 
-            <HeightReveal className="service-staff-cont" isShown={true}>
+            {/* <HeightReveal className="service-staff-cont" isShown={true}> */}
+            <div className="service-staff-cont">
               <FormInput 
                 {...handleFindProps('service')}
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', }))
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', location: ''}))
                   handleServicePicked(e.target.value)
                 }}
               />
 
-              {locationOptions.length > 0 && (
+              <FormInput 
+                {...handleFindProps('location')}
+                value={values['location']}
+                isDisabled={values.service === '' ? true : false}
+                onChange={(e:any) => {
+                  onChange(e)
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  findPartialDays(e.target.value)
+                }}
+                // key={pickedService}
+              />
 
-                <FormInput 
-                  {...handleFindProps('location')}
-                  value={values['location']}
-                  onChange={(e:any) => {
-                    onChange(e)
-                    setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    findPartialDays(e.target.value)
-                  }}
-                  key={locationOptions}
-                />
-              )}
-
-              {employeeOptions.length > 0 && (
-
-                <FormInput 
-                  {...handleFindProps('staff')}
-                  value={values['staff']}
-                  onChange={(e:any) => {
-                    onChange(e)
-                    setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
-                    findPartialDays(e.target.value)
-                  }}
-                  key={employeeOptions}
-                />
-              )}
-
-            </HeightReveal>
+              <FormInput 
+                {...handleFindProps('staff')}
+                value={values['staff']}
+                isDisabled={values.location === '' ? true : false}
+                onChange={(e:any) => {
+                  onChange(e)
+                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  findPartialDays(e.target.value)
+                }}
+                // key={employeeOptions}
+              />
+             
+            </div>
           </fieldset>
 
           <fieldset >
             <legend> The When </legend>
-            <HeightReveal className='datetime-cont' isShown={values.staff ? true : false} key={values.service}>
+            <HeightReveal className='datetime-cont' isShown={values.staff ? true : false} >
 
               <div>            
                 <FormInput 
                   {...handleFindProps('date')}
                   defaultValue={values['date']}
-                  disabled
+                  isDisabled={true}
                   onChange={onChange}
                 />
 
@@ -567,13 +564,13 @@ export function BookingForm2({ services }:iProps) {
                     {...handleFindProps('timeStart')}
                     defaultValue={values['timeStart']}
                     onChange={onChange}
-                    disabled
+                    isDisabled={true}
                   />
                   <FormInput 
                     {...handleFindProps('timeEnd')}
                     defaultValue={values['timeEnd']}
                     onChange={onChange}
-                    disabled
+                    isDisabled={true}
                   />
                 </div>
 
@@ -584,6 +581,7 @@ export function BookingForm2({ services }:iProps) {
                   setValues={setValues} 
                   times={times} 
                   partialDates={partialDates}
+                  // todo setting 'service' to empty string causes error here
                   buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
                   serviceDuration={Number(pickedService.durationInHours)}
                 />
@@ -640,6 +638,8 @@ export function BookingForm2({ services }:iProps) {
 const StyledBookingForm = styled.form`
   background-color: #d0e4dd;
   padding: 1em;
+  max-width: 40em;
+  border-radius: var(--br-sharp);
   
   button[type=submit]{
     color: var(--c-3);
