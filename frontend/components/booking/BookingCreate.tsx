@@ -45,6 +45,11 @@ const QUERY_SERVICES_ALL = gql`
           end
         }
       }
+      addons {
+        id
+        name
+        price
+      }
       employees {
         id
         name

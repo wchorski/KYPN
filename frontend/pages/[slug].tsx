@@ -50,7 +50,7 @@ export default function PageBySlug() {
 
   return (
     <>
-      <StyledPageSingle isShown >
+      <StyledPageSingle isShown={false} >
         <header
           className='page'
           style={{
@@ -80,6 +80,8 @@ export default function PageBySlug() {
             <span>View Count : 12345</span>
 
           </div>
+
+          <hr />
         </header>
 
         <BlockRenderer document={content.document} />
@@ -92,18 +94,24 @@ export default function PageBySlug() {
 
 const StyledPageSingle = styled.div<{isShown: boolean}>`
   header.page{
-    display: ${props => props.isShown ? 'none' : 'block'};
-    background: var(--c-accent);
+    /* display: ${props => props.isShown ? 'none' : 'block'}; */
+    /* display: block; */
+    ${props => props.isShown ? '' : 'height: 2rem; opacity: 0;'}
+
+    background: var(--c-bg);
     position: relative;
     /* background-blend-mode: overlay; */
 
     .overlay{
       /* background-color: rgb(155 255 0 / 52%); */
-      background: rgba(242, 242, 242, 0.82);
+      background: rgba(30, 30, 30, 0.474);
       overflow: hidden;
       height: 100%;
       z-index: 2;
     }
+
+    text-align: center;
+    color: var(--c-txt);
   }
 
 
