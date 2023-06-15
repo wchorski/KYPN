@@ -4,8 +4,11 @@ export default function BookingPage() {
 
   return (
     <>
-      <h1>Booking Page</h1>
-      <BookingCreate />
+      <section className="pad marg">
+        <h1>Booking Page</h1>
+        <BookingCreate />
+
+      </section>
       {/* <BookingForm /> */}
     </>
   )

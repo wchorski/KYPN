@@ -29,7 +29,7 @@ export const CalendarDatePicker = ({ setValues, blackoutDays, buisnessDays, hand
         calendarType='US'
         onClickDay={(date) => {      
           // handleBlackoutTimes(date)
-          setValues((prev:any) => ({...prev, date: format(date, 'yyyy-MM-dd')}))
+          setValues((prev:any) => ({...prev, date: format(date, 'yyyy-MM-dd'), timeStart: '', timeEnd: ''}))
           // setAnimTrig(animTrig + 1)
           // getTimes()
         }}

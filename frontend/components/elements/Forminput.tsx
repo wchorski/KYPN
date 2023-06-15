@@ -10,8 +10,18 @@ type SelectOpt = {
   isSelected:boolean,
 }
 
+type Props = {
+  value:any,
+  label:string,
+  errorMessage:string,
+  onChange:any,
+  id:number,
+  hint:string,
+  isDisabled:boolean,
+}
+
 export const FormInput = (props:any) => {
-  const { value, label, errorMessage, onChange, id, hint, ...inputProps } = props;
+  const { value, label, errorMessage, onChange, id, hint, isDisabled, ...inputProps } = props;
 
   const [focused, setFocused] = useState(false);
 
@@ -28,12 +38,13 @@ export const FormInput = (props:any) => {
 
   if(inputProps.type === 'select') return (
     <StyledInputLabel htmlFor={inputProps.name}>
-      <span className="label">{label}</span>
+      <span className="label">{label} </span>
       <select 
         {...inputProps}
         // onChange={handleChange}
         onChange={onChange}
         value={value}
+        disabled={isDisabled}
       >
         <option key={0} value={''}> -- Select a {label} -- </option>
         {inputProps.options.map((opt:SelectOpt, i:number) => (
@@ -51,6 +62,7 @@ export const FormInput = (props:any) => {
         {...inputProps}
         onChange={onChange}
         onBlur={handleFocus}
+        disabled={isDisabled}
         onFocus={() =>
           inputProps.name === "confirmPassword" && setFocused(true)
         }

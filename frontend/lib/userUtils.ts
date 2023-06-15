@@ -27,6 +27,6 @@ export function findEmployeeBusyRanges(employee:User){
     busyRanges.push(availRange)
   })
   
-  console.log({busyRanges});
+  // console.log({busyRanges});
   return busyRanges
 }
