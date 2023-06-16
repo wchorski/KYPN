@@ -54,6 +54,13 @@ const StyledPopup = styled.dialog`
   padding: 0;
   border: none;
   background: transparent;
+  color: var(--c-txt);
+  transition: all .3s;
+
+  &[open]{
+    opacity: 1;
+    scale: 1;
+  }
 
    /* nav{
     position: absolute;
