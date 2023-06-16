@@ -16,6 +16,7 @@ import { calcEndTime, filterBuisnessTimes, findBlackoutDates, findUniqueDays, is
 import { findEmployeeBusyRanges } from "../../lib/userUtils"
 import { useRouter } from "next/router"
 import moneyFormatter from "../../lib/moneyFormatter"
+import Link from "next/link"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -304,7 +305,7 @@ export function BookingForm2({ services, addons }:iProps) {
         msg: "We'll reach out to confirm your booking via email"
       }
 
-      console.log({successObj});
+      // console.log({successObj});
       
 
       
@@ -545,7 +546,8 @@ export function BookingForm2({ services, addons }:iProps) {
     <div>
 
       <ErrorMessage error={errorMutation} />
-      {isSuccess && successfullBook && (<div className="card">
+      {isSuccess && successfullBook && (
+      <div className="card">
         <h2 className="msg success">Booking Created: </h2>
 
         <ul>
@@ -564,7 +566,18 @@ export function BookingForm2({ services, addons }:iProps) {
           <li>staff: {successfullBook.staff}</li>
           <li>message: {successfullBook.msg}</li>
         </ul>
-      </div>)}
+
+        <Link href={`/booking`}> Book another aervice </Link> 
+        <br />
+        {session ? (
+          <Link href={`/account`}> View your account</Link> 
+        ) : (
+          <Link href={`/auth/login`}> Login </Link> 
+        )}
+        <br />
+        <Link href={`/home`}> ↼ Back Home </Link>
+      </div>
+      )}
 
       {!isSuccess && (
 
@@ -764,6 +777,7 @@ const StyledBookingForm = styled.form`
       color: var(--c-txt-rev);
       display: flex;
       flex-direction: row;
+      
     }
   }
 

@@ -1,16 +1,20 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop,  } from "react-icons/md"
 import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
 import { Table } from "../elements/Table"
-import { User } from "../../lib/types"
+import { Booking, User } from "../../lib/types"
 import TicketsList from "../events/TicketsList"
-import { datePrettyLocalDay } from "../../lib/dateFormatter"
+import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import Link from "next/link"
 import { FiEdit } from "react-icons/fi"
 import { PopupModal } from "../elements/PopupModal"
 import { UserUpdateForm } from "../user/UserUpdateForm"
 import { BsQrCode } from "react-icons/bs"
+import { gql, useQuery } from "@apollo/client"
+import { QueryLoading } from "./QueryLoading"
+import ErrorMessage from "../ErrorMessage"
+import moneyFormatter from "../../lib/moneyFormatter"
 
 
 enum DASH_STATE {
@@ -24,8 +28,62 @@ enum DASH_STATE {
 
 export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
+  const dashRef = useRef<HTMLHeadingElement | null>(null)
+  const ordersRef = useRef<HTMLHeadingElement | null>(null)
+  const subscriptionsRef = useRef<HTMLHeadingElement | null>(null)
+  const downloadsRef = useRef<HTMLHeadingElement | null>(null)
+  const ticketsRef = useRef<HTMLHeadingElement | null>(null)
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
   const [userData, setUserData] = useState<User>()
+  const [bookingCells, setBookingCells] = useState([])
+
+  const { loading, error, data } = useQuery(
+    USER_DASH_QUERY, {
+    variables: { where: { id: id } }
+  })
+
+  function handleNavClick(state:string, ref:any){
+
+    setState(state)
+
+    if (ref.current) {
+      // ref.current.scrollIntoView({ behavior: 'smooth' });
+      // const scrollOffset = 50; // Adjust this value as needed
+      // window.scrollBy(0, -scrollOffset);
+
+      var headerOffset = 105;
+      var elementPosition = ref.current.getBoundingClientRect().top;
+      var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+      window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+      }); 
+    }
+  };
+
+  useEffect(() => {
+    if(!data?.user) return
+
+    const cells = data.user.bookings.map((book:Booking) => ({
+      date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
+      service: book.service.name,
+      price: moneyFormatter(book.price),
+      // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
+      details: book.id,
+    }))
+    // console.log(cells);
+    
+    
+    setBookingCells(cells)
+    
+    // return () => 
+  }, [data?.user])
+
+  if (loading) return <QueryLoading />
+  if (error) return <ErrorMessage error={error} />
+  // console.log(data);
+  // const {user}:{user:User} = data
 
   return (<>
     <PopupModal data={userData} setData={setUserData}>
@@ -34,39 +92,54 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     
     <StyledAccountCard>
       <StyledAccountNav>
- 
+        <ul>
           <li>
-            <button onClick={() => setState(DASH_STATE.DASHBOARD)} className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
+            <button 
+              onClick={() => handleNavClick(DASH_STATE.DASHBOARD, dashRef)} 
+              className={state === DASH_STATE.DASHBOARD ? 'active' : ''}
+            >
               Dashboard <MdOutlineAccountBox />
             </button>
           </li>
           <li>
-            <button onClick={() => setState(DASH_STATE.ORDERS)} className={state === DASH_STATE.ORDERS ? 'active' : ''}>
+            <button 
+              onClick={() => handleNavClick(DASH_STATE.ORDERS, ordersRef)} 
+              className={state === DASH_STATE.ORDERS ? 'active' : ''}
+            >
               Orders <MdShop />
             </button>
           </li>
           <li>
-            <button onClick={() => setState(DASH_STATE.SUBSCRIPTIONS)} className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
+            <button 
+              onClick={() => handleNavClick(DASH_STATE.SUBSCRIPTIONS, subscriptionsRef)} 
+              className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}
+            >
               Subscriptions <MdAutorenew />
             </button>
           </li>
           <li>
-            <button onClick={() => setState(DASH_STATE.DOWNLOADS)} className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}>
+            <button 
+              onClick={() => handleNavClick(DASH_STATE.DOWNLOADS, downloadsRef)} 
+              className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}
+            >
               Downloads <MdOutlineDownload />
             </button>
           </li>
           <li>
-            <button onClick={() => setState(DASH_STATE.TICKETS)} className={state === DASH_STATE.TICKETS ? 'active' : ''}>
+            <button 
+              onClick={() => handleNavClick(DASH_STATE.TICKETS, ticketsRef)} 
+              className={state === DASH_STATE.TICKETS ? 'active' : ''}
+            >
               Tickets <HiOutlineTicket />
             </button>
           </li>
-      
+        </ul>
       </StyledAccountNav>
 
       <div className="dash-cont">
 
-        <article className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
-          <h3>Dashboard</h3>
+        <article ref={dashRef} className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
+          <h3  >Dashboard</h3>
           <table>
             <tbody>
               <tr>
@@ -86,23 +159,33 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
         </article>
 
-        <article className={state === DASH_STATE.ORDERS ? 'active' : ''}>
+        <article ref={ordersRef} className={state === DASH_STATE.ORDERS ? 'active' : ''}>
           <h3>Orders</h3>
-
+          <Table 
+            caption="Orders / Services"
+            headers={[
+              'service',
+              'date',
+              'price', 
+              'details',
+            ]}
+            cells={bookingCells}
+            route={`/bookings`}
+          />
 
         </article>
 
-        <article className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
+        <article ref={subscriptionsRef} className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
           <h3>Subscriptions</h3>
 
         </article>
 
-        <article className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}>
+        <article ref={downloadsRef} className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}>
           <h3>Downloads</h3>
 
         </article>
 
-        <article className={state === DASH_STATE.TICKETS ? 'active' : ''}>
+        <article ref={ticketsRef} className={state === DASH_STATE.TICKETS ? 'active' : ''}>
           <h3> Tickets </h3>
           <StyledTicketList>
             {tickets && tickets.map(tick => (
@@ -136,6 +219,22 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
   </> )
 }
 
+const USER_DASH_QUERY = gql`
+  query User($where: UserWhereUniqueInput!) {
+    user(where: $where) {
+      bookings {
+        id
+        price
+        start
+        service {
+          name
+        }
+        status
+      }
+    }
+  }
+`
+
 const StyledTicketList = styled.ul`
   padding: 0;
 
@@ -167,7 +266,7 @@ const StyledAccountCard = styled.div`
     }
 
     article{
-      height: 30em;
+      /* height: 30em; */
       overflow-y: scroll;
       opacity: 0;
       transition: all .3s;
@@ -195,6 +294,21 @@ const StyledAccountCard = styled.div`
       }
     }
   }
+
+  @media screen and (max-width: 600px){
+    nav{display: none}
+
+    .dash-cont{
+      article{
+        opacity: 1;
+        grid-column: auto;
+        grid-row: auto;
+        height: auto;
+        overflow-y: visible;
+        border-bottom: 1px solid black;
+      }
+    }
+  }
 `
 
 
@@ -204,6 +318,11 @@ const StyledAccountNav = styled.nav`
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
+
+  > ul {
+    position: sticky;
+    top: 3rem;
+  }
   
 
   li{
@@ -220,8 +339,11 @@ const StyledAccountNav = styled.nav`
     align-self: stretch;
     padding: 2em 1em;
     text-transform: uppercase;
-    font-size: 1.2rem;
+    font-size: .7rem;
     transition: all .3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     &.active{
       background-color: var(--c-3);

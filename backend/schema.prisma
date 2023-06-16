@@ -15,6 +15,7 @@ model User {
   id                      String             @id @default(uuid()) @postgresql.Uuid
   name                    String             @default("")
   nameLast                String             @default("")
+  image                   String             @default("")
   email                   String             @unique @default("")
   password                String
   isAdmin                 Boolean            @default(false)

@@ -102,7 +102,9 @@ export const GlobalStyles = createGlobalStyle`
   button, 
   select,
   input {
-    transition: background-color, color, border .3s ;
+    transition-property: color, background-color, border, text-shadow;
+    transition-duration: .2s;
+    transition-timing-function: ease-in;
     cursor: pointer;
   }
 

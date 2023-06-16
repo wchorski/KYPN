@@ -56,7 +56,11 @@ export enum DATE_OPTION {
   FULL = 'full',
 }
 
-export function datePrettyLocal(date:string, option:DATE_OPTION) {
+type DateOptions = {
+
+}
+
+export function datePrettyLocal(date:string, option:'day'|'time'|'full') {
   // console.log('pretty date input, ', date);
   
   let options = {}

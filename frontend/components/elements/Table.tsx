@@ -13,7 +13,7 @@ interface TableProps {
 export function Table({ caption, cells, headers, route }: TableProps) {
 
   const [keys, setKeys] = useState<any>(headers)
-  const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account',]
+  const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account', 'details']
   
 
   // ? if u want to automatically grab keys from object
@@ -95,6 +95,14 @@ const StyledTable = styled.table`
   width: 100%;
   margin-bottom: 1em;
 
+  a{
+    color: var(--c-3);
+
+    &:hover, &:focus{
+      color: var(--c-accent);
+    }
+  }
+
   th, td, caption {
     padding: .1rem 1rem;
   }
@@ -112,7 +120,7 @@ const StyledTable = styled.table`
     color: white;
   }
   tr:nth-of-type(2n) {
-    background-color: var(--c-txt-rev);
+    background-color: #ffffff;
   }
 
   @media (max-width: 650px) {

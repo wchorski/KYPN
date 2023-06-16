@@ -3,8 +3,14 @@ import { useState } from "react";
 
 const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URI
 
+type Props = {
+  photoIn: {
+    url:string
+    altText:string,
+  }|string|undefined,
+}
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn }: any) {
+export function ImageDynamic({ photoIn }: Props) {
   
 
   const [state, setState] = useState<any>(handlePhoto(photoIn))
