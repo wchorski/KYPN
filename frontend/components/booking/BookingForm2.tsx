@@ -34,6 +34,7 @@ type SuccessfullBook = {
   start: string,
   end: string,
   service: string,
+  addons: string[],
   location: string,
   staff: string,
   msg: string,
@@ -213,13 +214,13 @@ export function BookingForm2({ services, addons }:iProps) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    console.log(values);
+    // console.log(values);
     
     if(!formRef.current) return console.warn('form is missing');
     
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
-      summary: `[NEW] ${values.name ? values.name : values.email}`,
+      summary: `${values.name ? values.name : values.email}`,
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: `[name: ${values.name}, email: ${values.email}] -- ${values.notes}`
     }
@@ -235,10 +236,10 @@ export function BookingForm2({ services, addons }:iProps) {
         },
       })
     }
-    console.log('values.addonIds, ', values.addonIds);
+    // console.log('values.addonIds, ', values.addonIds);
     
     if (values.addonIds.length > 0 ) {
-      console.log(values.addonIds);
+      // console.log(values.addonIds);
       
       Object.assign(formattedInputs, {
         addons: {
@@ -278,7 +279,7 @@ export function BookingForm2({ services, addons }:iProps) {
       })
     }
     
-    console.log({ formattedInputs })
+    // console.log({ formattedInputs })
     const res = await gqlMutation({
       variables: {
         data: formattedInputs
@@ -292,14 +293,19 @@ export function BookingForm2({ services, addons }:iProps) {
 
       const location = services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location)
 
+      const addonsFlat = addons.flatMap(ad => ad.id)
       let successObj = {
         start: values.date + 'T' + values.timeStart,
         end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService.durationInHours)),
         service: pickedService.name || 'n/a',
+        addons: addons.filter(ad => values.addonIds.includes(ad.id)).map( (ad:Addon) => ad.name),
         location: location ? location.name : 'n/a' || '',
         staff: pickedStaff?.name || 'n/a',
         msg: "We'll reach out to confirm your booking via email"
       }
+
+      console.log({successObj});
+      
 
       
 
@@ -546,6 +552,14 @@ export function BookingForm2({ services, addons }:iProps) {
           <li>start: {datePrettyLocal(successfullBook.start, DATE_OPTION.FULL)}</li>
           <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService.durationInHours)), DATE_OPTION.FULL)}</li>
           <li>service: {successfullBook.service}</li>
+          <li>
+            Addons:
+            <ul>
+              {successfullBook.addons.map((name:string,i) => (
+                <li key={i}> {name} </li>
+              ))}
+            </ul>
+          </li>
           <li>location: {successfullBook.location}</li>
           <li>staff: {successfullBook.staff}</li>
           <li>message: {successfullBook.msg}</li>
