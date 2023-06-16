@@ -13,6 +13,7 @@ const ErrorStyles = styled.div`
   color: #931a33;
 
   p {
+    color: black;
     margin: 0;
     font-weight: 100;
   }
