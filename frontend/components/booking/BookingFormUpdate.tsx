@@ -155,6 +155,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       name: "date",
       type: "date",
       label: "Date",
+      value: values.date,
       errorMessage: 'Must pick a date. It can be an estimate and can be changed later',
       required: true,
     },
@@ -162,6 +163,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       id: 5,
       name: "timeStart",
       type: "time",
+      value: values.timeStart,
       label: "Start Time",
       errorMessage: 'Must pick a time. It can be an estimate and can be changed later',
       required: true,
@@ -185,7 +187,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       label: "name",
       pattern: "^[a-zA-Z0-9 -]+",
       minLength: '3',
-      defaultValue: values.name + ' ' + (values.nameLast ? values.nameLast : ''),
+      // defaultValue: values.name + ' ' + (values.nameLast ? values.nameLast : ''),
       maxLength: '30',
       required: false,
     },
@@ -196,14 +198,14 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       placeholder: "John@Wick.com...",
       errorMessage: "It should be a valid email address!",
       label: "Email",
-      defaultValue: values.email,
+      // defaultValue: values.email,
       required: true,
     },
     {
       id: 9,
       name: "phone",
       type: "phone",
-      defaultValue: values?.phone || '',
+      // defaultValue: values?.phone || '',
       placeholder: "123 456 7890...",
       errorMessage: 'Please format phone number to "123 456 7890" ',
       // hint: 'format "123 456 7890" ',
@@ -322,7 +324,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
     }).catch(err => errorRef?.current.scrollIntoView({ behavior: 'smooth' }))
     
 
-    console.log('res', res)
+    // console.log('res', res)
     // todo show booking success message
     if (res?.data.updateBooking) {
       setIsSuccess(true)
@@ -546,7 +548,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
 
   const handleCheckboxChangeGroup = (event:any) => {
     const { value, checked }:{value:string[], checked:boolean} = event.target;
-    console.table({value, checked});
+    // console.table({value, checked});
     
     // Update the selected checkboxes based on the checkbox change
     if (checked) {
@@ -677,10 +679,10 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
                   <li key={addon.name}>
                     <FormInput 
                     // ? remove anything that aint a letter or number
-                      {...{name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),  label: moneyFormatter(addon.price) + ' ' + addon.name, type: 'checkbox', defaultChecked: bookingAddonIds.includes(addon.id)}}
+                      {...{name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''),  label: moneyFormatter(addon.price) + ' ' + addon.name, value: addon.id, type: 'checkbox', defaultChecked: bookingAddonIds.includes(addon.id)}}
                       // todo how to fill in values that weren't added on yet
                       // value={values.addonIds.find(aId => aId === addon.id)}
-                      value={addon.id}
+                      // value={addon.id}
                       onChange={handleCheckboxChangeGroup}
                     />
                   </li>
@@ -698,12 +700,13 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
               <div>            
                 <FormInput 
                   {...handleFindProps('date')}
-                  defaultValue={values['date']}
+                  value={values['date']}
                   isDisabled={true}
                   onChange={onChange}
                 />
 
                 <CalendarDatePicker 
+                  // value={values.date}
                   key={values.staff}
                   setValues={setValues} 
                   blackoutDays={blackoutDates}
@@ -717,13 +720,13 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
                 <div className="time-input-cont">
                   <FormInput 
                     {...handleFindProps('timeStart')}
-                    defaultValue={values['timeStart']}
+                    value={values['timeStart']}
                     onChange={onChange}
                     isDisabled={true}
                   />
                   <FormInput 
                     {...handleFindProps('timeEnd')}
-                    defaultValue={values['timeEnd']}
+                    // defaultValue={values['timeEnd']}
                     onChange={onChange}
                     isDisabled={true}
                   />
@@ -902,6 +905,7 @@ const UPDATE_BOOKING = gql`
         id
         name
         email
+        phone
       }
       dateCreated
       dateModified

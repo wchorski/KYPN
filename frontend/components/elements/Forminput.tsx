@@ -11,7 +11,6 @@ type SelectOpt = {
 }
 
 type Props = {
-  value?:any,
   label?:string,
   errorMessage?:string,
   onChange?:any,
@@ -24,7 +23,7 @@ type Props = {
 
 export const FormInput = (props:any) => {
   // todo type this shit
-  const { value, label, errorMessage, onChange, id, hint, isDisabled, ...inputProps }:any = props;
+  const {  label, errorMessage, onChange, id, hint, isDisabled, ...inputProps }:any = props;
 
   const [focused, setFocused] = useState(false);
 
@@ -35,7 +34,7 @@ export const FormInput = (props:any) => {
   if(inputProps.type === 'textarea') return (
     <StyledInputLabel htmlFor={inputProps.name}>
       <span className="label">{label}</span>
-      <textarea {...inputProps} onChange={onChange} onBlur={handleFocus} focused={focused.toString()} value={value}/>
+      <textarea {...inputProps} onChange={onChange} onBlur={handleFocus} focused={focused.toString()} />
     </StyledInputLabel>
   )
 
@@ -46,7 +45,7 @@ export const FormInput = (props:any) => {
         {...inputProps}
         // onChange={handleChange}
         onChange={onChange}
-        value={value}
+        // value={value}
         disabled={isDisabled}
       >
         <option key={0} value={''}> -- Select a {label} -- </option>
@@ -65,7 +64,7 @@ export const FormInput = (props:any) => {
         {...inputProps}
         type="checkbox" 
         name={inputProps.name} 
-        value={value}
+        // value={value}
         onChange={onChange}
       />
       <span>{label}</span>
@@ -78,6 +77,7 @@ export const FormInput = (props:any) => {
       <span className="label"> {label} </span>
       <input
         {...inputProps}
+        // value={value}
         onChange={onChange}
         onBlur={handleFocus}
         disabled={isDisabled}
