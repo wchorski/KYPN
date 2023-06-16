@@ -398,7 +398,8 @@ export enum INPUT_TYPES {
 
 export type InputObj = {
   name:string,
-  type: INPUT_TYPES,
+  disabled?:boolean,
+  type: 'text'|'email'|'textarea'|'time'|'date'|'select'|'number'|'datetime-local',
   label: string,
   placeholder?:string,
   pattern?:string,
@@ -406,7 +407,7 @@ export type InputObj = {
   maxLength?:string
   errorMessage:string,
   required: boolean,
-  initial: string,
+  initial: string|number,
   options?: {
     label:string,
     value:string,

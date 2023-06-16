@@ -129,10 +129,13 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
     // return () =>
   }, [popupData])  
   
-  if(popupData?.isDelete && popupData?.ticket) return (
+
+  // ? if it's user & event show RSVP
+  return (<>
     <StyledPopup 
       ref={ticketPopupRef}
       onClick={handleOnClick}
+      className={(popupData?.isDelete && popupData?.ticket) ? 'open' : ''}
     >
       <button onClick={() => setTicketPopupData(undefined)} disabled={loading} data-tooltip={'close'} className='edit'> 
         <RiCloseFill />
@@ -140,23 +143,21 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
 
       <h2> Delete Ticket </h2>
 
-      <h3>{popupData.ticket.event?.summary}</h3>
+      <h3>{popupData?.ticket?.event?.summary}</h3>
 
       <ul>
-        <li>User Name: {popupData.ticket.holder?.name}</li>
-        <li>User Email: {popupData.ticket.holder?.email}</li>
-        <li>Event: {popupData.ticket.event?.summary}</li>
-        <li>Ticket: {popupData.ticket.id}</li>
+        <li>User Name: {popupData?.ticket?.holder?.name}</li>
+        <li>User Email: {popupData?.ticket?.holder?.email}</li>
+        <li>Event: {popupData?.ticket?.event?.summary}</li>
+        <li>Ticket: {popupData?.ticket?.id}</li>
       </ul>
 
       <button disabled={loading} onClick={handleDelete} className='delete'> 
         {loading ? 'Wait...' : 'Delete'}
       </button>
     </StyledPopup>
-  )
 
-  // ? if it's user & event show RSVP
-  return (
+
     <StyledPopup 
       ref={ticketPopupRef}
       onClick={handleOnClick}
@@ -178,13 +179,22 @@ export default function TicketPopup({isPopup, setIsPopup, event, user, setAnimTr
         {loading ? 'Wait...' : 'Assign Ticket'}
       </button>
     </StyledPopup>
-  )
+  </>)
 }
 
 
 const StyledPopup = styled.dialog`
 
-  transition: all 1s;
+  opacity: 0;
+  transform: scale(.1);
+  transition: all 2s;
+  pointer-events: none;
+
+  &[open]{
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+  }
 
   &::backdrop{
     transition: all 1s;

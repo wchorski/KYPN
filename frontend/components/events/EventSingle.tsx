@@ -18,12 +18,18 @@ import { BsFileEarmarkSpreadsheet } from "react-icons/bs"
 import Link from "next/link"
 import { AttendeeTable } from "./AttendeeTable"
 import { useUser } from "../menus/Session"
+import { PopupAnim } from "../menus/PopupAnim"
+import { TicketsForm } from "../tickets/TicketsForm"
 
+type tPopupData = {
+
+}|any
 
 export default function EventSingle({id}:{id:string}) {
 
   const session = useUser()
   
+  const [popupData, setPopupData] = useState<tPopupData>()
   const [isPopup, setIsPopup] = useState(false)
   const [ticketPopupData, setTicketPopupData] = useState<tTicketPopup>()
   const [animTrig, setAnimTrig] = useState(0)
@@ -33,6 +39,7 @@ export default function EventSingle({id}:{id:string}) {
     QUERY_EVENT, {
     variables: { where: { id: id } }
   })
+  
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
@@ -40,7 +47,7 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, seats, hosts, location}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, seats, hosts, location, categories, tags}:Event = data?.event
   
   return (
     <StyledEventSingle className="pad">
@@ -55,6 +62,10 @@ export default function EventSingle({id}:{id:string}) {
         setAnimTrig={setAnimTrig}
         
       />
+
+      <PopupAnim popupData={popupData}>
+        <TicketsForm eventId={id} holderId={session?.id} price={price}/>
+      </PopupAnim>
 
       {/* <aside>
         <div className="cont">
@@ -80,6 +91,13 @@ export default function EventSingle({id}:{id:string}) {
           </picture>
 
           <h1>{summary}</h1>
+          <ul className="categories">
+            {categories?.map(cat => (
+              <li key={cat.id}>
+                <Link href={`/blogs/search?categories=${cat.id}`} > {cat.name} </Link>
+              </li>
+            ))}
+          </ul>
           <ul className="meta">
             <li>{datePrettyLocalDay(start || '')}</li>
             <li>{datePrettyLocalTime(start || '')}</li>
@@ -105,7 +123,7 @@ export default function EventSingle({id}:{id:string}) {
               <small>sub text</small> 
             </div>
 
-            <button onClick={() => setIsPopup(true)} className="ticket"> 
+            <button onClick={() => setPopupData({id: '123'})} className="ticket"> 
               {price && price > 0 ? (
                 <span>{moneyFormatter(price)} per Ticket</span>
               ) : (
@@ -119,6 +137,14 @@ export default function EventSingle({id}:{id:string}) {
           <p>{description}</p>
 
           <hr />
+          <ul className="tags">
+            {tags?.map(tag => (
+              <li key={tag.id}>
+                <Link href={`/blogs/search?tags=${tag.id}`} > {tag.name} </Link>
+              </li>
+            ))}
+          </ul>
+
           {/* //todo have multiple hosts */}
           {/* {session && (host?.id === session.id || session.isAdmin) && ( */}
           {session && (hosts?.map(host => host.id).includes(session.id) || session.isAdmin) && (
@@ -140,7 +166,9 @@ export default function EventSingle({id}:{id:string}) {
               </Link>
 
               <h3>Edit Attendees</h3>
-              <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+              <div style={{position: 'relative'}}>
+                <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/>
+              </div>
               
               <h3>All Ticket Holders</h3>
               <AttendeeTable event={data.event} className="display-none" />
@@ -194,7 +222,11 @@ const StyledEventSingle = styled.section`
 
     .content{
       flex: 3 1 80%;
+
+      margin-top: 2rem;
+      
     }
+    
   }
 
   button.ticket{

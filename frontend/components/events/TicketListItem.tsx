@@ -59,7 +59,7 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
 
   // todo using the `ticket.holder.name` check is a bit hacky but using it for now
   return (
-    <li className='card'>
+    <StyledTicketItem className='card'>
       <div>
         {ticket.holder.name ? (<>
           <strong>{ticket.holder?.name}</strong> <br />
@@ -117,9 +117,15 @@ export  function TicketListItem({ticket, setPopupData}:Props) {
       <button className='edit' data-tooltip="Edit" onClick={() => setIsEditing(!isEditing)}> 
         {!isEditing ? (<CgMenuRound /> ) : (<CgClose />)} 
       </button>
-    </li>
+    </StyledTicketItem>
   )
 }
+
+const StyledTicketItem = styled.li`
+  button svg{
+    font-size: 2rem;
+  }
+`
 
 export const StyledFormMini = styled.form`
   max-width: 15em;

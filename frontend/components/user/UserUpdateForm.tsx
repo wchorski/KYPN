@@ -55,7 +55,7 @@ export function UserUpdateForm({user, setUser}:Props) {
 
   async function handleSubmit(e:any) {
     e.preventDefault()
-    console.log({values});
+    // console.log({values});
     
 
     try {

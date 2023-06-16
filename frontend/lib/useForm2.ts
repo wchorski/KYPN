@@ -16,7 +16,8 @@ export default function useForm2(inputArray:InputObj[]) {
   const [values, setValues] = useState(initialValues)
 
   function handleChange(e: any) {
-
+    // console.log(e.target);
+    
     let { value, name, type } = e.target
     // console.log(name + ' : ' + value + ' : ' + type);
 
@@ -49,6 +50,7 @@ export default function useForm2(inputArray:InputObj[]) {
 
   return {
     values,
+    setValues,
     handleChange,
     handleFindProps,
     resetForm,
