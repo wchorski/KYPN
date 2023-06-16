@@ -78,7 +78,7 @@ model Booking {
   customer        User?     @relation("Booking_customer", fields: [customerId], references: [id])
   customerId      String?   @map("customer") @postgresql.Uuid
   notes           String    @default("")
-  status          String?   @default("ACTIVE")
+  status          String?   @default("LEAD")
   dateCreated     DateTime? @default(now())
   dateModified    DateTime? @default(now())
   google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")

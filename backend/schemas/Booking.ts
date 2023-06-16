@@ -67,7 +67,7 @@ export const Booking:Lists.Booking = list({
         { label: 'Canceled', value: 'CANCELED' },
         { label: 'Lead', value: 'LEAD' },
       ],
-      defaultValue: 'ACTIVE',
+      defaultValue: 'LEAD',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
