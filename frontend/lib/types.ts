@@ -127,6 +127,7 @@ export type User = {
   id: string,
   name?: string,
   nameLast?:string,
+  image?:string,
   email?: string,
   password?: string,
   isAdmin?: boolean,
@@ -178,13 +179,15 @@ export type Booking = {
   end: string,
   summary: string,
   durationInHours: string,
-  service: Service[],
+  service: Service,
   price: number,
   employees: User[],
   customer: User,
   notes: string,
   dateCreated: string,
   dateModified: string,
+  addons:Addon[],
+  location:Location,
 }
 
 export type Category = {

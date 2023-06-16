@@ -138,6 +138,7 @@ const StyledInputLabel = styled.label`
     /* display: block; */
     position: absolute;
     white-space: nowrap;
+    z-index: 1;
     
     left: 5px;
     transform: translateY(-20%)

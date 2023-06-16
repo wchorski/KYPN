@@ -5,6 +5,7 @@ type User {
   id: ID!
   name: String
   nameLast: String
+  image: String
   email: String
   password: PasswordState
   isAdmin: Boolean
@@ -67,6 +68,7 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   nameLast: StringFilter
+  image: StringFilter
   email: StringFilter
   isAdmin: BooleanFilter
   isActive: BooleanFilter
@@ -252,6 +254,7 @@ input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   nameLast: OrderDirection
+  image: OrderDirection
   email: OrderDirection
   isAdmin: OrderDirection
   isActive: OrderDirection
@@ -273,6 +276,7 @@ enum OrderDirection {
 input UserUpdateInput {
   name: String
   nameLast: String
+  image: String
   email: String
   password: String
   isAdmin: Boolean
@@ -401,6 +405,7 @@ input UserUpdateArgs {
 input UserCreateInput {
   name: String
   nameLast: String
+  image: String
   email: String
   password: String
   isAdmin: Boolean

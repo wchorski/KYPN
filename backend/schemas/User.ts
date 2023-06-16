@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { checkbox, password, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { checkbox, password, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
 import { timesArray } from "../lib/timeArrayCreator";
@@ -44,7 +44,7 @@ export const User: Lists.User = list({
     //   if no name is provided, an error will be displayed
     name: text({ validation: { isRequired: true } }),
     nameLast: text(),
-
+    image: text({}),
     email: text({
       validation: { isRequired: true },
       // by adding isIndexed: 'unique', we're saying that no user can have the same

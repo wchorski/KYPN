@@ -28,7 +28,7 @@ export type tMediaText = {
 
 export function MediaText({imageSrc, imageAlt, content, rowReverse = false, children}:tMediaText) {
   
-  console.log(rowReverse);
+  // console.log(rowReverse);
   
   //? this is when i was manually entering data 
   // function handleContentRender(content:any){

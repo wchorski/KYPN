@@ -21,8 +21,12 @@ export function SessionBadge({ session, label }: Props) {
 
   return (
     <StyledSessionBadge className="toggle-menu button" aria-label='account menu link'>
-      <MdAccountCircle />
-      <span>{label}</span>
+      
+      <Link href={`/account`} className="button">
+        <MdAccountCircle />
+        <span>{label}</span>
+      </Link>
+
       <ul>
         <li><Link href={`/account`}> My Account </Link> </li>
         <li>{session?.name}</li>
@@ -87,7 +91,7 @@ export const QUERY_USER_CURRENT = gql`
   }
 `
 
-const StyledSessionBadge = styled.button`
+const StyledSessionBadge = styled.div`
   padding: 1em;
   text-align: right;
   position: relative;

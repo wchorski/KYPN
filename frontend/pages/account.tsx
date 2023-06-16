@@ -9,12 +9,13 @@ export default function Account() {
   if (!session) return (
     <p> must be logged in to view </p>
   )
-
+  
   return (
     <>
 
       <h1>Account | {session.name}</h1>
-      <AccountDetails {...session.user} />
+
+      <AccountDetails {...session} />
 
     </>
   )
