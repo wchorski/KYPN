@@ -52,12 +52,13 @@ const genTimeStrings = generateTimesArray().map((t) => t.value)
 export function BookingFormUpdate({ services, addons, booking }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
-  const {query} = useRouter()
+  const {query, push:routerPush} = useRouter()
 
   const bookingAddonIds = booking?.addons.flatMap(ad => ad.id)
+  const bookingEmployeeIds = booking?.employees.flatMap(emp => emp.id)
   // console.log({bookingAddonIds});
   
-  
+  const errorRef = useRef<HTMLDivElement|null>(null)
   const session = useUser()
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -271,16 +272,16 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       })
     }
 
-    if (values.staff !== '' ) {
+    // if (values.staff !== '' ) {
 
-      Object.assign(formattedInputs, {
-        employees: {
-          connect: [
-            { id: values.staff }
-          ]
-        },
-      })
-    } 
+    //   Object.assign(formattedInputs, {
+    //     employees: {
+    //       connect: [
+    //         { id: values.staff }
+    //       ]
+    //     },
+    //   })
+    // } 
 
     if (session) {
       Object.assign(formattedInputs, {
@@ -291,19 +292,18 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
         }
       })
     }
-    // todo figure out how to connect and disconnect these
-    // compare forms addons w prev booking addons
-    // if prev 'booking addons' don't exist in 'form addons' disconnect those addons
+    // todo if employee changed, remove [0] and replace with new
    
+    const employeeDisconnectIds = booking.employees[0].id !== values.staff ? [booking.employees[0].id] : []
+    const employeeConnectIds = booking.employees[0].id !== values.staff ? bookingEmployeeIds.filter(empId => !booking.employees[0].id).map(empId => ({id: empId})) : bookingEmployeeIds.map(empId => ({id: empId}))
+    Object.assign(formattedInputs, {
+      employees: {
+        disconnect: employeeDisconnectIds.map(dis => ({id: dis})),
+        connect:[{id: values.staff}, ...employeeConnectIds] //employeeConnectIds.map((con:string) => ({id: con}))
+      }
+    })
     const addonDisconnectIds = bookingAddonIds.filter(aId => !values.addonIds.includes(aId)).map(aId => aId)
-
-    console.log('values.addonIds, ', values.addonIds);
-    
     const addonConnectIds = values.addonIds.filter((valId:string) => !bookingAddonIds.includes(valId)).map((valId:string) => valId)
-
-    console.table({addonDisconnectIds, addonConnectIds});
-    
-
     Object.assign(formattedInputs, {
       addons: {
         disconnect: addonDisconnectIds.map(dis => ({id: dis})),
@@ -312,20 +312,6 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
     })
     
     
-    const addons = {
-      disconnect: [
-        {
-          id: "0481cda2-6486-4d40-a32b-b84887128f54"
-        }
-      ],
-      connect: [
-        {
-          id: null
-        }
-      ]
-    }
-    
-    console.log({ formattedInputs })
     const res = await updateBooking({
       variables: {
         where: {
@@ -333,11 +319,12 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
         },
         data: formattedInputs
       }
-    })
+    }).catch(err => errorRef?.current.scrollIntoView({ behavior: 'smooth' }))
+    
 
-    // console.log('res', res)
+    console.log('res', res)
     // todo show booking success message
-    if (res.data.createBooking) {
+    if (res?.data.updateBooking) {
       setIsSuccess(true)
 
       const location = services.find((x: any) => x.id === serviceId)?.locations.find((x:any) => x.id === values.location)
@@ -358,18 +345,19 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
 
       
 
-      if(values.service === '') 
-        successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
-      // if(values.location === '') 
-      //   successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
-      if(values.staff === '') 
-        successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
-      if(values.staff === '' && values.service === '') 
-        successObj = {...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"}
-      // todo may cause problems idk
+      // if(values.service === '') 
+      //   successObj = {...successObj, msg: "A Service was not selected. We'll reach out to get more details about your event date" }
+      // // if(values.location === '') 
+      // //   successObj = {...successObj, msg: "A Location was not selected. We'll reach out to get more details about your event date" }
+      // if(values.staff === '') 
+      //   successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
+      // if(values.staff === '' && values.service === '') 
+      //   successObj = {...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"}
+      // // todo may cause problems idk
         // @ts-ignore
-      setSuccessfullBook(successObj)
-    }
+      routerPush(`/bookings/${booking.id}`)
+      // setSuccessfullBook(successObj)
+    } 
     // Router.push({
     //   pathname: `/shop/product/${res.data.createProduct.id}`,
     // })
@@ -600,7 +588,10 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
   return (
     <div>
 
-      <ErrorMessage error={errorMutation} />
+      <div ref={errorRef}>
+        <ErrorMessage error={errorMutation} />
+      </div>
+
       {isSuccess && successfullBook && (
       <div className="card">
         <h2 className="msg success">Booking Created: </h2>

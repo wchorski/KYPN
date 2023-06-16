@@ -40,11 +40,11 @@ export  function BookingSingle({id}:Props) {
     <StyledBookingSingle>
 
       <div className="edit-buttons">
-        <button className="edit"
+        <Link href={`/bookings/update/${id}`} className="edit button"
           onClick={() => setBookingState(data?.booking)}
         > 
         <FiEdit /> Edit 
-        </button>
+        </Link>
       </div>
 
       <h2>Package: { service?.name } </h2>
@@ -57,8 +57,11 @@ export  function BookingSingle({id}:Props) {
             <td> <label>Client: </label> </td>
             <td>
               <Link href={`/user/${customer.id}`}>
-                {customer?.name} | {customer?.email}
+                {customer?.name}
               </Link>
+              <br />
+              <span>{customer?.email}</span>
+              <span>{customer?.phone}</span>
             </td>
           </tr>
           <tr>
@@ -67,11 +70,11 @@ export  function BookingSingle({id}:Props) {
           </tr>
           <tr>
             <td><label>Start: </label> </td>
-            <td><DayAndMonth dateString={start}/></td>
+            <td><DayMonthTime dateString={start}/></td>
           </tr>
           <tr>
             <td><label>End: </label> </td>
-            <td><DayAndMonth dateString={end}/></td>
+            <td><DayMonthTime dateString={end}/></td>
           </tr>
           <tr>
             <td><label>Price: </label> </td>
@@ -150,7 +153,7 @@ const StyledUserBadge = styled.div`
   }
 `
 
-function DayAndMonth({dateString}:{dateString:string}){
+function DayMonthTime({dateString}:{dateString:string}){
 
   const date = new Date(dateString);
   const calDate = date.toLocaleDateString('en-CA')
@@ -163,7 +166,7 @@ function DayAndMonth({dateString}:{dateString:string}){
 
 
   return(
-    <StyledDayAndMonth>
+    <StyledDayMonthTime>
       <time dateTime={calDate} className="date">
         <span className="day"> {day} </span>
         <span className="month"> {month} </span>
@@ -172,17 +175,18 @@ function DayAndMonth({dateString}:{dateString:string}){
         <span> {time} </span>
         <small> {ampm} </small>
       </time>
-    </StyledDayAndMonth>
+    </StyledDayMonthTime>
   )
 }
 
-const StyledDayAndMonth = styled.div`
+const StyledDayMonthTime = styled.div`
 
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: solid 2px var(--c-txt);
   border-radius: var(--br-sharp);
+  max-width: 12rem;
 
   time{
     padding: .3rem;
@@ -242,11 +246,12 @@ const StyledBookingSingle = styled.div`
     right: .5rem;
     z-index: 1;
 
-    button{
-      padding: 1rem;
+    .button{
+      padding: 2rem;
       margin: 0;
       color: var(--c-txt-primary);
       font-size: 1rem;
+      border: solid 2px var(--c-accent);
 
       svg{
         font-size: 1rem;
