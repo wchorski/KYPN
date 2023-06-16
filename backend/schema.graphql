@@ -6,6 +6,7 @@ type User {
   name: String
   nameLast: String
   image: String
+  phone: String
   email: String
   password: PasswordState
   isAdmin: Boolean
@@ -69,6 +70,7 @@ input UserWhereInput {
   name: StringFilter
   nameLast: StringFilter
   image: StringFilter
+  phone: StringFilter
   email: StringFilter
   isAdmin: BooleanFilter
   isActive: BooleanFilter
@@ -255,6 +257,7 @@ input UserOrderByInput {
   name: OrderDirection
   nameLast: OrderDirection
   image: OrderDirection
+  phone: OrderDirection
   email: OrderDirection
   isAdmin: OrderDirection
   isActive: OrderDirection
@@ -277,6 +280,7 @@ input UserUpdateInput {
   name: String
   nameLast: String
   image: String
+  phone: String
   email: String
   password: String
   isAdmin: Boolean
@@ -406,6 +410,7 @@ input UserCreateInput {
   name: String
   nameLast: String
   image: String
+  phone: String
   email: String
   password: String
   isAdmin: Boolean

@@ -303,6 +303,8 @@ export const QUERY_BOOKING_SINGLE = gql`
       }
       customer {
         id
+        email
+        phone
         name
         nameLast
       }

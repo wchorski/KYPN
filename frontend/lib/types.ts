@@ -129,6 +129,7 @@ export type User = {
   nameLast?:string,
   image?:string,
   email?: string,
+  phone?: string,
   password?: string,
   isAdmin?: boolean,
   isActive?: boolean,
