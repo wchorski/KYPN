@@ -27,7 +27,7 @@ export function BookingCreate() {
   )
 }
 
-const ADDONS_QUERY = gql`
+export const ADDONS_QUERY = gql`
   query Addons {
     addons {
       id
@@ -38,7 +38,7 @@ const ADDONS_QUERY = gql`
   }
 `
 
-const QUERY_SERVICES_ALL = gql`
+export const QUERY_SERVICES_ALL = gql`
   query Query {
     services {
       id
