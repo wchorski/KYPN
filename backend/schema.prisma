@@ -16,6 +16,7 @@ model User {
   name                    String             @default("")
   nameLast                String             @default("")
   image                   String             @default("")
+  phone                   String             @default("")
   email                   String             @unique @default("")
   password                String
   isAdmin                 Boolean            @default(false)

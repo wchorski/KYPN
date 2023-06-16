@@ -45,6 +45,7 @@ export const User: Lists.User = list({
     name: text({ validation: { isRequired: true } }),
     nameLast: text(),
     image: text({}),
+    phone: text({}),
     email: text({
       validation: { isRequired: true },
       // by adding isIndexed: 'unique', we're saying that no user can have the same
