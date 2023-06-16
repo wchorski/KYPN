@@ -61,6 +61,7 @@ export  function BookingSingle({id}:Props) {
               </Link>
               <br />
               <span>{customer?.email}</span>
+              <br />
               <span>{customer?.phone}</span>
             </td>
           </tr>
@@ -93,6 +94,9 @@ export  function BookingSingle({id}:Props) {
             </div>
           </li>
         ))}
+        {addons.length <= 0 && (
+          <p> No addons. </p>
+        )}
       </ul>
       <p className="align-right"> 
         <Link href={`/addons`} > View more addons</Link>

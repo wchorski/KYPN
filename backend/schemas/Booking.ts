@@ -292,6 +292,7 @@ export const Booking:Lists.Booking = list({
         }
 
         resolvedData.price = currPrice
+        resolvedData.dateModified = new Date().toISOString()
         
       }
     },

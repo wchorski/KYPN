@@ -11,7 +11,7 @@ type iProps = {
   handleBlackoutTimes: any,
 }
 
-export const CalendarDatePicker = ({ setValues, blackoutDays, buisnessDays, handleBlackoutTimes}:iProps) => {
+export const CalendarDatePicker = ({  setValues, blackoutDays, buisnessDays, handleBlackoutTimes}:iProps) => {
 
   // const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
@@ -27,6 +27,7 @@ export const CalendarDatePicker = ({ setValues, blackoutDays, buisnessDays, hand
         className={'REACT-CALENDAR p-2'}
         view='month'
         calendarType='US'
+        // value={value}
         onClickDay={(date) => {      
           // handleBlackoutTimes(date)
           setValues((prev:any) => ({...prev, date: format(date, 'yyyy-MM-dd'), timeStart: '', timeEnd: ''}))
