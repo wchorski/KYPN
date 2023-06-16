@@ -71,7 +71,7 @@ export function BookingForm2({ services, addons }:iProps) {
   
 
   const [times, setTimes] = useState<string[]>(generateTimesArray().map(t => t.value))
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<any>({
     service: query?.serviceId ? query.serviceId : "",
     location: '',
     staff: "",
@@ -83,6 +83,7 @@ export function BookingForm2({ services, addons }:iProps) {
     email: "",
     phone: "",
     notes: "",
+    addonIds: [],
   });
   
   const serviceOptions = services.map((serv:any) => { return {value: serv.id, label: serv.name,} })
@@ -212,6 +213,8 @@ export function BookingForm2({ services, addons }:iProps) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    console.log(values);
+    
     if(!formRef.current) return console.warn('form is missing');
     
     const formattedInputs = {
@@ -229,6 +232,17 @@ export function BookingForm2({ services, addons }:iProps) {
           connect: {
             id: values.service
           }
+        },
+      })
+    }
+    console.log('values.addonIds, ', values.addonIds);
+    
+    if (values.addonIds.length > 0 ) {
+      console.log(values.addonIds);
+      
+      Object.assign(formattedInputs, {
+        addons: {
+          connect: values.addonIds.map((addonId:string) => ({id: addonId}))
         },
       })
     }
@@ -264,7 +278,7 @@ export function BookingForm2({ services, addons }:iProps) {
       })
     }
     
-    // console.log({ formattedInputs })
+    console.log({ formattedInputs })
     const res = await gqlMutation({
       variables: {
         data: formattedInputs
@@ -344,7 +358,7 @@ export function BookingForm2({ services, addons }:iProps) {
     
     
     const formatted = foundAddons.map((addon:any) => { return {value: addon.id, label: addon.name, name: addon.name.toLowerCase().replace(/\s/g, "")} } )
-    console.log(formatted);
+    // console.log(formatted);
     // todo check back later
     // @ts-ignore
     setAddonsOptions(formatted)
@@ -480,6 +494,27 @@ export function BookingForm2({ services, addons }:iProps) {
     setPartialDates(partialDays)
   }
 
+  const handleCheckboxChange = (event:any) => {
+    const { value, checked }:{value:string[], checked:boolean} = event.target;
+    // console.table({value, checked});
+    
+    // Update the selected checkboxes based on the checkbox change
+    if (checked) {
+      setValues((prev:any) => ({
+        ...prev,
+        addonIds: [...prev.addonIds, value],
+
+      }))
+    } else {
+      setValues((prev:any) => ({
+        ...prev,
+        addonIds: prev.addonIds.filter((addId:any) => addId !== value)
+
+      }))
+      
+    }
+  };
+
   const onChange = (e: any) => {    
     setValues({ ...values, [e.target.name]: e.target.value });
   }
@@ -532,7 +567,7 @@ export function BookingForm2({ services, addons }:iProps) {
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', location: ''}))
+                  setValues((prev:any) => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', location: ''}))
                   handleServicePicked(e.target.value)
                 }}
               />
@@ -543,7 +578,7 @@ export function BookingForm2({ services, addons }:iProps) {
                 isDisabled={values.service === '' ? true : false}
                 onChange={(e:any) => {
                   onChange(e)
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  setValues((prev:any) => ({...prev, date: '', timeStart: '', timeEnd: ''}))
                   findPartialDays(e.target.value)
                 }}
                 // key={pickedService}
@@ -555,7 +590,7 @@ export function BookingForm2({ services, addons }:iProps) {
                 isDisabled={values.location === '' ? true : false}
                 onChange={(e:any) => {
                   onChange(e)
-                  setValues(prev => ({...prev, date: '', timeStart: '', timeEnd: ''}))
+                  setValues((prev:any) => ({...prev, date: '', timeStart: '', timeEnd: ''}))
                   findPartialDays(e.target.value)
                 }}
                 // key={employeeOptions}
@@ -570,6 +605,7 @@ export function BookingForm2({ services, addons }:iProps) {
                     <FormInput 
                     // ? remove anything that aint a letter or number
                       {...{name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''), value: addon.id, label: moneyFormatter(addon.price) + ' ' + addon.name, type: 'checkbox'}}
+                      onChange={handleCheckboxChange}
                     />
                   </li>
                 )})}

@@ -57,11 +57,16 @@ export const FormInput = (props:any) => {
     </StyledInputLabel>
   )
 
-  if(inputProps.type === 'checkbox') console.log(inputProps);
+  // if(inputProps.type === 'checkbox') console.log(inputProps);
   
   if(inputProps.type === 'checkbox') return (
     <label htmlFor={inputProps.name}>
-      <input type="checkbox" name={inputProps.name} value={value}/>
+      <input 
+        type="checkbox" 
+        name={inputProps.name} 
+        value={value}
+        onChange={onChange}
+      />
       <span>{label}</span>
     </label>
   )
