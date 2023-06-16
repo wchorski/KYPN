@@ -9,6 +9,9 @@ import { datePrettyLocal } from "../../lib/dateFormatter"
 import { RiAddLine } from "react-icons/ri"
 import { FiEdit } from "react-icons/fi"
 import { ImageDynamic } from "../elements/ImageDynamic"
+import { PopupModal } from "../elements/PopupModal"
+import { BookingFormUpdate } from "./BookingFormUpdate"
+import { useState } from "react"
 
 type Props = {
   id:string
@@ -16,6 +19,8 @@ type Props = {
 
 // todo only show to 'canManageBookings', customer, & employees
 export  function BookingSingle({id}:Props) {
+
+  const [bookingState, setBookingState] = useState<Booking>()
 
   const { loading, error, data } = useQuery(
     QUERY_BOOKING_SINGLE, {
@@ -27,11 +32,19 @@ export  function BookingSingle({id}:Props) {
 
   const { location, service, price, addons, employees, customer, dateModified, start, end }:Booking = data?.booking
   
-  return (
+  return (<>
+    <PopupModal data={bookingState} setData={setBookingState}>
+      {/* <BookingFormUpdate /> */}
+      {/* <UserUpdateForm user={{ id, name, nameLast, email, tickets }} setUser={setUserData}/> */}
+    </PopupModal>
     <StyledBookingSingle>
 
       <div className="edit-buttons">
-        <button className="edit"> <FiEdit /> Edit </button>
+        <button className="edit"
+          onClick={() => setBookingState(data?.booking)}
+        > 
+        <FiEdit /> Edit 
+        </button>
       </div>
 
       <h2>Package: { service?.name } </h2>
@@ -41,7 +54,7 @@ export  function BookingSingle({id}:Props) {
       <table>
         <tbody>
           <tr>
-            <td>Client: </td>
+            <td> <label>Client: </label> </td>
             <td>
               <Link href={`/user/${customer.id}`}>
                 {customer?.name} | {customer?.email}
@@ -49,19 +62,19 @@ export  function BookingSingle({id}:Props) {
             </td>
           </tr>
           <tr>
-            <td>Location: </td>
+            <td><label>Location: </label> </td>
             <td>{location.name}</td>
           </tr>
           <tr>
-            <td>Start: </td>
+            <td><label>Start: </label> </td>
             <td><DayAndMonth dateString={start}/></td>
           </tr>
           <tr>
-            <td>End: </td>
+            <td><label>End: </label> </td>
             <td><DayAndMonth dateString={end}/></td>
           </tr>
           <tr>
-            <td>Price: </td>
+            <td><label>Price: </label> </td>
             <td> <span className="price">{moneyFormatter(price)}</span></td>
           </tr>
         </tbody>
@@ -91,7 +104,7 @@ export  function BookingSingle({id}:Props) {
         ))}
       </ul>
     </StyledBookingSingle>
-  )
+  </>)
 }
 
 function UserBadge({user}:{user:User}){
@@ -210,6 +223,10 @@ const StyledBookingSingle = styled.div`
     border-bottom: solid 10px var(--c-txt);
     border-collapse: collapse;
 
+    label{
+      color: var(--c-disabled);
+    }
+
     /* td{
       border-bottom: solid 1px var(--c-txt);
     } */
@@ -275,7 +292,7 @@ const StyledBookingSingle = styled.div`
 `
 
 
-const QUERY_BOOKING_SINGLE = gql`
+export const QUERY_BOOKING_SINGLE = gql`
   query Booking($where: BookingWhereUniqueInput!) {
     booking(where: $where) {
       addons {

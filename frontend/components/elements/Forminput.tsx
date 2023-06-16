@@ -35,7 +35,7 @@ export const FormInput = (props:any) => {
   if(inputProps.type === 'textarea') return (
     <StyledInputLabel htmlFor={inputProps.name}>
       <span className="label">{label}</span>
-      <textarea {...inputProps} onChange={onChange} onBlur={handleFocus} focused={focused.toString()}/>
+      <textarea {...inputProps} onChange={onChange} onBlur={handleFocus} focused={focused.toString()} value={value}/>
     </StyledInputLabel>
   )
 
@@ -62,6 +62,7 @@ export const FormInput = (props:any) => {
   if(inputProps.type === 'checkbox') return (
     <label htmlFor={inputProps.name}>
       <input 
+        {...inputProps}
         type="checkbox" 
         name={inputProps.name} 
         value={value}
