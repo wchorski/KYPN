@@ -264,6 +264,8 @@ export type Service = {
   status: string,
   categories: Category[],
   tags: Tag[],
+  locations: Location[],
+  addons: Addon[],
 }
 
 export type SubscriptionPlan = {

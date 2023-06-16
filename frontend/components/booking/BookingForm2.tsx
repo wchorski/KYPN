@@ -9,12 +9,13 @@ import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { DATE_OPTION, calcDurationHuman, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
-import { Availability, Booking, DayTimes, Service, User } from "../../lib/types"
+import { Availability, Booking, DayTimes, Service, User, Addon } from "../../lib/types"
 import { findOverlapTimes, isSameCalendarDay } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
 import { calcEndTime, filterBuisnessTimes, findBlackoutDates, findUniqueDays, isDateRangeAvailable } from "../../lib/filterTimeAvail"
 import { findEmployeeBusyRanges } from "../../lib/userUtils"
 import { useRouter } from "next/router"
+import moneyFormatter from "../../lib/moneyFormatter"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -23,7 +24,8 @@ import { useRouter } from "next/router"
 // }
 
 type iProps = {
-  services: any,
+  services: Service[],
+  addons: Addon[],
   // employee: any,
   // setEmployeeId: any,
 }
@@ -44,7 +46,7 @@ type SuccessfullBook = {
 
 const genTimeStrings = generateTimesArray().map((t) => t.value)
 
-export function BookingForm2({ services }:iProps) {
+export function BookingForm2({ services, addons }:iProps) {
   // console.log(services[0]);
   // console.log(services[0].employees);
   const {query} = useRouter()
@@ -295,7 +297,8 @@ export function BookingForm2({ services }:iProps) {
         successObj = {...successObj, msg: "A staff member was not selected. We'll check and see if an employee is available for this booking"}
       if(values.staff === '' && values.service === '') 
         successObj = {...successObj, msg: "A Staff Member and Service were not selected. We'll reach out to get more details about your event date"}
-
+      // todo may cause problems idk
+        // @ts-ignore
       setSuccessfullBook(successObj)
     }
     // Router.push({
@@ -308,6 +311,8 @@ export function BookingForm2({ services }:iProps) {
 
   function handleServicePicked(id:string){
     const foundService = services.find((x: any) => x.id === id)
+    // todo check back later
+    // @ts-ignore
     setPickedService(foundService)
 
     handleEmployeeUpdate(id)
@@ -340,6 +345,8 @@ export function BookingForm2({ services }:iProps) {
     
     const formatted = foundAddons.map((addon:any) => { return {value: addon.id, label: addon.name, name: addon.name.toLowerCase().replace(/\s/g, "")} } )
     console.log(formatted);
+    // todo check back later
+    // @ts-ignore
     setAddonsOptions(formatted)
   }
 
@@ -555,19 +562,17 @@ export function BookingForm2({ services }:iProps) {
               />
 
               <h3> Add-Ons </h3>
-              <ul>
-                {addonsOptions.map((opt:any) => (
-                  <li key={opt.name}>
+              <ul className="addons">
+                {addons.filter(addon => pickedService.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => { 
+                 
+                  return(
+                  <li key={addon.name}>
                     <FormInput 
-                      {...{name: opt.name, value: opt.value, label: opt.label, type: 'checkbox'}}
+                    // ? remove anything that aint a letter or number
+                      {...{name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''), value: addon.id, label: moneyFormatter(addon.price) + ' ' + addon.name, type: 'checkbox'}}
                     />
-                    <span>{opt.label}</span>
                   </li>
-                  // <label htmlFor={opt.name} key={opt.name}>
-                  //   <input type="checkbox" name={opt.name} value={opt.value}/>
-                  //   <span>{opt.label}</span>
-                  // </label>
-                ))}
+                )})}
               </ul>
              
             </div>
@@ -698,6 +703,17 @@ const StyledBookingForm = styled.form`
 
     .notes{
       height: 10em;
+    }
+  }
+
+  ul.addons{
+    padding: 0;
+    list-style: none;
+    
+    li label {
+      color: var(--c-txt-rev);
+      display: flex;
+      flex-direction: row;
     }
   }
 

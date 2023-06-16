@@ -11,17 +11,20 @@ type SelectOpt = {
 }
 
 type Props = {
-  value:any,
-  label:string,
-  errorMessage:string,
-  onChange:any,
-  id:number,
-  hint:string,
-  isDisabled:boolean,
+  value?:any,
+  label?:string,
+  errorMessage?:string,
+  onChange?:any,
+  id?:number,
+  hint?:string,
+  isDisabled?:boolean,
+  selectOpt?:SelectOpt,
+  name:string,
 }
 
 export const FormInput = (props:any) => {
-  const { value, label, errorMessage, onChange, id, hint, isDisabled, ...inputProps } = props;
+  // todo type this shit
+  const { value, label, errorMessage, onChange, id, hint, isDisabled, ...inputProps }:any = props;
 
   const [focused, setFocused] = useState(false);
 
@@ -54,10 +57,12 @@ export const FormInput = (props:any) => {
     </StyledInputLabel>
   )
 
+  if(inputProps.type === 'checkbox') console.log(inputProps);
+  
   if(inputProps.type === 'checkbox') return (
     <label htmlFor={inputProps.name}>
-      <input type="checkbox" name={inputProps.name} value={inputProps.value}/>
-      <span>{inputProps.label}</span>
+      <input type="checkbox" name={inputProps.name} value={value}/>
+      <span>{label}</span>
     </label>
   )
 
