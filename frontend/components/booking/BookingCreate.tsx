@@ -5,24 +5,38 @@ import { BookingForm2 } from "./BookingForm2";
 
 export function BookingCreate() {
 
-  const { loading: loadingQuery, error: errorQuery, data: dataQuery } = useQuery(QUERY_SERVICES_ALL)
+  const { loading: servicesLoading, error: servicesError, data: servicesData } = useQuery(QUERY_SERVICES_ALL)
+  const { loading: addonsLoading, error: addonsError, data: addonsData } = useQuery(ADDONS_QUERY)
   
-  if (loadingQuery)  return <QueryLoading />
-  if (errorQuery)      return <QueryError error={errorQuery}/>
+  if (servicesLoading || addonsLoading)  return <QueryLoading />
+  if (servicesError || addonsError)      return <QueryError error={servicesError || addonsError}/>
   
   
   // console.log(dataEmployee)
   // const {user } = dataEmployee
-  const { services } = dataQuery
+  const { services } = servicesData
+  const { addons } = addonsData
 
   return (
     <div>
       <BookingForm2 
         services={services} 
+        addons={addons}
       />
     </div>
   )
 }
+
+const ADDONS_QUERY = gql`
+  query Addons {
+    addons {
+      id
+      name
+      description
+      price
+    }
+  }
+`
 
 const QUERY_SERVICES_ALL = gql`
   query Query {
