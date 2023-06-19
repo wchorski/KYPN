@@ -52,11 +52,13 @@ import { Location } from './schemas/Location';
 import { Availability } from './schemas/Availability';
 import { Addon } from './schemas/Addon';
 import { contact } from './mutations/contact';
+import { Announcement } from './schemas/Announcement';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
 export const lists: Lists = {
   User,
+  Announcement,
   Role,
   Booking,
   Service,

@@ -3,25 +3,27 @@ import ErrorMessage from "../ErrorMessage";
 import { StyledFormMini } from "../events/TicketListItem";
 import { QueryLoading } from "../menus/QueryLoading";
 import useForm2 from "../../lib/useForm2";
-import { InputObj } from "../../lib/types";
+import { Event, InputObj } from "../../lib/types";
 import { FormInput } from "../elements/Forminput";
 import { useState } from "react";
 import styled from "styled-components";
 import { RiAddLine, RiSubtractFill } from "react-icons/ri";
 import moneyFormatter from "../../lib/moneyFormatter";
 import Link from "next/link";
+import { datePrettyLocal } from "../../lib/dateFormatter";
 
 type Props = {
-  eventId:string,
+  event:Event,
   holderId:string,
   qrcode?:string,
   status?:string,
   price?:number,
 }
 
-export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
+export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
 
   const [quantityState, setQuantityState] = useState(1)
+  const [successMessage, setSuccessMessage] = useState('')
 
   const inputs:InputObj[] = [
     {
@@ -31,7 +33,7 @@ export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
       label: 'event',
       errorMessage: 'event name error',
       required: true,
-      initial: eventId || '',
+      initial: event.id || '',
       disabled:true,
     },
     {
@@ -71,12 +73,12 @@ export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
 
   async function handleSubmit(e:any){
     e.preventDefault()
-    console.log({values});
+    // console.log({values});
 
-    const formattedData = Array.from({ length: values.quantity }, (_, index) => ({
+    const formattedData = Array.from({ length: quantityState }, (_, index) => ({
       event: {
         connect: {
-          id: eventId
+          id: event.id
         }
       },
       holder: {
@@ -94,7 +96,8 @@ export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
         variables: { data: formattedData }
       })
 
-      console.log({res});
+      // console.log({res});
+      setSuccessMessage(`${quantityState} Tickets confirmed`)
       
 
     } catch(err){
@@ -113,22 +116,46 @@ export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
       <p><Link href={`/auth/login`}> Login </Link></p>
     </div>
   )
+
+  if(successMessage) return(
+    <div>
+      <h3> Success</h3>
+      <p>{successMessage}</p>
+      <p><Link href={`/account#tickets`}> My Tickets </Link></p>
+      <button onClick={() => {setSuccessMessage(''); setQuantityState(1);}}> Get More Tickets</button>
+    </div>
+  )
+
   return (
     <StyledForm method="POST" onSubmit={handleSubmit}>
 
+      <header>
+        <h4>{event.summary}</h4>
+        <time>{datePrettyLocal(String(event.start), 'full')}</time>
+      </header>
+
       <legend> Get Tickets </legend>
-      <FormInput 
-        {...handleFindProps('event')}
-        isDisabled={true}
-        value={values['event']}
-        onChange={handleChange}
-      />
-      <FormInput 
-        {...handleFindProps('holder')}
-        isDisabled={true}
-        value={values['holder']}
-        onChange={handleChange}
-      />
+
+      <div className="hidden">
+        <FormInput 
+          {...handleFindProps('event')}
+          isDisabled={true}
+          value={values['event']}
+          onChange={handleChange}
+        />
+        <FormInput 
+          {...handleFindProps('holder')}
+          isDisabled={true}
+          value={values['holder']}
+          onChange={handleChange}
+        />
+        <FormInput 
+          {...handleFindProps('quantity')}
+          isDisabled={true}
+          value={quantityState}
+          onChange={setQuantityState}
+        />
+      </div>
 
       <h4>
         {price && price > 0 ? (
@@ -148,12 +175,9 @@ export  function TicketsForm({price, eventId, holderId, qrcode, status}:Props) {
         > 
           <RiSubtractFill/>
         </button>
-        <FormInput 
-          {...handleFindProps('quantity')}
-          isDisabled={true}
-          value={quantityState}
-          onChange={setQuantityState}
-        />
+
+        <span className="quantity">{quantityState}</span>
+
         <button 
           type="button" 
           aria-label="add ticket"
@@ -181,9 +205,23 @@ const StyledForm = styled.form`
     
   } */
 
+  .hidden{
+    visibility: hidden;
+    height: 1px;
+  }
+
+  header{
+    h4{
+      margin-bottom: 0;
+    }
+
+    margin-bottom: 1rem;
+  }
+
   .quantity-cont{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     box-align: center;
 
     input[type="number"]{
@@ -192,10 +230,16 @@ const StyledForm = styled.form`
       transform: translateX(5px);
     }
 
+    .quantity{
+      color: var(--c-txt);
+      font-weight: bold;
+      font-size: 2rem;
+    }
+
     button{
       position: relative;
       border-radius: 50%;
-      width: 68px;
+      /* width: 68px; */
 
       border: solid 2px var(--c-3);
       color: var(--c-3);

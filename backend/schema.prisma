@@ -50,6 +50,14 @@ model User {
   @@index([roleId])
 }
 
+model Announcement {
+  id      String    @id @default(uuid()) @postgresql.Uuid
+  link    String    @default("")
+  start   DateTime?
+  end     DateTime?
+  content Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+}
+
 model Role {
   id                String  @id @default(uuid()) @postgresql.Uuid
   name              String  @default("")

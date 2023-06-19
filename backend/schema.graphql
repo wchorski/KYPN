@@ -506,6 +506,58 @@ input RoleRelateToOneForCreateInput {
   connect: RoleWhereUniqueInput
 }
 
+type Announcement {
+  id: ID!
+  link: String
+  start: DateTime
+  end: DateTime
+  content: Announcement_content_Document
+}
+
+type Announcement_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input AnnouncementWhereUniqueInput {
+  id: ID
+}
+
+input AnnouncementWhereInput {
+  AND: [AnnouncementWhereInput!]
+  OR: [AnnouncementWhereInput!]
+  NOT: [AnnouncementWhereInput!]
+  id: IDFilter
+  link: StringFilter
+  start: DateTimeNullableFilter
+  end: DateTimeNullableFilter
+}
+
+input AnnouncementOrderByInput {
+  id: OrderDirection
+  link: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
+}
+
+input AnnouncementUpdateInput {
+  link: String
+  start: DateTime
+  end: DateTime
+  content: JSON
+}
+
+input AnnouncementUpdateArgs {
+  where: AnnouncementWhereUniqueInput!
+  data: AnnouncementUpdateInput!
+}
+
+input AnnouncementCreateInput {
+  link: String
+  start: DateTime
+  end: DateTime
+  content: JSON
+}
+
 type Role {
   id: ID!
   name: String
@@ -2300,6 +2352,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createAnnouncement(data: AnnouncementCreateInput!): Announcement
+  createAnnouncements(data: [AnnouncementCreateInput!]!): [Announcement]
+  updateAnnouncement(where: AnnouncementWhereUniqueInput!, data: AnnouncementUpdateInput!): Announcement
+  updateAnnouncements(data: [AnnouncementUpdateArgs!]!): [Announcement]
+  deleteAnnouncement(where: AnnouncementWhereUniqueInput!): Announcement
+  deleteAnnouncements(where: [AnnouncementWhereUniqueInput!]!): [Announcement]
   createRole(data: RoleCreateInput!): Role
   createRoles(data: [RoleCreateInput!]!): [Role]
   updateRole(where: RoleWhereUniqueInput!, data: RoleUpdateInput!): Role
@@ -2456,6 +2514,9 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  announcements(where: AnnouncementWhereInput! = {}, orderBy: [AnnouncementOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AnnouncementWhereUniqueInput): [Announcement!]
+  announcement(where: AnnouncementWhereUniqueInput!): Announcement
+  announcementsCount(where: AnnouncementWhereInput! = {}): Int
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
