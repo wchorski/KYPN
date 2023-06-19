@@ -4,10 +4,11 @@ import styled from "styled-components";
 
 type Props = {
   children?:ReactNode,
-  popupData?:any,
+  isPopup:boolean,
+  setIsPopup:Function,
 }
 
-export const PopupAnim = ({children, popupData}:Props) => {
+export const PopupAnim = ({children, isPopup, setIsPopup}:Props) => {
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ export const PopupAnim = ({children, popupData}:Props) => {
 
   const closeModal = () => {
     setIsOpen(false);
+    setIsPopup(false);
   };
 
   const handleTransitionEnd = () => {
@@ -33,11 +35,11 @@ export const PopupAnim = ({children, popupData}:Props) => {
 
   useEffect(() => {
     if(!dialogRef.current) return
-    if(popupData) return openModal()
-    if(!popupData) return closeModal()
+    if(isPopup) return openModal()
+    if(!isPopup) return closeModal()
     
 
-  }, [popupData])  
+  }, [isPopup])  
   
 
   return (

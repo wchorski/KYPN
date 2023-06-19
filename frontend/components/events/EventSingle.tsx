@@ -20,10 +20,14 @@ import { AttendeeTable } from "./AttendeeTable"
 import { useUser } from "../menus/Session"
 import { PopupAnim } from "../menus/PopupAnim"
 import { TicketsForm } from "../tickets/TicketsForm"
+import { AddTicketButton } from "../tickets/AddTicketButton"
 
 type tPopupData = {
 
 }|any
+
+
+// const now = new Date()
 
 export default function EventSingle({id}:{id:string}) {
 
@@ -63,8 +67,8 @@ export default function EventSingle({id}:{id:string}) {
         
       />
 
-      <PopupAnim popupData={popupData}>
-        <TicketsForm eventId={id} holderId={session?.id} price={price}/>
+      <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
+        <TicketsForm event={data?.event} holderId={session?.id} price={price}/>
       </PopupAnim>
 
       {/* <aside>
@@ -123,13 +127,20 @@ export default function EventSingle({id}:{id:string}) {
               <small>sub text</small> 
             </div>
 
-            <button onClick={() => setPopupData({id: '123'})} className="ticket"> 
+
+            <AddTicketButton 
+              setIsPopup={setIsPopup}
+              price={price} 
+              date={start} 
+            />
+
+            {/* <button onClick={() => setPopupData({id: '123'})} className="ticket"> 
               {price && price > 0 ? (
                 <span>{moneyFormatter(price)} per Ticket</span>
               ) : (
                 <span> Free </span>
               )}
-            </button>
+            </button> */}
 
           </div>
 
@@ -200,6 +211,22 @@ const StyledEventSingle = styled.section`
 
     }
   } */
+
+  picture{
+    width: 300px; /* Adjust the width of the container as per your requirement */
+    height: 300px; /* Adjust the height of the container as per your requirement */
+    border: 1px solid black; /* Optional: Add border for visualization */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    img{
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  }
 
   article{
     display: flex;

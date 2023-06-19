@@ -5,21 +5,53 @@ import { useState } from "react"
 import { MdClose } from "react-icons/md"
 import { FiExternalLink } from "react-icons/fi"
 import styled from "styled-components"
+import { gql, useQuery } from "@apollo/client"
+import { QueryLoading } from "../menus/QueryLoading"
+import { QueryError } from "../menus/QueryError"
 
 interface Props {
+  header:string,
   message: string,
   url: string,
   isActive: boolean,
 }
 
-export function AnnouncementsMarquee({ message, url, isActive }: Props) {
+const now = new Date()
+
+export function AnnouncementsMarquee({ header, message, url, isActive }: Props) {
+
+  const yearLater = new Date((now.getFullYear() + 1), now.getMonth()).toISOString()
+  // console.log({yearLater});
+  // console.log('now: ', now.toISOString());
+
 
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [isClosed, setisClosed] = useState<boolean>(false)
-
+  const { loading, error, data } = useQuery(Announcements_QUERY, {
+    variables: {
+      where: {
+        start: {
+          gte: now.toISOString(),
+          lt: yearLater,
+        }
+      },
+      orderBy: [
+        {
+          start: 'desc'
+        }
+      ]
+    },
+  })
   function handleClose() {
     setisClosed(true)
   }
+
+  if (loading) return <QueryLoading />
+  if (error) return <QueryError error={error} />
+
+  console.log(data);
+  
+  const {announcments} = data
 
   if (!isActive) return null
 
@@ -29,9 +61,13 @@ export function AnnouncementsMarquee({ message, url, isActive }: Props) {
       onMouseOut={() => setIsFocused(false)}
       className={isClosed ? 'closed' : ''}
     >
-      <span className="msg">
-        {message}
-      </span>
+      <div className="content-cont">
+        <h2>{header}</h2>
+        <p className="msg">
+          {message}
+        </p>
+
+      </div>
 
       <Link href={url} onClick={e => setisClosed(true)}
         className={isFocused ? 'focused' : ''}
@@ -41,6 +77,7 @@ export function AnnouncementsMarquee({ message, url, isActive }: Props) {
 
       <button
         onClick={e => setisClosed(true)}
+        className="close"
       >
         <MdClose />
       </button>
@@ -50,25 +87,41 @@ export function AnnouncementsMarquee({ message, url, isActive }: Props) {
 
 }
 
+const Announcements_QUERY = gql`
+  query Announcements($where: AnnouncementWhereInput!, $orderBy: [AnnouncementOrderByInput!]!) {
+    announcements(where: $where, orderBy: $orderBy) {
+      start
+      end
+      id
+      link
+      content {
+        document(hydrateRelationships: true)
+      }
+    }
+  }
+`
+
 
 const StyledMarquee = styled.div`
 
   --c-banner: #dbdbdb;
-  width: 100%;
-  border: 1px solid var(--c-accent);
+  /* width: 100%; */
+  /* border: 1px solid var(--c-accent); */
   /* border-radius: 10% 0 0 0 ; */
   border-radius:10px/40%;
+  margin: .2rem 1rem;
 
   &.closed{
     height: 0;
+    margin: 0;
     pointer-events: none;
   }
 
-  background-color: var(--c-banner);
+  background-color: var(--c-3);
   
   position: relative;
 
-  z-index: 9003;
+  /* z-index: 9003; */
   height: 300px;
   /* overflow: hidden; */
   display: flex;
@@ -77,8 +130,14 @@ const StyledMarquee = styled.div`
   justify-content: center;
   align-items: center;
 
+  .content-cont{
+    padding: 0 1rem;
+    margin: 0 auto;
+  }
+
   a{
     font-size: 3rem;
+    margin-left: auto;
 
     border-bottom: 10px dashed var(--c-accent);
     padding: 1em;
@@ -88,18 +147,19 @@ const StyledMarquee = styled.div`
     transform: scale(1);
     transition: all .3s;
 
-    &:hover{
+    &:hover, &:focus{
       background-color: var(--c-accent);
+      border-bottom: 10px dashed var(--c-3);
       color: var(--c-txt-rev);
     }
 
-    &.focused{
+    /* &.focused{
       transform: scale(1.2);
-    }
+    } */
   }
 
 
-  button{
+  button.close{
     /* position: absolute; */
     top: 0;
     right: 0;
@@ -109,6 +169,7 @@ const StyledMarquee = styled.div`
     border: none;
     background-color: transparent;
     transition: all .3s;
+    height: 100%;
     
     &:hover{
       background-color: #00000064;

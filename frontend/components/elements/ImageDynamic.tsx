@@ -71,3 +71,20 @@ function handlePhoto(photo: any) {
 
   return photo
 }
+
+// ? should i create a dynamic sized container here?
+// picture{
+//   width: 300px; /* Adjust the width of the container as per your requirement */
+//   height: 300px; /* Adjust the height of the container as per your requirement */
+//   border: 1px solid black; /* Optional: Add border for visualization */
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   overflow: hidden;
+
+//   img{
+//     max-width: 100%;
+//     max-height: 100%;
+//     object-fit: contain;
+//   }
+// }
