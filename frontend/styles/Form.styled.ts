@@ -19,7 +19,7 @@ export const StyledForm = styled.form`
   border-radius: 1em;
   /* border: 5px solid white; */
   padding: 1em;
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1.5;
   font-weight: 600;
   /* min-width: 25em; */
@@ -51,15 +51,18 @@ export const StyledForm = styled.form`
   input[type='submit'] {
     width: auto;
     background: var(--c-3);
+    border-radius: var(--br-sharp);
     color: white;
-    border: 0;
+    border: solid 2px transparent;
     font-size: 2rem;
     font-weight: 600;
     padding: 0.5rem 1.2rem;
-    transition: background .3s;
+    transition: all .3s;
 
-    &:hover{
-      background-color: var(--c-3);
+    &:hover, &:focus{
+      background-color: var(--c-accent);
+      border: solid 2px var(--c-3);
+      color: var(--c-3);
     }
   }
   fieldset {

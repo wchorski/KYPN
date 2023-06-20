@@ -77,6 +77,12 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
 
   .content-cont{
 
+    article{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
     article > * {
       margin: 0;
       padding: 2em ;
@@ -93,6 +99,10 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
       text-align: center;
       /* font-size: 4rem; */
       text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* p{
@@ -109,7 +119,7 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
     background-position: 50% 50%;
     background-size: cover;
     height: 100%;
-    min-height: 250px;
+    min-height: 20rem;
   }
 
   img{
