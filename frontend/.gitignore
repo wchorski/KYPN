@@ -44,3 +44,4 @@ next-env.d.ts
 /public/favicon.ico
 home.tsx
 Header.tsx
+Footer.tsx
