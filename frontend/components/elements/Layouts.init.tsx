@@ -14,11 +14,7 @@ export function Layout_Wide_Width({ children }: { children: ReactNode }) {
 
     <StyledLayout_WideWith className='layout-wrap'>
 
-      <AnnouncementsMarquee
-        message={'custom marquee message that you can all read'}
-        url={'/shop'}
-        isActive={false}
-      />
+      <AnnouncementsMarquee />
 
       <Header options={{
         isLogo: true,

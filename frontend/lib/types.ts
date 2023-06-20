@@ -413,3 +413,12 @@ export type InputObj = {
     value:string,
   }[]
 }
+
+export type Announcment = {
+  link:string,
+  start:string,
+  end:string,
+  content:{
+    document:any
+  }
+}

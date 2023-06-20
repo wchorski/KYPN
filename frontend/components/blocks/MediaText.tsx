@@ -1,6 +1,5 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { BlockRenderer } from '../../components/blocks/BlocksRenderer';
 import { ReactNode } from "react";
 
 // const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`
@@ -30,10 +29,6 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false, chil
   
   // console.log(rowReverse);
   
-  //? this is when i was manually entering data 
-  // function handleContentRender(content:any){
-  //   return <BlockRenderer document={content.document} />
-  // }
   
   return (
     <StyledMediaText bg={imageSrc} rowReverse={rowReverse}>
