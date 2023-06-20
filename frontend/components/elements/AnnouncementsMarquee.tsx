@@ -8,19 +8,18 @@ import styled from "styled-components"
 import { gql, useQuery } from "@apollo/client"
 import { QueryLoading } from "../menus/QueryLoading"
 import { QueryError } from "../menus/QueryError"
+import { BlockRenderer } from "../blocks/BlocksRenderer"
+import { Announcment } from "../../lib/types"
 
 interface Props {
-  header:string,
-  message: string,
-  url: string,
-  isActive: boolean,
+  
 }
 
 const now = new Date()
 
-export function AnnouncementsMarquee({ header, message, url, isActive }: Props) {
+export function AnnouncementsMarquee({ }: Props) {
 
-  const yearLater = new Date((now.getFullYear() + 1), now.getMonth()).toISOString()
+  const dayLater = new Date(now.getFullYear(), now.getMonth(), now.getDay() + 1 ).toISOString()
   // console.log({yearLater});
   // console.log('now: ', now.toISOString());
 
@@ -30,14 +29,22 @@ export function AnnouncementsMarquee({ header, message, url, isActive }: Props) 
   const { loading, error, data } = useQuery(Announcements_QUERY, {
     variables: {
       where: {
-        start: {
-          gte: now.toISOString(),
-          lt: yearLater,
-        }
+        AND: [
+          {
+            start: {
+              lte: now.toISOString(),
+            }
+          },
+          {
+            end: {
+              gte: now.toISOString(),
+            }
+          },
+        ]
       },
       orderBy: [
         {
-          start: 'desc'
+          start: 'asc'
         }
       ]
     },
@@ -51,9 +58,10 @@ export function AnnouncementsMarquee({ header, message, url, isActive }: Props) 
 
   console.log(data);
   
-  const {announcments} = data
-
-  if (!isActive) return null
+  const {announcements} = data
+  const {content, start, end, link}:Announcment = announcements[0]
+  
+  if (data?.announcements.length <= 0) return null
 
   return (
     <StyledMarquee
@@ -62,15 +70,13 @@ export function AnnouncementsMarquee({ header, message, url, isActive }: Props) 
       className={isClosed ? 'closed' : ''}
     >
       <div className="content-cont">
-        <h2>{header}</h2>
-        <p className="msg">
-          {message}
-        </p>
+
+        <BlockRenderer document={content.document} />
 
       </div>
 
-      <Link href={url} onClick={e => setisClosed(true)}
-        className={isFocused ? 'focused' : ''}
+      <Link href={link} onClick={e => setisClosed(true)}
+        className={isFocused ? 'focused btnlink' : 'btnlink'}
       >
         <FiExternalLink />
       </Link>
@@ -135,11 +141,11 @@ const StyledMarquee = styled.div`
     margin: 0 auto;
   }
 
-  a{
-    font-size: 3rem;
+  a.btnlink{
+    font-size: 2rem;
     margin-left: auto;
 
-    border-bottom: 10px dashed var(--c-accent);
+    border-bottom: 5px dashed var(--c-accent);
     padding: 1em;
     height: 100%;
     display: flex;
@@ -149,7 +155,7 @@ const StyledMarquee = styled.div`
 
     &:hover, &:focus{
       background-color: var(--c-accent);
-      border-bottom: 10px dashed var(--c-3);
+      border-bottom: 2px dashed var(--c-3);
       color: var(--c-txt-rev);
     }
 
