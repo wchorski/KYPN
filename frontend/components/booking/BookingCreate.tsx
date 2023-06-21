@@ -18,12 +18,12 @@ export function BookingCreate() {
   const { addons } = addonsData
 
   return (
-    <div>
+    <>
       <BookingForm2 
         services={services} 
         addons={addons}
       />
-    </div>
+    </>
   )
 }
 

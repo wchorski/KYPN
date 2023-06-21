@@ -9,7 +9,7 @@ import { FormInput } from "../elements/Forminput"
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "../elements/TimePicker"
 import { DATE_OPTION, calcDurationHuman, datePrettyLocal, datePrettyLocalDay, timePretty } from "../../lib/dateFormatter"
-import { Availability, Booking, DayTimes, Service, User, Addon } from "../../lib/types"
+import { Availability, Booking, DayTimes, Service, User, Addon, SelectOpt } from "../../lib/types"
 import { findOverlapTimes, isSameCalendarDay } from "../../lib/dateCheckCal"
 import { generateTimesArray } from "../../lib/generateTimesArray"
 import { calcEndTime, filterBuisnessTimes, findBlackoutDates, findUniqueDays, isDateRangeAvailable } from "../../lib/filterTimeAvail"
@@ -17,6 +17,7 @@ import { findEmployeeBusyRanges } from "../../lib/userUtils"
 import { useRouter } from "next/router"
 import moneyFormatter from "../../lib/moneyFormatter"
 import Link from "next/link"
+import { BookingFormStatus } from "./BookingFormStatus"
 // import { QUERY_EMPLOYEE_AVAIL } from "./BookingCreate"
 
 // export interface DateType {
@@ -68,6 +69,7 @@ export function BookingForm2({ services, addons }:iProps) {
   const [addonsOptions, setAddonsOptions] = useState([])
   const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
+  const [priceSubTotal, setPriceSubTotal] = useState(0)
 
   // console.log(pickedService);
   
@@ -332,9 +334,11 @@ export function BookingForm2({ services, addons }:iProps) {
 
   function handleServicePicked(id:string){
     const foundService = services.find((x: any) => x.id === id)
+    if(!foundService) return console.warn('SERVICE NOT FOUND');
+    
     // todo check back later
-    // @ts-ignore
     setPickedService(foundService)
+    setPriceSubTotal(foundService.price)
 
     handleEmployeeUpdate(id)
     handleLocationUpdate(id)
@@ -520,7 +524,20 @@ export function BookingForm2({ services, addons }:iProps) {
       }))
       
     }
+    // TODO broken, prob because 'setValue' and then immediately tring to set another State
+    handleCalcSubTotal()
   };
+
+  function handleCalcSubTotal(){
+    // const pickedAddons = addons.filter(addon => pickedService.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => addon)
+    // TODO somethign is wrong here where it leaves off on one before. 
+    const pickedAddons = pickedService.addons.filter(ad => values.addonIds.includes(ad.id)) 
+    console.log({pickedAddons});
+    const addonsPrice = pickedAddons.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+    console.log({addonsPrice});
+    
+    setPriceSubTotal(pickedService.price + addonsPrice)
+  }
 
   const onChange = (e: any) => {    
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -579,9 +596,9 @@ export function BookingForm2({ services, addons }:iProps) {
       </div>
       )}
 
-      {!isSuccess && (
+      {!isSuccess && (<StyledSideBySide>
 
-      
+        
         <StyledBookingForm onSubmit={(e: FormEvent) => handleSubmit(e)} ref={formRef} >
           <fieldset>
 
@@ -594,7 +611,7 @@ export function BookingForm2({ services, addons }:iProps) {
                 value={values['service']}
                 onChange={(e:any) => {
                   onChange(e) 
-                  setValues((prev:any) => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', location: ''}))
+                  setValues((prev:any) => ({...prev, date: '', timeStart: '', timeEnd: '', staff: '', location: '', addonIds: []}))
                   handleServicePicked(e.target.value)
                 }}
               />
@@ -733,7 +750,21 @@ export function BookingForm2({ services, addons }:iProps) {
 
 
         </StyledBookingForm>
-      )}
+
+        <aside>
+          <BookingFormStatus 
+            serviceName={services.find(serv => serv.id === values.service)?.name}
+            locationName={locationOptions.find((loc:SelectOpt) => loc.value === values.location)?.label || ''}
+            staffName={pickedStaff?.name}
+            addons={addons.filter(ad => values.addonIds.includes(ad.id)).map( (ad:Addon) => ({name: ad.name, price: ad.price}))}
+            date={values.date}
+            start={values.timeStart}
+            end={values.timeEnd}
+            price={moneyFormatter(priceSubTotal)}
+          />
+        </aside>
+
+      </StyledSideBySide>)}
 
     </div>
   )
@@ -791,6 +822,18 @@ const StyledBookingForm = styled.form`
     margin: 0;
     color: var(--c-txt-rev);
   }
+`
+
+const StyledSideBySide = styled.div`
+
+  display: flex;
+  gap: 1rem;
+
+  aside > div {
+    position: sticky;
+    top: 2rem;
+  }
+  
 `
 
 export function HeightReveal({children, isShown, className}:{children:ReactNode[]|ReactNode, isShown: boolean, className:string}){

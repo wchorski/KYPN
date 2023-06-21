@@ -60,6 +60,23 @@ type DateOptions = {
 
 }
 
+export function timePrettyTo12HourFormat(timeString:string) {
+  const [hours, minutes, seconds] = timeString.split(':');
+  const date = new Date();
+  date.setHours(Number(hours));
+  date.setMinutes(Number(minutes));
+  date.setSeconds(Number(seconds));
+
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  };
+  // @ts-ignore
+  const prettyTime = date.toLocaleTimeString(undefined, options);
+  return prettyTime;
+}
+
 export function datePrettyLocal(date:string, option:'day'|'time'|'full') {
   // console.log('pretty date input, ', date);
   
