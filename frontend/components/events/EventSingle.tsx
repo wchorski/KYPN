@@ -21,6 +21,7 @@ import { useUser } from "../menus/Session"
 import { PopupAnim } from "../menus/PopupAnim"
 import { TicketsForm } from "../tickets/TicketsForm"
 import { AddTicketButton } from "../tickets/AddTicketButton"
+import {AddToCalendarButton} from'add-to-calendar-button-react';
 
 type tPopupData = {
 
@@ -51,7 +52,7 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, seats, hosts, location, categories, tags}:Event = data?.event
+  const {photo, summary, description, tickets = [], price, start, end, seats, hosts, location, categories, tags}:Event = data?.event
   
   return (
     <StyledEventSingle className="pad">
@@ -102,6 +103,17 @@ export default function EventSingle({id}:{id:string}) {
               </li>
             ))}
           </ul>
+
+          <AddToCalendarButton
+            name={summary}
+            startDate={new Date(start || '').toLocaleDateString('en-Ca')}
+            startTime={new Date(start || '').toLocaleTimeString('en-CA', {hour12:false })}
+            endDate={new Date(end || '').toLocaleDateString('en-Ca')}
+            endTime={new Date(end || '').toLocaleTimeString('en-CA', {hour12:false })}
+            timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+            options={['Apple','Google','Yahoo','iCal']}
+          />
+
           <ul className="meta">
             <li>{datePrettyLocalDay(start || '')}</li>
             <li>{datePrettyLocalTime(start || '')}</li>

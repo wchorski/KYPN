@@ -11,3 +11,6 @@ variables.env
 *.db
 compose.yml
 db/postgres/*
+
+private/**
+!private/README.md

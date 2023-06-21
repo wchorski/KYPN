@@ -205,11 +205,13 @@ const StyledDayMonthTime = styled.div`
     color: var(--c-txt-rev);
 
     .day{
-      transform: translateY(10px);
+      /* transform: translateY(10px); */
+      margin-bottom: -10px;
     }
     .month{
       font-size: 1.1rem;
-      transform: translateY(-10px);
+      margin-top: -10px;
+      /* transform: translateY(-10px); */
     }
   }
 

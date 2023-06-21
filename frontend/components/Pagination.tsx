@@ -15,7 +15,24 @@ type PagProps = {
 export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 
   // todo make this modular with other Schema types
-  const { error, loading, data } = useQuery(QUERY_PRODUCTS_COUNT)
+  const { error, loading, data } = useQuery(QUERY_PRODUCTS_COUNT, {
+    variables: {
+      where: {
+        NOT: [
+          {
+            status: {
+              equals: "DRAFT"
+            }
+          },
+          {
+            status: {
+              equals: "PRIVATE"
+            }
+          }
+        ]
+      }
+    }
+  })
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
@@ -62,9 +79,9 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 }
 
 export const QUERY_PRODUCTS_COUNT = gql`
-  query Query {
+  query Query($where: PostWhereInput!) {
     productsCount
-    postsCount
+    postsCount(where: $where)
 
   }
 `
