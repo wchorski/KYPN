@@ -396,6 +396,11 @@ export enum INPUT_TYPES {
   DATETIME= 'datetime-local',
 }
 
+export type SelectOpt = {
+  value:string,
+  label:string,
+}
+
 export type InputObj = {
   name:string,
   disabled?:boolean,
