@@ -84,6 +84,10 @@ const StyledBlogItem = styled.article`
   border-radius: var(--br-sharp);
   overflow: hidden;
 
+  > * {
+    padding: 0;
+  }
+
   .meta-cont{
     padding: 1em;
     padding-top: 0;

@@ -511,6 +511,7 @@ type Announcement {
   link: String
   start: DateTime
   end: DateTime
+  type: String
   content: Announcement_content_Document
 }
 
@@ -530,6 +531,7 @@ input AnnouncementWhereInput {
   link: StringFilter
   start: DateTimeNullableFilter
   end: DateTimeNullableFilter
+  type: StringNullableFilter
 }
 
 input AnnouncementOrderByInput {
@@ -537,12 +539,14 @@ input AnnouncementOrderByInput {
   link: OrderDirection
   start: OrderDirection
   end: OrderDirection
+  type: OrderDirection
 }
 
 input AnnouncementUpdateInput {
   link: String
   start: DateTime
   end: DateTime
+  type: String
   content: JSON
 }
 
@@ -555,6 +559,7 @@ input AnnouncementCreateInput {
   link: String
   start: DateTime
   end: DateTime
+  type: String
   content: JSON
 }
 

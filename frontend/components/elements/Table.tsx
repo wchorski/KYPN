@@ -117,10 +117,13 @@ const StyledTable = styled.table`
     text-align: left;
     background-color: var(--c-3);
     border-right: solid 1px black;
-    color: white;
+    color: var(--c-txt);
   }
   tr:nth-of-type(2n) {
     background-color: #ffffff;
+  }
+  td{
+    color: var(--c-txt-dark);
   }
 
   @media (max-width: 650px) {

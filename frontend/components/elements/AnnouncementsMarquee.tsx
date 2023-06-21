@@ -44,7 +44,7 @@ export function AnnouncementsMarquee({ }: Props) {
       },
       orderBy: [
         {
-          start: 'asc'
+          start: 'desc'
         }
       ]
     },
@@ -56,13 +56,13 @@ export function AnnouncementsMarquee({ }: Props) {
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 
-  console.log(data);
+  // console.log(data);
   
   const {announcements} = data
+  if (data?.announcements.length <= 0) return null
   const {content, start, end, link}:Announcment = announcements[0]
   
-  if (data?.announcements.length <= 0) return null
-
+  
   return (
     <StyledMarquee
       onMouseOver={() => setIsFocused(true)}

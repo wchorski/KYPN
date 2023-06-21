@@ -13,15 +13,34 @@ export const Announcement:Lists.Announcement = list({
 
   // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
   // todo hide these again
-  // ui: {
-  //   isHidden: true,
-  // },
+  ui: {
+
+    // todo hide these again
+    // isHidden: true,
+    listView: {
+      initialColumns: ['link', 'start', 'end', 'type' ],
+      initialSort: { field: 'start', direction: 'DESC'}
+    },
+  },
 
   // this is the fields for our Tag list
   fields: {
     link: text(),
     start: timestamp(),
     end: timestamp(),
+    type: select({
+      options: [
+        { label: 'Site Maitenance', value: 'MAINTENANCE' },
+        { label: 'Normal', value: 'NORMAL' },
+        { label: 'Critical', value: 'CRITICAL' },
+        { label: 'Sale', value: 'SALE' },
+      ],
+      defaultValue: 'NORMAL',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
     content: document({
       componentBlocks,
       ui: {

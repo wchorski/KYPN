@@ -12,6 +12,15 @@ export const Post:Lists.Post = list({
   //   if you want to prevent random people on the internet from accessing your data,
   //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   access: allowAll,
+  ui: {
+
+    // todo hide these again
+    // isHidden: true,
+    listView: {
+      initialColumns: ['title', 'status', 'dateModified', 'author' ],
+      initialSort: { field: 'start', direction: 'DESC'}
+    },
+  },
 
   // this is the fields for our Post list
   fields: {
