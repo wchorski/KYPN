@@ -35,6 +35,7 @@ export function BookingFormStatus({
       <h3>{serviceName}</h3>
 
       <table>
+        <tbody>
         <tr>
           <td> Service: </td>
           <td> {serviceName} </td>
@@ -76,6 +77,7 @@ export function BookingFormStatus({
           <td>Price:</td>
           <td>{price}</td>
         </tr>
+        </tbody>
       </table>
 
     </StyledReciept>
@@ -83,5 +85,7 @@ export function BookingFormStatus({
 }
 
 const StyledReciept = styled.div`
-  
+  table{
+    vertical-align: initial;
+  }
 `
