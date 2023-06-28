@@ -25,10 +25,12 @@ const generatedTimes = generateTimesArray()
 
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
 export function TimePicker({values, setValues, times, buisnessHours, partialDates, serviceDuration}:iProps) {
+  // console.log({times});
   
   const [animTrig, setAnimTrig] = useState(0)
   const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
-
+  // console.log({generatedTimes});
+  
   // const activeDay = partialDates.filter(d => isSameCalendarDay(d.day, new Date(values.date)))
   // const activeTimes = activeDay.map(d => d.times)
   // console.log({activeTimes});
@@ -38,7 +40,10 @@ export function TimePicker({values, setValues, times, buisnessHours, partialDate
 
   useEffect(() => {
     setAnimTrig(animTrig + 1)
-  
+    // console.log({currentTimes});
+    // console.log({buisnessHours});
+    // console.log({generatedTimes});
+    
     // return () => 
   }, [times])
 
@@ -133,8 +138,10 @@ function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:st
   
   const filteredTimes = times.filter(time => {
     const specificTime = new Date(`2000-01-01T${time.value}`)
-
+    
+    
     if(openDate <= specificTime && specificTime <= closedDate){
+
       return true
     }
 
@@ -142,6 +149,7 @@ function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:st
 
   })
 
+  // console.log({filteredTimes});
   
   return filteredTimes
 

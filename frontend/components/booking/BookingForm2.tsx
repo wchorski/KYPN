@@ -61,7 +61,7 @@ export function BookingForm2({ services, addons }:iProps) {
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   
   const [serviceIdState, setServiceIdState] = useState(query?.serviceId ? query.serviceId : "")
-  const [pickedService, setPickedService] = useState<Service>(services[0])
+  const [pickedService, setPickedService] = useState<Service>()
   const [pickedStaff, setPickedStaff] = useState<User>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
@@ -299,8 +299,8 @@ export function BookingForm2({ services, addons }:iProps) {
       const addonsFlat = addons.flatMap(ad => ad.id)
       let successObj = {
         start: values.date + 'T' + values.timeStart,
-        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService.durationInHours)),
-        service: pickedService.name || 'n/a',
+        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService?.durationInHours)),
+        service: pickedService?.name || 'n/a',
         addons: addons.filter(ad => values.addonIds.includes(ad.id)).map( (ad:Addon) => ad.name),
         location: location ? location.name : 'n/a' || '',
         staff: pickedStaff?.name || 'n/a',
@@ -401,7 +401,7 @@ export function BookingForm2({ services, addons }:iProps) {
       })
       
       gigs?.map(gig => {
-        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService.durationInHours))
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService?.durationInHours))
         currentTimes = filteredTimeStarts || [] 
       })
     }
@@ -423,7 +423,7 @@ export function BookingForm2({ services, addons }:iProps) {
       })
       
       avails?.map(avail => {
-        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService.durationInHours))
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService?.durationInHours))
         currentTimes = filteredTimeStarts || []  
       })
 
@@ -454,8 +454,8 @@ export function BookingForm2({ services, addons }:iProps) {
     setPickedStaff(selectedEmpl)
 
     const buisnessHours = {
-      start: pickedService.buisnessHourOpen,
-      end: pickedService.buisnessHourClosed,
+      start: pickedService?.buisnessHourOpen || '',
+      end: pickedService?.buisnessHourClosed || '',
     }
     const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
     
@@ -468,7 +468,7 @@ export function BookingForm2({ services, addons }:iProps) {
         const [hours, minutes, seconds] = time.split(":").map(Number)
         const testStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, seconds)
         const testEnd = new Date(testStart)
-        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService.durationInHours) * 60)
+        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService?.durationInHours) * 60)
 
         // ? this caused problems with reseting a Date's time to 00:00:00
         // const testRange = {
@@ -525,19 +525,28 @@ export function BookingForm2({ services, addons }:iProps) {
       
     }
     // TODO broken, prob because 'setValue' and then immediately tring to set another State
-    handleCalcSubTotal()
+    // handleCalcSubTotal()
   };
 
   function handleCalcSubTotal(){
-    // const pickedAddons = addons.filter(addon => pickedService.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => addon)
-    // TODO somethign is wrong here where it leaves off on one before. 
-    const pickedAddons = pickedService.addons.filter(ad => values.addonIds.includes(ad.id)) 
-    console.log({pickedAddons});
-    const addonsPrice = pickedAddons.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
-    console.log({addonsPrice});
+    if(!pickedService) return console.log('no service picked');
     
-    setPriceSubTotal(pickedService.price + addonsPrice)
+    // const pickedAddons = addons.filter(addon => pickedService?.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => addon)
+    // TODO somethign is wrong here where it leaves off on one before. 
+    const pickedAddons = pickedService?.addons.filter(ad => values.addonIds.includes(ad.id)) || []
+    // console.log({pickedAddons});
+    const addonsPrice = pickedAddons.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+    // console.log({addonsPrice});
+    
+    setPriceSubTotal(pickedService?.price + addonsPrice)
   }
+
+  useEffect(() => {
+    handleCalcSubTotal()
+  
+    // return () => 
+  }, [pickedService, values])
+  
 
   const onChange = (e: any) => {    
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -569,7 +578,7 @@ export function BookingForm2({ services, addons }:iProps) {
 
         <ul>
           <li>start: {datePrettyLocal(successfullBook.start, DATE_OPTION.FULL)}</li>
-          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService.durationInHours)), DATE_OPTION.FULL)}</li>
+          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService?.durationInHours)), DATE_OPTION.FULL)}</li>
           <li>service: {successfullBook.service}</li>
           <li>
             Addons:
@@ -642,13 +651,19 @@ export function BookingForm2({ services, addons }:iProps) {
 
               <h3> Add-Ons </h3>
               <ul className="addons">
-                {addons.filter(addon => pickedService.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => { 
+                {addons.filter(addon => pickedService?.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon) => { 
                  
                   return(
                   <li key={addon.name}>
                     <FormInput 
                     // ? remove anything that aint a letter or number
-                      {...{name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''), value: addon.id, label: moneyFormatter(addon.price) + ' ' + addon.name, type: 'checkbox'}}
+                      {...{
+                        name: addon.name.toLowerCase().replace(/[^a-zA-Z0-9]/g, ''), 
+                        value: addon.id, 
+                        label: moneyFormatter(addon.price) + ' ' + addon.name, 
+                        type: 'checkbox',
+                        checked: values.addonIds.includes(addon.id),
+                      }}
                       onChange={handleCheckboxChange}
                     />
                   </li>
@@ -696,16 +711,17 @@ export function BookingForm2({ services, addons }:iProps) {
                   />
                 </div>
 
-                <h6 className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)} Service</h6>
+                <h6 className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours || '')} Service</h6>
 
                 <TimePicker 
                   values={values} 
                   setValues={setValues} 
                   times={times} 
                   partialDates={partialDates}
+                  key={values.date}
                   // todo setting 'service' to empty string causes error here
-                  buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
-                  serviceDuration={Number(pickedService.durationInHours)}
+                  buisnessHours={{start: pickedService?.buisnessHourOpen || '', end: pickedService?.buisnessHourClosed || ''}}
+                  serviceDuration={Number(pickedService?.durationInHours)}
                 />
               </div>
               
