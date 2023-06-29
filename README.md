@@ -45,7 +45,12 @@ following along with Wes Bos Tutorial
   - run your dev environment to create the tables and edit the schemas
   - now you can `build` and `run` your app within a `docker container`
 
-
+## Development
+- don't forget to run and save these queries to the `seed_data.ts` 
+  - `Query.Pages`
+  - `Query.Services`
+  - `Query.Roles`
+  - `Query.Products`
 
 
 ## TODO

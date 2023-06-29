@@ -60,8 +60,8 @@ export function BookingForm2({ services, addons }:iProps) {
   const [isSuccess, setIsSuccess] = useState(false)
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   
-  const [serviceIdState, setServiceIdState] = useState(query?.serviceId ? query.serviceId : "")
-  const [pickedService, setPickedService] = useState<Service>()
+  const [serviceIdState, setServiceIdState] = useState(query.serviceId)
+  const [pickedService, setPickedService] = useState<Service|undefined>(services.find(serv => serv.id === query.serviceId))
   const [pickedStaff, setPickedStaff] = useState<User>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
@@ -331,6 +331,15 @@ export function BookingForm2({ services, addons }:iProps) {
   }
 
   const [gqlMutation, { loading: loadingMutation, error: errorMutation, data: dataMutation }] = useMutation(MUTATE_BOOKING_CREATE)
+
+  useEffect(() => {
+    if(!query?.serviceId) return console.log('no  service id');
+    
+    handleServicePicked(String(query.serviceId))
+  
+    // return () => 
+  }, [])
+  
 
   function handleServicePicked(id:string){
     const foundService = services.find((x: any) => x.id === id)

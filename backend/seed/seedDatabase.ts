@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 // @ts-ignore
 import { Context } from '.keystone/types';
-import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, pages_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 import { Category, Post, Product, Tag, User } from '../types';
@@ -231,6 +231,25 @@ const seedAddons = async (context: Context) => {
   });
 };
 
+const seedPages = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = pages_seeddata;
+  const objectsAlreadyInDatabase = await db.Page.findMany({
+    where: {
+      slug: { in: seedObjects.map(obj => obj.slug) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
+  );
+
+  console.log('Pages seeded, ', { objsToCreate })
+
+  await db.Page.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 const seedProductImages = async (context: Context) => {
   const { db } = context.sudo();
   const seedObjects: any[] = productImage_seedjson;
@@ -284,5 +303,6 @@ export const seedDatabase = async (context: Context) => {
   await seedSubscriptions(context)
   await seedServices(context)
   await seedAddons(context)
+  await seedPages(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };
