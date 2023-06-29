@@ -30,7 +30,7 @@ export const pricetable = component({
         }),
         buttonLabel: fields.url({
           label: 'Button Label',
-          defaultValue: 'Learn More',
+          defaultValue: 'Book Now',
         }),
         content: fields.child({
           kind: 'block',

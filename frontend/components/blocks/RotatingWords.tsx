@@ -51,7 +51,7 @@ const StyledRotatingWords = styled.div`
   margin:0 auto;
   width:100%;
   height: 60px;
-  transform: translateX(-.5%);
+  transform: translateX(-1%);
   /* top: 100px; */
   
   .words-cont{

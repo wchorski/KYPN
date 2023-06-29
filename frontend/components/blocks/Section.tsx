@@ -23,6 +23,7 @@ const StyledSection = styled.section<{bg?:string}>`
   background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
   background-position: center;
   background-size: cover;
+  background-attachment: fixed;
   padding: 3em 1em;
   color: var(--c-txt);
 
@@ -31,3 +32,9 @@ const StyledSection = styled.section<{bg?:string}>`
   }
 
 `
+
+// todo
+// add  variables for
+// background-attachment: fixed;
+// padding
+// margin

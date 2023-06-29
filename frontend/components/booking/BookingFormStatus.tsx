@@ -62,15 +62,24 @@ export function BookingFormStatus({
 
         <tr>
           <td>Date: </td>
-          <td>{datePrettyLocalDay(date)}</td>
+          {(timePrettyTo12HourFormat(start) === 'Invalid Date') 
+            ? (<td className="disabled"> n/a </td>)
+            : (<td>{datePrettyLocalDay(date)}</td>)
+          } 
         </tr>
         <tr>
           <td>Start: </td>
-          <td>{timePrettyTo12HourFormat(start)}</td>
+          {(timePrettyTo12HourFormat(start) === 'Invalid Date') 
+            ? (<td className="disabled"> n/a </td>)
+            : (<td>{timePrettyTo12HourFormat(start)}</td>)
+          } 
         </tr>
         <tr>
           <td>End: </td>
-          <td>{timePrettyTo12HourFormat(end)}</td>
+          {(timePrettyTo12HourFormat(start) === 'Invalid Date') 
+            ? (<td className="disabled"> n/a </td>)
+            : (<td>{timePrettyTo12HourFormat(end)}</td>)
+          } 
         </tr>
 
         <tr>
@@ -86,6 +95,12 @@ export function BookingFormStatus({
 
 const StyledReciept = styled.div`
   table{
-    vertical-align: initial;
+    td{
+      vertical-align: initial;
+    }
+  }
+
+  .disabled{
+    color: var(--c-disabled)
   }
 `
