@@ -98,6 +98,10 @@ const StyledReciept = styled.div`
     td{
       vertical-align: initial;
     }
+
+    ul{
+      padding: 0 1rem;
+    }
   }
 
   .disabled{
