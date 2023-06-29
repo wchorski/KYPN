@@ -39,13 +39,15 @@ console.log(data.ticket);
 
       <div className="rip"></div>
 
-      <div className="details">
-        <h2>{event.summary}</h2>
-        <p>{datePretty(event.start || '')}</p>
-        <p>{event.location?.name}</p>
-        <p>{holder?.name} {holder?.nameLast}</p>
-        <p>{holder?.email}</p>
-      </div>
+      <ul className="details">
+        <li>
+          <h2>{event.summary}</h2>
+        </li>
+        <li>{datePrettyLocalDay(event.start || '')}</li>
+        <li>{event.location?.name}</li>
+        <li>{holder?.name} {holder?.nameLast}</li>
+        <li>{holder?.email}</li>
+      </ul>
 
       <div className="qrcode-cont">
         <QRCode link={`/tickets/${id}`} />
@@ -72,6 +74,7 @@ const StyledTicketSingle = styled.article`
   padding-bottom: 1em;
   margin-bottom: 1em;
   border-radius: var(--br-sharp);
+  margin: 1rem 0;
 
   .meta-short{
     padding: 1em;
@@ -81,7 +84,8 @@ const StyledTicketSingle = styled.article`
     justify-content: center;
   }
 
-  .details{
+  ul.details{
+    list-style: none;
     border-left: dashed 1px #e0e0e0;
     padding: 1em;
   }
@@ -93,6 +97,11 @@ const StyledTicketSingle = styled.article`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    svg{
+      width: 200px;
+      height: 200px;
+    }
   }
 
   .status{
@@ -106,16 +115,16 @@ const StyledTicketSingle = styled.article`
   }
 
   .rip {  
-    background-color: #291eee;
+    /* background-color: #291eee; */
     height: 20px;
     margin: 0 10px;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuOWwzfk4AAAAaSURBVBhXY5g7f97/2XPn/AcCBmSMQ+I/AwB2eyNBlrqzUQAAAABJRU5ErkJggg==);
+    /* background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAACCAYAAAB7Xa1eAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuOWwzfk4AAAAaSURBVBhXY5g7f97/2XPn/AcCBmSMQ+I/AwB2eyNBlrqzUQAAAABJRU5ErkJggg==); */
     background-size: 4px 2px;
     background-repeat: repeat-x;
     background-position: center;
     position: relative;
-    box-shadow: 0 1px 0 0 #fff, 0 -1px 0 0 #fff;
-    &:before,
+    /* box-shadow: 0 1px 0 0 #fff, 0 -1px 0 0 #fff; */
+    /* &:before,
     &:after {
         content: '';
         position: absolute;
@@ -135,7 +144,7 @@ const StyledTicketSingle = styled.article`
     &:after {
         transform: translate(-50%, -50%) rotate(225deg);
         right: -40px;
-    }
+    } */
   }
        
 

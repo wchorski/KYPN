@@ -71,6 +71,15 @@ export const QUERY_USER_CURRENT = gql`
           canManageTickets
           canManageEvents
         }
+        tickets {
+          event {
+            id
+            start
+            summary
+          }
+          id
+          status
+        }
         cart {
           id
           quantity
