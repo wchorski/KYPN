@@ -66,7 +66,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
   const [successfullBook, setSuccessfullBook] = useState<SuccessfullBook>()
   
   const [serviceIdState, setServiceIdState] = useState(query?.serviceId ? query.serviceId : "")
-  const [pickedService, setPickedService] = useState<Service>(services.find(serv => serv.id === booking.service.id))
+  const [pickedService, setPickedService] = useState<Service|undefined>(services.find(serv => serv.id === booking.service.id))
   const [pickedStaff, setPickedStaff] = useState<User>()
   const [serviceId, setServiceId] = useState('')
   const [employeeOptions, setEmployeeOptions] = useState<any>([])
@@ -321,7 +321,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
         },
         data: formattedInputs
       }
-    }).catch(err => errorRef?.current.scrollIntoView({ behavior: 'smooth' }))
+    }).catch(err => errorRef?.current?.scrollIntoView({ behavior: 'smooth' }))
     
 
     // console.log('res', res)
@@ -334,8 +334,8 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       const addonsFlat = addons.flatMap(ad => ad.id)
       let successObj = {
         start: values.date + 'T' + values.timeStart,
-        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService.durationInHours)),
-        service: pickedService.name || 'n/a',
+        end: calcEndTime(values.date+'T'+ values.timeStart, Number(pickedService?.durationInHours)),
+        service: pickedService?.name || 'n/a',
         addons: addons.filter(ad => values.addonIds.includes(ad.id)).map( (ad:Addon) => ad.name),
         location: location ? location.name : 'n/a' || '',
         staff: pickedStaff?.name || 'n/a',
@@ -442,7 +442,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       })
       
       gigs?.map(gig => {
-        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService.durationInHours))
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService?.durationInHours))
         currentTimes = filteredTimeStarts || [] 
       })
     }
@@ -464,7 +464,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
       })
       
       avails?.map(avail => {
-        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService.durationInHours))
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService?.durationInHours))
         currentTimes = filteredTimeStarts || []  
       })
 
@@ -495,8 +495,8 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
     setPickedStaff(selectedEmpl)
 
     const buisnessHours = {
-      start: pickedService.buisnessHourOpen,
-      end: pickedService.buisnessHourClosed,
+      start: pickedService?.buisnessHourOpen || '',
+      end: pickedService?.buisnessHourClosed || '',
     }
     const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
     
@@ -509,7 +509,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
         const [hours, minutes, seconds] = time.split(":").map(Number)
         const testStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, seconds)
         const testEnd = new Date(testStart)
-        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService.durationInHours) * 60)
+        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService?.durationInHours) * 60)
 
         // ? this caused problems with reseting a Date's time to 00:00:00
         // const testRange = {
@@ -600,7 +600,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
 
         <ul>
           <li>start: {datePrettyLocal(successfullBook.start, DATE_OPTION.FULL)}</li>
-          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService.durationInHours)), DATE_OPTION.FULL)}</li>
+          <li>end: {datePrettyLocal(calcEndTime(successfullBook.start, Number(pickedService?.durationInHours)), DATE_OPTION.FULL)}</li>
           <li>service: {successfullBook.service}</li>
           <li>
             Addons:
@@ -673,7 +673,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
 
               <h3> Add-Ons </h3>
               <ul className="addons">
-                {addons.filter((addon) => pickedService.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon, i) => { 
+                {addons.filter((addon) => pickedService?.addons.flatMap(addon => addon.id).includes(addon.id)).map((addon:Addon, i) => { 
                  
                   return(
                   <li key={addon.name}>
@@ -732,7 +732,7 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
                   />
                 </div>
 
-                <h6 className="duration-stamp">{ calcDurationHuman(pickedService?.durationInHours)} Service</h6>
+                <h6 className="duration-stamp">{ calcDurationHuman(String(pickedService?.durationInHours))} Service</h6>
 
                 <TimePicker 
                   values={values} 
@@ -740,8 +740,8 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
                   times={times} 
                   partialDates={partialDates}
                   // todo setting 'service' to empty string causes error here
-                  buisnessHours={{start: pickedService?.buisnessHourOpen, end: pickedService?.buisnessHourClosed}}
-                  serviceDuration={Number(pickedService.durationInHours)}
+                  buisnessHours={{start: pickedService?.buisnessHourOpen || '', end: pickedService?.buisnessHourClosed || ''}}
+                  serviceDuration={Number(pickedService?.durationInHours)}
                 />
               </div>
               
