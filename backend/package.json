@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "keystone dev",
     "seed": "keystone dev --seed-database",
-    "start": "keystone start",
+    "start": "prisma migrate deploy && keystone start",
     "build": "keystone build",
     "postinstall": "keystone build --no-ui --frozen"
   },
