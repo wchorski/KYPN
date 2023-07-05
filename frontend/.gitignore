@@ -45,3 +45,4 @@ next-env.d.ts
 home.tsx
 Header.tsx
 Footer.tsx
+Nav.tsx

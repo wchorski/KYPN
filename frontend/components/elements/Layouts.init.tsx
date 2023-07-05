@@ -3,7 +3,7 @@ import { Nav } from '../menus/Nav'
 // import { TableOfContents } from 'components/TableOfContents';
 import { Footer } from '../menus/Footer'
 import { StyledMainCont } from '../../styles/elements/MainCont.styled'
-import Header from '../Header'
+import Header from '../menus/Header'
 import styled from 'styled-components'
 import { AnnouncementsMarquee } from './AnnouncementsMarquee'
 import ShoppingCart from '../ecommerce/ShoppingCart'

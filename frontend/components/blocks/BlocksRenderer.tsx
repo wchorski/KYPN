@@ -45,7 +45,7 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
   },
   inline: {
     bold: ({ children }) => {
-      return <strong style={{ color: '#363945' }}>{children}</strong>;
+      return <strong style={{ color: 'var(--c-bold)' }}>{children}</strong>;
     },
     // inline code ` `
     code: ({ children }) => {

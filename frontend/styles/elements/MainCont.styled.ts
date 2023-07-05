@@ -4,15 +4,19 @@ import styled from 'styled-components'
 export const StyledMainCont = styled.main`
 
   background-color: var(--c-bg);
+
+  .container{
+    margin-right: auto; 
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+
+  }
   /* padding: 0 1em; */
   /* max-width: var(--width-cont); */
   /* margin: 0 auto;  */
-  margin-right: auto; 
   /* padding-top: 1em; */
-  min-height: 90vh;
 
-  display: flex;
-  flex-direction: column;
 
   
   /* .header-cont{
