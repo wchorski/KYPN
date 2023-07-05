@@ -36,7 +36,7 @@ export const StyledForm = styled.form`
   select {
     width: 100%;
     padding: 0.5rem;
-    font-size: 1rem;
+    font-size: .7rem;
     border: 1px solid black;
     &:focus {
       outline: 0;
@@ -54,7 +54,7 @@ export const StyledForm = styled.form`
     border-radius: var(--br-sharp);
     color: white;
     border: solid 2px transparent;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: 600;
     padding: 0.5rem 1.2rem;
     transition: all .3s;

@@ -21,7 +21,7 @@ export function InfoCardList({items}:Props) {
     <StyledList>
       {items.map((item, i) => (
         <li key={i}>
-          <Card item={item}/>
+          <InfoCardItem item={item}/>
         </li>
       ))}
     </StyledList>
@@ -29,7 +29,7 @@ export function InfoCardList({items}:Props) {
 }
 
 
-function Card({item}:{item:InfoCard}){
+export function InfoCardItem({item, children}:{item:InfoCard, children?:ReactNode}){
 
   return (
     <StyledCard>
@@ -40,6 +40,7 @@ function Card({item}:{item:InfoCard}){
 
       <div className="content">
         {item.content}
+        {children}
       </div>
 
       <Link href={item.buttonLink} className="button">{item.buttonLabel}</Link>
@@ -72,6 +73,10 @@ const StyledCard = styled.article`
   flex-direction: column;
   transition: all .3s;
   overflow: hidden;
+
+  header{
+    padding: 0;
+  }
 
   h3{
     padding: 0 1rem;
