@@ -113,6 +113,7 @@ const StyledPriceTable = styled.table`
   border-collapse: separate;
   overflow: hidden;
   position: relative;
+  margin: 1rem auto;
 
   &::before {
     content: '';

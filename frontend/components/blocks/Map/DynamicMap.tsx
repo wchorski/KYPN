@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import styles from './Map.module.css';
 import { QueryLoading } from '../../menus/QueryLoading';
 import { tMap } from './Map';
+import Link from 'next/link';
 
 const myaddress = "111 S Michigan Ave, Chicago, IL 60603 United States"; // Replace with your desired address
 
@@ -23,6 +24,8 @@ const Map = ({  address,  }:tMap) => {
 
 
   useEffect(() => {
+    if(address.startsWith('http')) return console.log('web address');
+    
     (async function init() {
       // @ts-ignore
       delete Leaflet.Icon.Default.prototype._getIconUrl;
@@ -47,7 +50,8 @@ const Map = ({  address,  }:tMap) => {
     // console.log(cord);
   
   }, []);
-
+  
+  if(address.startsWith('http')) return <Link href={address}>{address}</Link>
   if(!coordinance) return <QueryLoading />
 
   return (<>

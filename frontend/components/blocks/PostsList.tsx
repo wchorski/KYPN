@@ -7,9 +7,10 @@ type Props = {
   color:string,
   colorOverlay:string,
   categories: { id:string }[]
+  style?: any,
 }
 
-export function PostsList({header, color, colorOverlay, imageSrc, categories}:Props) {
+export function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props) {
   
   return (
     <section style={{
@@ -18,7 +19,7 @@ export function PostsList({header, color, colorOverlay, imageSrc, categories}:Pr
       backgroundPosition: 'center',
       backgroundSize: 'cover',
     }}>
-      <div className="overlay" style={{backgroundColor: colorOverlay, padding: '5em 1em',}}>
+      <div className="overlay" style={{backgroundColor: colorOverlay, padding: '12em 1em',}}>
         <h2 style={{textAlign: 'center'}}> 
           {header}
         </h2>
