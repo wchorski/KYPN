@@ -32,7 +32,7 @@ import { seedDatabase } from './seed/seedDatabase';
 import { permissionsList } from './schemas/permissions';
 
 const DB_URL = DB_PROTOCOL + DB_USER + ':' + DB_PASSWORD + '@' + DB_DOMAIN + DB_PORT + '/' 
-console.log('💾' + DB_URL + DB_COLLECTION);
+console.log('💾 💾 💾' + DB_URL + DB_COLLECTION);
 
 
 const db: KeystoneConfig<TypeInfo>['db'] = {
