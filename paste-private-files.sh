@@ -10,7 +10,4 @@ cp -a ./private/frontend/components/ ./frontend/components/private
 cp -a ./private/frontend/styles/private ./frontend/styles/private
 cp ./private/frontend/styles/GlobalThemeStyle.styled.js ./frontend/styles/GlobalThemeStyle.styled.js
 cp ./private/frontend/pages/home.tsx ./frontend/pages/home.tsx
-cp ./private/frontend/.env.local ./frontend/.env.local
-cp ./private/frontend/.env ./frontend/.env
-cp ./private/backend/.env ./backend/.env
 echo "--- pasting complete ---"
