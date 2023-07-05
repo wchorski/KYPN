@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import Header from './Header'
+import Header from './menus/Header'
 import styled from "styled-components";
 import { Footer } from './menus/Footer';
 import { Nav } from './menus/Nav';

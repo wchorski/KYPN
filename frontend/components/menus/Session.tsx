@@ -127,7 +127,7 @@ const StyledSessionBadge = styled.div`
     position: absolute;
     pointer-events: none;
     top: 100%;
-    background-color: var(--c-desaturated);
+    background-color: var(--c-bg);
     display: flex;
     flex-direction: column;
     padding: .5em;

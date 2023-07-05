@@ -21,7 +21,10 @@ export function Footer() {
   return (
     <StyledFooter>
 
+
       <div className="top">
+      <div className="container">
+      
 
         <div className="col">
           <h3>Contact</h3>
@@ -57,10 +60,12 @@ export function Footer() {
             <li><Link href={`/events`}> Events </Link></li>
           </ul>
         </div>
-
+        
+      </div>
       </div>
 
       <div className="bot">
+      <div className="container">
 
         <div className="col">
           <ul>
@@ -70,17 +75,22 @@ export function Footer() {
 
         <div className="col">
           <ul>
-            <li><Link href={`/terms`}> Terms & Conditions </Link></li>
-            <li><Link href={`/privacy`}> Privacy Policy </Link></li>
+            <li><Link href={`/terms-and-privacy`}> Terms & Conditions </Link></li>
+            <li><Link href={`/terms-and-privacy`}> Privacy Policy </Link></li>
           </ul>
         </div>
 
       </div>
+      </div>
 
       <div className="poweredby">
+      <div className="container">
+        
         <ul>
           <li>powered by <Link href={`https://www.tawtaw.site`}> {"There's a Will There's a Website"}</Link> </li>
         </ul>
+
+      </div>
       </div>
 
 
@@ -90,13 +100,17 @@ export function Footer() {
 
 const StyledFooter = styled.footer`
   /* background-color: green; */
-  max-width: var(--maxWidth);
+  /* max-width: var(--maxWidth); */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   margin: 0 auto;
   position: relative;
   color: var(--c-txt-rev);
+
+  .container{
+    width: 100%;
+  }
 
   ul{
     margin: 0;
@@ -106,9 +120,12 @@ const StyledFooter = styled.footer`
 
   .top{
     background-color: var(--c-dark);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    padding:  1rem;
+
+    .container{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      padding:  1rem;
+    }
 
     h3{
       margin-bottom: 0;
@@ -116,10 +133,13 @@ const StyledFooter = styled.footer`
   }
 
   .bot{
-    padding:  1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    .container{
+      padding:  1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
 
     ul{
       display: flex;
@@ -138,9 +158,13 @@ const StyledFooter = styled.footer`
   }
 
   .poweredby{
-    padding: .5rem;
     background-color: #303030;
-    text-align: center;
+    
+    .container{
+      padding: .5rem;
+      text-align: center;
+
+    }
 
     li{
       opacity: .7;
