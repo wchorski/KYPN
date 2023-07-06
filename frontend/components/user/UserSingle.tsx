@@ -6,6 +6,7 @@ import { AccountDetails } from "../menus/AccountDetails"
 import EventList from "../events/EventList"
 import { UserEvents } from "./UserEvents"
 import { useUser } from "../menus/Session"
+import { ImageDynamic } from "../elements/ImageDynamic"
 
 
 export function UserSingle({id}:{id:string}) {  
@@ -20,11 +21,15 @@ export function UserSingle({id}:{id:string}) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
   
-  const {name, email, isAdmin, tickets, dateCreated, dateModified,}:User = data?.user
+  const {name, email, image, isAdmin, tickets, dateCreated, dateModified,}:User = data?.user
   
 
   return (
     <>
+      <header>
+        <ImageDynamic photoIn={image}/>
+      </header>
+      
       <section className="pad">
         <AccountDetails {...data.user}/>
       </section>
@@ -51,6 +56,7 @@ export const QUERY_USER_SINGLE = gql`
       email
       isAdmin
       isActive
+      image
       tickets {
         id
         status

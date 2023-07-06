@@ -6,9 +6,10 @@ import ErrorMessage from '../ErrorMessage';
 import { useQuery, gql } from '@apollo/client';
 import styled from 'styled-components';
 import { YouTubeVideo } from '../blocks/YouTubeVideo';
-import { datePretty } from '../../lib/dateFormatter';
+import { datePretty, datePrettyLocal } from '../../lib/dateFormatter';
 import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
+import { MediaText } from '../blocks/MediaText';
 
 
 export default function BlogPage({ slug }: { slug: string | string[] | undefined }) {
@@ -50,40 +51,30 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
       </div>
 
       <StyledBlogSingle>
-        <header
-          style={{
-            backgroundImage: `url(${featured_image})`,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-          }}
-        >
-          <div className='overlay'>
+        <header>
+          <MediaText 
+            imageSrc={featured_image}
+            imageAlt='Featured Image'
+            rowReverse={true}
+          >
             <h1>{title}</h1>
+            <ul className='meta'>
+              {author && (
+                <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
+              )}
+              <li>Published on {datePrettyLocal(dateCreated , 'day')}</li>
+              {/* <li>Modified on {datePretty(dateModified)}</li> */}
+            </ul>
+          </MediaText>
 
-
-            <span>
-              <em>Published on {new Date(dateCreated).toLocaleDateString()}</em>
-              <br />
-              <em>Modified on {datePretty(dateModified)}</em>
-            </span>
-            <br />
-
-            {author?.name ? (
-              <span>
-                <em> · by {author?.name}</em>
-              </span>
-            ) : null}
-
-            <span>View Count : 12345</span>
-
-          </div>
         </header>
-
-        <YouTubeVideo
-          url={featured_video}
-          altText='featured video'
-        />
+        
+        {featured_video && (
+          <YouTubeVideo
+            url={featured_video}
+            altText='featured video'
+          />
+        )}
 
 
         <BlockRenderer document={content.document} />
@@ -139,24 +130,57 @@ export const QUERY_BLOG_SINGLE = gql`
 
 const StyledBlogSingle = styled.article`
   header{
-    background: var(--c-accent);
+    /* background: var(--c-accent); */
     position: relative;
+    padding: 0;
+    margin-bottom: 4rem;
+    /* display: flex; */
     /* background-blend-mode: overlay; */
 
     .overlay{
       /* background-color: rgb(155 255 0 / 52%); */
-      background: rgba(242, 242, 242, 0.82);
+      /* background: rgba(242, 242, 242, 0.82); */
+      padding: 1rem;
       overflow: hidden;
       height: 100%;
       z-index: 2;
+      background-color: var(--c-3);
     }
+
+    .content-cont{
+      article > *:nth-child(even){
+        background-color: transparent;
+        border-top: solid 3px var(--c-txt);
+      }
+    }
+
+    /* h1{
+      font-size: 2rem;
+    } */
+
+    ul.meta{
+      padding: 1rem;
+      list-style: none;
+    }
+
+    /* figure{
+
+      height: 30rem;
+      margin: 0;
+
+      img{
+        width: 1px;
+      }
+    } */
   }
 
 
   footer{
+    margin-top: 4rem;
+
     h2{
       margin-bottom: .1em;
-      font-size: 1.2rem;
+      font-size: .8rem;
     }
   }
 `
