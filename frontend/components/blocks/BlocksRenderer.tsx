@@ -20,6 +20,7 @@ import { IFrame } from './IFrame';
 import { PriceTable } from './PriceTable';
 import { InfoCardList } from './InfoCardList';
 import { ImageLinkList } from './ImageLinkList';
+import { VideoLocal } from './VideoLocal';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -109,6 +110,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   youtubeVideo: props => {
     return <YouTubeVideo {...props} />;
+  },
+  videoLocal: props => {
+    return <VideoLocal {...props} />;
   },
 };
 

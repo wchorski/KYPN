@@ -26,7 +26,7 @@ const StyledCatsPool = styled.div`
     border-radius: 50px;
     padding: 0 1em;
     margin-left: .2em;
-    font-size: 1rem;
+    font-size: .7rem;
     transition: all .3s;
 
     &:hover{
