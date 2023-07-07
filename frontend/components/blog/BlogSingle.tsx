@@ -10,9 +10,11 @@ import { datePretty, datePrettyLocal } from '../../lib/dateFormatter';
 import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
 import { MediaText } from '../blocks/MediaText';
+import { BreadCrumbs } from '../elements/BreadCrumbs';
 
 
 export default function BlogPage({ slug }: { slug: string | string[] | undefined }) {
+  
 
   const { loading, error, data } = useQuery(
     QUERY_BLOG_SINGLE, {
@@ -46,11 +48,13 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
 
   return (
     <>
-      <div>
-        <Link href="/">&larr; back home</Link>
-      </div>
 
       <StyledBlogSingle>
+
+        <div className='breadcrumbs-cont'>
+          <BreadCrumbs />
+        </div>
+
         <header>
           <MediaText 
             imageSrc={featured_image}
@@ -129,6 +133,12 @@ export const QUERY_BLOG_SINGLE = gql`
 `
 
 const StyledBlogSingle = styled.article`
+
+  .breadcrumbs-cont{
+    /* height: 2rem; */
+    padding: 1rem 1rem;
+  }
+
   header{
     /* background: var(--c-accent); */
     position: relative;
@@ -148,15 +158,21 @@ const StyledBlogSingle = styled.article`
     }
 
     .content-cont{
+      article > *:nth-child(odd){
+        min-height: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: solid 3px var(--c-txt);
+      }
       article > *:nth-child(even){
         background-color: transparent;
-        border-top: solid 3px var(--c-txt);
       }
     }
 
-    /* h1{
-      font-size: 2rem;
-    } */
+    h1{
+      font-size: 1.2rem;
+    }
 
     ul.meta{
       padding: 1rem;
