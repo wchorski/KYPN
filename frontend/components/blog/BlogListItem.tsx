@@ -78,7 +78,7 @@ const StyledBlogItem = styled.article`
   display: flex;
   flex-direction: column;
   height: 100%;
-  /* background-color: var(--c-desaturated); */
+  background-color: var(--c-bg);
   border: solid 2px var(--c-3);
   box-shadow: #0000004d 2px 2px 8px;
   border-radius: var(--br-sharp);
