@@ -26,13 +26,14 @@ export const StyledPagination = styled.div`
   text-align: center;
 
 
+
   .count-cont{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 1rem;
+    font-size: .7rem;
   }
   a[aria-disabled='true'] {
     color: var(--c-disabled);

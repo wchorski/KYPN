@@ -45,9 +45,8 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateMod
         </Link>
     
           {author && (
-            <small className='author'> 
-              <CgProfile />
-              <Link href={`/blog/posts/search?user=${author?.id}`}>{author?.name}</Link>
+            <small> 
+              <Link className='author' href={`/users/${author?.id}`}> <CgProfile /> {author?.name}</Link>
             </small>
           )}
           <small className='date'> 
@@ -79,7 +78,8 @@ const StyledBlogItem = styled.article`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--c-desaturated);
+  /* background-color: var(--c-desaturated); */
+  border: solid 2px var(--c-3);
   box-shadow: #0000004d 2px 2px 8px;
   border-radius: var(--br-sharp);
   overflow: hidden;
@@ -116,6 +116,12 @@ const StyledBlogItem = styled.article`
     color: var(--c-txt);
     text-decoration: none;
     /* padding: 0 1rem; */
+    transition: .3s;
+
+    &:hover{
+      opacity: .7;
+      color: var(--c-accent) !important;
+    }
   }
 
   h3{

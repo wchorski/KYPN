@@ -16,6 +16,7 @@ import { EmojiFade } from '../elements/EmojiFade';
 import { CartCount2 } from '../ecommerce/CartCount2';
 import { LinkActive } from '../menus/LinkActive';
 import { FiLogIn, FiLogOut } from 'react-icons/fi';
+import { IoMdBookmark } from 'react-icons/io';
 
 export function Nav() {
 
@@ -103,10 +104,10 @@ export function Nav() {
           <LinkActive href='/about'> About </LinkActive>
         </li> 
         <li>
-          <LinkActive href='/booking'> Book a Service </LinkActive>
+          <LinkActive href='/events'> Events </LinkActive>
         </li> 
         <li>
-          <LinkActive href='/events'> Events </LinkActive>
+          <LinkActive href='/booking' className='cta'> <IoMdBookmark /> Book a Service </LinkActive>
         </li> 
 
         {session ? (
@@ -152,6 +153,7 @@ export const StyledNavMenu = styled.nav`
   background-size: 400% 400%;
   outline: solid white 1px;
   animation: gradient 15s ease infinite;
+  box-shadow: #0000007a 0 5px 6px;
   /* overflow: hidden; */
 
   @keyframes gradient {
@@ -232,6 +234,7 @@ export const StyledNavMenu = styled.nav`
 
   a.isActive{
     background-color: var(--c-accent);
+    color: var(--c-txt-rev) !important;
   }
 
   a:hover, &:focus{
@@ -400,4 +403,11 @@ export const StyledNavMenu = styled.nav`
     }
   }
    */
+
+  .cta{
+    background-color: var(--c-light);
+    margin: 0 .4rem;
+    border-radius: 30px;
+    overflow: hidden;
+  }
 `
