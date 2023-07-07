@@ -44,6 +44,7 @@ export function DiscoFloor() {
       {squares.map((sqr,i) => (
         <div 
         className="grid-item"
+        key={i}
         style={{
           backgroundColor: sqr.color,
           animationDelay: `${String(i)}s`,

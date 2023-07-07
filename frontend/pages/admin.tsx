@@ -15,6 +15,7 @@ import { QUERY_LOCATIONS } from "./events/edit/[id]";
 import { Location } from "../lib/types"
 import { QueryLoading } from "../components/menus/QueryLoading";
 import ErrorMessage from "../components/ErrorMessage";
+import { BookingsTable } from "../components/booking/BookingsTable";
 
 // list of users
 export default function AdminPage() {
@@ -59,6 +60,9 @@ export default function AdminPage() {
       <hr />
 
       <section className="pad">
+        <BookingsTable />
+        <hr />
+        
         <EventTable />
         <hr />
 
