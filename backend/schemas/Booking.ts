@@ -216,12 +216,13 @@ export const Booking:Lists.Booking = list({
 
           description += '\n EMPLOYEES: ' + employeeNames
         }
+        console.log({resolvedData});
         
         const calRes = await createCalendarEvent({
           summary: resolvedData.summary || '',
           description: description,
           start: {
-            dateTime: String(resolvedData.start),
+            dateTime: new Date(resolvedData.start || '').toISOString(),
             // timeZone: 'America/Chicago',
           },
           end: {

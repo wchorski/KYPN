@@ -53,13 +53,16 @@ export async function createCalendarEvent(event:GEvent){
   let calendar = google.calendar('v3')
   
   try {
+    console.log({event});
+    
     const response = await calendar.events.insert({
       auth: jwtClient,
       calendarId: GOOGLE_CAL_ID,
       requestBody: event,
     })
 
-    console.log('googleapi cal success, ');
+
+    console.log('📅 googleapi cal success, ');
     
 
     return { 
