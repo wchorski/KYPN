@@ -4,16 +4,17 @@ import { createTransport, getTestMessageUrl } from "nodemailer";
 const MAIL_HOST = process.env.MAIL_HOST || 'update .env file'
 const MAIL_PORT = process.env.MAIL_PORT || 'update .env file'
 const MAIL_USER = process.env.MAIL_USER || 'update .env file'
+const MAIL_PASS = process.env.MAIL_PASS || 'update .env file'
 const SITE_TITLE = process.env.SITE_TITLE || ''
 const EMAIL_ADDRESS = process.env.EMAIL_ADDRESS || ''
 
 const transport = createTransport({
-  // @ts-ignore
-  host: MAIL_HOST,
-  port: MAIL_PORT,
+  service: 'gmail',
+  // host: MAIL_HOST,
+  // port: MAIL_PORT,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS
+    user: MAIL_USER,
+    pass: MAIL_PASS
   }
 })
 
@@ -53,7 +54,7 @@ function templateBooking(id: string, name: string, email: string, msg: string): 
       <p>${msg}</p>
 
       <p>
-        <a href="${process.env.FRONTEND_URL}/booking/${id}"> View Booking | Admin Dashboard </a>
+        <a href="${process.env.FRONTEND_URL}/bookings/${id}"> View Booking </a>
       </p>
 
       
@@ -100,8 +101,10 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
 export async function mailBookingCreated(id: string, to: string, name: string, email: string, message: string,
 ): Promise<void> {
   // email the user a token
+  const recievers = to + ', ' + email
+
   const info = (await transport.sendMail({
-    to,
+    to: recievers,
     from: EMAIL_ADDRESS,
     subject: 'New Booking Created!',
     html: templateBooking(

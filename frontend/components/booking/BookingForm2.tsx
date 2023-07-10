@@ -602,7 +602,7 @@ export function BookingForm2({ services, addons }:iProps) {
           <li>message: {successfullBook.msg}</li>
         </ul>
 
-        <Link href={`/booking`}> Book another service </Link> 
+        <Link href={`/booking`} onClick={() => {setSuccessfullBook(undefined); setIsSuccess(false)}}> Book another service </Link> 
         <br />
         {session ? (
           <Link href={`/account`}> View your account</Link> 
