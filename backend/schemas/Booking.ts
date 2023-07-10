@@ -55,6 +55,9 @@ export const Booking:Lists.Booking = list({
     price: integer({ defaultValue: 0 }),
     employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
+    email: text(),
+    phone: text(),
+    name: text(),
     notes: text({
       ui: {
         displayMode: 'textarea'
@@ -303,7 +306,7 @@ export const Booking:Lists.Booking = list({
           name: 'non registered user',
           email: 'non registered user'
         }
-        // todo email employees and customer too. right now it just emails cutefruit@tawtaw.com
+        // todo email employees and customer too. right now it just emails admin_email
         if (item?.customerId) {
           // @ts-ignore //todo might cause problems
           customer = await context.db.User.findOne({ where: { id: item?.customerId } })

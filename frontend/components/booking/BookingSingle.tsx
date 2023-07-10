@@ -57,9 +57,13 @@ export  function BookingSingle({id}:Props) {
           <tr>
             <td> <label>Client: </label> </td>
             <td>
-              <Link href={`/user/${customer.id}`}>
-                {customer?.name}
-              </Link>
+              {customer ? (
+                <Link href={`/user/${customer.id}`}>
+                  {customer?.name}
+                </Link>
+              ) : (
+                <span> Unregistered User </span>
+              )}
               <br />
               <span>{customer?.email}</span>
               <br />
