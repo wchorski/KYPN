@@ -9,7 +9,6 @@ COPY . .
 
 RUN yarn install
 RUN yarn build
-RUN yarn keystone prisma migrate deploy
 
 
 EXPOSE 3001
