@@ -31,7 +31,7 @@ export  function BookingSingle({id}:Props) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { location, service, price, addons, employees, customer, dateModified, start, end }:Booking = data?.booking
+  const { email, phone, name, location, service, price, addons, employees, customer, dateModified, start, end }:Booking = data?.booking
   
   return (<>
     <PopupModal data={bookingState} setData={setBookingState}>
@@ -62,12 +62,12 @@ export  function BookingSingle({id}:Props) {
                   {customer?.name}
                 </Link>
               ) : (
-                <span> Unregistered User </span>
+                <span> {name} (Unregistered User) </span>
               )}
               <br />
-              <span>{customer?.email}</span>
+              <span>{customer?.email}, {email}</span>
               <br />
-              <span>{customer?.phone}</span>
+              <span>{customer?.phone}, {phone}</span>
             </td>
           </tr>
           <tr>
@@ -274,6 +274,9 @@ export const QUERY_BOOKING_SINGLE = gql`
         name
         price
       }
+      email
+      phone
+      name
       customer {
         id
         email

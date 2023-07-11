@@ -9,6 +9,7 @@ import { mailBookingCreated } from "../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
 import { createCalendarEvent } from "../lib/googleapi/calCreate";
+import { datePrettyLocal } from "../lib/dateFormatter";
 
 
 const now = new Date();
@@ -219,7 +220,7 @@ export const Booking:Lists.Booking = list({
 
           description += '\n EMPLOYEES: ' + employeeNames
         }
-        console.log({resolvedData});
+        // console.log({resolvedData});
         
         const calRes = await createCalendarEvent({
           summary: resolvedData.summary || '',
@@ -303,26 +304,76 @@ export const Booking:Lists.Booking = list({
     afterOperation: async ({ operation, resolvedData, item, context }) => {
       if (operation === 'create') {
         let customer = {
+          id: 'non registered user',
           name: 'non registered user',
-          email: 'non registered user'
+          email: 'non registered user',
+          phone: 'non registered user',
         }
+        console.log('===========');
+        
+        console.log(resolvedData.employees?.connect);
+        // @ts-ignore
+        const employeesIds = resolvedData.employees?.connect.flatMap(emp => emp.id)
+        const employeesObjs = await context.db.User.findMany({ where: { id: {in: employeesIds.map((userId:string) => userId)} } })
+        const employeesEmails = employeesObjs.flatMap(emp => emp.email)
+        console.log({item});
+        const serviceObj = await context.db.Service.findOne({ where: { id: item?.serviceId } })
+        console.log({serviceObj});
+        
+        
         // todo email employees and customer too. right now it just emails admin_email
         if (item?.customerId) {
           // @ts-ignore //todo might cause problems
           customer = await context.db.User.findOne({ where: { id: item?.customerId } })
           mailBookingCreated(
             item.id,
-            EMAIL_ADDRESS,
+            [EMAIL_ADDRESS, item?.email, ...employeesEmails],
+            {
+              id: customer.id,
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone,
+            },
+            {
+              id: employeesObjs[0].id,
+              name: employeesObjs[0].name,
+            },
             customer.name,
             customer.email,
+            {
+              email: item?.email,
+              name: item?.name,
+              phone: item?.phone,
+              start: datePrettyLocal(item?.start.toISOString(), 'full'),
+              service: {
+                id: serviceObj?.id || '',
+                name: serviceObj?.name || '',
+              }
+            },
             item.notes,
           )
         } else if(item){
           mailBookingCreated(
             item.id,
-            EMAIL_ADDRESS,
+            [EMAIL_ADDRESS, item?.email, ...employeesEmails],
+            {
+              id: customer.id,
+              name: customer.name,
+              email: customer.email,
+              phone: customer.phone,
+            },
             customer.name,
             customer.email,
+            {
+              email: item?.email,
+              name: item?.name,
+              phone: item?.phone,
+              start: datePrettyLocal(item?.start.toISOString(), 'full'),
+              service: {
+                id: serviceObj?.id || '',
+                name: serviceObj?.name || '',
+              }
+            },
             item.notes,
           )
         }

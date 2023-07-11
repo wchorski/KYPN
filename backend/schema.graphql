@@ -675,6 +675,9 @@ type Booking {
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
   customer: User
+  email: String
+  phone: String
+  name: String
   notes: String
   status: String
   dateCreated: DateTime
@@ -703,6 +706,9 @@ input BookingWhereInput {
   price: IntNullableFilter
   employees: UserManyRelationFilter
   customer: UserWhereInput
+  email: StringFilter
+  phone: StringFilter
+  name: StringFilter
   notes: StringFilter
   status: StringNullableFilter
   dateCreated: DateTimeNullableFilter
@@ -755,6 +761,9 @@ input BookingOrderByInput {
   summary: OrderDirection
   durationInHours: OrderDirection
   price: OrderDirection
+  email: OrderDirection
+  phone: OrderDirection
+  name: OrderDirection
   notes: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
@@ -772,6 +781,9 @@ input BookingUpdateInput {
   price: Int
   employees: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
+  email: String
+  phone: String
+  name: String
   notes: String
   status: String
   dateCreated: DateTime
@@ -820,6 +832,9 @@ input BookingCreateInput {
   price: Int
   employees: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
+  email: String
+  phone: String
+  name: String
   notes: String
   status: String
   dateCreated: DateTime
