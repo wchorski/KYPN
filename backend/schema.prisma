@@ -88,6 +88,9 @@ model Booking {
   employees       User[]    @relation("Booking_employees")
   customer        User?     @relation("Booking_customer", fields: [customerId], references: [id])
   customerId      String?   @map("customer") @postgresql.Uuid
+  email           String    @default("")
+  phone           String    @default("")
+  name            String    @default("")
   notes           String    @default("")
   status          String?   @default("LEAD")
   dateCreated     DateTime? @default(now())

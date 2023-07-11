@@ -224,8 +224,11 @@ export function BookingForm2({ services, addons }:iProps) {
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
       summary: `${values.name ? values.name : values.email}`,
+      email: values.email,
+      phone: values.phone,
+      name: values.name,
       // dateTime: new Date(values.datetime_local).toISOString(),
-      notes: `[name: ${values.name}, email: ${values.email}] -- ${values.notes}`
+      notes: values.notes,
     }
     // console.log({formattedInputs});
     
@@ -768,6 +771,8 @@ export function BookingForm2({ services, addons }:iProps) {
                 onChange={onChange}
               />
 
+              <ErrorMessage error={errorMutation} />
+              
               <button type="submit" disabled={values.email ? false : true}> Submit </button>
             </HeightReveal>
             
