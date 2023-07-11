@@ -6,7 +6,7 @@
     "dev": "keystone dev",
     "seed": "keystone dev --seed-database",
     "start": "keystone start",
-    "build": "keystone build",
+    "build": "keystone build && keystone prisma migrate deploy",
     "postinstall": "keystone build --no-ui --frozen"
   },
   "dependencies": {
