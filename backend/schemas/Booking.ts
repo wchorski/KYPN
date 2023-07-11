@@ -316,9 +316,9 @@ export const Booking:Lists.Booking = list({
         const employeesIds = resolvedData.employees?.connect.flatMap(emp => emp.id)
         const employeesObjs = await context.db.User.findMany({ where: { id: {in: employeesIds.map((userId:string) => userId)} } })
         const employeesEmails = employeesObjs.flatMap(emp => emp.email)
-        console.log({item});
+        // console.log({item});
         const serviceObj = await context.db.Service.findOne({ where: { id: item?.serviceId } })
-        console.log({serviceObj});
+        // console.log({serviceObj});
         
         
         // todo email employees and customer too. right now it just emails admin_email
@@ -327,6 +327,7 @@ export const Booking:Lists.Booking = list({
           customer = await context.db.User.findOne({ where: { id: item?.customerId } })
           mailBookingCreated(
             item.id,
+            // @ts-ignore
             [EMAIL_ADDRESS, item?.email, ...employeesEmails],
             {
               id: customer.id,
@@ -341,8 +342,11 @@ export const Booking:Lists.Booking = list({
             customer.name,
             customer.email,
             {
+              // @ts-ignore
               email: item?.email,
+              // @ts-ignore
               name: item?.name,
+              // @ts-ignore
               phone: item?.phone,
               start: datePrettyLocal(item?.start.toISOString(), 'full'),
               service: {
@@ -355,6 +359,7 @@ export const Booking:Lists.Booking = list({
         } else if(item){
           mailBookingCreated(
             item.id,
+            // @ts-ignore
             [EMAIL_ADDRESS, item?.email, ...employeesEmails],
             {
               id: customer.id,
@@ -362,11 +367,18 @@ export const Booking:Lists.Booking = list({
               email: customer.email,
               phone: customer.phone,
             },
+            {
+              id: employeesObjs[0].id,
+              name: employeesObjs[0].name,
+            },
             customer.name,
             customer.email,
             {
+              // @ts-ignore
               email: item?.email,
+              // @ts-ignore
               name: item?.name,
+              // @ts-ignore
               phone: item?.phone,
               start: datePrettyLocal(item?.start.toISOString(), 'full'),
               service: {
