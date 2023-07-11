@@ -39,6 +39,8 @@ export function BookingsTable() {
       end: datePrettyLocalDay(item.end || '') + ' ' + datePrettyLocalTime(item.end || ''),
       summary: item?.summary,
       service: item?.service?.name,
+      client: item?.customer?.name,
+      employee: item?.employees[0]?.name,
       link: item.id,
     }))
     
@@ -61,6 +63,8 @@ export function BookingsTable() {
         'end',
         'summary',
         'service',
+        'client',
+        'employee',
         'link',
       ]}
       cells={cellsState}
