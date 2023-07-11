@@ -87,10 +87,10 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
     date: new Date(booking?.start).toLocaleDateString('en-CA'),
     timeStart: new Date(booking?.start).toLocaleTimeString('en-US', { hour12: false }),
     timeEnd: '',
-    name: booking?.customer?.name || '',
+    name: booking?.name || '',
     // email: booking?.customer?.email || '',
-    email: booking?.customer?.email || '',
-    phone: booking?.customer?.phone || '',
+    email: booking?.email || '',
+    phone: booking?.phone || '',
     notes: booking?.notes || '',
     addonIds: booking?.addons.flatMap(ad => ad.id),
   });
@@ -896,6 +896,16 @@ const UPDATE_BOOKING = gql`
   mutation UpdateBooking($where: BookingWhereUniqueInput!, $data: BookingUpdateInput!) {
     updateBooking(where: $where, data: $data) {
       id
+      summary
+      name
+      email
+      phone
+      status
+      start
+      end
+      dateCreated
+      dateModified
+      durationInHours
       addons {
         id
         name
@@ -907,9 +917,6 @@ const UPDATE_BOOKING = gql`
         email
         phone
       }
-      dateCreated
-      dateModified
-      durationInHours
       employees {
         email
         id
@@ -926,10 +933,6 @@ const UPDATE_BOOKING = gql`
         name
         id
       }
-      start
-      status
-      summary
-      end
     }
   }
 `
