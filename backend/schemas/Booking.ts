@@ -6,10 +6,11 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
-import { User, Addon, Service, Location, Booking, } from '../types'
+import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
 import { createCalendarEvent, updateCalendarEvent } from "../lib/googleapi/calCreate";
 import { datePrettyLocal } from "../lib/dateFormatter";
+import { isLoggedIn, permissions, rules } from "../access";
 
 
 const now = new Date();
@@ -25,7 +26,19 @@ const EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_email_set'
 
 export const Booking:Lists.Booking = list({
 
-  access: allowAll,
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageBookings,
+      delete: rules.canManageBookings,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: isLoggedIn,
+      delete: isLoggedIn,
+    }
+  },
 
   ui: {
     // hide backend from non admins
@@ -103,6 +116,8 @@ export const Booking:Lists.Booking = list({
 
         let description:string = ''
 
+        description += 'STATUS: ' + resolvedData.status + ' \n\n'
+
         resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
 
         if(resolvedData.service){
@@ -113,7 +128,7 @@ export const Booking:Lists.Booking = list({
             resolvedData.durationInHours = selectedService.durationInHours
             resolvedData.price = selectedService.price
             resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
-            description += 'SERVICE: ' + selectedService.name + '\n'
+            description += 'SERVICE: ' + selectedService.name + ' \n\n'
 
             const day = new Date(resolvedData.start || '').getDay()
             // console.log({day})
@@ -169,7 +184,7 @@ export const Booking:Lists.Booking = list({
               resolvedData.price += addon.price
               addonNames +=  '- ' + addon.name + '\n '
             })
-            description += 'ADDONS: \n' + addonNames + '\n'
+            description += 'ADDONS: \n' + addonNames + ' \n\n'
           }
         }
         
@@ -218,7 +233,7 @@ export const Booking:Lists.Booking = list({
               employeeNames +=  emp.email + ', '
           })
 
-          description += 'EMPLOYEES: ' + employeeNames + '\n'
+          description += 'EMPLOYEES: ' + employeeNames + ' \n\n'
         }
         // console.log({resolvedData});
 
@@ -483,6 +498,7 @@ async function handleCalendarEvent(item:any, context:any) {
     where: { id: item.id  },
     query: `
       notes
+      status
       service {
         name
       }
@@ -494,14 +510,15 @@ async function handleCalendarEvent(item:any, context:any) {
         name
       }
     `
-  }) as Booking
+  }) 
 
-  console.log({selectedBooking});
+  // console.log({selectedBooking});
   
   let calDescription = '' 
+  calDescription += 'STATUS: ' + selectedBooking.status + ' \n\n'
   calDescription += 'SERVICE: '   + selectedBooking.service.name + ' \n\n' 
-  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map(addon => '  - ' + addon.name).join(', \n') + ' \n\n' 
-  calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map(emp => '  - ' + emp.email).join(', \n') + ' \n\n' 
+  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n\n' 
+  calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
   calDescription += 'NOTES: '     + selectedBooking.notes 
 
   const calRes = await updateCalendarEvent(

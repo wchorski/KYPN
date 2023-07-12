@@ -567,6 +567,7 @@ type Role {
   id: ID!
   name: String
   canManageProducts: Boolean
+  canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean
@@ -589,6 +590,7 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   canManageProducts: BooleanFilter
+  canManageBookings: BooleanFilter
   canManageEvents: BooleanFilter
   canManageTickets: BooleanFilter
   canSeeOtherUsers: BooleanFilter
@@ -609,6 +611,7 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   canManageProducts: OrderDirection
+  canManageBookings: OrderDirection
   canManageEvents: OrderDirection
   canManageTickets: OrderDirection
   canSeeOtherUsers: OrderDirection
@@ -621,6 +624,7 @@ input RoleOrderByInput {
 input RoleUpdateInput {
   name: String
   canManageProducts: Boolean
+  canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean
@@ -646,6 +650,7 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   canManageProducts: Boolean
+  canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean

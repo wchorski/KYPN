@@ -63,6 +63,7 @@ model Role {
   id                String  @id @default(uuid()) @postgresql.Uuid
   name              String  @default("")
   canManageProducts Boolean @default(false)
+  canManageBookings Boolean @default(false)
   canManageEvents   Boolean @default(false)
   canManageTickets  Boolean @default(false)
   canSeeOtherUsers  Boolean @default(false)
