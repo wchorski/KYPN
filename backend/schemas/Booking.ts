@@ -6,9 +6,9 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { mailBookingCreated } from "../lib/mail";
-import { User, Addon, Service, Location, } from '../types'
+import { User, Addon, Service, Location, Booking, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
-import { createCalendarEvent } from "../lib/googleapi/calCreate";
+import { createCalendarEvent, updateCalendarEvent } from "../lib/googleapi/calCreate";
 import { datePrettyLocal } from "../lib/dateFormatter";
 
 
@@ -101,7 +101,7 @@ export const Booking:Lists.Booking = list({
 
       if (operation === 'create') {
 
-        let description = 'NOTES: ' + resolvedData.notes
+        let description:string = ''
 
         resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
 
@@ -113,7 +113,7 @@ export const Booking:Lists.Booking = list({
             resolvedData.durationInHours = selectedService.durationInHours
             resolvedData.price = selectedService.price
             resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
-            description += '\n SERVICE: ' + selectedService.name
+            description += 'SERVICE: ' + selectedService.name + '\n'
 
             const day = new Date(resolvedData.start || '').getDay()
             // console.log({day})
@@ -167,9 +167,9 @@ export const Booking:Lists.Booking = list({
             selectedAddons.map(addon => {
               // @ts-ignore //todo might cause problems
               resolvedData.price += addon.price
-              addonNames +=  addon.name + ', '
+              addonNames +=  '- ' + addon.name + '\n '
             })
-            description += '\n ADDONS: ' + addonNames
+            description += 'ADDONS: \n' + addonNames + '\n'
           }
         }
         
@@ -218,10 +218,13 @@ export const Booking:Lists.Booking = list({
               employeeNames +=  emp.email + ', '
           })
 
-          description += '\n EMPLOYEES: ' + employeeNames
+          description += 'EMPLOYEES: ' + employeeNames + '\n'
         }
         // console.log({resolvedData});
+
+        description += 'NOTES: \n' + resolvedData.notes
         
+        // todo refactor to the 'afterOperation' - but don't forget employee conflict
         const calRes = await createCalendarEvent({
           summary: resolvedData.summary || '',
           description: description,
@@ -234,6 +237,7 @@ export const Booking:Lists.Booking = list({
             // timeZone: 'America/Chicago',
           },
         })
+        
         // console.log({calRes})
         // @ts-ignore //todo might cause problems
         resolvedData.google = calRes
@@ -298,6 +302,56 @@ export const Booking:Lists.Booking = list({
 
         resolvedData.price = currPrice
         resolvedData.dateModified = new Date().toISOString()
+        // console.log('+++++++++ booking update');
+        // const filteredData = Object.fromEntries(
+        //   Object.entries(resolvedData).filter(([key, value]) => value !== undefined)
+        // );
+        // // console.log({filteredData});
+        // // console.log({item});
+        // // console.log({resolvedData});
+        // const newData = { ...item, ...filteredData}
+        // // console.log({newData});
+
+        // const thisBooking = await context.query.Booking.findOne({
+        //   where: {id: item.id},
+        //   query: `
+        //     employees {
+        //       name
+        //     }
+        //     addons {
+        //       name
+        //     }
+        //   `
+        // }) as Booking
+        // console.log(thisBooking.employees);
+        // console.log(thisBooking.addons);
+
+        // const selectedService = await context.query.Service.findOne({
+        //   where: { id: item.serviceId  },
+        //   query: `
+        //     name
+        //   `
+        // }) as Service
+        
+
+        // const calRes = await updateCalendarEvent(
+        //   item.google.id,
+        //   {
+        //     summary: newData.summary,
+        //     description: 'SERVICE: ' + selectedService.name + '\n ' + 'NOTES: ' + newData.notes,
+        //     start: {
+        //       dateTime: newData.start.toISOString(),
+        //       // timeZone: 'America/Chicago',
+        //     },
+        //     end: {
+        //       dateTime: newData.end.toISOString(),
+        //       // timeZone: 'America/Chicago',
+        //     },
+        //   }
+        // )
+        // // console.log({calRes})
+        // // @ts-ignore //todo might cause problems
+        // resolvedData.google = calRes
         
       }
     },
@@ -411,6 +465,63 @@ export const Booking:Lists.Booking = list({
   
       }
 
+      if(operation === 'update'){
+
+        const calResponse = await handleCalendarEvent(item, context)
+        // resolvedData.google = calResponse
+      }
+
     },
   }
 })
+
+
+async function handleCalendarEvent(item:any, context:any) {
+  console.log('+++++++++ after booking update');
+
+  const selectedBooking = await context.query.Booking.findOne({
+    where: { id: item.id  },
+    query: `
+      notes
+      service {
+        name
+      }
+      employees{
+        name
+        email
+      }
+      addons {
+        name
+      }
+    `
+  }) as Booking
+
+  console.log({selectedBooking});
+  
+  let calDescription = '' 
+  calDescription += 'SERVICE: '   + selectedBooking.service.name + ' \n\n' 
+  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map(addon => '  - ' + addon.name).join(', \n') + ' \n\n' 
+  calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map(emp => '  - ' + emp.email).join(', \n') + ' \n\n' 
+  calDescription += 'NOTES: '     + selectedBooking.notes 
+
+  const calRes = await updateCalendarEvent(
+    item.google.id,
+    {
+      summary: selectedBooking.summary,
+      description: calDescription,
+      start: {
+        dateTime: selectedBooking.start,
+        // timeZone: 'America/Chicago',
+      },
+      end: {
+        dateTime: selectedBooking.end,
+        // timeZone: 'America/Chicago',
+      },
+    }
+  )
+  // console.log({calRes})
+  // @ts-ignore //todo might cause problems
+
+  return calRes
+  // resolvedData.google = calRes
+}
