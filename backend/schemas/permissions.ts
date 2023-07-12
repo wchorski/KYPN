@@ -5,6 +5,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Manage Products: Can update and delete any product',
   }),
+  canManageBookings: checkbox({
+    defaultValue: false,
+    label: 'Manage Bookings: Can update and delete any booking',
+  }),
   canManageEvents: checkbox({
     defaultValue: false,
     label: 'Manage Events: Can update and delete any event',

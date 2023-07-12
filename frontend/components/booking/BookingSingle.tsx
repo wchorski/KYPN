@@ -31,7 +31,7 @@ export  function BookingSingle({id}:Props) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { email, phone, name, location, service, price, addons, employees, customer, dateModified, start, end }:Booking = data?.booking
+  const { email, phone, name, location, service, price, notes, addons, employees, customer, dateModified, start, end }:Booking = data?.booking
   
   return (<>
     <PopupModal data={bookingState} setData={setBookingState}>
@@ -115,6 +115,9 @@ export  function BookingSingle({id}:Props) {
           </li>
         ))}
       </ul>
+
+      <h2> Notes </h2>
+      <p>{notes}</p>
     </StyledBookingSingle>
   </>)
 }

@@ -49,10 +49,27 @@ export const rules = {
     return { user: { id: { equals: session?.itemId }} }
   },
 
+  canManageBookings({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission of canManageProducts
+    if (permissions.canManageBookings({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // todo query item.author and match session.user
+    console.log('==== no manage bookings but do i own?');
+    
+    console.log({ customer: { id: { equals: session?.itemId }} });
+    
+    // return false
+    return { customer:{ id:{ equals: session?.itemId } } }
+
+  },
+
   canManageEvents({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
-    console.log('=========== SESSION');
-    console.log({session});
+    // console.log('=========== SESSION');
+    // console.log({session});
     // todo why context return undefined?
     // console.log('=========== CONTEXT');
     // console.log({context});

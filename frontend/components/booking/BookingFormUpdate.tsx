@@ -237,8 +237,11 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
       summary: `${values.name ? values.name : values.email}`,
+      name: values.name,
+      email: values.email,
+      phone: values.phone,
       // dateTime: new Date(values.datetime_local).toISOString(),
-      notes: `[name: ${values.name}, email: ${values.email}] -- ${values.notes}`
+      notes: values.notes,
     }
     // console.log({formattedInputs});
     
@@ -321,7 +324,11 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
         },
         data: formattedInputs
       }
-    }).catch(err => errorRef?.current?.scrollIntoView({ behavior: 'smooth' }))
+    }).catch(err => 
+      console.log('there was error in booking update')
+      
+      // errorRef?.current?.scrollIntoView({ behavior: 'smooth' })
+    )
     
 
     // console.log('res', res)
@@ -778,6 +785,8 @@ export function BookingFormUpdate({ services, addons, booking }:iProps) {
                 value={values['notes']}
                 onChange={onChange}
               />
+
+              <ErrorMessage error={errorMutation} />
 
               <button type="submit" disabled={values.email ? false : true}> Submit </button>
             </HeightReveal>
