@@ -44,12 +44,49 @@ type GEvent = {
   }
 }
 
+export async function updateCalendarEvent(eventId:string, event:GEvent) {
+  if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
+  let calendar = google.calendar('v3')
+  
+  try {
+    // console.log({event});
+    
+    const response = await calendar.events.patch({
+      auth: jwtClient,
+      calendarId: GOOGLE_CAL_ID,
+      eventId: eventId,
+      requestBody: event,
+    })
+
+
+    console.log('📅 googleapi cal update success, ');
+    // console.log({response});
+
+    return { 
+      id: response.data.id,
+      htmlLink: response.data.htmlLink, 
+      kind: response.data.kind,
+      status: response.data.status,
+      message: response.statusText, 
+    }
+    
+  } catch (err:any) {
+    console.log('Google update Cal API Error: ' + err)
+
+    return { 
+      id: undefined,
+      htmlLink: undefined, 
+      kind: undefined,
+      status: undefined,
+      message: err.errors.map((err:any) =>  err.message).join(', ') 
+    }
+  }
+}
+
 export async function createCalendarEvent(event:GEvent){
 
   // console.log({event})
   if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
-  
-    
   let calendar = google.calendar('v3')
   
   try {
@@ -62,7 +99,7 @@ export async function createCalendarEvent(event:GEvent){
     })
 
 
-    console.log('📅 googleapi cal success, ');
+    console.log('📅 googleapi cal create success, ');
     
 
     return { 
