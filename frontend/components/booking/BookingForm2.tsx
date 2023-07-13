@@ -221,12 +221,14 @@ export function BookingForm2({ services, addons }:iProps) {
     
     if(!formRef.current) return console.warn('form is missing');
     
+    console.log({values});
+    
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),
-      summary: `${values.name ? values.name : values.email}`,
-      email: values.email,
-      phone: values.phone,
-      name: values.name,
+      summary: values?.name + ' | ' + pickedService?.name,
+      email: values?.email,
+      phone: values?.phone,
+      name: values?.name,
       // dateTime: new Date(values.datetime_local).toISOString(),
       notes: values.notes,
     }

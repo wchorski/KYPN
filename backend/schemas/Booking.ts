@@ -20,6 +20,7 @@ const day = now.getDate();
 const today = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
 // console.log(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
 const EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_email_set'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 // const EMAIL_ADDRESS = 'y@m'
 
 // const rightnow = new Date().toISOString()
@@ -116,7 +117,8 @@ export const Booking:Lists.Booking = list({
 
         let description:string = ''
 
-        description += 'STATUS: ' + resolvedData.status + ' \n\n'
+        description += 'CLIENT: ' + resolvedData?.name + ' | <' + resolvedData?.email + '>' + ' | ' + resolvedData?.phone + '\n'
+        description += 'STATUS: ' + resolvedData.status + ' \n'
 
         resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
 
@@ -233,11 +235,12 @@ export const Booking:Lists.Booking = list({
               employeeNames +=  emp.email + ', '
           })
 
-          description += 'EMPLOYEES: ' + employeeNames + ' \n\n'
+          description += 'EMPLOYEES: ' + employeeNames + ' \n'
         }
         // console.log({resolvedData});
 
         description += 'NOTES: \n' + resolvedData.notes
+        description += 'URL: '     + 'before resolve'
         
         // todo refactor to the 'afterOperation' - but don't forget employee conflict
         const calRes = await createCalendarEvent({
@@ -477,6 +480,8 @@ export const Booking:Lists.Booking = list({
         // console.log({calRes})
 
         // item.google = calRes
+
+        const calResponse = await handleCalendarEvent(item, context)
   
       }
 
@@ -504,6 +509,7 @@ async function handleCalendarEvent(item:any, context:any) {
       status
       name
       email
+      phone
       service {
         name
       }
@@ -521,12 +527,16 @@ async function handleCalendarEvent(item:any, context:any) {
   
   let calDescription = '' 
 
-  calDescription += 'CLIENT: ' + selectedBooking.name + ' <' + selectedBooking.email + '> \n'
-  calDescription += 'STATUS: ' + selectedBooking.status + ' \n'
-  calDescription += 'SERVICE: '   + selectedBooking.service.name + ' \n' 
-  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n\n' 
+  console.log({selectedBooking});
+  
+
+  calDescription += 'CLIENT: '      + selectedBooking.name + ' | ' + selectedBooking?.email + ' | ' + selectedBooking?.phone + '\n'
+  calDescription += 'STATUS: '      + selectedBooking.status + ' \n'
+  calDescription += 'SERVICE: '     + selectedBooking.service.name + ' \n' 
+  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n' 
   calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
-  calDescription += 'NOTES: '     + selectedBooking.notes 
+  calDescription += 'NOTES: '       + selectedBooking.notes + '\n'
+  calDescription += 'URL: '         + FRONTEND_URL + `/bookings/${item.id}`
 
   const calSummary = selectedBooking.name + ' | ' + selectedBooking.service.name
   const calRes = await updateCalendarEvent(
