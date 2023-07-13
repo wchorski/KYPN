@@ -60,18 +60,27 @@ model Announcement {
 }
 
 model Role {
-  id                String  @id @default(uuid()) @postgresql.Uuid
-  name              String  @default("")
-  canManageProducts Boolean @default(false)
-  canManageBookings Boolean @default(false)
-  canManageEvents   Boolean @default(false)
-  canManageTickets  Boolean @default(false)
-  canSeeOtherUsers  Boolean @default(false)
-  canManageUsers    Boolean @default(false)
-  canManageRoles    Boolean @default(false)
-  canManageCart     Boolean @default(false)
-  canManageOrders   Boolean @default(false)
-  assignedTo        User[]  @relation("User_role")
+  id                     String  @id @default(uuid()) @postgresql.Uuid
+  name                   String  @default("")
+  canManageProducts      Boolean @default(false)
+  canManageAddons        Boolean @default(false)
+  canManageBookings      Boolean @default(false)
+  canManageAvailability  Boolean @default(false)
+  canManageEvents        Boolean @default(false)
+  canManageAnnouncements Boolean @default(false)
+  canManageTickets       Boolean @default(false)
+  canSeeOtherUsers       Boolean @default(false)
+  canManageUsers         Boolean @default(false)
+  canManageRoles         Boolean @default(false)
+  canManageCart          Boolean @default(false)
+  canManageOrders        Boolean @default(false)
+  canManageCategories    Boolean @default(false)
+  canManageTags          Boolean @default(false)
+  canManageLocations     Boolean @default(false)
+  canManagePages         Boolean @default(false)
+  canManagePosts         Boolean @default(false)
+  canManageServices      Boolean @default(false)
+  assignedTo             User[]  @relation("User_role")
 }
 
 model Booking {
