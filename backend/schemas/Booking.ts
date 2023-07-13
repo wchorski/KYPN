@@ -8,7 +8,7 @@ import { decimal, integer, json, relationship, select, text, timestamp, } from "
 import { mailBookingCreated } from "../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../lib/dateCheck';
-import { createCalendarEvent, updateCalendarEvent } from "../lib/googleapi/calCreate";
+import { createCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from "../lib/googleapi/calCreate";
 import { datePrettyLocal } from "../lib/dateFormatter";
 import { isLoggedIn, permissions, rules } from "../access";
 
@@ -372,6 +372,18 @@ export const Booking:Lists.Booking = list({
         // resolvedData.google = calRes
         
       }
+
+      if(operation === 'delete'){
+        console.log({item});
+        
+        // @ts-ignore
+        if(!item.google.id) return console.log('no google cal id');
+        // @ts-ignore
+        console.log('GOOOGLE CAL ID:::: ', item.google.id);
+        // @ts-ignore
+        const calResponse = await deleteCalendarEvent(item.google.id)
+      }
+
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
       if (operation === 'create') {
@@ -497,7 +509,7 @@ export const Booking:Lists.Booking = list({
 
 
 async function handleCalendarEvent(item:any, context:any) {
-  console.log('+++++++++ after booking update');
+  // console.log('+++++++++ after booking update');
 
   const selectedBooking = await context.query.Booking.findOne({
     where: { id: item.id  },

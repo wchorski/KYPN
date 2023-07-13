@@ -44,6 +44,43 @@ type GEvent = {
   }
 }
 
+export async function deleteCalendarEvent(eventId:string){
+  if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
+  let calendar = google.calendar('v3')
+
+  console.log('local file -- - eventId, ', eventId);
+  
+  
+  try {
+    // console.log({event});
+    
+    const response = await calendar.events.delete({
+      auth: jwtClient,
+      calendarId: GOOGLE_CAL_ID,
+      eventId: eventId,
+    })
+
+
+    console.log('📅 googleapi cal delete success, ');
+    console.log({response});
+
+    return { 
+      message: 'successful calendar deletion'
+    }
+    
+  } catch (err:any) {
+    console.log('Google delete Cal API Error: ' + err)
+
+    return { 
+      id: undefined,
+      htmlLink: undefined, 
+      kind: undefined,
+      status: undefined,
+      message: err.errors.map((err:any) =>  err.message).join(', ') 
+    }
+  }
+}
+
 export async function updateCalendarEvent(eventId:string, event:GEvent) {
   if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
   let calendar = google.calendar('v3')

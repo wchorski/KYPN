@@ -221,7 +221,7 @@ export function BookingForm2({ services, addons }:iProps) {
     
     if(!formRef.current) return console.warn('form is missing');
     
-    console.log({values});
+    // console.log({values});
     
     const formattedInputs = {
       start: new Date(`${values.date}T${values.timeStart}`).toISOString(),

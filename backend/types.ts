@@ -192,6 +192,13 @@ export type Booking = {
   status: string,
   dateCreated: string,
   dateModified: string,
+  google?:{
+    id?:string,
+    kind?:string,
+    status?:string,
+    message?:string,
+    htmlLink?:string,
+  }
 }
 
 export type Category = {
