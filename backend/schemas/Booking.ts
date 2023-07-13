@@ -497,8 +497,13 @@ async function handleCalendarEvent(item:any, context:any) {
   const selectedBooking = await context.query.Booking.findOne({
     where: { id: item.id  },
     query: `
+      summary
+      start
+      end
       notes
       status
+      name
+      email
       service {
         name
       }
@@ -515,16 +520,19 @@ async function handleCalendarEvent(item:any, context:any) {
   // console.log({selectedBooking});
   
   let calDescription = '' 
-  calDescription += 'STATUS: ' + selectedBooking.status + ' \n\n'
-  calDescription += 'SERVICE: '   + selectedBooking.service.name + ' \n\n' 
+
+  calDescription += 'CLIENT: ' + selectedBooking.name + ' <' + selectedBooking.email + '> \n'
+  calDescription += 'STATUS: ' + selectedBooking.status + ' \n'
+  calDescription += 'SERVICE: '   + selectedBooking.service.name + ' \n' 
   calDescription += 'ADDONS: \n'    + selectedBooking.addons.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n\n' 
   calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
   calDescription += 'NOTES: '     + selectedBooking.notes 
 
+  const calSummary = selectedBooking.name + ' | ' + selectedBooking.service.name
   const calRes = await updateCalendarEvent(
     item.google.id,
     {
-      summary: selectedBooking.summary,
+      summary: calSummary,
       description: calDescription,
       start: {
         dateTime: selectedBooking.start,
