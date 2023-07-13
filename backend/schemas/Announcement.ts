@@ -4,12 +4,25 @@ import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer,} from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
+import { permissions, rules } from "../access";
 
 
 
 export const Announcement:Lists.Announcement = list({
 
-  access: allowAll,
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageAnnouncements,
+      delete: rules.canManageAnnouncements,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
 
   // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
   // todo hide these again

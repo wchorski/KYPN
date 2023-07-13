@@ -39,7 +39,7 @@ export const rules = {
   canManageProducts({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
 
-    // 1. Do they have the permission of canManageProducts
+    // 1. Do they have the permission
     if (permissions.canManageProducts({ session })) return true;
     
     // 2. If not, do they own this item?
@@ -49,31 +49,86 @@ export const rules = {
     return { user: { id: { equals: session?.itemId }} }
   },
 
-  canManageBookings({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
+  canManageAddons({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
 
-    // 1. Do they have the permission of canManageProducts
+    // 1. Do they have the permission
+    if (permissions.canManageAddons({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // nobody owns an addon
+    
+    // return false
+    return false
+  },
+
+  canManageServices({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission
+    if (permissions.canManageServices({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // nobody owns 
+    
+    // return false
+    return false
+  },
+  
+  canManageBookings({ session }: ListAccessArgs) {
+    // anonymous users can create bookings
+    // if (!isLoggedIn({ session })) return false;
+    
+    // 1. Do they have the permission 
     if (permissions.canManageBookings({ session })) return true;
     
     // 2. If not, do they own this item?
-    // todo query item.author and match session.user
-    console.log('==== no manage bookings but do i own?');
-    
-    console.log({ customer: { id: { equals: session?.itemId }} });
-    
-    // return false
     return { customer:{ id:{ equals: session?.itemId } } }
-
+    
   },
-
+  canManageAvailability({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    
+    // 1. Do they have the permission 
+    if (permissions.canManageAvailability({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    return { employee:{ id:{ equals: session?.itemId } } }
+    
+  },
+  canManagePages({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    
+    // 1. Do they have the permission 
+    if (permissions.canManagePages({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    return { author:{ id:{ equals: session?.itemId } } }
+    
+  },
+  canManagePosts({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    
+    // 1. Do they have the permission 
+    if (permissions.canManagePosts({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    return { author:{ id:{ equals: session?.itemId } } }
+    
+  },
+  canManageLocations({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+    
+    // 1. Do they have the permission 
+    if (permissions.canManageLocations({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    return false
+    
+  },
+  
   canManageEvents({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
-    // console.log('=========== SESSION');
-    // console.log({session});
-    // todo why context return undefined?
-    // console.log('=========== CONTEXT');
-    // console.log({context});
-
     
     if(session?.data.isAdmin) return true
     // 1. compair against permissions checkbox
@@ -93,6 +148,20 @@ export const rules = {
       } 
     }
   },
+
+  canManageAnnouncements({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission?
+    if (permissions.canManageAnnouncements({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // nobody owns an addon
+    
+    // return false
+    return false
+  },
+
   canManageTickets({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
     // console.log('=========== SESSION');
@@ -124,7 +193,7 @@ export const rules = {
   canOrder({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
     
-    // 1. Do they have the permission of canManageProducts
+    // 1. Do they have the permission
     if (permissions.canManageCart({ session })) return true;
     
     // 2. If not, do they own this item?
@@ -133,7 +202,7 @@ export const rules = {
   canManageOrderItems({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
     
-    // 1. Do they have the permission of canManageProducts
+    // 1. Do they have the permission 
     if (permissions.canManageCart({ session })) return true;
     
     // 2. If not, do they own this item?
@@ -157,5 +226,30 @@ export const rules = {
     
     // Otherwise they may only update themselves!
     return { id: {equals: session?.itemId} };
+  },
+
+  canManageCategories({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission 
+    if (permissions.canManageCategories({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // nobody owns 
+    
+    // return false
+    return false
+  },
+  canManageTags({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission 
+    if (permissions.canManageTags({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    // nobody owns 
+    
+    // return false
+    return false
   },
 };

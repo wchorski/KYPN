@@ -3,12 +3,25 @@ import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, text, } from "@keystone-6/core/fields";
+import { permissions, rules } from "../access";
 
 
 
 export const Location:Lists.Location = list({
 
-  access: allowAll,
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageLocations,
+      delete: rules.canManageLocations,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
 
   // todo hide these again
   // ui: {

@@ -5,13 +5,23 @@ import { relationship, select, text, timestamp, integer, checkbox } from "@keyst
 import { document } from '@keystone-6/fields-document';
 // @ts-ignore
 import { componentBlocks } from "../blocks";
+import { permissions, rules } from "../access";
 
 export const Post:Lists.Post = list({
-  // WARNING
-  //   for this starter project, anyone can create, query, update and delete anything
-  //   if you want to prevent random people on the internet from accessing your data,
-  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  access: allowAll,
+  
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManagePosts,
+      delete: rules.canManagePosts,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
   ui: {
 
     // todo hide these again

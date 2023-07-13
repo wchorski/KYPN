@@ -3,13 +3,25 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { calcEndTime } from "../lib/dateCheck";
+import { permissions, rules } from "../access";
 
 
 
 export const Availability:Lists.Availability = list({
 
-  access: allowAll,
-
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageAvailability,
+      delete: rules.canManageAvailability,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
 
   ui: {
 
