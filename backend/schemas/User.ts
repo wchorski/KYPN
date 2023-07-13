@@ -23,7 +23,7 @@ export const User: Lists.User = list({
       create: () => true,
       // todo NEED TO FIX THIS
       // update: () => permissions.canManageUsers,
-      update: () => true,
+      update: permissions.canManageUsers,
       delete: permissions.canManageUsers,
     },
   },

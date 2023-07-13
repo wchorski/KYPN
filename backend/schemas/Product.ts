@@ -9,8 +9,8 @@ export const Product:Lists.Product = list({
   // access: allowAll,
   access: {
     filter: {
-      // query: rules.canReadProducts,
-      query: () => true,
+      query: rules.canReadProducts,
+      // query: () => true,
       // @ts-ignore //todo might cause problems
       delete: rules.canManageProducts,
       // @ts-ignore //todo might cause problems

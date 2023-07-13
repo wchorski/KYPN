@@ -4,11 +4,24 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, multiselect, relationship, select, text } from "@keystone-6/core/fields";
 import { timesArray } from "../lib/timeArrayCreator";
+import { permissions, rules } from "../access";
 
 
 export const Service:Lists.Service = list({
 
-  access: allowAll,
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageServices,
+      delete: rules.canManageServices,
+    },
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
+    }
+  },
 
   // todo hide these again
   // ui: {

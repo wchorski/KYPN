@@ -5,13 +5,25 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Manage Products: Can update and delete any product',
   }),
+  canManageAddons: checkbox({
+    defaultValue: false,
+    label: 'Manage Products: Can update and delete any addon',
+  }),
   canManageBookings: checkbox({
     defaultValue: false,
     label: 'Manage Bookings: Can update and delete any booking',
   }),
+  canManageAvailability: checkbox({
+    defaultValue: false,
+    label: 'Manage Availability: Can update and delete any availbility',
+  }),
   canManageEvents: checkbox({
     defaultValue: false,
     label: 'Manage Events: Can update and delete any event',
+  }),
+  canManageAnnouncements: checkbox({
+    defaultValue: false,
+    label: 'Manage Events: Can update and delete any annoucement',
   }),
   canManageTickets: checkbox({
     defaultValue: false,
@@ -36,6 +48,30 @@ export const permissionFields = {
   canManageOrders: checkbox({
     defaultValue: false,
     label: 'Manage Orders: Can see and manage any Order',
+  }),
+  canManageCategories: checkbox({
+    defaultValue: false,
+    label: 'Manage Categories: Can see and manage any category',
+  }),
+  canManageTags: checkbox({
+    defaultValue: false,
+    label: 'Manage Tags: Can see and manage any tag',
+  }),
+  canManageLocations: checkbox({
+    defaultValue: false,
+    label: 'Manage Locations: Can see and manage any location',
+  }),
+  canManagePages: checkbox({
+    defaultValue: false,
+    label: 'Manage Pages: Can see and manage any page',
+  }),
+  canManagePosts: checkbox({
+    defaultValue: false,
+    label: 'Manage Pages: Can see and manage any page',
+  }),
+  canManageServices: checkbox({
+    defaultValue: false,
+    label: 'Manage Services: Can see and manage any service',
   }),
 };
 
