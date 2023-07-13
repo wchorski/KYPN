@@ -567,14 +567,23 @@ type Role {
   id: ID!
   name: String
   canManageProducts: Boolean
+  canManageAddons: Boolean
   canManageBookings: Boolean
+  canManageAvailability: Boolean
   canManageEvents: Boolean
+  canManageAnnouncements: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
+  canManageLocations: Boolean
+  canManagePages: Boolean
+  canManagePosts: Boolean
+  canManageServices: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -590,14 +599,23 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   canManageProducts: BooleanFilter
+  canManageAddons: BooleanFilter
   canManageBookings: BooleanFilter
+  canManageAvailability: BooleanFilter
   canManageEvents: BooleanFilter
+  canManageAnnouncements: BooleanFilter
   canManageTickets: BooleanFilter
   canSeeOtherUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageRoles: BooleanFilter
   canManageCart: BooleanFilter
   canManageOrders: BooleanFilter
+  canManageCategories: BooleanFilter
+  canManageTags: BooleanFilter
+  canManageLocations: BooleanFilter
+  canManagePages: BooleanFilter
+  canManagePosts: BooleanFilter
+  canManageServices: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -611,27 +629,45 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   canManageProducts: OrderDirection
+  canManageAddons: OrderDirection
   canManageBookings: OrderDirection
+  canManageAvailability: OrderDirection
   canManageEvents: OrderDirection
+  canManageAnnouncements: OrderDirection
   canManageTickets: OrderDirection
   canSeeOtherUsers: OrderDirection
   canManageUsers: OrderDirection
   canManageRoles: OrderDirection
   canManageCart: OrderDirection
   canManageOrders: OrderDirection
+  canManageCategories: OrderDirection
+  canManageTags: OrderDirection
+  canManageLocations: OrderDirection
+  canManagePages: OrderDirection
+  canManagePosts: OrderDirection
+  canManageServices: OrderDirection
 }
 
 input RoleUpdateInput {
   name: String
   canManageProducts: Boolean
+  canManageAddons: Boolean
   canManageBookings: Boolean
+  canManageAvailability: Boolean
   canManageEvents: Boolean
+  canManageAnnouncements: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
+  canManageLocations: Boolean
+  canManagePages: Boolean
+  canManagePosts: Boolean
+  canManageServices: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -650,14 +686,23 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   canManageProducts: Boolean
+  canManageAddons: Boolean
   canManageBookings: Boolean
+  canManageAvailability: Boolean
   canManageEvents: Boolean
+  canManageAnnouncements: Boolean
   canManageTickets: Boolean
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
+  canManageLocations: Boolean
+  canManagePages: Boolean
+  canManagePosts: Boolean
+  canManageServices: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 
