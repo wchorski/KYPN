@@ -65,6 +65,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/stts/:match*',
+        destination: ANALYTICS_URL,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
