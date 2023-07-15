@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL + '/:match*'
+
 const nextConfig = {
   reactStrictMode: true,
   compiler: {
