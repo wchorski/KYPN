@@ -7,6 +7,9 @@ function timestamp() {
   return new Date(stampy).toISOString();
 }
 
+export const locations_seeddata = []
+export const pages_seeddata = []
+
 export const events_seeddata = [
   {
     summary: 'Apple Harvest Festival',

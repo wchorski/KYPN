@@ -76,29 +76,9 @@ export function Nav() {
         <li>
           <LinkActive href='/home'> Home </LinkActive>
         </li> 
-        <li>
-          <LinkActive href='/blog'> DJ Mixes </LinkActive>
-        </li> 
-        <li>
-          <LinkActive href='/packages'> 
-            DJ Packages 
-            <button className='sub-menu-handle'> <MdKeyboardArrowDown /> </button>
-          </LinkActive>
 
-          <ul className='sub-menu'>
-            <li> <LinkActive href='/weddings'> Weddings </LinkActive></li>
-            <li> <LinkActive href='/mitzvah'> Mitzvahs </LinkActive></li>
-            <li> <LinkActive href='/quince'> Quinces </LinkActive></li>
-          </ul>
-        </li> 
         <li>
-          <LinkActive href='/photobooth'> Photo Booth </LinkActive>
-        </li> 
-        <li>
-          <LinkActive href='/faq'> WTFAQ </LinkActive>
-        </li> 
-        <li>
-          <LinkActive href='/reviews'> Rave Reviews </LinkActive>
+          <LinkActive href='/faq'> FAQ </LinkActive>
         </li> 
         <li>
           <LinkActive href='/about'> About </LinkActive>
