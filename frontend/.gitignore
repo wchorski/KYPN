@@ -43,6 +43,7 @@ next-env.d.ts
 
 /public/favicon.ico
 home.tsx
-Header.tsxFooter.tsx
+Header.tsx
+/components/menus/Footer.tsx
 Nav.tsx
 favicon.ico
