@@ -29,8 +29,7 @@ export function Footer() {
         <div className="col">
           <h3>Contact</h3>
           <ul>
-            <li><Link href={`tel:1234567890`}> (123) 456-7890) </Link></li>
-            <li><Link href={`mailto:info@partyvibeonline.com`}> info@partyvibeonline.com </Link></li>
+            <li><Link href={`mailto:will@tawtaw.site`}> will@tawtaw.site </Link></li>
             <li>
               <SocialLinkNav 
                 color="var(--c-accent)" 
@@ -69,7 +68,7 @@ export function Footer() {
 
         <div className="col">
           <ul>
-            <li>© 2023 PartyVibeOnline All Rights Reserved</li>
+            <li>© 2023 There's a Will There's a Website All Rights Reserved</li>
           </ul>
         </div>
 

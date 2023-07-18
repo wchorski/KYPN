@@ -32,12 +32,12 @@ class VectorGPT extends Component {
     window.addEventListener('resize', this.handleResize);
     this.initializeCanvas();
     this.startAnimation();
-    this.canvasRef.current.addEventListener('mousemove', this.handleMouseMove)
+    window.addEventListener('mousemove', this.handleMouseMove)
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
-    this.canvasRef.current.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('mousemove', this.handleMouseMove);
   }
 
   // createGradient(ctx){
@@ -80,10 +80,12 @@ class VectorGPT extends Component {
     let dx = this.mouse.x - posX
     let dy = this.mouse.y - posY
     let distance = dx*dx + dy*dy
+    if(distance > 100000) distance = 100000
+    else if(distance < 40000) distance = 40000
     this.lineLength = distance/10000 - 1
 
     ctx.beginPath();
-    ctx.arc(this.mouse.x, this.mouse.y, 5, 0, Math.PI * 2);
+    // ctx.arc(this.mouse.x, this.mouse.y, 5, 0, Math.PI * 2);
     ctx.moveTo(x, y);
     ctx.lineWidth = this.lineWidth
     ctx.strokeStyle = this.gradient
@@ -98,10 +100,10 @@ class VectorGPT extends Component {
     const ctx = canvas.getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop('0.1', '#33ff9c')
-    gradient.addColorStop('0.4', '#33ffd6')
-    gradient.addColorStop('0.7', '#33ff5c')
-    gradient.addColorStop('0.9', '#33b4ff')
+    gradient.addColorStop('0.1', '#33ff9c7e')
+    gradient.addColorStop('0.4', '#33ffd67d')
+    gradient.addColorStop('0.7', '#33ff5c96')
+    gradient.addColorStop('0.9', '#33b4ff90')
     ctx.strokeStyle = gradient;
 
     const animation = (timeStamp) => {
