@@ -39,6 +39,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
     }),
+    image: text(),
 
     // todo does this need to be?
     author: relationship({
@@ -178,7 +179,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
             // @ts-ignore //todo might cause problems
             recurring: { interval: resolvedData.billing_interval},
           },
-          url: process.env.FRONTEND_URL + '/shop/product/' + resolvedData.id
+          url: process.env.FRONTEND_URL + '/shop/subscriptionplan/' + resolvedData.id
 
         })
           .then(async (res) => {

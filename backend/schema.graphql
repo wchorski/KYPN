@@ -1281,6 +1281,7 @@ input AvailabilityCreateInput {
 type SubscriptionPlan {
   id: ID!
   photo: ProductImage
+  image: String
   author: User
   name: String
   slug: String
@@ -1310,6 +1311,7 @@ input SubscriptionPlanWhereInput {
   NOT: [SubscriptionPlanWhereInput!]
   id: IDFilter
   photo: ProductImageWhereInput
+  image: StringFilter
   author: UserWhereInput
   name: StringFilter
   slug: StringFilter
@@ -1338,6 +1340,7 @@ input IntFilter {
 
 input SubscriptionPlanOrderByInput {
   id: OrderDirection
+  image: OrderDirection
   name: OrderDirection
   slug: OrderDirection
   description: OrderDirection
@@ -1351,6 +1354,7 @@ input SubscriptionPlanOrderByInput {
 
 input SubscriptionPlanUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
+  image: String
   author: UserRelateToOneForUpdateInput
   name: String
   slug: String
@@ -1379,6 +1383,7 @@ input SubscriptionPlanUpdateArgs {
 
 input SubscriptionPlanCreateInput {
   photo: ProductImageRelateToOneForCreateInput
+  image: String
   author: UserRelateToOneForCreateInput
   name: String
   slug: String

@@ -50,25 +50,27 @@ export default function PasswordResetRequest() {
 
       <h2> Password Reset </h2>
 
-      {data?.sendUserPasswordResetLink && <p>A reset link is on the way to your email</p>}
+      {data?.sendUserPasswordResetLink && <p>A reset link is on the way to your email: {inputs.email}</p>}
 
       <ErrorMessage error={error} />
 
-      <fieldset disabled={loading} aria-busy={loading}>
+      {!data?.sendUserPasswordResetLink && (
+        <fieldset disabled={loading} aria-busy={loading}>
 
-        <label htmlFor="email">
-          Email
-          <input type="email" id="email" name="email" autoComplete="email"
-            placeholder="email..."
-            required
-            defaultValue={inputs.email}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="email">
+            Email
+            <input type="email" id="email" name="email" autoComplete="email"
+              placeholder="email..."
+              required
+              defaultValue={inputs.email}
+              onChange={handleChange}
+            />
+          </label>
 
-        <button type="submit"> Send Email </button>
+          <button type="submit"> Send Email </button>
 
-      </fieldset>
+        </fieldset>
+      )}
 
     </StyledForm>
   </>)

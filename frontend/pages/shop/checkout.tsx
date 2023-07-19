@@ -16,7 +16,7 @@ export default function CheckoutPage() {
     <StyledCheckout>
       <header>
         <StyledSupreme>
-          {session?.name} | Cart
+          {session?.name}'s | Cart
         </StyledSupreme>
         <CartCount count={session?.cart.reduce(
           (tally: any, cartItem: any) => tally + cartItem.quantity,
@@ -25,14 +25,18 @@ export default function CheckoutPage() {
 
       </header>
 
-      {session?.cart.length <= 0 && <p>Add your first item</p>}
-      <ul>
-        {session?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
-      </ul>
-      <footer>
-        <p className="total"> <strong>Total: </strong> {moneyFormatter(calcTotalPrice(session?.cart))}</p>
-        <CheckoutForm />
-      </footer>
+      {session?.cart.length <= 0 
+        ? <p> Cart is empty. </p>
+        : (<>
+        
+          <ul>
+            {session?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
+          </ul>
+          <footer>
+            <p className="total"> <strong>Total: </strong> {moneyFormatter(calcTotalPrice(session?.cart))}</p>
+            <CheckoutForm />
+          </footer>
+        </>)}
 
     </StyledCheckout>
   )

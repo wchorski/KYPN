@@ -4,10 +4,11 @@ import styled from 'styled-components'
 export const StyledMainCont = styled.main`
 
   background-color: var(--c-bg);
+  /* background-color: red; */
 
   .container{
     margin-right: auto; 
-    min-height: 90vh;
+    /* min-height: 90vh; */
     display: flex;
     flex-direction: column;
 

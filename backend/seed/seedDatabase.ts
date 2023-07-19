@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 // @ts-ignore
 import { Context } from '.keystone/types';
-import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, pages_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptions_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, pages_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptionPlans_seedjson, tags_seedjson, user_seeddata } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 import { Category, Post, Product, Tag, User } from '../types';
@@ -139,7 +139,7 @@ const seedProducts = async (context: Context) => {
 
 const seedSubscriptions = async (context: Context) => {
   const { db } = context.sudo();
-  const seedObjects: any[] = subscriptions_seedjson;
+  const seedObjects: any[] = subscriptionPlans_seedjson;
   const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
     where: {
       slug: { in: seedObjects.map(obj => obj.slug) },

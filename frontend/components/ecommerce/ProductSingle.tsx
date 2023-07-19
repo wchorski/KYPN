@@ -15,6 +15,7 @@ import ErrorMessage from '../ErrorMessage';
 import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
 
+const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 
 export function ProductSingle({ id }: any) {
 
@@ -33,7 +34,7 @@ export function ProductSingle({ id }: any) {
   return (<>
 
     <Head>
-      <title>Sick Fits | {name}</title>
+      <title> {name} | {SITE_TITLE} </title>
     </Head>
 
     <StyledProductSingle data-testid='singleProduct'>
