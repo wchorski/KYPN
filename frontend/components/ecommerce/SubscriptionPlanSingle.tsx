@@ -18,6 +18,7 @@ import { ImageDynamic } from '../elements/ImageDynamic';
 import { PopupAnim } from '../menus/PopupAnim';
 import { useState } from 'react';
 import { CheckoutForm } from './CheckoutForm';
+import { SubscriptionItemForm } from './SubscriptionItemForm';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 
@@ -90,6 +91,8 @@ export function SubscriptionPlanSingle({ id }: any) {
         <ul>
           <li> <span className="price"> {moneyFormatter(price)} </span> / month </li>
         </ul>
+
+        <SubscriptionItemForm planId={id}/>
 
         <CheckoutForm />
 
