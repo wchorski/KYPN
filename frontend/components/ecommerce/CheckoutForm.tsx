@@ -111,4 +111,6 @@ const StyledCheckoutForm = styled.form`
   display: grid;
   grid-gap: 1rem;
 
+  max-width: 30em;
+
 `

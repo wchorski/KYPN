@@ -1,8 +1,12 @@
 import useForm from "../../lib/useForm";
 import { StyledForm } from "../../styles/Form.styled";
+import PasswordReset from "../../components/menus/PasswordResetRequest";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { QUERY_USER_CURRENT } from "./Session";
+import Link from "next/link";
+import styled from "styled-components";
+import { useState } from "react";
 // import { useGlobalContext } from "../../lib/useGlobalContext";
 // import { useLocalStorage } from "../../lib/useLocalStorage";
 
@@ -11,6 +15,8 @@ export default function LoginForm() {
 
   // const { session, setSession } = useGlobalContext()
   const router = useRouter()
+
+  const [isReset, setIsReset] = useState(false)
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',
@@ -75,12 +81,27 @@ export default function LoginForm() {
           />
         </label>
 
+
         <button type="submit"> Login </button>
+        <button type="button" onClick={() => setIsReset(!isReset)} className="forgot-password"> Forgot your password? </button>
       </fieldset>
 
     </StyledForm>
+    <br />
+
+    <StyledDrawer isReset={isReset}>
+      <PasswordReset />
+    </StyledDrawer>
   </>)
 }
+
+const StyledDrawer = styled.div<{isReset:boolean}>`
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  ${p => p.isReset ? 'opacity: 1; pointer-events: all; position: relative;' : ''}
+  transition: all .5s;
+`
 
 const MUTATION_USER_LOGIN = gql`
   mutation Mutation($email: String!, $password: String!) {

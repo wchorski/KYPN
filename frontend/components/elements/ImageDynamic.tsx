@@ -12,6 +12,8 @@ type Props = {
 // todo idk, just gonna not use the 'optimized' version on production for now
 export function ImageDynamic({ photoIn }: Props) {
   
+  // console.log(photoIn);
+  
 
   const [state, setState] = useState<any>(handlePhoto(photoIn))
 
@@ -29,8 +31,6 @@ export function ImageDynamic({ photoIn }: Props) {
 
 function handlePhoto(photo: any) {
 
-  // console.log(photo)
-
   if (photo?.image?.publicUrlTransformed) {
 
     // console.log('cloudinaryyyyy');
@@ -46,6 +46,30 @@ function handlePhoto(photo: any) {
     }
   }
 
+  if(!photo.url && photo.altText) {
+    
+    return {
+      altText: photo.altText,
+      image: {
+        url: `/assets/private/placeholder.png`,
+        width: 300,
+        height: 300,
+      }
+    }
+  }
+
+  if(photo.url && photo.altText) {
+    
+    return {
+      altText: photo.altText,
+      image: {
+        url: photo.url,
+        width: 300,
+        height: 300,
+      }
+    }
+  }
+
   if(photo) {
     return {
       altText: 'default image',
@@ -56,8 +80,9 @@ function handlePhoto(photo: any) {
       }
     }
   }
+  
 
-  if (!photo) {
+  if (!photo ) {
     return {
       altText: 'no product image',
       image: {

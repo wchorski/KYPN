@@ -6,14 +6,16 @@ import styled from 'styled-components';
 import { QueryLoading } from '../menus/QueryLoading';
 import { QueryError } from '../menus/QueryError';
 import { perPage } from '../../config';
+import { SubscriptionPlan } from '../../lib/types';
+import { SubscriptionThumbnail } from './SubscriptionThumbnail';
 
 type ProdProps = {
   page: number
 }
 
-export function ProductsList({ page }: ProdProps) {
+export function SubscriptionPlansList({ page }: ProdProps) {
   // const { loading, error, data } = useQuery(GET_ALL_PRODUCTS)
-  const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
+  const { loading, error, data } = useQuery(GET_ALL_SUBSCRIPTIONPLANS, {
     variables: {
       skip: page * perPage - perPage,
       take: perPage
@@ -24,24 +26,26 @@ export function ProductsList({ page }: ProdProps) {
   if (error) return <QueryError error={error} />
   // console.log({ data });
 
+  const { subscriptionPlans } = data
+
   return (
     <StyledProductsList>
-      {data.products.length <= 0 && (
-        <h2> No Products Available </h2>
+      {subscriptionPlans.length <= 0 && (
+        <h2> No Subscription Plans Available </h2>
       )}
-      {data.products.map((prod: any) => {
+      {subscriptionPlans.map((item: any) => {
         // console.log(prod);
 
         return (
-          <li key={prod.id}>
-            <ProductThumbnail {...prod} />
-
+          <li key={item.id}>
+            <SubscriptionThumbnail item={item}/>
           </li>
         );
       })}
     </StyledProductsList>
   )
 }
+
 
 const StyledProductsList = styled.ul`
   /* display: grid; */
@@ -68,39 +72,31 @@ const StyledProductsList = styled.ul`
   }
 `
 
-export const GET_PAGE_PRODUCTS_QUERY = gql`
-  query Query($skip: Int!, $take: Int) {
-    products(skip: $skip, take: $take) {
-      description
+export const GET_ALL_SUBSCRIPTIONPLANS = gql`
+  query Query($skip: Int!, $take: Int)  {
+    subscriptionPlans(skip: $skip, take: $take)  {
       id
-      name
-      price
-      status
-      photo {
+      author {
         id
-        altText
-        image {
-          publicUrlTransformed
-        }
+        name
       }
-    }
-  }
-`
-
-export const GET_ALL_PRODUCTS = gql`
-  query Products {
-    products {
-      id
-      description
-      name
-      price
-      status
-      photo {
+      categories {
         id
-        altText
-        image {
-          publicUrlTransformed
-        }
+        name
+      }
+      name
+      image
+      photo {
+        url
+        id
+      }
+      price
+      slug
+      status
+      stockCount
+      tags {
+        id
+        name
       }
     }
   }

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const StyledSickButton = styled.button`
-  background: red;
+  background: var(--c-3);
   color: white;
   font-weight: 500;
   border: 0;

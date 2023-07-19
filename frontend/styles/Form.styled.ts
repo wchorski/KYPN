@@ -14,8 +14,8 @@ const loading = keyframes`
 
 export const StyledForm = styled.form`
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background-color: rgba(var(--c-cont-light), 0.6);
-  backdrop-filter: blur(14px);
+  /* background-color: rgba(var(--c-cont-light), 0.6); */
+  backdrop-filter: blur(3px) contrast(70%);
   border-radius: 1em;
   /* border: 5px solid white; */
   padding: 1em;
@@ -96,6 +96,16 @@ export const StyledForm = styled.form`
       input[type='radio']{
         width: inherit;
       }
+    }
+  }
+
+  button.forgot-password{
+    background-color: transparent;
+    font-size: .7rem;
+    border: none;
+
+    &:hover, &:focus{
+      border: none;
     }
   }
 

@@ -87,14 +87,31 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         if (!resolvedData.custom_price) {
           // todo add this for sale or other stuff
         }
+        console.log('==== NEW SUBSCR ITEM');
+        
+        console.log(item);
+        
 
         const subscription = await stripeConfig.subscriptions.create({
-          // @ts-ignore
-          customer: currUser.stripeCustomerId,
+ 
+          customer: currUser?.stripeCustomerId || 'no_stripe_user_id',
+          description: currSub?.name + ' | ' + currSub?.id,
           items: [
-            // @ts-ignore
-            { price: currSub?.stripePriceId, },
+            { 
+              price: currSub?.stripePriceId,
+    
+              metadata: {
+                subscriptionPlanId: currSub?.id || 'no_sub_id',
+                // todo get subscriptionItem Id. prob have to use afterOperation
+                subscriptionPlanItemId: currSub?.id|| 'no_item_id',
+                subscriptionPlanName: currSub?.name || 'no_sub_name',
+              } 
+            },
           ],
+          metadata: {
+            subscriptionPlanId: currSub?.id|| 'no_sub_id',
+            subscriptionPlanName: currSub?.name || 'no_sub_name',
+          }
         })
       }
 

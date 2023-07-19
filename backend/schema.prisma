@@ -170,6 +170,7 @@ model Availability {
 model SubscriptionPlan {
   id               String             @id @default(uuid()) @postgresql.Uuid
   photo            ProductImage?      @relation("ProductImage_subscription")
+  image            String             @default("")
   author           User?              @relation("SubscriptionPlan_author", fields: [authorId], references: [id])
   authorId         String?            @map("author") @postgresql.Uuid
   name             String             @default("")
