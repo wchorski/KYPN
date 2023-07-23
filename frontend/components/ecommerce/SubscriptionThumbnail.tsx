@@ -15,7 +15,7 @@ type Props = {
 
 export const SubscriptionThumbnail = ({ item }: Props) => {
 
-  const {price, photo, id, name, description} = item
+  const {price, photo, image, id, name, description} = item
 
   return (
     <StyledProdThumbnail>
@@ -23,7 +23,7 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
 
       <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
 
-      <ImageDynamic photoIn={photo} />
+      <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`}} />
 
       <h3><Link href={`/shop/subscriptionplan/${id}`}>{name}</Link></h3>
 
@@ -31,7 +31,9 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
 
       <div className="menu admin">
         <Link href={{ pathname: '/shop/product/update', query: { id: id }, }}> Edit ✏️ </Link>
-        <Link href={`/shop/subscriptionplan/${id}`} className='button'> Subscribe </Link>
+
+        <Link href={`/shop/subscriptionplan/${id}`} className='button'> Start Subscribe </Link>
+
         <ProductDelete id={id}> Delete </ProductDelete>
       </div>
     </StyledProdThumbnail>

@@ -19,6 +19,7 @@ import { PopupAnim } from '../menus/PopupAnim';
 import { useState } from 'react';
 import { CheckoutForm } from './CheckoutForm';
 import { SubscriptionItemForm } from './SubscriptionItemForm';
+import { LoadingAnim } from '../elements/LoadingAnim';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 
@@ -34,10 +35,9 @@ export function SubscriptionPlanSingle({ id }: any) {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-
+  if(!data.subscriptionPlan) return <p> no data found </p>
   const { name, photo, image, price, description, status, categories, tags } = data.subscriptionPlan
 
-// console.log(image);
 
   return (<>
 
@@ -46,6 +46,9 @@ export function SubscriptionPlanSingle({ id }: any) {
     </Head>
 
     <StyledProductSingle data-testid='singleProduct'>
+      {data.subscriptionPlan.length <= 0 && (
+        <h2> No Products Available </h2>
+      )}
       <aside>
         <picture className="img-frame">
           <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
@@ -71,15 +74,20 @@ export function SubscriptionPlanSingle({ id }: any) {
 
         <footer>
 
+          <SubscriptionItemForm planId={id}/>
+
           <h5>Categories: </h5>
           <CategoriesPool categories={categories} />
 
           <h5>Tags:</h5>
           <TagsPool tags={tags} />
+          
 
         </footer>
 
       </div>
+
+      
 
     </StyledProductSingle>
 
@@ -89,12 +97,16 @@ export function SubscriptionPlanSingle({ id }: any) {
         <h2>Subscription: </h2>
         <h4> {name} </h4>
         <ul>
-          <li> <span className="price"> {moneyFormatter(price)} </span> / month </li>
+          <li>
+            <span className="price"> {moneyFormatter(price)} </span> 
+            <small> / month </small> 
+          </li>
         </ul>
 
         <SubscriptionItemForm planId={id}/>
+        <br />
 
-        <CheckoutForm />
+        {/* <CheckoutForm /> */}
 
       </StyledCheckoutForm>
 

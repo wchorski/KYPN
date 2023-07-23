@@ -584,6 +584,8 @@ type Role {
   canManagePages: Boolean
   canManagePosts: Boolean
   canManageServices: Boolean
+  canManageSubscriptionPlans: Boolean
+  canManageSubscriptionItems: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -616,6 +618,8 @@ input RoleWhereInput {
   canManagePages: BooleanFilter
   canManagePosts: BooleanFilter
   canManageServices: BooleanFilter
+  canManageSubscriptionPlans: BooleanFilter
+  canManageSubscriptionItems: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -646,6 +650,8 @@ input RoleOrderByInput {
   canManagePages: OrderDirection
   canManagePosts: OrderDirection
   canManageServices: OrderDirection
+  canManageSubscriptionPlans: OrderDirection
+  canManageSubscriptionItems: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -668,6 +674,8 @@ input RoleUpdateInput {
   canManagePages: Boolean
   canManagePosts: Boolean
   canManageServices: Boolean
+  canManageSubscriptionPlans: Boolean
+  canManageSubscriptionItems: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -703,6 +711,8 @@ input RoleCreateInput {
   canManagePages: Boolean
   canManagePosts: Boolean
   canManageServices: Boolean
+  canManageSubscriptionPlans: Boolean
+  canManageSubscriptionItems: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 
@@ -1411,6 +1421,9 @@ type SubscriptionItem {
   isActive: Boolean
   isDelinquent: Boolean
   user: User
+  charge: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input SubscriptionItemWhereUniqueInput {
@@ -1427,6 +1440,9 @@ input SubscriptionItemWhereInput {
   isActive: BooleanFilter
   isDelinquent: BooleanFilter
   user: UserWhereInput
+  charge: StringFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input SubscriptionItemOrderByInput {
@@ -1434,6 +1450,9 @@ input SubscriptionItemOrderByInput {
   custom_price: OrderDirection
   isActive: OrderDirection
   isDelinquent: OrderDirection
+  charge: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input SubscriptionItemUpdateInput {
@@ -1442,6 +1461,9 @@ input SubscriptionItemUpdateInput {
   isActive: Boolean
   isDelinquent: Boolean
   user: UserRelateToOneForUpdateInput
+  charge: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input SubscriptionPlanRelateToOneForUpdateInput {
@@ -1461,6 +1483,9 @@ input SubscriptionItemCreateInput {
   isActive: Boolean
   isDelinquent: Boolean
   user: UserRelateToOneForCreateInput
+  charge: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input SubscriptionPlanRelateToOneForCreateInput {
@@ -2554,6 +2579,7 @@ type Mutation {
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   addToCart(id: ID!, productID: ID): CartItem
   checkout(token: String!): CartItem
+  checkoutSubscription(custom_price: Int!, planId: String!, token: String!, userId: String!): SubscriptionItem
   contact(name: String!, email: String!, phone: String!, date: String!, notes: String!): Booking
 }
 

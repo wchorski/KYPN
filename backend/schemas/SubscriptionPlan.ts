@@ -15,16 +15,14 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
     filter: {
       // query: rules.canReadProducts,
       query: () => true,
-      // @ts-ignore //todo might cause problems
-      delete: rules.canManageProducts,
-      // @ts-ignore //todo might cause problems
-      update: rules.canManageProducts,
+      // delete: rules.canManageSubscriptionPlans,
+      update: rules.canManageSubscriptionPlans,
     },
     operation: {
       query: () => true,
-      create: isLoggedIn,
-      update: isLoggedIn,
-      delete: isLoggedIn,
+      create: permissions.canManageSubscriptionPlans,
+      update: permissions.canManageSubscriptionPlans,
+      delete: permissions.canManageSubscriptionPlans,
     }
   },
 

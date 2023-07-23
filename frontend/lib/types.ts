@@ -278,6 +278,7 @@ export type Service = {
 export type SubscriptionPlan = {
   id: string,
   photo: ProductImage,
+  image:string,
   author: User,
   name: string,
   slug: string,
