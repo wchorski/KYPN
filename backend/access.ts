@@ -252,4 +252,22 @@ export const rules = {
     // return false
     return false
   },
+  canManageSubscriptionPlans({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission 
+    if (permissions.canManageSubscriptionPlans({ session })) return true;
+    
+    // 2. If not, do they own this item?
+    return false
+  },
+  canManageSubscriptionItems({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission 
+    if (permissions.canManageSubscriptionPlans({ session })) return true;
+    
+    // do they own?
+    return { user: { id: {equals: session?.itemId} } };
+  },
 };

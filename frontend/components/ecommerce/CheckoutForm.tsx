@@ -1,7 +1,7 @@
 import { StyledSickButton } from "../../styles/SickButton.styled"
 import { gql, useMutation } from "@apollo/client"
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js"
+import { loadStripe, } from "@stripe/stripe-js"
 import { useRouter } from "next/router"
 import nProgress from "nprogress"
 import { FormEvent, useState } from "react"
@@ -12,7 +12,6 @@ import { QUERY_USER_CURRENT, useUser } from "../menus/Session"
 
 // TODO Add blocker stops stripe.com requests thinks it's X site
 const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY_IN_ENV'
-
 const stripeLib = loadStripe(STRIPE_KEY)
 
 function CheckoutFormChild() {
@@ -26,7 +25,7 @@ function CheckoutFormChild() {
   const stripe = useStripe()
   const elements = useElements()
 
-  const [mutate, { error, loading, data }] = useMutation(MUTATE_CHECKOUT_ORDER, {
+  const [mutateCheckout, { error, loading, data }] = useMutation(MUTATE_CHECKOUT_ORDER, {
     refetchQueries: [{ query: QUERY_USER_CURRENT }]
   })
 
@@ -55,7 +54,7 @@ function CheckoutFormChild() {
       return //stops checkout
     }
 
-    const res = await mutate({
+    const res = await mutateCheckout({
       variables: {
         token: paymentMethod.id,
       }

@@ -30,6 +30,18 @@ export function ImageDynamic({ photoIn }: Props) {
 }
 
 function handlePhoto(photo: any) {
+  
+
+  if (!photo ) {
+    return {
+      altText: 'no product image',
+      image: {
+        url: `/assets/private/placeholder.png`,
+        width: 300,
+        height: 300,
+      }
+    }
+  }
 
   if (photo?.image?.publicUrlTransformed) {
 
@@ -75,18 +87,6 @@ function handlePhoto(photo: any) {
       altText: 'default image',
       image: {
         url: photo,
-        width: 300,
-        height: 300,
-      }
-    }
-  }
-  
-
-  if (!photo ) {
-    return {
-      altText: 'no product image',
-      image: {
-        url: `/assets/private/placeholder.png`,
         width: 300,
         height: 300,
       }
