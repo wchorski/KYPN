@@ -24,7 +24,6 @@ const ErrorStyles = styled.div`
 
 const ErrorMessage = ({ error }: any) => {
 
-
   if (!error || !error.message) return null;
   // console.log('error, ', error);
 
@@ -42,6 +41,7 @@ const ErrorMessage = ({ error }: any) => {
     <ErrorStyles>
       <p data-test="graphql-error">
         <strong> <MdError style={{ color: 'red' }} />  </strong>
+        {error.code}
         {error.message.replace('GraphQL error: ', '')}
       </p>
     </ErrorStyles>

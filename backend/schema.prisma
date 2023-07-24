@@ -200,7 +200,7 @@ model SubscriptionItem {
   isDelinquent       Boolean           @default(false)
   user               User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId             String?           @map("user") @postgresql.Uuid
-  charge             String            @default("")
+  stripeId           String            @default("")
   dateCreated        DateTime?         @default(now())
   dateModified       DateTime?         @default(now())
 

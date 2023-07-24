@@ -85,69 +85,79 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
     //   throw new Error(err.message);
     // });
 
-    await stripeConfig.paymentMethods.attach(token, {
-      customer: user?.stripeCustomerId,
-    });
-
-    const customer = await stripeConfig.customers.update(
-      user?.stripeCustomerId,
-      {
-        metadata: {customdata: 'lol-wut'},
-        invoice_settings: {
-          default_payment_method: token
+    if(token){
+      await stripeConfig.paymentMethods.attach(
+        token, 
+        { customer: user?.stripeCustomerId,}
+      );
+  
+      const customer = await stripeConfig.customers.update(
+        user?.stripeCustomerId,
+        {
+          metadata: {userId: user?.id},
+          invoice_settings: {
+            default_payment_method: token
+          }
         }
+      ).catch((err:any) => {
+        console.log('!!!! User payment update failed');
+        console.log(err);
+      })
+    }
+    // console.log({customer});
+    
+    const resStripe = await stripeConfig.subscriptions.create({
+      customer: user?.stripeCustomerId || 'no_stripe_user_id',
+      description: user?.name + ' | ' + user?.id,
+      // default_source: token,
+      items: [
+        { 
+          price: thePlan?.stripePriceId,
+
+          metadata: {
+            subscriptionPlanId: thePlan?.id || 'no_sub_id',
+            // todo get subscriptionItem Id. prob have to use afterOperation
+            subscriptionPlanItemId: thePlan?.id|| 'no_item_id',
+            subscriptionPlanName: thePlan?.name || 'no_sub_name',
+          }, 
+        },
+      ],
+      metadata: {
+        subscriptionPlanId: thePlan?.id|| 'no_sub_id',
+        subscriptionPlanName: thePlan?.name || 'no_sub_name',
       }
-    ).catch((err:any) => {
-      console.log('WHAT ERROR HUH????????');
-      console.log(err);
     })
-    console.log({customer});
-    
-    
-    // const resStripe = await stripeConfig.subscriptions.create({
-    //   customer: user?.stripeCustomerId || 'no_stripe_user_id',
-    //   description: user?.name + ' | ' + user?.id,
-    //   default_source: token,
-    //   items: [
-    //     { 
-    //       price: thePlan?.stripePriceId,
-
-    //       metadata: {
-    //         subscriptionPlanId: thePlan?.id || 'no_sub_id',
-    //         // todo get subscriptionItem Id. prob have to use afterOperation
-    //         subscriptionPlanItemId: thePlan?.id|| 'no_item_id',
-    //         subscriptionPlanName: thePlan?.name || 'no_sub_name',
-    //       }, 
-    //     },
-    //   ],
-    //   metadata: {
-    //     subscriptionPlanId: thePlan?.id|| 'no_sub_id',
-    //     subscriptionPlanName: thePlan?.name || 'no_sub_name',
-    //   }
-    // })
-    // console.log(resStripe)
-    // console.log(' --------- CHARGE MADE')
+    console.log(resStripe)
+    console.log(' --------- NEW SUBSCRIPTION MADE')
 
 
-    // const now = new Date
-    // const order = await context.db.SubscriptionItem.createOne({
-    //   data: {
-    //     custom_price: resStripe.amount,
-    //     subscriptionPlan: { connect: { id: planId } },
-    //     user: { connect: { id: user.id } },
-    //     charge: resStripe.id,
+    const now = new Date
+    const order = await context.db.SubscriptionItem.createOne({
+      data: {
+        // @ts-ignore
+        custom_price: resStripe.plan.amount,
+        subscriptionPlan: { connect: { id: planId } },
+        user: { connect: { id: user.id } },
+        // @ts-ignore
+        stripeId: resStripe.id,
 
-    //     dateCreated: now.toISOString(),
-    //     dateModified: now.toISOString(),
-    //   },
-    // })
+        dateCreated: now.toISOString(),
+        dateModified: now.toISOString(),
+      },
+    }).catch(error => {
+      console.log('+++++++ catch checkout error');
+      
+    })
 
-    // return order
-    return null
+    return order
+    // return null
       
     } catch (error:any) {
-      console.log('checkout subscription Error: ', error.message);
-      
+      // console.log({error});
+      // console.log('checkout subscription Error: ', error);
+
+      // if(error.code === 'resource_missing') return error
+
       throw error
     }
   

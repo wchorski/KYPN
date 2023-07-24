@@ -18,14 +18,18 @@ import { ImageDynamic } from '../elements/ImageDynamic';
 import { PopupAnim } from '../menus/PopupAnim';
 import { useState } from 'react';
 import { CheckoutForm } from './CheckoutForm';
-import { SubscriptionItemForm } from './SubscriptionItemForm';
+import { SubscriptionItemForm, SubscriptionItemFormStripe } from './SubscriptionItemForm';
 import { LoadingAnim } from '../elements/LoadingAnim';
+import StatusMessage from '../elements/StatusMessage';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
+let formStateInit:'success'|'failure'|undefined = undefined
 
 export function SubscriptionPlanSingle({ id }: any) {
 
   const [isPopup, setIsPopup] = useState(false)
+  const [isOtherPayment, setIsOtherPayment] = useState(false)
+  const [formState, setFormState] = useState(formStateInit)
 
   const { loading, error, data } = useQuery(
     SINGLE_SUBSCRIPTIONPLAN_QUERY, {
@@ -68,13 +72,11 @@ export function SubscriptionPlanSingle({ id }: any) {
           <p className='description'>{description}</p>
         </div>
 
-        <button onClick={() => setIsPopup(!isPopup)}> Start Subscription </button>
+        <button onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
         
         <Link href={{ pathname: '/shop/subscriptionplan/update', query: { id: id }, }}> Edit ✏️ </Link>
 
         <footer>
-
-          <SubscriptionItemForm planId={id}/>
 
           <h5>Categories: </h5>
           <CategoriesPool categories={categories} />
@@ -93,9 +95,10 @@ export function SubscriptionPlanSingle({ id }: any) {
 
     <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
 
-      <StyledCheckoutForm>
+      <StyledCheckoutCard>
         <h2>Subscription: </h2>
         <h4> {name} </h4>
+        
         <ul>
           <li>
             <span className="price"> {moneyFormatter(price)} </span> 
@@ -103,18 +106,47 @@ export function SubscriptionPlanSingle({ id }: any) {
           </li>
         </ul>
 
-        <SubscriptionItemForm planId={id}/>
-        <br />
+        {!formState && (<>
+          <div className="payment-choice-cont">
+            <button 
+              className={isOtherPayment ? 'left' : 'active left'}
+              onClick={() => setIsOtherPayment(false)}  
+            > Payment on File </button>
+            <button 
+              className={isOtherPayment ? 'active right' : 'right'}
+              onClick={() => setIsOtherPayment(true)}  
+            > Other Payment Options </button>
+          </div>
+          
+          <div className={isOtherPayment ? 'form-cont' : 'active form-cont'}>
+            <SubscriptionItemForm planId={id} setFormState={setFormState}/>
+          </div>
+          <br />
 
-        {/* <CheckoutForm /> */}
+          <div className={isOtherPayment ? 'active form-cont' : 'form-cont'}>
+            <SubscriptionItemFormStripe planId={id} setFormState={setFormState}/>
+          </div>
+          <br />
+        </>)}
 
-      </StyledCheckoutForm>
+        {formState === 'success' && (<>
+          <StatusMessage  status={formState} message={'subscription successful'}>
+            <Link href={`/account`}> My Account </Link>
+          </StatusMessage>
+        </>)}
+
+        {formState === 'failure' && (<>
+          <p> subscription failure, refresh the page and try again </p>
+        </>)}
+
+
+      </StyledCheckoutCard>
 
     </PopupAnim>
   </>)
 }
 
-const StyledCheckoutForm = styled.div`
+const StyledCheckoutCard = styled.div`
   h2{
     font-size: 1rem;
     margin-bottom: .5rem;
@@ -130,6 +162,38 @@ const StyledCheckoutForm = styled.div`
 
   .price{
     font-weight: bolder;
+  }
+
+  .payment-choice-cont{
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+
+    button{
+      padding: 1rem;
+
+      &.active{
+        background-color: var(--c-accent);
+      }
+    }
+
+    button.left{
+      border-radius: 10px 0 0 10px;
+    }
+    button.right{
+      border-radius: 0 10px 10px 0;
+    }
+  }
+
+  .form-cont{
+    opacity: .2;
+    pointer-events: none;
+    transition: all .5s;
+
+    &.active{
+      pointer-events: all;
+      opacity: 1;
+    }
   }
 `
 
