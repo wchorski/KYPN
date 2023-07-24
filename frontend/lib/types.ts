@@ -301,6 +301,9 @@ export type SubscriptionItem = {
   isActive: boolean,
   isDelinquent: boolean,
   user: User,
+  status:string,
+  dateCreated:string,
+  dateModified:string,
 
 }
 

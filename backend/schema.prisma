@@ -61,7 +61,7 @@ model Announcement {
 
 model Role {
   id                         String  @id @default(uuid()) @postgresql.Uuid
-  name                       String  @default("")
+  name                       String  @unique @default("")
   canManageProducts          Boolean @default(false)
   canManageAddons            Boolean @default(false)
   canManageBookings          Boolean @default(false)
@@ -198,6 +198,7 @@ model SubscriptionItem {
   subscriptionPlanId String?           @map("subscriptionPlan") @postgresql.Uuid
   isActive           Boolean           @default(true)
   isDelinquent       Boolean           @default(false)
+  status             String?           @default("ACTIVE")
   user               User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId             String?           @map("user") @postgresql.Uuid
   stripeId           String            @default("")

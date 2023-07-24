@@ -592,6 +592,7 @@ type Role {
 
 input RoleWhereUniqueInput {
   id: ID
+  name: String
 }
 
 input RoleWhereInput {
@@ -1420,6 +1421,7 @@ type SubscriptionItem {
   subscriptionPlan: SubscriptionPlan
   isActive: Boolean
   isDelinquent: Boolean
+  status: String
   user: User
   stripeId: String
   dateCreated: DateTime
@@ -1439,6 +1441,7 @@ input SubscriptionItemWhereInput {
   subscriptionPlan: SubscriptionPlanWhereInput
   isActive: BooleanFilter
   isDelinquent: BooleanFilter
+  status: StringNullableFilter
   user: UserWhereInput
   stripeId: StringFilter
   dateCreated: DateTimeNullableFilter
@@ -1450,6 +1453,7 @@ input SubscriptionItemOrderByInput {
   custom_price: OrderDirection
   isActive: OrderDirection
   isDelinquent: OrderDirection
+  status: OrderDirection
   stripeId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -1460,6 +1464,7 @@ input SubscriptionItemUpdateInput {
   subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   isActive: Boolean
   isDelinquent: Boolean
+  status: String
   user: UserRelateToOneForUpdateInput
   stripeId: String
   dateCreated: DateTime
@@ -1482,6 +1487,7 @@ input SubscriptionItemCreateInput {
   subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   isActive: Boolean
   isDelinquent: Boolean
+  status: String
   user: UserRelateToOneForCreateInput
   stripeId: String
   dateCreated: DateTime
