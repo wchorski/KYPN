@@ -53,8 +53,10 @@ export function AnnouncementsMarquee({ }: Props) {
     setisClosed(true)
   }
 
-  if (loading) return <QueryLoading />
-  if (error) return <QueryError error={error} />
+  if (loading) return null
+  if (error) return null
+  // if (loading) return <QueryLoading />
+  // if (error) return <QueryError error={error} />
 
   // console.log(data);
   
