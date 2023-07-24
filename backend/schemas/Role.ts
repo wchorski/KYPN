@@ -24,7 +24,7 @@ export const Role:Lists.Role = list({
     isHidden: (args) => !permissions.canManageRoles(args),
   },
   fields: {
-    name: text({ validation: { isRequired: true} }),
+    name: text({ validation: { isRequired: true}, isIndexed: 'unique' }),
     ...permissionFields,
     assignedTo: relationship({
       ref: 'User.role', 

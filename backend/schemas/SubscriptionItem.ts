@@ -47,6 +47,21 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
     }),
     isActive: checkbox({ defaultValue: true }),
     isDelinquent: checkbox({ defaultValue: false }),
+    status: select({
+      options: [
+        { label: 'Active',      value: 'ACTIVE' },
+        { label: 'Trial',       value: 'TRIAL' },
+        { label: 'Expired',     value: 'EXPIRED' },
+        { label: 'Canceled',    value: 'CANCELED' },
+        { label: 'Suspended',   value: 'SUSPENDED' },
+        { label: 'Delinquent',  value: 'DELINQUENT' },
+      ],
+      defaultValue: 'ACTIVE',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
     user: relationship({
       ref: 'User.subscriptions',
       ui: {

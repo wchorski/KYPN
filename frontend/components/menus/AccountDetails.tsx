@@ -3,7 +3,7 @@ import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop,  } from "r
 import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
 import { Table } from "../elements/Table"
-import { Booking, User } from "../../lib/types"
+import { Booking, SubscriptionItem, User } from "../../lib/types"
 import TicketsList from "../events/TicketsList"
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import Link from "next/link"
@@ -36,6 +36,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
   const [userData, setUserData] = useState<User>()
   const [bookingCells, setBookingCells] = useState([])
+  const [subscriptionCells, setSubscriptionCells] = useState([])
 
   const { loading, error, data } = useQuery(
     USER_DASH_QUERY, {
@@ -65,7 +66,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
   useEffect(() => {
     if(!data?.user) return
 
-    const cells = data.user.bookings.map((book:Booking) => ({
+    const cellsBook = data.user.bookings.map((book:Booking) => ({
       date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
       service: book.service.name,
       price: moneyFormatter(book.price),
@@ -73,9 +74,19 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
       details: book.id,
     }))
     // console.log(cells);
-    
-    
-    setBookingCells(cells)
+    setBookingCells(cellsBook)
+
+    const cellsSubs = data.user.subscriptions.map((sub:SubscriptionItem) => ({
+      plan: sub.subscriptionPlan.name,
+      status: sub.status,
+      // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
+      details: sub.id,
+    }))
+    // console.log(cells);
+    setSubscriptionCells(cellsSubs)
+
+
+
     
     // return () => 
   }, [data?.user])
@@ -177,6 +188,16 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
         <article ref={subscriptionsRef} className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
           <h3>Subscriptions</h3>
+          <Table 
+            caption="Subscriptions"
+            headers={[
+              'plan',
+              'status',
+              'details',
+            ]}
+            cells={subscriptionCells}
+            route={`/subscriptions`}
+          />
 
         </article>
 
@@ -227,6 +248,14 @@ const USER_DASH_QUERY = gql`
         price
         start
         service {
+          name
+        }
+        status
+      }
+      subscriptions{
+        id
+        subscriptionPlan {
+          id
           name
         }
         status
