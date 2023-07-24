@@ -65,7 +65,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         },
       }
     }),
-    charge: text(),
+    stripeId: text(),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },

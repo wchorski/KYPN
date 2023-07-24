@@ -1421,7 +1421,7 @@ type SubscriptionItem {
   isActive: Boolean
   isDelinquent: Boolean
   user: User
-  charge: String
+  stripeId: String
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1440,7 +1440,7 @@ input SubscriptionItemWhereInput {
   isActive: BooleanFilter
   isDelinquent: BooleanFilter
   user: UserWhereInput
-  charge: StringFilter
+  stripeId: StringFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -1450,7 +1450,7 @@ input SubscriptionItemOrderByInput {
   custom_price: OrderDirection
   isActive: OrderDirection
   isDelinquent: OrderDirection
-  charge: OrderDirection
+  stripeId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -1461,7 +1461,7 @@ input SubscriptionItemUpdateInput {
   isActive: Boolean
   isDelinquent: Boolean
   user: UserRelateToOneForUpdateInput
-  charge: String
+  stripeId: String
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1483,7 +1483,7 @@ input SubscriptionItemCreateInput {
   isActive: Boolean
   isDelinquent: Boolean
   user: UserRelateToOneForCreateInput
-  charge: String
+  stripeId: String
   dateCreated: DateTime
   dateModified: DateTime
 }

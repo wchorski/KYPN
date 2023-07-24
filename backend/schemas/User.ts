@@ -129,7 +129,7 @@ export const User: Lists.User = list({
       if (operation === 'create') {
         const customer = await stripeConfig.customers.create({
           email: resolvedData.email,
-          name: resolvedData.name,
+          name: resolvedData.name + ' ' + resolvedData.nameLast,
           metadata: {
             isActive: resolvedData.isActive,
           }

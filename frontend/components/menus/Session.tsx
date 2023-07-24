@@ -80,6 +80,12 @@ export const QUERY_USER_CURRENT = gql`
           id
           status
         }
+        subscriptions {
+          id
+          subscriptionPlan {
+            id
+          }
+        }
         cart {
           id
           quantity

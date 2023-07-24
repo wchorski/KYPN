@@ -127,7 +127,7 @@ const StyledPopup = styled.div`
     }
 
     button:hover, button:focus{
-      color: white;
+      color: var(--c-desaturated);
     }
   }
 
