@@ -304,6 +304,7 @@ export type SubscriptionItem = {
   status:string,
   dateCreated:string,
   dateModified:string,
+  billing_interval:string,
 
 }
 

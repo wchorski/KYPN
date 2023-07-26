@@ -216,6 +216,7 @@ export const Booking:Lists.Booking = list({
             `
           }) as User[]
           
+          
           // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
           let employeeNames = ''
           bookedEmployees.map(emp => {
@@ -255,6 +256,8 @@ export const Booking:Lists.Booking = list({
             // timeZone: 'America/Chicago',
           },
         })
+
+        console.log('%%%%%% HELP ME after cal %%%%%%%');
         
         // console.log({calRes})
         // @ts-ignore //todo might cause problems
@@ -286,6 +289,7 @@ export const Booking:Lists.Booking = list({
             currPrice = Math.max(currPrice + Number(selectedService?.price), 0) //don't go below zero
           }
         }
+        
 
         if(resolvedData.addons?.connect || resolvedData.addons?.disconnect){
 
@@ -545,8 +549,8 @@ async function handleCalendarEvent(item:any, context:any) {
   calDescription += 'CLIENT: '      + selectedBooking.name + ' | ' + selectedBooking?.email + ' | ' + selectedBooking?.phone + '\n'
   calDescription += 'STATUS: '      + selectedBooking.status + ' \n'
   calDescription += 'SERVICE: '     + selectedBooking.service.name + ' \n' 
-  calDescription += 'ADDONS: \n'    + selectedBooking.addons.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n' 
-  calDescription += 'EMPLOYEES: \n' + selectedBooking.employees.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
+  calDescription += 'ADDONS: \n'    + selectedBooking?.addons?.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n' 
+  calDescription += 'EMPLOYEES: \n' + selectedBooking?.employees?.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
   calDescription += 'NOTES: '       + selectedBooking.notes + '\n'
   calDescription += 'URL: '         + FRONTEND_URL + `/bookings/${item.id}`
 
