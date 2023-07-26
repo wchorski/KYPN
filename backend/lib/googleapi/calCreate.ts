@@ -148,14 +148,15 @@ export async function createCalendarEvent(event:GEvent){
     }
     
   } catch (err:any) {
-    console.log('Google Cal API Error: ' + err)
-
+    console.log('Google Cal API Error: ')
+    console.log({err});
+    
     return { 
       id: undefined,
       htmlLink: undefined, 
       kind: undefined,
       status: undefined,
-      message: err.errors.map((err:any) =>  err.message).join(', ') 
+      message: err.errors?.map((err:any) =>  err.message).join(', ') 
     }
   }
 }

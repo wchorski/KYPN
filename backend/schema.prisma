@@ -199,6 +199,7 @@ model SubscriptionItem {
   isActive           Boolean           @default(true)
   isDelinquent       Boolean           @default(false)
   status             String?           @default("ACTIVE")
+  billing_interval   String?           @default("month")
   user               User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId             String?           @map("user") @postgresql.Uuid
   stripeId           String            @default("")

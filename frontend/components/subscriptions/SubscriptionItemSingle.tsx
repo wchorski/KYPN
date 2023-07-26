@@ -8,6 +8,8 @@ import { datePrettyLocal } from "../../lib/dateFormatter"
 import Link from "next/link"
 import { FiEdit } from "react-icons/fi"
 import { useState } from "react"
+import { PopupAnim } from "../menus/PopupAnim"
+import { SubItemUpdateForm } from "./SubItemUpdateForm"
 
 type Props = {
   id:string,
@@ -16,7 +18,8 @@ type Props = {
 export function SubscriptionItemSingle({id}:Props) {
 
   const [subscriptionItemState, setSubscriptionItemState] = useState<SubscriptionItem>()
-
+  const [isPopup, setIsPopup] = useState(false)
+  
   const { loading, error, data } = useQuery(
     QUERY_SUBSCRIPTIONITEM, {
     variables: { where: { id: id } }
@@ -25,22 +28,24 @@ export function SubscriptionItemSingle({id}:Props) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { user, subscriptionPlan, custom_price, dateCreated, dateModified }:SubscriptionItem = data?.booking
+  const { user, subscriptionPlan, custom_price, dateCreated, dateModified, billing_interval, status }:SubscriptionItem = data?.subscriptionItem
   
-  return (
+  return (<>
     <StyledSubscriptionItemSingle>
-
-      <div className="edit-buttons">
-        <Link href={`/bookings/update/${id}`} className="edit button"
-          onClick={() => setSubscriptionItemState(data?.booking)}
-        > 
-        <FiEdit /> Edit 
-        </Link>
-      </div>
 
       <h2>Package: { subscriptionPlan?.name } </h2>
       <small>last updated: {datePrettyLocal(dateModified, 'full')}</small>
+      <p className="description">{subscriptionPlan.description}</p>
       <br />
+
+      <div className="edit-buttons">
+        <button 
+          className="edit button"
+          onClick={() => setIsPopup(!isPopup)}
+        > 
+          <FiEdit /> Edit 
+        </button>
+      </div>
       
       <table>
         <tbody>
@@ -52,7 +57,7 @@ export function SubscriptionItemSingle({id}:Props) {
                   {user?.name}
                 </Link>
               ) : (
-                <span> {user?.name} (Unregistered User) </span>
+                <span> {user.name ? user.name : 'Unregistered User'} </span>
               )}
               <br />
               <span>{user?.email} </span>
@@ -70,13 +75,22 @@ export function SubscriptionItemSingle({id}:Props) {
             <td><DayMonthTime dateString={end}/></td>
           </tr> */}
           <tr>
+            <td><label>Status: </label> </td>
+            <td> <span className="status"> {status} </span></td>
+          </tr>
+
+          <tr>
             <td><label>Price: </label> </td>
-            <td> <span className="price">{moneyFormatter(custom_price)}</span></td>
+            <td> <span className="price">{moneyFormatter(custom_price)} / {billing_interval} </span></td>
           </tr>
         </tbody>
       </table>
     </StyledSubscriptionItemSingle>
-  )
+
+    <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
+      <SubItemUpdateForm />
+    </PopupAnim>
+  </>)
 }
 
 const StyledSubscriptionItemSingle = styled.div`
@@ -87,10 +101,20 @@ const StyledSubscriptionItemSingle = styled.div`
     text-align: right;
   }
 
+  .description{
+    background-color: black;
+    padding: 1rem;
+  }
+
   table{
     width: 100%;
     border-bottom: solid 10px var(--c-txt);
     border-collapse: collapse;
+    background-color: var(--c-dark);
+    
+    td{
+      padding: 1rem;
+    }
 
     label{
       color: var(--c-disabled);
@@ -106,15 +130,17 @@ const StyledSubscriptionItemSingle = styled.div`
   }
 
   .edit-buttons{
-    position: fixed;
+    /* position: fixed; */
     bottom: .5rem;
     right: .5rem;
+    margin-bottom: 1rem;
     z-index: 1;
 
     .button{
-      padding: 2rem;
+      padding: 1rem 2rem;
       margin: 0;
-      color: var(--c-txt-primary);
+      width: 6em;
+      /* color: var(--c-txt-primary); */
       font-size: 1rem;
       border: solid 2px var(--c-accent);
 
@@ -124,6 +150,7 @@ const StyledSubscriptionItemSingle = styled.div`
 
       &:hover, &:focus{
         background-color: var(--c-accent);
+        color: var(--c-txt);
       }
     }
   }
@@ -167,6 +194,7 @@ const QUERY_SUBSCRIPTIONITEM = gql`
     custom_price
     dateCreated
     dateModified
+    billing_interval
     id
     status
     subscriptionPlan {

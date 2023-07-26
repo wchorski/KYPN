@@ -62,6 +62,19 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         createView: { fieldMode: 'edit' }
       }
     }),
+    billing_interval: select({
+      options: [
+        { label: 'Daily', value: 'day' },
+        { label: 'Weekly', value: 'week' },
+        { label: 'Monthly', value: 'month' },
+        { label: 'Yearly', value: 'year' },
+      ],
+      defaultValue: 'month',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
     user: relationship({
       ref: 'User.subscriptions',
       ui: {

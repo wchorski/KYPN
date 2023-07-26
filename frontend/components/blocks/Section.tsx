@@ -5,14 +5,16 @@ type Props = {
   children:ReactNode|ReactNode[]
   imageSrc?:string,
   color?:string,
-  content: ReactNode,
+  content?: ReactNode,
 }
 
 export function Section({color, imageSrc, content, children}:Props) {
   return (
     <StyledSection color={color} bg={imageSrc}>
-      {content}
-      {children}
+      <div className="container">
+        {content}
+        {children}
+      </div>
     </StyledSection>
   )
 }

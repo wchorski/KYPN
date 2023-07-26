@@ -169,11 +169,11 @@ const StyledInputLabel = styled.label`
     }
   }
 
-  input:invalid[focused="true"]{
+  input:invalid:not(:placeholder-shown):focus{
     border: 1px solid red;
   }
 
-  input:invalid[focused="true"] ~ span{
+  input:invalid:not(:placeholder-shown):focus ~ span{
     max-height: 30px;
   }
 

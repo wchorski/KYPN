@@ -58,7 +58,7 @@ export default function LoginForm() {
 
       <h2> Login </h2>
 
-      <p>{data?.authenticateUserWithPassword?.message}</p>
+      <p className="error">{data?.authenticateUserWithPassword?.message}</p>
 
       <fieldset>
         <label htmlFor="email">

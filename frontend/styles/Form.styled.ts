@@ -120,5 +120,10 @@ export const StyledForm = styled.form`
     height: 0;
     display: none;
   }
+
+  .error{
+    background-color: red;
+    padding: 0 1rem;
+  }
 `;
 

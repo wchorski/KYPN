@@ -160,7 +160,12 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
     html: makeANiceEmail(`Your Password Reset Token is here!
       <a href="${process.env.FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
     `),
-  }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
+  }).catch(err => {
+    
+    console.log('%%%% mail.ts ERROR: ', err)
+    throw new Error("mail smpt error: " + err);
+    
+  } ))
 
   if (MAIL_USER.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);

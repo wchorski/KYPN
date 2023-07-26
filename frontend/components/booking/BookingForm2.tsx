@@ -682,6 +682,10 @@ export function BookingForm2({ services, addons }:iProps) {
                     />
                   </li>
                 )})}
+
+                {addons.length <= 0 && (
+                  <p> no addons available </p>
+                )}
               </ul>
              
             </div>
@@ -804,7 +808,7 @@ export function BookingForm2({ services, addons }:iProps) {
 
 
 const StyledBookingForm = styled.form`
-  background-color: #d0e4dd;
+  background-color: var(--c-desaturated);
   padding: 1em;
   max-width: 40em;
   border-radius: var(--br-sharp);
@@ -864,6 +868,10 @@ const StyledSideBySide = styled.div`
   aside > div {
     position: sticky;
     top: 2rem;
+  }
+
+  @media screen and (width < 600px){
+    flex-direction: column;
   }
   
 `
