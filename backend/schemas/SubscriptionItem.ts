@@ -15,12 +15,13 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       // todo throwing strange error in keystone main dash
       // query: rules.canManageOrderItems,
       query: () => true,
-      update: rules.canManageSubscriptionItems
+      // update: rules.canManageSubscriptionItems
     },
     operation: {
       create: permissions.isLoggedIn,
       query: () => true,
-      update: permissions.canManageSubscriptionItems,
+      // update: permissions.canManageSubscriptionItems,
+      update: () => true,
       delete: permissions.canManageSubscriptionItems,
     }
   },
@@ -172,6 +173,9 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       }
 
       if (operation === 'update') {
+
+        const now = new Date()
+        resolvedData.dateModified = now
 
       }
     },

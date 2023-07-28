@@ -34,7 +34,6 @@ export function SubscriptionItemSingle({id}:Props) {
     <StyledSubscriptionItemSingle>
 
       <h2>Package: { subscriptionPlan?.name } </h2>
-      <small>last updated: {datePrettyLocal(dateModified, 'full')}</small>
       <p className="description">{subscriptionPlan.description}</p>
       <br />
 
@@ -66,14 +65,14 @@ export function SubscriptionItemSingle({id}:Props) {
             </td>
           </tr>
 
-          {/* <tr>
-            <td><label>Start: </label> </td>
-            <td><DayMonthTime dateString={start}/></td>
+          <tr>
+            <td><label>started: </label> </td>
+            <td>{datePrettyLocal(dateCreated, 'full')} </td>
           </tr>
           <tr>
-            <td><label>End: </label> </td>
-            <td><DayMonthTime dateString={end}/></td>
-          </tr> */}
+            <td><label>updated: </label> </td>
+            <td> {datePrettyLocal(dateModified, 'full')} </td>
+          </tr>
           <tr>
             <td><label>Status: </label> </td>
             <td> <span className="status"> {status} </span></td>
@@ -85,10 +84,17 @@ export function SubscriptionItemSingle({id}:Props) {
           </tr>
         </tbody>
       </table>
+
+      <h2> Add-ons </h2>
     </StyledSubscriptionItemSingle>
 
     <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
-      <SubItemUpdateForm />
+      <SubItemUpdateForm 
+        id={id}
+        subPlanId={subscriptionPlan.id}
+        userId={user.id}
+        status={status}
+      />
     </PopupAnim>
   </>)
 }
