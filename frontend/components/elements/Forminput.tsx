@@ -45,6 +45,7 @@ export const FormInput = (props:any) => {
         {...inputProps}
         // onChange={handleChange}
         onChange={onChange}
+        defaultValue={{value: 'hehehe', label: 'hahah'}}
         // value={value}
         disabled={isDisabled}
       >
