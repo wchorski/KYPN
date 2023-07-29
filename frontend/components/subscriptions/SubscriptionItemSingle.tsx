@@ -56,6 +56,7 @@ export function SubscriptionItemSingle({id}:Props) {
                   {user?.name}
                 </Link>
               ) : (
+                // @ts-ignore
                 <span> {user.name ? user.name : 'Unregistered User'} </span>
               )}
               <br />

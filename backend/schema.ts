@@ -54,6 +54,7 @@ import { Addon } from './schemas/Addon';
 import { contact } from './mutations/contact';
 import { Announcement } from './schemas/Announcement';
 import { checkoutSubscription } from './mutations/checkoutSubscription';
+import { Coupon } from './schemas/Coupon';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -73,6 +74,7 @@ export const lists: Lists = {
   CartItem,
   OrderItem,
   Order,
+  Coupon,
   Page,
   Post,
   Event,

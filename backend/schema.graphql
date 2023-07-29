@@ -1917,6 +1917,62 @@ input OrderItemRelateToManyForCreateInput {
   connect: [OrderItemWhereUniqueInput!]
 }
 
+type Coupon {
+  id: ID!
+  name: String
+  amount_off: Int
+  percent_off: Int
+  duration_in_months: Int
+  duration: String
+}
+
+input CouponWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+input CouponWhereInput {
+  AND: [CouponWhereInput!]
+  OR: [CouponWhereInput!]
+  NOT: [CouponWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  amount_off: IntNullableFilter
+  percent_off: IntNullableFilter
+  duration_in_months: IntNullableFilter
+  duration: StringFilter
+}
+
+input CouponOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  amount_off: OrderDirection
+  percent_off: OrderDirection
+  duration_in_months: OrderDirection
+  duration: OrderDirection
+}
+
+input CouponUpdateInput {
+  name: String
+  amount_off: Int
+  percent_off: Int
+  duration_in_months: Int
+  duration: String
+}
+
+input CouponUpdateArgs {
+  where: CouponWhereUniqueInput!
+  data: CouponUpdateInput!
+}
+
+input CouponCreateInput {
+  name: String
+  amount_off: Int
+  percent_off: Int
+  duration_in_months: Int
+  duration: String
+}
+
 type Page {
   id: ID!
   title: String
@@ -2547,6 +2603,12 @@ type Mutation {
   updateOrders(data: [OrderUpdateArgs!]!): [Order]
   deleteOrder(where: OrderWhereUniqueInput!): Order
   deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
+  createCoupon(data: CouponCreateInput!): Coupon
+  createCoupons(data: [CouponCreateInput!]!): [Coupon]
+  updateCoupon(where: CouponWhereUniqueInput!, data: CouponUpdateInput!): Coupon
+  updateCoupons(data: [CouponUpdateArgs!]!): [Coupon]
+  deleteCoupon(where: CouponWhereUniqueInput!): Coupon
+  deleteCoupons(where: [CouponWhereUniqueInput!]!): [Coupon]
   createPage(data: PageCreateInput!): Page
   createPages(data: [PageCreateInput!]!): [Page]
   updatePage(where: PageWhereUniqueInput!, data: PageUpdateInput!): Page
@@ -2668,6 +2730,9 @@ type Query {
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   order(where: OrderWhereUniqueInput!): Order
   ordersCount(where: OrderWhereInput! = {}): Int
+  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
+  coupon(where: CouponWhereUniqueInput!): Coupon
+  couponsCount(where: CouponWhereInput! = {}): Int
   pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
   page(where: PageWhereUniqueInput!): Page
   pagesCount(where: PageWhereInput! = {}): Int
