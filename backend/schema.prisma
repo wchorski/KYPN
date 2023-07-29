@@ -286,6 +286,15 @@ model Order {
   @@index([userId])
 }
 
+model Coupon {
+  id                 String @id @default(uuid()) @postgresql.Uuid
+  name               String @unique @default("")
+  amount_off         Int?
+  percent_off        Int?
+  duration_in_months Int?
+  duration           String
+}
+
 model Page {
   id             String     @id @default(uuid()) @postgresql.Uuid
   title          String     @default("")

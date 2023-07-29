@@ -50,6 +50,15 @@ export type CartItem = {
 
 }
 
+export type Coupon = {
+  name:string,
+  amount_off:number,
+  percent_off:number,
+  duration_in_months:number,
+  duration:'once'|'repeating'|'forever',
+
+}
+
 export type Event = {
   summary:string,
   location:Location,

@@ -9,20 +9,20 @@ import 'dotenv/config'
 
 
 export const SubscriptionItem:Lists.SubscriptionItem = list({
+
   // access: allowAll,
   access: {
     filter: {
       // todo throwing strange error in keystone main dash
       // query: rules.canManageOrderItems,
       query: () => true,
-      // update: rules.canManageSubscriptionItems
+      update: rules.canManageSubscriptionItems
     },
     operation: {
       create: permissions.isLoggedIn,
       query: () => true,
-      // update: permissions.canManageSubscriptionItems,
-      update: () => true,
-      delete: permissions.canManageSubscriptionItems,
+      update: permissions.isLoggedIn,
+      delete: permissions.isLoggedIn,
     }
   },
 
@@ -39,12 +39,13 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
     subscriptionPlan: relationship({
       ref: 'SubscriptionPlan.items',
       many: false,
-      hooks: {
-        validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
-          const connection = resolvedData[fieldKey];
-          if (!connection) return addValidationError(`Must choose a Subscription Plan`);
-        },
-      },
+      // todo this validation seems nice but messes up updating
+      // hooks: {
+      //   validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
+      //     const connection = resolvedData[fieldKey];
+      //     if (!connection) return addValidationError(`Must choose a Subscription Plan`);
+      //   },
+      // },
     }),
     isActive: checkbox({ defaultValue: true }),
     isDelinquent: checkbox({ defaultValue: false }),
@@ -87,12 +88,12 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       },
 
       many: false,
-      hooks: {
-        validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
-          const connection = resolvedData[fieldKey];
-          if (!connection) return addValidationError(`Must choose a User`);
-        },
-      }
+      // hooks: {
+      //   validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
+      //     const connection = resolvedData[fieldKey];
+      //     if (!connection) return addValidationError(`Must choose a User`);
+      //   },
+      // }
     }),
     stripeId: text(),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
@@ -102,13 +103,13 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
   hooks: {
 
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
-      try {
-        if (resolvedData && !resolvedData.user) {
-          const currentUserId = await context.session.itemId;
-          // console.log({ currentUserId });
-          resolvedData.user = { connect: { id: currentUserId } };
-        }
-      } catch (err) { console.warn(err) }
+      // try {
+      //   if (resolvedData && !resolvedData.user) {
+      //     const currentUserId = await context.session.itemId;
+      //     // console.log({ currentUserId });
+      //     resolvedData.user = { connect: { id: currentUserId } };
+      //   }
+      // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
         // todo moving this to checkoutSubscription
@@ -176,7 +177,24 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
         const now = new Date()
         resolvedData.dateModified = now
+        
+        try {
+          const resStripe = await stripeConfig.subscriptionItems.update(
+            item.stripeId,
+            {metadata: {
+              order_id: '6735'
+            }}
+          );
 
+          console.log({resStripe});
+          
+          
+        } catch (error) {
+          console.log("sub item update error: ", error);
+          
+        }
+
+        
       }
     },
     // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
