@@ -81,6 +81,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Manage Subscription Item: Can see and manage any current running subscriptions',
   }),
+  canManageCoupons: checkbox({
+    defaultValue: false,
+    label: 'Manage Coupons: Can create / delete coupons',
+  }),
 };
 
 export type Permission = keyof typeof permissionFields;
