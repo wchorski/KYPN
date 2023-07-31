@@ -117,7 +117,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
           metadata: {
             subscriptionPlanId: thePlan?.id || 'no_sub_id',
             // todo get subscriptionItem Id. prob have to use afterOperation
-            subscriptionPlanItemId: thePlan?.id|| 'no_item_id',
+            // subscriptionPlanItemId: thePlan?.id|| 'no_item_id',
             subscriptionPlanName: thePlan?.name || 'no_sub_name',
           }, 
         },
@@ -127,7 +127,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         subscriptionPlanName: thePlan?.name || 'no_sub_name',
       }
     })
-    console.log(resStripe)
+    console.log({resStripe})
     console.log(' --------- NEW SUBSCRIPTION MADE')
 
 
@@ -139,7 +139,8 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         subscriptionPlan: { connect: { id: planId } },
         user: { connect: { id: user.id } },
         // @ts-ignore
-        stripeId: resStripe.id,
+        stripePlanId: resStripe.id,
+        // stripeItemId: resStripe.id,
 
         dateCreated: now.toISOString(),
         dateModified: now.toISOString(),

@@ -68,7 +68,8 @@ export const Coupon:Lists.Coupon = list({
 
     // todo add coupon relations
     // products: relationship({ ref: 'Product.coupons', many: true }),
-    // subscriptions: relationship({ ref: 'SubscriptionPlan.coupons', many: true }),
+    subscriptionItems: relationship({ ref: 'SubscriptionItem.coupons', many: true }),
+    // subscription: relationship({ ref: 'SubscriptionPlan.coupons', many: true }),
     // events: relationship({ ref: 'Event.coupons', many: true }),
     // tickets: relationship({ ref: 'Event.coupons', many: true }),
     // bookings: relationship({ ref: 'Booking.coupons', many: true }),

@@ -261,6 +261,15 @@ export const rules = {
     // 2. If not, do they own this item?
     return false
   },
+  canManageCoupons({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission 
+    if (permissions.canManageCoupons({ session })) return true;
+    
+    // 2. If not, then no
+    return false
+  },
   canManageSubscriptionItems({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
 

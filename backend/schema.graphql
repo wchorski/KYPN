@@ -586,6 +586,7 @@ type Role {
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
+  canManageCoupons: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -621,6 +622,7 @@ input RoleWhereInput {
   canManageServices: BooleanFilter
   canManageSubscriptionPlans: BooleanFilter
   canManageSubscriptionItems: BooleanFilter
+  canManageCoupons: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -653,6 +655,7 @@ input RoleOrderByInput {
   canManageServices: OrderDirection
   canManageSubscriptionPlans: OrderDirection
   canManageSubscriptionItems: OrderDirection
+  canManageCoupons: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -677,6 +680,7 @@ input RoleUpdateInput {
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
+  canManageCoupons: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -714,6 +718,7 @@ input RoleCreateInput {
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
+  canManageCoupons: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 
@@ -1425,6 +1430,8 @@ type SubscriptionItem {
   billing_interval: String
   user: User
   stripeId: String
+  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
+  couponsCount(where: CouponWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1446,8 +1453,15 @@ input SubscriptionItemWhereInput {
   billing_interval: StringNullableFilter
   user: UserWhereInput
   stripeId: StringFilter
+  coupons: CouponManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+}
+
+input CouponManyRelationFilter {
+  every: CouponWhereInput
+  some: CouponWhereInput
+  none: CouponWhereInput
 }
 
 input SubscriptionItemOrderByInput {
@@ -1471,6 +1485,7 @@ input SubscriptionItemUpdateInput {
   billing_interval: String
   user: UserRelateToOneForUpdateInput
   stripeId: String
+  coupons: CouponRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1479,6 +1494,13 @@ input SubscriptionPlanRelateToOneForUpdateInput {
   create: SubscriptionPlanCreateInput
   connect: SubscriptionPlanWhereUniqueInput
   disconnect: Boolean
+}
+
+input CouponRelateToManyForUpdateInput {
+  disconnect: [CouponWhereUniqueInput!]
+  set: [CouponWhereUniqueInput!]
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
 }
 
 input SubscriptionItemUpdateArgs {
@@ -1495,6 +1517,7 @@ input SubscriptionItemCreateInput {
   billing_interval: String
   user: UserRelateToOneForCreateInput
   stripeId: String
+  coupons: CouponRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1502,6 +1525,11 @@ input SubscriptionItemCreateInput {
 input SubscriptionPlanRelateToOneForCreateInput {
   create: SubscriptionPlanCreateInput
   connect: SubscriptionPlanWhereUniqueInput
+}
+
+input CouponRelateToManyForCreateInput {
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
 }
 
 type Product {
@@ -1920,10 +1948,13 @@ input OrderItemRelateToManyForCreateInput {
 type Coupon {
   id: ID!
   name: String
+  stripeId: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
 }
 
 input CouponWhereUniqueInput {
@@ -1937,15 +1968,18 @@ input CouponWhereInput {
   NOT: [CouponWhereInput!]
   id: IDFilter
   name: StringFilter
+  stripeId: StringFilter
   amount_off: IntNullableFilter
   percent_off: IntNullableFilter
   duration_in_months: IntNullableFilter
   duration: StringFilter
+  subscriptionItems: SubscriptionItemManyRelationFilter
 }
 
 input CouponOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  stripeId: OrderDirection
   amount_off: OrderDirection
   percent_off: OrderDirection
   duration_in_months: OrderDirection
@@ -1954,10 +1988,12 @@ input CouponOrderByInput {
 
 input CouponUpdateInput {
   name: String
+  stripeId: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
 }
 
 input CouponUpdateArgs {
@@ -1967,10 +2003,12 @@ input CouponUpdateArgs {
 
 input CouponCreateInput {
   name: String
+  stripeId: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  subscriptionItems: SubscriptionItemRelateToManyForCreateInput
 }
 
 type Page {

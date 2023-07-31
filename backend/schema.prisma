@@ -82,6 +82,7 @@ model Role {
   canManageServices          Boolean @default(false)
   canManageSubscriptionPlans Boolean @default(false)
   canManageSubscriptionItems Boolean @default(false)
+  canManageCoupons           Boolean @default(false)
   assignedTo                 User[]  @relation("User_role")
 }
 
@@ -203,6 +204,7 @@ model SubscriptionItem {
   user               User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId             String?           @map("user") @postgresql.Uuid
   stripeId           String            @default("")
+  coupons            Coupon[]          @relation("Coupon_subscriptionItems")
   dateCreated        DateTime?         @default(now())
   dateModified       DateTime?         @default(now())
 
@@ -287,12 +289,14 @@ model Order {
 }
 
 model Coupon {
-  id                 String @id @default(uuid()) @postgresql.Uuid
-  name               String @unique @default("")
+  id                 String             @id @default(uuid()) @postgresql.Uuid
+  name               String             @unique @default("")
+  stripeId           String             @default("")
   amount_off         Int?
   percent_off        Int?
   duration_in_months Int?
   duration           String
+  subscriptionItems  SubscriptionItem[] @relation("Coupon_subscriptionItems")
 }
 
 model Page {

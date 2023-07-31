@@ -6,6 +6,7 @@ import { permissions, rules } from "../access";
 import { validate } from "graphql";
 import stripeConfig from "../lib/stripe";
 import 'dotenv/config'
+import { SubscriptionItem, SubscriptionItem } from "../types";
 
 
 export const SubscriptionItem:Lists.SubscriptionItem = list({
@@ -56,6 +57,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         { label: 'Expired',     value: 'EXPIRED' },
         { label: 'Canceled',    value: 'CANCELED' },
         { label: 'Suspended',   value: 'SUSPENDED' },
+        { label: 'Paused',      value: 'PAUSED' },
         { label: 'Delinquent',  value: 'DELINQUENT' },
       ],
       defaultValue: 'ACTIVE',
@@ -96,6 +98,10 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       // }
     }),
     stripeId: text(),
+    coupons: relationship({
+      ref: 'Coupon.subscriptionItems',
+      many: true,
+    }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
@@ -178,23 +184,9 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         const now = new Date()
         resolvedData.dateModified = now
         
-        try {
-          const resStripe = await stripeConfig.subscriptionItems.update(
-            item.stripeId,
-            {metadata: {
-              order_id: '6735'
-            }}
-          );
-
-          console.log({resStripe});
+        // @ts-ignore
+        if(resolvedData.status) handleStatusChange(item, String(resolvedData.status))
           
-          
-        } catch (error) {
-          console.log("sub item update error: ", error);
-          
-        }
-
-        
       }
     },
     // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
@@ -203,3 +195,53 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
     // },
   },
 })
+
+
+
+async function handleStatusChange(item:SubscriptionItem, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
+  
+  console.log(' **** status update *****'); 
+  console.log(status);
+
+  try {
+    if(status === 'PAUSED'){
+      const resStripe = await stripeConfig.subscriptions.update(
+        item.stripeId,
+        {
+          pause_collection: {
+            behavior: 'void'
+          },
+          metadata: {
+            subscriptionItemId: item.id
+          }
+        }
+      )
+
+      // console.log({resStripe});
+    }
+
+    if(status === 'ACTIVE'){
+      const resStripe = await stripeConfig.subscriptions.update(
+        item.stripeId,
+        {
+          pause_collection: '',
+        }
+      );
+
+      // console.log({resStripe});
+    }
+
+    if(status === 'CANCELED'){
+      const resStripe = await stripeConfig.subscriptions.cancel(item.stripeId);
+
+      // console.log({resStripe});
+    }
+
+    
+    
+  } catch (error) {
+    console.log("sub item update error: ", error);
+    throw new Error("Sub Item Status Change Error: ", error.message);
+    
+  }
+}
