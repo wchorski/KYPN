@@ -4,11 +4,14 @@ import useForm2 from "../../lib/useForm2"
 import { InputObj } from "../../lib/types"
 import { gql, useMutation } from "@apollo/client"
 import ErrorMessage from "../ErrorMessage"
+import { useState } from "react"
+import StatusMessage from "../elements/StatusMessage"
+import Link from "next/link"
 
 
 const statusOptions = [
   {value: 'ACTIVE', label: 'Active'},
-  {value: 'SUSPENDED', label: 'Suspend'},
+  {value: 'PAUSED', label: 'Pause'},
   {value: 'CANCELED', label: 'Cancel'},
 ]
 
@@ -16,11 +19,13 @@ type Props = {
   id:string,
   subPlanId:string,
   userId:string,
-  status:'ACTIVE'|'CANCELED'|'SUSPENDED'|string,
+  status:'ACTIVE'|'CANCELED'|'PAUSED'|string,
   // custom_price:number,
 }
 
 export function SubItemUpdateForm({ id, subPlanId, userId, status }:Props) {
+
+  const [formState, setFormState] = useState<'success'|'failure'|undefined>(undefined)
 
   const inputs:InputObj[] = [
 
@@ -89,7 +94,14 @@ export function SubItemUpdateForm({ id, subPlanId, userId, status }:Props) {
           // refetchQueries: [{ query: QUERY_EVENTS_ALL }, { query: QUERY_EVENT, variables: { where: { id: event?.id }}, },]
         },
       })
-      console.log('update subitem success, ', res);
+      console.log('update subitem success, ')
+      console.log(res.data.updateSubscriptionItem);
+      
+      if(res.data.updateSubscriptionItem) {
+        setFormState('success') 
+      } else {
+        setFormState('failure')
+      }
       // router.push(`/events/e/${res.data.updateEvent.id}`)
       
     } catch (error) {
@@ -98,6 +110,18 @@ export function SubItemUpdateForm({ id, subPlanId, userId, status }:Props) {
     }
 
   }
+
+  if(formState === 'success') return (
+    <StatusMessage  status={formState} message={'subscription update successful'}>
+      <Link href={`/account`}> My Account </Link>
+    </StatusMessage>
+  )
+
+  if(formState === 'failure') return (
+    <StatusMessage  status={formState} message={'subscription update failed'}>
+      <p> refesh the page and try again </p>
+    </StatusMessage>
+  )
 
   return (
     <StyledSubItemForm onSubmit={handleSubmit}>

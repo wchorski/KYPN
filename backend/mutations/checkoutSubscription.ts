@@ -139,7 +139,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         subscriptionPlan: { connect: { id: planId } },
         user: { connect: { id: user.id } },
         // @ts-ignore
-        stripePlanId: resStripe.id,
+        stripeId: resStripe.id,
         // stripeItemId: resStripe.id,
 
         dateCreated: now.toISOString(),
@@ -147,6 +147,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
       },
     }).catch(error => {
       console.log('+++++++ catch checkout error');
+      console.log(error);
       
     })
 
