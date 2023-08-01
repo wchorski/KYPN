@@ -16,7 +16,7 @@ const StatusMessage = ({ status = undefined, message, code, children}: Props) =>
   if (!status) return null;
 
   if(status === 'success') return (
-    <SuccessStyles>
+    <StyledStatsMessage status={status}>
       <p data-test="graphql-success">
         <strong> <MdCheck />  </strong>
         {code}
@@ -24,7 +24,18 @@ const StatusMessage = ({ status = undefined, message, code, children}: Props) =>
         <br />
         {children}
       </p>
-    </SuccessStyles>
+    </StyledStatsMessage>
+  )
+  if(status === 'failure') return (
+    <StyledStatsMessage status={status}>
+      <p data-test="graphql-failure">
+        <strong> <MdError />  </strong>
+        {code}
+        {message?.replace('GraphQL error: ', '')}
+        <br />
+        {children}
+      </p>
+    </StyledStatsMessage>
   )
 
   return null;
@@ -50,15 +61,37 @@ StatusMessage.propTypes = {
 
 export default StatusMessage;
 
-const SuccessStyles = styled.div`
+const StyledStatsMessage = styled.div<{status:'success'|'failure'|'error'|'loading'|undefined}>`
   padding: 2rem;
   background: white;
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-left: 5px solid #20df50;
+  border-left: 5px solid ${p => {
+    switch (p.status) {
+      case 'success':
+        return 'limegreen'
+      case 'failure':
+        return 'red'
+    
+      default:
+        return 'grey'
+    }
+  }}
+  ;
 
   svg{
-    color: #50ca6f;
+    color: ${p => {
+      switch (p.status) {
+        case 'success':
+          return 'limegreen'
+        case 'failure':
+          return 'red'
+      
+        default:
+          return 'grey'
+      }
+    }}
+    ;
   }
 
   p {
@@ -69,7 +102,7 @@ const SuccessStyles = styled.div`
   strong {
     margin-right: 1rem;
   }
-`;
+`
 
 const ErrorStyles = styled.div`
   padding: 2rem;

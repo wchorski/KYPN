@@ -152,7 +152,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
           name: resolvedData.name || '',
           active: true,
-          description: resolvedData.description,
+          description: resolvedData.description ||'no_description',
           metadata: {
             // @ts-ignore //todo might cause problems
             category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
@@ -188,7 +188,11 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
               resolvedData.stripePriceId = res.default_price
             }
           })
-          .catch(err => { console.warn(err) })
+          .catch(err => { 
+            console.warn(err) 
+            throw new Error("subplan create err: " + 'haha uh oh::' + err.message);
+            
+          })
 
       }
 

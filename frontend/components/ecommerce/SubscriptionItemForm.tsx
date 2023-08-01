@@ -281,6 +281,12 @@ const CREATE_SUBSCRIPTIONITEM = gql`
   createSubscriptionItem(data: $data) {
     user {
       id
+      subscriptions{
+        subscriptionPlan{
+          name
+        }
+        status
+      }
     }
     custom_price
     id
@@ -289,6 +295,7 @@ const CREATE_SUBSCRIPTIONITEM = gql`
     subscriptionPlan {
       id
       name
+      status
     }
   }
 }
