@@ -42,11 +42,14 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
   const handleItemCount = () => {
     if (route === '/shop') return data.productsCount
     if (route === '/blog/posts') return data.postsCount
+    if (route === '/shop/subscriptions') return data.subscriptionPlansCount
     return 0
   }
 
 
   const pageCount = Math.ceil(handleItemCount() / perPage)
+
+  if(data.productsCount <= perPage) return null
 
   return (<>
     <Head>
@@ -81,6 +84,7 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 export const QUERY_PRODUCTS_COUNT = gql`
   query Query($where: PostWhereInput!) {
     productsCount
+    subscriptionPlansCount
     postsCount(where: $where)
 
   }

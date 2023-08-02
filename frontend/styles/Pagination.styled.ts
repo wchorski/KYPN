@@ -19,6 +19,8 @@ export const StyledPagination = styled.div`
     }
   } */
 
+  margin: 1rem 0;
+
   display: flex;
   /* flex-direction: column; */
   justify-content: space-between;

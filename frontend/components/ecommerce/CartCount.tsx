@@ -56,7 +56,7 @@ const StyledAnimation = styled.span`
   .count-enter{
     /* background-color: green; */
     opacity: 0;
-    transform: scale(1.3) rotateX(45deg);
+    transform: scale(1.1) rotateX(45deg);
   }
 
   .count-enter-active {
