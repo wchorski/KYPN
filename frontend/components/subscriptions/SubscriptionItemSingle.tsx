@@ -10,6 +10,7 @@ import { FiEdit } from "react-icons/fi"
 import { useState } from "react"
 import { PopupAnim } from "../menus/PopupAnim"
 import { SubItemUpdateForm } from "./SubItemUpdateForm"
+import StatusMessage from "../elements/StatusMessage"
 
 type Props = {
   id:string,
@@ -28,7 +29,7 @@ export function SubscriptionItemSingle({id}:Props) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { user, subscriptionPlan, custom_price, dateCreated, dateModified, billing_interval, status }:SubscriptionItem = data?.subscriptionItem
+  const { user, subscriptionPlan, addons, custom_price, dateCreated, dateModified, billing_interval, status }:SubscriptionItem = data?.subscriptionItem
   
   return (<>
     <StyledSubscriptionItemSingle>
@@ -37,7 +38,13 @@ export function SubscriptionItemSingle({id}:Props) {
       <p className="description">{subscriptionPlan.description}</p>
       <br />
 
-      <div className="edit-buttons">
+      {status === 'CANCELED' ? (
+        <StatusMessage status={'canceled'}>
+          <h3> Canceled </h3>
+          <p>This subscription is canceled. To start a new subscription head to the <Link href={`/shop`}>shop</Link></p>
+        </StatusMessage>
+      ) : (
+        <div className="edit-buttons">
         <button 
           className="edit button"
           onClick={() => setIsPopup(!isPopup)}
@@ -45,6 +52,7 @@ export function SubscriptionItemSingle({id}:Props) {
           <FiEdit /> Edit 
         </button>
       </div>
+      )}
       
       <table>
         <tbody>
@@ -87,6 +95,10 @@ export function SubscriptionItemSingle({id}:Props) {
       </table>
 
       <h2> Add-ons </h2>
+      {addons.length <= 0 && (
+        <p> no addons </p>
+      )}
+      
     </StyledSubscriptionItemSingle>
 
     <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
@@ -209,6 +221,10 @@ const QUERY_SUBSCRIPTIONITEM = gql`
       image
       name
       description
+    }
+    addons{
+      id
+      name
     }
     user {
       email

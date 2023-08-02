@@ -1157,6 +1157,8 @@ type Addon {
   servicesCount(where: ServiceWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   bookingsCount(where: BookingWhereInput! = {}): Int
+  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -1178,6 +1180,7 @@ input AddonWhereInput {
   price: IntNullableFilter
   services: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
+  subscriptionItems: SubscriptionItemManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
 }
@@ -1195,6 +1198,7 @@ input AddonUpdateInput {
   price: Int
   services: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
+  subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
 }
@@ -1210,6 +1214,7 @@ input AddonCreateInput {
   price: Int
   services: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
+  subscriptionItems: SubscriptionItemRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
 }
@@ -1428,6 +1433,8 @@ type SubscriptionItem {
   isDelinquent: Boolean
   status: String
   billing_interval: String
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
   user: User
   stripeId: String
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
@@ -1451,6 +1458,7 @@ input SubscriptionItemWhereInput {
   isDelinquent: BooleanFilter
   status: StringNullableFilter
   billing_interval: StringNullableFilter
+  addons: AddonManyRelationFilter
   user: UserWhereInput
   stripeId: StringFilter
   coupons: CouponManyRelationFilter
@@ -1483,6 +1491,7 @@ input SubscriptionItemUpdateInput {
   isDelinquent: Boolean
   status: String
   billing_interval: String
+  addons: AddonRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   stripeId: String
   coupons: CouponRelateToManyForUpdateInput
@@ -1515,6 +1524,7 @@ input SubscriptionItemCreateInput {
   isDelinquent: Boolean
   status: String
   billing_interval: String
+  addons: AddonRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   stripeId: String
   coupons: CouponRelateToManyForCreateInput

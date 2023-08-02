@@ -305,6 +305,7 @@ export type SubscriptionItem = {
   dateCreated:string,
   dateModified:string,
   billing_interval:string,
+  addons:Addon[],
 
 }
 
