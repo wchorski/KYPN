@@ -25,7 +25,7 @@ type Props = {
 
 export function SubItemUpdateForm({ id, subPlanId, userId, status }:Props) {
 
-  const [formState, setFormState] = useState<'success'|'failure'|undefined>(undefined)
+  const [formState, setFormState] = useState<'success'|'failure'|''>('')
 
   const inputs:InputObj[] = [
 
@@ -95,7 +95,7 @@ export function SubItemUpdateForm({ id, subPlanId, userId, status }:Props) {
         },
       })
       console.log('update subitem success, ')
-      console.log(res.data.updateSubscriptionItem);
+      // console.log(res.data.updateSubscriptionItem);
       
       if(res.data.updateSubscriptionItem) {
         setFormState('success') 

@@ -2,39 +2,52 @@ import styled from 'styled-components';
 import React, { ReactNode } from 'react';
 
 import PropTypes from 'prop-types';
-import { MdError, MdCheck } from 'react-icons/md';
+import { MdError, MdCheck, MdCancel } from 'react-icons/md';
 
 type Props = {
-  status:'success'|'failure'|'error'|'loading'|undefined,
+  status:'success'|'failure'|'error'|'loading'|'canceled'|'',
   message?:string|undefined,
   code?:string|number,
   children:ReactNode,
 }
 
-const StatusMessage = ({ status = undefined, message, code, children}: Props) => {
+const StatusMessage = ({ status = '', message, code, children}: Props) => {
 
   if (!status) return null;
 
   if(status === 'success') return (
     <StyledStatsMessage status={status}>
-      <p data-test="graphql-success">
+      <div data-test="graphql-success">
         <strong> <MdCheck />  </strong>
         {code}
         {message?.replace('GraphQL error: ', '')}
         <br />
         {children}
-      </p>
+      </div>
     </StyledStatsMessage>
   )
   if(status === 'failure') return (
     <StyledStatsMessage status={status}>
-      <p data-test="graphql-failure">
+      <div data-test="graphql-failure">
         <strong> <MdError />  </strong>
         {code}
         {message?.replace('GraphQL error: ', '')}
         <br />
         {children}
-      </p>
+      </div>
+    </StyledStatsMessage>
+  )
+  if(status === 'canceled') return (
+    <StyledStatsMessage status={status}>
+      <div data-test="graphql-canceled" className='wrapper'>
+        <strong> <MdCancel />  </strong>
+
+        <div className="content">
+          {code}
+          {message?.replace('GraphQL error: ', '')}
+          {children}
+        </div>
+      </div>
     </StyledStatsMessage>
   )
 
@@ -61,37 +74,38 @@ StatusMessage.propTypes = {
 
 export default StatusMessage;
 
-const StyledStatsMessage = styled.div<{status:'success'|'failure'|'error'|'loading'|undefined}>`
+function getColor(status:string){
+
+  switch (status) {
+    case 'success':
+      return 'limegreen'
+    case 'failure':
+      return 'red'
+  
+    default:
+      return 'grey'
+  }
+  
+}
+
+const StyledStatsMessage = styled.div<{status:'success'|'failure'|'error'|'loading'|'canceled'|''}>`
   padding: 2rem;
   background: white;
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-left: 5px solid ${p => {
-    switch (p.status) {
-      case 'success':
-        return 'limegreen'
-      case 'failure':
-        return 'red'
-    
-      default:
-        return 'grey'
-    }
-  }}
-  ;
+  border-left: 5px solid ${p => getColor(p.status)};
 
-  svg{
-    color: ${p => {
-      switch (p.status) {
-        case 'success':
-          return 'limegreen'
-        case 'failure':
-          return 'red'
-      
-        default:
-          return 'grey'
-      }
-    }}
-    ;
+  .wrapper{
+    display: flex;
+  }
+
+  svg{        
+    color: ${p => getColor(p.status)};
+  }
+
+  h3{
+    color: ${p => getColor(p.status)};
+    margin-top: 0;
   }
 
   p {

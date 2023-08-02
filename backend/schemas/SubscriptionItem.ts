@@ -6,7 +6,7 @@ import { permissions, rules } from "../access";
 import { validate } from "graphql";
 import stripeConfig from "../lib/stripe";
 import 'dotenv/config'
-import { SubscriptionItem, SubscriptionItem } from "../types";
+// import { SubscriptionItem, SubscriptionItem } from "../types";
 
 
 export const SubscriptionItem:Lists.SubscriptionItem = list({
@@ -79,6 +79,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         createView: { fieldMode: 'edit' }
       }
     }),
+    addons: relationship({ ref: 'Addon.subscriptionItems', many: true }),
     user: relationship({
       ref: 'User.subscriptions',
       ui: {
@@ -183,6 +184,11 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
         const now = new Date()
         resolvedData.dateModified = now
+
+        if(item.status === 'CANCELED') {
+          console.log('!!!!!!!! sub item is canceled and cannot be re-activated');
+          throw new Error('!!!!!!!! sub item is canceled and cannot be re-activated')
+        }
         
         // @ts-ignore
         if(resolvedData.status) handleStatusChange(item, String(resolvedData.status))
@@ -198,7 +204,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
 
 
-async function handleStatusChange(item:SubscriptionItem, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
+async function handleStatusChange(item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
   
   console.log(' **** status update *****'); 
   console.log(status);
@@ -241,6 +247,7 @@ async function handleStatusChange(item:SubscriptionItem, status:'ACTIVE'|'SUSPEN
     
   } catch (error) {
     console.log("sub item update error: ", error);
+    // @ts-ignore
     throw new Error("Sub Item Status Change Error: ", error.message);
     
   }

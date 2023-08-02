@@ -38,6 +38,7 @@ export const Addon:Lists.Addon = list({
     price: integer({defaultValue: 0}),
     services: relationship({ ref: 'Service.addons', many: true }),
     bookings: relationship({ ref: 'Booking.addons', many: true }),
+    subscriptionItems: relationship({ ref: 'SubscriptionItem.addons', many: true }),
     // products: relationship({}),
 
     categories: relationship({
