@@ -26,11 +26,13 @@ export function ProductsList({ page }: ProdProps) {
 
   return (
     <StyledProductsList>
-      {data.products.length <= 0 && (
-        <h2> No Products Available </h2>
-      )}
+      {/* {data.products.length <= 0 && (
+        <p> No Products Available </p>
+      )} */}
       {data.products.map((prod: any) => {
         // console.log(prod);
+
+        if(prod.status === 'DRAFT') return null
 
         return (
           <li key={prod.id}>

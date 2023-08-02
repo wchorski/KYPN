@@ -65,11 +65,20 @@ export const QUERY_USER_CURRENT = gql`
           canManageCart
           canManageOrders
           canManageProducts
+          canManageServices
           canManageRoles
           canManageUsers
           canSeeOtherUsers
           canManageTickets
           canManageEvents
+          canManagePosts
+          canManagePages
+          canManageLocations
+          canManageTags
+          canManageCategories
+          canManageSubscriptionPlans
+          canManageSubscriptionItems
+          canManageCoupons
         }
         tickets {
           event {

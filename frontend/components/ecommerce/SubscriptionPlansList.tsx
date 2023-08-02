@@ -36,6 +36,8 @@ export function SubscriptionPlansList({ page }: ProdProps) {
       {subscriptionPlans.map((item: any) => {
         // console.log(prod);
 
+        if(item.status === 'DRAFT') return null
+
         return (
           <li key={item.id}>
             <SubscriptionThumbnail item={item}/>
@@ -59,8 +61,8 @@ const StyledProductsList = styled.ul`
   padding: 0;
 
   li{
-    background-color: #dcdcdc;
-    padding: .3em;
+    background-color: var(--c-desaturated);
+    /* padding: .3em; */
     box-shadow: #0000004d 2px 2px 8px;
     margin: 1em;
     width: 20em;
@@ -85,6 +87,8 @@ export const GET_ALL_SUBSCRIPTIONPLANS = gql`
         name
       }
       name
+      description
+      billing_interval
       image
       photo {
         url

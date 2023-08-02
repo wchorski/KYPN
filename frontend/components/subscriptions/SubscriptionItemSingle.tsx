@@ -89,7 +89,7 @@ export function SubscriptionItemSingle({id}:Props) {
 
           <tr>
             <td><label>Price: </label> </td>
-            <td> <span className="price">{moneyFormatter(custom_price)} / {billing_interval} </span></td>
+            <td> <span className="price">{moneyFormatter(custom_price)} <small>{billing_interval} </small> </span></td>
           </tr>
         </tbody>
       </table>
@@ -98,7 +98,7 @@ export function SubscriptionItemSingle({id}:Props) {
       {addons.length <= 0 && (
         <p> no addons </p>
       )}
-      
+
     </StyledSubscriptionItemSingle>
 
     <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
