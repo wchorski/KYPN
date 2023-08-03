@@ -29,7 +29,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
   ui: {
     listView: {
-      initialColumns: ['user', 'subscriptionPlan', 'isActive', 'isDelinquent', 'custom_price']
+      initialColumns: ['user', 'subscriptionPlan', 'status', 'custom_price', 'billing_interval']
     }
   },
 
@@ -191,7 +191,7 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         }
         
         // @ts-ignore
-        if(resolvedData.status) handleStatusChange(item, String(resolvedData.status))
+        if(resolvedData.status) handleStatusChange(context, item, String(resolvedData.status))
           
       }
     },
@@ -204,10 +204,17 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
 
 
-async function handleStatusChange(item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
+async function handleStatusChange(context:any, item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
   
   console.log(' **** status update *****'); 
   console.log(status);
+
+  const thePlan = await context.db.SubscriptionPlan.findOne({
+    where: { id: item.subscriptionPlanId },
+    query: `
+      stockCount
+    `,
+  })
 
   try {
     if(status === 'PAUSED'){
@@ -237,9 +244,17 @@ async function handleStatusChange(item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'
       // console.log({resStripe});
     }
 
+    console.log({item});
+    
+
     if(status === 'CANCELED'){
       const resStripe = await stripeConfig.subscriptions.cancel(item.stripeId);
-
+      const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
+        where: { id: item.subscriptionPlanId },
+        data: {
+          stockCount: thePlan.stockCount + 1,
+        },
+      })
       // console.log({resStripe});
     }
 
@@ -251,4 +266,8 @@ async function handleStatusChange(item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'
     throw new Error("Sub Item Status Change Error: ", error.message);
     
   }
+}
+
+async function handlePlanUpdate(context:any, quantity:number){
+
 }

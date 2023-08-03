@@ -44,8 +44,34 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         stripePriceId
         billing_interval
         stockCount
+        items {
+          id
+        }
       `
     })
+
+    console.log(' ==== subitem count on this plan ');
+    console.log(thePlan.items);
+
+    if(thePlan.items.length >= thePlan.stockCount) throw new Error("Max Stock Count Reached");
+    
+
+    // const SubItemCount = await context.query.SubscriptionItem.count({
+    //     where: {
+    //       NOT: [
+    //         {
+    //           status: {
+    //             equals: "CANCELED"
+    //           }
+    //         },
+    //         {
+    //           status: {
+    //             equals: "EXPIRED"
+    //           }
+    //         }
+    //       ]
+    //     },
+    // })
 
     //Query the current user
     const user = await context.query.User.findOne({
@@ -148,7 +174,13 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
     }).catch(error => {
       console.log('+++++++ catch checkout error');
       console.log(error);
-      
+    })
+
+    const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
+      where: { id: thePlan.id },
+      data: {
+        stockCount: thePlan.stockCount - 1,
+      },
     })
 
     return order
