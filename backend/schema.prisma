@@ -186,7 +186,7 @@ model SubscriptionPlan {
   stripePriceId    String             @default("NO_PRICE_ID")
   billing_interval String?            @default("month")
   items            SubscriptionItem[] @relation("SubscriptionItem_subscriptionPlan")
-  stockCount       Int                @default(0)
+  stockMax         Int                @default(0)
   tags             Tag[]              @relation("SubscriptionPlan_tags")
   categories       Category[]         @relation("Category_subscriptions")
 

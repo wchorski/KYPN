@@ -9,6 +9,7 @@ import { handlePhoto } from '../../lib/handleProductPhoto';
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { SubscriptionPlan } from '../../lib/types';
 import { useUser } from '../menus/Session';
+import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 
 type Props = {
   item:SubscriptionPlan
@@ -20,11 +21,12 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
   console.log(session);
   
 
-  const {price, photo, image, id, name, description, billing_interval} = item
+  const {price, photo, status, image, id, name, description, billing_interval} = item
 
   return (
     <StyledProdThumbnail>
-
+      
+      {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
       <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`}} />
 
       <h3><Link href={`/shop/subscriptionplan/${id}`}>{name}</Link></h3>

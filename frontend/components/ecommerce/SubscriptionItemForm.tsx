@@ -272,6 +272,10 @@ const CHECKOUT_SUBSCRIPTIONITEM = gql`
       email
       id
     }
+    subscriptionPlan{
+      status
+      stockMax
+    }
   }
 }
 `

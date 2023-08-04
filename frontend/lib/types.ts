@@ -289,7 +289,7 @@ export type SubscriptionPlan = {
   stripePriceId: string,
   billing_interval: string,
   items: any[]
-  stockCount: number,
+  stockMax: number,
   tags: Tag[],
   categories: Category[],
 }

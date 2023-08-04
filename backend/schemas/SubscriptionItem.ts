@@ -182,6 +182,9 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
       if (operation === 'update') {
 
+        // todo if thePlan.stockCount > 0
+        // set thePlan.status = ACTIVE
+
         const now = new Date()
         resolvedData.dateModified = now
 
@@ -212,7 +215,7 @@ async function handleStatusChange(context:any, item:any, status:'ACTIVE'|'SUSPEN
   const thePlan = await context.db.SubscriptionPlan.findOne({
     where: { id: item.subscriptionPlanId },
     query: `
-      stockCount
+      stockMax
     `,
   })
 
@@ -249,12 +252,13 @@ async function handleStatusChange(context:any, item:any, status:'ACTIVE'|'SUSPEN
 
     if(status === 'CANCELED'){
       const resStripe = await stripeConfig.subscriptions.cancel(item.stripeId);
-      const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
-        where: { id: item.subscriptionPlanId },
-        data: {
-          stockCount: thePlan.stockCount + 1,
-        },
-      })
+      // todo using stockMax now
+      // const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
+      //   where: { id: item.subscriptionPlanId },
+      //   data: {
+      //     stockCount: thePlan.stockCount + 1,
+      //   },
+      // })
       // console.log({resStripe});
     }
 
