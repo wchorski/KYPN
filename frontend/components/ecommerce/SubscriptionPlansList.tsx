@@ -97,7 +97,7 @@ export const GET_ALL_SUBSCRIPTIONPLANS = gql`
       price
       slug
       status
-      stockCount
+      stockMax
       tags {
         id
         name

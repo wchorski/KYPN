@@ -1314,7 +1314,7 @@ type SubscriptionPlan {
   billing_interval: String
   items(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
   itemsCount(where: SubscriptionItemWhereInput! = {}): Int
-  stockCount: Int
+  stockMax: Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -1343,7 +1343,7 @@ input SubscriptionPlanWhereInput {
   stripePriceId: StringFilter
   billing_interval: StringNullableFilter
   items: SubscriptionItemManyRelationFilter
-  stockCount: IntFilter
+  stockMax: IntFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
 }
@@ -1370,7 +1370,7 @@ input SubscriptionPlanOrderByInput {
   stripeProductId: OrderDirection
   stripePriceId: OrderDirection
   billing_interval: OrderDirection
-  stockCount: OrderDirection
+  stockMax: OrderDirection
 }
 
 input SubscriptionPlanUpdateInput {
@@ -1386,7 +1386,7 @@ input SubscriptionPlanUpdateInput {
   stripePriceId: String
   billing_interval: String
   items: SubscriptionItemRelateToManyForUpdateInput
-  stockCount: Int
+  stockMax: Int
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
 }
@@ -1415,7 +1415,7 @@ input SubscriptionPlanCreateInput {
   stripePriceId: String
   billing_interval: String
   items: SubscriptionItemRelateToManyForCreateInput
-  stockCount: Int
+  stockMax: Int
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
 }

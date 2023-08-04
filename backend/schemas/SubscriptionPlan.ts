@@ -80,7 +80,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       options: [
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Available', value: 'AVAILABLE' },
-        { label: 'Out of Stock', value: 'OUT_OFF_STOCK' },
+        { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
       ],
       defaultValue: 'DRAFT',
       ui: {
@@ -108,7 +108,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
     items: relationship({ ref: 'SubscriptionItem.subscriptionPlan', many: true }),
 
-    stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+    stockMax: integer({ validation: { isRequired: true }, defaultValue: 0 }),
 
     tags: relationship({
       ref: 'Tag.subscriptions',

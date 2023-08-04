@@ -21,6 +21,7 @@ import { CheckoutForm } from './CheckoutForm';
 import { SubscriptionItemForm, SubscriptionItemFormStripe } from './SubscriptionItemForm';
 import { LoadingAnim } from '../elements/LoadingAnim';
 import StatusMessage from '../elements/StatusMessage';
+import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 let formStateInit:'success'|'failure'|undefined = undefined
@@ -54,6 +55,8 @@ export function SubscriptionPlanSingle({ id }: any) {
         <h2> No Products Available </h2>
       )}
       <aside>
+        {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
+
         <picture className="img-frame">
           <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
           
@@ -219,7 +222,7 @@ export const SINGLE_SUBSCRIPTIONPLAN_QUERY = gql`
       price
       slug
       status
-      stockCount
+      stockMax
       tags {
         id
         name
@@ -237,6 +240,10 @@ const StyledProductSingle = styled.article`
   max-width: var(--maxWidth);
   align-items: start;
   gap: 2em;
+
+  aside{
+    position: relative;
+  }
 
   picture{
     overflow: auto;
