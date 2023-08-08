@@ -1306,7 +1306,7 @@ type SubscriptionPlan {
   author: User
   name: String
   slug: String
-  description: String
+  description: SubscriptionPlan_description_Document
   status: String
   price: Int
   stripeProductId: String
@@ -1319,6 +1319,10 @@ type SubscriptionPlan {
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
+}
+
+type SubscriptionPlan_description_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input SubscriptionPlanWhereUniqueInput {
@@ -1336,7 +1340,6 @@ input SubscriptionPlanWhereInput {
   author: UserWhereInput
   name: StringFilter
   slug: StringFilter
-  description: StringFilter
   status: StringNullableFilter
   price: IntNullableFilter
   stripeProductId: StringFilter
@@ -1364,7 +1367,6 @@ input SubscriptionPlanOrderByInput {
   image: OrderDirection
   name: OrderDirection
   slug: OrderDirection
-  description: OrderDirection
   status: OrderDirection
   price: OrderDirection
   stripeProductId: OrderDirection
@@ -1379,7 +1381,7 @@ input SubscriptionPlanUpdateInput {
   author: UserRelateToOneForUpdateInput
   name: String
   slug: String
-  description: String
+  description: JSON
   status: String
   price: Int
   stripeProductId: String
@@ -1408,7 +1410,7 @@ input SubscriptionPlanCreateInput {
   author: UserRelateToOneForCreateInput
   name: String
   slug: String
-  description: String
+  description: JSON
   status: String
   price: Int
   stripeProductId: String

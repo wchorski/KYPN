@@ -45,13 +45,13 @@ export function SubscriptionItemSingle({id}:Props) {
         </StatusMessage>
       ) : (
         <div className="edit-buttons">
-        <button 
-          className="edit button"
-          onClick={() => setIsPopup(!isPopup)}
-        > 
-          <FiEdit /> Edit 
-        </button>
-      </div>
+          <button 
+            className="edit button"
+            onClick={() => setIsPopup(!isPopup)}
+          > 
+            <FiEdit /> Edit 
+          </button>
+        </div>
       )}
       
       <table>
