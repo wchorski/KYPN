@@ -179,7 +179,7 @@ model SubscriptionPlan {
   authorId         String?            @map("author") @postgresql.Uuid
   name             String             @default("")
   slug             String             @unique @default("")
-  description      String             @default("")
+  description      Json               @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   status           String?            @default("DRAFT")
   price            Int?
   stripeProductId  String             @default("NO_PROD_ID")

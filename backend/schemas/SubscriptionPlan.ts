@@ -1,10 +1,12 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
+import { image, integer, relationship, select, text, } from "@keystone-6/core/fields";
+import { document } from '@keystone-6/fields-document';
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
 import 'dotenv/config'
+import { componentBlocks } from "../blocks";
 
 const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
 const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
@@ -70,10 +72,51 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         },
       }
     }),
-    description: text({
+    // description: text({
+    //   ui: {
+    //     displayMode: 'textarea'
+    //   }
+    // }),
+    description: document({
+      componentBlocks,
       ui: {
-        displayMode: 'textarea'
-      }
+        views: './blocks',
+      },
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true,
+          code: true,
+          superscript: true,
+          subscript: true,
+          keyboard: true,
+        },
+        listTypes: {
+          ordered: true,
+          unordered: true,
+        },
+        alignment: {
+          center: true,
+          end: true,
+        },
+        headingLevels: [2, 3, 4, 5, 6],
+        blockTypes: {
+          blockquote: true,
+          code: true
+        },
+        softBreaks: true,
+      },
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1],
+      ],
+      links: true,
+      dividers: true,
     }),
 
     status: select({
@@ -152,7 +195,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
           name: resolvedData.name || '',
           active: true,
-          description: resolvedData.description ||'no_description',
+          // description: resolvedData.description ||'no_description',
           metadata: {
             // @ts-ignore //todo might cause problems
             category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
@@ -235,7 +278,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
             resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
             {
               name: resolvedData.name ? resolvedData.name : item.name,
-              description: resolvedData.description ? resolvedData.description : item.description,
+              // description: resolvedData.description ? resolvedData.description : item.description,
               default_price: newPrice.id,
               images: [
                 photo_url
@@ -256,7 +299,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
             resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
             {
               name: resolvedData.name ? resolvedData.name : item.name,
-              description: resolvedData.description ? resolvedData.description : item.description,
+              // description: resolvedData.description ? resolvedData.description : item.description,
               images: [
                 photo_url
               ],

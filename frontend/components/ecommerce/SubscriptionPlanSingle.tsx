@@ -22,6 +22,7 @@ import { SubscriptionItemForm, SubscriptionItemFormStripe } from './Subscription
 import { LoadingAnim } from '../elements/LoadingAnim';
 import StatusMessage from '../elements/StatusMessage';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
+import { BlockRenderer } from '../blocks/BlocksRenderer';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 let formStateInit:'success'|'failure'|undefined = undefined
@@ -69,22 +70,25 @@ export function SubscriptionPlanSingle({ id }: any) {
 
           <ul>
             <li><span className="price"> {moneyFormatter(price)} </span> / month</li>
-            <li><span>status: {status}</span></li>
+            {/* <li><span>status: {status}</span></li> */}
           </ul>
 
-          <p className='description'>{description}</p>
+          <div className='description-wrap'>
+            <BlockRenderer document={description.document} />
+          </div>
         </div>
 
-        <button onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
+        <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
         
-        <Link href={{ pathname: '/shop/subscriptionplan/update', query: { id: id }, }}> Edit ✏️ </Link>
+        {/* //todo frontend plan editing */}
+        {/* <Link href={{ pathname: '/shop/subscriptionplan/update', query: { id: id }, }}> Edit ✏️ </Link> */}
 
         <footer>
 
-          <h5>Categories: </h5>
+          <h5 className='categories'>Categories: </h5>
           <CategoriesPool categories={categories} />
 
-          <h5>Tags:</h5>
+          <h5 className='tags'>Tags:</h5>
           <TagsPool tags={tags} />
           
 
@@ -218,7 +222,9 @@ export const SINGLE_SUBSCRIPTIONPLAN_QUERY = gql`
         url
         id
       }
-      description
+      description {
+        document(hydrateRelationships: true)
+      }
       price
       slug
       status
@@ -241,8 +247,17 @@ const StyledProductSingle = styled.article`
   align-items: start;
   gap: 2em;
 
+  @media screen and (width < 600px){
+    grid-auto-flow: row;
+  }
+
   aside{
     position: relative;
+  }
+
+  .content{
+    padding: 0 1rem;
+    padding-bottom: 5rem;
   }
 
   picture{
@@ -260,11 +275,15 @@ const StyledProductSingle = styled.article`
     }
   }
 
-  .description{
+  .description-wrap{
     padding: 1rem 2rem;
     transform: translateX(-2rem);
     backdrop-filter: contrast(80%) blur(3px);
     border-radius: var(--br-sharp);
+  }
+
+  button.subscribe{
+    margin: 2rem 0;
   }
 
   ul{
@@ -275,6 +294,12 @@ const StyledProductSingle = styled.article`
   .price{
     font-size: 2rem;
     font-weight: bolder;
+  }
+
+  footer{
+    h5.categories, h5.tags{
+      display: none;
+    }
   }
 
 `

@@ -809,9 +809,15 @@ export function BookingForm2({ services, addons }:iProps) {
 
 const StyledBookingForm = styled.form`
   background-color: var(--c-desaturated);
-  padding: 1em;
+  
   max-width: 40em;
   border-radius: var(--br-sharp);
+
+  fieldset{
+    margin: 1.5rem 0;
+    border: none;
+    border-top: solid 1px var(--c-dark);
+  }
   
   button[type=submit]{
     color: var(--c-3);
