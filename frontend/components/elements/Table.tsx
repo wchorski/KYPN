@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { NoData } from './NoData';
 
 interface TableProps {
   caption: string;
@@ -39,6 +40,9 @@ export function Table({ caption, cells, headers, route }: TableProps) {
         </thead>
 
         <tbody role="rowgroup">
+
+          {cells.length <= 0 && <NoData />}
+
           {cells.map((item: any, i: number) => (
             <tr key={i} role="row">
               {keys.map((key: string) => (
@@ -89,7 +93,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
     /> */}
 
 const StyledTable = styled.table`
-  background-color: #ededed;
+  background-color: var(--c-light);
   border-collapse: collapse;
   padding: 1rem;
   width: 100%;
@@ -151,6 +155,10 @@ const StyledTable = styled.table`
       font-weight: 700;
       text-transform: capitalize;
     }
+  }
+
+  p.none{
+    color: var(--c-txt-rev)
   }
 `
 function AddTableARIA() {

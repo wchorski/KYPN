@@ -15,6 +15,7 @@ import { gql, useQuery } from "@apollo/client"
 import { QueryLoading } from "./QueryLoading"
 import ErrorMessage from "../ErrorMessage"
 import moneyFormatter from "../../lib/moneyFormatter"
+import { NoData } from "../elements/NoData"
 
 
 enum DASH_STATE {
@@ -171,9 +172,11 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
         </article>
 
         <article ref={ordersRef} className={state === DASH_STATE.ORDERS ? 'active' : ''}>
-          <h3>Orders</h3>
+
+          <h3>Orders / Services</h3>
+
           <Table 
-            caption="Orders / Services"
+            caption=""
             headers={[
               'service',
               'date',
@@ -189,7 +192,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
         <article ref={subscriptionsRef} className={state === DASH_STATE.SUBSCRIPTIONS ? 'active' : ''}>
           <h3>Subscriptions</h3>
           <Table 
-            caption="Subscriptions"
+            caption=""
             headers={[
               'plan',
               'status',
@@ -209,6 +212,9 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
         <article ref={ticketsRef} className={state === DASH_STATE.TICKETS ? 'active' : ''}>
           <h3> Tickets </h3>
           <StyledTicketList>
+            
+            {tickets && tickets.length <= 0 && <NoData /> }
+
             {tickets && tickets.map(tick => (
               <li key={tick.id}>
                 <div className="meta">
@@ -320,6 +326,7 @@ const StyledAccountCard = styled.div`
 
       h3{
         transform: translateX(0px);
+
       }
     }
   }
@@ -373,10 +380,12 @@ const StyledAccountNav = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-radius: 0;
+    border: none;
 
     &.active{
       background-color: var(--c-3);
-      color: var(--c-txt-rev);
+      color: var(--c-txt);
     }
 
     svg {

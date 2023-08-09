@@ -8,6 +8,7 @@ import { timesArray } from "../lib/timeArrayCreator";
 
 
 export const User: Lists.User = list({
+  // access: allowAll,
   access: {
     filter: {
       // todo will this cause privacy problems with clients?
@@ -23,7 +24,7 @@ export const User: Lists.User = list({
       create: () => true,
       // todo NEED TO FIX THIS
       // update: () => permissions.canManageUsers,
-      update: permissions.canManageUsers,
+      update: permissions.isLoggedIn,
       delete: permissions.canManageUsers,
     },
   },
