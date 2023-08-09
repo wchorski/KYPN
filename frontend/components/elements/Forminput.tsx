@@ -23,7 +23,7 @@ type Props = {
 
 export const FormInput = (props:any) => {
   // todo type this shit
-  const {  label, errorMessage, onChange, id, hint, isDisabled, ...inputProps }:any = props;
+  const {  label, errorMessage, onChange, id, hint, isDisabled, className, ...inputProps }:any = props;
 
   const [focused, setFocused] = useState(false);
 
@@ -74,7 +74,7 @@ export const FormInput = (props:any) => {
 
   // ? for any other input type
   return (
-    <StyledInputLabel className="formInput" htmlFor={inputProps.name}>
+    <StyledInputLabel className={`formInput ${className}`} htmlFor={inputProps.name}>
       <span className="label"> {label} </span>
       <input
         {...inputProps}
@@ -107,11 +107,27 @@ const StyledInputLabel = styled.label`
     width: 280px;
   }
 
+  &:has(input:hover, input:focus){
+    span.label{
+      background-color: var(--c-accent);
+      color: var(--c-dark);
+    }
+
+    input{
+      border: solid var(--c-accent) 1px;
+    }
+  }
+
   input{
     padding: 15px;
     margin: 10px 0px;
     border-radius: 5px;
     border: 1px solid gray;
+
+
+    /* &:hover, &:focus{
+      border: solid var(--c-accent) 1px;
+    } */
   }
 
   /* fixes slight offset with other inputs */
@@ -135,7 +151,7 @@ const StyledInputLabel = styled.label`
     background-color: var(--c-3);
     color: var(--c-label);
     border-radius: var(--br-sharp);
-    font-size: .5rem;
+    font-size: .8rem;
     padding: 0 8px;
     /* display: block; */
     position: absolute;
@@ -143,13 +159,14 @@ const StyledInputLabel = styled.label`
     z-index: 1;
     
     left: 5px;
-    transform: translateY(-20%)
+    transform: translateY(40%);
+    transition: all .3s;
     
   }
 
   span.tooltip {
     font-size: 12px;
-    padding: 3px;
+    /* padding: 3px; */
     display: block;
     transition: all .3s;
 
@@ -181,6 +198,11 @@ const StyledInputLabel = styled.label`
   textarea{
     min-height: 10em;
     padding: 2em 1em;
+  }
+
+  &.hidden{
+    /* visibility: hidden; */
+    display: none;
   }
 `
 

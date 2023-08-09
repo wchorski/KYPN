@@ -7,6 +7,7 @@ import { QUERY_USER_CURRENT } from "./Session";
 import Link from "next/link";
 import styled from "styled-components";
 import { useState } from "react";
+import { PopupAnim } from "./PopupAnim";
 // import { useGlobalContext } from "../../lib/useGlobalContext";
 // import { useLocalStorage } from "../../lib/useLocalStorage";
 
@@ -17,6 +18,7 @@ export default function LoginForm() {
   const router = useRouter()
 
   const [isReset, setIsReset] = useState(false)
+  const [isPopup, setIsPopup] = useState(false)
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
     email: '',
@@ -62,9 +64,10 @@ export default function LoginForm() {
 
       <fieldset>
         <label htmlFor="email">
-          Email
+          <span className="label">Email</span>
+          
           <input type="email" id="email" name="email" autoComplete="email"
-            placeholder="email..."
+            placeholder="zelda@hyrule.com..."
             required
             defaultValue={inputs.email}
             onChange={handleChange}
@@ -72,9 +75,10 @@ export default function LoginForm() {
         </label>
 
         <label htmlFor="password">
-          Email
+          <span className="label">Password</span>
+
           <input type="password" id="password" name="password" autoComplete="password"
-            placeholder="password..."
+            placeholder="********..."
             required
             defaultValue={inputs.password}
             onChange={handleChange}
@@ -87,23 +91,25 @@ export default function LoginForm() {
       </fieldset>
 
     </StyledForm>
-    <br />
-
-    <StyledDrawer isReset={isReset}>
+    
+    <PopupAnim isPopup={isReset} setIsPopup={setIsReset}>
       <PasswordReset />
-    </StyledDrawer>
+    </PopupAnim>
   </>)
 }
 
 const StyledDrawer = styled.div<{isReset:boolean}>`
   opacity: 0;
   position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
   pointer-events: none;
-  ${p => p.isReset ? 'opacity: 1; pointer-events: all; position: relative;' : ''}
+  ${(p:any) => p.isReset ? 'opacity: 1; pointer-events: all; position: relative;' : ''}
   transition: all .5s;
 `
 
-const MUTATION_USER_LOGIN = gql`
+export const MUTATION_USER_LOGIN = gql`
   mutation Mutation($email: String!, $password: String!) {
     authenticateUserWithPassword(email: $email, password: $password) {
       ... on UserAuthenticationWithPasswordSuccess {

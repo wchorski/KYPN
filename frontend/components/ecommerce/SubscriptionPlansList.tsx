@@ -60,7 +60,7 @@ const StyledProductsList = styled.ul`
   margin: 0;
   padding: 0;
 
-  li{
+  > li{
     background-color: var(--c-desaturated);
     /* padding: .3em; */
     box-shadow: #0000004d 2px 2px 8px;
@@ -68,7 +68,7 @@ const StyledProductsList = styled.ul`
     width: 20em;
   }
 
-  img{
+  img.featured{
     width: 100%;
     height: auto;
   }
@@ -87,7 +87,9 @@ export const GET_ALL_SUBSCRIPTIONPLANS = gql`
         name
       }
       name
-      description
+      description {
+        document(hydrateRelationships: true)
+      }
       billing_interval
       image
       photo {

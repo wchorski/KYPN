@@ -8,9 +8,10 @@ type Props = {
     url:string
     altText:string,
   }|string|undefined,
+  className?:string,
 }
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn }: Props) {
+export function ImageDynamic({ photoIn, className }: Props) {
   
   // console.log(photoIn);
   
@@ -24,6 +25,7 @@ export function ImageDynamic({ photoIn }: Props) {
       alt={state.altText}
       width={state.image.width}
       height={state.image.height}
+      className={className}
     />
   )
 
