@@ -24,12 +24,17 @@ export const StyledForm = styled.form`
   font-weight: 600;
   /* min-width: 25em; */
   max-width: 30em;
-  /* margin: 1em auto; */
+  margin-inline: auto;
+  position: relative;
 
 
   label {
     display: block;
     margin-bottom: 1rem;
+  }
+  span.label{
+    font-weight: lighter;
+    font-size: .8rem;
   }
   input,
   textarea,
@@ -73,14 +78,14 @@ export const StyledForm = styled.form`
       opacity: 0.5;
     }
     &::before {
-      height: 10px;
+      height: 5px;
       content: '';
       display: block;
       background-image: linear-gradient(
         to right,
-        var(--c-accent) 0%,
-        var(--c-desaturated) 50%,
-        var(--c-3) 100%
+        var(--c-desaturated) 0%,
+        var(--c-light) 70%,
+        var(--c-desaturated) 100%
       );
       margin-bottom: 1em;
     }

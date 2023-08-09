@@ -9,9 +9,6 @@ export default function BookingPage() {
   return (
     <>
       <Section>
-        <StyledCalendar>
-          <Calendar />
-        </StyledCalendar>
         
         <h1>Book a Service</h1>
         <BookingCreate />

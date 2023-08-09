@@ -701,6 +701,7 @@ export function BookingForm2({ services, addons }:iProps) {
                   defaultValue={values['date']}
                   isDisabled={true}
                   onChange={onChange}
+                  className='hidden'
                 />
 
                 <CalendarDatePicker 
@@ -720,12 +721,14 @@ export function BookingForm2({ services, addons }:iProps) {
                     defaultValue={values['timeStart']}
                     onChange={onChange}
                     isDisabled={true}
+                    className='hidden'
                   />
                   <FormInput 
                     {...handleFindProps('timeEnd')}
                     defaultValue={values['timeEnd']}
                     onChange={onChange}
                     isDisabled={true}
+                    className='hidden'
                   />
                 </div>
 

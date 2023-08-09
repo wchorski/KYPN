@@ -10,6 +10,7 @@ import { ImageDynamic } from '../elements/ImageDynamic';
 import { SubscriptionPlan } from '../../lib/types';
 import { useUser } from '../menus/Session';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
+import { BlockRenderer } from '../blocks/BlocksRenderer';
 
 type Props = {
   item:SubscriptionPlan
@@ -27,12 +28,14 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
     <StyledProdThumbnail>
       
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
-      <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`}} />
+      <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`,}} className='featured'/>
 
       <h3><Link href={`/shop/subscriptionplan/${id}`}>{name}</Link></h3>
       
       <div className="container">
-        <p className='desc'>{description}</p>
+          <div className='description-wrap'>
+            <BlockRenderer document={description.document} />
+          </div>
 
         <div className="menu">
           <Link href={`/shop/subscriptionplan/${id}`} className='cta'> View More </Link>

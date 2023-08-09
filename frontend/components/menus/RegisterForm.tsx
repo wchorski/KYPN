@@ -5,11 +5,14 @@ import { QUERY_USER_CURRENT } from "./Session";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { MUTATION_USER_LOGIN } from "./LoginForm";
 
 export default function RegisterForm() {
 
   const router = useRouter()
   const [successMsg, setSuccessMsg] = useState<string>()
+  const [isPassMatch, setIsPassMatch] = useState<boolean|undefined>(undefined)
+
   // const { session, setSession } = useGlobalContext()
 
   const { inputs, handleChange, clearForm, resetForm } = useForm({
@@ -17,31 +20,58 @@ export default function RegisterForm() {
     nameLast: '',
     email: '',
     password: '',
+    passwordConfirm: '',
   })
 
   const [registerUser, { data, error, loading }] = useMutation(MUTATION_USER_REGSITER)
+  const [loginUser, { data: dataLogin, error: errorLogin, loading: loadingLogin }] = useMutation(MUTATION_USER_LOGIN)
 
   async function handleSubmit(e: any) {
     e.preventDefault()
 
     if (inputs.name === '', inputs.email === '', inputs.password === '') return console.warn('inputs are empty, ', inputs);
 
-    const res = await registerUser({
-      variables: { data: inputs },
+    if(inputs.password !== inputs.passwordConfirm) {
+      console.warn('passwords do not match')
+      setIsPassMatch(false)
+      return 
+    }
+    
+
+    const inputsFormatted = {
+      name: inputs.name,
+      nameLast: inputs.nameLast,
+      email: inputs.email,
+      password: inputs.password,
+    }
+
+    const resRegister = await registerUser({
+      variables: { data: inputsFormatted },
       refetchQueries: [{ query: QUERY_USER_CURRENT }]
     }).catch(console.error)
-    console.log('res', res)
+    console.log('res', resRegister)
 
-    if (res?.data.createUser.__typename !== "User")
-      console.log('REGy FAILED, ', res?.data.authenticateUserWithPassword.message)
+    if (resRegister?.data.createUser.__typename !== "User")
+      console.log('REGy FAILED, ', resRegister?.data.authenticateUserWithPassword.message)
     // TODO why is it creating an empty session object
     // console.log(session);
 
 
-    if (res?.data.createUser.__typename === "User") {
-      console.log('Regy SUCCESS, ', res?.data.createUser)
-      router.push(`/users/${res.data.createUser.id}`)
+    if (resRegister?.data.createUser.__typename === "User") {
+      console.log('Regy SUCCESS, ', resRegister?.data.createUser)
       setSuccessMsg(`Success! New account registered: ${inputs.email}`)
+
+      const resLogin = await loginUser({
+        variables: {
+          email: inputs.email,
+          password: inputs.password
+        },
+        refetchQueries: [{ query: QUERY_USER_CURRENT }]
+      }).catch(console.error)
+
+      console.log(resLogin);
+
+      router.push(`/account`)
     }
     // @ts-ignore
     // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
@@ -65,7 +95,8 @@ export default function RegisterForm() {
 
         <fieldset disabled={loading} aria-busy={loading}>
           <label htmlFor="name">
-            First Name
+            <span className="label"> First Name </span>
+      
             <input type="text" id="name" name="name" autoComplete="name"
               placeholder="Jake..."
               required
@@ -75,7 +106,8 @@ export default function RegisterForm() {
           </label>
 
           <label htmlFor="nameLast">
-            Last Name
+            <span className="label"> Last Name </span>
+
             <input type="text" id="nameLast" name="nameLast" 
               placeholder="Smith..."
               required
@@ -85,7 +117,8 @@ export default function RegisterForm() {
           </label>
 
           <label htmlFor="email">
-            Email
+            <span className="label"> Email </span>
+
             <input type="email" id="email" name="email" 
               placeholder="email..."
               required
@@ -95,7 +128,8 @@ export default function RegisterForm() {
           </label>
 
           <label htmlFor="password">
-            Password
+            <span className="label"> Password </span>
+            
             <input type="password" id="password" name="password" 
               placeholder="password..."
               required
@@ -103,6 +137,19 @@ export default function RegisterForm() {
               onChange={handleChange}
             />
           </label>
+
+          <label htmlFor="passwordConfirm">
+            <span className="label"> Confirm Password </span>
+            
+            <input type="password" id="passwordConfirm" name="passwordConfirm" 
+              placeholder="confirm password..."
+              required
+              defaultValue={inputs.passwordConfirm}
+              onChange={handleChange}
+            />
+          </label>
+
+          {isPassMatch === false && <p className="error"> password does not match </p>}
 
           <button type="submit"> Create Account </button>
         </fieldset>

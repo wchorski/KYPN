@@ -50,7 +50,7 @@ export default function PasswordResetRequest() {
 
       <h2> Password Reset </h2>
 
-      {data?.sendUserPasswordResetLink && <p>A reset link is on the way to your email: {inputs.email}</p>}
+      {data?.sendUserPasswordResetLink && <p>If an account is present, a reset link will be sent to <strong>{inputs.email}</strong> </p>}
 
       <ErrorMessage error={error} />
 
