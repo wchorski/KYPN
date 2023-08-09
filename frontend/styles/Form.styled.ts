@@ -36,6 +36,7 @@ export const StyledForm = styled.form`
     font-weight: lighter;
     font-size: .8rem;
   }
+  
   input,
   textarea,
   select {
