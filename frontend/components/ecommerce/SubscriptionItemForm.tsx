@@ -197,7 +197,7 @@ export function SubscriptionItemForm({planId, setFormState}:Props) {
 
     <StyledCheckoutForm onSubmit={handleSubmit} >
 
-      {userPlanIdsOwned.includes(planId) && (
+      {userPlanIdsOwned?.includes(planId) && (
         <Callout 
           intent={'info'} 
           content={(

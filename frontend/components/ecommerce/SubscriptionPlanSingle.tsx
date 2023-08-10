@@ -49,8 +49,6 @@ export function SubscriptionPlanSingle({ id }: any) {
 
   return (<>
 
-    {/* <ImageGallery /> */}
-
     <Head>
       <title> {name} | {SITE_TITLE} </title>
     </Head>

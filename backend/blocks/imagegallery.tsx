@@ -16,8 +16,8 @@ export const imagegallery = component({
       ],
       defaultValue: 'grid'
     }),
-    columns: fields.integer({defaultValue: 3}),
-    gap: fields.integer({defaultValue: 1}),
+    columns: fields.integer({ label: 'Columns', defaultValue: 3}),
+    gap: fields.integer({label: 'Grid Gap', defaultValue: 1}),
     items: fields.array(
       fields.object({
         caption: fields.text({ label: 'caption' }),
@@ -45,7 +45,7 @@ export const imagegallery = component({
                 key={item.key}
                 margin="xsmall"
                 css={{
-                  minWidth: '61.8%',
+                  minWidth: '31.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',
                   margin: 4,
@@ -59,13 +59,25 @@ export const imagegallery = component({
                   role="presentation"
                   src={item.fields.src.value}
                   css={{
-                    objectFit: 'cover',
+                    objectFit: 'contain',
                     objectPosition: 'center center',
                     height: 240,
                     width: '100%',
                     borderRadius: 4,
                   }}
                 />
+                <p
+                  css={{
+                    '&&': {
+                      fontSize: '1.25rem',
+                      lineHeight: 'unset',
+                      marginTop: 8,
+                    },
+                  }}
+                >
+                  <strong>{item.fields.alt.value}</strong>
+                  
+                </p>
                 <p
                   css={{
                     '&&': {
