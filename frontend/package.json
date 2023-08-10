@@ -30,6 +30,7 @@
     "eslint-config-next": "13.4.4",
     "graphql-upload": "^16.0.2",
     "leaflet": "^1.9.4",
+    "lightgallery": "^2.7.1",
     "lodash": "^4.17.21",
     "micro": "^10.0.1",
     "mime": "^3.0.0",

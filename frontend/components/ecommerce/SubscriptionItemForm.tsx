@@ -136,7 +136,7 @@ export function SubscriptionItemForm({planId, setFormState}:Props) {
 
   const session = useUser()  
   const userPlanIdsOwned = session?.subscriptions?.flatMap((item:SubscriptionItem) => item.subscriptionPlan?.id)
-  const userPlanIdsOwnedCount = userPlanIdsOwned.reduce((count:number, currentString:string) => { return count + (currentString === planId ? 1 : 0) }, 0)
+  const userPlanIdsOwnedCount = userPlanIdsOwned?.reduce((count:number, currentString:string) => { return count + (currentString === planId ? 1 : 0) }, 0)
   const [errorStripe, setError] = useState()
   const [isOtherPayment, setIsOtherPayment] = useState(false)
 
