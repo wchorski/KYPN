@@ -21,6 +21,7 @@ import { pricetable } from './pricetable';
 import { infocardlist } from './infocardlist';
 import { imagelinklist } from './imagelinklist';
 import { videoLocal } from './video-local';
+import { imagegallery } from './imagegallery';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -44,4 +45,5 @@ export const componentBlocks = {
   tweet,
   youtubeVideo,
   videoLocal,
+  imagegallery,
 };

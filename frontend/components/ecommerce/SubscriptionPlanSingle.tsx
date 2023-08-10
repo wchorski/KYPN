@@ -23,6 +23,8 @@ import { LoadingAnim } from '../elements/LoadingAnim';
 import StatusMessage from '../elements/StatusMessage';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
+import  LightGallery  from 'lightgallery/lightgallery';
+import { ImageGallery } from '../blocks/ImageGallery';
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
 let formStateInit:'success'|'failure'|undefined = undefined
@@ -46,6 +48,8 @@ export function SubscriptionPlanSingle({ id }: any) {
 
 
   return (<>
+
+    {/* <ImageGallery /> */}
 
     <Head>
       <title> {name} | {SITE_TITLE} </title>
@@ -73,12 +77,12 @@ export function SubscriptionPlanSingle({ id }: any) {
             {/* <li><span>status: {status}</span></li> */}
           </ul>
 
+          <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
+
           <div className='description-wrap'>
             <BlockRenderer document={description.document} />
           </div>
         </div>
-
-        <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
         
         {/* //todo frontend plan editing */}
         {/* <Link href={{ pathname: '/shop/subscriptionplan/update', query: { id: id }, }}> Edit ✏️ </Link> */}
@@ -91,7 +95,6 @@ export function SubscriptionPlanSingle({ id }: any) {
           <h5 className='tags'>Tags:</h5>
           <TagsPool tags={tags} />
           
-
         </footer>
 
       </div>

@@ -21,6 +21,7 @@ import { PriceTable } from './PriceTable';
 import { InfoCardList } from './InfoCardList';
 import { ImageLinkList } from './ImageLinkList';
 import { VideoLocal } from './VideoLocal';
+import { ImageGallery } from './ImageGallery';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -113,6 +114,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   videoLocal: props => {
     return <VideoLocal {...props} />;
+  },
+  imagegallery: props => {
+    return <ImageGallery {...props} />;
   },
 };
 
