@@ -9,14 +9,19 @@ export default function StorePage() {
 
   return (
     <>
-      <Pagination route='/shop' page={Number(query.page) || 1} />
 
+      
+      <Pagination route='/shop' page={Number(query.page) || 1} />
       <div className="container">
-        <SubscriptionPlansList page={Number(query.page) || 1} />
         <ProductsList page={Number(query.page) || 1} />
       </div>
-    
       <Pagination route='/shop' page={Number(query.page) || 1} />
+
+      <Pagination route='/shop/subscriptions' page={Number(query.page) || 1} />
+      <div className="container">
+        <SubscriptionPlansList page={Number(query.page) || 1} />
+      </div>
+      <Pagination route='/shop/subscriptions' page={Number(query.page) || 1} />
 
     </>
   );

@@ -15,29 +15,49 @@ type PagProps = {
 export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
 
   // todo make this modular with other Schema types
-  const { error, loading, data } = useQuery(QUERY_PRODUCTS_COUNT, {
+  const { error, loading, data } = useQuery(QUERY_MULTI_COUNT, {
     variables: {
-      where: {
-        NOT: [
-          {
-            status: {
-              equals: "DRAFT"
-            }
-          },
-          {
-            status: {
-              equals: "PRIVATE"
-            }
+      whereProducts: { NOT: [
+        {
+          status: {
+            equals: "DRAFT"
           }
-        ]
-      }
+        },
+        {
+          status: {
+            equals: "PRIVATE"
+          }
+        }
+      ]},
+      whereSubPlans: { NOT: [
+        {
+          status: {
+            equals: "DRAFT"
+          }
+        },
+        {
+          status: {
+            equals: "PRIVATE"
+          }
+        }
+      ]},
+      wherePosts: { NOT: [
+        {
+          status: {
+            equals: "DRAFT"
+          }
+        },
+        {
+          status: {
+            equals: "PRIVATE"
+          }
+        }
+      ]},
     }
   })
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-
-  // console.log('pag data, ', data);
 
   const handleItemCount = () => {
     if (route === '/shop') return data.productsCount
@@ -46,10 +66,10 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
     return 0
   }
 
-
   const pageCount = Math.ceil(handleItemCount() / perPage)
 
-  if(data.productsCount <= perPage) return null
+  
+  if(handleItemCount() <= perPage) return null
 
   return (<>
     <Head>
@@ -81,11 +101,10 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
   </>)
 }
 
-export const QUERY_PRODUCTS_COUNT = gql`
-  query Query($where: PostWhereInput!) {
-    productsCount
-    subscriptionPlansCount
-    postsCount(where: $where)
-
+export const QUERY_MULTI_COUNT = gql`
+  query Query($whereSubPlans: SubscriptionPlanWhereInput!, $whereProducts: ProductWhereInput!, $wherePosts: PostWhereInput!) {
+    subscriptionPlansCount(where: $whereSubPlans)
+    productsCount(where: $whereProducts)
+    postsCount(where: $wherePosts)
   }
 `

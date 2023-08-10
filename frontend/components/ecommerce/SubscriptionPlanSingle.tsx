@@ -277,8 +277,7 @@ const StyledProductSingle = styled.article`
   }
 
   .description-wrap{
-    padding: 1rem 2rem;
-    transform: translateX(-2rem);
+    padding: 1rem 1rem;
     backdrop-filter: contrast(80%) blur(3px);
     border-radius: var(--br-sharp);
   }

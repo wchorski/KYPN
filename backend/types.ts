@@ -305,7 +305,10 @@ export type SubscriptionPlan = {
   author: User,
   name: string,
   slug: string,
-  description: string,
+  excerpt:string,
+  description: {
+    document: any
+  },
   status: string,
   price: number,
   stripeProductId: string,

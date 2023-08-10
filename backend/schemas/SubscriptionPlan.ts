@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text, } from "@keystone-6/core/fields";
+import { image, integer, relationship, select, text,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
@@ -72,11 +72,11 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         },
       }
     }),
-    // description: text({
-    //   ui: {
-    //     displayMode: 'textarea'
-    //   }
-    // }),
+    excerpt: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     description: document({
       componentBlocks,
       ui: {
@@ -124,6 +124,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Available', value: 'AVAILABLE' },
         { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
+        { label: 'Private', value: 'PRIVATE' },
       ],
       defaultValue: 'DRAFT',
       ui: {

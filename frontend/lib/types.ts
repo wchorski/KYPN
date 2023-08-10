@@ -282,6 +282,7 @@ export type SubscriptionPlan = {
   author: User,
   name: string,
   slug: string,
+  excerpt:string,
   description: {
     document: any
   },
