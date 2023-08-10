@@ -1,5 +1,4 @@
 import LightGallery from 'lightgallery/react';
-import styles from './styles/ImageGallery.module.scss';
 
 // import styles
 import 'lightgallery/css/lightgallery.css';
@@ -73,7 +72,7 @@ const myimages:Image[] = [
 
 export function ImageGallery(props:Props) {
 
-  let {gap = 1, items = myimages, columns = 3, objFit = 'cover',layout = 'grid'} = props
+  let {gap = 1, items = myimages, columns = 3, objFit = 'cover',layout = 'grid', } = props
 
   const lightGallery = useRef<any>(null);
 
@@ -101,19 +100,9 @@ export function ImageGallery(props:Props) {
         plugins={[lgThumbnail, lgZoom]}
         elementClassNames={'gallery-wrap ' + layout}
       >
-        {/* <ul 
-          className={styles.gallery + ' ' + styles.grid}
-          style={{
-            gridTemplateColumns: `repeat(${columns}, 1fr)`,
-            padding: '0',
-            gap: gap,
-          }}
-        > */}
-          {items.map((img, i) => (
-            <ImageFrame src={img.src} alt={img.alt} objFit={objFit} key={i}/>
-          ))}
-        {/* </ul> */}
-      
+        {items.map((img, i) => (
+          <ImageFrame src={img.src} alt={img.alt} objFit={objFit} caption={img.caption} key={i}/>
+        ))}
       </LightGallery>
     </StyledGallery>
   )
@@ -122,14 +111,29 @@ export function ImageGallery(props:Props) {
 }
 
 
-function ImageFrame({src, alt, objFit}:Image){
+function ImageFrame({src, alt, caption, objFit}:Image){
 
   return(
-    <a href={src} className='imgframe' style={{overflow: 'hidden'}}>
+    <a 
+      href={src} 
+      className='imgframe' 
+      style={{overflow: 'hidden'}} 
+      // data-sub-html={renderToHTML(<Caption alt={alt} caption={String(caption)}/>)}>
+      data-sub-html={`<p> <strong>${alt}</strong> </p> <p>${caption}</p>`}>
       <img alt={alt} src={src} style={{objectFit: objFit}}/>
     </a>
   )
 }
+
+// function Caption({alt, caption}:{alt:string, caption:string}){
+
+//   return(
+//     <div>
+//       <p className="alt">{alt}</p>
+//       <p className="caption">{caption}</p>
+//     </div>
+//   )
+// }
 
 const StyledGallery = styled.div<{columns:number, gap:number}>`
 
