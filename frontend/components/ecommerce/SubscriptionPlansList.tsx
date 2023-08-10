@@ -87,9 +87,7 @@ export const GET_ALL_SUBSCRIPTIONPLANS = gql`
         name
       }
       name
-      description {
-        document(hydrateRelationships: true)
-      }
+      excerpt
       billing_interval
       image
       photo {

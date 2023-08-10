@@ -19,10 +19,8 @@ type Props = {
 export const SubscriptionThumbnail = ({ item }: Props) => {
 
   const session = useUser()
-  console.log(session);
-  
 
-  const {price, photo, status, image, id, name, description, billing_interval} = item
+  const {price, photo, status, image, id, name, excerpt, billing_interval} = item
 
   return (
     <StyledProdThumbnail>
@@ -33,8 +31,9 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
       <h3><Link href={`/shop/subscriptionplan/${id}`}>{name}</Link></h3>
       
       <div className="container">
-          <div className='description-wrap'>
-            <BlockRenderer document={description.document} />
+          <div className='excerpt-wrap'>
+            {/* <BlockRenderer document={excerpt.document} /> */}
+            <p>{excerpt}</p>
           </div>
 
         <div className="menu">

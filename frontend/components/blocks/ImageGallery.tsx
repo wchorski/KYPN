@@ -139,7 +139,7 @@ const StyledGallery = styled.div<{columns:number, gap:number}>`
 
   .gallery-wrap.grid{
     display: grid;
-    grid-template-columns: repeat(${p => p.columns}, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     padding: 0;
     gap: ${p => p.gap}px;
   }
@@ -154,6 +154,12 @@ const StyledGallery = styled.div<{columns:number, gap:number}>`
     &:hover{
       opacity: .8;
       transform: scale(1.02);
+    }
+  }
+
+  @media screen and (width > 600px){
+    .gallery-wrap.grid{
+      grid-template-columns: repeat(${p => p.columns}, 1fr);
     }
   }
 

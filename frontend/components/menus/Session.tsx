@@ -27,10 +27,10 @@ export function SessionBadge({ session, label }: Props) {
         <span>{label}</span>
       </Link>
 
-      <ul>
+      <ul className="sub-menu">
+        <li className="name">{session?.name}</li>
+        <li className="email">{session?.email}</li>
         <li><Link href={`/account`}> My Account </Link> </li>
-        <li>{session?.name}</li>
-        <li>{session?.email}</li>
         {session.isAdmin && (
             <li>
               <LinkActive href='/admin' className="button"> Admin Panel </LinkActive>
@@ -138,7 +138,7 @@ const StyledSessionBadge = styled.div`
     font-size: 2rem;
   } */
 
-  ul{
+  ul.sub-menu{
     opacity: 0;
     position: absolute;
     pointer-events: none;
@@ -152,12 +152,21 @@ const StyledSessionBadge = styled.div`
     transition: all linear .1s;
     right: 0;
     z-index: 999;
+    min-width: 20rem;
   }
 
   li{
     margin-bottom: 1em;
     padding: 0;
     text-align: right;
+  }
+
+  li.name{
+    margin-bottom: 0;
+    font-weight: bold;
+  }
+  li.email{
+    font-size: small;
   }
 
   a{

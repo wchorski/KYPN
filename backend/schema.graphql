@@ -1306,6 +1306,7 @@ type SubscriptionPlan {
   author: User
   name: String
   slug: String
+  excerpt: String
   description: SubscriptionPlan_description_Document
   status: String
   price: Int
@@ -1340,6 +1341,7 @@ input SubscriptionPlanWhereInput {
   author: UserWhereInput
   name: StringFilter
   slug: StringFilter
+  excerpt: StringFilter
   status: StringNullableFilter
   price: IntNullableFilter
   stripeProductId: StringFilter
@@ -1367,6 +1369,7 @@ input SubscriptionPlanOrderByInput {
   image: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  excerpt: OrderDirection
   status: OrderDirection
   price: OrderDirection
   stripeProductId: OrderDirection
@@ -1381,6 +1384,7 @@ input SubscriptionPlanUpdateInput {
   author: UserRelateToOneForUpdateInput
   name: String
   slug: String
+  excerpt: String
   description: JSON
   status: String
   price: Int
@@ -1410,6 +1414,7 @@ input SubscriptionPlanCreateInput {
   author: UserRelateToOneForCreateInput
   name: String
   slug: String
+  excerpt: String
   description: JSON
   status: String
   price: Int
