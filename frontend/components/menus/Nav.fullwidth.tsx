@@ -254,7 +254,7 @@ export const StyledNavParty = styled.nav`
 
     &.open{
       svg{
-        background-color: var(--c-2);
+        background-color: var(--c-secondary);
         color: var(--c-txt-primary);
       }
     }

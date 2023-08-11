@@ -78,7 +78,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     setBookingCells(cellsBook)
 
     const cellsSubs = data.user.subscriptions.map((sub:SubscriptionItem) => ({
-      plan: sub.subscriptionPlan.name,
+      plan: sub.subscriptionPlan?.name,
       status: sub.status,
       // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
       details: sub.id,

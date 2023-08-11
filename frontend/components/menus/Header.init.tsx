@@ -92,7 +92,7 @@ const StyledHeader = styled.header`
   }
 
   .util-menu{
-    border-bottom: solid 1px var(--c-2, darkgrey);
+    border-bottom: solid 1px var(--c-secondary, darkgrey);
     display: grid;
     grid-template-columns: auto 1fr;
     justify-content: space-between;

@@ -17,10 +17,10 @@ type Props = {
   label:string,
 }
 
-export function SessionBadge({ session, label }: Props) {
+export function SessionBadge({ session, label, }: Props) {
 
   return (
-    <StyledSessionBadge className="toggle-menu button" id="session-badge" aria-label='account menu link'>
+    <StyledSessionBadge className={`toggle-menu button `} id="session-badge" aria-label='account menu link'>
       
       <Link href={`/account`} className="button account-toggle">
         <MdAccountCircle />
