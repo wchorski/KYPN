@@ -16,6 +16,7 @@ import { QueryLoading } from "./QueryLoading"
 import ErrorMessage from "../ErrorMessage"
 import moneyFormatter from "../../lib/moneyFormatter"
 import { NoData } from "../elements/NoData"
+import { GigTable } from "../booking/GigsTable"
 
 
 enum DASH_STATE {
@@ -70,7 +71,6 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     const cellsBook = data.user.bookings.map((book:Booking) => ({
       date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
       service: book.service.name,
-      price: moneyFormatter(book.price),
       // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
       details: book.id,
     }))
@@ -151,7 +151,8 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
       <div className="dash-cont">
 
         <article ref={dashRef} className={state === DASH_STATE.DASHBOARD ? 'active' : ''}>
-          <h3  >Dashboard</h3>
+          <h3>Dashboard</h3>
+
           <table>
             <tbody>
               <tr>
@@ -169,6 +170,8 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
             <FiEdit />
           </button>
 
+          <GigTable />
+
         </article>
 
         <article ref={ordersRef} className={state === DASH_STATE.ORDERS ? 'active' : ''}>
@@ -180,7 +183,6 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
             headers={[
               'service',
               'date',
-              'price', 
               'details',
             ]}
             cells={bookingCells}
@@ -206,7 +208,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
 
         <article ref={downloadsRef} className={state === DASH_STATE.DOWNLOADS ? 'active' : ''}>
           <h3>Downloads</h3>
-
+          <NoData /> 
         </article>
 
         <article ref={ticketsRef} className={state === DASH_STATE.TICKETS ? 'active' : ''}>

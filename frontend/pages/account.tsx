@@ -12,10 +12,11 @@ export default function Account() {
   
   return (
     <>
+      <div className="container">
+        <h1>Account | {session.name}</h1>
 
-      <h1>Account | {session.name}</h1>
-
-      <AccountDetails {...session} />
+        <AccountDetails {...session} />
+      </div>
 
     </>
   )

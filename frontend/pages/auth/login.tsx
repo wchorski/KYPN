@@ -1,4 +1,5 @@
 import LoginForm from "../../components/menus/LoginForm";
+import { QueryLoading } from "../../components/menus/QueryLoading";
 import RegisterForm from "../../components/menus/RegisterForm";
 import styled from 'styled-components'
 
@@ -7,6 +8,8 @@ export default function LoginPage() {
     <section>
       <div className="container" >
         <StyledLoginWrap>
+
+          <QueryLoading />
 
           <LoginForm />
  

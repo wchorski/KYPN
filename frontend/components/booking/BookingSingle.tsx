@@ -48,9 +48,11 @@ export  function BookingSingle({id}:Props) {
         </Link>
       </div>
 
-      <h2>Package: { service?.name } </h2>
-      <small>last updated: {datePrettyLocal(dateModified, 'full')}</small>
-      <br />
+      <header>
+        <h2>Package: { service?.name } </h2>
+        <small>last updated: {datePrettyLocal(dateModified, 'full')}</small>
+      </header>
+
       
       <table>
         <tbody>
@@ -169,14 +171,9 @@ const StyledDayMonthTime = styled.div`
     background-color: var(--c-txt);
     color: var(--c-txt-rev);
 
-    .day{
-      /* transform: translateY(10px); */
-      margin-bottom: -10px;
-    }
+  
     .month{
       font-size: 1.1rem;
-      margin-top: -10px;
-      /* transform: translateY(-10px); */
     }
   }
 
@@ -188,6 +185,7 @@ const StyledDayMonthTime = styled.div`
 const StyledBookingSingle = styled.div`
   /* background-color: gainsboro; */
   color: var(--c-txt);
+  padding: 1rem;
 
   .align-right{
     text-align: right;
@@ -197,9 +195,15 @@ const StyledBookingSingle = styled.div`
     width: 100%;
     border-bottom: solid 10px var(--c-txt);
     border-collapse: collapse;
+    background: var(--c-desaturated);
+
+    td{
+      padding: 1rem .7rem;
+      border-bottom: solid 1px var(--c-disabled);
+    }
 
     label{
-      color: var(--c-disabled);
+      color: var(--c-dark);
     }
 
     /* td{
@@ -234,10 +238,15 @@ const StyledBookingSingle = styled.div`
     }
   }
 
-  > h2 {
-    margin-bottom: .1rem;
-    margin-top: 2rem;
+  > header{
+    margin-bottom: 2rem;
+
+    h2 {
+      margin-bottom: .1rem;
+      margin-top: 2rem;
+    }
   }
+
 
   ul{
     overflow-x: hidden;

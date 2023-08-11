@@ -11,12 +11,14 @@ export function NoData() {
 }
 
 
-const StyledNoData = styled.div`
-  background-color: var(--c-light);
+const StyledNoData = styled.span`
+  background: var(--c-light);
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--c-light) 18%, var(--c-light) 84%, rgba(0,0,0,0) 100%);;
   color: var(--c-desaturated);
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: .7;
 
   svg{
     margin-right: 1rem;
