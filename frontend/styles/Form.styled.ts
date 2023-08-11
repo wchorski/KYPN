@@ -19,13 +19,14 @@ export const StyledForm = styled.form`
   border-radius: 1em;
   /* border: 5px solid white; */
   padding: 1em;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   line-height: 1.5;
   font-weight: 600;
   /* min-width: 25em; */
   max-width: 30em;
   margin-inline: auto;
   position: relative;
+  min-width: 20em;
 
 
   label {

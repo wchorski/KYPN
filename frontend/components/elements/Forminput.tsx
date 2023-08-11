@@ -96,7 +96,7 @@ export const FormInput = (props:any) => {
 
 
 const StyledInputLabel = styled.label`
-  font-size: 1rem;
+  /* font-size: 2rem; */
   /* color: var(--c-desaturated); */
   margin-bottom: 0;
   position: relative;
@@ -165,7 +165,7 @@ const StyledInputLabel = styled.label`
   }
 
   span.tooltip {
-    font-size: 12px;
+    font-size: .8rem;
     /* padding: 3px; */
     display: block;
     transition: all .3s;
@@ -203,6 +203,10 @@ const StyledInputLabel = styled.label`
   &.hidden{
     /* visibility: hidden; */
     display: none;
+  }
+
+  input{
+    font-size: 1.3rem;
   }
 `
 

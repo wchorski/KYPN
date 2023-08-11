@@ -8,9 +8,11 @@ export default function BookingById() {
   
   return (
     <>
-      <section className="pad">
-        <BookingSingle id={String(router.query.id)}/>
-      </section>
+      <div className="container">
+        <section>
+          <BookingSingle id={String(router.query.id)}/>
+        </section>
+      </div>
     </>
   )
 }

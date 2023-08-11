@@ -5,3 +5,4 @@ export const QueryLoading = () => {
     <p>QueryLoading...</p>
   )
 }
+

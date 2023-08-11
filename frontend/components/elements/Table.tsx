@@ -25,9 +25,13 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   //     setKeys(Object.keys(cells[0]))
   //   }
   // }, [cells]);
+  
 
   return (
     <div role="region" aria-labelledby="Cap" tabIndex={0}>
+
+      {cells.length <= 0 && <NoData />}
+
       <StyledTable role="table">
         <caption role="caption"> {caption} </caption>
 
@@ -40,8 +44,6 @@ export function Table({ caption, cells, headers, route }: TableProps) {
         </thead>
 
         <tbody role="rowgroup">
-
-          {cells.length <= 0 && <NoData />}
 
           {cells.map((item: any, i: number) => (
             <tr key={i} role="row">
@@ -108,7 +110,7 @@ const StyledTable = styled.table`
   }
 
   th, td, caption {
-    padding: .1rem 1rem;
+    padding: .5rem 1rem;
   }
 
   caption{
@@ -140,7 +142,7 @@ const StyledTable = styled.table`
       display: grid;
       grid-template-columns: 15ch auto;
       gap: .5rem;
-      padding: 0.5rem 1rem;
+      padding: 0.7rem 1rem;
     }
 
     td:first-child{
