@@ -79,7 +79,7 @@ const StyledBlogItem = styled.article`
   flex-direction: column;
   height: 100%;
   background-color: var(--c-bg);
-  border: solid 2px var(--c-3);
+  border: solid 2px var(--c-primary);
   box-shadow: #0000004d 2px 2px 8px;
   border-radius: var(--br-sharp);
   overflow: hidden;
@@ -162,7 +162,7 @@ const StyledBlogItem = styled.article`
 `
 
 const StyledPriceTag = styled.span`
-  background: var(--c-3);
+  background: var(--c-primary);
   transform: rotate(3deg);
   color: white;
   font-weight: 600;

@@ -108,7 +108,7 @@ const StyledUserSingle = styled.article`
   section.posts{
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     background: var(--cg-primary)
   }
 

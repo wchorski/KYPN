@@ -121,7 +121,7 @@ const StyledSessionBadge = styled.div`
   text-align: right;
   position: relative;
   margin-left: auto;
-  background-color: var(--c-3);
+  background-color: var(--c-primary);
   border-radius: 100px;
   display: flex;
   align-items: center;

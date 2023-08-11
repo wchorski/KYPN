@@ -15,7 +15,7 @@ export const GlobalStyles = createGlobalStyle`
     --c-error: red;
     --c-accent: #a1d7e2;  /* accent */
     --c-2: #d7e2a1; /* desaturated */
-    --c-3: #8baf72; /* contrast */
+    --c-primary: #8baf72; /* contrast */
     --c-dark: #4b4f4c; /* dark */
     --c-bg: #eff6f4;
     --c-cont-light: 255, 255, 255;
@@ -70,7 +70,7 @@ export const GlobalStyles = createGlobalStyle`
   }  
     
   ::-webkit-scrollbar-thumb {  
-    background: var(--c-3);  
+    background: var(--c-primary);  
     border-radius: 20px;
     z-index: 999999;
   }
@@ -80,7 +80,7 @@ export const GlobalStyles = createGlobalStyle`
     transition: all .3s;
 
     &.button{
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       color: var(--c-txt-rev);
       text-align: center;
       display: flex;
@@ -140,8 +140,8 @@ export const GlobalStyles = createGlobalStyle`
       font-size: 1.2rem;
       display: flex;
       align-items: center;
-      color: var(--c-3);
-      border: solid 3px var(--c-3);
+      color: var(--c-primary);
+      border: solid 3px var(--c-primary);
       border-radius: var(--br-dull);
       transition-property: color, background, border;
       transition-duration: .1s;
@@ -150,7 +150,7 @@ export const GlobalStyles = createGlobalStyle`
       
       &:hover, &:focus{
         color: var(--c-txt-rev);
-        background-color: var(--c-3);
+        background-color: var(--c-primary);
         border: solid 3px var(--c-accent);
         border-radius: var(--br-dull);
       }
@@ -169,7 +169,7 @@ export const GlobalStyles = createGlobalStyle`
     border: none;
     margin-right: -2rem;
     margin-left: 1rem;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     transition: all .3s;
 
 
@@ -240,7 +240,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .card{
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     padding: 1em;
     border-radius: 10px;
     box-shadow: black 1px 1px 3px 0px;
@@ -261,7 +261,7 @@ export const GlobalStyles = createGlobalStyle`
 
   section.admin-panel{
 
-    border: solid 2px var(--c-3);
+    border: solid 2px var(--c-primary);
     /* padding: 1em; */
     border-radius: 5px;
     margin-bottom: 1em;
@@ -275,7 +275,7 @@ export const GlobalStyles = createGlobalStyle`
       margin: 0;
       margin-bottom: 1em;
       padding: 0 1em;
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       color: var(--c-txt-rev);
     }
     

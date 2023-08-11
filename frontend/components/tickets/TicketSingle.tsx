@@ -67,7 +67,7 @@ console.log(data.ticket);
 
 
 const StyledTicketSingle = styled.article`
-  border: solid 1px var(--c-3);
+  border: solid 1px var(--c-primary);
   box-shadow: var(--boxs-1);
   position: relative;
   display: flex;
@@ -105,7 +105,7 @@ const StyledTicketSingle = styled.article`
   }
 
   .status{
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     color: var(--c-txt-rev);
     padding: .1em 1em .1em 1em;
     position: absolute;

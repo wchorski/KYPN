@@ -42,7 +42,7 @@
   display: grid;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
-  background-color: var(--c-3);
+  background-color: var(--c-primary);
 
   a.imgframe {
     width: calc(25% - 10px); // Adjust column width and gap as needed

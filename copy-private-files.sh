@@ -1,16 +1,21 @@
 #! /bin/bash
 
 echo "--- copying private files ---"
-cp ./backend/seed/seed_data.ts ./private/backend/seed/
-cp ./frontend/components/menus/Nav.tsx ./private/frontend/components/menus/Nav.tsx
-cp ./frontend/components/menus/Header.tsx ./private/frontend/components/menus/Header.tsx 
-cp ./frontend/components/menus/Footer.tsx ./private/frontend/components/menus/Footer.tsx 
-cp ./frontend/components/elements/Layouts.tsx ./private/frontend/components/elements/Layouts.tsx
-cp -a ./frontend/components/private ./private/frontend/components/
-cp -a ./frontend/styles/private ./private/frontend/styles/
-cp ./frontend/styles/GlobalThemeStyle.styled.js ./private/frontend/styles/GlobalThemeStyle.styled.js
-cp ./frontend/pages/home.tsx ./private/frontend/pages/home.tsx 
-cp ./frontend/.env.local ./private/frontend/.env.local
-cp ./frontend/.env ./private/frontend/.env 
-cp ./backend/.env ./private/backend/.env 
+
+# # single files
+mkdir -p ./private/backend/seed && cp ./backend/seed/seed_data.ts $_
+mkdir -p ./private/frontend/components/menus && cp ./frontend/components/menus/Nav.tsx $_
+mkdir -p ./private/frontend/components/menus && cp ./frontend/components/menus/Header.tsx $_
+mkdir -p ./private/frontend/components/menus && cp ./frontend/components/menus/Footer.tsx $_
+mkdir -p ./private/frontend/components/elements && cp ./frontend/components/elements/Layouts.tsx $_
+mkdir -p ./private/frontend/styles && cp ./frontend/styles/GlobalThemeStyle.styled.js $_
+mkdir -p ./private/frontend/pages && cp ./frontend/pages/home.tsx $_
+mkdir -p ./private/frontend && cp ./frontend/.env.local $_
+mkdir -p ./private/frontend && cp ./frontend/.env $_
+mkdir -p ./private/backend && cp ./backend/.env $_
+
+# # directories
+mkdir -p ./private/frontend/components && cp -R ./frontend/components/private $_
+mkdir -p ./private/frontend/styles && cp -R ./frontend/styles/private  $_
+# mkdir-a ./frontend/styles/private ./private/frontend/styles/
 echo "--- copying complete ---"

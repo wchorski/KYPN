@@ -823,13 +823,13 @@ const StyledBookingForm = styled.form`
   }
   
   button[type=submit]{
-    color: var(--c-3);
+    color: var(--c-primary);
     padding: 1em 2em;
     border-radius: 3px;
     transition: all .3s;
     
     &:hover:not([disabled]){
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       color: var(--c-txt-rev);
     }
   }

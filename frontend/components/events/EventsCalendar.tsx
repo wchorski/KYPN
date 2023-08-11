@@ -220,7 +220,7 @@ const HeadDays = styled.span`
   border: 1px solid;
   /* height: 30px; */
   padding: 5px;
-  background: var(--c-3);
+  background: var(--c-primary);
   color: white;
 `;
 
@@ -241,7 +241,7 @@ const GridSevenCol = styled.div<{fullheight?:boolean, is28Days?:boolean}>`
 
 const DayHead = styled.span`
   text-align: center;
-  background: var(--c-3);
+  background: var(--c-primary);
   color: var(--c-txt);
   font-size: 1.3rem;
 `
@@ -263,7 +263,7 @@ const StyledDay = styled.span<{active:boolean}>`
     padding: 5px;
     border-radius: 50%;
     color: var(--c-desaturated);
-    ${p => p.active && `background-color: var(--c-3); color: white;`}
+    ${p => p.active && `background-color: var(--c-primary); color: white;`}
   }
 `
 
@@ -273,7 +273,7 @@ const StyledEvent = styled.span`
   a{
     text-align: left;
     margin-bottom: 5px;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     text-decoration: none;
     color: var(--c-txt-primary);
     padding: 0px 8px;

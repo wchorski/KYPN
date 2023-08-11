@@ -100,7 +100,7 @@ const StyledTable = styled.table`
   margin-bottom: 1em;
 
   a{
-    color: var(--c-3);
+    color: var(--c-primary);
 
     &:hover, &:focus{
       color: var(--c-accent);
@@ -119,7 +119,7 @@ const StyledTable = styled.table`
 
   th {
     text-align: left;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     border-right: solid 1px black;
     color: var(--c-txt);
   }

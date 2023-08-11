@@ -50,13 +50,13 @@ export const StyledForm = styled.form`
     }
 
     border-radius: 3px;
-    border: solid var(--c-3) 1px;
+    border: solid var(--c-primary) 1px;
     box-shadow: #0000002b 2px 2px 8px;
   }
   button,
   input[type='submit'] {
     width: auto;
-    background: var(--c-3);
+    background: var(--c-primary);
     border-radius: var(--br-sharp);
     color: white;
     border: solid 2px transparent;
@@ -67,8 +67,8 @@ export const StyledForm = styled.form`
 
     &:hover, &:focus{
       background-color: var(--c-accent);
-      border: solid 2px var(--c-3);
-      color: var(--c-3);
+      border: solid 2px var(--c-primary);
+      color: var(--c-primary);
     }
   }
   fieldset {

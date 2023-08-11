@@ -21,7 +21,7 @@ const StyledCatsPool = styled.div`
     background-color: #c5c5c5;
     color: var(--c-txt-rev);
     text-decoration: none;
-    border: solid 1px var(--c-3);
+    border: solid 1px var(--c-primary);
 
     border-radius: 50px;
     padding: 0 1em;
@@ -30,7 +30,7 @@ const StyledCatsPool = styled.div`
     transition: all .3s;
 
     &:hover{
-      color: var(--c-3);
+      color: var(--c-primary);
     }
   }
 `

@@ -125,7 +125,7 @@ const StyledMarquee = styled.div`
     pointer-events: none;
   }
 
-  background-color: var(--c-3);
+  background-color: var(--c-primary);
   
   position: relative;
 
@@ -157,7 +157,7 @@ const StyledMarquee = styled.div`
 
     &:hover, &:focus{
       background-color: var(--c-accent);
-      border-bottom: 2px dashed var(--c-3);
+      border-bottom: 2px dashed var(--c-primary);
       color: var(--c-txt-rev);
     }
 

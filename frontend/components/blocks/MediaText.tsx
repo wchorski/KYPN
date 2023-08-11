@@ -92,7 +92,7 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
       background-color: var(--c-light);
     }
     article > *:nth-child(even){
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
     }
 
     h2, h3{

@@ -30,8 +30,8 @@ const StyledFooter = styled.footer`
     /* background: 
       linear-gradient(90deg, 
         var(--c-bg) 0%, 
-        var(--c-3) 25%, 
-        var(--c-3) 75%, 
+        var(--c-primary) 25%, 
+        var(--c-primary) 75%, 
         var(--c-bg) 100%); */
     position: absolute;
     z-index: -1;

@@ -154,7 +154,7 @@ const StyledBlogSingle = styled.article`
       overflow: hidden;
       height: 100%;
       z-index: 2;
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
     }
 
     .content-cont{
