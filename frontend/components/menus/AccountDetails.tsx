@@ -274,7 +274,7 @@ const StyledTicketList = styled.ul`
   padding: 0;
 
   li{
-    border: solid 1px var(--c-3);
+    border: solid 1px var(--c-primary);
     margin-bottom: .2em;
     border-radius: var(--br-dull);
     padding: .5em;
@@ -384,7 +384,7 @@ const StyledAccountNav = styled.nav`
     border: none;
 
     &.active{
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       color: var(--c-txt);
     }
 

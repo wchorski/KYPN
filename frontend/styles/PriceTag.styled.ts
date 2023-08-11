@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledPriceTag = styled.span`
-  background: var(--c-3);
+  background: var(--c-primary);
   transform: rotate(3deg);
   color: white;
   font-weight: 600;

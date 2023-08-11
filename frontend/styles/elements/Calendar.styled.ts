@@ -77,7 +77,7 @@ font-size: 1rem;
     background-color: #e6e6e6;
   }
   .react-calendar__month-view__weekdays {
-    color: var(--c-3);
+    color: var(--c-primary);
     text-align: center;
     text-transform: uppercase;
     font-weight: 700;
@@ -168,8 +168,8 @@ font-size: 1rem;
   .react-calendar__tile--now {
     border-radius: 15px;
     border: 2px solid lightgray !important;
-    border-bottom: 2px solid var(--c-3) !important;
-    color: var(--c-3);
+    border-bottom: 2px solid var(--c-primary) !important;
+    color: var(--c-primary);
     position: relative;
 
     /* &::after{

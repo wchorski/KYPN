@@ -152,7 +152,7 @@ export const StyledNavParty = styled.nav`
   ul.menu-main {
     opacity: 0;
     pointer-events: none;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     
     /* position: sticky; */
     top: 0;

@@ -69,7 +69,7 @@ const StyledLayout_WideWith = styled.div`
   nav#menu-main{
     position: sticky;
     top: 0px;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
   }
 
   main{

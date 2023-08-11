@@ -241,8 +241,8 @@ const StyledForm = styled.form`
       border-radius: 50%;
       /* width: 68px; */
 
-      border: solid 2px var(--c-3);
-      color: var(--c-3);
+      border: solid 2px var(--c-primary);
+      color: var(--c-primary);
       background-color: transparent;
       transition: all .1s;
       

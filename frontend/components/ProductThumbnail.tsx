@@ -49,7 +49,7 @@ const StyledProdThumbnail = styled.article`
     margin-top: -3rem;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
     a {
-      background: var(--c-3);
+      background: var(--c-primary);
       display: inline;
       line-height: 1.3;
       font-size: 4rem;
@@ -67,7 +67,7 @@ const StyledProdThumbnail = styled.article`
 `
 
 const StyledPriceTag = styled.span`
-  background: var(--c-3);
+  background: var(--c-primary);
   transform: rotate(3deg);
   color: white;
   font-weight: 600;

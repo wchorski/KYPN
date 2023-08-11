@@ -66,7 +66,7 @@ const StyledPagination = styled.div`
     margin: 0 3px 3px 0;
     background: transparent;
     border: none;
-    border-bottom: solid 1px var(--c-3);
+    border-bottom: solid 1px var(--c-primary);
     opacity: .3;
     transition: all .3s;
 
@@ -78,7 +78,7 @@ const StyledPagination = styled.div`
   .active{
     border-bottom: solid 1px var(--c-accent);
     opacity: 1;
-    color: var(--c-3);
+    color: var(--c-primary);
     /* background-color: var(--c-accent); */
   }
 

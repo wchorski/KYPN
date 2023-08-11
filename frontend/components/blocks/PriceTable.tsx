@@ -109,7 +109,7 @@ export function PriceTable({items = []}:Props) {
 
 const StyledPriceTable = styled.table`
 
-  --border: solid 1px var(--c-3);
+  --border: solid 1px var(--c-primary);
   border-collapse: separate;
   overflow: hidden;
   position: relative;
@@ -194,7 +194,7 @@ const StyledPriceTable = styled.table`
 
     /* td::before {
       content: attr(data-title);
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       text-align: center;
       border-radius: var(--br-dull);
       font-weight: 700;
@@ -202,7 +202,7 @@ const StyledPriceTable = styled.table`
     }
     td::after {
       content: attr(data-price);
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
       text-align: center;
       border-radius: var(--br-dull);
       font-weight: 700;
@@ -223,12 +223,12 @@ const StyledHeader = styled.header`
     height: 10rem;
     margin: 0;
     background-color: red;
-    border-bottom: solid 5px var(--c-3);
+    border-bottom: solid 5px var(--c-primary);
     background-size: cover;
   }
 
   h3{
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     box-shadow: 1px 1px 1px black;
     text-align: center;
     margin: 0 1rem;
@@ -301,7 +301,7 @@ const StyledPriceList = styled.ul`
 
 const StyledPriceItem = styled.li<{imageSrc:string}>`
   background-color: var(--c-bg);
-  border: solid 1px var(--c-3);
+  border: solid 1px var(--c-primary);
   border-radius: var(--br-sharp);
   display: flex;
   flex-direction: column;
@@ -317,13 +317,13 @@ const StyledPriceItem = styled.li<{imageSrc:string}>`
     height: 10rem;
     margin: 0;
     background-color: red;
-    border-bottom: solid 5px var(--c-3);
+    border-bottom: solid 5px var(--c-primary);
     background-image: ${p => `url( ${p.imageSrc} )`};
     background-size: cover;
   }
 
   h3{
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     box-shadow: 1px 1px 1px black;
     text-align: center;
     margin: 0 1rem;

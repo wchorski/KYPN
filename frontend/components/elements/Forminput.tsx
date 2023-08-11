@@ -148,7 +148,7 @@ const StyledInputLabel = styled.label`
   }
   
   span.label{
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     color: var(--c-label);
     border-radius: var(--br-sharp);
     font-size: .8rem;

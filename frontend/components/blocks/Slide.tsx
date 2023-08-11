@@ -141,7 +141,7 @@ const StyledSlide = styled.div`
         text-align: center;
 
         a.button{
-          background-color: var(--c-3);
+          background-color: var(--c-primary);
           padding: 1em 2em;
           text-decoration: none;
           border-radius: 100px;

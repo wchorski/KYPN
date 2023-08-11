@@ -67,7 +67,7 @@ const StyledTicketList = styled.ul`
     border: none;
     margin-right: -2rem;
     margin-left: 1rem;
-    background-color: var(--c-3);
+    background-color: var(--c-primary);
     transition: all .3s;
 
 

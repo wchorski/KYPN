@@ -23,7 +23,7 @@ export function UserBadge({user}:{user:User}){
 
 const StyledUserBadge = styled.div`
   display: flex;
-  border: solid 2px var(--c-3);
+  border: solid 2px var(--c-primary);
   border-radius: var(--br-sharp);
   padding: .6rem;
   align-items: center;

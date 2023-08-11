@@ -20,7 +20,7 @@
 .btn{
   margin: 2em 0;
   padding: .5em 2em;
-  background-color: var(--c-3);
+  background-color: var(--c-primary);
   border: solid white 3px;
   border-radius: var(--br-dull);
   max-width: 15em;

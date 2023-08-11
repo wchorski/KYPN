@@ -28,7 +28,7 @@ const StyledTagsPool = styled.div`
     transition: all .3s;
 
     &:hover{
-      background-color: var(--c-3);
+      background-color: var(--c-primary);
     }
   }
 `
