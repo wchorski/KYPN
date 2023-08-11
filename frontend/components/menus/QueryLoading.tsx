@@ -1,8 +1,11 @@
 import React from 'react'
+import styles from '../../styles/eyecandy/LoadingSkeleton.module.scss'
 
 export const QueryLoading = () => {
   return (
-    <p>QueryLoading...</p>
+    <div className={styles.wrapper}>
+      <p>Loading...</p>
+    </div>
   )
 }
 

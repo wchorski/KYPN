@@ -13,7 +13,7 @@ export function NoData() {
 
 const StyledNoData = styled.span`
   background: var(--c-light);
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--c-light) 18%, var(--c-light) 84%, rgba(0,0,0,0) 100%);;
+  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--c-light) 18%, var(--c-light) 84%, rgba(0,0,0,0) 100%);
   color: var(--c-desaturated);
   display: flex;
   align-items: center;
