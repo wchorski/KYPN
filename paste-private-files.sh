@@ -1,13 +1,18 @@
 #! /bin/bash
 
 echo "--- pasting private files ---"
-cp ./private/backend/seed/seed_data.ts ./backend/seed/seed_data.ts
-cp ./private/frontend/components/menus/Nav.tsx ./frontend/components/menus/Nav.tsx
-cp ./private/frontend/components/menus/Header.tsx ./frontend/components/menus/Header.tsx 
-cp ./private/frontend/components/menus/Footer.tsx ./frontend/components/menus/Footer.tsx 
-cp ./private/frontend/components/elements/Layouts.tsx ./frontend/components/elements/Layouts.tsx
-cp -a ./private/frontend/components/private ./frontend/components/
-cp -a ./private/frontend/styles/private ./frontend/styles/
-cp ./private/frontend/styles/GlobalThemeStyle.styled.js ./frontend/styles/GlobalThemeStyle.styled.js
-cp ./private/frontend/pages/home.tsx ./frontend/pages/home.tsx
+mkdir -p ./backend/seed && cp ./private/backend/seed/seed_data.ts $_
+mkdir -p ./frontend/components/menus && cp ./private/frontend/components/menus/Nav.tsx $_
+mkdir -p ./frontend/components/menus && cp ./private/frontend/components/menus/Header.tsx $_
+mkdir -p ./frontend/components/menus && cp ./private/frontend/components/menus/Footer.tsx $_
+mkdir -p ./frontend/components/elements && cp ./private/frontend/components/elements/Layouts.tsx $_
+mkdir -p ./frontend/styles && cp ./private/frontend/styles/GlobalThemeStyle.styled.js $_
+mkdir -p ./frontend/pages && cp ./private/frontend/pages/home.tsx $_
+mkdir -p ./frontend && cp ./private/frontend/.env.local $_
+mkdir -p ./frontend && cp ./private/frontend/.env $_
+mkdir -p ./backend && cp ./private/backend/.env $_
+
+# # directories
+mkdir -p ./frontend/components && cp -R ./private/frontend/components/private $_
+mkdir -p ./frontend/styles && cp -R ./private/frontend/styles/private  $_
 echo "--- pasting complete ---"

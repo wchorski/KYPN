@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const StyledUtilMenu = styled.div`
 
-  border-bottom: solid 1px var(--c-2, darkgrey);
+  border-bottom: solid 1px var(--c-secondary, darkgrey);
   display: grid;
   grid-template-columns: auto 1fr;
   justify-content: space-between;
@@ -85,8 +85,8 @@ export const StyledNav = styled.nav`
   &#menu-main ul.open{
     opacity: 1;
     pointer-events: all;
-    height: 70vh;
-    overflow-y: scroll;
+    height: 100%;
+    /* overflow-y: scroll; */
   }
 
 
@@ -121,7 +121,7 @@ export const StyledNav = styled.nav`
 
     &.open{
       svg{
-        background-color: var(--c-2);
+        background-color: var(--c-secondary);
         color: var(--c-txt-primary);
       }
     }

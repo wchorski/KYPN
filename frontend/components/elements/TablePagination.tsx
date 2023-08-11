@@ -71,7 +71,7 @@ const StyledPagination = styled.div`
     transition: all .3s;
 
     &:hover{
-      border-bottom: solid 1px var(--c-2);
+      border-bottom: solid 1px var(--c-secondary);
       opacity: 1;
     }
   }

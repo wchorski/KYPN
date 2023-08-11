@@ -14,7 +14,7 @@ export const GlobalStyles = createGlobalStyle`
     --c-1: whitesmoke;
     --c-error: red;
     --c-accent: #a1d7e2;  /* accent */
-    --c-2: #d7e2a1; /* desaturated */
+    --c-secondary: #d7e2a1; /* desaturated */
     --c-primary: #8baf72; /* contrast */
     --c-dark: #4b4f4c; /* dark */
     --c-bg: #eff6f4;
@@ -93,7 +93,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   a:hover{ 
-    background-color: var(--c-2);
+    background-color: var(--c-secondary);
     color: var(--c-txt);
   }
 
