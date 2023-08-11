@@ -9,8 +9,6 @@ export default function LoginPage() {
       <div className="container" >
         <StyledLoginWrap>
 
-          <QueryLoading />
-
           <LoginForm />
  
           <RegisterForm />
