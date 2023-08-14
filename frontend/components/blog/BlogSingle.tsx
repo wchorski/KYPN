@@ -11,6 +11,7 @@ import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
 import { MediaText } from '../blocks/MediaText';
 import { BreadCrumbs } from '../elements/BreadCrumbs';
+import { ImageDynamic } from '../elements/ImageDynamic';
 
 
 export default function BlogPage({ slug }: { slug: string | string[] | undefined }) {
@@ -55,13 +56,18 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
           <BreadCrumbs />
         </div>
 
-        <header>
-          <MediaText 
-            imageSrc={featured_image}
-            imageAlt='Featured Image'
-            rowReverse={true}
-          >
+        <header
+          style={{
+            backgroundImage: `url(${featured_image})`
+          }}
+        >
+          <ImageDynamic 
+            photoIn={featured_image}
+          />
+
+          <div className="title-cont">
             <h1>{title}</h1>
+            
             <ul className='meta'>
               {author && (
                 <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
@@ -69,7 +75,7 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
               <li>Published on {datePrettyLocal(dateCreated , 'day')}</li>
               {/* <li>Modified on {datePretty(dateModified)}</li> */}
             </ul>
-          </MediaText>
+          </div>
 
         </header>
         
@@ -142,10 +148,44 @@ const StyledBlogSingle = styled.article`
   header{
     /* background: var(--c-accent); */
     position: relative;
-    padding: 0;
-    margin-bottom: 4rem;
+    height: 70vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    /* outline: dotted aqua 1px; */
     /* display: flex; */
     /* background-blend-mode: overlay; */
+
+    img{
+      object-fit: cover;
+      /* outline: dotted lavender 2px; */
+      width: 100%;
+      position: absolute;
+      z-index: -1;
+      width: 1px;
+      height: 1px;
+    }
+
+    .title-cont{
+      padding: 3rem;
+      margin: 1rem;
+      position: relative;
+      border-radius: var(--br-dull);
+      bottom: 0;
+      position: absolute;
+      z-index: 1;
+      /* backdrop-filter: blur(10px); */
+
+      &::after{
+        background-color: rgba(60, 60, 60, 0.774);
+        content: '';
+        backdrop-filter: blur(10px);
+        /* filter: blur(10px); */
+        position: absolute;
+        inset: 0%;
+        z-index: -1;
+      }
+    }
 
     .overlay{
       /* background-color: rgb(155 255 0 / 52%); */
@@ -170,12 +210,13 @@ const StyledBlogSingle = styled.article`
       }
     }
 
-    h1{
+    /* h1{
       font-size: 1.2rem;
-    }
+    } */
 
     ul.meta{
-      padding: 1rem;
+      padding: 0;
+      font-size: 1rem;
       list-style: none;
     }
 
@@ -192,6 +233,7 @@ const StyledBlogSingle = styled.article`
 
   .block-renderer{
     padding: 1rem;
+    background-color: var(--c-dark);
   }
 
 
