@@ -71,8 +71,10 @@ const StyledCrumbList = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
-  opacity: .6;
+  /* opacity: .6; */
+  filter: contrast(0.3);
   transition: opacity .3s;
+  font-size: 1rem;
 
   &:hover, &:focus {
     opacity: 1;
