@@ -22,6 +22,7 @@ import { InfoCardList } from './InfoCardList';
 import { ImageLinkList } from './ImageLinkList';
 import { VideoLocal } from './VideoLocal';
 import { ImageGallery } from './ImageGallery';
+import { ButtonLink } from './ButtonLink';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -118,11 +119,14 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   imagegallery: props => {
     return <ImageGallery {...props} />;
   },
+  buttonlink: props => {
+    return <ButtonLink {...props} />;
+  },
 };
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <StyledBlockRender>
+    <StyledBlockRender className='block-renderer'>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}

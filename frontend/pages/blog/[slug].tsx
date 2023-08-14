@@ -5,6 +5,8 @@ export default function BlogByID() {
   const router = useRouter()
 
   return (
-    <BlogSingle slug={router.query.slug} />
+    <div className="container">
+      <BlogSingle slug={router.query.slug} />
+    </div>
   )
 }

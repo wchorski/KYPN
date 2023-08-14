@@ -55,7 +55,7 @@ const StyledProductsList = styled.ul`
   /* grid-gap: 60px; */
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  /* justify-content: center; */
   list-style: none;
   margin: 0;
   padding: 0;

@@ -2,10 +2,11 @@ import { ReactNode, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 type Props = {
-  children?:ReactNode|ReactNode[]
+  delay?: number,
+  children?:ReactNode|ReactNode[],
 }
 
-export function ScrollAnim({children}:Props) {
+export function ScrollAnim({ delay = 0, children}:Props) {
   const animateBoxRef = useRef(null);
 
   useEffect(() => {
@@ -36,7 +37,13 @@ export function ScrollAnim({children}:Props) {
   }, []);
 
   return (
-    <StyledScrollAnim className="scroll-anim" ref={animateBoxRef}>
+    <StyledScrollAnim 
+      ref={animateBoxRef} 
+      className="scroll-anim" 
+      style={{
+        transitionDelay: String(delay) + 'ms'
+      }}
+    >
       {children}
     </StyledScrollAnim>
   );
@@ -46,7 +53,7 @@ const StyledScrollAnim = styled.div`
 
   transform: translateX(-3%);
   opacity: 0;
-  transition: opacity, transform, 1s;
+  transition: all 1s;
   
 
   &.reveal {

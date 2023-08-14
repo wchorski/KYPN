@@ -190,9 +190,14 @@ const StyledBlogSingle = styled.article`
     } */
   }
 
+  .block-renderer{
+    padding: 1rem;
+  }
+
 
   footer{
     margin-top: 4rem;
+    padding: 1rem;
 
     h2{
       margin-bottom: .1em;
