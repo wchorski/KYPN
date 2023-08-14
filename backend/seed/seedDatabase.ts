@@ -72,9 +72,17 @@ const seedPosts = async (context: Context) => {
       slug: { in: seedPosts.map(post => post.slug) },
     },
   });
+
+  console.log('================ &&&&&&&&&&&');
+  
+  console.log('posts alread in db, ', {postsAlreadyInDatabase});
+  
   const postsToCreate = seedPosts.filter(
     seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
   );
+
+  console.log('posts seeded, ', { postsToCreate })
+
   await db.Post.createMany({
     data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
   });
@@ -289,11 +297,11 @@ const seedProductImages = async (context: Context) => {
 
 export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
+  await seedCategories(context)
+  await seedTags(context)
   await seedUsers(context)
   await seedRoles(context)
   // await seedAvail(context)
-  await seedCategories(context)
-  await seedTags(context)
   await seedPosts(context)
   await seedLocations(context)
   

@@ -22,6 +22,7 @@ import { infocardlist } from './infocardlist';
 import { imagelinklist } from './imagelinklist';
 import { videoLocal } from './video-local';
 import { imagegallery } from './imagegallery';
+import { buttonlink } from './buttonlink';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -46,4 +47,5 @@ export const componentBlocks = {
   youtubeVideo,
   videoLocal,
   imagegallery,
+  buttonlink,
 };
