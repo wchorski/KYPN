@@ -37,7 +37,7 @@ export const Product:Lists.Product = list({
         inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
     }),
-    image: text({defaultValue: FRONTEND_URL + '/assets/images/private/placeholder.png'}),
+    image: text({defaultValue: FRONTEND_URL + '/assets/private/placeholder.png'}),
     name: text({ validation: { isRequired: true } }),
     stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
     stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),

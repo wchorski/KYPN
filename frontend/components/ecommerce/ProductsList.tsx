@@ -78,6 +78,7 @@ export const GET_PAGE_PRODUCTS_QUERY = gql`
       name
       price
       status
+      image
       photo {
         id
         altText

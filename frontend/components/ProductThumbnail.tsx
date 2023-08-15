@@ -10,14 +10,14 @@ import { ImageDynamic } from './elements/ImageDynamic';
 import { useUser } from './menus/Session';
 import { StyledPriceTag } from '../styles/PriceTag.styled';
 
-export const ProductThumbnail = ({ id, name, description, price, photo }: any) => {
+export const ProductThumbnail = ({ id, name, description, price, photo, image }: any) => {
 
   const session = useUser()
 
   return (
     <StyledProdThumbnail>
 
-      <ImageDynamic photoIn={photo} />
+      <ImageDynamic photoIn={image} />
 
 
       <div className="container">
