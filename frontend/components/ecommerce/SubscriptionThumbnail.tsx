@@ -11,6 +11,7 @@ import { SubscriptionPlan } from '../../lib/types';
 import { useUser } from '../menus/Session';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
+import { StyledPriceTag } from '../../styles/PriceTag.styled';
 
 type Props = {
   item:SubscriptionPlan
@@ -128,17 +129,3 @@ const StyledProdThumbnail = styled.article`
   }
 
 `
-
-const StyledPriceTag = styled.span`
-  /* background: var(--c-primary); */
-  /* transform: rotate(3deg); */
-  color: white;
-  font-weight: 600;
-  padding: 5px;
-  line-height: 1;
-  font-size: 2rem;
-  display: inline-block;
-  /* position: absolute; */
-  /* top: -3px; */
-  /* right: -3px; */
-`;
