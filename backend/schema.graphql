@@ -1552,6 +1552,7 @@ input CouponRelateToManyForCreateInput {
 type Product {
   id: ID!
   photo: ProductImage
+  image: String
   name: String
   stripeProductId: String
   stripePriceId: String
@@ -1580,6 +1581,7 @@ input ProductWhereInput {
   NOT: [ProductWhereInput!]
   id: IDFilter
   photo: ProductImageWhereInput
+  image: StringFilter
   name: StringFilter
   stripeProductId: StringFilter
   stripePriceId: StringFilter
@@ -1597,6 +1599,7 @@ input ProductWhereInput {
 
 input ProductOrderByInput {
   id: OrderDirection
+  image: OrderDirection
   name: OrderDirection
   stripeProductId: OrderDirection
   stripePriceId: OrderDirection
@@ -1611,6 +1614,7 @@ input ProductOrderByInput {
 
 input ProductUpdateInput {
   photo: ProductImageRelateToOneForUpdateInput
+  image: String
   name: String
   stripeProductId: String
   stripePriceId: String
@@ -1633,6 +1637,7 @@ input ProductUpdateArgs {
 
 input ProductCreateInput {
   photo: ProductImageRelateToOneForCreateInput
+  image: String
   name: String
   stripeProductId: String
   stripePriceId: String

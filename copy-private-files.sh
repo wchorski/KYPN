@@ -17,4 +17,5 @@ mkdir -p ./private/backend && cp ./backend/.env $_
 # # directories
 mkdir -p ./private/frontend/components && cp -R ./frontend/components/private $_
 mkdir -p ./private/frontend/styles && cp -R ./frontend/styles/private  $_
+mkdir -p ./private/frontend/public/assets && cp -R ./frontend/public/assets/private  $_
 echo "--- copying complete ---"

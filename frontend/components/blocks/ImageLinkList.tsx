@@ -63,7 +63,7 @@ function Card({item}:{item:InfoCard}){
         {item.content}
       </div> */}
       {item.buttonLink && (
-        <Link href={item.buttonLink} target="#" className="button">
+        <Link href={item.buttonLink} target="#" className="btn">
           {item.buttonLabel && <span> {item.buttonLabel} </span> }
           <LuExternalLink />
         </Link>
@@ -139,23 +139,51 @@ const StyledCard = styled.div`
     flex: 1;
   }
 
-  .image-cont{
-    transition: all .3s;
+  &:has(a:hover){
 
-    &:hover, &:focus{
-      outline: none;
-      /* opacity: .7; */
+    figure{
+      background-position: 20% 80%;
+      transform: scale(1.03);
+    }
+
+    h6{
+      color: var(--c-accent);
+      top: -5px;
+    }
+
+    a.image-cont{
+
+    }
+    a.btn{
+      color: var(--c-accent);
+      border-bottom: solid 1px var(--c-accent);
+      box-shadow: var(--boxs-2);
+      transform: translateY(-3px);
     }
   }
 
-  a.button{
+  .image-cont{
+    transition: all .3s;
+
+    /* &:hover, &:focus{
+      outline: none;
+    } */
+  }
+
+  a.btn{
     margin: 0 auto;
     margin-top: auto;
-    max-width: 10rem;
+    max-width: 15rem;
     /* padding: 0 1rem; */
     text-align: center;
     position: absolute;
-    bottom: 5px;
+    bottom: 20px;
+    background-color: var(--c-primary);
+    padding: 10px;
+    border-radius: var(--br-soft);
+    text-decoration: none;
+    border-bottom: solid 1px var(--c-primary);
+    transition: all .3s;
 
     span{
       margin-right: .7rem;
@@ -168,8 +196,7 @@ const StyledCard = styled.div`
 
 
 
-  &:hover{
-    /* border: solid 1px var(--c-accent) ; */
+  /* &:hover{
     border-radius: var(--br-dull);
 
     h6{
@@ -180,5 +207,5 @@ const StyledCard = styled.div`
       background-position: 20% 80%;
       transform: scale(1.03);
     }
-  }
+  } */
 `

@@ -70,11 +70,8 @@ export function SubscriptionPlanSingle({ id }: any) {
         <div className="details">
           <h2>{name}</h2>
 
-          <ul>
-            <li><span className="price"> {moneyFormatter(price)} </span> / month</li>
-            {/* <li><span>status: {status}</span></li> */}
-          </ul>
-
+          <p><span className="price"> {moneyFormatter(price)} </span> / month</p>
+ 
           <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
 
           <div className='description-wrap'>
@@ -284,11 +281,6 @@ const StyledProductSingle = styled.article`
 
   button.subscribe{
     margin: 2rem 0;
-  }
-
-  ul{
-    padding: 0;
-    list-style: none;
   }
 
   .price{
