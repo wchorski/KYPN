@@ -1,6 +1,6 @@
 // note - tried to use styled components but something was overriding 
 import React, { ReactNode } from 'react';
-import styles from './styles/Callout.module.css';
+import styles from './styles/Callout.module.scss';
 
 type CalloutProps = {
   intent: 'info' | 'warning' | 'error' | 'success';
@@ -8,45 +8,16 @@ type CalloutProps = {
 };
 
 export function Callout({ intent, content }: CalloutProps) {
-  let backgroundColor = 'transparent';
-  let textColor = 'current';
-  let borderColor = 'current';
-  switch (intent) {
-    case 'info': {
-      backgroundColor = '#dbeafe';
-      textColor = '#1e40af';
-      borderColor = '#1e40af';
-      break;
-    }
-    case 'warning': {
-      backgroundColor = '#fef9c3';
-      textColor = '#854d0e';
-      borderColor = '#854d0e';
-      break;
-    }
-    case 'error': {
-      backgroundColor = '#fee2e2';
-      textColor = '#991b1b';
-      borderColor = '#991b1b';
-      break;
-    }
-    case 'success': {
-      backgroundColor = '#dcfce7';
-      textColor = '#166534';
-      borderColor = '#166534';
-      break;
-    }
-  }
 
   return (
     <blockquote
-      className={styles.callout}
-      style={{
-        background: backgroundColor,
-        borderColor,
-      }}
+      className={styles.callout + ' ' + styles[intent]}
+      // style={{
+      //   background: backgroundColor,
+      //   borderColor,
+      // }}
     >
-      <i className={`icon ${styles.icon} ${styles[intent]}`} style={{ color: textColor }} />
+      <i className={`icon ${styles.icon} `}  />
       <div style={{ flex: 1 }}>{content}</div>
     </blockquote>
   );

@@ -5,6 +5,8 @@ import { image, integer, relationship, select, text, timestamp } from "@keystone
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
 
+const FRONTEND_URL = process.env.FRONTEND_URL
+
 export const Product:Lists.Product = list({
   // access: allowAll,
   access: {
@@ -35,6 +37,7 @@ export const Product:Lists.Product = list({
         inlineEdit: { fields: ['image', 'altText', 'filename'] }
       }
     }),
+    image: text({defaultValue: FRONTEND_URL + '/assets/images/private/placeholder.png'}),
     name: text({ validation: { isRequired: true } }),
     stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
     stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
@@ -168,12 +171,14 @@ export const Product:Lists.Product = list({
 
       if (operation === 'update') {
 
-        const photo = await context.db.ProductImage.findOne({
-          where: {
-            // @ts-ignore //todo might cause problems
-            id: resolvedData.photoId ? resolvedData.photoId : item.photoId
-          }
-        })
+        // const photo = await context.db.ProductImage.findOne({
+        //   where: {
+        //     // @ts-ignore //todo might cause problems
+        //     id: resolvedData.photoId ? resolvedData.photoId : item.photoId
+        //   }
+        // })
+
+        const photo = resolvedData.image ? resolvedData.image : item.image
 
         const currPrice = await stripeConfig.prices.retrieve(
           // @ts-ignore //todo might cause problems
@@ -203,7 +208,8 @@ export const Product:Lists.Product = list({
               default_price: newPrice.id,
               images: [
                 // @ts-ignore
-                photo.image._meta.secure_url
+                // photo.image._meta.secure_url
+                photo
               ],
               metadata: {
                 // @ts-ignore //todo might cause problems
@@ -223,7 +229,8 @@ export const Product:Lists.Product = list({
               description: resolvedData.description ? resolvedData.description : item.description,
               images: [
                 // @ts-ignore
-                photo.image._meta.secure_url
+                // photo.image._meta.secure_url
+                photo
               ],
               metadata: {
                 // @ts-ignore //todo might cause problems
