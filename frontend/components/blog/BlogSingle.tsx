@@ -6,7 +6,7 @@ import ErrorMessage from '../ErrorMessage';
 import { useQuery, gql } from '@apollo/client';
 import styled from 'styled-components';
 import { YouTubeVideo } from '../blocks/YouTubeVideo';
-import { datePretty, datePrettyLocal } from '../../lib/dateFormatter';
+import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '../../lib/dateFormatter';
 import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
 import { MediaText } from '../blocks/MediaText';
@@ -72,7 +72,11 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
               {author && (
                 <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
               )}
-              <li>Published on {datePrettyLocal(dateCreated , 'day')}</li>
+              <li> 
+                <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
+                  {datePrettyLocalDay(dateCreated)}
+                </time>
+              </li>
               {/* <li>Modified on {datePretty(dateModified)}</li> */}
             </ul>
           </div>
@@ -86,7 +90,7 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
           />
         )}
 
-
+        
         <BlockRenderer document={content.document} />
 
         <footer>
@@ -210,14 +214,18 @@ const StyledBlogSingle = styled.article`
       }
     }
 
-    /* h1{
-      font-size: 1.2rem;
-    } */
+    h1{
+      margin-bottom: 0;
+    }
 
     ul.meta{
       padding: 0;
       font-size: 1rem;
       list-style: none;
+    }
+
+    time.date{
+      position: relative;
     }
 
     /* figure{

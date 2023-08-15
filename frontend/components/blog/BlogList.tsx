@@ -75,7 +75,7 @@ const StyledBlogList = styled.ul`
   flex-direction: column;
   justify-content: space-around; */
   list-style: none;
-  margin: 0;
+  margin: 2rem 1rem;
   padding: 0;
 
   li{

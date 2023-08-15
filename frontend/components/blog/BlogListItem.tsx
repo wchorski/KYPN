@@ -78,7 +78,7 @@ const StyledBlogItem = styled.article`
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--c-bg);
+  background-color: var(--c-dark);
   border: solid 2px var(--c-primary);
   box-shadow: #0000004d 2px 2px 8px;
   border-radius: var(--br-sharp);
@@ -130,7 +130,7 @@ const StyledBlogItem = styled.article`
     /* transform: skew(-5deg) rotate(-1deg); */
     /* margin-top: -3rem; */
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
-    margin: 0;
+    margin: 1rem 0 0 0;
     line-height: 1.3em;
     min-height: 3em;
 
