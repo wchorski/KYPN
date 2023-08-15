@@ -8,12 +8,13 @@ export default function BlogPage() {
 
   return (
     <>
+      <div className="container">
+        <Pagination route='/blog/posts' page={Number(query.page) || 1} />
 
-      <Pagination route='/blog/posts' page={Number(query.page) || 1} />
+        <BlogList page={Number(query.page) || 1} />
 
-      <BlogList page={Number(query.page) || 1} />
-
-      <Pagination route='/blog/posts' page={Number(query.page) || 1} />
+        <Pagination route='/blog/posts' page={Number(query.page) || 1} />
+      </div>
 
     </>
   );

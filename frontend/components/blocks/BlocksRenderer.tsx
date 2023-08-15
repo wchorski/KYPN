@@ -136,7 +136,7 @@ export function BlockRenderer({ document }: CustomRendererProps) {
   );
 }
 
-const StyledBlockRender = styled.article`
+const StyledBlockRender = styled.div`
   .blockquote {
     margin: 0;
     border-left: 5px solid #D1D0CE;
