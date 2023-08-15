@@ -58,7 +58,7 @@ const StyledProductsList = styled.ul`
 
   li{
     background-color: #dcdcdc;
-    padding: .3em;
+    /* padding: .3em; */
     box-shadow: #0000004d 2px 2px 8px;
     margin: 1em;
     width: 20em;
