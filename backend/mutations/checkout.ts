@@ -43,7 +43,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
               id
               name
               price
-              description
+              stockCount
               photo {
                 id
               }
@@ -54,6 +54,15 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     // console.log('===== FOUND USER')
     // console.log({ user })
 
+    user.cart.map((item:CartItem) => {
+      if(item.quantity > item.product.stockCount){
+        throw new Error(`Insufficent Stock for ${item.product.name}`);
+        
+      } else {
+        console.log('######### enough product');
+        
+      }
+    })
 
     // 2. calc the total price for their order
     const totalOrder = user.cart.reduce((accumulator: number, cartItem: CartItem) => {

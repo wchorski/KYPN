@@ -54,8 +54,9 @@ const StyledBigButton = styled.button`
   font-size: 3rem;
   background: none;
   border: 0;
+  color: var(--c-desaturated);
 
-  &:hover{
-    color: var(--c-1);
+  &:hover, &:focus{
+    color: var(--c-error);
   }
 `

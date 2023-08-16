@@ -90,7 +90,7 @@ export type Product = {
   name: string,
   slug: string,
   status: string,
-  stockCount: string,
+  stockCount: number,
   description: string,
   photo: Photo,
   image:string,
