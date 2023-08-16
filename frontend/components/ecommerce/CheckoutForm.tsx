@@ -20,7 +20,7 @@ function CheckoutFormChild() {
 
   const router = useRouter()
   const { closeCart } = useCart()
-  const [errorStripe, setError] = useState()
+  const [errorStripe, setError] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
@@ -35,45 +35,57 @@ function CheckoutFormChild() {
 
     nProgress.start()
 
-    // @ts-ignore
-    const { paymentMethod, error } = await stripe?.createPaymentMethod({
+    // try {
       // @ts-ignore
-      elements,
-      params: {
-        billing_details: {
-          name: session ? session.name : 'Anonymous Name',
-          email: session ? session.email : 'Anonymous Email',
+      const { paymentMethod, error } = await stripe?.createPaymentMethod({
+        // @ts-ignore
+        elements,
+        params: {
+          billing_details: {
+            name: session ? session.name : 'Anonymous Name',
+            email: session ? session.email : 'Anonymous Email',
+          },
         },
-      },
-    });
-
-    if (error) {
-      console.log(error);
-      nProgress.done()
-      setError(error)
-      return //stops checkout
-    }
-
-    const res = await mutateCheckout({
-      variables: {
-        token: paymentMethod.id,
+      });
+  
+      if (error) {
+        console.warn(error)
+        nProgress.done()
+        setIsLoading(false)
+        setError(error)
+        return //stops checkout
       }
-    })
-    console.log('FINISHED ORDER', res);
+  
+      const res = await mutateCheckout({
+        variables: {
+          token: paymentMethod.id,
+        }
+      })
+      console.log('FINISHED ORDER', res);
+  
+      setIsLoading(false)
+      nProgress.done()
+      console.log('check end')
+  
+      closeCart()
+  
+      router.push(`/shop/orders/${res.data.checkout.id}`)
+      
+    // } catch (err) {
+    //   console.warn(error)
+    //   setIsLoading(false)
+    //   nProgress.done()
+    //   setError(err)
+    // } 
 
-    setIsLoading(false)
-    nProgress.done()
-    console.log('check end')
-
-    closeCart()
-
-    router.push(`/shop/orders/${res.data.checkout.id}`)
   }
 
   return (
     <StyledCheckoutForm onSubmit={e => handleSubmit(e)}>
 
-      {errorStripe || error && <ErrorMessage error={errorStripe || error} />}
+      {(errorStripe || error) && (<>
+        <ErrorMessage error={errorStripe || error} />
+      </>)}
 
       <CardElement />
 

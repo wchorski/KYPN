@@ -106,10 +106,9 @@ export type Order = {
   charge: string,
   total: number,
   createdAt: string,
-  user: {
-    id: string,
-  }
-  items: [OrderItem]
+  user: User,
+  items: [OrderItem],
+  itemsCount:number,
 }
 
 export type OrderItem = {

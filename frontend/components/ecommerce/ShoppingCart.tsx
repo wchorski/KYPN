@@ -10,6 +10,7 @@ import { TbArrowBarToRight } from "react-icons/tb";
 import CartCount from './CartCount'
 import { CheckoutForm } from './CheckoutForm'
 import Link from 'next/link'
+import { CartCount2 } from './CartCount2'
 
 export default function ShoppingCart() {
 
@@ -25,7 +26,7 @@ export default function ShoppingCart() {
         <h2>
            Cart
         </h2>
-        <CartCount count={customer?.cart.reduce(
+        <CartCount2 count={customer?.cart.reduce(
           (tally: any, cartItem: any) => tally + cartItem.quantity,
           0
         )} />

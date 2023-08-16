@@ -25,6 +25,12 @@ export const StyledShoppingCart = styled.div`
     margin-bottom: 2rem;
     padding-bottom: 2rem;
   }
+
+  .cartCount{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   footer {
     border-top: 2px dashed black;
     margin-top: 2rem;
