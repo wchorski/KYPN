@@ -6,7 +6,7 @@ export const StyledOrderReceipt = styled.div`
   border: 1px solid var(--offWhite);
   box-shadow: var(--bs);
   padding: 2rem;
-  border-top: 10px solid red;
+  border-top: 10px dashed var(--c-accent);
   & > p {
     display: grid;
     grid-template-columns: 1fr 5fr;
@@ -32,6 +32,17 @@ export const StyledOrderReceipt = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+  }
+
+  ul{
+    padding: 0;
+  }
+
+  table{
+    td{
+      padding: 1rem;
+      background-color: var(--c-dark);
     }
   }
 `

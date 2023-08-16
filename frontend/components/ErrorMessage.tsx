@@ -40,9 +40,9 @@ const ErrorMessage = ({ error }: any) => {
   return (
     <ErrorStyles>
       <p data-test="graphql-error">
-        <strong> <MdError style={{ color: 'red' }} />  </strong>
-        {error.code}
-        {error.message.replace('GraphQL error: ', '')}
+        <strong> <MdError style={{ color: 'red' }} /> {error?.code}: </strong>
+
+        {error?.message?.replace('GraphQL error: ', '')}
       </p>
     </ErrorStyles>
   );

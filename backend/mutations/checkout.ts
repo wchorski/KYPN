@@ -5,7 +5,7 @@ import { Context } from '.keystone/types';
 // import { relationship } from '@keystone-6/core/fields';
 import stripeConfig from '../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { CartItem } from '../types';
+import { CartItem, Product } from '../types';
 
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 
@@ -54,16 +54,27 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     // console.log('===== FOUND USER')
     // console.log({ user })
 
-    user.cart.map((item:CartItem) => {
+    user.cart.map(async (item:CartItem) => {
       if(item.quantity > item.product.stockCount){
         throw new Error(`Insufficent Stock for ${item.product.name}`);
         
       } else {
-        console.log('######### enough product');
+        // @ts-ignore
+        const currData:Product = {
+          stockCount: item.product.stockCount - item.quantity,
+        }
+
+        if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
+
+        const product = await context.db.Product.updateOne({
+          where: {id: item.product.id},
+          // @ts-ignore
+          data: currData
+        })
         
       }
     })
-
+    
     // 2. calc the total price for their order
     const totalOrder = user.cart.reduce((accumulator: number, cartItem: CartItem) => {
       const amountCartItem = cartItem.quantity * cartItem.product.price
@@ -122,6 +133,9 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     })
 
     console.log({ orderItems });
+
+
+
 
 
 

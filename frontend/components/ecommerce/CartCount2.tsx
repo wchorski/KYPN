@@ -35,6 +35,10 @@ const StyledDot = styled.div`
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   outline: solid white 1px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 
   @keyframes bigSmall {
     0% { 

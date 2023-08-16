@@ -12,6 +12,9 @@ import moneyFormatter from '../../lib/moneyFormatter'
 import OrderItem from './OrderItem'
 import { StyledCartItem } from '../../styles/CartItem.styled'
 import { ImageDynamic } from '../elements/ImageDynamic'
+import { Order } from '../../lib/types'
+import Link from 'next/link'
+import { datePrettyLocal } from '../../lib/dateFormatter'
 
 export default function OrderReceipt() {
 
@@ -31,7 +34,7 @@ export default function OrderReceipt() {
 
   // console.log(data);
 
-  const { order, charge } = data
+  const { order }:{order:Order} = data
 
   // console.log(order.items);
 
@@ -42,8 +45,8 @@ export default function OrderReceipt() {
       <table>
         <tbody>
           <tr>
-            <td>Order ID:</td>
-            <td>{order.id}</td>
+            <td>Customer:</td>
+            <td> <Link href={`/users/${order.user.id}`}>{order.user.email}</Link></td>
           </tr>
           <tr>
             <td>Charge:</td>
@@ -51,7 +54,7 @@ export default function OrderReceipt() {
           </tr>
           <tr>
             <td>Date:</td>
-            <td>{order.createdAt}</td>
+            <td>{datePrettyLocal(order.createdAt, 'full')}</td>
           </tr>
           <tr>
             <td>Qty: </td>
@@ -64,6 +67,7 @@ export default function OrderReceipt() {
         </tbody>
       </table>
 
+      <h3> Items: </h3>
       <ul>
         {order?.items.map((item: any) => (
           // <OrderItem key={item.id} item={item} />
@@ -74,7 +78,7 @@ export default function OrderReceipt() {
             <h5>{item.name}</h5>
             <span className="perItemTotal">
               {moneyFormatter(item.price * item.quantity)}
-              -
+              <br />
               <em>{item.quantity} &times; {moneyFormatter(item.price)} each</em>
             </span>
 
@@ -104,6 +108,10 @@ const QUERY_ORDER_ID = gql`
             publicUrlTransformed
           }
         }
+      }
+      user{
+        id
+        email
       }
       itemsCount
       label
