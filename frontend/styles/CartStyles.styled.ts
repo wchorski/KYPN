@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledShoppingCart = styled.div`
   padding: 20px;
   position: relative;
-  background: white;
+  background: var(--c-desaturated);
   position: fixed;
   height: 100%;
   top: 0;
@@ -13,15 +13,12 @@ export const StyledShoppingCart = styled.div`
   bottom: 0;
   transform: translateX(100%);
 
+
   transition: all 0.3s;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
   z-index: 90010;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  
-  &.open{
-    transform: translateX(0%);
-  }
 
   header {
     border-bottom: 5px solid black;
@@ -46,6 +43,34 @@ export const StyledShoppingCart = styled.div`
     margin: 0;
     padding: 0;
     list-style: none;
-    overflow: scroll;
+    overflow-y: auto;
+  }
+
+  button.close{
+    position: absolute;
+    top: 0;
+    left: -13%;
+    background-color: var(--c-desaturated);
+    border: none;
+    padding: 1rem;
+    font-size: 2rem;
+    transition: all .3s;
+    transition-delay: .1s;
+    transform: scaleX(0);
+    transform-origin: center right;
+    pointer-events: none;
+
+    &:hover, &:focus{
+      color: var(--c-txt);
+    }
+  }
+
+  &.open{
+    transform: translateX(0%);
+
+    button.close{
+      transform: scaleX(1);
+      pointer-events: initial;
+    }
   }
 `;

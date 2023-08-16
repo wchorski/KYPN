@@ -33,6 +33,7 @@ const StyledDot = styled.div`
   font-variant-numeric: tabular-nums;
   animation: bigSmall .3s;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  outline: solid white 1px;
 
 
   @keyframes bigSmall {
