@@ -52,7 +52,6 @@ export function SubscriptionPlansList({ page }: ProdProps) {
 const StyledProductsList = styled.ul`
   
   list-style: none;
-  margin: 0;
   padding: 0;
 
   > li{
@@ -62,8 +61,6 @@ const StyledProductsList = styled.ul`
   display: grid;
   grid-gap: 1em;
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  list-style: none;
-  padding: 1rem;
 
   img.featured{
     width: 100%;

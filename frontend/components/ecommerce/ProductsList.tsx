@@ -51,7 +51,7 @@ const StyledProductsList = styled.ul`
   grid-gap: 1em;
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
   list-style: none;
-  padding: 1rem;
+  padding: 0;
 
   img{
     width: 100%;
