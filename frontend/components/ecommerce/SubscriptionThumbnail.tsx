@@ -34,7 +34,7 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
       <div className="container">
           <div className='excerpt-wrap'>
             {/* <BlockRenderer document={excerpt.document} /> */}
-            <p>{excerpt}</p>
+            <p className='excerpt'>{excerpt}</p>
           </div>
 
         <div className="menu">
@@ -82,13 +82,14 @@ const StyledProdThumbnail = styled.article`
     
     a {
       background: var(--c-desaturated);
+      padding: 0 1rem;
+      display: block;
+      box-shadow: #00000049 1px -1px 2px;
       border-radius: 0 var(--br-dull) 0 0;
-      display: inline;
       line-height: 1.3;
       font-size: 2.5rem;
       text-decoration: none;
       color: white;
-      padding: .5rem 1rem;
 
       &:hover, &:focus{
         color: var(--c-light);
@@ -101,6 +102,14 @@ const StyledProdThumbnail = styled.article`
     flex-direction: column;
     height: 100%;
     padding: 1rem;
+    background-color: var(--c-desaturated);
+  }
+
+  p.excerpt{
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
   }
 
   a.cta{

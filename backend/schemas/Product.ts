@@ -65,7 +65,7 @@ export const Product:Lists.Product = list({
       options: [
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Available', value: 'AVAILABLE' },
-        { label: 'Out of Stock', value: 'OUT_OFF_STOCK' },
+        { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
       ],
       defaultValue: 'DRAFT',
       ui: {
@@ -126,7 +126,10 @@ export const Product:Lists.Product = list({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
           name: resolvedData.name || '',
           active: true,
-          description: resolvedData.description,
+          description: resolvedData.description || 'no_description',
+          images: [
+            resolvedData.image || FRONTEND_URL + '/assets/private/placeholder.png',
+          ],
           metadata: {
             // @ts-ignore //todo might cause problems
             category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',

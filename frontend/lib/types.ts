@@ -71,6 +71,7 @@ export type Product = {
   stockCount: string,
   description: string,
   photo: Photo,
+  image:string,
   stripeProductId: string,
   stripePriceId: string,
   tags: Tag[],

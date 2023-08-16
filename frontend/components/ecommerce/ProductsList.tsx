@@ -46,10 +46,7 @@ export function ProductsList({ page }: ProdProps) {
 }
 
 const StyledProductsList = styled.ul`
-  /* display: grid; */
-  /* grid-template-columns: 1fr 1fr; */
-  /* grid-gap: 60px; */
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   list-style: none;
@@ -58,15 +55,21 @@ const StyledProductsList = styled.ul`
 
   li{
     background-color: #dcdcdc;
-    /* padding: .3em; */
     box-shadow: #0000004d 2px 2px 8px;
     margin: 1em;
     width: 20em;
-  }
+  } */
+
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  list-style: none;
+  padding: 1rem;
 
   img{
     width: 100%;
-    height: auto;
+    object-fit: cover;
+    background: var(--cg-stripes);
   }
 `
 

@@ -9,14 +9,17 @@ import { handlePhoto } from '../lib/handleProductPhoto';
 import { ImageDynamic } from './elements/ImageDynamic';
 import { useUser } from './menus/Session';
 import { StyledPriceTag } from '../styles/PriceTag.styled';
+import { OutOfStockLabel } from './elements/OutOfStockLabel';
+import { Product } from '../lib/types';
 
-export const ProductThumbnail = ({ id, name, description, price, photo, image }: any) => {
+export const ProductThumbnail = ({ id, name, description, price, photo, image, status }: Product) => {
 
   const session = useUser()
 
   return (
     <StyledProdThumbnail>
 
+      {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
       <ImageDynamic photoIn={image} />
 
 
@@ -26,7 +29,11 @@ export const ProductThumbnail = ({ id, name, description, price, photo, image }:
         <p className='desc'>{description}</p>
 
         <div className="menu">
-          <AddToCart id={id} />
+          {status !== 'OUT_OF_STOCK' 
+            ? <AddToCart id={id} />
+            : <button disabled={true}> out of stock </button>
+          }
+          
           <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
         </div>
       </div>
@@ -51,6 +58,9 @@ const StyledProdThumbnail = styled.article`
     background-color: var(--c-desaturated);
     background: var(--cg-primary);
     padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   p.desc{

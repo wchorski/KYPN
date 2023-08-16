@@ -196,7 +196,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
           name: resolvedData.name || '',
           active: true,
-          // description: resolvedData.description ||'no_description',
+          description: resolvedData.excerpt ||'no_description',
           metadata: {
             // @ts-ignore //todo might cause problems
             category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
@@ -279,7 +279,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
             resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
             {
               name: resolvedData.name ? resolvedData.name : item.name,
-              // description: resolvedData.description ? resolvedData.description : item.description,
+              description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt || 'no_description',
               default_price: newPrice.id,
               images: [
                 photo_url
