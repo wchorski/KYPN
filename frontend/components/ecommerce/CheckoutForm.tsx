@@ -77,9 +77,9 @@ function CheckoutFormChild() {
 
       <CardElement />
 
-      <StyledSickButton disabled={isLoading}>
+      <button className="medium submit" disabled={isLoading}>
         Checkout
-      </StyledSickButton>
+      </button>
 
     </StyledCheckoutForm>
   )
@@ -111,5 +111,10 @@ const StyledCheckoutForm = styled.form`
   grid-gap: 1rem;
 
   max-width: 30em;
+
+  button.submit{
+    display: grid;
+    align-items: center;
+  }
 
 `

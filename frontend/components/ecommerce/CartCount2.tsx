@@ -5,7 +5,7 @@ import { MdShoppingBag } from "react-icons/md";
 export function CartCount2({ count }: { count: number }) {
 
   return (
-    <StyledCartIcon>
+    <StyledCartIcon className="cartCount">
 
       <StyledDot key={count}>
         <span> {count} </span>

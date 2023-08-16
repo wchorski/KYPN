@@ -6,9 +6,11 @@ export const StyledCartItem = styled.li`
   display: flex;
   justify-content: space-between;
   grid-template-columns: auto 1fr auto;
+  background-color: var(--c-dark);
+  border-radius: var(--br-dull);
 
   img{
-    margin-right: 1rem;
+    margin-inline: 1rem;
     width: 50px;
     height: auto;
     object-fit: contain;
@@ -28,5 +30,10 @@ export const StyledCartItem = styled.li`
 
   .perItemTotal{
     padding: 0 1em;
+  }
+
+  input{
+    text-align: right;
+    width: 5em;
   }
 `

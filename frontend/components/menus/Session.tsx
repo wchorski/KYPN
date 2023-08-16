@@ -104,6 +104,7 @@ export const QUERY_USER_CURRENT = gql`
             price
             name
             description
+            image
             photo {
               image {
                 publicUrlTransformed
