@@ -219,7 +219,7 @@ model Product {
   id                    String        @id @default(uuid()) @postgresql.Uuid
   photo                 ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
   photoId               String?       @unique @map("photo") @postgresql.Uuid
-  image                 String        @default("http://localhost:3000/assets/images/private/placeholder.png")
+  image                 String        @default("http://localhost:3000/assets/private/placeholder.png")
   name                  String        @default("")
   stripeProductId       String        @default("NO_PROD_ID")
   stripePriceId         String        @default("NO_PRICE_ID")
