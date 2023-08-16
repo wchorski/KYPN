@@ -46,19 +46,6 @@ export function ProductsList({ page }: ProdProps) {
 }
 
 const StyledProductsList = styled.ul`
-  /* display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  li{
-    background-color: #dcdcdc;
-    box-shadow: #0000004d 2px 2px 8px;
-    margin: 1em;
-    width: 20em;
-  } */
 
   display: grid;
   grid-gap: 1em;

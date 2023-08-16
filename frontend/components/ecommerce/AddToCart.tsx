@@ -2,11 +2,18 @@ import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { useUser } from "../../components/menus/Session";
 import { MdShoppingBag } from 'react-icons/md';
+import { TbCheck, TbExclamationCircle, TbQuestionMark, TbLoader  } from 'react-icons/tb';
 import { QUERY_USER_CURRENT } from '../menus/Session';
+import { useState } from 'react';
+import styles from '../../styles/eyecandy/SpinCycle.module.scss'
 
+const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
+
+type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
 export default function AddToCart({ id }: { id: string }) {
 
+  const [state, setstate] = useState<State>(undefined)
   const session = useUser()
   const router = useRouter()
   const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
@@ -16,23 +23,66 @@ export default function AddToCart({ id }: { id: string }) {
 
     if (!session) return router.push(`/auth/login`)
 
-    const res = await addToCart({
-      variables: {
-        addToCartId: id,
-        productId: id
-      },
-      refetchQueries: [{ query: QUERY_USER_CURRENT }],
-    }).catch(console.error)
+    try {
+
+      setstate('pending')
+      
+      const res = await addToCart({
+        variables: {
+          addToCartId: id,
+          productId: id
+        },
+        refetchQueries: [{ query: QUERY_USER_CURRENT }],
+      })
+
+      await delay(500)
+
+      setstate('success')
+
+      await delay(500)
+
+      setstate(undefined)
+      
+    } catch (error) {
+      setstate('error')
+      console.warn('addtocart error: ', error);
+    }
+
 
     // console.log({res});
 
   }
 
-  return (
-    <button disabled={loading} type="button" onClick={e => handleButton()}>
-      Add{loading && 'ing'} To Cart <MdShoppingBag />
+  const renderIcon = (state:State) => {
+
+    switch (state) {
+      case 'pending':
+        return <TbLoader className={styles.spin}/>
+        
+      case 'success':
+        return <TbCheck />
+
+      case 'error':
+        return <TbExclamationCircle />
+    
+      default:
+        return <TbExclamationCircle />
+    }
+  }
+
+  return (<>
+    <button 
+      type="button" 
+      disabled={loading || state !== undefined} 
+      onClick={e => handleButton()}
+    >
+      <span>Add To Cart <MdShoppingBag /></span>
     </button>
-  );
+    
+    {state 
+      && <span style={{marginRight: 'auto'}}>{renderIcon(state)}</span>
+    }
+    </>);
 }
 
 const ADD_TO_CART_MUTATION = gql`

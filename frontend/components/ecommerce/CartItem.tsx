@@ -15,7 +15,7 @@ export default function CartItem({ item }: any) {
   )
 
 
-  const { product: { id, description, name, price, photo, }, quantity } = item
+  const { product: { id, description, name, price, photo, image}, quantity } = item
 
 
   return (

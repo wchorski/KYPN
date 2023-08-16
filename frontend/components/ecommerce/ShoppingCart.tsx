@@ -6,7 +6,7 @@ import { StyledSupreme } from '../../styles/Supreme.styled'
 import React from 'react'
 import { useUser } from '../menus/Session'
 import CartItem from './CartItem'
-import { MdClose } from "react-icons/md";
+import { TbArrowBarToRight } from "react-icons/tb";
 import CartCount from './CartCount'
 import { CheckoutForm } from './CheckoutForm'
 import Link from 'next/link'
@@ -22,25 +22,27 @@ export default function ShoppingCart() {
   return (
     <StyledShoppingCart className={isOpen ? 'open' : ''}>
       <header>
-        <StyledSupreme>
-          {customer?.name} | Cart
-        </StyledSupreme>
+        <h2>
+           Cart
+        </h2>
         <CartCount count={customer?.cart.reduce(
           (tally: any, cartItem: any) => tally + cartItem.quantity,
           0
         )} />
-        <button onClick={e => closeCart()}> <MdClose /></button>
+        <button onClick={e => closeCart()} className='close'> <TbArrowBarToRight /></button>
       </header>
 
       {customer?.cart.length <= 0 && <p>Add your first item</p>}
       <ul>
         {customer?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
       </ul>
+      
       <footer>
         <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer?.cart))}</p>
         <Link
           href={'/shop/checkout'}
           onClick={() => closeCart()}
+          className='button medium'
         >
           Checkout
         </Link>
