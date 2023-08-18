@@ -22,6 +22,7 @@ import StatusMessage from '../elements/StatusMessage';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
 import { SubscriptionPlan } from '../../lib/types';
+import { StyledProductArticle } from '../../styles/ecommerce/ProductArticle.styled';
 
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
@@ -59,17 +60,17 @@ export function SubscriptionPlanSingle({ id }: any) {
       <meta property="og:type" content="article" />
     </Head>
 
-    <StyledProductSingle data-testid='singleProduct'>
+    <StyledProductArticle data-testid='singleProduct'>
       {data.subscriptionPlan.length <= 0 && (
         <h2> No Products Available </h2>
       )}
       <aside>
         {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
 
-        <picture className="img-frame">
+        <figure className="img-frame">
           <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
           
-        </picture>
+        </figure>
       </aside>
 
       <div className="content">
@@ -102,7 +103,7 @@ export function SubscriptionPlanSingle({ id }: any) {
 
       
 
-    </StyledProductSingle>
+    </StyledProductArticle>
 
     <PopupAnim isPopup={isPopup} setIsPopup={setIsPopup}>
 
@@ -226,6 +227,7 @@ export const SINGLE_SUBSCRIPTIONPLAN_QUERY = gql`
         url
         id
       }
+      excerpt
       description {
         document(hydrateRelationships: true)
       }
@@ -241,63 +243,3 @@ export const SINGLE_SUBSCRIPTIONPLAN_QUERY = gql`
   }
 `
 
-const StyledProductSingle = styled.article`
-  position: relative;
-  display: grid;
-  grid-auto-columns: 1fr;
-  grid-auto-flow: column;
-  min-height: 800px;
-  max-width: var(--maxWidth);
-  align-items: start;
-  gap: 2em;
-
-  @media screen and (width < 600px){
-    grid-auto-flow: row;
-  }
-
-  aside{
-    position: relative;
-  }
-
-  .content{
-    padding: 0 1rem;
-    padding-bottom: 5rem;
-  }
-
-  picture{
-    overflow: auto;
-    display: grid;
-    grid-template-rows: minmax(0,1fr) auto;
-    resize: both;
-    /* border: 2px dashed var(--c-accent); */
-    
-    img{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: 50% 0;
-    }
-  }
-
-  .description-wrap{
-    padding: 1rem 1rem;
-    backdrop-filter: contrast(80%) blur(3px);
-    border-radius: var(--br-sharp);
-  }
-
-  button.subscribe{
-    margin: 2rem 0;
-  }
-
-  .price{
-    font-size: 2rem;
-    font-weight: bolder;
-  }
-
-  footer{
-    h5.categories, h5.tags{
-      display: none;
-    }
-  }
-
-`

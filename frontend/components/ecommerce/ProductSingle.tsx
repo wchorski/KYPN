@@ -17,6 +17,9 @@ import { CategoriesPool } from '../menus/CategoriesPool';
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { Metadata } from 'next';
 import { Product } from '../../lib/types';
+import { OutOfStockLabel } from '../elements/OutOfStockLabel';
+import { BlockRenderer } from '../blocks/BlocksRenderer';
+import { StyledProductArticle } from '../../styles/ecommerce/ProductArticle.styled';
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
@@ -31,7 +34,7 @@ export function ProductSingle({ id }: any) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { name, image, photo, price, description, status, categories, tags, author}:Product = data.product
+  const { name, image, photo, price, description, excerpt, status, categories, tags, author}:Product = data.product
 
   // todo finish how to add good SEO, maybe learn nextjs /app router paradymn
 
@@ -39,44 +42,56 @@ export function ProductSingle({ id }: any) {
 
     <Head>
       <title> {name} </title>
-      <meta name="description" content={description} />
-      <meta name='keywords' content={tags.map(tag => tag.name).join(', ')} />
-      <meta name="author" content={author.name} />
+      <meta name="description"        content={excerpt} />
+      <meta name='keywords'           content={tags.map(tag => tag.name).join(', ')} />
+      <meta name="author"             content={author.name} />
       <meta property="og:title"       content={name} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={excerpt} />
       <meta property="og:image"       content={image} />
-      <meta property="og:url" content={SITE_URI + '/shop/product/' + id} />
-      <meta property="og:type" content="article" />
+      <meta property="og:url"         content={SITE_URI + '/shop/product/' + id} />
+      <meta property="og:type"        content="article" />
     </Head>
 
-    <StyledProductSingle data-testid='singleProduct'>
+    <StyledProductArticle data-testid='singleProduct'>
 
-      <figure>
-        <ImageDynamic photoIn={{url: image, altText: `${name} featured Image`} || photo}/>
-      </figure>
+      <aside>
+        {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
 
-      <div className="details">
-        <h2>{name}</h2>
+        <figure className="img-frame">
+          <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
+          
+        </figure>
+      </aside>
 
-        <span><StyledPriceTag> {moneyFormatter(price)} </StyledPriceTag></span>
-        <span>status: {status}</span>
+      <div className="content">
+        <div className="details">
+          <h2>{name}</h2>
 
-        <p>{description}</p>
+          <p><span className="price"> {moneyFormatter(price)} </span> / month</p>
+ 
+          <AddToCart id={id}/>
+
+          <div className='description-wrap'>
+            <BlockRenderer document={description.document} />
+          </div>
+        </div>
+        
+        {/* //todo frontend plan editing */}
+        {/* <Link href={{ pathname: '/shop/subscriptionplan/update', query: { id: id }, }}> Edit ✏️ </Link> */}
+
+        <footer>
+
+          <h5 className='categories'>Categories: </h5>
+          <CategoriesPool categories={categories} />
+
+          <h5 className='tags'>Tags:</h5>
+          <TagsPool tags={tags} />
+          
+        </footer>
+
       </div>
-      <AddToCart id={id} />
-      <Link href={{ pathname: '/shop/product/update', query: { id: id }, }}> Edit ✏️ </Link>
 
-      <footer>
-
-        <h2>Categories: </h2>
-        <CategoriesPool categories={categories} />
-
-        <h2>Tags:</h2>
-        <TagsPool tags={tags} />
-
-      </footer>
-
-    </StyledProductSingle>
+    </StyledProductArticle>
   </>)
 }
 
@@ -100,7 +115,10 @@ export const SINGLE_PRODUCT_QUERY = gql`
       # }
       price
       status
-      description
+      excerpt
+      description {
+        document(hydrateRelationships: true)
+      }
       author{
         id
         name

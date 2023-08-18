@@ -21,9 +21,9 @@ const StyledTagsPool = styled.div`
     color: var(--c-txt-rev);
     text-decoration: none;
 
-    border-radius: 50px;
+    border-radius: var(--br-soft);
     padding: 0 1em;
-    margin-left: .2em;
+    margin-right: .3rem;
     font-size: .7rem;
     transition: all .3s;
 
