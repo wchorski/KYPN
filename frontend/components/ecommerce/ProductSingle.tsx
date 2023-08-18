@@ -14,8 +14,11 @@ import { QueryLoading } from '../menus/QueryLoading';
 import ErrorMessage from '../ErrorMessage';
 import { TagsPool } from '../menus/TagsPool';
 import { CategoriesPool } from '../menus/CategoriesPool';
+import { ImageDynamic } from '../elements/ImageDynamic';
+import { Metadata } from 'next';
+import { Product } from '../../lib/types';
 
-const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
+const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
 export function ProductSingle({ id }: any) {
 
@@ -28,25 +31,29 @@ export function ProductSingle({ id }: any) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
 
-  const { name, photo, price, description, status, categories, tags } = data.product
+  const { name, image, photo, price, description, status, categories, tags, author}:Product = data.product
 
+  // todo finish how to add good SEO, maybe learn nextjs /app router paradymn
 
   return (<>
 
     <Head>
-      <title> {name} | {SITE_TITLE} </title>
+      <title> {name} </title>
+      <meta name="description" content={description} />
+      <meta name='keywords' content={tags.map(tag => tag.name).join(', ')} />
+      <meta name="author" content={author.name} />
+      <meta property="og:title"       content={name} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image"       content={image} />
+      <meta property="og:url" content={SITE_URI + '/shop/product/' + id} />
+      <meta property="og:type" content="article" />
     </Head>
 
     <StyledProductSingle data-testid='singleProduct'>
-      <picture className="img-frame">
-        <Image
-          priority
-          src={handlePhoto(photo).image?.url}
-          alt={handlePhoto(photo).altText}
-          width={handlePhoto(photo).image?.width}
-          height={handlePhoto(photo).image?.height}
-        />
-      </picture>
+
+      <figure>
+        <ImageDynamic photoIn={{url: image, altText: `${name} featured Image`} || photo}/>
+      </figure>
 
       <div className="details">
         <h2>{name}</h2>
@@ -78,21 +85,26 @@ export const SINGLE_PRODUCT_QUERY = gql`
     product(where: $where) {
       id
       name
-      photo {
-        altText
-        id
-        image {
-          extension
-          filesize
-          id
-          height
-          url
-          width
-        }
-      }
+      image
+      # photo {
+      #   altText
+      #   id
+      #   image {
+      #     extension
+      #     filesize
+      #     id
+      #     height
+      #     url
+      #     width
+      #   }
+      # }
       price
       status
       description
+      author{
+        id
+        name
+      }
       tags {
         name
         id
@@ -115,12 +127,8 @@ const StyledProductSingle = styled.article`
   align-items: start;
   gap: 2em;
 
-  picture{
-    overflow: auto;
-    display: grid;
-    grid-template-rows: minmax(0,1fr) auto;
-    resize: both;
-    border: 2px dashed var(--c-accent);
+  figure{
+    margin: 0;
     
     img{
       width: 100%;

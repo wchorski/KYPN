@@ -11,6 +11,7 @@ import { useApollo } from '../lib/apolloClient';
 import { CartStateProvider } from '../lib/cartState';
 import { Layout_Wide_Width } from '../components/elements/Layouts';
 import Script from 'next/script';
+import Head from 'next/head';
 
 // @ts-ignore
 const ProgressBar = dynamic(() => import('components/ProgressBar'), { ssr: false });
@@ -22,6 +23,7 @@ function App({ Component, pageProps }: any) {
   const apolloClient = useApollo(pageProps)
 
   return (<>
+    
     <Script
       id="umami-next"
       strategy="afterInteractive"

@@ -6,6 +6,8 @@
 /components/elements/Test.tsx
 /styles/GlobalThemeStyle.styled.js
 
+robots.txt
+
 # dependencies
 /node_modules
 /.pnp

@@ -17,16 +17,14 @@ import { CategoriesPool } from '../menus/CategoriesPool';
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { PopupAnim } from '../menus/PopupAnim';
 import { useState } from 'react';
-import { CheckoutForm } from './CheckoutForm';
 import { SubscriptionItemForm, SubscriptionItemFormStripe } from './SubscriptionItemForm';
-import { LoadingAnim } from '../elements/LoadingAnim';
 import StatusMessage from '../elements/StatusMessage';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
-import  LightGallery  from 'lightgallery/lightgallery';
-import { ImageGallery } from '../blocks/ImageGallery';
+import { SubscriptionPlan } from '../../lib/types';
 
-const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE
+
+const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 let formStateInit:'success'|'failure'|undefined = undefined
 
 export function SubscriptionPlanSingle({ id }: any) {
@@ -44,13 +42,21 @@ export function SubscriptionPlanSingle({ id }: any) {
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
   if(!data.subscriptionPlan) return <p> no data found </p>
-  const { name, photo, image, price, description, status, categories, tags } = data.subscriptionPlan
+  const { name, photo, image, price, excerpt, description, status, author, categories, tags }:SubscriptionPlan = data.subscriptionPlan
 
 
   return (<>
 
     <Head>
-      <title> {name} | {SITE_TITLE} </title>
+      <title> {name} </title>
+      <meta name="description" content={excerpt} />
+      <meta name='keywords' content={tags.map(tag => tag.name).join(', ')} />
+      <meta name="author" content={author.name} />
+      <meta property="og:title"       content={name} />
+      <meta property="og:description" content={excerpt} />
+      <meta property="og:image"       content={image} />
+      <meta property="og:url" content={SITE_URI + '/shop/product/' + id} />
+      <meta property="og:type" content="article" />
     </Head>
 
     <StyledProductSingle data-testid='singleProduct'>
