@@ -72,9 +72,9 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
   if(handleItemCount() <= perPage) return null
 
   return (<>
-    <Head>
+    {/* <Head>
       <title> {page} / {pageCount} </title>
-    </Head>
+    </Head> */}
 
     <StyledPagination data-testid='pagination'>
 

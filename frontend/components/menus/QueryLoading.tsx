@@ -5,6 +5,7 @@ export const QueryLoading = () => {
   return (
     <div className={styles.wrapper}>
       <p>Loading...</p>
+      <br/>
     </div>
   )
 }

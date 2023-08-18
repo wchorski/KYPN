@@ -10,6 +10,7 @@ mkdir -p ./frontend/styles && cp ./private/frontend/styles/GlobalThemeStyle.styl
 mkdir -p ./frontend/pages && cp ./private/frontend/pages/home.tsx $_
 mkdir -p ./frontend && cp ./private/frontend/.env.local $_
 mkdir -p ./frontend && cp ./private/frontend/.env $_
+mkdir -p ./private/frontend && cp ./frontend/robots.txt $_
 mkdir -p ./backend && cp ./private/backend/.env $_
 
 # # directories
