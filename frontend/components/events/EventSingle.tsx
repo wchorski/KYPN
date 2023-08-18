@@ -22,6 +22,7 @@ import { PopupAnim } from "../menus/PopupAnim"
 import { TicketsForm } from "../tickets/TicketsForm"
 import { AddTicketButton } from "../tickets/AddTicketButton"
 import {AddToCalendarButton} from'add-to-calendar-button-react';
+import { Head } from "next/document"
 
 type tPopupData = {
 
@@ -29,6 +30,8 @@ type tPopupData = {
 
 
 // const now = new Date()
+
+const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
 export default function EventSingle({id}:{id:string}) {
 
@@ -54,7 +57,19 @@ export default function EventSingle({id}:{id:string}) {
 
   const {photo, summary, description, tickets = [], price, start, end, seats, hosts, location, categories, tags}:Event = data?.event
   
-  return (
+  return (<>
+    <Head>
+      <title> {summary} </title>
+      <meta name="description" content={description} />
+      <meta name='keywords' content={tags?.map(tag => tag.name).join(', ')} />
+      <meta name="author" content={hosts ? hosts[0].name : ''} />
+      <meta property="og:title"       content={summary} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image"       content={photo} />
+      <meta property="og:url" content={SITE_URI + '/events/e/' + id} />
+      <meta property="og:type" content="article" />
+    </Head>
+    
     <StyledEventSingle className="pad">
 
       <TicketPopup 
@@ -205,7 +220,7 @@ export default function EventSingle({id}:{id:string}) {
 
       </article>
     </StyledEventSingle>
-  )
+  </>)
 }
 
 const StyledEventSingle = styled.section`
