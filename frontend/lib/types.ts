@@ -250,6 +250,7 @@ export type Post = {
   author: User,
   categories: Category[],
   tags: Tag[],
+  allow_comments:boolean,
 }
 
 export type Role = {

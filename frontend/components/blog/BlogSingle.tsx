@@ -12,7 +12,10 @@ import { CategoriesPool } from '../menus/CategoriesPool';
 import { MediaText } from '../blocks/MediaText';
 import { BreadCrumbs } from '../elements/BreadCrumbs';
 import { ImageDynamic } from '../elements/ImageDynamic';
+import { Head } from 'next/document';
+import { Post } from '../../lib/types';
 
+const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
 export default function BlogPage({ slug }: { slug: string | string[] | undefined }) {
   
@@ -42,13 +45,24 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
     categories,
     tags,
     content,
-  } = data.post
+  }:Post = data.post
 
   if (status === 'DRAFT') return <p>This blog post is still a draft</p>
   if (status === 'PRIVATE') return <p>This blog post is private</p>
 
   return (
     <>
+      <Head>
+        <title> {title} </title>
+        <meta name="description" content={excerpt} />
+        <meta name='keywords' content={tags.map(tag => tag.name).join(', ')} />
+        <meta name="author" content={author.name} />
+        <meta property="og:title"       content={title} />
+        <meta property="og:description" content={excerpt} />
+        <meta property="og:image"       content={featured_image} />
+        <meta property="og:url" content={SITE_URI + '/blog/' + slug} />
+        <meta property="og:type" content="article" />
+      </Head>
 
       <StyledBlogSingle>
 
