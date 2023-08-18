@@ -23,7 +23,7 @@ const StyledCatsPool = styled.div`
     text-decoration: none;
     border: solid 1px var(--c-primary);
 
-    border-radius: 50px;
+    border-radius: var(--br-sharp);
     padding: 0 1em;
     margin-left: .2em;
     font-size: .7rem;

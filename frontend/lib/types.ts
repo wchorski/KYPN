@@ -69,7 +69,10 @@ export type Product = {
   slug: string,
   status: string,
   stockCount: string,
-  description: string,
+  excerpt:string
+  description: {
+    document:any
+  },
   photo: Photo,
   image:string,
   stripeProductId: string,

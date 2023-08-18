@@ -1557,7 +1557,8 @@ type Product {
   stripeProductId: String
   stripePriceId: String
   slug: String
-  description: String
+  excerpt: String
+  description: Product_description_Document
   status: String
   price: Int
   stockCount: Int
@@ -1568,6 +1569,10 @@ type Product {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+type Product_description_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input ProductWhereUniqueInput {
@@ -1586,7 +1591,7 @@ input ProductWhereInput {
   stripeProductId: StringFilter
   stripePriceId: StringFilter
   slug: StringFilter
-  description: StringFilter
+  excerpt: StringFilter
   status: StringNullableFilter
   price: IntNullableFilter
   stockCount: IntFilter
@@ -1604,7 +1609,7 @@ input ProductOrderByInput {
   stripeProductId: OrderDirection
   stripePriceId: OrderDirection
   slug: OrderDirection
-  description: OrderDirection
+  excerpt: OrderDirection
   status: OrderDirection
   price: OrderDirection
   stockCount: OrderDirection
@@ -1619,7 +1624,8 @@ input ProductUpdateInput {
   stripeProductId: String
   stripePriceId: String
   slug: String
-  description: String
+  excerpt: String
+  description: JSON
   status: String
   price: Int
   stockCount: Int
@@ -1642,7 +1648,8 @@ input ProductCreateInput {
   stripeProductId: String
   stripePriceId: String
   slug: String
-  description: String
+  excerpt: String
+  description: JSON
   status: String
   price: Int
   stockCount: Int

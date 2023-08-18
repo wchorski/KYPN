@@ -63,7 +63,7 @@ const StyledProductsList = styled.ul`
 export const GET_PAGE_PRODUCTS_QUERY = gql`
   query Query($skip: Int!, $take: Int) {
     products(skip: $skip, take: $take) {
-      description
+      excerpt
       id
       name
       price
@@ -84,7 +84,7 @@ export const GET_ALL_PRODUCTS = gql`
   query Products {
     products {
       id
-      description
+      excerpt
       name
       price
       status

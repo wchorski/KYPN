@@ -224,7 +224,8 @@ model Product {
   stripeProductId       String        @default("NO_PROD_ID")
   stripePriceId         String        @default("NO_PRICE_ID")
   slug                  String        @unique @default("")
-  description           String        @default("")
+  excerpt               String        @default("")
+  description           Json          @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   status                String?       @default("DRAFT")
   price                 Int?
   stockCount            Int           @default(0)

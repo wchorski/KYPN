@@ -4,6 +4,8 @@ import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../lib/stripe";
+import { document } from '@keystone-6/fields-document';
+import { componentBlocks } from "../blocks";
 
 const FRONTEND_URL = process.env.FRONTEND_URL
 
@@ -56,10 +58,51 @@ export const Product:Lists.Product = list({
         },
       }
     }),
-    description: text({
+    excerpt: text({
       ui: {
         displayMode: 'textarea'
       }
+    }),
+    description: document({
+      componentBlocks,
+      ui: {
+        views: './blocks',
+      },
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true,
+          code: true,
+          superscript: true,
+          subscript: true,
+          keyboard: true,
+        },
+        listTypes: {
+          ordered: true,
+          unordered: true,
+        },
+        alignment: {
+          center: true,
+          end: true,
+        },
+        headingLevels: [2, 3, 4, 5, 6],
+        blockTypes: {
+          blockquote: true,
+          code: true
+        },
+        softBreaks: true,
+      },
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1],
+      ],
+      links: true,
+      dividers: true,
     }),
     status: select({
       options: [
@@ -126,7 +169,7 @@ export const Product:Lists.Product = list({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
           name: resolvedData.name || '',
           active: true,
-          description: resolvedData.description || 'no_description',
+          description: resolvedData.excerpt || 'no_description',
           images: [
             resolvedData.image || FRONTEND_URL + '/assets/private/placeholder.png',
           ],
@@ -207,7 +250,7 @@ export const Product:Lists.Product = list({
             resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
             {
               name: resolvedData.name ? resolvedData.name : item.name,
-              description: resolvedData.description ? resolvedData.description : item.description,
+              description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt,
               default_price: newPrice.id,
               images: [
                 // @ts-ignore
@@ -229,7 +272,7 @@ export const Product:Lists.Product = list({
             resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
             {
               name: resolvedData.name ? resolvedData.name : item.name,
-              description: resolvedData.description ? resolvedData.description : item.description,
+              description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt,
               images: [
                 // @ts-ignore
                 // photo.image._meta.secure_url
