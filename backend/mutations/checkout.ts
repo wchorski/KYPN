@@ -54,11 +54,12 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     // console.log('===== FOUND USER')
     // console.log({ user })
 
-    user.cart.map(async (item:CartItem) => {
+    const currCart = await user.cart.map( async (item:CartItem) => {
       if(item.quantity > item.product.stockCount){
         throw new Error(`Insufficent Stock for ${item.product.name}`);
         
-      } else {
+      } 
+      else {
         // @ts-ignore
         const currData:Product = {
           stockCount: item.product.stockCount - item.quantity,
