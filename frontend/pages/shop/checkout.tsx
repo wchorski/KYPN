@@ -14,6 +14,8 @@ export default function CheckoutPage() {
   const session = useUser()
 
   return (
+    <div className="container">
+
     <StyledCheckout>
       <header>
         <h2>
@@ -32,7 +34,7 @@ export default function CheckoutPage() {
         ? <p> Cart is empty. </p>
         : (<>
         
-          <ul>
+          <ul className="items">
             {session?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
           </ul>
 
@@ -46,6 +48,7 @@ export default function CheckoutPage() {
         </>)}
 
     </StyledCheckout>
+    </div>
   )
 }
 
@@ -57,6 +60,8 @@ const StyledCheckout = styled.div`
   min-height: 80vh;
   display: flex;
   flex-direction: column;
+  max-width: 50em;
+  margin-inline: auto;
 
   .cartCount{
     width: 3em;
@@ -65,7 +70,7 @@ const StyledCheckout = styled.div`
     right: 0;
   }
 
-  > ul {
+  > ul.items {
     padding: 0;
   }
   

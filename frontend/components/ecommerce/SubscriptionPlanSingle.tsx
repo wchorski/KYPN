@@ -23,12 +23,15 @@ import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
 import { SubscriptionPlan } from '../../lib/types';
 import { StyledProductArticle } from '../../styles/ecommerce/ProductArticle.styled';
+import { useUser } from '../menus/Session';
 
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 let formStateInit:'success'|'failure'|undefined = undefined
 
 export function SubscriptionPlanSingle({ id }: any) {
+
+  const session = useUser()
 
   const [isPopup, setIsPopup] = useState(false)
   const [isOtherPayment, setIsOtherPayment] = useState(false)
@@ -67,7 +70,7 @@ export function SubscriptionPlanSingle({ id }: any) {
       <aside>
         {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
 
-        <figure className="img-frame">
+        <figure className="img-frame featured_img">
           <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
           
         </figure>
@@ -79,7 +82,10 @@ export function SubscriptionPlanSingle({ id }: any) {
 
           <p><span className="price"> {moneyFormatter(price)} </span> / month</p>
  
-          <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button>
+          {session 
+            ? <button className='medium subscribe' onClick={() => setIsPopup(!isPopup)}> Subscribe </button> 
+            : <button disabled={true} className='medium subscribe'> Login to subscribe </button>
+          }
 
           <div className='description-wrap'>
             <BlockRenderer document={description.document} />

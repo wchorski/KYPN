@@ -103,13 +103,12 @@ export const QUERY_USER_CURRENT = gql`
             id
             price
             name
-            description
             image
-            photo {
-              image {
-                publicUrlTransformed
-              }
-            }
+            # photo {
+            #   image {
+            #     publicUrlTransformed
+            #   }
+            # }
           }
         }
       }

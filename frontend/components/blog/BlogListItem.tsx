@@ -101,6 +101,9 @@ const StyledBlogItem = styled.article`
     width: 100% !important;
     height: 300px !important;
     object-fit: cover;
+    min-height: 14em;
+    background: var(--cg-stripes);
+  
   }
 
   p{

@@ -26,7 +26,8 @@ export const StyledProductArticle = styled.article`
     height: 100%;
   }
 
-  figure{
+  figure.featured_img{
+    backdrop-filter: blur;
     margin: 0;
     overflow: auto;
     display: grid;
@@ -39,6 +40,7 @@ export const StyledProductArticle = styled.article`
       height: 100%;
       object-fit: contain;
       object-position: 50% 0;
+      background: var(--cg-stripes);
     }
   }
 

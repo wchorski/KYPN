@@ -1,22 +1,25 @@
 .wrapper{
-  background: linear-gradient(90deg, rgba(0,0,0,0) 0%, var(--c-light) 18%, var(--c-light) 84%, rgba(0,0,0,0) 100%);
-  background: linear-gradient(to right, #96c8a3, #000000, #96c8a3);
+  background-color: var(--c-desaturated);
+  // background: linear-gradient(to right, var(--c-light), #000000, var(--c-light));
   background-size: 200% 200%; 
   background-position: 0 0;
-  padding: 1rem;
+  padding-inline: 1rem;
   width: 100%;
   border-radius: var(--br-soft);
+  display: flex;
 
   opacity: .3;
   animation: animGradient 1s ease-in-out infinite alternate;
 
   @keyframes animGradient { 
     0%{
-      background-position: 0 0;
+      // background-position: 0 0;
+      opacity: .2;
       // transform: translateX(0);
     }
     100%{
-      background-position: 100% 0%;
+      // background-position: 100% 0%;
+      opacity: .1;
       // transform: translateX(100px);
     }
     // 100%{

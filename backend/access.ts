@@ -211,7 +211,7 @@ export const rules = {
 
   // AVAILABLE products can be viewed by all
   canReadProducts({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+    // if (!isLoggedIn({ session })) return false;
     
     if (permissions.canManageProducts({ session })) return true; // They can read everything!
     
