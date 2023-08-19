@@ -14,7 +14,6 @@ type ProdProps = {
 }
 
 export function SubscriptionPlansList({ page }: ProdProps) {
-  // const { loading, error, data } = useQuery(GET_ALL_PRODUCTS)
   const { loading, error, data } = useQuery(GET_ALL_SUBSCRIPTIONPLANS, {
     variables: {
       skip: page * perPage - perPage,
@@ -60,7 +59,7 @@ const StyledProductsList = styled.ul`
 
   display: grid;
   grid-gap: 1em;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(23rem, 1fr));
 
   img.featured{
     width: 100%;

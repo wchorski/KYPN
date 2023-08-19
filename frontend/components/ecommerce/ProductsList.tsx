@@ -12,7 +12,6 @@ type ProdProps = {
 }
 
 export function ProductsList({ page }: ProdProps) {
-  // const { loading, error, data } = useQuery(GET_ALL_PRODUCTS)
   const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
     variables: {
       skip: page * perPage - perPage,
@@ -88,13 +87,14 @@ export const GET_ALL_PRODUCTS = gql`
       name
       price
       status
-      photo {
-        id
-        altText
-        image {
-          publicUrlTransformed
-        }
-      }
+      image
+      # photo {
+      #   id
+      #   altText
+      #   image {
+      #     publicUrlTransformed
+      #   }
+      # }
     }
   }
 `

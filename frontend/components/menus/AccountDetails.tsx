@@ -3,7 +3,7 @@ import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop,  } from "r
 import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
 import { Table } from "../elements/Table"
-import { Booking, SubscriptionItem, User } from "../../lib/types"
+import { Booking, Order, SubscriptionItem, User } from "../../lib/types"
 import TicketsList from "../events/TicketsList"
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import Link from "next/link"
@@ -38,6 +38,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
   const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
   const [userData, setUserData] = useState<User>()
   const [bookingCells, setBookingCells] = useState([])
+  const [ordersCells, setOrdersCells] = useState([])
   const [subscriptionCells, setSubscriptionCells] = useState([])
 
   const { loading, error, data } = useQuery(
@@ -86,7 +87,15 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
     // console.log(cells);
     setSubscriptionCells(cellsSubs)
 
-
+    const cellsOrders = data.user.orders.map((order:Order) => ({
+      date: datePrettyLocalDay(order.createdAt || '') + ' ' + datePrettyLocalTime(order.createdAt || '') ,
+      total: moneyFormatter(order.total),
+      count: order.items.reduce((accumulator, it) => {
+        return accumulator + it.quantity;
+      }, 0),
+      details: order.id,
+    }))
+    setOrdersCells(cellsOrders)
 
     
     // return () => 
@@ -179,7 +188,7 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
           <h3>Orders / Services</h3>
 
           <Table 
-            caption=""
+            caption="Services"
             headers={[
               'service',
               'date',
@@ -187,6 +196,18 @@ export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
             ]}
             cells={bookingCells}
             route={`/bookings`}
+          />
+
+          <Table 
+            caption="Orders"
+            headers={[
+              'date',
+              'total',
+              'count',
+              'details',
+            ]}
+            cells={ordersCells}
+            route={`/shop/orders`}
           />
 
         </article>
@@ -267,6 +288,14 @@ const USER_DASH_QUERY = gql`
           name
         }
         status
+      }
+      orders{
+        id
+        total
+        items{
+          quantity
+        }
+        createdAt
       }
     }
   }

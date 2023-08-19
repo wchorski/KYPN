@@ -27,9 +27,13 @@ export const SubscriptionThumbnail = ({ item }: Props) => {
     <StyledProdThumbnail>
       
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
-      <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`,}} className='featured'/>
+      <Link href={`/shop/subscriptionplan/${id}`} className='featured_image'>
+        <ImageDynamic photoIn={{url: image, altText: `${name} product feature image`,}} className='featured'/>
+      </Link>
 
-      <h3><Link href={`/shop/subscriptionplan/${id}`}>{name}</Link></h3>
+      <Link href={`/shop/subscriptionplan/${id}`} className='title'>
+        <h3>{name}</h3>
+      </Link>
       
       <div className="container">
           <div className='excerpt-wrap'>
@@ -70,32 +74,49 @@ const StyledProdThumbnail = styled.article`
     overflow: hidden;
   }
 
-  h3{
-    margin: 0;
-    /* text-align: center; */
-    /* transform: skew(-5deg) rotate(-1deg); */
-    margin-top: -3rem;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
+  a.featured_image img{
+    transition: all .3s;
+    min-height: 14em;
+  }
 
-    text-wrap: balance;
-    transform: translateY(1rem);
-    
-    a {
-      background: var(--c-desaturated);
-      padding: 0 1rem;
-      display: block;
-      box-shadow: #00000049 1px -1px 2px;
-      border-radius: 0 var(--br-dull) 0 0;
-      line-height: 1.3;
-      font-size: 2.5rem;
-      text-decoration: none;
-      color: white;
+  a.featured_image{
+    &:hover, &:focus{
 
-      &:hover, &:focus{
-        color: var(--c-light);
+      img{
+        transform: scale(0.99);
+        filter: contrast(0.7);
       }
     }
   }
+  
+  a.title {
+    display: block;
+    line-height: 1.3;
+    font-size: 2.5rem;
+    text-decoration: none;
+    color: white;
+
+    &:hover, &:focus{
+      color: var(--c-light);
+    }
+
+    h3{
+      margin: 0;
+      background: var(--c-desaturated);
+      box-shadow: #00000049 1px -1px 2px;
+      padding: 0 1rem;
+      width: fit-content;
+      border-radius: 0 var(--br-dull) 0 0;
+      /* text-align: center; */
+      /* transform: skew(-5deg) rotate(-1deg); */
+      margin-top: -3rem;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
+  
+      text-wrap: balance;
+      transform: translateY(1rem);
+    }
+  }
+
 
   .container{
     display: flex;

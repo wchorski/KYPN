@@ -12,7 +12,7 @@ import { StyledPriceTag } from '../styles/PriceTag.styled';
 import { OutOfStockLabel } from './elements/OutOfStockLabel';
 import { Product } from '../lib/types';
 
-export const ProductThumbnail = ({ id, name, description, price, photo, image, status }: Product) => {
+export const ProductThumbnail = ({ id, name, excerpt, price, photo, image, status }: Product) => {
 
   const session = useUser()
 
@@ -20,19 +20,27 @@ export const ProductThumbnail = ({ id, name, description, price, photo, image, s
     <StyledProdThumbnail>
 
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
-      <ImageDynamic photoIn={image} />
+      <Link href={`/shop/product/${id}`} className='featured_image'>
+        <ImageDynamic photoIn={image} />
+      </Link>
 
 
       <div className="container">
-        <h3><Link href={`/shop/product/${id}`}>{name}</Link></h3>
+        <Link href={`/shop/product/${id}`} className='title'>
+          <h3>{name}</h3>
+        </Link>
 
-        <p className='desc'>{description}</p>
+        <p className='desc'>{excerpt}</p>
 
         <div className="menu">
-          {status !== 'OUT_OF_STOCK' 
-            ? <AddToCart id={id} />
-            : <button disabled={true}> out of stock </button>
+          {session 
+            ? status !== 'OUT_OF_STOCK' 
+              ? <AddToCart id={id} />
+              : <button disabled={true}> out of stock </button>
+              
+            : <button disabled={true}> Login to shop </button>
           }
+          
           
           <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
         </div>
@@ -54,9 +62,17 @@ const StyledProdThumbnail = styled.article`
   flex-direction: column;
   height: 100%;
 
+  a.featured_image img{
+    height: 100%;
+    min-height: 14em;
+    min-height: 14em;
+    box-shadow: var(--boxs-1);
+    transition: all .3s ease-in-out;
+  }
+
   .container{
     background-color: var(--c-desaturated);
-    background: var(--cg-primary);
+    /* background: var(--cg-primary); */
     padding: 1rem;
     flex: 1;
     display: flex;
@@ -68,23 +84,32 @@ const StyledProdThumbnail = styled.article`
     word-wrap: break-word;
   }
 
-  h3{
-    /* margin: 0; */
-    /* text-align: center; */
-    /* transform: skew(-5deg) rotate(-1deg); */
-    /* margin-top: -3rem; */
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
-    /* background: var(--c-primary); */
+  a.featured_image{
+    &:hover, &:focus{
 
-    a {
-      display: inline;
-      line-height: 1.3;
-      font-size: 2.5rem;
-      text-align: center;
-      color: var(--c-txt);
-      text-decoration: none;
+      img{
+        transform: scale(1.01);
+        filter: contrast(0.7);
+      }
     }
   }
+  a.title{
+    display: inline;
+    line-height: 1.3;
+    font-size: 2.5rem;
+    color: var(--c-txt);
+    text-decoration: none;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
+
+    h3{
+      margin: 0;
+    }
+
+    &:hover, &:focus{
+      color: var(--c-light);
+    }
+  }
+  
 
   .menu{
     display: flex;

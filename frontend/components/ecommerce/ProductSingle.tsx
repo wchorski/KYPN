@@ -20,10 +20,13 @@ import { Product } from '../../lib/types';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
 import { StyledProductArticle } from '../../styles/ecommerce/ProductArticle.styled';
+import { useUser } from '../menus/Session';
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
 export function ProductSingle({ id }: any) {
+
+  const session = useUser()
 
   const { loading, error, data } = useQuery(
     SINGLE_PRODUCT_QUERY, {
@@ -57,7 +60,7 @@ export function ProductSingle({ id }: any) {
       <aside>
         {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
 
-        <figure className="img-frame">
+        <figure className="img-frame featured_img">
           <ImageDynamic photoIn={ {url: image, altText: 'subscription image'}}/>
           
         </figure>
