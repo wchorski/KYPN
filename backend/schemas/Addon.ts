@@ -34,7 +34,11 @@ export const Addon:Lists.Addon = list({
 
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
-    description: text(),
+    excerpt: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     price: integer({defaultValue: 0}),
     services: relationship({ ref: 'Service.addons', many: true }),
     bookings: relationship({ ref: 'Booking.addons', many: true }),

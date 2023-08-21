@@ -147,7 +147,7 @@ model Location {
 model Addon {
   id                String             @id @default(uuid()) @postgresql.Uuid
   name              String             @unique @default("")
-  description       String             @default("")
+  excerpt           String             @default("")
   price             Int?               @default(0)
   services          Service[]          @relation("Addon_services")
   bookings          Booking[]          @relation("Addon_bookings")
@@ -360,8 +360,8 @@ model Event {
   cohosts      User[]     @relation("Event_cohosts")
   tickets      Ticket[]   @relation("Ticket_event")
   seats        Int
-  photo        String     @default("")
-  description  String     @default("")
+  image        String     @default("")
+  excerpt      String     @default("")
   status       String?    @default("ACTIVE")
   dateCreated  DateTime?  @default(now())
   dateModified DateTime?  @default(now())
@@ -387,7 +387,7 @@ model Ticket {
 model Category {
   id            String             @id @default(uuid()) @postgresql.Uuid
   name          String             @unique @default("")
-  description   String             @default("")
+  excerpt       String             @default("")
   pages         Page[]             @relation("Category_pages")
   posts         Post[]             @relation("Category_posts")
   products      Product[]          @relation("Category_products")

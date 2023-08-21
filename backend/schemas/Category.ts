@@ -31,7 +31,7 @@ export const Category:Lists.Category = list({
   // this is the fields for our Tag list
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
-    description: text({
+    excerpt: text({
       ui: {
         displayMode: 'textarea'
       }

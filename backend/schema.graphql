@@ -1151,7 +1151,7 @@ input LocationCreateInput {
 type Addon {
   id: ID!
   name: String
-  description: String
+  excerpt: String
   price: Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
@@ -1176,7 +1176,7 @@ input AddonWhereInput {
   NOT: [AddonWhereInput!]
   id: IDFilter
   name: StringFilter
-  description: StringFilter
+  excerpt: StringFilter
   price: IntNullableFilter
   services: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
@@ -1188,13 +1188,13 @@ input AddonWhereInput {
 input AddonOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  description: OrderDirection
+  excerpt: OrderDirection
   price: OrderDirection
 }
 
 input AddonUpdateInput {
   name: String
-  description: String
+  excerpt: String
   price: Int
   services: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
@@ -1210,7 +1210,7 @@ input AddonUpdateArgs {
 
 input AddonCreateInput {
   name: String
-  description: String
+  excerpt: String
   price: Int
   services: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
@@ -2268,8 +2268,8 @@ type Event {
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketsCount(where: TicketWhereInput! = {}): Int
   seats: Int
-  photo: String
-  description: String
+  image: String
+  excerpt: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2297,8 +2297,8 @@ input EventWhereInput {
   cohosts: UserManyRelationFilter
   tickets: TicketManyRelationFilter
   seats: IntFilter
-  photo: StringFilter
-  description: StringFilter
+  image: StringFilter
+  excerpt: StringFilter
   status: StringNullableFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
@@ -2313,8 +2313,8 @@ input EventOrderByInput {
   end: OrderDirection
   price: OrderDirection
   seats: OrderDirection
-  photo: OrderDirection
-  description: OrderDirection
+  image: OrderDirection
+  excerpt: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -2330,8 +2330,8 @@ input EventUpdateInput {
   cohosts: UserRelateToManyForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
   seats: Int
-  photo: String
-  description: String
+  image: String
+  excerpt: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2354,8 +2354,8 @@ input EventCreateInput {
   cohosts: UserRelateToManyForCreateInput
   tickets: TicketRelateToManyForCreateInput
   seats: Int
-  photo: String
-  description: String
+  image: String
+  excerpt: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2425,7 +2425,7 @@ input EventRelateToOneForCreateInput {
 type Category {
   id: ID!
   name: String
-  description: String
+  excerpt: String
   pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
   pagesCount(where: PageWhereInput! = {}): Int
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
@@ -2455,7 +2455,7 @@ input CategoryWhereInput {
   NOT: [CategoryWhereInput!]
   id: IDFilter
   name: StringFilter
-  description: StringFilter
+  excerpt: StringFilter
   pages: PageManyRelationFilter
   posts: PostManyRelationFilter
   products: ProductManyRelationFilter
@@ -2469,12 +2469,12 @@ input CategoryWhereInput {
 input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  description: OrderDirection
+  excerpt: OrderDirection
 }
 
 input CategoryUpdateInput {
   name: String
-  description: String
+  excerpt: String
   pages: PageRelateToManyForUpdateInput
   posts: PostRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
@@ -2492,7 +2492,7 @@ input CategoryUpdateArgs {
 
 input CategoryCreateInput {
   name: String
-  description: String
+  excerpt: String
   pages: PageRelateToManyForCreateInput
   posts: PostRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
