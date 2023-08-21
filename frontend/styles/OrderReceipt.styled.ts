@@ -20,23 +20,25 @@ export const StyledOrderReceipt = styled.div`
       }
     }
   }
-  .order-item {
-    border-bottom: 1px solid var(--offWhite);
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    align-items: center;
-    grid-gap: 2rem;
-    margin: 2rem 0;
-    padding-bottom: 2rem;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+
+  ul.orderItems{
+    padding: 0;
   }
 
-  ul{
-    padding: 0;
+  ul.orderItems > li {
+    border-bottom: 1px solid var(--offWhite);
+    display: flex;
+    /* grid-template-columns: 200px 1fr; */
+    align-items: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    border-bottom: solid var(--c-accent) 1px;
+    /* padding-bottom: 2rem; */
+    img {
+      width: 100px;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 
   table{

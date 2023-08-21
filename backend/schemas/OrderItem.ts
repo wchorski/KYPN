@@ -25,6 +25,7 @@ export const OrderItem:Lists.OrderItem = list({
         displayMode: 'textarea'
       }
     }),
+    image: text(),
     photo: relationship({
       ref: 'ProductImage',
       ui: {
@@ -37,6 +38,8 @@ export const OrderItem:Lists.OrderItem = list({
     price: integer(),
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),
+    // todo add this link for receipt convienince?
+    // product: relationship({ ref: 'Product.items' }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
   }

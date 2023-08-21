@@ -1,5 +1,7 @@
 
 import { createTransport, getTestMessageUrl } from "nodemailer";
+import moneyFormatter from '../lib/moneyFormatter'
+import { datePrettyLocal } from "./dateFormatter";
 
 const MAIL_HOST = process.env.MAIL_HOST || 'update .env file'
 const MAIL_PORT = process.env.MAIL_PORT || 'update .env file'
@@ -7,6 +9,7 @@ const MAIL_USER = process.env.MAIL_USER || 'update .env file'
 const MAIL_PASS = process.env.MAIL_PASS || 'update .env file'
 const SITE_TITLE = process.env.SITE_TITLE || ''
 const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email'
+const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 
 const transport = createTransport({
   service: 'gmail',
@@ -58,6 +61,13 @@ type Employee = {
   name?:string,
   email?:string,
   phone?:string,
+}
+
+type OrderItem = {
+  image:string,
+  name:string,
+  quantity:number,
+  price:number,
 }
 
 function templateBooking(id: string, customer:Customer, employee:Employee, name: string, email: string, formValues:FormValues, msg: string): string {
@@ -207,4 +217,100 @@ export async function mailBookingCreated(id: string, to: string[], customer:Cust
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }
+}
+
+export async function mailCheckoutReceipt(id: string, to: string[], customerName:string, emailAdmin: string, items:OrderItem[], date:string, totalOrder:number
+): Promise<void> {
+  // email the user a token
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: 'Order Receipt',
+    html: templateReceipt(
+      id,
+      customerName || 'anonymous',
+      emailAdmin,
+      items,
+      date,
+      totalOrder,
+    ),
+  }).catch(err => console.log('%%%% mail.ts Checkout ERROR: ', err) ))
+
+  if (MAIL_USER.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
+}
+
+function templateReceipt(id:string, customerName:string, emailAdmin:string, orderItems:OrderItem[], date:string, totalOrder:number){
+  
+  const itemRows = orderItems.map(item => 
+    `
+      <tr>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: left;" align="left"> 
+          <img class="product" src="${item.image}" alt="product image" width="100" height="100" style="width: 100px; height: 100px; object-fit: contain;"> 
+        </td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: left;" align="left">
+          ${item.name}
+        </td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: left;" align="left">
+          ${item.quantity}
+        </td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: left;" align="left">
+          ${ moneyFormatter(item.price) }
+        </td>
+      </tr>
+    `
+  ).join('')
+
+  return`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Order Receipt</title>
+      
+    </head>
+    <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
+      
+      <div class="container" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border: 1px solid #ccc; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+      <img src="${FRONTEND_URL}/assets/private/logo.png" alt="product image" width="100" height="100" style="width: 100px; height: 100px; object-fit: contain;"> 
+        <h2>${SITE_TITLE}</h2>
+        <h3 class="title" style="font-size: 2rem; margin-bottom: 0;"> 
+          Order Receipt
+        </h3>
+        <p class="sub-title" style="margin-top: 0; margin-bottom: 2rem;">
+          ${datePrettyLocal(date, 'full')}
+          <br />
+          ${id}
+        </p>
+
+        <p>${customerName}, thank you for your order! Here are the details:</p>
+        <hr style="border: dashed lightgrey 1px;">
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;" width="100%">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;" align="left" bgcolor="#f2f2f2">Image</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;" align="left" bgcolor="#f2f2f2">Item</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;" align="left" bgcolor="#f2f2f2">Quantity</th>
+              <th style="border: 1px solid #ddd; padding: 8px; text-align: left; background-color: #f2f2f2;" align="left" bgcolor="#f2f2f2">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemRows}
+          </tbody>
+        </table>
+        
+        <p class="total" style="text-align: right;">Total Amount: <strong> ${moneyFormatter(totalOrder)} </strong></p>
+        <hr style="border: dashed lightgrey 1px;">
+        
+        <p><a href="${FRONTEND_URL}/account"> View Your Account </a></p>
+        <p>For any questions, please reply to <strong><a href="mailto:${emailAdmin}">${emailAdmin}</a></strong></p>
+    </div>
+    </body>
+    </html>
+  `
 }
