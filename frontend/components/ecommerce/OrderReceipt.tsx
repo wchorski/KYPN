@@ -9,10 +9,10 @@ import { QueryLoading } from '../menus/QueryLoading'
 import CartItem from './CartItem'
 import { handlePhoto } from '../../lib/handleProductPhoto'
 import moneyFormatter from '../../lib/moneyFormatter'
-import OrderItem from './OrderItem'
+
 import { StyledCartItem } from '../../styles/CartItem.styled'
 import { ImageDynamic } from '../elements/ImageDynamic'
-import { Order } from '../../lib/types'
+import { Order, OrderItem } from '../../lib/types'
 import Link from 'next/link'
 import { datePrettyLocal } from '../../lib/dateFormatter'
 
@@ -56,28 +56,31 @@ export default function OrderReceipt() {
             <td>Date:</td>
             <td>{datePrettyLocal(order.createdAt, 'full')}</td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>Qty: </td>
             <td>{order.itemsCount}</td>
-          </tr>
+          </tr> */}
           <tr>
-            <td>Sub Total: </td>
+            <td> Total: </td>
             <td>{moneyFormatter(order.total)}</td>
           </tr>
         </tbody>
       </table>
 
       <h3> Items: </h3>
-      <ul>
-        {order?.items.map((item: any) => (
+      <ul className='orderItems'>
+        {order?.items.map((item: OrderItem) => (
           // <OrderItem key={item.id} item={item} />
           <StyledCartItem key={item.id}>
+   
+              <ImageDynamic photoIn={item.image} />
 
-            <ImageDynamic photoIn={item.photo} />
 
             <h5>{item.name}</h5>
             <span className="perItemTotal">
-              {moneyFormatter(item.price * item.quantity)}
+              <strong>
+                {moneyFormatter(item.price * item.quantity)}
+              </strong>
               <br />
               <em>{item.quantity} &times; {moneyFormatter(item.price)} each</em>
             </span>
@@ -101,6 +104,7 @@ const QUERY_ORDER_ID = gql`
         id
         price
         quantity
+        image
         photo {
           altText
           id

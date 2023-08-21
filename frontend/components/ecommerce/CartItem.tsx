@@ -69,7 +69,7 @@ export default function CartItem({ item }: any) {
 
         <input 
           type="number" 
-          defaultValue={quantity}
+          value={quantity}
           onChange={e => updateQuantity(Number(e.target.value))}
         /> 
         <em> &times; {moneyFormatter(price)} each </em>

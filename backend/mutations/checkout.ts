@@ -6,8 +6,10 @@ import { Context } from '.keystone/types';
 import stripeConfig from '../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { CartItem, Product } from '../types';
+import { mailCheckoutReceipt } from '../lib/mail';
 
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
+const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
 
 export const checkout = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
@@ -44,6 +46,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
               name
               price
               stockCount
+              image
               photo {
                 id
               }
@@ -134,6 +137,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         description: cartItem.product.description,
         price: cartItem.product.price,
         quantity: cartItem.quantity,
+        image: cartItem.product.image,
         // productId: cartItem.product.id,
         // photo: { connect: { id: cartItem.product.photo.id } },
       }
@@ -141,9 +145,6 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     })
 
     console.log({ orderItems });
-
-
-
 
 
 
@@ -163,6 +164,22 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     await context.db.CartItem.deleteMany({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
+
+    mailCheckoutReceipt(
+      order.id, 
+      [user.email, ADMIN_EMAIL_ADDRESS],
+      user.name,
+      ADMIN_EMAIL_ADDRESS,
+      orderItems,
+      now.toISOString(),
+      totalOrder,
+    )
+
     return order
   }
 })
+
+
+function handleMail(){
+
+}

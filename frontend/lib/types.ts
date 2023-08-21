@@ -122,6 +122,7 @@ export type OrderItem = {
   price: number,
   quantity: number,
   productId: string,
+  image:string,
   photo: Photo,
   dateCreated: string,
   dateModified: string,

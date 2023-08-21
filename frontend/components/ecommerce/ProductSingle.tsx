@@ -21,6 +21,7 @@ import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { BlockRenderer } from '../blocks/BlocksRenderer';
 import { StyledProductArticle } from '../../styles/ecommerce/ProductArticle.styled';
 import { useUser } from '../menus/Session';
+import Error404 from '../../pages/404';
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
 
@@ -36,8 +37,10 @@ export function ProductSingle({ id }: any) {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
+  if(!data.product) return <Error404 />
+  
 
-  const { name, image, photo, price, description, excerpt, status, categories, tags, author}:Product = data.product
+  const { name, image, price, description, excerpt, status, categories, tags, author}:Product = data.product
 
   // todo finish how to add good SEO, maybe learn nextjs /app router paradymn
 

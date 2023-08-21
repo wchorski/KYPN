@@ -1826,6 +1826,7 @@ type OrderItem {
   id: ID!
   name: String
   description: String
+  image: String
   photo: ProductImage
   price: Int
   quantity: Int
@@ -1845,6 +1846,7 @@ input OrderItemWhereInput {
   id: IDFilter
   name: StringFilter
   description: StringFilter
+  image: StringFilter
   photo: ProductImageWhereInput
   price: IntNullableFilter
   quantity: IntNullableFilter
@@ -1857,6 +1859,7 @@ input OrderItemOrderByInput {
   id: OrderDirection
   name: OrderDirection
   description: OrderDirection
+  image: OrderDirection
   price: OrderDirection
   quantity: OrderDirection
   dateCreated: OrderDirection
@@ -1866,6 +1869,7 @@ input OrderItemOrderByInput {
 input OrderItemUpdateInput {
   name: String
   description: String
+  image: String
   photo: ProductImageRelateToOneForUpdateInput
   price: Int
   quantity: Int
@@ -1888,6 +1892,7 @@ input OrderItemUpdateArgs {
 input OrderItemCreateInput {
   name: String
   description: String
+  image: String
   photo: ProductImageRelateToOneForCreateInput
   price: Int
   quantity: Int
