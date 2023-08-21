@@ -11,7 +11,7 @@ export function CartCount2({ count }: { count: number }) {
         <span> {count} </span>
       </StyledDot>
 
-      <MdShoppingBag />
+      <MdShoppingBag className="cart"/>
 
     </StyledCartIcon>
   )
@@ -59,4 +59,9 @@ const StyledDot = styled.div`
 
 const StyledCartIcon = styled.div`
   position: relative;
+
+  svg.cart{
+    color: var(--c-primary);
+  }
+
 `

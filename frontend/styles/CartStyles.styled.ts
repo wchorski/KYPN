@@ -55,7 +55,7 @@ export const StyledShoppingCart = styled.div`
   button.close{
     position: absolute;
     top: 0;
-    left: -13%;
+    left: -2em;
     background-color: var(--c-desaturated);
     border: none;
     padding: 1rem;

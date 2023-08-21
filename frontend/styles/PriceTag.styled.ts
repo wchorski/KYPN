@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const StyledPriceTag = styled.span`
-  color: white;
+  color: var(--c-txt);
+  text-shadow: var(--c-dark) 1px 1px 3px;
   font-weight: 600;
   padding: 5px;
   line-height: 1;

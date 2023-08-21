@@ -57,8 +57,8 @@ export const Event:Lists.Event = list({
     cohosts: relationship({ ref: 'User.eventsCohost', many: true }),
     tickets: relationship({ ref: 'Ticket.event', many: true }),
     seats: integer({ validation: { isRequired: true} }),
-    photo: text(),
-    description: text({
+    image: text(),
+    excerpt: text({
       ui: {
         displayMode: 'textarea'
       }
