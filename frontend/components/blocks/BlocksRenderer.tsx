@@ -137,6 +137,17 @@ export function BlockRenderer({ document }: CustomRendererProps) {
 }
 
 const StyledBlockRender = styled.div`
+
+  max-width: 800px;
+  /* border: solid 1px lightseagreen; */
+  padding-inline: 1rem;
+  margin-inline: auto;
+
+  /* > p {
+    max-width: 60ch;
+    margin-inline: auto;
+  } */
+
   .blockquote {
     margin: 0;
     border-left: 5px solid #D1D0CE;
