@@ -11,10 +11,6 @@ import { useApollo } from '../lib/apolloClient';
 import { CartStateProvider } from '../lib/cartState';
 import { Layout_Wide_Width } from '../components/elements/Layouts';
 import Script from 'next/script';
-import Head from 'next/head';
-
-import { fontHeader, fontParagraph, fontExo } from "@/fonts";
-import '../styles/fonts.css'
 
 // @ts-ignore
 const ProgressBar = dynamic(() => import('components/ProgressBar'), { ssr: false });
@@ -25,7 +21,7 @@ const UMAMI_ID = process.env.NEXT_PUBLIC_UMAMI_ID
 function App({ Component, pageProps }: any) {
   const apolloClient = useApollo(pageProps)
 
-  return (< div className={fontExo.variable}>
+  return (<>
     
     <Script
       id="umami-next"
@@ -51,7 +47,7 @@ function App({ Component, pageProps }: any) {
         </CartStateProvider>
       </ApolloProvider>
     </GlobalContextProvider>
-  </div>)
+  </>)
 }
 
 export default (App)
