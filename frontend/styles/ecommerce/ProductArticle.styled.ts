@@ -50,8 +50,9 @@ export const StyledProductArticle = styled.article`
     border-radius: var(--br-sharp);
   }
 
-  button.subscribe{
+  button.subscribe, button.addtocart{
     margin: 2rem 0;
+    padding: 1rem;
   }
 
   .price{

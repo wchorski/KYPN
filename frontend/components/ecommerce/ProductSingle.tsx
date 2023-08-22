@@ -50,7 +50,7 @@ export function ProductSingle({ id }: any) {
       <title> {name} </title>
       <meta name="description"        content={excerpt} />
       <meta name='keywords'           content={tags.map(tag => tag.name).join(', ')} />
-      <meta name="author"             content={author.name} />
+      <meta name="author"             content={author?.name} />
       <meta property="og:title"       content={name} />
       <meta property="og:description" content={excerpt} />
       <meta property="og:image"       content={image} />
@@ -75,7 +75,7 @@ export function ProductSingle({ id }: any) {
 
           <p><span className="price"> {moneyFormatter(price)} </span> / month</p>
  
-          <AddToCart id={id}/>
+          <AddToCart id={id} />
 
           <div className='description-wrap'>
             <BlockRenderer document={description.document} />

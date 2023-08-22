@@ -254,7 +254,7 @@ export type Page = {
 }
 
 export type Post = {
-  id: string,
+  id?: string,
   title: string,
   slug: string,
   dateCreated: string,
@@ -265,10 +265,11 @@ export type Post = {
   excerpt: string,
   featured_image: string,
   featured_video: string,
-  content: any,
-  author: User,
-  categories: Category[],
-  tags: Tag[],
+  content: any[],
+  allow_comments:boolean,
+  author: User|{connect:any},
+  categories?: Category[]|{connect:any},
+  tags?: Tag[]|{connect:any},
 }
 
 export type Role = {

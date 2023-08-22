@@ -6,6 +6,7 @@ import { TbCheck, TbExclamationCircle, TbQuestionMark, TbLoader  } from 'react-i
 import { QUERY_USER_CURRENT } from '../menus/Session';
 import { useState } from 'react';
 import styles from '../../styles/eyecandy/SpinCycle.module.scss'
+import stylesButton from "@/styles/ecommerce/AddToCart.module.scss";
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
@@ -66,7 +67,7 @@ export default function AddToCart({ id }: { id: string }) {
         return <TbExclamationCircle />
     
       default:
-        return <TbExclamationCircle />
+        return <MdShoppingBag /> 
     }
   }
 
@@ -75,13 +76,12 @@ export default function AddToCart({ id }: { id: string }) {
       type="button" 
       disabled={loading || state !== undefined} 
       onClick={e => handleButton()}
+      className={stylesButton.addtocart + ' addtocart'}
     >
-      <span>Add To Cart <MdShoppingBag /></span>
+      <span>Add To Cart <span style={{marginRight: 'auto'}} className='state'>{renderIcon(state)}</span> </span>
+      
     </button>
     
-    {state 
-      && <span style={{marginRight: 'auto'}}>{renderIcon(state)}</span>
-    }
     </>);
 }
 

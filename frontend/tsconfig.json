@@ -20,6 +20,7 @@
     "incremental": true,
     "paths": {
       "@/components/*": ["./components/*"],
+      "@/styles/*": ["./styles/*"],
       "@/fonts": ["./styles/fonts"],
     }
   },

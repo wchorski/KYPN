@@ -17,6 +17,7 @@ const seedUsers = async (context: Context) => {
     },
   });
   const usersToCreate = seedUsers.filter(
+    // @ts-ignore
     seedUser => !usersAlreadyInDatabase.some((u:User) => u.email === seedUser.email)
   )
   console.log({ usersToCreate })
@@ -72,12 +73,9 @@ const seedPosts = async (context: Context) => {
       slug: { in: seedPosts.map(post => post.slug) },
     },
   });
-
-  console.log('================ &&&&&&&&&&&');
-  
-  console.log('posts alread in db, ', {postsAlreadyInDatabase});
   
   const postsToCreate = seedPosts.filter(
+    // @ts-ignore
     seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
   );
 
@@ -97,6 +95,7 @@ const seedTags = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
+    //@ts-ignore
     seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
   );
 
@@ -116,6 +115,7 @@ const seedCategories = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
+    //@ts-ignore
     seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
   );
 
@@ -135,6 +135,7 @@ const seedProducts = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
+    //@ts-ignore
     seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
   );
 
