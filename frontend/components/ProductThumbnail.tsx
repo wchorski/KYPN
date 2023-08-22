@@ -11,6 +11,7 @@ import { useUser } from './menus/Session';
 import { StyledPriceTag } from '../styles/PriceTag.styled';
 import { OutOfStockLabel } from './elements/OutOfStockLabel';
 import { Product } from '../lib/types';
+import { PriceTag } from './ecommerce/PriceTag';
 
 export const ProductThumbnail = ({ id, name, excerpt, price, photo, image, status }: Product) => {
 
@@ -41,8 +42,7 @@ export const ProductThumbnail = ({ id, name, excerpt, price, photo, image, statu
             : <button disabled={true}> Login to shop </button>
           }
           
-          
-          <StyledPriceTag>{moneyFormatter(price)}</StyledPriceTag>
+          <PriceTag price={price}/>
         </div>
       </div>
 
@@ -96,7 +96,7 @@ const StyledProdThumbnail = styled.article`
   a.title{
     display: inline;
     line-height: 1.3;
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--c-txt);
     text-decoration: none;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
