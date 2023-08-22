@@ -1,0 +1,14 @@
+button.addtocart{
+  
+  &:hover, &:focus{
+    background-color: var(--c-secondary);
+  }
+
+  &:active{
+    background-color: var(--c-accent);
+  }
+
+  // span.state{
+    
+  // }
+}

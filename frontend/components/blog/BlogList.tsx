@@ -7,6 +7,7 @@ import { QueryLoading } from './../menus/QueryLoading';
 import { QueryError } from './../menus/QueryError';
 import { perPage } from '../../config';
 import { BlogListItem } from './BlogListItem';
+import styles from "@/styles/blog/Blog.module.scss";
 
 type ProdProps = {
   page: number,
@@ -52,15 +53,15 @@ export function BlogList({ page, categories = [] }: ProdProps) {
   if (error) return <QueryError error={error} />
 
   return (
-    <StyledBlogList>
+    <ul className={styles.blog}>
       {data.posts.map((item: any) => {
         return (
           <li key={item.id}>
-            <BlogListItem {...item} buttonText="Press Play"/>
+            <BlogListItem {...item} />
           </li>
         );
       })}
-    </StyledBlogList>
+    </ul>
   )
 }
 
