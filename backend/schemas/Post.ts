@@ -63,7 +63,11 @@ export const Post:Lists.Post = list({
       }
     }),
     pinned: integer({ defaultValue: 0 }),
-    excerpt: text(),
+    excerpt: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     featured_image: text(),
     featured_video: text(),
 

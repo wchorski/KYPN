@@ -12,7 +12,7 @@ import { CategoriesPool } from '../menus/CategoriesPool';
 import { MediaText } from '../blocks/MediaText';
 import { BreadCrumbs } from '../elements/BreadCrumbs';
 import { ImageDynamic } from '../elements/ImageDynamic';
-import { Head } from 'next/document';
+import Head  from 'next/head';
 import { Post } from '../../lib/types';
 
 const SITE_URI = process.env.NEXT_PUBLIC_SITE_URI || 'no_url'
@@ -54,14 +54,14 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
     <>
       <Head>
         <title> {title} </title>
-        <meta name="description" content={excerpt} />
-        <meta name='keywords' content={tags.map(tag => tag.name).join(', ')} />
-        <meta name="author" content={author.name} />
+        <meta name="description"        content={excerpt} />
+        <meta name='keywords'           content={tags.map(tag => tag.name).join(', ')} />
+        <meta name="author"             content={author.name} />
         <meta property="og:title"       content={title} />
         <meta property="og:description" content={excerpt} />
         <meta property="og:image"       content={featured_image} />
-        <meta property="og:url" content={SITE_URI + '/blog/' + slug} />
-        <meta property="og:type" content="article" />
+        <meta property="og:url"         content={SITE_URI + '/blog/' + slug} />
+        <meta property="og:type"        content="article" />
       </Head>
 
       <StyledBlogSingle>
@@ -108,11 +108,11 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
         <BlockRenderer document={content.document} />
 
         <footer>
-          <h2>Categories: </h2>
+          <h2 className='categories'>Categories: </h2>
           <CategoriesPool categories={categories} />
 
 
-          <h2>Tags:</h2>
+          <h2 className='tags'>Tags:</h2>
           <TagsPool tags={tags} />
         </footer>
 
@@ -158,6 +158,9 @@ export const QUERY_BLOG_SINGLE = gql`
 
 const StyledBlogSingle = styled.article`
 
+  max-width: 1000px;
+  margin-inline: auto;
+
   .breadcrumbs-cont{
     /* height: 2rem; */
     padding: 1rem 1rem;
@@ -195,7 +198,7 @@ const StyledBlogSingle = styled.article`
       /* backdrop-filter: blur(10px); */
 
       &::after{
-        background-color: rgba(60, 60, 60, 0.774);
+        background-color: var(--c-glass);
         content: '';
         backdrop-filter: blur(10px);
         /* filter: blur(10px); */
@@ -253,19 +256,22 @@ const StyledBlogSingle = styled.article`
     } */
   }
 
-  .block-renderer{
-    padding: 1rem;
-    background-color: var(--c-dark);
+  > .video-cont{
+    margin: .2rem;
   }
 
+  /* .block-renderer{
+    padding: 1rem;
+    background-color: var(--c-light);
+  } */
 
-  footer{
+
+  > footer{
     margin-top: 4rem;
     padding: 1rem;
 
-    h2{
-      margin-bottom: .1em;
-      font-size: .8rem;
+    h2.categories, h2.tags{
+      display: none;
     }
   }
 `

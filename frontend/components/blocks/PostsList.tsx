@@ -3,7 +3,7 @@ import { BlogList } from "../blog/BlogList"
 
 type Props = {
   header:string,
-  imageSrc:string,
+  imageSrc?:string,
   color:string,
   colorOverlay:string,
   categories: { id:string }[]

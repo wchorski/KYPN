@@ -9,6 +9,25 @@ ul.blog{
   // max-width: 60em;
 }
 
+.layout{
+  display: flex;
+
+  > ul {
+    padding-inline: 1rem;
+  }
+
+  > aside :global {
+    max-width: 300px;
+    
+    .widget{
+      padding-inline: 1rem;
+      position: sticky;
+      top: 10em;
+    }
+    // flex: 1
+  }
+}
+
 article.thumbnail :global{
   display: flex;
   flex-direction: column;

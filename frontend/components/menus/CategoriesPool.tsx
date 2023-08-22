@@ -1,12 +1,18 @@
 import Link from "next/link"
 import styled from "styled-components"
 
+type Props = {
+  categories: {
+    id:string,
+    name:string,
+  }[]
+}
 
-export function CategoriesPool({ categories }: any) {
+export function CategoriesPool({ categories }:Props) {
   return (
     <StyledCatsPool>
       {categories.map((c: any) => (
-        <Link key={c.name} className='cat' href={`/category/${c.name}`} >{c.name}</Link>
+        <Link key={c.name} className='cat' href={`/categories/${c.name}`} >{c.name}</Link>
       ))}
     </StyledCatsPool>
   )
@@ -15,6 +21,7 @@ export function CategoriesPool({ categories }: any) {
 const StyledCatsPool = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: .3rem;
   margin-bottom: 1em;
 
   a.cat{
@@ -25,7 +32,6 @@ const StyledCatsPool = styled.div`
 
     border-radius: var(--br-sharp);
     padding: 0 1em;
-    margin-left: .2em;
     font-size: .7rem;
     transition: all .3s;
 

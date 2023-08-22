@@ -11,7 +11,7 @@ export function YouTubeVideo({ url = '', altText = 'Embedded YouTube video' }: Y
   const embedId = getYouTubeEmbedId(url);
 
   return (
-    <StyledVideo className={`youtubeVideo`}>
+    <StyledVideo className={`youtubeVideo video-cont`}>
       <div className={`iframePosition`}>
         <iframe
           width="100%"

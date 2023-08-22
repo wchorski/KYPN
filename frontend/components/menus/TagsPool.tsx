@@ -1,8 +1,14 @@
 import Link from "next/link"
 import styled from "styled-components"
 
+type Props = {
+  tags: {
+    id:string,
+    name:string,
+  }[]
+}
 
-export function TagsPool({ tags }: any) {
+export function TagsPool({ tags }:Props) {
   return (
     <StyledTagsPool>
       {tags.map((t: any) => (
@@ -15,6 +21,7 @@ export function TagsPool({ tags }: any) {
 const StyledTagsPool = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: .3rem;
 
   a.tag{
     background-color: #c5c5c5;
@@ -23,7 +30,6 @@ const StyledTagsPool = styled.div`
 
     border-radius: var(--br-soft);
     padding: 0 1em;
-    margin-right: .3rem;
     font-size: .7rem;
     transition: all .3s;
 

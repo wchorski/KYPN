@@ -38,9 +38,11 @@ export function BreadCrumbs() {
 
   return (
     <StyledCrumbList aria-label="breadcrumb">
-      {breadcrumbs.map((crumb, idx) => (<>
-        <Crumb {...crumb} key={idx} last={idx === breadcrumbs.length - 1} />
-      </>))}
+      {breadcrumbs.map((crumb, idx) => (
+        <li key={idx}>
+          <Crumb {...crumb} last={idx === breadcrumbs.length - 1} />
+        </li>
+      ))}
     </StyledCrumbList>
   )
 }
@@ -75,6 +77,7 @@ const StyledCrumbList = styled.ul`
   filter: contrast(0.3);
   transition: opacity .3s;
   font-size: 1rem;
+  display: flex;
 
   &:hover, &:focus {
     opacity: 1;
