@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { QueryLoading } from '../menus/QueryLoading';
 import { QueryError } from '../menus/QueryError';
 import { perPage } from '../../config';
+import styles from '@/styles/ecommerce/Product.module.scss'
 
 type ProdProps = {
   page: number
@@ -24,7 +25,7 @@ export function ProductsList({ page }: ProdProps) {
   // console.log({ data });
 
   return (
-    <StyledProductsList>
+    <ul className={styles.product}>
       {/* {data.products.length <= 0 && (
         <p> No Products Available </p>
       )} */}
@@ -40,7 +41,7 @@ export function ProductsList({ page }: ProdProps) {
           </li>
         );
       })}
-    </StyledProductsList>
+    </ul>
   )
 }
 

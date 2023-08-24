@@ -1,0 +1,25 @@
+ul.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-bottom: 1em;
+  padding-inline: 0;
+
+  > a{
+    background-color: var(--c-light);
+    color: var(--c-txt);
+    text-decoration: none;
+    border: solid 1px transparent;
+
+    border-radius: var(--br-sharp);
+    padding: 0 1em;
+    font-size: .7rem;
+    transition: all .3s;
+
+    &:hover{
+      background-color: transparent;
+      color: var(--c-primary);
+      border: solid 1px var(--c-primary);
+    }
+  }
+}

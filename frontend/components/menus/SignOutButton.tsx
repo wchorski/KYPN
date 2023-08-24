@@ -39,6 +39,7 @@ export default function SignOutButton() {
       onClick={e => handleSignout()}
       style={{
         background: 'var(--c-dark)',
+        color: 'var(--c-txt-rev)',
         borderRadius: 'var(--br-dull)'
       }}
     >

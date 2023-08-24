@@ -1,5 +1,5 @@
 import Link from "next/link"
-import styled from "styled-components"
+import styles from '@/styles/tags.module.scss'
 
 type Props = {
   tags: {
@@ -10,31 +10,10 @@ type Props = {
 
 export function TagsPool({ tags }:Props) {
   return (
-    <StyledTagsPool>
+    <ul className={styles.tags}>
       {tags.map((t: any) => (
         <Link key={t.name} className='tag' href={`/tag/${t.name}`} >{t.name}</Link>
       ))}
-    </StyledTagsPool>
+    </ul>
   )
 }
-
-const StyledTagsPool = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-
-  a.tag{
-    background-color: #c5c5c5;
-    color: var(--c-txt-rev);
-    text-decoration: none;
-
-    border-radius: var(--br-soft);
-    padding: 0 1em;
-    font-size: .7rem;
-    transition: all .3s;
-
-    &:hover{
-      background-color: var(--c-primary);
-    }
-  }
-`
