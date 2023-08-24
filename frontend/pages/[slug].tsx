@@ -12,6 +12,9 @@ import { datePretty } from '../lib/dateFormatter';
 import { TagsPool } from '../components/menus/TagsPool';
 import { CategoriesPool } from '../components/menus/CategoriesPool';
 import Error404 from './404';
+import { envvars } from '../lib/envvars';
+import Head from 'next/head';
+import { Page } from '../lib/types';
 
 
 export default function PageBySlug() {
@@ -31,6 +34,7 @@ export default function PageBySlug() {
   const {
     id,
     title,
+    slug,
     status,
     featured_image,
     featured_video,
@@ -43,13 +47,26 @@ export default function PageBySlug() {
     categories,
     tags,
     content,
-  } = data.page
+  }:Page = data.page
 
   if (status === 'DRAFT') return <p>This blog post is still a draft</p>
   if (status === 'PRIVATE') return <p>This blog post is private</p>
 
   return (
     <>
+    <Head>
+      <title> {title} | {envvars.SITE_TITLE} </title>
+      <meta name="description"        content={excerpt} />
+      <meta name='keywords'           content={tags.map(tag => tag.name).join(', ')} />
+      <meta name="author"             content={author.name} />
+      <meta property="og:title"       content={title} />
+      <meta property="og:description" content={excerpt} />
+      <meta property="og:image"       content={featured_image} />
+      <meta property="og:url"         content={envvars.SITE_URI + '/' + slug} />
+      <meta property="og:type"        content="article" />
+    </Head>
+    
+
       <StyledPageSingle isShown={false} >
         <header
           className='page'
@@ -58,6 +75,7 @@ export default function PageBySlug() {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'cover',
+            display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
           }}
         >
           <div className='overlay'>
@@ -87,6 +105,8 @@ export default function PageBySlug() {
         <BlockRenderer document={content.document} />
 
       </StyledPageSingle>
+
+
 
     </>
   )
@@ -122,11 +142,7 @@ const StyledPageSingle = styled.div<{isShown: boolean}>`
     }
   }
 
-  p{
-    /* text-align: center; */
-    /* max-width: 60ch; */
-    margin: 1em auto;
-  }
+
 `
 
 export const QUERY_PAGE_SINGLE = gql`
@@ -143,6 +159,10 @@ export const QUERY_PAGE_SINGLE = gql`
         name
       }
       status
+      author{
+        id
+        name
+      }
       content {
         document(hydrateRelationships: true)
       }

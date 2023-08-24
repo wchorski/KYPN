@@ -23,6 +23,7 @@ import { ImageLinkList } from './ImageLinkList';
 import { VideoLocal } from './VideoLocal';
 import { ImageGallery } from './ImageGallery';
 import { ButtonLink } from './ButtonLink';
+import styles from './styles/blockrenderer.module.scss'
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -126,7 +127,7 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <StyledBlockRender className='block-renderer'>
+    <StyledBlockRender className={`block-renderer ${styles.blockrenderer}`}>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}
@@ -138,9 +139,9 @@ export function BlockRenderer({ document }: CustomRendererProps) {
 
 const StyledBlockRender = styled.div`
 
-  max-width: 800px;
+  /* max-width: var(); */
   /* border: solid 1px lightseagreen; */
-  padding-inline: 1rem;
+  /* padding-inline: 1rem; */
   margin-inline: auto;
 
   /* > p {

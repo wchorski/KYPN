@@ -65,7 +65,7 @@ export default function EventSingle({id}:{id:string}) {
       <title> {summary} </title>
       <meta name="description"        content={excerpt} />
       <meta name='keywords'           content={tags?.map(tag => tag.name).join(', ')} />
-      <meta name="author"             content={hosts[0]?.name || ''} />
+      <meta name="author"             content={hosts ? hosts[0]?.name || '' : ''} />
       <meta property="og:title"       content={summary} />
       <meta property="og:description" content={excerpt} />
       <meta property="og:image"       content={image} />

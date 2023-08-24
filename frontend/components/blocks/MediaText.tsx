@@ -58,21 +58,13 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false, chil
 const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
   display: flex;
   flex-direction: ${p => (p.rowReverse ? 'row-reverse' : 'row')};
+  max-width: var(--maxWidth);
+  margin-inline: auto;
   /* flex-wrap: wrap; */
 
   > * {
     /* flex-grow: 0; */
     flex: 1;
-  }
-  
-  .media-cont{
-    /* container-type: inline-size; */
-    /* width: 50%; */
-  }
-  
-  .content-cont{
-    /* container-type: inline-size; */
-    /* width: 50%; */
   }
 
   .content-cont{
@@ -81,12 +73,14 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
       height: 100%;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
-    article > * {
+    /* article > * {
       margin: 0;
       padding: 2em ;
-    }
+    } */
 
     article > *:nth-child(odd){
       background-color: var(--c-light);
@@ -105,14 +99,18 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
       justify-content: center;
     }
 
-    /* p{
-      max-width: 60ch;
+    article p{
+      max-width: 111ch;
       min-width: 20ch;
-    } */
+      padding: 1em;
+      margin: 0;
+      width: 100%;
+    }
+
   }
 
   figure{
-    background: blue;
+    /* background: blue; */
     margin: 0;
     /* background-image: url('https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg'); */
     background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
