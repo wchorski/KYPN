@@ -68,7 +68,7 @@ export const QUERY_EVENTS_ALL = gql`
       start
       status
       end
-      photo
+      image
       dateCreated
       dateModified
       location {

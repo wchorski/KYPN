@@ -75,7 +75,7 @@ export function EventsSearch() {
           }
       }).then(({ data }) => {
         
-        if(!data.events) return console.log('searching events failed');
+        if(!data?.events) return console.log('searching events failed');
         setInputItems(data.events)
       })
     },
@@ -169,7 +169,7 @@ const SEARCH_EVENTS = gql`
       }
       start
       price
-      photo
+      image
       status
     }
   }

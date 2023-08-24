@@ -4,7 +4,7 @@ import ErrorMessage from "../ErrorMessage"
 import { PostsList } from "../blocks/PostsList"
 import { BlogList } from "../blog/BlogList"
 import { BlogListItem } from "../blog/BlogListItem"
-import { Category, Post } from "../../lib/types"
+import { Post, Tag } from "../../lib/types"
 import { ProductThumbnail } from "../ProductThumbnail"
 import stylesProduct from '@/styles/ecommerce/Product.module.scss'
 import stylesBlog from "@/styles/blog/Blog.module.scss";
@@ -13,9 +13,11 @@ type Props = {
   name:string,
 }
 
-export function CategoriesSingle({name}:Props) {
+// todo paginate this so page isn't flooded with a big DB
 
-  const { error, loading, data } = useQuery(QUERY_CATEGORY, {
+export function TagsSingle({name}:Props) {
+
+  const { error, loading, data } = useQuery(QUERY_TAGS, {
     variables: {
       where: {
         name: name
@@ -25,50 +27,52 @@ export function CategoriesSingle({name}:Props) {
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-
   
-  const {category}:{category:Category} = data
+  const {tag}:{tag:Tag} = data
 
   return (
     <>
     <h1> Archive: {name}</h1>
-    <p> browse articles categories by <strong>{name}</strong> </p>
+    <p> browse articles tagged with <strong>{name}</strong> </p>
 
     <div>
       <h2>Posts: </h2>
       <ul className={stylesBlog.blog}>
-        {category.posts?.map(post => (
+        {tag.posts?.map(post => (
           <li key={post.id}>
             <BlogListItem {...post}/>
           </li>
         ))} 
 
-        {category.posts.length === 0  && <p> no posts </p>}
+        {tag.posts.length === 0 && <p> no posts </p>}
+
       </ul>
     </div>
+    <br />
 
     <div>
       <h2> Products: </h2>
 
       <ul className={stylesProduct.product}>
-      {category.products?.map(prod => (
-        <li key={prod.id}>
-          <ProductThumbnail {...prod}/>
-        </li>
-      ))}
+        {tag.products?.map(prod => (
+          <li key={prod.id}>
+            <ProductThumbnail {...prod}/>
+          </li>
+        ))}
           
-        {category.products.length === 0  && <p> no products </p>}
+        {tag.products.length === 0  && <p> no products </p>}
       </ul>
     </div>
+    <br />
         
     </>
   )
 }
 
 
-const QUERY_CATEGORY = gql`
-  query Category($where: CategoryWhereUniqueInput!) {
-    category(where: $where) {
+const QUERY_TAGS = gql`
+  query Query($where: TagWhereUniqueInput!) {
+    tag(where: $where) {
       id
       posts {
         id

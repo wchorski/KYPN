@@ -30,7 +30,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   return (
     <div role="region" aria-labelledby="Cap" tabIndex={0}>
 
-      {cells.length <= 0 && <NoData />}
+      {cells.length === 0 && <NoData />}
 
       <StyledTable role="table">
         <caption role="caption"> {caption} </caption>
@@ -95,7 +95,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
     /> */}
 
 const StyledTable = styled.table`
-  background-color: var(--c-light);
+  /* background-color: var(--c-light); */
   border-collapse: collapse;
   padding: 1rem;
   width: 100%;
