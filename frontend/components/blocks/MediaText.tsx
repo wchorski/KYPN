@@ -99,12 +99,16 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
       justify-content: center;
     }
 
-    article p{
+    article > p{
       max-width: 111ch;
       min-width: 20ch;
       padding: 1em;
       margin: 0;
       width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
     }
 
   }
