@@ -49,6 +49,7 @@ export function BookingsTable() {
     // return () => 
   }, [data?.bookings])
   
+  
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 

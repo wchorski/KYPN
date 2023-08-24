@@ -5,7 +5,7 @@ export const StyledDropDown = styled.div`
   position: absolute;
   width: 100%;
   z-index: 999999;
-  border: 1px solid var(--c-accent);
+  /* border: 1px solid var(--c-accent); */
 
   ul{
     list-style: none;
@@ -29,7 +29,7 @@ export const StyledDropDownItem = styled.li`
   /* border-left: 10px solid white; */
   ${(props) => (props.highlighted ? 'border-left: 10px solid var(--c-accent);' : '')} 
   padding: 1rem;
-  color: var(--c-txt-rev);
+  color: var(--c-txt);
   
   /* div.meta{
     margin-left: 2em;
@@ -47,7 +47,7 @@ export const StyledDropDownItem = styled.li`
 
   h5{
     margin: 0;
-    color: var(--c-txt-rev);
+    color: var(--c-primary);
   }
 
   p.description{

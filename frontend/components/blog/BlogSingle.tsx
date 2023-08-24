@@ -158,7 +158,6 @@ export const QUERY_BLOG_SINGLE = gql`
 
 const StyledBlogSingle = styled.article`
 
-  max-width: 1000px;
   margin-inline: auto;
 
   .breadcrumbs-cont{

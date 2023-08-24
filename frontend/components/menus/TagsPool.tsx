@@ -12,7 +12,7 @@ export function TagsPool({ tags }:Props) {
   return (
     <ul className={styles.tags}>
       {tags.map((t: any) => (
-        <Link key={t.name} className='tag' href={`/tag/${t.name}`} >{t.name}</Link>
+        <Link key={t.name} className='tag' href={`/tags/${t.name}`} >{t.name}</Link>
       ))}
     </ul>
   )

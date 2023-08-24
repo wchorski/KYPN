@@ -13,8 +13,9 @@ export const fontSub = localFont({
   variable: '--font-sub',
 })
 
+
 export const fontParagraph = localFont({
-  src: '../public/assets/fonts/Overpass-VariableFont_wght.ttf',
+  src: '../public/assets/fonts/NunitoSans-VariableFont_YTLC.ttf',
   // display: 'swap',
   variable: '--font-paragraph',
 })
@@ -40,14 +41,4 @@ export const fontExo = Exo({
 export const fontBoogaloo = localFont({
   src: '../public/assets/fonts/Boogaloo-Regular.ttf',
   variable: '--font-Boogaloo'
-})
-
-export const fontHindSiliguri = localFont({
-  src: '../public/assets/fonts/HindSiliguri-Regular.ttf',
-  variable: '--font-HindSiliguri'
-})
-
-export const fontOverpass = localFont({
-  src: '../public/assets/fonts/Overpass-VariableFont_wght.ttf',
-  variable: '--font-Overpass'
 })

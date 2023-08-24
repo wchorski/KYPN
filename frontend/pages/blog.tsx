@@ -47,7 +47,7 @@ export default function BlogPage() {
   );
 }
 
-const QUERY_CATEGORIES_AND_TAGS = gql`
+export const QUERY_CATEGORIES_AND_TAGS = gql`
   query Query {
     categories {
       id

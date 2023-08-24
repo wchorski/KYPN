@@ -33,6 +33,8 @@ export default function AdminPage() {
 
 
   return (<>
+  <div className="container">
+
     <StyledAdminDash>
       <PopupModal data={registerData} setData={setRegisterData}>
         <RegisterForm />
@@ -70,6 +72,7 @@ export default function AdminPage() {
       </section>
 
     </StyledAdminDash>
+  </div>
   </>)
 }
 

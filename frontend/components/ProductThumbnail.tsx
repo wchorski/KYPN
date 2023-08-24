@@ -89,7 +89,7 @@ const StyledProdThumbnail = styled.article`
 
       img{
         transform: scale(1.01);
-        filter: contrast(0.7);
+        filter: contrast(1.2);
       }
     }
   }
