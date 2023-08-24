@@ -238,6 +238,7 @@ export type Page = {
   author: User,
   categories: Category[],
   tags: Tag[],
+  allow_comments:boolean,
 }
 
 export type Post = {

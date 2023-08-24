@@ -257,6 +257,11 @@ const StyledBlogSingle = styled.article`
 
   > .video-cont{
     margin: .2rem;
+    background-color: var(--c-dark);
+  }
+
+  .block-renderer{
+    max-width: 800px;
   }
 
   /* .block-renderer{

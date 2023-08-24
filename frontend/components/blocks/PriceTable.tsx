@@ -260,7 +260,7 @@ const StyledContent = styled.div`
   color: var(--c-txt);
 
   ul{
-    list-style-image: url('/assets/bullet.svg');
+    list-style-image: url('/marker.svg');
   }
   ol{
     list-style-image: initial;

@@ -12,6 +12,7 @@ mkdir -p ./frontend && cp ./private/frontend/.env.local $_
 mkdir -p ./frontend && cp ./private/frontend/.env $_
 mkdir -p ./frontend/public && cp ./private/frontend/public/robots.txt $_
 mkdir -p ./frontend/public && cp ./private/frontend/public/favicon.ico $_
+mkdir -p ./frontend/public && cp ./private/frontend/public/marker.svg $_
 mkdir -p ./frontend/styles && cp ./private/frontend/styles/fonts.ts $_
 mkdir -p ./backend && cp ./private/backend/.env $_
 

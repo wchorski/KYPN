@@ -44,6 +44,7 @@ export const Page:Lists.Page = list({
     template: select({
       options: [
         { label: 'Full Width', value: 'FULLWIDTH' },
+        { label: 'Full Width with Header', value: 'FULLWIDTH_WITHHEADER' },
         { label: 'With Sidebar', value: 'WITHSIDEBAR' },
         { label: 'Blank', value: 'BLANK' },
       ],
