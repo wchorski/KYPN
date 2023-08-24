@@ -121,7 +121,7 @@ export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
     <div>
       <h3> Success</h3>
       <p>{successMessage}</p>
-      <p><Link href={`/account#tickets`}> My Tickets </Link></p>
+      <p><Link href={`/account?dashState=tickets`}> My Tickets </Link></p>
       <button onClick={() => {setSuccessMessage(''); setQuantityState(1);}}> Get More Tickets</button>
     </div>
   )
@@ -200,6 +200,8 @@ export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
 
 const StyledForm = styled.form`
   position: relative;
+  max-width: 25em;
+  margin-inline: auto;
   /* .fetch-status{
     position: absolute;
     
@@ -223,6 +225,7 @@ const StyledForm = styled.form`
     justify-content: space-between;
     align-items: center;
     box-align: center;
+    max-width: 20em;
 
     input[type="number"]{
       width: 4rem;
@@ -275,6 +278,20 @@ const CREATE_TICKETS = gql`
         id
         name
         email
+        tickets{
+          id
+          status
+          event {
+            id
+            location {
+              id
+              name
+            }
+            image
+            price
+            start
+          }
+        }
       }
       event {
         id
@@ -282,7 +299,7 @@ const CREATE_TICKETS = gql`
           id
           name
         }
-        photo
+        image
         price
         start
       }

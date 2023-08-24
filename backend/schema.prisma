@@ -362,6 +362,7 @@ model Event {
   seats        Int
   image        String     @default("")
   excerpt      String     @default("")
+  description  Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   status       String?    @default("ACTIVE")
   dateCreated  DateTime?  @default(now())
   dateModified DateTime?  @default(now())

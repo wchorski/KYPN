@@ -3,7 +3,7 @@ import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop,  } from "r
 import { HiOutlineTicket } from "react-icons/hi"
 import styled from "styled-components"
 import { Table } from "../elements/Table"
-import { Booking, Order, SubscriptionItem, User } from "../../lib/types"
+import { Booking, DashState, Order, SubscriptionItem, User } from "../../lib/types"
 import TicketsList from "../events/TicketsList"
 import { datePrettyLocalDay, datePrettyLocalTime } from "../../lib/dateFormatter"
 import Link from "next/link"
@@ -27,15 +27,22 @@ enum DASH_STATE {
   TICKETS = 'tickets',
 }
 
+type Props = {
+  dashState:DashState,
+  user:User,
+}
 
-export function AccountDetails({ id, name, nameLast, email, tickets }: User) {
+
+export function AccountDetails({dashState, user}:Props) {
+
+  const { id, name, nameLast, email, tickets } = user
 
   const dashRef = useRef<HTMLHeadingElement | null>(null)
   const ordersRef = useRef<HTMLHeadingElement | null>(null)
   const subscriptionsRef = useRef<HTMLHeadingElement | null>(null)
   const downloadsRef = useRef<HTMLHeadingElement | null>(null)
   const ticketsRef = useRef<HTMLHeadingElement | null>(null)
-  const [state, setState] = useState<string>(DASH_STATE.DASHBOARD)
+  const [state, setState] = useState<string>(dashState)
   const [userData, setUserData] = useState<User>()
   const [bookingCells, setBookingCells] = useState([])
   const [ordersCells, setOrdersCells] = useState([])

@@ -2270,6 +2270,7 @@ type Event {
   seats: Int
   image: String
   excerpt: String
+  description: Event_description_Document
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2277,6 +2278,10 @@ type Event {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+}
+
+type Event_description_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input EventWhereUniqueInput {
@@ -2332,6 +2337,7 @@ input EventUpdateInput {
   seats: Int
   image: String
   excerpt: String
+  description: JSON
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2356,6 +2362,7 @@ input EventCreateInput {
   seats: Int
   image: String
   excerpt: String
+  description: JSON
   status: String
   dateCreated: DateTime
   dateModified: DateTime

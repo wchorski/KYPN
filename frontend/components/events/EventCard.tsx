@@ -31,11 +31,11 @@ import { Event } from "../../lib/types";
 //   id:string,
 // }
 
-export function EventCard({photo, start, summary, location, id}:Event) {
+export function EventCard({image, start, summary, location, id}:Event) {
   return (
     <StyledEventCard>
       <div>
-        <ImageDynamic photoIn={photo}/>
+        <ImageDynamic photoIn={image}/>
       </div>
 
       <div>
@@ -80,7 +80,7 @@ export function EventCard({photo, start, summary, location, id}:Event) {
 export const StyledEventCard = styled.article`
   display: flex;
   flex-wrap: wrap;
-  border: solid white 1px;
+  border: solid 1px var(--c-desaturated);
   padding: 1em;
   transition: border .2s ease-in;
   color: var(--c-txt);
@@ -126,7 +126,7 @@ export const StyledEventCard = styled.article`
   }
 
   &:hover, &:focus{
-    border-left: solid white 4px;
+    border-left: solid 4px var(--c-accent);
   }
 
   address{

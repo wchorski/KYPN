@@ -68,6 +68,10 @@ export type Event = {
   hosts:User[],
   tickets: any[],
   seats:number,
+  description: {
+    document: any,
+  }
+  excerpt:string,
   photo:string,
   status:string,
   dateCreated:string,

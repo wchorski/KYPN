@@ -22,7 +22,8 @@ import { PopupAnim } from "../menus/PopupAnim"
 import { TicketsForm } from "../tickets/TicketsForm"
 import { AddTicketButton } from "../tickets/AddTicketButton"
 import {AddToCalendarButton} from'add-to-calendar-button-react';
-import { Head } from "next/document"
+import Head  from "next/head"
+import { BlockRenderer } from "../blocks/BlocksRenderer"
 
 type tPopupData = {
 
@@ -55,19 +56,21 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
 
-  const {photo, summary, description, tickets = [], price, start, end, seats, hosts, location, categories, tags}:Event = data?.event
+  console.log(data.event)
+  
+  const {image, summary, excerpt, description, tickets = [], price, start, end, seats, hosts, location, categories, tags}:Event = data?.event
   
   return (<>
     <Head>
       <title> {summary} </title>
-      <meta name="description" content={description} />
-      <meta name='keywords' content={tags?.map(tag => tag.name).join(', ')} />
-      <meta name="author" content={hosts ? hosts[0].name : ''} />
+      <meta name="description"        content={excerpt} />
+      <meta name='keywords'           content={tags?.map(tag => tag.name).join(', ')} />
+      <meta name="author"             content={hosts[0]?.name || ''} />
       <meta property="og:title"       content={summary} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image"       content={photo} />
-      <meta property="og:url" content={SITE_URI + '/events/e/' + id} />
-      <meta property="og:type" content="article" />
+      <meta property="og:description" content={excerpt} />
+      <meta property="og:image"       content={image} />
+      <meta property="og:url"         content={SITE_URI + '/events/e/' + id} />
+      <meta property="og:type"        content="article" />
     </Head>
     
     <StyledEventSingle className="pad">
@@ -90,7 +93,7 @@ export default function EventSingle({id}:{id:string}) {
       {/* <aside>
         <div className="cont">
           <picture>
-            <ImageDynamic photoIn={photo} />
+            <ImageDynamic photoIn={image} />
           </picture>
           <strong>{summary}</strong>
           <br />
@@ -107,7 +110,7 @@ export default function EventSingle({id}:{id:string}) {
         <header>
           <div className="container">
           <picture>
-            <ImageDynamic photoIn={photo} />
+            <ImageDynamic photoIn={image} />
           </picture>
 
           <h1>{summary}</h1>
@@ -172,7 +175,9 @@ export default function EventSingle({id}:{id:string}) {
           </div>
 
           <h2>About</h2>
-          <p>{description}</p>
+          <div className='description-wrap'>
+            <BlockRenderer document={description.document} />
+          </div>
 
           <hr />
           <ul className="tags">
@@ -312,8 +317,11 @@ export const QUERY_EVENT = gql`
         email
         name
       }
-      photo
-      description
+      image
+      description {
+        document(hydrateRelationships: true)
+      }
+      excerpt
       end
       id
       location {

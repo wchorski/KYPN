@@ -4,8 +4,8 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { isLoggedIn, rules } from "../access";
-
-
+import { document } from '@keystone-6/fields-document';
+import { componentBlocks } from "../blocks";
 
 export const Event:Lists.Event = list({
 
@@ -62,6 +62,47 @@ export const Event:Lists.Event = list({
       ui: {
         displayMode: 'textarea'
       }
+    }),
+    description: document({
+      componentBlocks,
+      ui: {
+        views: './blocks',
+      },
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true,
+          code: true,
+          superscript: true,
+          subscript: true,
+          keyboard: true,
+        },
+        listTypes: {
+          ordered: true,
+          unordered: true,
+        },
+        alignment: {
+          center: true,
+          end: true,
+        },
+        headingLevels: [2, 3, 4, 5, 6],
+        blockTypes: {
+          blockquote: true,
+          code: true
+        },
+        softBreaks: true,
+      },
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1],
+      ],
+      links: true,
+      dividers: true,
     }),
     status: select({
       options: [
