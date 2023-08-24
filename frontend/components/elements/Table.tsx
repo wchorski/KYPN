@@ -30,8 +30,6 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   return (
     <div role="region" aria-labelledby="Cap" tabIndex={0}>
 
-      {cells.length === 0 && <NoData />}
-
       <StyledTable role="table">
         <caption role="caption"> {caption} </caption>
 
@@ -60,6 +58,9 @@ export function Table({ caption, cells, headers, route }: TableProps) {
           ))}
         </tbody>
       </StyledTable>
+
+      {cells.length === 0 && <NoData />}
+      
     </div>
   );
 }

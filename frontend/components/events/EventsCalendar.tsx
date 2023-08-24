@@ -153,7 +153,9 @@ export function EventsCalendar({initDate = new Date()}:Props) {
                 return (
                   <StyledEvent key={event.id}>
                     <Link href={`/events/e/${event.id}`}>
-                      {event.summary} @ {datePrettyLocalTime(event.start || '')}
+                      {event.summary}
+                      <br /> 
+                      @ {datePrettyLocalTime(event.start || '')}
                     </Link>
                   </StyledEvent>
                 )
@@ -262,7 +264,7 @@ const StyledDay = styled.span<{active:boolean}>`
   label{
     padding: 5px;
     border-radius: 50%;
-    color: var(--c-desaturated);
+    color: var(--c-txt);
     ${p => p.active && `background-color: var(--c-primary); color: white;`}
   }
 `
@@ -270,13 +272,13 @@ const StyledDay = styled.span<{active:boolean}>`
 const StyledEvent = styled.span`
   display: grid;
 
-  a{
+  > a{
     text-align: left;
     margin-bottom: 5px;
     background-color: var(--c-primary);
     text-decoration: none;
-    color: var(--c-txt-primary);
-    padding: 0px 8px;
+    color: var(--c-txt);
+    padding: 5px;
     border-radius: var(--br-sharp);
     font-size: small;
   }

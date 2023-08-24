@@ -7,6 +7,8 @@
 import { KeystoneGraphQLAPI, KeystoneListsAPI } from '@keystone-6/core/types';
 import type { Permission } from './schemas/fields';
 
+export type DashState = 'dashboard'|'orders'|'subscriptions'|'downloads'|'tickets'
+
 export type DateRange = {
   start: Date,
   end: Date,
@@ -355,8 +357,12 @@ export type Event = {
   hosts?:User[],
   tickets?: Ticket[],
   seats?:number,
+  image:string,
   photo?:string,
-  description?: string,
+  description: {
+    document: any,
+  }
+  excerpt:string,
   status?:string,
   dateCreated?:string,
   dateModified?:string,
