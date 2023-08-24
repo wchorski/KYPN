@@ -73,7 +73,7 @@ export function ProductSingle({ id }: any) {
         <div className="details">
           <h2>{name}</h2>
 
-          <p><span className="price"> {moneyFormatter(price)} </span> / month</p>
+          <p><span className="price"> {moneyFormatter(price)} </span> </p>
  
           <AddToCart id={id} />
 

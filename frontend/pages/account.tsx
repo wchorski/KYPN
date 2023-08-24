@@ -26,7 +26,7 @@ export default function Account() {
         <h1>Account | {session.name}</h1>
 
         {router.isReady && (
-          <AccountDetails user={session} dashState={router.query.dashState}/>
+          <AccountDetails user={session} dashState={router.query.dashState || 'dashboard'}/>
         )}
       </div>
 
