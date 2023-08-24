@@ -19,7 +19,7 @@ type Props = {
   author:User,
 
 
-  buttonText:string,
+  buttonText?:string,
 }
 
 export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateModified, author, buttonText = 'read more' }: Props) => {

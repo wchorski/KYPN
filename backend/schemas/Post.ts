@@ -27,7 +27,7 @@ export const Post:Lists.Post = list({
     // todo hide these again
     // isHidden: true,
     listView: {
-      initialColumns: ['title', 'status', 'dateModified', 'author' ],
+      initialColumns: ['title', 'status', 'dateModified', 'author', 'categories' ],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
