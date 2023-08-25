@@ -27,6 +27,10 @@ ul.blog{
     }
     // flex: 1
   }
+
+  @media screen and (width < 840px) {
+    flex-direction: column;
+  }
 }
 
 article.thumbnail :global{

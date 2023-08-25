@@ -10,7 +10,9 @@ type Props = {
 export function PriceTag({price}:Props) {
 
   const money = moneyFormatter(price)
-  let currency = '?'
+  let currency = '$'
+  const dollars = money.replace(currency, '').split('.')[0]
+  const cents = money.replace(currency, '').split('.')[1]
 
   function handleFormat(){
     switch (true) {
@@ -18,8 +20,11 @@ export function PriceTag({price}:Props) {
         currency = '$'
 
         return (<>
-          <small className="currency"> {currency} </small> 
-          <span className="amount"> {money.replace(currency, '')} </span>
+          <span className="amount"> 
+            <sup className="currency">{currency}</sup> 
+            {dollars}
+            <span className="cents">.{cents}</span> 
+          </span>
         </>)
 
       case money.includes('¥'):

@@ -8,7 +8,9 @@ export default function EventByID() {
   
   return (
     <>
-      <EventSingle id={String(router.query.id)} />
+      <div className="container">
+        <EventSingle id={String(router.query.id)} />
+      </div>
     </>
   )
 }
