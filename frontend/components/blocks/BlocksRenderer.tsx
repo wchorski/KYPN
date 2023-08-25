@@ -25,6 +25,7 @@ import { ImageGallery } from './ImageGallery';
 import { ButtonLink } from './ButtonLink';
 import styles from './styles/blockrenderer.module.scss'
 import { ProductListBlock } from './ProductListBlock';
+import { ImageBlock } from './ImageBlock';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -126,6 +127,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   productslist: props => {
     return <ProductListBlock {...props} />;
+  },
+  image: props => {
+    return <ImageBlock {...props} />;
   },
 };
 

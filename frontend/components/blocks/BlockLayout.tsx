@@ -12,11 +12,13 @@ export function BlockLayout({children, layout}:Props) {
   // console.log(props);
   
   return (
+    <div className="maxwidth">
 
-    <div className={styles.grid}>
+      <div className={styles.grid}>
 
-      {children.map((child, i) => <div key={i}> {child} </div>) }
-     
+        {children.map((child, i) => <div key={i}> {child} </div>) }
+      
+      </div>
     </div>
   )
 }
