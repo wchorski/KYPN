@@ -210,6 +210,7 @@ const CalenderHead = styled.div`
     border: none;
     font-size: 2rem;
     transition: all .3s;
+    color: var(--c-txt);
 
     &:hover{
       color: var(--c-accent);
@@ -235,9 +236,12 @@ const GridSevenCol = styled.div<{fullheight?:boolean, is28Days?:boolean}>`
     props.fullheight &&
     `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
 
+  &.calendar-body{
+    height: 40vh;
+  }
+
   & .calendar-cell{
     height: calc(100% - 27px - 40px);
-  
   }
 `
 
@@ -259,13 +263,13 @@ const StyledDay = styled.span<{active:boolean}>`
   border: solid 1px var(--c-desaturated);
   text-align: right;
   padding: 5px;
-  min-height: 5em;
+  /* min-height: 5em; */
 
   label{
     padding: 5px;
     border-radius: 50%;
     color: var(--c-txt);
-    ${p => p.active && `background-color: var(--c-primary); color: white;`}
+    ${p => p.active && `background-color: var(--c-primary); color: white; border: solid 1px var(--c-txt-rev);`}
   }
 `
 

@@ -293,6 +293,12 @@ const StyledEventSingle = styled.section`
     
   }
 
+  .description-wrap{
+    background-color: var(--c-txt-cont);
+    padding: 1rem 0;
+    border-radius: var(--br-sharp);
+  }
+
   button.ticket{
     span{
       margin-right: .4em;
