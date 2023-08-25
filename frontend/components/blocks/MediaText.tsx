@@ -121,7 +121,7 @@ const StyledMediaText = styled.div<{bg?:string, rowReverse:boolean}>`
     background-position: 50% 50%;
     background-size: cover;
     height: 100%;
-    min-height: 20rem;
+    min-height: 60vh;
   }
 
   img{

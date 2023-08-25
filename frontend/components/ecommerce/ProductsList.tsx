@@ -1,22 +1,47 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { ProductThumbnail } from "../ProductThumbnail";
 import { useQuery, gql } from '@apollo/client'
-import styled from 'styled-components';
 import { QueryLoading } from '../menus/QueryLoading';
 import { QueryError } from '../menus/QueryError';
 import { perPage } from '../../config';
 import styles from '@/styles/ecommerce/Product.module.scss'
 
 type ProdProps = {
-  page: number
+  page: number,
+  categories?: {id:string}[]
 }
 
-export function ProductsList({ page }: ProdProps) {
+export function ProductsList({ page, categories = [] }: ProdProps) {
+
+  const catArray = categories.map(cat => ({categories: { some: { id: { equals: cat.id }}}}))
+
   const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
     variables: {
       skip: page * perPage - perPage,
-      take: perPage
+      take: perPage,
+      orderBy: [
+        {
+          dateModified: "desc"
+        }
+      ],
+      where: {
+        OR: catArray,
+        NOT: [
+          {
+            OR: [
+              {
+                status: {
+                  equals: "DRAFT"
+                }
+              },
+              {
+                status: {
+                  equals: "PRIVATE"
+                }
+              },
+            ]
+          }
+        ]
+      },
     }
   })
 
@@ -45,24 +70,9 @@ export function ProductsList({ page }: ProdProps) {
   )
 }
 
-const StyledProductsList = styled.ul`
-
-  display: grid;
-  grid-gap: 1em;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  list-style: none;
-  padding: 0;
-
-  img{
-    width: 100%;
-    object-fit: cover;
-    background: var(--cg-stripes);
-  }
-`
-
 export const GET_PAGE_PRODUCTS_QUERY = gql`
-  query Query($skip: Int!, $take: Int) {
-    products(skip: $skip, take: $take) {
+  query Query($where: ProductWhereInput!, $orderBy: [ProductOrderByInput!]!, $skip: Int!, $take: Int) {
+    products(where: $where, orderBy: $orderBy, skip: $skip, take: $take) {
       excerpt
       id
       name
