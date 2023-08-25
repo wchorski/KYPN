@@ -71,7 +71,8 @@ const StyledProdThumbnail = styled.article`
   }
 
   .container{
-    background-color: var(--c-desaturated);
+    /* background-color: var(--c-light); */
+    background-color: var(--c-txt-cont);
     /* background: var(--cg-primary); */
     padding: 1rem;
     flex: 1;

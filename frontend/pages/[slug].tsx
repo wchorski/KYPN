@@ -52,8 +52,7 @@ export default function PageBySlug() {
   if (status === 'DRAFT') return <p>This blog post is still a draft</p>
   if (status === 'PRIVATE') return <p>This blog post is private</p>
 
-  return (
-    <>
+  return (<>
     <Head>
       <title> {title} | {envvars.SITE_TITLE} </title>
       <meta name="description"        content={excerpt} />
@@ -67,49 +66,45 @@ export default function PageBySlug() {
     </Head>
     
 
-      <StyledPageSingle isShown={false} >
-        <header
-          className='page'
-          style={{
-            backgroundImage: `url(${featured_image})`,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
-            display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
-          }}
-        >
-          <div className='overlay'>
-            <h1>{title}</h1>
+    <StyledPageSingle isShown={false} >
+      <header
+        className='page'
+        style={{
+          backgroundImage: `url(${featured_image})`,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
+        }}
+      >
+        <div className='overlay'>
+          <h1>{title}</h1>
 
 
-            <span>
-              <em>Published on {new Date(dateCreated).toLocaleDateString()}</em>
-              <br />
-              <em>Modified on {datePretty(dateModified)}</em>
-            </span>
+          <span>
+            <em>Published on {new Date(dateCreated).toLocaleDateString()}</em>
             <br />
+            <em>Modified on {datePretty(dateModified)}</em>
+          </span>
+          <br />
 
-            {author?.name ? (
-              <span>
-                <em> · by {author?.name}</em>
-              </span>
-            ) : null}
+          {author?.name ? (
+            <span>
+              <em> · by {author?.name}</em>
+            </span>
+          ) : null}
 
-            <span>View Count : 12345</span>
+          <span>View Count : 12345</span>
 
-          </div>
+        </div>
 
-          <hr />
-        </header>
+        <hr />
+      </header>
 
-        <BlockRenderer document={content.document} />
+      <BlockRenderer document={content.document} />
 
-      </StyledPageSingle>
-
-
-
-    </>
-  )
+    </StyledPageSingle>
+  </>)
 }
 
 const StyledPageSingle = styled.div<{isShown: boolean}>`

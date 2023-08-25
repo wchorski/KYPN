@@ -24,6 +24,7 @@ import { VideoLocal } from './VideoLocal';
 import { ImageGallery } from './ImageGallery';
 import { ButtonLink } from './ButtonLink';
 import styles from './styles/blockrenderer.module.scss'
+import { ProductListBlock } from './ProductListBlock';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -122,6 +123,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
   buttonlink: props => {
     return <ButtonLink {...props} />;
+  },
+  productslist: props => {
+    return <ProductListBlock {...props} />;
   },
 };
 
