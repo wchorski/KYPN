@@ -56,6 +56,8 @@ following along with Wes Bos Tutorial
 
 ## TODO
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
+- [ ] switch all *Single.tsx to *Artcile.tsx to better reflect the HTML symatics
+- [ ] transition as much Styled Components to CSS Modules
 
 ## Color pallet? 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

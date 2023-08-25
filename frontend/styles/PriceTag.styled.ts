@@ -9,13 +9,18 @@ export const StyledPriceTag = styled.div`
   font-size: 2rem;
   display: inline-block;
 
-  small.currency{
-    vertical-align: top;
-    font-size: 80%;
+  sup {
+    /* vertical-align: top; */
+    font-size: 1.6rem;
+    font-weight: lighter;
   }
 
-  span.amount{
+  span.amount, .cents{
     font-weight: bold;
+  }
+
+  span.cents{
+    font-size: 1.7rem;
   }
 `
 

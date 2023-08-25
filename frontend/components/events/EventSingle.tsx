@@ -113,7 +113,7 @@ export default function EventSingle({id}:{id:string}) {
             <ImageDynamic photoIn={image} />
           </picture>
 
-          <h1>{summary}</h1>
+          <h3>{summary}</h3>
           <ul className="categories">
             {categories?.map(cat => (
               <li key={cat.id}>
@@ -148,6 +148,7 @@ export default function EventSingle({id}:{id:string}) {
         </header>
 
         <div className="content">
+          <h1>{summary}</h1>
 
           <div className="card call-to-action">
             
@@ -173,8 +174,9 @@ export default function EventSingle({id}:{id:string}) {
             </button> */}
 
           </div>
-
-          <h2>About</h2>
+          
+          <br />
+          <h3>About</h3>
           <div className='description-wrap'>
             <BlockRenderer document={description.document} />
           </div>
@@ -244,8 +246,13 @@ const StyledEventSingle = styled.section`
     }
   } */
 
+  h1{
+    font-size: 3rem;
+    margin: 1rem 0;
+  }
+
   picture{
-    width: 300px; /* Adjust the width of the container as per your requirement */
+    width: 100%; /* Adjust the width of the container as per your requirement */
     height: 300px; /* Adjust the height of the container as per your requirement */
     border: 1px solid black; /* Optional: Add border for visualization */
     display: flex;
@@ -262,25 +269,23 @@ const StyledEventSingle = styled.section`
 
   article{
     display: flex;
+    justify-content: center;
     gap: 1em;
 
     header{
       margin-bottom: 1em;
-      flex: 1 6 20%;
+      /* flex: 1 6 20%; */
 
       .container{
         position: sticky;
-        top: 2em;
-        float: left;
-      }
-
-      h1{
-        margin-bottom: 0;
+        top: 4em;
+        max-width: 22em;
+        float: right;
       }
     }
 
     .content{
-      flex: 3 1 80%;
+      /* flex: 1 1 0%; */
 
       margin-top: 2rem;
       
