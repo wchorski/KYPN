@@ -27,7 +27,6 @@ export default function EventsPage() {
   <StyledEventsPage>
     <section className='pad events maxwidth' >
       {/* <h2>Events Calendar</h2> */}
-      <br />
       <EventsCalendar />
     </section>
 

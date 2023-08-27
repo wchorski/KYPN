@@ -127,7 +127,7 @@ export function EventsCalendar({initDate = new Date()}:Props) {
           <MdOutlineKeyboardArrowLeft />
         </button>
         
-        <p>{getMonthYear(currentDate)}</p>
+        <p className="month-label">{getMonthYear(currentDate)}</p>
 
         <button onClick={nextMonth} className="arrow right">
           <MdOutlineKeyboardArrowRight />
@@ -152,7 +152,7 @@ export function EventsCalendar({initDate = new Date()}:Props) {
               if(isDatesSameDay(getDateObj(currentDate.getFullYear(), currentDate.getMonth(), day), new Date(event.start || '')))
                 return (
                   <StyledEvent key={event.id}>
-                    <Link href={`/events/e/${event.id}`}>
+                    <Link href={`/events/e/${event.id}`} className="event-button">
                       {event.summary}
                       <br /> 
                       @ {datePrettyLocalTime(event.start || '')}
@@ -205,6 +205,10 @@ const CalenderHead = styled.div`
   align-items: center;
   font-size: 2rem;
 
+  p.month-label{
+    margin: 1rem 0;
+  }
+
   .arrow{
     background-color: transparent;
     border: none;
@@ -234,10 +238,10 @@ const GridSevenCol = styled.div<{fullheight?:boolean, is28Days?:boolean}>`
   ${(props) => props.fullheight && `height: calc(100% - 75px);`}
   ${(props) =>
     props.fullheight &&
-    `grid-template-rows: repeat(${props.is28Days ? 4 : 5}, 1fr);`}
+    `grid-template-rows: repeat(${props.is28Days ? 2 : 3}, 1fr);`}
 
   &.calendar-body{
-    height: 40vh;
+    min-height: 20vh;
   }
 
   & .calendar-cell{
@@ -263,7 +267,7 @@ const StyledDay = styled.span<{active:boolean}>`
   border: solid 1px var(--c-desaturated);
   text-align: right;
   padding: 5px;
-  /* min-height: 5em; */
+  min-height: 6em;
 
   label{
     padding: 5px;
@@ -276,7 +280,7 @@ const StyledDay = styled.span<{active:boolean}>`
 const StyledEvent = styled.span`
   display: grid;
 
-  > a{
+  > a.event-button{
     text-align: left;
     margin-bottom: 5px;
     background-color: var(--c-primary);
@@ -284,6 +288,18 @@ const StyledEvent = styled.span`
     color: var(--c-txt);
     padding: 5px;
     border-radius: var(--br-sharp);
+    border: solid 1px var(--c-primary);
     font-size: small;
+
+    &:hover, &:focus{
+      border: solid 1px var(--c-secondary);
+      background-color: var(--c-txt-cont);
+      color: var(--c-secondary);
+    }
+
+    &:active{
+      border: solid 1px var(--c-accent);
+      color: var(--c-accent);
+    }
   }
 `

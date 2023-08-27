@@ -1,0 +1,9 @@
+a.signout{
+  background-color: var(--c-dark);
+  color: var(--c-txt-rev) !important;
+  border-Radius: var(--br-dull);
+
+  &:hover, &:focus{
+    color: red !important;
+  }
+}

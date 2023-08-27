@@ -39,7 +39,9 @@ article.thumbnail :global{
   background-color: var(--c-txt-rev);
   height: 100%;
   box-shadow: var(--boxs-1);
-  // max-width: 50em;
+  max-width: 70em;
+  margin-inline: auto;
+
 
   .featured_image{
     transition: transform, contrast, .3s;
@@ -70,7 +72,7 @@ article.thumbnail :global{
     // transform: translateX(-10rem);
     // transform: translate(0, -4rem);
     // max-width: 30em;
-    margin-left: auto;
+    // margin-left: auto;
     padding: 1rem 0 1rem 1rem;
     // margin-left: 1rem;
     

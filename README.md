@@ -52,12 +52,19 @@ following along with Wes Bos Tutorial
   - `Query.Services`
   - `Query.Roles`
   - `Query.Products`
+- ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
 
 
 ## TODO
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
 - [ ] switch all *Single.tsx to *Artcile.tsx to better reflect the HTML symatics
 - [ ] transition as much Styled Components to CSS Modules
+- [ ] screen shots / recordings
+  - [ ] 16 / 10 (1200 x 750) - laptop
+  - [ ] ? / ? - phone
+  - [ ] Events
+  - [ ] Bookings
+  - [ ] Products (checkout)
 
 ## Color pallet? 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

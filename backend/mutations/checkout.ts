@@ -82,7 +82,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         
       } catch (error) {
         console.error('!!!! checkout ERROR: ', error);
-        throw new Error(`Insufficent Stock for ${item.product.name}`);
+        throw new Error(`Checkout Error: ${error}`);
       }
     }))
     
@@ -138,6 +138,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         price: cartItem.product.price,
         quantity: cartItem.quantity,
         image: cartItem.product.image,
+        product: { connect: { id: cartItem.product.id }}
         // productId: cartItem.product.id,
         // photo: { connect: { id: cartItem.product.photo.id } },
       }

@@ -231,6 +231,7 @@ model Product {
   stockCount            Int           @default(0)
   author                User?         @relation("Product_author", fields: [authorId], references: [id])
   authorId              String?       @map("author") @postgresql.Uuid
+  orderItems            OrderItem[]   @relation("OrderItem_product")
   tags                  Tag[]         @relation("Product_tags")
   categories            Category[]    @relation("Category_products")
   dateCreated           DateTime?     @default(now())
@@ -275,11 +276,14 @@ model OrderItem {
   quantity     Int?
   order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
   orderId      String?       @map("order") @postgresql.Uuid
+  product      Product?      @relation("OrderItem_product", fields: [productId], references: [id])
+  productId    String?       @map("product") @postgresql.Uuid
   dateCreated  DateTime?     @default(now())
   dateModified DateTime?     @default(now())
 
   @@index([photoId])
   @@index([orderId])
+  @@index([productId])
 }
 
 model Order {

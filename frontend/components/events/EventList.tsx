@@ -58,6 +58,7 @@ const StyledEventList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-bottom: 2rem;
 `
 
 export const QUERY_EVENTS_ALL = gql`

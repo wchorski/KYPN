@@ -278,7 +278,7 @@ const StyledEventSingle = styled.section`
 
       .container{
         position: sticky;
-        top: 4em;
+        top: 9em;
         max-width: 22em;
         float: right;
       }

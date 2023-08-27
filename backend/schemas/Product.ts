@@ -15,9 +15,7 @@ export const Product:Lists.Product = list({
     filter: {
       query: rules.canReadProducts,
       // query: () => true,
-      // @ts-ignore //todo might cause problems
       delete: rules.canManageProducts,
-      // @ts-ignore //todo might cause problems
       update: rules.canManageProducts,
     },
     operation: {
@@ -124,7 +122,7 @@ export const Product:Lists.Product = list({
     author: relationship({
       ref: 'User.products',
     }),
-
+    orderItems: relationship({ref: 'OrderItem.product', many: true}),
     tags: relationship({
       // we could have used 'Tag', but then the relationship would only be 1-way
       ref: 'Tag.products',

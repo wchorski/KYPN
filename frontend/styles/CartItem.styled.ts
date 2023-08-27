@@ -6,7 +6,7 @@ export const StyledCartItem = styled.li`
   display: flex;
   justify-content: space-between;
   grid-template-columns: auto 1fr auto;
-  background-color: var(--c-dark);
+  background-color: var(--c-txt-cont);
   border-radius: var(--br-dull);
 
   img{
