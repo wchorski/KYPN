@@ -2,6 +2,7 @@
 import { gql, useMutation } from "@apollo/client"
 import { useRouter } from "next/router"
 import { QUERY_USER_CURRENT } from "./Session"
+import styles from '@/styles/elements/button.module.scss'
 
 export default function SignOutButton() {
 
@@ -35,13 +36,9 @@ export default function SignOutButton() {
 
   return (
     <a
+      className={styles.signout}
       type="button "
       onClick={e => handleSignout()}
-      style={{
-        background: 'var(--c-dark)',
-        color: 'var(--c-txt-rev)',
-        borderRadius: 'var(--br-dull)'
-      }}
     >
       Sign Out
     </a>

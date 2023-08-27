@@ -1563,6 +1563,8 @@ type Product {
   price: Int
   stockCount: Int
   author: User
+  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -1596,10 +1598,17 @@ input ProductWhereInput {
   price: IntNullableFilter
   stockCount: IntFilter
   author: UserWhereInput
+  orderItems: OrderItemManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+}
+
+input OrderItemManyRelationFilter {
+  every: OrderItemWhereInput
+  some: OrderItemWhereInput
+  none: OrderItemWhereInput
 }
 
 input ProductOrderByInput {
@@ -1630,10 +1639,18 @@ input ProductUpdateInput {
   price: Int
   stockCount: Int
   author: UserRelateToOneForUpdateInput
+  orderItems: OrderItemRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input OrderItemRelateToManyForUpdateInput {
+  disconnect: [OrderItemWhereUniqueInput!]
+  set: [OrderItemWhereUniqueInput!]
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
 }
 
 input ProductUpdateArgs {
@@ -1654,10 +1671,16 @@ input ProductCreateInput {
   price: Int
   stockCount: Int
   author: UserRelateToOneForCreateInput
+  orderItems: OrderItemRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input OrderItemRelateToManyForCreateInput {
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
 }
 
 type ProductImage {
@@ -1831,6 +1854,7 @@ type OrderItem {
   price: Int
   quantity: Int
   order: Order
+  product: Product
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1851,6 +1875,7 @@ input OrderItemWhereInput {
   price: IntNullableFilter
   quantity: IntNullableFilter
   order: OrderWhereInput
+  product: ProductWhereInput
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -1874,6 +1899,7 @@ input OrderItemUpdateInput {
   price: Int
   quantity: Int
   order: OrderRelateToOneForUpdateInput
+  product: ProductRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1897,6 +1923,7 @@ input OrderItemCreateInput {
   price: Int
   quantity: Int
   order: OrderRelateToOneForCreateInput
+  product: ProductRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1933,12 +1960,6 @@ input OrderWhereInput {
   createdAt: DateTimeNullableFilter
 }
 
-input OrderItemManyRelationFilter {
-  every: OrderItemWhereInput
-  some: OrderItemWhereInput
-  none: OrderItemWhereInput
-}
-
 input OrderOrderByInput {
   id: OrderDirection
   total: OrderDirection
@@ -1954,13 +1975,6 @@ input OrderUpdateInput {
   createdAt: DateTime
 }
 
-input OrderItemRelateToManyForUpdateInput {
-  disconnect: [OrderItemWhereUniqueInput!]
-  set: [OrderItemWhereUniqueInput!]
-  create: [OrderItemCreateInput!]
-  connect: [OrderItemWhereUniqueInput!]
-}
-
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
@@ -1972,11 +1986,6 @@ input OrderCreateInput {
   user: UserRelateToOneForCreateInput
   charge: String
   createdAt: DateTime
-}
-
-input OrderItemRelateToManyForCreateInput {
-  create: [OrderItemCreateInput!]
-  connect: [OrderItemWhereUniqueInput!]
 }
 
 type Coupon {

@@ -343,7 +343,7 @@ const StyledAccountCard = styled.div`
       overflow-y: scroll;
       opacity: 0;
       transition: all .3s;
-      background-color: var(--c-desaturated);
+      background-color: var(--c-txt-cont);
       padding: 0 1em;
 
       grid-column: 1;
@@ -392,10 +392,14 @@ const StyledAccountNav = styled.nav`
   flex-direction: column;
   justify-content: flex-start;
   align-items: start;
-
+  
   > ul {
     position: sticky;
     top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    padding-inline: 1rem;
   }
   
 
@@ -420,10 +424,14 @@ const StyledAccountNav = styled.nav`
     justify-content: space-between;
     border-radius: 0;
     border: none;
+    background-color: var(--c-txt-cont);
+    border-bottom: solid 1px var(--c-light);
+    color: var(--c-txt);
 
     &.active{
       background-color: var(--c-primary);
-      color: var(--c-txt);
+      color: var(--c-txt-primary);
+      border-bottom: solid 3px var(--c-primary);
     }
 
     svg {

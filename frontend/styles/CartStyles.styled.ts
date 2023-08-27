@@ -45,11 +45,14 @@ export const StyledShoppingCart = styled.div`
       font-size: 2rem;
     }
   }
-  ul {
+  > ul {
     margin: 0;
     padding: 0;
     list-style: none;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
   }
 
   button.close{

@@ -4,8 +4,12 @@
   // padding: 5em 0;
 
   > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+
     > p, > h1, > h2, > h3 {
-      margin: auto 0;
       padding: 1rem;
     }
   }

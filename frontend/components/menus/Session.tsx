@@ -30,7 +30,7 @@ export function SessionBadge({ session, label, }: Props) {
       <ul className="sub-menu">
         <li className="name">{session?.name}</li>
         <li className="email">{session?.email}</li>
-        <li><Link href={`/account`}> My Account </Link> </li>
+        <li> <Link className="button" href={`/account`}> My Account </Link> </li>
         {session.isAdmin && (
             <li>
               <LinkActive href='/admin' className="button"> Admin Panel </LinkActive>

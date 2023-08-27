@@ -46,7 +46,7 @@ export const rules = {
     // todo query item.author and match session.user
     
     // return false
-    return { user: { id: { equals: session?.itemId }} }
+    return { author: { id: { equals: session?.itemId }} }
   },
 
   canManageAddons({ session }: ListAccessArgs) {

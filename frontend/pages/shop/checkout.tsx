@@ -54,7 +54,6 @@ export default function CheckoutPage() {
 
 
 const StyledCheckout = styled.div`
-  background: #515151b6;
   backdrop-filter: blur(4px);
   padding: 1rem;
   min-height: 80vh;
@@ -72,6 +71,13 @@ const StyledCheckout = styled.div`
 
   > ul.items {
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+
+    li {
+      background: var(--c-txt-cont);
+    }
   }
   
   footer{

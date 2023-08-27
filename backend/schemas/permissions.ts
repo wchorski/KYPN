@@ -7,7 +7,7 @@ export const permissionFields = {
   }),
   canManageAddons: checkbox({
     defaultValue: false,
-    label: 'Manage Products: Can update and delete any addon',
+    label: 'Manage Add-ons: Can update and delete any addon',
   }),
   canManageBookings: checkbox({
     defaultValue: false,

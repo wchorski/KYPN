@@ -44,7 +44,7 @@ export const StyledOrderReceipt = styled.div`
   table{
     td{
       padding: 1rem;
-      background-color: var(--c-dark);
+      background-color: var(--c-txt-cont);
     }
   }
 `

@@ -71,6 +71,8 @@ export default function CartItem({ item }: any) {
           type="number" 
           value={quantity}
           onChange={e => updateQuantity(Number(e.target.value))}
+          // todo only update once input is unselected
+          // onBlur={e => updateQuantity(Number(e.target.value))}
         /> 
         <em> &times; {moneyFormatter(price)} each </em>
       </div>
