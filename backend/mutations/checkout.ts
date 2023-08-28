@@ -60,25 +60,26 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     const currCart = await Promise.all(user.cart.map( async (item:CartItem) => {
       try {
         if(item.quantity > item.product.stockCount){
-          throw new Error(`Insufficent Stock for ${item.product.name}`);
+          throw new Error(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
           
-        } else {
-          // @ts-ignore
-          const currData:Product = {
-            stockCount: item.product.stockCount - item.quantity,
-          }
+        } 
+        // else {
+        //   // @ts-ignore
+        //   const currData:Product = {
+        //     stockCount: item.product.stockCount - item.quantity,
+        //   }
     
-          if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
+        //   if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
     
-          const product = await context.db.Product.updateOne({
-            where: {id: item.product.id},
-            // @ts-ignore
-            data: currData
-          })
+        //   const product = await context.db.Product.updateOne({
+        //     where: {id: item.product.id},
+        //     // @ts-ignore
+        //     data: currData
+        //   })
 
-          return product
+        //   return product
           
-        }
+        // }
         
       } catch (error) {
         console.error('!!!! checkout ERROR: ', error);
