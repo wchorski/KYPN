@@ -49,22 +49,36 @@ export const OrderItem:Lists.OrderItem = list({
   hooks:{
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
       if(operation === 'create'){
-        // TODO figure out how to remove stock
-        console.log({resolvedData});
-        console.log(resolvedData.product.connect.id);
+
+        try {
+          // console.log({resolvedData});
+          // console.log(resolvedData.product?.connect?.id);
+  
+          const currProduct = await context.db.Product.findOne({
+            where: {id: resolvedData.product?.connect?.id}
+          })
+          
+          // @ts-ignore
+          const currData:Product = {
+            // @ts-ignore
+            stockCount: currProduct.stockCount - resolvedData.quantity,
+          }
+  
+          if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
+  
+          const updatedProduct = await context.db.Product.updateOne({
+            where: {id: resolvedData.product?.connect?.id},
+            // @ts-ignore
+            data: currData
+          })
+          console.log({updatedProduct});
+          
+        } catch (error) {
+          console.log('Order Item Create Error: ', error);
+          throw new Error('Order Item Create Error: ???');
+          
+        }
         
-        // @ts-ignore
-        // const currData:Product = {
-        //   stockCount: item.product.stockCount - item.quantity,
-        // }
-
-        // if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
-
-        // const product = await context.db.Product.updateOne({
-        //   where: {id: item.product.id},
-        //   // @ts-ignore
-        //   data: currData
-        // })
       }
     }
   }
