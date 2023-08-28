@@ -127,7 +127,7 @@ const StyledTable = styled.table`
     color: var(--c-txt);
   }
   tr:nth-of-type(2n) {
-    background-color: #ffffff;
+    background-color: #9898983b;
   }
   td{
     color: var(--c-txt-dark);
