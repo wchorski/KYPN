@@ -6,7 +6,7 @@ export const StyledOrderReceipt = styled.div`
   border: 1px solid var(--offWhite);
   box-shadow: var(--bs);
   padding: 2rem;
-  border-top: 10px dashed var(--c-accent);
+  
   & > p {
     display: grid;
     grid-template-columns: 1fr 5fr;
@@ -31,7 +31,7 @@ export const StyledOrderReceipt = styled.div`
     /* grid-template-columns: 200px 1fr; */
     align-items: center;
     gap: 2rem;
-    margin: 2rem 0;
+    margin-bottom: .3rem;
     border-bottom: solid var(--c-accent) 1px;
     /* padding-bottom: 2rem; */
     img {
@@ -42,6 +42,8 @@ export const StyledOrderReceipt = styled.div`
   }
 
   table{
+    border-bottom: 3px dashed var(--c-accent);
+
     td{
       padding: 1rem;
       background-color: var(--c-txt-cont);

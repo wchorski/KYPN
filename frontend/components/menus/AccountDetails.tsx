@@ -95,7 +95,8 @@ export function AccountDetails({dashState, user}:Props) {
     setSubscriptionCells(cellsSubs)
 
     const cellsOrders = data.user.orders.map((order:Order) => ({
-      date: datePrettyLocalDay(order.createdAt || '') + ' ' + datePrettyLocalTime(order.createdAt || '') ,
+      date: datePrettyLocalDay(order.createdAt || ''),
+      time: datePrettyLocalTime(order.createdAt || '') ,
       total: moneyFormatter(order.total),
       count: order.items.reduce((accumulator, it) => {
         return accumulator + it.quantity;
@@ -113,6 +114,7 @@ export function AccountDetails({dashState, user}:Props) {
   // console.log(data);
   // const {user}:{user:User} = data
 
+  // TODO make a better mobile friendly dash with a lil chip sub menu of the different tabs
   return (<>
     <PopupModal data={userData} setData={setUserData}>
      <UserUpdateForm user={{ id, name, nameLast, email, tickets }} setUser={setUserData}/>
@@ -209,6 +211,7 @@ export function AccountDetails({dashState, user}:Props) {
             caption="Orders"
             headers={[
               'date',
+              'time',
               'total',
               'count',
               'details',
