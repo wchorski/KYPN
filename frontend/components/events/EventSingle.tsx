@@ -55,8 +55,6 @@ export default function EventSingle({id}:{id:string}) {
   // console.log(data);
   // console.log(id);
   if(!data.event) return <p> 404: Event not found </p>
-
-  console.log(data.event)
   
   const {image, summary, excerpt, description, tickets = [], price, start, end, seats, hosts, location, categories, tags}:Event = data?.event
   

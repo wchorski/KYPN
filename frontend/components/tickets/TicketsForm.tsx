@@ -11,6 +11,12 @@ import { RiAddLine, RiSubtractFill } from "react-icons/ri";
 import moneyFormatter from "../../lib/moneyFormatter";
 import Link from "next/link";
 import { datePrettyLocal } from "../../lib/dateFormatter";
+import { Elements, useElements, useStripe } from "@stripe/react-stripe-js";
+import { loadStripe, } from "@stripe/stripe-js"
+import nProgress from "nprogress";
+import { useUser } from "../menus/Session";
+const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY_IN_ENV'
+const stripeLib = loadStripe(STRIPE_KEY)
 
 type Props = {
   event:Event,
@@ -20,10 +26,13 @@ type Props = {
   price?:number,
 }
 
-export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
+function TicketsFormChild({price, event, holderId, qrcode, status}:Props) {
 
   const [quantityState, setQuantityState] = useState(1)
   const [successMessage, setSuccessMessage] = useState('')
+  const session = useUser()
+  const stripe = useStripe()
+  const elements = useElements()
 
   const inputs:InputObj[] = [
     {
@@ -68,11 +77,12 @@ export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
     
   ]
 
-  const [createTickets, { error, loading, data }] = useMutation(CREATE_TICKETS)
+  const [checkoutTicket, { error, loading, data }] = useMutation(CHECKOUT_TICKET)
   const {values, setValues, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
 
   async function handleSubmit(e:any){
     e.preventDefault()
+    nProgress.start()
     // console.log({values});
 
     const formattedData = Array.from({ length: quantityState }, (_, index) => ({
@@ -92,17 +102,42 @@ export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
     
     try{
 
-      const res = await createTickets({
-        variables: { data: formattedData }
+      const { paymentMethod, error } = await stripe?.createPaymentMethod({
+        // @ts-ignore
+        elements,
+        params: {
+          billing_details: {
+            name: session ? session.name : 'Anonymous Name',
+            email: session ? session.email : 'Anonymous Email',
+          },
+        },
+      });
+
+      if (error) {
+        console.warn(error)
+        nProgress.done()
+        // setIsLoading(false)
+        // setError(error)
+        return //stops checkout
+      }
+  
+      const res = await checkoutTicket({
+        variables: {
+          token: paymentMethod.id,
+          eventId: event.id,
+          quantity: quantityState
+        }
       })
+
+
 
       // console.log({res});
       setSuccessMessage(`${quantityState} Tickets confirmed`)
-      
+      nProgress.done()
 
     } catch(err){
       console.log('ticket form catch, ', err);
-      
+      nProgress.done()
     }
   }
 
@@ -198,6 +233,20 @@ export  function TicketsForm({price, event, holderId, qrcode, status}:Props) {
   )
 }
 
+export function TicketsForm({price, event, holderId, qrcode, status}:Props) {
+  return (
+    <Elements stripe={stripeLib}>
+      <TicketsFormChild 
+        price={price}
+        event={event}
+        holderId={holderId}
+        qrcode={qrcode}
+        status={status}
+      />
+    </Elements>
+  )
+}
+
 const StyledForm = styled.form`
   position: relative;
   max-width: 25em;
@@ -268,41 +317,47 @@ const StyledForm = styled.form`
     border-radius: var(--br-sharp);
   }
 `
-
-
-const CREATE_TICKETS = gql`
-  mutation CreateTickets($data: [TicketCreateInput!]!) {
-    createTickets(data: $data) {
-      status
-      holder{
-        id
-        name
-        email
-        tickets{
-          id
-          status
-          event {
-            id
-            location {
-              id
-              name
-            }
-            image
-            price
-            start
-          }
-        }
-      }
-      event {
-        id
-        location {
-          id
-          name
-        }
-        image
-        price
-        start
-      }
+const CHECKOUT_TICKET = gql`
+  mutation CheckoutTicket($token: String!, $eventId: String!, $quantity: Int!) {
+    checkoutTicket(token: $token, eventId: $eventId, quantity: $quantity) {
+      id
     }
   }
 `
+
+// const CREATE_TICKETS = gql`
+//   mutation CreateTickets($data: [TicketCreateInput!]!) {
+//     createTickets(data: $data) {
+//       status
+//       holder{
+//         id
+//         name
+//         email
+//         tickets{
+//           id
+//           status
+//           event {
+//             id
+//             location {
+//               id
+//               name
+//             }
+//             image
+//             price
+//             start
+//           }
+//         }
+//       }
+//       event {
+//         id
+//         location {
+//           id
+//           name
+//         }
+//         image
+//         price
+//         start
+//       }
+//     }
+//   }
+// `

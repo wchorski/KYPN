@@ -1,9 +1,10 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { relationship, select, text, } from "@keystone-6/core/fields";
+import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
-
+import stripe from '../lib/stripe';
+import { Context } from '.keystone/types';
 
 
 export const Ticket:Lists.Ticket = list({
@@ -50,6 +51,9 @@ export const Ticket:Lists.Ticket = list({
       ref: 'User.tickets',
       many: false,
     }),
+    cost: integer({validation: {isRequired: true}, defaultValue: 0}),
+    chargeId: text(),
+    order: relationship({ ref: 'Order.ticketItems' }),
     status: select({
       options: [
         { label: 'Pending', value: 'PENDING' },
@@ -65,6 +69,37 @@ export const Ticket:Lists.Ticket = list({
         createView: { fieldMode: 'edit' }
       }
     }),
+    dateCreated: timestamp(),
+    dateModified: timestamp(),
 
   },
+
+  hooks: {
+    beforeOperation: async ({ operation, resolvedData, context }) => {
+      if(operation === 'create'){
+
+        if(!resolvedData.event?.connect) throw new Error("NO EVENT Connect ID FOUND");
+        
+        const event = await context.db.Event.findOne({
+          where: { id: resolvedData.event?.connect.id}
+        })
+        if(!event) throw new Error("No Event Found");
+        console.log({event});
+        
+        // TODO check to see if Event seats less than or equal to 0. throw error
+        // const charge = await stripe.paymentIntents.create({
+        //   amount: Number(event.price),
+        //   currency: 'USD',
+        //   confirm: true,
+        //   payment_method: token,
+        // }).catch((err: any) => {
+        //   console.log(err);
+        //   throw new Error(err.message);
+        // });
+
+      }
+
+
+    },
+  }
 })

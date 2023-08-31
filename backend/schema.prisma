@@ -287,13 +287,14 @@ model OrderItem {
 }
 
 model Order {
-  id        String      @id @default(uuid()) @postgresql.Uuid
-  total     Int?
-  items     OrderItem[] @relation("OrderItem_order")
-  user      User?       @relation("Order_user", fields: [userId], references: [id])
-  userId    String?     @map("user") @postgresql.Uuid
-  charge    String      @default("")
-  createdAt DateTime?
+  id          String      @id @default(uuid()) @postgresql.Uuid
+  total       Int?
+  items       OrderItem[] @relation("OrderItem_order")
+  ticketItems Ticket[]    @relation("Ticket_order")
+  user        User?       @relation("Order_user", fields: [userId], references: [id])
+  userId      String?     @map("user") @postgresql.Uuid
+  charge      String      @default("")
+  createdAt   DateTime?
 
   @@index([userId])
 }
@@ -359,7 +360,7 @@ model Event {
   locationId   String?    @map("location") @postgresql.Uuid
   start        DateTime
   end          DateTime?
-  price        Int?       @default(0)
+  price        Int        @default(0)
   hosts        User[]     @relation("Event_hosts")
   cohosts      User[]     @relation("Event_cohosts")
   tickets      Ticket[]   @relation("Ticket_event")
@@ -377,16 +378,23 @@ model Event {
 }
 
 model Ticket {
-  id       String  @id @default(uuid()) @postgresql.Uuid
-  qrcode   String  @default("")
-  event    Event?  @relation("Ticket_event", fields: [eventId], references: [id])
-  eventId  String? @map("event") @postgresql.Uuid
-  holder   User?   @relation("Ticket_holder", fields: [holderId], references: [id])
-  holderId String? @map("holder") @postgresql.Uuid
-  status   String? @default("CONFIRMED")
+  id           String    @id @default(uuid()) @postgresql.Uuid
+  qrcode       String    @default("")
+  event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])
+  eventId      String?   @map("event") @postgresql.Uuid
+  holder       User?     @relation("Ticket_holder", fields: [holderId], references: [id])
+  holderId     String?   @map("holder") @postgresql.Uuid
+  cost         Int       @default(0)
+  chargeId     String    @default("")
+  order        Order?    @relation("Ticket_order", fields: [orderId], references: [id])
+  orderId      String?   @map("order") @postgresql.Uuid
+  status       String?   @default("CONFIRMED")
+  dateCreated  DateTime?
+  dateModified DateTime?
 
   @@index([eventId])
   @@index([holderId])
+  @@index([orderId])
 }
 
 model Category {
