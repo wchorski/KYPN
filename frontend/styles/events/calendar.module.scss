@@ -1,0 +1,75 @@
+.header :global{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 2rem;
+
+  p.month-label{
+    margin: 1rem 0;
+    /* transform: translateX(-10px); */
+    /* transition: transform 1s ease-out; */
+    animation: labelAnim .3s ease-out forwards;
+  }
+
+  @keyframes labelAnim {
+    0% { 
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    100% { 
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .arrow{
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    transition: all .3s;
+    color: var(--c-txt);
+
+    &:hover{
+      color: var(--c-accent);
+    }
+  }
+}
+
+.monthLabel{
+  min-height: 2rem;
+}
+
+.grid  {
+  width: 100%;
+  min-height: 50vh;
+  border-collapse: collapse;
+
+  thead{
+    background-color: var(--c-desaturated);
+    height: 3rem;
+  }
+
+  td {
+    height: calc(100% - 27px - 40px);
+    border: solid 1px var(--c-desaturated);
+    background-color: var(--c-desaturated);
+    animation-name: cellAnim;
+    animation-duration: .3s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes cellAnim {
+    0%{
+      opacity: .1;
+    }
+    100%{
+      opacity: .9;
+    }
+  }
+}
+
+.calendar{
+  background-color: goldenrod;
+}

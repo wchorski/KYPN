@@ -8,6 +8,7 @@ import { QueryLoading } from "../menus/QueryLoading"
 import { QueryError } from "../menus/QueryError"
 import { gql, useQuery } from "@apollo/client"
 import Link from "next/link"
+import CalendarSkeleton from "./CalendarSkeleton"
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -90,7 +91,7 @@ export function EventsCalendar({initDate = new Date()}:Props) {
     },
   })
 
-  if (loading) return <QueryLoading />
+  if (loading) return <CalendarSkeleton />
   if (error) return <QueryError error={error} />
 
   const {events} = data
@@ -120,9 +121,10 @@ export function EventsCalendar({initDate = new Date()}:Props) {
     setCurrentDate(new Date(curDate));
   };
 
+
   return (
     <StyledEventsCalender>
-      <CalenderHead>
+      <CalenderHead key={getMonthYear(currentDate)}>
         <button onClick={prevMonth} className="arrow left">
           <MdOutlineKeyboardArrowLeft />
         </button>
@@ -135,9 +137,11 @@ export function EventsCalendar({initDate = new Date()}:Props) {
       </CalenderHead>
 
       <GridSevenCol>
-        {DAYS.map((day, i) => (
+        {DAYS ? DAYS.map((day, i) => (
           <HeadDays key={i} className="nonDRAG">{day}</HeadDays>
-        ))}
+        )) : (
+          <HeadDays  className="nonDRAG"> WOHHHHHHHHHHHHHHHHH </HeadDays>
+        )}
       </GridSevenCol>
 
       <GridSevenCol
@@ -207,6 +211,20 @@ const CalenderHead = styled.div`
 
   p.month-label{
     margin: 1rem 0;
+    /* transform: translateX(-10px); */
+    /* transition: transform 1s ease-out; */
+    animation: labelAnim .3s ease-out forwards;
+  }
+
+  @keyframes labelAnim {
+    0% { 
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    100% { 
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   .arrow{
