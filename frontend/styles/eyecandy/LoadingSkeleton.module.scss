@@ -1,9 +1,10 @@
 .wrapper{
-  background-color: var(--c-desaturated);
+  background-color: var(--c-light);
   // background: linear-gradient(to right, var(--c-light), #000000, var(--c-light));
   background-size: 200% 200%; 
   background-position: 0 0;
   padding-inline: 1rem;
+  margin: 1rem 0;
   width: 100%;
   border-radius: var(--br-soft);
   display: flex;
@@ -14,7 +15,7 @@
   @keyframes animGradient { 
     0%{
       // background-position: 0 0;
-      opacity: .2;
+      opacity: .3;
       // transform: translateX(0);
     }
     100%{
