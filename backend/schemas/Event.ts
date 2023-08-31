@@ -51,7 +51,7 @@ export const Event:Lists.Event = list({
     location: relationship({ ref: 'Location.events', many: false }),
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({}),
-    price: integer({defaultValue: 0}),
+    price: integer({defaultValue: 0, validation: {isRequired: true}}),
     // todo have multiple hosts
     hosts: relationship({ ref: 'User.eventsHost', many: true }),
     cohosts: relationship({ ref: 'User.eventsCohost', many: true }),

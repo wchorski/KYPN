@@ -1939,6 +1939,8 @@ type Order {
   total: Int
   items(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   itemsCount(where: OrderItemWhereInput! = {}): Int
+  ticketItems(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
+  ticketItemsCount(where: TicketWhereInput! = {}): Int
   user: User
   charge: String
   createdAt: DateTime
@@ -1955,6 +1957,7 @@ input OrderWhereInput {
   id: IDFilter
   total: IntNullableFilter
   items: OrderItemManyRelationFilter
+  ticketItems: TicketManyRelationFilter
   user: UserWhereInput
   charge: StringFilter
   createdAt: DateTimeNullableFilter
@@ -1970,6 +1973,7 @@ input OrderOrderByInput {
 input OrderUpdateInput {
   total: Int
   items: OrderItemRelateToManyForUpdateInput
+  ticketItems: TicketRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   charge: String
   createdAt: DateTime
@@ -1983,6 +1987,7 @@ input OrderUpdateArgs {
 input OrderCreateInput {
   total: Int
   items: OrderItemRelateToManyForCreateInput
+  ticketItems: TicketRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   charge: String
   createdAt: DateTime
@@ -2306,7 +2311,7 @@ input EventWhereInput {
   location: LocationWhereInput
   start: DateTimeFilter
   end: DateTimeNullableFilter
-  price: IntNullableFilter
+  price: IntFilter
   hosts: UserManyRelationFilter
   cohosts: UserManyRelationFilter
   tickets: TicketManyRelationFilter
@@ -2384,7 +2389,12 @@ type Ticket {
   qrcode: String
   event: Event
   holder: User
+  cost: Int
+  chargeId: String
+  order: Order
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input TicketWhereUniqueInput {
@@ -2399,20 +2409,34 @@ input TicketWhereInput {
   qrcode: StringFilter
   event: EventWhereInput
   holder: UserWhereInput
+  cost: IntFilter
+  chargeId: StringFilter
+  order: OrderWhereInput
   status: StringNullableFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input TicketOrderByInput {
   id: OrderDirection
   qrcode: OrderDirection
+  cost: OrderDirection
+  chargeId: OrderDirection
   status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input TicketUpdateInput {
   qrcode: String
   event: EventRelateToOneForUpdateInput
   holder: UserRelateToOneForUpdateInput
+  cost: Int
+  chargeId: String
+  order: OrderRelateToOneForUpdateInput
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input EventRelateToOneForUpdateInput {
@@ -2430,7 +2454,12 @@ input TicketCreateInput {
   qrcode: String
   event: EventRelateToOneForCreateInput
   holder: UserRelateToOneForCreateInput
+  cost: Int
+  chargeId: String
+  order: OrderRelateToOneForCreateInput
   status: String
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input EventRelateToOneForCreateInput {
@@ -2741,6 +2770,7 @@ type Mutation {
   addToCart(id: ID!, productID: ID): CartItem
   checkout(token: String!): CartItem
   checkoutSubscription(custom_price: Int!, planId: String!, token: String!, userId: String!): SubscriptionItem
+  checkoutTicket(token: String!, eventId: String!, quantity: Int!): Ticket
   contact(name: String!, email: String!, phone: String!, date: String!, notes: String!): Booking
 }
 
