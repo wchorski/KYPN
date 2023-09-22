@@ -55,8 +55,8 @@ export default function BlogPage({ slug }: { slug: string | string[] | undefined
       <Head>
         <title> {title} </title>
         <meta name="description"        content={excerpt} />
-        <meta name='keywords'           content={tags.map(tag => tag.name).join(', ')} />
-        <meta name="author"             content={author.name} />
+        <meta name='keywords'           content={tags?.map(tag => tag.name).join(', ')} />
+        <meta name="author"             content={author?.name} />
         <meta property="og:title"       content={title} />
         <meta property="og:description" content={excerpt} />
         <meta property="og:image"       content={featured_image} />
