@@ -31,11 +31,6 @@ if (!sessionSecret && process.env.NODE_ENV !== 'production') {
   sessionSecret = randomBytes(32).toString('hex');
 }
 
-const db = {
-  provider: 'postgres',
-  url: process.env.DATABASE_URL || 'postgres://admin:admin@localhost:5432/keystone'
-}
-
 // withAuth is a function we can use to wrap our base configuration
 const { withAuth } = createAuth({
   listKey: 'User',

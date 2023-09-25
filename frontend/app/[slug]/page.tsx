@@ -1,0 +1,121 @@
+
+import { AsideBar } from "@/components/layouts/AsideBar"
+import { Card } from "@components/layouts/Card"
+import { Section } from "@components/layouts/Section"
+import { PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
+
+type Props = {
+  searchParams:any,
+  template:string,
+}
+
+export default async function BackupsPage ({
+  searchParams,
+  template = 'full_width'
+}:Props) {
+
+  // const data = await getData(searchParams?.start, searchParams?.stop)
+  // // console.log(JSON.stringify(data, null, 2))  
+
+  // const uniqueFields = data[0]?.times[0].items.reduce((uniqueFieldsArray:any, item:any) => {
+  //   const field = item["_field"];
+  //   if (!uniqueFieldsArray.includes(field)) {
+  //     uniqueFieldsArray.push(field);
+  //   }
+  //   return uniqueFieldsArray;
+  // }, []);
+
+  // if(data.statusCode === 400 || data.statusCode === 401) return <ErrorFromDB code={data.code} message={data.message}/>
+  
+
+  if(template === 'full_width') return (
+    <PageTMain 
+      main={Main()}
+    />
+  )
+
+  return (
+    <PageTHeaderMainAside 
+      header={Header()}
+      main={Main()}
+      aside={Aside()}
+    />
+  )
+}
+
+
+//? Content
+function Header(){
+
+  return <>
+    <h1> Page Header </h1>
+  </>
+}
+
+
+function Main(){
+
+  return <>
+    <Section bgColor="blue">
+      <p>heyyyy</p>
+    </Section>
+  </>
+}
+
+function Aside(){
+  return <>
+    <Card>
+      <h2> Aside</h2>
+    </Card>
+  </>
+}
+
+
+//? Data Fetching
+// async function getData(start?:string|number, stop?:string|number) {
+//   const res = await fetch(envars.FRONTEND_URL + `/api/backups?start=${start}&stop=${stop}`)
+//   // The return value is *not* serialized
+//   // You can return Date, Map, Set, etc.
+  
+ 
+//   if (!res.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     throw new Error('Failed to fetch data')
+//   }
+  
+//   const data = await res.json()
+
+//   if(data.statusCode === 400 || data.statusCode === 401) return data  
+  
+
+//   const result:  Record<string, Record<string, any[]>> = data?.reduce((acc:any, item:any) => {
+//     const duplicatiId = item.duplicati_id;
+//     const time = item._time;
+  
+//     if (!acc[duplicatiId]) {
+//       acc[duplicatiId] = {};
+//     }
+  
+//     if (!acc[duplicatiId][time]) {
+//       acc[duplicatiId][time] = [];
+//     }
+  
+//     acc[duplicatiId][time].push(item);
+//     return acc;
+//   }, {});
+  
+//   const organizedArrays: OrganizedData[] = Object.entries(result).map(([duplicatiId, times]) => {
+//     return {
+//       duplicati_id: duplicatiId,
+//       times: Object.entries(times).map(([time, items]) => ({
+//         _time: time,
+//         items,
+//       })),
+//     };
+//   });
+//   // console.log(result);
+  
+
+//   return organizedArrays
+
+// }

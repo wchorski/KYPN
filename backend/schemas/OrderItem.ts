@@ -27,15 +27,15 @@ export const OrderItem:Lists.OrderItem = list({
       }
     }),
     image: text(),
-    photo: relationship({
-      ref: 'ProductImage',
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText'],
-        inlineCreate: { fields: ['image', 'altText'] },
-        inlineEdit: { fields: ['image', 'altText'] }
-      }
-    }),
+    // photo: relationship({
+    //   ref: 'ProductImage',
+    //   ui: {
+    //     displayMode: 'cards',
+    //     cardFields: ['image', 'altText'],
+    //     inlineCreate: { fields: ['image', 'altText'] },
+    //     inlineEdit: { fields: ['image', 'altText'] }
+    //   }
+    // }),
     price: integer(),
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),

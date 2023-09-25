@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /blog
+Allow: /events
+Allow: /locations
+Allow: /shop
+Disallow: /admin/
+Disallow: /users/
+Disallow: /tickets/

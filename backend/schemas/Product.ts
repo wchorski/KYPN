@@ -1,5 +1,6 @@
 import { list } from "@keystone-6/core";
-import type { Lists } from '.keystone/types';
+import { Lists } from '.keystone/types';
+
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
@@ -28,15 +29,15 @@ export const Product:Lists.Product = list({
 
 
   fields: {
-    photo: relationship({
-      ref: 'ProductImage.product',
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText', 'filename'],
-        inlineCreate: { fields: ['image', 'altText', 'filename'] },
-        inlineEdit: { fields: ['image', 'altText', 'filename'] }
-      }
-    }),
+    // photo: relationship({
+    //   ref: 'ProductImage.product',
+    //   ui: {
+    //     displayMode: 'cards',
+    //     cardFields: ['image', 'altText', 'filename'],
+    //     inlineCreate: { fields: ['image', 'altText', 'filename'] },
+    //     inlineEdit: { fields: ['image', 'altText', 'filename'] }
+    //   }
+    // }),
     image: text({defaultValue: FRONTEND_URL + '/assets/private/placeholder.png'}),
     name: text({ validation: { isRequired: true } }),
     stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
