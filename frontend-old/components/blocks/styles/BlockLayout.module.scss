@@ -1,0 +1,23 @@
+.grid{
+  display: grid;
+  // gap: 1em;
+  // padding: 5em 0;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // align-items: center;
+
+    > p, > h1, > h2, > h3 {
+      padding: 1rem;
+    }
+  }
+  
+}
+
+@media screen and (min-width: 600px){
+  .grid{
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+}

@@ -33,7 +33,6 @@ marker.svg
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
 # local env files
 .env*.local
@@ -44,10 +43,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-/public/favicon.ico
-home.tsx
-Header.tsx
-/components/menus/Footer.tsx
-Nav.tsx
-favicon.ico

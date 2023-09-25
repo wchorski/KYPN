@@ -9,6 +9,7 @@ function timestamp() {
 
 export const locations_seeddata = []
 export const pages_seeddata = []
+export const subscriptionPlans_seedjson = []
 
 export const events_seeddata = [
   {
@@ -17,7 +18,7 @@ export const events_seeddata = [
     end: '2023-09-30T18:00:00.000Z',
     seats: 20,
     price: 100,
-    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
+    excerpt: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg'
   },
   {
@@ -26,7 +27,7 @@ export const events_seeddata = [
     end: '2023-07-15T17:00:00.000Z',
     seats: 20,
     price: 100,
-    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
+    excerpt: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290024/cutefruit/product_images/clgu01m7x0004dwsv0b05di5c.png'
   },
   {
@@ -35,7 +36,7 @@ export const events_seeddata = [
     end: '2023-06-12T18:00:00.000Z',
     seats: 20,
     price: 100,
-    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
+    excerpt: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg'
   },
   {
@@ -44,7 +45,7 @@ export const events_seeddata = [
     end: '2023-08-05T15:00:00.000Z',
     seats: 20,
     price: 100,
-    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
+    excerpt: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png'
   },
   {
@@ -53,7 +54,7 @@ export const events_seeddata = [
     end: '2023-07-01T20:00:00.000Z',
     seats: 20,
     price: 100,
-    description: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
+    excerpt: 'Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!',
     photo: 'https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682274836/cutefruit/product_images/clgtr03ia0000gksv9qx8g9iz.jpg'
   }
 ]
@@ -354,27 +355,27 @@ export const posts_seed = [
 export const categories_seedjson = [
   {
     name: 'Pomes',
-    description: 'Fruits that have smooth skin and an enlarged fleshy area that surrounds the core. Examples of pomes are apples, pears, and kiwis.',
+    excerpt: 'Fruits that have smooth skin and an enlarged fleshy area that surrounds the core. Examples of pomes are apples, pears, and kiwis.',
   },
   {
     name: 'Drupes',
-    description: 'Fruits that contain a single seed, or pit, surrounded by juicy flesh. Examples of drupes are peaches, cherries, plums, nectarines, and apricots.',
+    excerpt: 'Fruits that contain a single seed, or pit, surrounded by juicy flesh. Examples of drupes are peaches, cherries, plums, nectarines, and apricots.',
   },
   {
     name: 'Berries',
-    description: 'Fruits with a fragile cell structure, that are pulpy and juicy with tiny seeds embedded in the flesh. Examples of berries are blackberries, cranberries, strawberries, and grapes.',
+    excerpt: 'Fruits with a fragile cell structure, that are pulpy and juicy with tiny seeds embedded in the flesh. Examples of berries are blackberries, cranberries, strawberries, and grapes.',
   },
   {
     name: 'Melons',
-    description: ': Fruits that have a hard outer surface that is either smooth or netted with a juicy flesh. Examples of melons include, cantaloupes, honeydew, watermelon, casaba, crenshaw, and muskmelon.',
+    excerpt: ': Fruits that have a hard outer surface that is either smooth or netted with a juicy flesh. Examples of melons include, cantaloupes, honeydew, watermelon, casaba, crenshaw, and muskmelon.',
   },
   {
     name: 'Citrus',
-    description: ' Fruits that grow in warm regions, and have a firm rind and a pulpy flesh. Examples of citrus fruits are, oranges, grapefruits, tangerines, lemons, limes, kumquats, citrons, tengelows, and ugli fruit.',
+    excerpt: ' Fruits that grow in warm regions, and have a firm rind and a pulpy flesh. Examples of citrus fruits are, oranges, grapefruits, tangerines, lemons, limes, kumquats, citrons, tengelows, and ugli fruit.',
   },
   {
     name: 'Tropical',
-    description: 'Fruits that grow in very warm climates, and differ in skin composition and seed characteristics. Examples, of tropical fruits are bananas, pineapples, avocados, dates, figs, mangoes, pomegranates, and papayas.',
+    excerpt: 'Fruits that grow in very warm climates, and differ in skin composition and seed characteristics. Examples, of tropical fruits are bananas, pineapples, avocados, dates, figs, mangoes, pomegranates, and papayas.',
   },
 
 ]
@@ -433,7 +434,7 @@ export const tags_seedjson = [
 export const products_seed = [
   {
     name: 'Banana Cherry',
-    description: 'Fluffy and fruity',
+    excerpt: 'Fluffy and fruity',
     status: 'AVAILABLE',
     price: 3423,
     stockCount: 12,
@@ -460,7 +461,7 @@ export const products_seed = [
   },
   {
     name: 'Penguin Pear',
-    description: 'Cute and fruit',
+    excerpt: 'Cute and fruit',
     status: 'AVAILABLE',
     price: 1212,
     stockCount: 1,
@@ -487,7 +488,7 @@ export const products_seed = [
   },
   {
     name: 'Sidways Pinapple',
-    description: 'Wadda head turner',
+    excerpt: 'Wadda head turner',
     status: 'AVAILABLE',
     price: 54321,
     stockCount: 10,
@@ -514,7 +515,7 @@ export const products_seed = [
   },
   {
     name: 'Tiger Tomatoe',
-    description: 'Rawr',
+    excerpt: 'Rawr',
     status: 'AVAILABLE',
     price: 3433,
     stockCount: 16,
@@ -542,7 +543,7 @@ export const products_seed = [
   },
   {
     name: 'Scared Pear',
-    description: 'yellow Green',
+    excerpt: 'yellow Green',
     status: 'AVAILABLE',
     price: 1111,
     stockCount: 3,
@@ -568,7 +569,7 @@ export const products_seed = [
   },
   {
     name: 'Strawberry Puff',
-    description: 'super cutie',
+    excerpt: 'super cutie',
     status: 'AVAILABLE',
     price: 454,
     stockCount: 956,
@@ -597,7 +598,7 @@ export const products_seed = [
   },
   {
     name: 'Apple Pillow',
-    description: 'an apple a day keeps the frowns away',
+    excerpt: 'an apple a day keeps the frowns away',
     status: 'AVAILABLE',
     price: 77,
     stockCount: 68,
@@ -626,7 +627,7 @@ export const products_seed = [
   },
   {
     name: 'Blue Drop',
-    description: 'A little shy, but super friendly once it settles in',
+    excerpt: 'A little shy, but super friendly once it settles in',
     status: 'AVAILABLE',
     price: 27,
     stockCount: 8,
@@ -657,7 +658,7 @@ export const products_seed = [
   },
   {
     name: 'Azure Cyclops',
-    description: 'The monster within is brought to life with every stick. This stuffed creature makes a big statement',
+    excerpt: 'The monster within is brought to life with every stick. This stuffed creature makes a big statement',
     status: 'AVAILABLE',
     price: 27,
     stockCount: 8,
@@ -688,7 +689,7 @@ export const products_seed = [
   },
   {
     name: 'Purple Fuzz Blob',
-    description: "This extra fuzzy cutie sproutes a lil green leaf atop it's head",
+    excerpt: "This extra fuzzy cutie sproutes a lil green leaf atop it's head",
     status: 'AVAILABLE',
     price: 590,
     stockCount: 81,
@@ -715,7 +716,7 @@ export const products_seed = [
   },
   {
     name: 'Inky Indigo',
-    description: 'Wide eyed, 2 legged, cute and cuddly',
+    excerpt: 'Wide eyed, 2 legged, cute and cuddly',
     status: 'AVAILABLE',
     price: 25657,
     stockCount: 999,
@@ -742,7 +743,7 @@ export const products_seed = [
   },
   {
     name: 'Yellow Pearabol',
-    description: 'Deliciously spooky, all around frighting',
+    excerpt: 'Deliciously spooky, all around frighting',
     status: 'AVAILABLE',
     price: 237,
     stockCount: 8111,
@@ -774,7 +775,7 @@ export const products_seed = [
   },
   {
     name: 'Kiwi Kidz',
-    description: 'Rag tag team from down unda!',
+    excerpt: 'Rag tag team from down unda!',
     status: 'AVAILABLE',
     price: 27,
     stockCount: 8,
@@ -806,7 +807,7 @@ export const products_seed = [
   },
   {
     name: 'Quad Kumquats',
-    description: '4 of the most adorable citrus fruits',
+    excerpt: '4 of the most adorable citrus fruits',
     status: 'AVAILABLE',
     price: 2557,
     stockCount: 89,
@@ -1242,7 +1243,7 @@ export const subscriptions_seedjson = [
   {
     name: "The Fruit Fiesta",
     "slug": "fruit-fiesta",
-    "description": "Join the party with a fully loaded fruit basket every month!",
+    "excerpt": "Join the party with a fully loaded fruit basket every month!",
     price: 30003,
     "stockCount": 4,
     author: {
@@ -1254,7 +1255,7 @@ export const subscriptions_seedjson = [
   {
     name: "The Double Trouble Fruity Bundle",
     "slug": "double-trouble-fruity-bundle",
-    "description": "Twice the fruit, twice the fun! Receive a fully loaded fruit basket every two months.",
+    "excerpt": "Twice the fruit, twice the fun! Receive a fully loaded fruit basket every two months.",
     price: 160002,
     "stockCount": 4,
     author: {
@@ -1266,7 +1267,7 @@ export const subscriptions_seedjson = [
   {
     name: "The Great Fruit Escape",
     "slug": "great-fruit-escape",
-    "description": "Escape into the world of fresh fruit every three months with a fully loaded fruit basket!",
+    "excerpt": "Escape into the world of fresh fruit every three months with a fully loaded fruit basket!",
     price: 450009,
     "stockCount": 4,
     author: {
@@ -1331,7 +1332,7 @@ export const services_seedjson = [
 export const addons_seedjson  = [
   {
     name: 'Scratch and Sniff Stickers',
-    description: 'An assortment of scratch and stiff stickers with various fruity scents',
+    excerpt: 'An assortment of scratch and stiff stickers with various fruity scents',
     price: 1,
     services: {
       connect: [
@@ -1343,7 +1344,7 @@ export const addons_seedjson  = [
   },
   {
     name: 'Zester',
-    description: 'Peel, scrape, shred to perfection.',
+    excerpt: 'Peel, scrape, shred to perfection.',
     price: 2,
     services: {
       connect: [
@@ -1355,7 +1356,7 @@ export const addons_seedjson  = [
   },
   {
     name: 'Tomato Timer',
-    description: 'Keep on schedual down the seconds and seeds.',
+    excerpt: 'Keep on schedual down the seconds and seeds.',
     price: 3,
     services: {
       connect: [

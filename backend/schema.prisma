@@ -173,7 +173,6 @@ model Availability {
 
 model SubscriptionPlan {
   id               String             @id @default(uuid()) @postgresql.Uuid
-  photo            ProductImage?      @relation("ProductImage_subscription")
   image            String             @default("")
   author           User?              @relation("SubscriptionPlan_author", fields: [authorId], references: [id])
   authorId         String?            @map("author") @postgresql.Uuid
@@ -216,41 +215,27 @@ model SubscriptionItem {
 }
 
 model Product {
-  id                    String        @id @default(uuid()) @postgresql.Uuid
-  photo                 ProductImage? @relation("Product_photo", fields: [photoId], references: [id])
-  photoId               String?       @unique @map("photo") @postgresql.Uuid
-  image                 String        @default("http://localhost:3000/assets/private/placeholder.png")
-  name                  String        @default("")
-  stripeProductId       String        @default("NO_PROD_ID")
-  stripePriceId         String        @default("NO_PRICE_ID")
-  slug                  String        @unique @default("")
-  excerpt               String        @default("")
-  description           Json          @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  status                String?       @default("DRAFT")
+  id                    String      @id @default(uuid()) @postgresql.Uuid
+  image                 String      @default("http://localhost:3000/assets/private/placeholder.png")
+  name                  String      @default("")
+  stripeProductId       String      @default("NO_PROD_ID")
+  stripePriceId         String      @default("NO_PRICE_ID")
+  slug                  String      @unique @default("")
+  excerpt               String      @default("")
+  description           Json        @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  status                String?     @default("DRAFT")
   price                 Int?
-  stockCount            Int           @default(0)
-  author                User?         @relation("Product_author", fields: [authorId], references: [id])
-  authorId              String?       @map("author") @postgresql.Uuid
-  orderItems            OrderItem[]   @relation("OrderItem_product")
-  tags                  Tag[]         @relation("Product_tags")
-  categories            Category[]    @relation("Category_products")
-  dateCreated           DateTime?     @default(now())
-  dateModified          DateTime?     @default(now())
-  from_CartItem_product CartItem[]    @relation("CartItem_product")
+  stockCount            Int         @default(0)
+  author                User?       @relation("Product_author", fields: [authorId], references: [id])
+  authorId              String?     @map("author") @postgresql.Uuid
+  orderItems            OrderItem[] @relation("OrderItem_product")
+  tags                  Tag[]       @relation("Product_tags")
+  categories            Category[]  @relation("Category_products")
+  dateCreated           DateTime?   @default(now())
+  dateModified          DateTime?   @default(now())
+  from_CartItem_product CartItem[]  @relation("CartItem_product")
 
   @@index([authorId])
-}
-
-model ProductImage {
-  id                   String            @id @default(uuid()) @postgresql.Uuid
-  image                Json?
-  url                  String            @default("")
-  altText              String            @default("Product Featured Image")
-  filename             String            @unique @default("")
-  product              Product?          @relation("Product_photo")
-  subscription         SubscriptionPlan? @relation("ProductImage_subscription", fields: [subscriptionId], references: [id])
-  subscriptionId       String?           @unique @map("subscription") @postgresql.Uuid
-  from_OrderItem_photo OrderItem[]       @relation("OrderItem_photo")
 }
 
 model CartItem {
@@ -266,22 +251,19 @@ model CartItem {
 }
 
 model OrderItem {
-  id           String        @id @default(uuid()) @postgresql.Uuid
-  name         String        @default("")
-  description  String        @default("")
-  image        String        @default("")
-  photo        ProductImage? @relation("OrderItem_photo", fields: [photoId], references: [id])
-  photoId      String?       @map("photo") @postgresql.Uuid
+  id           String    @id @default(uuid()) @postgresql.Uuid
+  name         String    @default("")
+  description  String    @default("")
+  image        String    @default("")
   price        Int?
   quantity     Int?
-  order        Order?        @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId      String?       @map("order") @postgresql.Uuid
-  product      Product?      @relation("OrderItem_product", fields: [productId], references: [id])
-  productId    String?       @map("product") @postgresql.Uuid
-  dateCreated  DateTime?     @default(now())
-  dateModified DateTime?     @default(now())
+  order        Order?    @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId      String?   @map("order") @postgresql.Uuid
+  product      Product?  @relation("OrderItem_product", fields: [productId], references: [id])
+  productId    String?   @map("product") @postgresql.Uuid
+  dateCreated  DateTime? @default(now())
+  dateModified DateTime? @default(now())
 
-  @@index([photoId])
   @@index([orderId])
   @@index([productId])
 }

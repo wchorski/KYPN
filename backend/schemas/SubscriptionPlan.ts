@@ -30,15 +30,15 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
 
   fields: {
-    photo: relationship({
-      ref: 'ProductImage.subscription',
-      ui: {
-        displayMode: 'cards',
-        cardFields: ['image', 'altText', 'filename'],
-        inlineCreate: { fields: ['image', 'altText', 'filename'] },
-        inlineEdit: { fields: ['image', 'altText', 'filename'] }
-      }
-    }),
+    // photo: relationship({
+    //   ref: 'ProductImage.subscription',
+    //   ui: {
+    //     displayMode: 'cards',
+    //     cardFields: ['image', 'altText', 'filename'],
+    //     inlineCreate: { fields: ['image', 'altText', 'filename'] },
+    //     inlineEdit: { fields: ['image', 'altText', 'filename'] }
+    //   }
+    // }),
     image: text(),
 
     // todo does this need to be?
@@ -181,16 +181,16 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         // console.log('resolvedData.photo.connect.id', resolvedData.photo.connect.id);
 
         let photo_url = IMG_PLACEHOLDER
-        if (resolvedData?.photo?.connect) {
-          const photo = await context.db.ProductImage.findOne({
-            where: {
-              id: resolvedData.photo.connect.id
-            }
-          })
-          console.log({ photo });
-          // @ts-ignore
-          photo_url = photo.image._meta.secure_url
-        }
+        // if (resolvedData?.photo?.connect) {
+        //   const photo = await context.db.ProductImage.findOne({
+        //     where: {
+        //       id: resolvedData.photo.connect.id
+        //     }
+        //   })
+        //   console.log({ photo });
+        //   // @ts-ignore
+        //   photo_url = photo.image._meta.secure_url
+        // }
 
         const res = await stripeConfig.products.create({
           // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
@@ -243,16 +243,16 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       if (operation === 'update') {
 
         let photo_url = IMG_PLACEHOLDER
-        if (resolvedData?.photo?.connect) {
-          const photo = await context.db.ProductImage.findOne({
-            where: {
-              id: resolvedData.photo.connect.id
-            }
-          })
-          console.log({ photo });
-          // @ts-ignore
-          photo_url = photo.image._meta.secure_url
-        }
+        // if (resolvedData?.photo?.connect) {
+        //   const photo = await context.db.ProductImage.findOne({
+        //     where: {
+        //       id: resolvedData.photo.connect.id
+        //     }
+        //   })
+        //   console.log({ photo });
+        //   // @ts-ignore
+        //   photo_url = photo.image._meta.secure_url
+        // }
 
         const currPrice = await stripeConfig.prices.retrieve(
           // @ts-ignore //todo might cause problems

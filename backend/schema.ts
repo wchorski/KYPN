@@ -23,7 +23,7 @@ import {
 import { document } from '@keystone-6/fields-document';
 
 import { Product } from "./schemas/Product";
-import { ProductImage } from "./schemas/ProductImage";
+// import { ProductImage } from "./schemas/ProductImage";
 import { CartItem } from "./schemas/CartItem";
 import { Event } from "./schemas/Event";
 import { Ticket } from "./schemas/Ticket";
@@ -71,7 +71,7 @@ export const lists: Lists = {
   SubscriptionPlan,
   SubscriptionItem,
   Product,
-  ProductImage,
+  // ProductImage,
   CartItem,
   OrderItem,
   Order,

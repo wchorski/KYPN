@@ -1301,7 +1301,6 @@ input AvailabilityCreateInput {
 
 type SubscriptionPlan {
   id: ID!
-  photo: ProductImage
   image: String
   author: User
   name: String
@@ -1336,7 +1335,6 @@ input SubscriptionPlanWhereInput {
   OR: [SubscriptionPlanWhereInput!]
   NOT: [SubscriptionPlanWhereInput!]
   id: IDFilter
-  photo: ProductImageWhereInput
   image: StringFilter
   author: UserWhereInput
   name: StringFilter
@@ -1379,7 +1377,6 @@ input SubscriptionPlanOrderByInput {
 }
 
 input SubscriptionPlanUpdateInput {
-  photo: ProductImageRelateToOneForUpdateInput
   image: String
   author: UserRelateToOneForUpdateInput
   name: String
@@ -1397,19 +1394,12 @@ input SubscriptionPlanUpdateInput {
   categories: CategoryRelateToManyForUpdateInput
 }
 
-input ProductImageRelateToOneForUpdateInput {
-  create: ProductImageCreateInput
-  connect: ProductImageWhereUniqueInput
-  disconnect: Boolean
-}
-
 input SubscriptionPlanUpdateArgs {
   where: SubscriptionPlanWhereUniqueInput!
   data: SubscriptionPlanUpdateInput!
 }
 
 input SubscriptionPlanCreateInput {
-  photo: ProductImageRelateToOneForCreateInput
   image: String
   author: UserRelateToOneForCreateInput
   name: String
@@ -1425,11 +1415,6 @@ input SubscriptionPlanCreateInput {
   stockMax: Int
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
-}
-
-input ProductImageRelateToOneForCreateInput {
-  create: ProductImageCreateInput
-  connect: ProductImageWhereUniqueInput
 }
 
 type SubscriptionItem {
@@ -1551,7 +1536,6 @@ input CouponRelateToManyForCreateInput {
 
 type Product {
   id: ID!
-  photo: ProductImage
   image: String
   name: String
   stripeProductId: String
@@ -1587,7 +1571,6 @@ input ProductWhereInput {
   OR: [ProductWhereInput!]
   NOT: [ProductWhereInput!]
   id: IDFilter
-  photo: ProductImageWhereInput
   image: StringFilter
   name: StringFilter
   stripeProductId: StringFilter
@@ -1627,7 +1610,6 @@ input ProductOrderByInput {
 }
 
 input ProductUpdateInput {
-  photo: ProductImageRelateToOneForUpdateInput
   image: String
   name: String
   stripeProductId: String
@@ -1659,7 +1641,6 @@ input ProductUpdateArgs {
 }
 
 input ProductCreateInput {
-  photo: ProductImageRelateToOneForCreateInput
   image: String
   name: String
   stripeProductId: String
@@ -1681,125 +1662,6 @@ input ProductCreateInput {
 input OrderItemRelateToManyForCreateInput {
   create: [OrderItemCreateInput!]
   connect: [OrderItemWhereUniqueInput!]
-}
-
-type ProductImage {
-  id: ID!
-  image: CloudinaryImage_File
-  url: String
-  altText: String
-  filename: String
-  product: Product
-  subscription: SubscriptionPlan
-}
-
-type CloudinaryImage_File {
-  id: ID
-  filename: String
-  originalFilename: String
-  mimetype: String
-  encoding: String
-  publicUrl: String
-  publicUrlTransformed(transformation: CloudinaryImageFormat): String
-}
-
-"""
-Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
-All options are strings as they ultimately end up in a URL.
-"""
-input CloudinaryImageFormat {
-  """ Rewrites the filename to be this pretty string. Do not include `/` or `.`
-  """
-  prettyName: String
-  width: String
-  height: String
-  crop: String
-  aspect_ratio: String
-  gravity: String
-  zoom: String
-  x: String
-  y: String
-  format: String
-  fetch_format: String
-  quality: String
-  radius: String
-  angle: String
-  effect: String
-  opacity: String
-  border: String
-  background: String
-  overlay: String
-  underlay: String
-  default_image: String
-  delay: String
-  color: String
-  color_space: String
-  dpr: String
-  page: String
-  density: String
-  flags: String
-  transformation: String
-}
-
-input ProductImageWhereUniqueInput {
-  id: ID
-  filename: String
-}
-
-input ProductImageWhereInput {
-  AND: [ProductImageWhereInput!]
-  OR: [ProductImageWhereInput!]
-  NOT: [ProductImageWhereInput!]
-  id: IDFilter
-  url: StringFilter
-  altText: StringFilter
-  filename: StringFilter
-  product: ProductWhereInput
-  subscription: SubscriptionPlanWhereInput
-}
-
-input ProductImageOrderByInput {
-  id: OrderDirection
-  url: OrderDirection
-  altText: OrderDirection
-  filename: OrderDirection
-}
-
-input ProductImageUpdateInput {
-  image: Upload
-  url: String
-  altText: String
-  filename: String
-  product: ProductRelateToOneForUpdateInput
-  subscription: SubscriptionPlanRelateToOneForUpdateInput
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
-input ProductRelateToOneForUpdateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
-  disconnect: Boolean
-}
-
-input ProductImageUpdateArgs {
-  where: ProductImageWhereUniqueInput!
-  data: ProductImageUpdateInput!
-}
-
-input ProductImageCreateInput {
-  image: Upload
-  url: String
-  altText: String
-  filename: String
-  product: ProductRelateToOneForCreateInput
-  subscription: SubscriptionPlanRelateToOneForCreateInput
-}
-
-input ProductRelateToOneForCreateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
 }
 
 type CartItem {
@@ -1834,6 +1696,12 @@ input CartItemUpdateInput {
   user: UserRelateToOneForUpdateInput
 }
 
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CartItemUpdateArgs {
   where: CartItemWhereUniqueInput!
   data: CartItemUpdateInput!
@@ -1845,12 +1713,16 @@ input CartItemCreateInput {
   user: UserRelateToOneForCreateInput
 }
 
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+}
+
 type OrderItem {
   id: ID!
   name: String
   description: String
   image: String
-  photo: ProductImage
   price: Int
   quantity: Int
   order: Order
@@ -1871,7 +1743,6 @@ input OrderItemWhereInput {
   name: StringFilter
   description: StringFilter
   image: StringFilter
-  photo: ProductImageWhereInput
   price: IntNullableFilter
   quantity: IntNullableFilter
   order: OrderWhereInput
@@ -1895,7 +1766,6 @@ input OrderItemUpdateInput {
   name: String
   description: String
   image: String
-  photo: ProductImageRelateToOneForUpdateInput
   price: Int
   quantity: Int
   order: OrderRelateToOneForUpdateInput
@@ -1919,7 +1789,6 @@ input OrderItemCreateInput {
   name: String
   description: String
   image: String
-  photo: ProductImageRelateToOneForCreateInput
   price: Int
   quantity: Int
   order: OrderRelateToOneForCreateInput
@@ -2696,12 +2565,6 @@ type Mutation {
   updateProducts(data: [ProductUpdateArgs!]!): [Product]
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
-  createProductImage(data: ProductImageCreateInput!): ProductImage
-  createProductImages(data: [ProductImageCreateInput!]!): [ProductImage]
-  updateProductImage(where: ProductImageWhereUniqueInput!, data: ProductImageUpdateInput!): ProductImage
-  updateProductImages(data: [ProductImageUpdateArgs!]!): [ProductImage]
-  deleteProductImage(where: ProductImageWhereUniqueInput!): ProductImage
-  deleteProductImages(where: [ProductImageWhereUniqueInput!]!): [ProductImage]
   createCartItem(data: CartItemCreateInput!): CartItem
   createCartItems(data: [CartItemCreateInput!]!): [CartItem]
   updateCartItem(where: CartItemWhereUniqueInput!, data: CartItemUpdateInput!): CartItem
@@ -2836,9 +2699,6 @@ type Query {
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
-  productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
-  productImage(where: ProductImageWhereUniqueInput!): ProductImage
-  productImagesCount(where: ProductImageWhereInput! = {}): Int
   cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartItem(where: CartItemWhereUniqueInput!): CartItem
   cartItemsCount(where: CartItemWhereInput! = {}): Int

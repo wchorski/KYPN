@@ -1,0 +1,12 @@
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+package-lock.json
+.next
+.git
+.env.prod
+.env.dev
+.env.local
+db

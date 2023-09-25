@@ -2,7 +2,22 @@ import fs from 'fs';
 import path from 'path';
 // @ts-ignore
 import { Context } from '.keystone/types';
-import { addons_seedjson, avail_seedjson, categories_seedjson, events_seeddata, locations_seeddata, pages_seeddata, posts_seedjson, productImage_seedjson, products_seed, roles_seedjson, services_seedjson, subscriptionPlans_seedjson, tags_seedjson, user_seeddata } from './seed_data';
+import { 
+  addons_seedjson, 
+  avail_seedjson, 
+  categories_seedjson, 
+  events_seeddata, 
+  locations_seeddata, 
+  pages_seeddata, 
+  posts_seedjson, 
+  // productImage_seedjson, 
+  products_seed, 
+  roles_seedjson, 
+  services_seedjson, 
+  subscriptionPlans_seedjson, 
+  tags_seedjson, 
+  user_seeddata 
+} from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 import { Category, Post, Product, Tag, User } from '../types';
@@ -259,42 +274,42 @@ const seedPages = async (context: Context) => {
   });
 };
 
-const seedProductImages = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = productImage_seedjson;
-  const objectsAlreadyInDatabase = await db.ProductImage.findMany({
-    where: {
-      // @ts-ignore
-      filename: { in: seedObjects.map(obj => obj.filename) },
-    },
-  });
+// const seedProductImages = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = productImage_seedjson;
+//   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
+//     where: {
+//       // @ts-ignore
+//       filename: { in: seedObjects.map(obj => obj.filename) },
+//     },
+//   });
 
-  const objsToCreate = seedObjects.filter(
-    // @ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
-  );
+//   const objsToCreate = seedObjects.filter(
+//     // @ts-ignore
+//     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
+//   );
 
-  console.log({ objsToCreate });
-
-
-  await db.ProductImage.createMany({
-    data: objsToCreate.map(obj => {
-      // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
+//   console.log({ objsToCreate });
 
 
-      return ({
-        ...obj,
-        // image: {
-        //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-        //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-        //   //   upload: prepareToUpload(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-        // }
-        // TODO why no seed upload files work?
-        // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
-      })
-    }),
-  });
-};
+//   await db.ProductImage.createMany({
+//     data: objsToCreate.map(obj => {
+//       // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
+
+
+//       return ({
+//         ...obj,
+//         // image: {
+//         //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+//         //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
+//         //   //   upload: prepareToUpload(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
+//         // }
+//         // TODO why no seed upload files work?
+//         // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
+//       })
+//     }),
+//   });
+// };
 
 export const seedDatabase = async (context: Context) => {
   console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
@@ -307,7 +322,7 @@ export const seedDatabase = async (context: Context) => {
   await seedLocations(context)
   
   await seedEvents(context)
-  await seedProductImages(context)
+  // await seedProductImages(context)
   await seedProducts(context)
   await seedSubscriptions(context)
   await seedServices(context)
