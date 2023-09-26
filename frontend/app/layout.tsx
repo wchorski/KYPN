@@ -6,6 +6,7 @@ import layoutStyles from '@styles/layout.module.scss'
 import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
+import { ApolloWrapper } from './ApolloWrapper'
 // import { AsideBar } from '@/components/layouts/AsideBar'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
@@ -29,6 +30,8 @@ export default function RootLayout({
         'layout--fullwidth',
         // 'layout--main-aside',
       ].join(' ')}>
+
+      <ApolloWrapper>
 
         <Nav />
 
@@ -56,6 +59,7 @@ export default function RootLayout({
 
         <Footer />
         
+      </ApolloWrapper>
       </body>
     </html>
   )

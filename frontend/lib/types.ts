@@ -228,13 +228,13 @@ export type Page = {
   slug: string,
   dateCreated: string,
   dateModified: string,
-  status: string,
-  template: string,
+  status: 'DRAFT'|'PUBLISHED'|'PRIVATE',
+  template: 'FULLWIDTH'|'FULLWIDTH_WITHHEADER'|'WITHSIDEBAR'|'BLANK',
   pinned: number,
   excerpt: string,
   featured_image: string,
   featured_video: string,
-  content: any,
+  content: Content,
   author: User,
   categories: Category[],
   tags: Tag[],
@@ -253,7 +253,7 @@ export type Post = {
   excerpt: string,
   featured_image: string,
   featured_video: string,
-  content: any,
+  content: Content,
   author: User,
   categories: Category[],
   tags: Tag[],
@@ -448,7 +448,9 @@ export type Announcment = {
   link:string,
   start:string,
   end:string,
-  content:{
-    document:any
-  }
+  content:Content,
+}
+
+export type Content = {
+  document:any,
 }

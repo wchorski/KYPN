@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ReactNode } from "react"
 import { LuExternalLink } from "react-icons/lu";
-import styled from "styled-components"
+import styles from './styles/imagelinks.module.scss'
 
 type InfoCard = {
   header:string,
@@ -20,13 +20,13 @@ type Props = {
 
 export function ImageLinkList({items}:Props) {
   return (
-    <StyledList>
+    <ul className={styles.links} >
       {items.map((item, i) => (
         <li key={i}>
           <Card item={item}/>
         </li>
       ))}
-    </StyledList>
+    </ul>
   )
 }
 
@@ -34,7 +34,7 @@ export function ImageLinkList({items}:Props) {
 function Card({item}:{item:InfoCard}){
 
   return (
-    <StyledCard>
+    <div className={styles.card} >
 
       {item.header && <h6>{item.header}</h6> }
       
@@ -69,143 +69,6 @@ function Card({item}:{item:InfoCard}){
         </Link>
       )}
 
-    </StyledCard>
+    </div>
   )
 }
-
-const StyledList = styled.ul`
-  display: flex;
-  /* grid-template-columns: repeat(auto-fit,  minmax(450px, 1fr)); */
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
-  gap: 1rem;
-  list-style: none;
-  padding: 0 1rem;
-
-  li{
-    min-width: 16rem;
-    margin-bottom: 2rem;
-    flex: 1;
-  }
-`
-
-const StyledCard = styled.div`
-  padding: 0;
-  padding-bottom: 1em;
-  
-  /* border: solid 1px var(--c-desaturated); */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: all .3s;
-  /* overflow: hidden; */
-  position: relative;
-
-  h6{
-    padding: 0 1rem;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--c-txt-rev);
-    border-radius: var(--br-soft);
-    z-index: 1;
-    margin: 0;
-    border: solid 1px var(--c-txt);
-    transition: all .5s;
-  }
-
-  figure{
-    background-position: 50% 50%;
-    background-size: cover;
-    min-height: 250px;
-    background-size: cover;
-    margin: 0;
-    transition: all .3s;
-    padding-bottom: 1rem;
-    /* filter: drop-shadow(1px 1px 3px white); */
-
-    /* img{
-      width: 250px;
-    } */
-  }
-
-  .content{
-    padding: 0 1rem 1rem 1rem;
-    flex: 1;
-  }
-
-  &:has(a:hover){
-
-    figure{
-      background-position: 20% 80%;
-      transform: scale(1.03);
-    }
-
-    h6{
-      color: var(--c-accent);
-      top: -5px;
-    }
-
-    a.image-cont{
-
-    }
-    a.btn{
-      color: var(--c-accent);
-      border-bottom: solid 1px var(--c-accent);
-      box-shadow: var(--boxs-2);
-      transform: translateY(-3px);
-    }
-  }
-
-  .image-cont{
-    transition: all .3s;
-
-    /* &:hover, &:focus{
-      outline: none;
-    } */
-  }
-
-  a.btn{
-    margin: 0 auto;
-    margin-top: auto;
-    max-width: 15rem;
-    /* padding: 0 1rem; */
-    text-align: center;
-    position: absolute;
-    bottom: 20px;
-    background-color: var(--c-primary);
-    padding: 10px;
-    border-radius: var(--br-soft);
-    text-decoration: none;
-    border-bottom: solid 1px var(--c-primary);
-    transition: all .3s;
-
-    span{
-      margin-right: .7rem;
-    }
-
-    svg{
-      margin: .1rem 0;
-    }
-  }
-
-
-
-  /* &:hover{
-    border-radius: var(--br-dull);
-
-    h6{
-      color: var(--c-accent);
-      top: -5px;
-    }
-    figure{
-      background-position: 20% 80%;
-      transform: scale(1.03);
-    }
-  } */
-`

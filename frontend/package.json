@@ -9,16 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.4",
+    "@apollo/experimental-nextjs-app-support": "^0.4.3",
+    "@keystone-6/document-renderer": "^1.1.2",
+    "graphql": "^16.8.1",
+    "graphql-upload": "^16.0.2",
+    "lightgallery": "^2.7.2",
+    "next": "latest",
+    "nprogress": "^0.2.0",
     "react": "latest",
     "react-dom": "latest",
-    "next": "latest"
+    "react-icons": "^4.11.0"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "latest",
     "@types/node": "latest",
+    "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
-    "eslint-config-next": "latest"
+    "eslint-config-next": "latest",
+    "sass": "^1.68.0",
+    "typescript": "latest"
   }
 }

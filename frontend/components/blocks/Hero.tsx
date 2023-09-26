@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styles from './styles/hero.module.scss'
 
 type HeroProps = {
   imageSrc: string;
@@ -15,28 +15,10 @@ type HeroProps = {
 
 export function Hero({ imageSrc, caption }: HeroProps) {
   return (
-    <StyledHero className='hero'>
+    <div className={styles.hero}>
       <div className='backgroundImage' style={{ backgroundImage: `url(${imageSrc})` }} />
       {caption.discriminant ? <div style={{ textAlign: 'center' }}>{caption.value}</div> : null}
-    </StyledHero>
+    </div>
   );
 }
 
-const StyledHero = styled.div`
-
-  &.hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .backgroundImage {
-      background-color: white;
-      background-position: center;
-      background-size: cover;
-      min-height: 400px;
-      width: 100%;
-  }
-
-`

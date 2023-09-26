@@ -12,7 +12,7 @@ type Props = {
 export function NavLink ({ href, children }:Props) {
 
   let segment = useSelectedLayoutSegment()
-  console.log(segment);
+  // console.log(segment);
   
   let isActive = href === `/${segment}`
 
