@@ -21,9 +21,9 @@ export function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAsi
     ].join(' ')} >
 
 
-      <header>
-        {header}
-      </header>
+      
+      {header}
+      
 
       <MainContainer>
         {main}
@@ -52,9 +52,9 @@ export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
       styles['header_main'],
     ].join(' ')} >
 
-      <header>
-        {header}
-      </header>
+   
+      {header}
+
 
       <MainContainer>
         {main}

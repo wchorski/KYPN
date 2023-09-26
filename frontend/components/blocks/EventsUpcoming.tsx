@@ -1,4 +1,4 @@
-import EventList from "../events/EventList";
+import EventList from "@components/events/EventsList";
 
 type Props = {
   header:string,

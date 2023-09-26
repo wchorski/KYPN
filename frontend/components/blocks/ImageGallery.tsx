@@ -13,7 +13,7 @@ import 'lightgallery/css/lg-thumbnail.css';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { useCallback, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styles from './styles/ImageGallery.module.scss'
 
 
 type Image = {
@@ -88,10 +88,14 @@ export function ImageGallery(props:Props) {
   
 
   if(items.length > 0) return (
-    <StyledGallery 
-      className="gallery"
-      columns={columns}
-      gap={gap}
+    <div 
+      className={
+        [
+          styles[`col_${columns}`],
+          styles[`gap_${gap}`],
+          styles.gallery
+        ].join(' ')
+      }
     >
 
       <LightGallery
@@ -104,7 +108,7 @@ export function ImageGallery(props:Props) {
           <ImageFrame src={img.src} alt={img.alt} objFit={objFit} caption={img.caption} key={i}/>
         ))}
       </LightGallery>
-    </StyledGallery>
+    </div>
   )
 
   return null

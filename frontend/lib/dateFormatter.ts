@@ -1,31 +1,18 @@
-import { format } from 'date-fns'
-
 export function datePretty(date: string) {
 
   // console.log(date);
   if (!date) return 'NO DATE'
   
-  // const options = {
-  //   year: 'numeric', 
-  //   month: 'long', 
-  //   day: 'numeric', 
-  //   timeZone: 'America/Chicago', 
-  //   timeZoneName: 'short', 
-  //   // hour: 'numeric',
-  //   // minute: 'numeric',
-  //   // hour12: true,
-  // }
+  const options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
 
-  // const dateObj = new Date(date)
-  // return dateObj.toLocaleTimeString('en-US', options);
-
-  const unixDate = Date.parse(date)
-  // console.log({unixDate});
-  
-
-  // console.log()
-  const prettyDate = format(unixDate, 'MMM Lo, yyyy')
-  return prettyDate
+  const dateObj = new Date(date)
+  //@ts-ignore
+  return dateObj.toLocaleTimeString(undefined, options);
 }
 
 export function formatHours(time:string){

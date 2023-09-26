@@ -6,7 +6,6 @@ import { Quote } from './Quote';
 import { Carousel } from './Carousel';
 import { Tweet } from './Tweet';
 import { YouTubeVideo } from './YouTubeVideo';
-import styled from 'styled-components';
 import SliderSlick from './SliderSlick';
 import { MediaText } from './MediaText';
 import { Section } from './Section';
@@ -135,55 +134,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <StyledBlockRender className={`block-renderer ${styles.blockrenderer}`}>
+    <div className={`block-renderer ${styles.blockrenderer}`}>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}
         document={document}
       />
-    </StyledBlockRender>
+    </div>
   );
 }
-
-const StyledBlockRender = styled.div`
-
-  /* max-width: var(); */
-  /* border: solid 1px lightseagreen; */
-  /* padding-inline: 1rem; */
-  margin-inline: auto;
-
-  /* > p {
-    max-width: 60ch;
-    margin-inline: auto;
-  } */
-
-  .blockquote {
-    margin: 0;
-    border-left: 5px solid #D1D0CE;
-    padding: 8px 24px;
-  }
-
-  .blockquote p {
-      margin: 0
-  }
-
-  .code {
-      font-family: monospace;
-      word-wrap: break-word;
-      box-decoration-break: clone;
-      padding: .1rem .3rem .2rem;
-      border-radius: 4px;
-      background-color: #eee;
-  }
-
-  .pre {
-      font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
-      white-space: pre-wrap;
-      overflow-x: auto;
-      background-color: #2c3e50;
-      color: whitesmoke;
-      padding: 16px;
-      font-size: 1.25rem;
-      border-radius: 8px;
-  }
-`

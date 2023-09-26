@@ -28,6 +28,8 @@
       opacity: .8;
       transform: scale(1.02);
     }
+
+    
   }
 
   // img.objectContain{
@@ -47,5 +49,45 @@
   a.imgframe {
     width: calc(25% - 10px); // Adjust column width and gap as needed
     // margin-bottom: 10px;
+  }
+}
+
+.gallery-wrap.grid{
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  padding: 0;
+}
+
+.gap_1 {
+  gap: 0.1rem;
+}
+.gap_2 {
+  gap: 0.3rem;
+}
+.gap_3 {
+  gap: 0.5rem;
+}
+.gap_4 {
+  gap: 1rem;
+}
+.gap_5 {
+  gap: 2rem;
+}
+
+@media screen and (width > 600px){
+  .col_1{
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .col_2{
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .col_3{
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .col_4{
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .col_5{
+    grid-template-columns: repeat(5, 1fr);
   }
 }

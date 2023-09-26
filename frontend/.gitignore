@@ -9,6 +9,7 @@
 robots.txt
 fonts.ts
 marker.svg
+/app/favicon.ico
 
 # dependencies
 /node_modules
