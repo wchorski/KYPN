@@ -3,7 +3,7 @@ import React from 'react'
 import { QueryLoading } from '@components/menus/QueryLoading'
 import { QueryError } from '@components/menus/QueryError'
 import { EventCard } from '@components/events/EventCard';
-import styles from '@styles/events/eventslist.module.scss'
+import styles from '@styles/events/events.module.scss'
 import { Event } from '../../lib/types';
 import { envvars } from '@lib/envvars';
 

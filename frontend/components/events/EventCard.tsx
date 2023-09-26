@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styles from '@styles/events/events.module.scss'
 import { datePrettyLocalDay, datePrettyLocalTime, datePrettyLocalDayShort } from "../../lib/dateFormatter"
 import { IoMdTime } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
@@ -33,7 +33,7 @@ import { Event } from "../../lib/types";
 
 export function EventCard({image, start, summary, location, id}:Event) {
   return (
-    <StyledEventCard>
+    <article className={styles.event} >
       <div>
         <ImageDynamic photoIn={image}/>
       </div>
@@ -73,75 +73,6 @@ export function EventCard({image, start, summary, location, id}:Event) {
 
       <a href={`/events/e/${id}`} className="view button medium"> view </a>
 
-    </StyledEventCard>
+    </article>
   )
 }
-
-export const StyledEventCard = styled.article`
-  display: flex;
-  flex-wrap: wrap;
-  border: solid 1px var(--c-desaturated);
-  padding: 1em;
-  transition: border .2s ease-in;
-  color: var(--c-txt);
-
-  h4{
-    margin: 0;
-  }
-
-  img{
-    width: 5em;
-    height: auto;
-  }
-
-  time.date-short{
-    padding: 0 1em;
-    width: 1em;
-    display: inline-table;
-  }
-
-  a.details{
-    color: var(--c-txt);
-    text-decoration: none;
-
-    &:hover{
-      text-decoration: revert;
-    }    
-  }
-
-  a.button{
-    margin-left: auto;
-  }
-
-  a.view{
-    background-color: transparent;
-  }
-
-  svg{
-    margin-right: .2em;
-  }
-
-  .actions-cont {
-    margin-left: auto;
-  }
-
-  &:hover, &:focus{
-    border-left: solid 4px var(--c-accent);
-  }
-
-  address{
-    overflow:hidden;
-    width: 100%; //can also use calc function as per Yudi's answer
-    display: inline-block;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  /* @media (max-width: 500px){
-    flex-direction: column;
-
-    .content-cont, .media-cont{
-      width: 100%;
-    }
-  } */
-`

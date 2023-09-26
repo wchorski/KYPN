@@ -6,10 +6,11 @@ import styles from '@styles/nav.module.scss'
 
 type Props = {
   href:string,
+  className:string,
   children:ReactNode
 }
 
-export function NavLink ({ href, children }:Props) {
+export function NavLink ({ href, children, className = '' }:Props) {
 
   let segment = useSelectedLayoutSegment()
   // console.log(segment);
@@ -19,7 +20,7 @@ export function NavLink ({ href, children }:Props) {
   return (
     <Link 
       href={href}
-      className={isActive ? styles.active : ''}
+      className={isActive ? [styles.active, className].join(' ') : className}
     >
       {children}
     </Link>

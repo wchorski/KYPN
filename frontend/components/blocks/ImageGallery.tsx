@@ -139,32 +139,3 @@ function ImageFrame({src, alt, caption, objFit}:Image){
 //   )
 // }
 
-const StyledGallery = styled.div<{columns:number, gap:number}>`
-
-  .gallery-wrap.grid{
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    padding: 0;
-    gap: ${p => p.gap}px;
-  }
-
-  img {
-    // border: dashed hotpink 2px;
-    width: 100%;
-    height: 100%;
-
-    transition: opacity, transform, .3s ease-out;
-
-    &:hover{
-      opacity: .8;
-      transform: scale(1.02);
-    }
-  }
-
-  @media screen and (width > 600px){
-    .gallery-wrap.grid{
-      grid-template-columns: repeat(${p => p.columns}, 1fr);
-    }
-  }
-
-`

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { BlogList } from "../blog/BlogList"
+import { BlogList } from "@components/blog/BlogList"
 
 type Props = {
   header:string,

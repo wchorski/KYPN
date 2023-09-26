@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import { BlogList } from "../blog/BlogList"
-import { ProductsList } from "../ecommerce/ProductsList";
-import { ProductThumbnail } from "../ProductThumbnail";
+import { ProductsList } from "@components/ecommerce/ProductsList";
+import { ProductThumbnail } from "../ecommerce/ProductThumbnail";
 import styles from '@/styles/ecommerce/Product.module.scss'
 
 
