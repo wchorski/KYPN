@@ -1,6 +1,5 @@
 import React from 'react';
-import styles from './YouTubeVideo.module.css';
-import styled from 'styled-components';
+import styles from './styles/video.module.scss'
 
 type YouTubeVideoProps = {
   url: string;
@@ -11,15 +10,15 @@ export function VideoLocal({ url = '', altText = 'Embedded YouTube video' }: You
   const embedId = getYouTubeEmbedId(url);
 
   return (
-    <StyledVideo className={`youtubeVideo`}>
-      <div className={`iframePosition`}>
+    <div className={styles.youtubeVideo}>
+      <div className={styles.iframePosition}>
         <video width="320" height="240" controls>
           <source src={url} type="video/mp4" />
           {/* <source src="movie.ogg" type="video/ogg" /> */}
           Your browser does not support the video tag.
         </video>
       </div>
-    </StyledVideo>
+    </div>
   );
 }
 
@@ -34,27 +33,3 @@ function getYouTubeEmbedId(url: string) {
   }
   return embedId;
 }
-
-const StyledVideo = styled.div`
-  &.youtubeVideo {
-    background-color: #131313;
-    display: grid;
-    grid-template-columns: minmax(auto, 960px);
-    align-items: center;
-    justify-content: center;
-  }
-
-  .iframePosition {
-    overflow: hidden;
-    padding-bottom: 56.25%;
-    position: relative;
-  }
-
-  .iframePosition video {
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-  }
-`

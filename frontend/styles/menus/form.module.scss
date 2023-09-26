@@ -1,6 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+@keyframes loading {
 
-const loading = keyframes`
   from {
     background-position: 0 0;
     /* rotate: 0; */
@@ -10,9 +9,11 @@ const loading = keyframes`
     background-position: 100% 100%;
     /* rotate: 360deg; */
   }
-`;
+}
 
-export const StyledForm = styled.form`
+
+.form :global{
+
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
   /* background-color: rgba(var(--c-cont-light), 0.6); */
   backdrop-filter: blur(3px) contrast(70%);
@@ -93,7 +94,7 @@ export const StyledForm = styled.form`
     }
     &[aria-busy='true']::before {
       background-size: 50% auto;
-      animation: ${loading} 0.5s linear infinite;
+      animation: loading 0.5s linear infinite;
     }
 
     &.radio-cont{
@@ -132,5 +133,4 @@ export const StyledForm = styled.form`
     background-color: red;
     padding: 0 1rem;
   }
-`;
-
+}

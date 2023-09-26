@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Slide, tSlide } from "./Slide";
-import styled from 'styled-components';
+import styles from './styles/slider.module.scss'
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { ReactNode } from 'react';
 
@@ -66,26 +66,28 @@ export default function SliderSlick({items = [], settings = sliderDefaults, chil
   const settingsCat = {...sliderDefaults, ...settings}
 
   return (
-    <StyledSlickSlider {...settingsCat}>
+    <div className={styles.slider_wrap} >
+      <Slider {...settingsCat}>
 
-      {items.map( (s, i) => (
-        <Slide 
-          id={i}
-          key={i}
-          bg={s.imageSrc}
-          content={null}
-          color={s.color}
-          excerpt={s.excerpt}
-          buttonLink={s.buttonLink}
-          buttonText={s.buttonText}
-          template={s.template || 0}
-          title={s.title}
-          
-        />
-      ))}
-      {children}
+        {items.map( (s, i) => (
+          <Slide 
+            id={i}
+            key={i}
+            bg={s.imageSrc}
+            content={null}
+            color={s.color}
+            excerpt={s.excerpt}
+            buttonLink={s.buttonLink}
+            buttonText={s.buttonText}
+            template={s.template || 0}
+            title={s.title}
+            
+          />
+        ))}
+        {children}
 
-    </StyledSlickSlider>
+      </Slider>
+    </div>
   )
 }
 
@@ -132,86 +134,3 @@ function NextArrow(props:any) {
     </button>
   );
 }
-
-const StyledSlickSlider = styled(Slider)`
-
-  .slick-track{
-    display: flex !important;
-    
-
-    /* .slick-prev, .slick-next{
-      z-index: 10;
-      color: var(--c-accent);
-    } */
-
-    /* .slick-prev svg{
-      color: limegreen;
-    }
-
-    .slick-prev:before{
-      content: '<';
-      left: 1em;
-      font-size: 4rem;
-      color: blue !important;
-    }
-    .nextArrw:before{
-      content: '<<<<<';
-      right: 1em;
-      color: red !important;
-    } */
-  }
-
-  .slick-slide{
-    margin: auto 0;
-    height: inherit !important;
-
-    > div {
-      /* padding-bottom: 3em; */
-      height: 100%;
-    }
-  }
-
-  .slick-arrow{
-    /* box-shadow: black 2px 2px 3px; */
-    color: white;
-    opacity: 0.6;
-    font-size: 2rem;
-    transition: all .3s;
-
-    &:hover, &:focus{
-      opacity: 1;
-      /* transform: translateX(10px); */
-    }
-  }
-
-  .slick-arrow::before{
-    content: '';
-  }
-
-  .slick-dots{
-    bottom: 10px;
-
-    
-    button::before{
-      /* color: red; */
-      outline: solid white 1px;
-      border-radius: 50%;
-      font-size: 15px;
-      padding: 1.4px;
-      color: transparent;
-      /* top: 10px; */
-    }
-
-    li.slick-active button::before{
-      color: white;
-    }
-  }
-
-  @media screen and (max-width: 500px){
-    .slick-arrow{
-
-      font-size: 1.2rem !important;
-
-    }
-  }
-`

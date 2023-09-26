@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styles from './styles/tweet.module.scss'
 
 type TweetProps = {
   url: string;
@@ -15,18 +15,10 @@ export function Tweet({ url }: TweetProps) {
   }, []);
 
   return (
-    <StyledTweet className='tweet'>
+    <article className={styles.tweet} >
       <blockquote ref={wrapper} className="twitter-tweet" data-conversation="none">
         <a href={url}>Loading tweet...</a>
       </blockquote>
-    </StyledTweet>
+    </article>
   );
 }
-
-const StyledTweet = styled.div`
-  &.tweet {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`

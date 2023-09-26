@@ -1,42 +1,37 @@
 import { ReactNode } from "react"
-import styled from "styled-components"
+import styles from "@styles/section.module.scss";
 
 type Props = {
   children:ReactNode|ReactNode[]
   imageSrc?:string,
   color?:string,
+  columns?:number,
   content?: ReactNode,
 }
 
-export function Section({color, imageSrc, content, children}:Props) {
-  return (
-    <StyledSection color={color} bg={imageSrc}>
-      <div className="container">
-        {content}
+export function Section({color, imageSrc, content, children, columns = 1}:Props) {
+
+  const styleArr = [styles.section, styles.grid]
+
+  if(columns > 1) return (
+    <section 
+      className={styleArr.join(' ')} 
+      style={{backgroundColor: color, background: `url(${imageSrc})`}}
+    >
+      <div className={styles[`col_${columns}`]}>
         {children}
       </div>
-    </StyledSection>
+    </section>
+  )
+
+  return (
+    <section 
+      className={styleArr.join(' ')} 
+      style={{backgroundColor: color, background: `url(${imageSrc})`}}
+    >
+      {/* <div className="siteWrapper" style={{paddingInline: pad + 'rem'}}> */}
+        {children}
+      {/* </div> */}
+    </section>
   )
 }
-
-
-const StyledSection = styled.section<{bg?:string}>`
-  background-color: ${p => p.color};
-  background-image: ${p => (p.bg ? `url(${p.bg})` : '')};
-  background-position: center;
-  background-size: cover;
-  background-attachment: fixed;
-  padding: 3em 1em;
-  color: var(--c-txt);
-
-  > * {
-    margin-top: 0;
-  }
-
-`
-
-// todo
-// add  variables for
-// background-attachment: fixed;
-// padding
-// margin

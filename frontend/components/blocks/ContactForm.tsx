@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react"
 import useForm from "../../lib/useForm"
-import { StyledForm } from "../../styles/Form.styled"
+import styles from '@styles/menus/form.module.scss'
 import ErrorMessage from "../ErrorMessage"
 import { gql, useMutation } from "@apollo/client"
-import { QueryLoading } from "../menus/QueryLoading"
+import { QueryLoading } from "@components/menus/QueryLoading"
 import nProgress from "nprogress"
 
 type Form = {
@@ -59,9 +59,11 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
   if(loading) return <QueryLoading />
 
   return (
-    <StyledForm onSubmit={(e: FormEvent) => handleSubmit(e)} style={{
-      background: color,
-    }}>
+    <form
+      className={styles.form}  
+      onSubmit={(e: FormEvent) => handleSubmit(e)} 
+      style={{ background: color,}}
+    >
 
 
       <h2>{header}</h2>
@@ -113,7 +115,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
 
         <button type="submit" disabled={loading || successMsg ? true : false}> {buttonLabel} </button>
       </fieldset>
-    </StyledForm>
+    </form>
   )
 }
 

@@ -64,27 +64,6 @@ ul.links {
     flex: 1;
   }
 
-  &:has(a:hover){
-
-    figure{
-      background-position: 20% 80%;
-      transform: scale(1.03);
-    }
-
-    h6{
-      color: var(--c-accent);
-      top: -5px;
-    }
-
-
-    a.btn{
-      color: var(--c-accent);
-      border-bottom: solid 1px var(--c-accent);
-      box-shadow: var(--boxs-2);
-      transform: translateY(-3px);
-    }
-  }
-
   .image-cont{
     transition: all .3s;
 
@@ -115,5 +94,26 @@ ul.links {
     svg{
       margin: .1rem 0;
     }
+  }
+}
+
+.card:has(a:hover){
+
+  figure{
+    background-position: 20% 80%;
+    transform: scale(1.03);
+  }
+
+  h6{
+    color: var(--c-accent);
+    top: -5px;
+  }
+
+
+  a.btn{
+    color: var(--c-accent);
+    border-bottom: solid 1px var(--c-accent);
+    box-shadow: var(--boxs-2);
+    transform: translateY(-3px);
   }
 }
