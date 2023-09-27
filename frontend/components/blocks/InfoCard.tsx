@@ -2,7 +2,7 @@
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
 import Link from "next/link"
 import { ReactNode, useState } from "react";
-import styles from './styles/infocard.module.scss'
+import styles from '@styles/blocs/infocard.module.scss'
 
 type InfoCard = {
   header:string,

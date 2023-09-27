@@ -1,6 +1,6 @@
 // note - tried to use styled components but something was overriding 
 import React, { ReactNode } from 'react';
-import styles from './styles/Callout.module.scss';
+import styles from '@styles/blocs/Callout.module.scss'
 
 type CalloutProps = {
   intent: 'info' | 'warning' | 'error' | 'success';

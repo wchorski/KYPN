@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Slide, tSlide } from "./Slide";
-import styles from './styles/slider.module.scss'
+import styles from '@styles/blocs/slider.module.scss'
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { ReactNode } from 'react';
 

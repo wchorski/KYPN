@@ -1,5 +1,5 @@
 import Image from "next/image";
-import styles from './styles/mediatext.module.scss'
+import styles from '@styles/blocs/mediatext.module.scss'
 import { ReactNode } from "react";
 
 // const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`

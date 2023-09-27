@@ -57,12 +57,12 @@ $--w-sitemax: 100em;
         grid-area: heading;
         grid-column: 2 / 4;
         // margin-bottom: 1rem;
-        padding-inline: 1rem;
+        // padding-inline: 1rem;
       }
     
       > main {
         grid-area: main;
-        grid-column: 2 / 4;
+        grid-column: 1 / -1;
       }
     
     }

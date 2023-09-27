@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from './styles/slider.module.scss'
+import styles from '@styles/blocs/slider.module.scss'
 
 function formatImgURL(url:string){
   // console.log('url img, ', url);

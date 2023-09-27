@@ -9,6 +9,8 @@ import type { Permission } from './schemas/fields';
 
 export type DashState = 'dashboard'|'orders'|'subscriptions'|'downloads'|'tickets'
 
+export type GridLayout = '1_1'|'2_1'|'1_2'|'1_1_1'|'1_2_1'
+
 export type DateRange = {
   start: Date,
   end: Date,

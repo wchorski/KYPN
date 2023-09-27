@@ -22,7 +22,7 @@ import { ImageLinkList } from './ImageLinkList';
 import { VideoLocal } from './VideoLocal';
 import { ImageGallery } from './ImageGallery';
 import { ButtonLink } from './ButtonLink';
-import styles from './styles/blockrenderer.module.scss'
+import styles from '@styles/blocs/blockrenderer.module.scss'
 import { ProductListBlock } from './ProductListBlock';
 import { ImageBlock } from './ImageBlock';
 
@@ -34,6 +34,7 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
     // so they will be wrapped with a <div /> by default
     // we can override that to whatever wrapper we want
     // for eg. using React.Fragment wraps the component with nothing
+    // @ts-ignore
     block: React.Fragment,
     layout: props => {
       return <BlockLayout {...props} />
@@ -46,6 +47,12 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
     code({ children }) {
       return <pre className={`pre`}>{children}</pre>;
     },
+    paragraph({ children }) {
+      return  <p>{children}</p>;
+    },
+    // paragraph({ children }) {
+    //   return <div className={styles.paragraph_wrap}> <p>{children}</p> </div>;
+    // },
     // and more - check out the types to see all available block elements
   },
   inline: {
@@ -134,7 +141,7 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <div className={`block-renderer ${styles.blockrenderer}`}>
+    <div className={styles.blockrenderer}>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}

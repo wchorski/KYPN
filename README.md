@@ -65,6 +65,7 @@ following along with Wes Bos Tutorial
   - [ ] Events
   - [ ] Bookings
   - [ ] Products (checkout)
+- [ ] use grid-template-areas to make a better PricingTable component
 
 ## Color pallet? 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

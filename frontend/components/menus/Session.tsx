@@ -1,3 +1,4 @@
+'use client'
 // import { useGlobalContext } from "../lib/useSessionContext";
 import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";

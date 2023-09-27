@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from './styles/Quote.module.css';
+import styles from '@styles/blocs/Quote.module.css';
 
 type QuoteProps = {
   attribution: ReactNode;
