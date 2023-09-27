@@ -135,7 +135,7 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <StyledBlockRender className={`block-renderer ${styles.blockrenderer}`}>
+    <StyledBlockRender className={styles.blockrenderer}>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}

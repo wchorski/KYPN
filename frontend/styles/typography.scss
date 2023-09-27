@@ -7,6 +7,19 @@ h1,h2,h3,h4,h5,h6, thead{
   font-family: var(--font-header), Verdana, sans-serif;
 }
 
+h1,h2,h3,h4,h5,h6 {
+  margin-top: 1.33em;
+  margin-bottom: 0.4em;
+}
+
+p {
+  max-width: 50ch;
+}
+
+p:empty {
+  margin: 0;
+}
+
 
 @media (width > 800px) {
   h1 {

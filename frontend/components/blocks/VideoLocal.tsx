@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles/video.module.scss'
+import styles from '@styles/blocs/video.module.scss'
 
 type YouTubeVideoProps = {
   url: string;

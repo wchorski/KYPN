@@ -260,15 +260,6 @@ const StyledBlogSingle = styled.article`
     background-color: var(--c-dark);
   }
 
-  .block-renderer{
-    max-width: 800px;
-  }
-
-  /* .block-renderer{
-    padding: 1rem;
-    background-color: var(--c-light);
-  } */
-
 
   > footer{
     margin-top: 4rem;

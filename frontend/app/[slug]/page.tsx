@@ -1,7 +1,6 @@
 'use client'
 import { AsideBar } from "@/components/layouts/AsideBar"
 import { Card } from "@components/layouts/Card"
-import { Section } from "@components/layouts/Section"
 import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
 import { gql } from "@apollo/client"
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr"
@@ -53,7 +52,7 @@ export default function PageBySlug ({
     content,
   }:Page = data.page
 
-  console.log(data);
+  // console.log(data);
   
 
   if (status === 'DRAFT') return <p>This blog post is still a draft</p>
@@ -89,7 +88,7 @@ type Header = {
 //? Content
 function Header({dateCreated, dateModified, title, author, featured_image }:Header){
 
-  console.log(dateCreated);
+  // console.log(dateCreated);
   
   return (
 

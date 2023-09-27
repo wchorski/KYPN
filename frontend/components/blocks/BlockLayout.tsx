@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
-import styles from './styles/BlockLayout.module.scss'
+import styles from '@styles/blocs/BlockLayout.module.scss'
+import stylesSec from '@styles/elements/section.module.scss'
 
 type Props = {
   children: ReactNode[],
@@ -9,17 +10,22 @@ type Props = {
 export function BlockLayout({children, layout}:Props) {
 
   // layout [1,1] [1,2] [2,1] [1,1,1]
-  // console.log(props);
+  console.log(layout);
+
+  const stylesArr = [stylesSec.section, stylesSec[`grid_${layout.join('_')}`] ]
   
   return (
-    <div className="maxwidth">
 
-      <div className={styles.grid}>
+    <section className={stylesArr.join(' ')}>
 
-        {children.map((child, i) => <div key={i}> {child} </div>) }
-      
-      </div>
-    </div>
+      {children.map((child, i) => (
+        <div key={i}> 
+          {child} 
+        </div>
+      )) }
+    
+    </section>
+
   )
 }
 

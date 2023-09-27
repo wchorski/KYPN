@@ -9,7 +9,7 @@ export function MainContainer ({ columns, children }:Props) {
 
   if(columns) return (
     <main 
-      className={['sitegrid'].join(' ')}
+      // className={['sitegrid'].join(' ')}
       // style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
     >
       <div className={`col-${columns}`}>

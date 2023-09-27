@@ -7,6 +7,7 @@ import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
 import { ApolloWrapper } from './ApolloWrapper'
+import ShoppingCart from '@components/ecommerce/ShoppingCart'
 // import { AsideBar } from '@/components/layouts/AsideBar'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
@@ -33,8 +34,9 @@ export default function RootLayout({
 
       <ApolloWrapper>
 
+        <ShoppingCart />
+        
         <Nav />
-
       
         {children}
 

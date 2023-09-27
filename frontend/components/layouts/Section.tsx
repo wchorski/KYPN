@@ -1,12 +1,14 @@
 import { ReactNode } from "react"
-import styles from "@styles/section.module.scss";
+import styles from "@styles/elements/section.module.scss";
+import { GridLayout } from "@lib/types";
 
 type Props = {
   pad?:number,
   bgColor?:string,
   bgImg?:string,
   col?:number,
-  children:ReactNode
+  layout:GridLayout,
+  children:ReactNode[]
 }
 
 export function Section({
@@ -14,30 +16,47 @@ export function Section({
   bgColor = 'transparent', 
   bgImg = '', 
   col,
-  children}:Props
+  layout = '1_1',
+  children
+}:Props
 ) {
 
-  const styleArr = [styles.section, styles.grid]
-
-  if(col) return (
-    <section 
-      className={styleArr.join(' ')} 
-      style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
-    >
-      <div className={styles[`col-${col}`]}>
-        {children}
-      </div>
-    </section>
-  )
+  const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
   return (
     <section 
-      className={styleArr.join(' ')} 
+      className={stylesArr.join(' ')}
       style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
     >
-      {/* <div className="siteWrapper" style={{paddingInline: pad + 'rem'}}> */}
-        {children}
-      {/* </div> */}
+
+      {children?.map((child:any, i:number) => (
+        <div key={i}> 
+          {child} 
+        </div>
+      )) }
+    
     </section>
   )
+
+  // if(col) return (
+  //   <section 
+  //     className={styleArr.join(' ')} 
+  //     style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
+  //   >
+  //     <div className={styles[`col-${col}`]}>
+  //       {children}
+  //     </div>
+  //   </section>
+  // )
+
+  // return (
+  //   <section 
+  //     className={styleArr.join(' ')} 
+  //     style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
+  //   >
+  //     {/* <div className="siteWrapper" style={{paddingInline: pad + 'rem'}}> */}
+  //       {children}
+  //     {/* </div> */}
+  //   </section>
+  // )
 }

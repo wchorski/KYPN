@@ -13,7 +13,7 @@ import 'lightgallery/css/lg-thumbnail.css';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { useCallback, useEffect, useRef } from 'react';
-import styles from './styles/ImageGallery.module.scss'
+import styles from '@styles/blocs/ImageGallery.module.scss'
 
 
 type Image = {

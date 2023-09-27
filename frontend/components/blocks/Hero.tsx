@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles/hero.module.scss'
+import styles from '@styles/blocs/hero.module.scss'
 
 type HeroProps = {
   imageSrc: string;
