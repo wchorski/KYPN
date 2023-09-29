@@ -8,7 +8,7 @@ type Props = {
   width:number,
 }
 
-export function ImageBlock({color, imageSrc, padding = 0, border = 0, width = 500}:Props) {
+export function ImageBlock({color, imageSrc, padding = 0, border = 0, width}:Props) {
 
   return (
     // <figure style={{
@@ -22,7 +22,7 @@ export function ImageBlock({color, imageSrc, padding = 0, border = 0, width = 50
         src={imageSrc}
         className={`image block`}
         style={{
-          width: '100%',
+          width: width ? width+'px' : '100%',
           objectFit: 'cover',
           display: 'block',
         }}

@@ -12,6 +12,14 @@ import { Content, Page } from "@lib/types"
 import { datePretty } from "@lib/dateFormatter"
 import { BlockRenderer } from "@components/blocks/BlocksRenderer"
 
+import type { Metadata } from 'next'
+import { envs } from "@/envs"
+ 
+// export const metadata: Metadata = {
+//   title: "NEW " + envs.SITE_TITLE,
+//   description: envs.SITE_DESC,
+// }
+
 type Props = {
   params:{
     slug:string,

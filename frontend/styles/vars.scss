@@ -1,11 +1,13 @@
 :root {
   --c-txt: rgb(209, 209, 209);
   --c-txt-rev: black;
-  --c-secondary: rgb(185, 209, 185);
-  --c-primary: rgb(52, 95, 223);
-  --c-desaturated: rgb(61, 65, 76);
-  --c-accent: rgb(136, 220, 136);
+  --c-tertiary: hsl(316, 62%, 58%);
+  --c-secondary: hsl(343, 56%, 68%);
+  --c-primary: hsl(193, 57%, 79%);
+  --c-desaturated: hsl(193, 5%, 32%);
+  --c-accent: hsl(54, 75%, 68%);
   --c-error: red;
+  --c-glass: rgba(47, 47, 47, 0.674);
   // todo how to use vars in media query "$--w-sitemax" in page.module.scss
   --w-sitemax: 100em;
   // --w-sitemax: 1000px;

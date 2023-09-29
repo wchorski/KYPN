@@ -19,7 +19,7 @@ export const image = component({
     }),
     padding: fields.integer({
       label: 'Frame Padding',
-      defaultValue: 20
+      defaultValue: 1
     }),
     border: fields.integer({
       label: 'Frame Border',
@@ -27,19 +27,27 @@ export const image = component({
     }),
     width: fields.integer({
       label: 'Frame Width',
-      defaultValue: 500
+      defaultValue: 0
     }),
   },
   preview: function Quote(props) {
+
+    const currWidth = (props.fields.width.value > 0) 
+      ? props.fields.width.value+'px'
+      : '100%'
+
+      console.log('currWidth, ', currWidth);
+      
+
     return (
 
         <figure style={{
-          padding: props.fields.padding.value,
+          padding: props.fields.padding.value + 'px',
           border: `solid lightgrey ${props.fields.border.value}px`,
           margin: '0',
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
-          width: '100%',
+          width: currWidth,
           // width: props.fields.width.value + 'px',
           marginInline: 'auto',
         }}>

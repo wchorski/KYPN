@@ -1,18 +1,33 @@
 import React, { ReactNode } from 'react';
-import styles from '@styles/blocs/Quote.module.css';
+import styles from '@styles/blocs/quote.module.scss';
+import Link from 'next/link';
 
 type QuoteProps = {
+  href:string|undefined,
   attribution: ReactNode;
   content: ReactNode;
 };
 
-export function Quote({ attribution, content }: QuoteProps) {
+export function Quote({ href, attribution, content }: QuoteProps) {
+  
+  if(href) return (
+    <Link href={href} className={styles.quote} target='blank'>
+
+      <div style={{ fontStyle: 'italic', }}>{content}</div>
+      <strong >— {attribution}</strong>
+
+    </Link>
+  )
+  
   return (
     <div className={styles.quote}>
-      <div style={{ fontStyle: 'italic', color: '#4A5568' }}>{content}</div>
-      <div style={{ fontWeight: 'bold', color: '#47546b' }}>— {attribution}</div>
+
+      <div style={{ fontStyle: 'italic', }}>{content}</div>
+      <strong >— {attribution}</strong>
+
     </div>
-  );
+  )
+
 }
 
 // const StyledQuote = styled.div`

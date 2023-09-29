@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
-
-const FRONTEND_URL = process.env.NEXT_PUBLIC_SITE_URI
+// import { useState } from "react";
 
 type Props = {
   photoIn: {
@@ -15,8 +13,8 @@ export function ImageDynamic({ photoIn, className }: Props) {
   
   // console.log(photoIn);
   
-
-  const [state, setState] = useState<any>(handlePhoto(photoIn))
+  const state = handlePhoto(photoIn)
+  // const [state, setState] = useState<any>(handlePhoto(photoIn))
 
 
   return (
