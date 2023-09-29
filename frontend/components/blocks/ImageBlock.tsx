@@ -11,13 +11,13 @@ type Props = {
 export function ImageBlock({color, imageSrc, padding = 0, border = 0, width = 500}:Props) {
 
   return (
-    <figure style={{
-      margin: '0',
-      width: width + 'px',
-      padding: padding + 'px',
-      border: `solid lightgrey ${String(border)}px`,
-      marginInline: 'auto',
-    }}>
+    // <figure style={{
+    //   margin: '0',
+    //   width: width + 'px',
+    //   padding: padding + 'px',
+    //   border: `solid lightgrey ${String(border)}px`,
+    //   marginInline: 'auto',
+    // }}>
       <img
         src={imageSrc}
         className={`image block`}
@@ -28,6 +28,6 @@ export function ImageBlock({color, imageSrc, padding = 0, border = 0, width = 50
         }}
       />
 
-    </figure>
+    // </figure>
   )
 }

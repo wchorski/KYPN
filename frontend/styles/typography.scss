@@ -10,14 +10,22 @@ h1,h2,h3,h4,h5,h6, thead{
 h1,h2,h3,h4,h5,h6 {
   margin-top: 1.33em;
   margin-bottom: 0.4em;
+  max-width: 19ch;
+  text-wrap: balance;
 }
 
 p {
-  max-width: 50ch;
+  max-width: 40ch;
+  color: var(--c-txt);
 }
 
 p:empty {
   margin: 0;
+}
+
+strong {
+  -webkit-text-stroke: var(--c-txt) 2px;
+  font-weight: bolder;
 }
 
 
