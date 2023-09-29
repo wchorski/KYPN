@@ -15,6 +15,10 @@ export const quote = component({
       links: 'inherit',
     }),
     attribution: fields.child({ kind: 'inline', placeholder: 'Attribution...' }),
+    href: fields.text({
+      label: 'Credit Link',
+      defaultValue: ''
+    })
   },
   preview: function Quote(props) {
     return (

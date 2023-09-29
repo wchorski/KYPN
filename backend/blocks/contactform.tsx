@@ -18,11 +18,12 @@ export const contactform = component({
     }),
     color: fields.text({
       label: 'Fallback background color',
-      defaultValue: 'gray'
+      defaultValue: 'var(--c-desaturated)'
     }),
 
     buttonLabel: fields.text({
       label: 'Button Label',
+      defaultValue: 'Submit'
     }),
     isName: fields.checkbox({ label: 'Name Field', defaultValue: true }),
     isPhone: fields.checkbox({ label: 'Phone Number Field', defaultValue: true }),

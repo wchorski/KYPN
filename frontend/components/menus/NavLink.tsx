@@ -6,7 +6,7 @@ import styles from '@styles/nav.module.scss'
 
 type Props = {
   href:string,
-  className:string,
+  className?:string,
   children:ReactNode
 }
 

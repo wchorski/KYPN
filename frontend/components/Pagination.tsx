@@ -1,21 +1,24 @@
-import { StyledPagination } from '../styles/Pagination.styled'
+// import { StyledPagination } from '../styles/Pagination.styled'
 import { gql, useQuery } from '@apollo/client';
 import Head from 'next/head'
 import Link from 'next/link'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import ErrorMessage from './ErrorMessage';
 import { QueryLoading } from './menus/QueryLoading';
-import { perPage } from "../config";
+import { envvars } from '@lib/envvars';
+import { getClient } from '@lib/gqlClient';
+
+const perPage = envvars.PERPAGE
 
 type PagProps = {
   page: number,
   route: string,
 }
 
-export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
+export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
 
-  // todo make this modular with other Schema types
-  const { error, loading, data } = useQuery(QUERY_MULTI_COUNT, {
+  const client = getClient()
+  const { data, error, loading } = await client.query({query, 
     variables: {
       whereProducts: { NOT: [
         {
@@ -55,6 +58,47 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
       ]},
     }
   })
+  // todo make this modular with other Schema types
+  // const { error, loading, data } = useQuery(QUERY_MULTI_COUNT, {
+  //   variables: {
+  //     whereProducts: { NOT: [
+  //       {
+  //         status: {
+  //           equals: "DRAFT"
+  //         }
+  //       },
+  //       {
+  //         status: {
+  //           equals: "PRIVATE"
+  //         }
+  //       }
+  //     ]},
+  //     whereSubPlans: { NOT: [
+  //       {
+  //         status: {
+  //           equals: "DRAFT"
+  //         }
+  //       },
+  //       {
+  //         status: {
+  //           equals: "PRIVATE"
+  //         }
+  //       }
+  //     ]},
+  //     wherePosts: { NOT: [
+  //       {
+  //         status: {
+  //           equals: "DRAFT"
+  //         }
+  //       },
+  //       {
+  //         status: {
+  //           equals: "PRIVATE"
+  //         }
+  //       }
+  //     ]},
+  //   }
+  // })
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
@@ -76,7 +120,7 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
       <title> {page} / {pageCount} </title>
     </Head> */}
 
-    <StyledPagination data-testid='pagination'>
+    <div data-testid='pagination'>
 
 
       {/* <Link href={`/shop?page=${page - 1}`} aria-disabled={page <= 1}> */}
@@ -97,11 +141,11 @@ export const Pagination = ({ page, route = 'NOROUTE' }: PagProps) => {
         <MdKeyboardArrowRight />
       </Link>
 
-    </StyledPagination>
+    </div>
   </>)
 }
 
-export const QUERY_MULTI_COUNT = gql`
+export const query = gql`
   query Query($whereSubPlans: SubscriptionPlanWhereInput!, $whereProducts: ProductWhereInput!, $wherePosts: PostWhereInput!) {
     subscriptionPlansCount(where: $whereSubPlans)
     productsCount(where: $whereProducts)

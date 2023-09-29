@@ -1,3 +1,4 @@
+'use client'
 // cred - Kevin Powell - https://www.youtube.com/watch?v=Z-3tPXf9a7M&t=388s
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
 import Link from "next/link"

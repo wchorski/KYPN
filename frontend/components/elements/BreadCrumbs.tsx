@@ -1,21 +1,24 @@
+'use client'
 import Link from "next/link";
-import { useRouter } from "next/router";
-import styled from "styled-components";
+import { useRouter, useSelectedLayoutSegment, usePathname } from "next/navigation";
+import styles from '@styles/menus/breadcrumbs.module.scss'
 
 export function BreadCrumbs() {
   
-  const router = useRouter()
-  console.log(router.asPath);
+  const path = usePathname()
+  console.log(path);
 
   function generateBreadcrumbs() {
     // Remove any query parameters, as those aren't included in breadcrumbs
-    const asPathWithoutQuery = router.asPath.split("?")[0];
+    const asPathWithoutQuery = path.split("?")[0];
 
     // Break down the path between "/"s, removing empty entities
     // Ex:"/my/nested/path" --> ["my", "nested", "path"]
+    
     const asPathNestedRoutes = asPathWithoutQuery.split("/")
-                                                 .filter(v => v.length > 0);
-
+                                .filter(v => v.length > 0);
+    console.log('asPathNestedRoutes, ', asPathNestedRoutes);
+    
     // Iterate over the list of nested route parts and build
     // a "crumb" object for each one.
     const crumblist = asPathNestedRoutes.map((subpath, idx) => {
@@ -33,17 +36,17 @@ export function BreadCrumbs() {
     return crumblist;
   }
 
-  // Call the function to generate the breadcrumbs list
+  // // Call the function to generate the breadcrumbs list
   const breadcrumbs = generateBreadcrumbs();
 
   return (
-    <StyledCrumbList aria-label="breadcrumb">
+    <ul aria-label="breadcrumb" className={styles.list} >
       {breadcrumbs.map((crumb, idx) => (
         <li key={idx}>
           <Crumb {...crumb} last={idx === breadcrumbs.length - 1} />
         </li>
       ))}
-    </StyledCrumbList>
+    </ul>
   )
 }
 
@@ -56,38 +59,38 @@ type Crumb = {
 function Crumb({ label, href, last=false }:Crumb) {
   // The last crumb is rendered as normal text since we are already on the page
   if (last) {
-    return <StyledCrumb color="text.primary">{label}</StyledCrumb>
+    return <span className={styles.crumb}>{label}</span>
   }
 
   // All other crumbs will be rendered as links that can be visited 
   return (
-    <StyledCrumb>
+    <span className={styles.crumb}>
       <Link color="inherit" href={href}>
         {label}
       </Link>
-    </StyledCrumb>
+    </span>
   );
 }
 
-const StyledCrumbList = styled.ul`
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  /* opacity: .6; */
-  filter: contrast(0.3);
-  transition: opacity .3s;
-  font-size: 1rem;
-  display: flex;
+// const StyledCrumbList = styled.ul`
+//   padding: 0;
+//   margin: 0;
+//   list-style: none;
+//   /* opacity: .6; */
+//   filter: contrast(0.3);
+//   transition: opacity .3s;
+//   font-size: 1rem;
+//   display: flex;
 
-  &:hover, &:focus {
-    opacity: 1;
-  }
-`
+//   &:hover, &:focus {
+//     opacity: 1;
+//   }
+// `
 
-const StyledCrumb = styled.span`
+// const StyledCrumb = styled.span`
 
-  &::before{
-    content: ' / ';
-    color: var(--c-desaturated);
-  }
-`
+//   &::before{
+//     content: ' / ';
+//     color: var(--c-desaturated);
+//   }
+// `

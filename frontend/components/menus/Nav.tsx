@@ -12,7 +12,8 @@ export function Nav() {
       <div className="siteWrapper">
         <ul className='main'>
           <li> <NavLink href={`/`}> Home </NavLink> </li>
-          <li> <NavLink href={`/backups`}> Logs </NavLink> </li>
+          <li> <NavLink href={`/blog`}> Blog </NavLink> </li>
+          {/* <li> <NavLink href={`/shop`}> Shop </NavLink> </li> */}
           {/* <li> <Link href={`https://github.com/wchorski/duplicati-dashboard`}> API </Link> </li> */}
           {/* <li> <Link href={`/`}> Settings </Link> </li> */}
         </ul>

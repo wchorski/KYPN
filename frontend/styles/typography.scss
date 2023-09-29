@@ -19,13 +19,20 @@ p {
   color: var(--c-txt);
 }
 
-p:empty {
-  margin: 0;
+h1, h2, h3, h4, h5, h6, p {
+  &:empty {
+    margin: 0;
+  }
 }
 
+
 strong {
-  -webkit-text-stroke: var(--c-txt) 2px;
+  -webkit-text-stroke: var(--c-txt) 1px;
   font-weight: bolder;
+}
+
+center {
+  width: 100vw;
 }
 
 

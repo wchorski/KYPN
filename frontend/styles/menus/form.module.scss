@@ -11,8 +11,123 @@
   }
 }
 
+.form :global {
+  display: grid;
+  gap: 1rem;
+  max-width: 20em;
+  margin-inline: auto;
+  padding: 1rem;
+  border-radius: var(--br-soft);
+  box-shadow: var(--boxs-1);
 
-.form :global{
+  label {
+    display: grid;
+  }
+  span.label{
+    font-weight: lighter;
+    font-size: .8rem;
+  }
+
+  input,
+  textarea,
+  select {
+    
+    padding: 0.5rem;
+    font-size: .7rem;
+    border: 1px solid black;
+    &:focus {
+      outline: 0;
+      border-color: var(--c-accent);
+    }
+
+    border-radius: var(--br-sharp);
+    // border: solid var(--c-primary) 1px;
+  }
+
+  button[type='submit'] {
+    max-width: fit-content;
+    background: var(--c-primary);
+    border-radius: var(--br-sharp);
+    color: white;
+    border: solid 2px transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1.2rem;
+    transition: all .3s;
+
+    &:hover, &:focus{
+      background-color: var(--c-accent);
+      border: solid 2px var(--c-primary);
+      color: var(--c-primary);
+    }
+  }
+
+  fieldset {
+    border: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+    &::before {
+      height: 5px;
+      content: '';
+      display: block;
+      background-image: linear-gradient(
+        to right,
+        var(--c-desaturated) 0%,
+        var(--c-light) 70%,
+        var(--c-desaturated) 100%
+      );
+      margin-bottom: 1em;
+    }
+    &[aria-busy='true']::before {
+      background-size: 50% auto;
+      animation: loading 0.5s linear infinite;
+    }
+
+    &.radio-cont{
+      display: flex;
+      flex-direction: column;
+
+      input[type='radio']{
+        width: inherit;
+      }
+    }
+  }
+
+  button.forgot-password{
+    background-color: transparent;
+    font-size: .7rem;
+    border: none;
+
+    &:hover, &:focus{
+      border: none;
+    }
+  }
+
+  
+
+  textarea{
+    min-height: 10em;
+  }
+
+  .hidden{
+    visibility: hidden;
+    height: 0;
+    display: none;
+  }
+
+  .error{
+    background-color: red;
+    padding: 0 1rem;
+  }
+}
+
+
+.formtwo :global{
 
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
   /* background-color: rgba(var(--c-cont-light), 0.6); */
@@ -32,7 +147,7 @@
 
   label {
     display: block;
-    margin-bottom: 1rem;
+    // margin-bottom: 1rem;
   }
   span.label{
     font-weight: lighter;

@@ -1,10 +1,12 @@
+'use client'
 import { FormEvent, useState } from "react"
 import useForm from "../../lib/useForm"
 import styles from '@styles/menus/form.module.scss'
 import ErrorMessage from "../ErrorMessage"
 import { gql, useMutation } from "@apollo/client"
 import { QueryLoading } from "@components/menus/QueryLoading"
-import nProgress from "nprogress"
+// @ts-ignore
+import nProgress from 'nprogress'
 
 type Form = {
   header?:string,
@@ -55,7 +57,6 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
     }
   }
 
-  if(error) return <ErrorMessage error={error} />
   if(loading) return <QueryLoading />
 
   return (
@@ -64,7 +65,6 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
       onSubmit={(e: FormEvent) => handleSubmit(e)} 
       style={{ background: color,}}
     >
-
 
       <h2>{header}</h2>
 
@@ -115,6 +115,8 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
 
         <button type="submit" disabled={loading || successMsg ? true : false}> {buttonLabel} </button>
       </fieldset>
+
+      {error && <ErrorMessage error={error} />}
     </form>
   )
 }

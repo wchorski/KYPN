@@ -1,7 +1,7 @@
 // docs - https://react-slick.neostack.com/docs/api
 // cred - https://stackoverflow.com/questions/49028877/slick-carousel-force-slides-to-have-the-same-height
 import * as React from 'react';
-import Slider from "react-slick";
+// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Slide, tSlide } from "./Slide";
@@ -67,7 +67,7 @@ export default function SliderSlick({items = [], settings = sliderDefaults, chil
 
   return (
     <div className={styles.slider_wrap} >
-      <Slider {...settingsCat}>
+      {/* <Slider {...settingsCat}>
 
         {items.map( (s, i) => (
           <Slide 
@@ -86,7 +86,7 @@ export default function SliderSlick({items = [], settings = sliderDefaults, chil
         ))}
         {children}
 
-      </Slider>
+      </Slider> */}
     </div>
   )
 }

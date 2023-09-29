@@ -1,3 +1,4 @@
+'use client'
 import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import { useUser } from "../menus/Session";

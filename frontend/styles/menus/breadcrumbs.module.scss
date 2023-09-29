@@ -1,0 +1,22 @@
+ul.list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  /* opacity: .6; */
+  filter: contrast(0.3);
+  transition: opacity .3s;
+  font-size: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+
+}
+ul.list:hover, ul.list:focus {
+  opacity: 1;
+}
+
+span.crumb::before{
+  content: '/';
+  padding-inline: .2rem;
+  color: var(--c-desaturated);
+
+}
