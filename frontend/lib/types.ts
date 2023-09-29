@@ -10,6 +10,8 @@ import type { Permission } from './schemas/fields';
 export type DashState = 'dashboard'|'orders'|'subscriptions'|'downloads'|'tickets'
 
 export type GridLayout = '1_1'|'2_1'|'1_2'|'1_1_1'|'1_2_1'
+// ? doesn't autocomplete nicely
+// export type GridLayout = [1,1]|[2,1]|[1,2]|[1,1,1]|[1,2,1]
 
 export type DateRange = {
   start: Date,

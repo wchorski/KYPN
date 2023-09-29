@@ -39,7 +39,8 @@ export const image = component({
           margin: '0',
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
-          width: props.fields.width.value + 'px',
+          width: '100%',
+          // width: props.fields.width.value + 'px',
           marginInline: 'auto',
         }}>
           <img 

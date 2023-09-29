@@ -1,4 +1,4 @@
-.blockrenderer{
+.blockrenderer :global {
 
   .blockquote {
     margin: 0;
@@ -30,13 +30,7 @@
     border-radius: 8px;
   }
 
-  > p {
-    margin-inline: auto;
-  }
-
-  > h2, > h3, > h4, > h5, > h6 {
-    text-align: center;
-  }
+  
 }
 
 // .paragraph_wrap{

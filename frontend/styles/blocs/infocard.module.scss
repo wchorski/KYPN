@@ -14,7 +14,7 @@ ul.cardlist {
 }
 
 article.carditem{
-  padding: 0;
+  // padding: 1rem;
   padding-bottom: 1em;
   border: solid 1px var(--c-desaturated);
   height: 100%;
@@ -67,42 +67,54 @@ article.carditem{
   }
 }
 
-.infocard {
-  border-radius: 1em;
-  margin: 1em auto;
-  
-  padding: 1em 1em;
+article.vAlign_start {
+  align-content: start;
+}
+article.vAlign_center {
+  align-content: center;
+}
+article.vAlign_end {
+  align-content: end;
+}
 
-  max-width: 25em;
+article.infocard {
+  border-radius: 1em;
+  // margin: 1em auto;
+  // background: var(--c-desaturated);
+  // padding-inline: 1rem;
+  height: 100%;
+  margin-inline: auto;
+
+  // max-width: 25em;
   position: relative;
+
+  display: grid;
   
   /* overflow: hidden; */
-  transition: transform .1s ease-in-out;
-  transform-style: preserve-3d;
-  transform: 
-    perspective(5000px) 
-    rotateY(var(--rot-x)) 
-    rotateX(var(--rot-y));
+  // transition: transform .1s ease-in-out;
+  // transform-style: preserve-3d;
+  // transform: 
+  //   perspective(5000px) 
+  //   rotateY(var(--rot-x)) 
+  //   rotateX(var(--rot-y));
   
-  display: flex;
-  flex-direction: column;
   
-  .container{
-    // background-color: ${p => p.color};
-    padding: 1em;
-    border-radius: 1em;
-    flex: 1 0 10em;
-    display: flex;
-    flex-direction: column;
-    /* //todo add this back on desktop */
-    /* min-height: 15rem; */
-  }
+  // .container{
+  //   // background-color: ${p => p.color};
+  //   padding: 1em;
+  //   border-radius: 1em;
+  //   flex: 1 0 10em;
+  //   display: flex;
+  //   flex-direction: column;
+  //   /* //todo add this back on desktop */
+  //   /* min-height: 15rem; */
+  // }
 
   h4{
-    color: var(--c-txt);
-    font-size: 1rem;
-    text-align: center;
-    text-shadow: 4px 2px 20px rgba(255 255 255 /35% );
+    // color: var(--c-txt);
+    // font-size: 1rem;
+    // text-align: center;
+    // text-shadow: 4px 2px 20px rgba(255 255 255 /35% );
     overflow:hidden;
     width: 100%; //can also use calc function as per Yudi's answer
     display: inline-block;
@@ -118,33 +130,37 @@ article.carditem{
     /* align-self: flex-start; */
   }
 
+  div:last-child, a:last-child {
+    margin-bottom: 0.5rem;
+  }
+
   
 
-  @media (max-width: 500px){
-    padding: 1em 0;
-  }
+  // @media (max-width: 500px){
+  //   padding: 1em 0;
+  // }
 }
 
-.infocard::before, .infocard::after{
-  content: '';
-  position: absolute;
-  border-radius: inherit;
-}
+// .infocard::before, .infocard::after{
+//   content: '';
+//   position: absolute;
+//   border-radius: inherit;
+// }
 
-.infocard::before{
-  inset: 0.75rem;
-  background: #343434;
-  transform: translateZ(-49px);
-  filter: blur(5px);
-  opacity: .7;
-}
+// .infocard::before{
+//   inset: 0.75rem;
+//   background: #343434;
+//   transform: translateZ(-49px);
+//   filter: blur(5px);
+//   opacity: .7;
+// }
 
-.infocard::after{
-  inset: -1rem;
-  // background-color: ${p => p.color};
-  // background-image: ${p => (p.imageSrc ? `url(${p.imageSrc})` : '')};
-  background-position: center;
-  background-size: cover;
-  transform: translateZ(-50px);
-  box-shadow: #00000070 7px 9px 16px 7px;
-}
+// .infocard::after{
+//   inset: -1rem;
+//   // background-color: ${p => p.color};
+//   // background-image: ${p => (p.imageSrc ? `url(${p.imageSrc})` : '')};
+//   background-position: center;
+//   background-size: cover;
+//   transform: translateZ(-50px);
+//   // box-shadow: #00000070 7px 9px 16px 7px;
+// }

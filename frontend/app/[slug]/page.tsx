@@ -61,14 +61,14 @@ export default function PageBySlug ({
 
   if(template === 'FULLWIDTH') return (
     <PageTHeaderMain
-      header={Header({dateCreated, dateModified, title, author, featured_image})} 
+      header={Header({dateCreated, dateModified, title, author, featured_image, template})} 
       main={Main(content)}
     />
   )
 
   return (
     <PageTHeaderMainAside 
-      header={Header({dateCreated, dateModified, title, author, featured_image})}
+      header={Header({dateCreated, dateModified, title, author, featured_image, template})}
       main={Main(content)}
       aside={Aside()}
     />
@@ -80,13 +80,14 @@ type Header = {
   dateCreated:string,
   dateModified:string,
   featured_image:string,
+  template:'FULLWIDTH'|'FULLWIDTH_WITHHEADER'|'WITHSIDEBAR'|'BLANK'
   author?:{
     name?:string,
   }
 }
 
 //? Content
-function Header({dateCreated, dateModified, title, author, featured_image }:Header){
+function Header({dateCreated, dateModified, title, author, featured_image, template }:Header){
 
   // console.log(dateCreated);
   
@@ -99,7 +100,7 @@ function Header({dateCreated, dateModified, title, author, featured_image }:Head
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',
-          display: ('FULLWIDTH_WITHHEADER' === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
+          display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
         }}
       >
 
@@ -151,8 +152,8 @@ export const QUERY_PAGE_SINGLE = gql`
       slug
       title
       template
-      dateCreated,
-      dateModified,
+      dateCreated
+      dateModified
       tags {
         name
       }

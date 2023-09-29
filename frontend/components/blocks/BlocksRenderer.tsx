@@ -25,6 +25,8 @@ import { ButtonLink } from './ButtonLink';
 import styles from '@styles/blocs/blockrenderer.module.scss'
 import { ProductListBlock } from './ProductListBlock';
 import { ImageBlock } from './ImageBlock';
+import { Paragraph } from './ParagraphBlock';
+import { HeadingBlock } from './HeadingBlock';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -47,9 +49,12 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
     code({ children }) {
       return <pre className={`pre`}>{children}</pre>;
     },
-    paragraph({ children }) {
-      return  <p>{children}</p>;
+    paragraph(props) {
+      return  <Paragraph {...props}/>;
     },
+    heading(props) {
+      return <HeadingBlock {...props} />
+    }
     // paragraph({ children }) {
     //   return <div className={styles.paragraph_wrap}> <p>{children}</p> </div>;
     // },
@@ -141,7 +146,7 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRenderer({ document }: CustomRendererProps) {
   return (
-    <div className={styles.blockrenderer}>
+    <div className={['block-renderer', styles.blockrenderer].join(' ')}>
       <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}

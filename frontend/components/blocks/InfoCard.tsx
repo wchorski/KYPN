@@ -12,6 +12,11 @@ type InfoCard = {
   buttonText:string,
   imageSrc:string,
   color:string,
+  verticleAlign:string,
+  padding:number,
+  fontSize:string,
+  fitContent:boolean,
+  width:'initial'|'fit-content',
 }
 
 type MousePosition = {
@@ -19,8 +24,8 @@ type MousePosition = {
   y: number;
 }
 
-export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color, children}:InfoCard) {
-
+export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color, verticleAlign, padding, fontSize, width, children}:InfoCard) {
+  
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
 
   const handleRotation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -47,7 +52,13 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
   }
 
   return (
-    <div className={styles.infocard}  
+    <article className={[styles.infocard, styles[`vAlign_${verticleAlign}`] ].join(' ')}  
+      style={{
+        paddingInline: padding + 'rem',
+        background: color,
+        fontSize: fontSize + 'rem',
+        maxWidth: width,
+      }}
       // imageSrc={imageSrc} 
       // color={color} 
       // mousePosition={mousePosition}
@@ -56,16 +67,18 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
     >
       {/* <div className="imageSrc"></div> */}
 
-      <h4> {header} </h4>
+      {header && <h4> {header} </h4>}
 
       <div className="container">
         {content && <>{content}</>}
         {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
-        <Link href={buttonLink} className="button"> {buttonText} </Link>
+        {buttonLink && (
+          <Link href={buttonLink} className="button"> {buttonText} </Link>
+        )}
       </div>
       
 
-    </div>
+    </article>
   )
 }

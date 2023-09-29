@@ -9,8 +9,7 @@ type Props = {
 
 export function BlockLayout({children, layout}:Props) {
 
-  // layout [1,1] [1,2] [2,1] [1,1,1]
-  console.log(layout);
+  // layout [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
 
   const stylesArr = [stylesSec.section, stylesSec[`grid_${layout.join('_')}`] ]
   
