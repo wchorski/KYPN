@@ -1,15 +1,19 @@
 .youtubeVideo {
-  background-color: #131313;
   display: grid;
   grid-template-columns: minmax(auto, 960px);
   align-items: center;
   justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .iframePosition {
   overflow: hidden;
   // padding-bottom: 56.25%;
   position: relative;
+
+  > iframe {
+    border: none;
+  }
 }
 
 .iframePosition video {

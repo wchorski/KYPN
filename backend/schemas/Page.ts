@@ -92,6 +92,7 @@ export const Page:Lists.Page = list({
       //   softBreaks: true,
       // },
       layouts: [
+        [1],
         [1, 1],
         [1, 1, 1],
         [2, 1],

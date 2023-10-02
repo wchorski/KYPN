@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ProductThumbnail } from "../ecommerce/ProductThumbnail";
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { QueryLoading } from '../menus/QueryLoading';
 import { QueryError } from '../menus/QueryError';
 import { BlogListItem } from './BlogListItem';
 import styles from "@/styles/blog/Blog.module.scss";
 import { envvars } from '@lib/envvars';
+import { getClient } from '@lib/gqlClient';
+import { List } from '@components/elements/List';
 
 const perPage = envvars.PERPAGE
 
@@ -16,59 +18,55 @@ type ProdProps = {
   categories?: {id:string}[],
 }
 
-export function BlogList({ page, categories = [] }: ProdProps) {
+export async function BlogList({ page, categories = [] }: ProdProps) {
 
   const catArray = categories.map(cat => ({categories: { some: { id: { equals: cat.id }}}}))
 
-  const { loading, error, data } = useQuery(QUERY_POSTS_PAGINATED, {
-    variables: {
-      skip: page * perPage - perPage,
-      take: perPage,
-      orderBy: [
+  const client = getClient()
+  const { data, error, loading } = await client.query({query, variables: {
+    skip: page * perPage - perPage,
+    take: perPage,
+    orderBy: [
+      {
+        dateModified: "desc"
+      }
+    ],
+    where: {
+      OR: catArray,
+      NOT: [
         {
-          dateModified: "desc"
+          OR: [
+            {
+              status: {
+                equals: "DRAFT"
+              }
+            },
+            {
+              status: {
+                equals: "PRIVATE"
+              }
+            },
+          ]
         }
-      ],
-      where: {
-        OR: catArray,
-        NOT: [
-          {
-            OR: [
-              {
-                status: {
-                  equals: "DRAFT"
-                }
-              },
-              {
-                status: {
-                  equals: "PRIVATE"
-                }
-              },
-            ]
-          }
-        ]
-      },
-    }
-  })
+      ]
+    },
+  }})
 
   if (loading) return <QueryLoading />
   if (error) return <QueryError error={error} />
 
   return (
-    <ul className={styles.blog}>
-      {data.posts.map((item: any) => {
-        return (
-          <li key={item.id}>
-            <BlogListItem {...item} />
-          </li>
-        );
-      })}
-    </ul>
+    <List className={styles.blog} isAnimated={true}>
+      {data.posts.map((item: any) => (
+        <BlogListItem {...item} />
+      ))}
+    </List>
   )
+
 }
 
 
-export const QUERY_POSTS_PAGINATED = gql`
+const query = gql`
   query Posts($where: PostWhereInput!, $orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int!) {
     posts(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       id

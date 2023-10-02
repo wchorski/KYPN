@@ -8,6 +8,8 @@ import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
 import { ApolloWrapper } from './ApolloWrapper'
 import ShoppingCart from '@components/ecommerce/ShoppingCart'
+import { Hero } from '@components/menus/Hero'
+import { envvars } from '@lib/envvars'
 // import { AsideBar } from '@/components/layouts/AsideBar'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
@@ -29,12 +31,21 @@ export default function RootLayout({
         header.variable, 
         paragraph.variable, 
         'layout--fullwidth',
+        'layout'
         // 'layout--main-aside',
       ].join(' ')}>
 
       <ApolloWrapper>
 
         <ShoppingCart />
+
+        <Hero
+          title={envvars.SITE_TITLE}
+          description={envvars.SITE_DESCRIPTION}
+          logoSrc={`/assets/private/logo.png`}
+          bgImg={'/assets/tiles/teal-restaurant.webp'}
+        >
+        </Hero>
         
         <Nav />
       

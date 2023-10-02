@@ -1,5 +1,5 @@
 // import { StyledPagination } from '../styles/Pagination.styled'
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 import Head from 'next/head'
 import Link from 'next/link'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
@@ -7,6 +7,7 @@ import ErrorMessage from './ErrorMessage';
 import { QueryLoading } from './menus/QueryLoading';
 import { envvars } from '@lib/envvars';
 import { getClient } from '@lib/gqlClient';
+import styles from "@styles/menus/pagination.module.scss";
 
 const perPage = envvars.PERPAGE
 
@@ -120,14 +121,22 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
       <title> {page} / {pageCount} </title>
     </Head> */}
 
-    <div data-testid='pagination'>
+    <div data-testid='pagination' className={[styles.pagination, 'siteWrapper'].join(' ')}>
 
 
       {/* <Link href={`/shop?page=${page - 1}`} aria-disabled={page <= 1}> */}
-      <Link href={`${route}/${page - 1}`} aria-disabled={page <= 1}>
-        <MdKeyboardArrowLeft />
-        Prev
-      </Link>
+
+      {page <= 1 ? (
+        <span className='disabled' aria-disabled={true}>
+          <MdKeyboardArrowLeft />
+          Prev
+        </span>
+      ) : (
+        <Link href={`${route}/${page - 1}`} >
+          <MdKeyboardArrowLeft />
+          Prev
+        </Link>
+      )}
 
       <div className='count-cont'>
         <span> {page} of {pageCount}</span>
@@ -136,10 +145,19 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
         </span>
       </div>
 
-      <Link href={`${route}/${page + 1}`} aria-disabled={page >= Math.ceil(handleItemCount() / perPage)}>
-        Next
-        <MdKeyboardArrowRight />
-      </Link>
+      {(page >= Math.ceil(handleItemCount() / perPage)) ? (
+        <span aria-disabled={true}>
+          Next
+          <MdKeyboardArrowRight />
+        </span>
+      ) : (
+        <Link href={`${route}/${page + 1}`} >
+          Next
+          <MdKeyboardArrowRight />
+        </Link>
+      )}
+
+
 
     </div>
   </>)

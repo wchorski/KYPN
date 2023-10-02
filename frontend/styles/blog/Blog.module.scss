@@ -6,7 +6,6 @@ ul.blog{
   display: grid;
   // grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
   gap: 1em;
-  padding-inline: 1rem;
   // max-width: 60em;
 }
 
@@ -36,11 +35,11 @@ ul.blog{
 article.thumbnail :global{
   display: flex;
   flex-direction: column;
-  background-color: var(--c-txt-rev);
+  background-color: var(--c-txt-bg);
   height: 100%;
   box-shadow: var(--boxs-1);
   max-width: 70em;
-  margin-inline: auto;
+  // margin-inline: auto;
 
 
   .featured_image{
@@ -68,7 +67,7 @@ article.thumbnail :global{
 
   header {
     padding-inline: 1rem;
-    background-color: var(--c-txt-rev);
+    // background-color: var(--c-txt-rev);
     // transform: translateX(-10rem);
     // transform: translate(0, -4rem);
     // max-width: 30em;
@@ -116,9 +115,9 @@ article.thumbnail :global{
 
     flex-direction: row;
 
-    header{
-      transform: translate(-1rem, 0);
-    }
+    // header{
+    //   transform: translate(-1rem, 0);
+    // }
 
     .featured_image{
       width: 20em;

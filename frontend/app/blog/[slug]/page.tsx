@@ -32,7 +32,9 @@ type Props = {
 export default async function BlogPageBySlug({ params }:Props) {
   
   const client = getClient()
-  const { data, error, loading } = await client.query({query, variables: { where: { slug: params.slug }}})
+  const { data, error, loading } = await client.query({query, 
+    variables: { where: { slug: params.slug } }
+  })
 
 
   if (loading) return <QueryLoading />
@@ -90,7 +92,7 @@ export default async function BlogPageBySlug({ params }:Props) {
           photoIn={featured_image}
         />
 
-        <div className="siteWrapper">
+        <div className="overlay siteWrapper">
           <div className={styles.title_wrap}>
             <h1>{title}</h1>
             
@@ -120,8 +122,9 @@ export default async function BlogPageBySlug({ params }:Props) {
         </div>
       )}
 
-      
-      <BlockRenderer document={content.document} />
+      <div className="siteWrapper">
+        <BlockRenderer document={content.document} />
+      </div>
 
       <footer>
         <h2 className='categories'>Categories: </h2>

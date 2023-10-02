@@ -12,11 +12,11 @@ section.section {
   position: relative;
   align-content: center;
 
-
   // // debug
   // > div {
   //   border: dashed grey 1px;
   // }
+  
   
 }
 
@@ -29,8 +29,37 @@ section.section {
   }
 }
 
+section.grid_1 {
+  grid-template-columns: 
+    minmax(0, 1fr) 
+    minmax(0, calc(var(--w-sitemax) - 1rem)) 
+    minmax(0, 1fr)
+  ;
+  
+  > div {
+    grid-column: 2/3;
+  }
+}
+
 @media screen and (width > 650px) {
   
+  section.grid_1{
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div {
+      grid-column: 2/3;
+
+      > ul, > li {
+        padding-left: 1.5rem;
+      }
+    }
+  }
+
   section.grid_1_1{
   
     grid-template-columns: 

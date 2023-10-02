@@ -105,6 +105,7 @@ export const Post:Lists.Post = list({
         softBreaks: true,
       },
       layouts: [
+        [1],
         [1, 1],
         [1, 1, 1],
         [2, 1],

@@ -1,4 +1,3 @@
-'use client'
 import { AsideBar } from "@/components/layouts/AsideBar"
 import { Card } from "@components/layouts/Card"
 import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
@@ -14,6 +13,7 @@ import { BlockRenderer } from "@components/blocks/BlocksRenderer"
 
 import type { Metadata } from 'next'
 import { envs } from "@/envs"
+import { getClient } from "@lib/gqlClient"
  
 // export const metadata: Metadata = {
 //   title: "NEW " + envs.SITE_TITLE,
@@ -27,15 +27,17 @@ type Props = {
   template:string,
 }
 
-export default function PageBySlug ({
+export default async function PageBySlug ({
   params,
 }:Props) {
 
-  const { loading, error, data } = useQuery(
-    QUERY_PAGE_SINGLE, {
-      variables: { where: { slug: params.slug } }
-    }
-  )
+  const client = getClient()
+  const { data, error, loading } = await client.query({query, variables: { where: { slug: params.slug } } })
+  // const { loading, error, data } = useQuery(
+  //   QUERY_PAGE_SINGLE, {
+  //     variables: { where: { slug: params.slug } }
+  //   }
+  // )
   // console.log(data);
 
   if (loading) return <QueryLoading />
@@ -153,7 +155,7 @@ function Aside(){
 
 
 // //? Data Fetching
-export const QUERY_PAGE_SINGLE = gql`
+const query = gql`
   query Page($where: PageWhereUniqueInput!) {
     page(where: $where) {
       id
