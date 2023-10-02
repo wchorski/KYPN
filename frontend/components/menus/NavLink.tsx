@@ -7,20 +7,24 @@ import styles from '@styles/nav.module.scss'
 type Props = {
   href:string,
   className?:string,
-  children:ReactNode
+  children:ReactNode,
+  target?:'_blank'|'_self'|'_parent'|'_top',
 }
 
-export function NavLink ({ href, children, className = '' }:Props) {
+export function NavLink ({ target = '_self',href, children, className = '' }:Props) {
 
   let segment = useSelectedLayoutSegment()
-  // console.log(segment);
+  // console.log(segment)
   
-  let isActive = href === `/${segment}`
+  let isActive = (href === `/${segment}`)
+
+  const styleArr = [styles.navlink, className]
 
   return (
     <Link 
       href={href}
-      className={isActive ? [styles.active, className].join(' ') : className}
+      target={target}
+      className={isActive ? [...styleArr, styles.active,].join(' ') : styleArr.join(' ')}
     >
       {children}
     </Link>

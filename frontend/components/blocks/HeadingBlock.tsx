@@ -26,8 +26,6 @@ export function HeadingBlock ({level, children, textAlign}:Props) {
 
 
 function Element({level, textAlign, children}:Props){
-
-  console.log(level);
   
   const style:any = {
     textAlign: textAlign,

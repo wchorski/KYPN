@@ -6,13 +6,13 @@ ul.tags{
   padding-inline: 0;
 
   > a{
-    background-color: var(--c-dark);
+    background-color: var(--c-txt-wrap);
     color: var(--c-txt-light);
     text-decoration: none;
     border: solid 1px transparent;
 
     border-radius: var(--br-soft);
-    padding: 0 1em;
+    padding: 0 .4rem;
     font-size: .7rem;
     transition: all .3s;
 
@@ -20,6 +20,12 @@ ul.tags{
       background-color: transparent;
       color: var(--c-primary);
       border: solid 1px var(--c-primary);
+    }
+
+    &::before {
+      content: '#';
+      color: grey;
+      margin-right: 1px;
     }
   }
 }

@@ -13,13 +13,13 @@ import { Category, Tag } from "@lib/types";
 
 type Props = {
   params:{
-    page:string | string[] | undefined,
+    pagination:string | string[] | undefined,
   },
 }
 
 
 
-export default async function BlogFeedPage({ params }:Props) {
+export default async function BlogFeedPagination({ params }:Props) {
 
   const client = getClient()
   const { data, error, loading } = await client.query({query})
@@ -34,7 +34,7 @@ export default async function BlogFeedPage({ params }:Props) {
 
     <PageTHeaderMainAside 
       header={Header()}
-      main={Main({page: Number(params.page)})}
+      main={Main({page: Number(params.pagination)})}
       aside={Aside({categories, tags})}
     />
 

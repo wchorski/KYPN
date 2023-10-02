@@ -6,7 +6,6 @@ import styles from '@styles/menus/breadcrumbs.module.scss'
 export function BreadCrumbs() {
   
   const path = usePathname()
-  console.log(path);
 
   function generateBreadcrumbs() {
     // Remove any query parameters, as those aren't included in breadcrumbs
@@ -17,7 +16,7 @@ export function BreadCrumbs() {
     
     const asPathNestedRoutes = asPathWithoutQuery.split("/")
                                 .filter(v => v.length > 0);
-    console.log('asPathNestedRoutes, ', asPathNestedRoutes);
+    // console.log('asPathNestedRoutes, ', asPathNestedRoutes);
     
     // Iterate over the list of nested route parts and build
     // a "crumb" object for each one.

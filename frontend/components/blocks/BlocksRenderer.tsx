@@ -27,6 +27,8 @@ import { ProductListBlock } from './ProductListBlock';
 import { ImageBlock } from './ImageBlock';
 import { Paragraph } from './ParagraphBlock';
 import { HeadingBlock } from './HeadingBlock';
+import { List } from '@components/elements/List';
+import { ListBlock } from './ListBlock';
 
 type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
 
@@ -52,6 +54,9 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
     paragraph(props) {
       return  <Paragraph {...props}/>;
     },
+    // list(props) {
+    //   return <ListBlock {...props}/>
+    // },
     heading(props) {
       return <HeadingBlock {...props} />
     }

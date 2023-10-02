@@ -1,17 +1,23 @@
 import Link from "next/link"
 import styles from '@/styles/categories.module.scss'
+import fetchCatsNTags from "@lib/fetchdata/fetchCats"
+import fetchCategories from "@lib/fetchdata/fetchCats"
 
 type Props = {
-  categories: {
+  categories?: {
     id:string,
     name:string,
   }[]
 }
 
-export function CategoriesPool({ categories }:Props) {
+
+export async function CategoriesPool({ categories }:Props) {
+
+  const data = await fetchCategories()
+
   return (
     <ul className={styles.categories}>
-      {categories.map((c: any) => (
+      {data?.categories.map((c: any) => (
         <Link key={c.name} className='cat' href={`/categories/${c.name}`} >{c.name}</Link>
       ))}
     </ul>

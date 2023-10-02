@@ -1,14 +1,5 @@
-.active {
-  border-bottom: solid 1px var(--c-primary);
-  color: var(--c-accent);
-}
-
-
 .nav :global{
 
-  position: sticky;
-  top: 0;
-  z-index: 999;
   backdrop-filter: blur(10px);
   background-color: rgba(55, 55, 55, 0.559);
   width: 100%;
@@ -31,26 +22,26 @@
       flex-direction: column;
     }
 
-    a {
-      padding: 1rem;
-      display: inline-block;
-      transition-property: color, background, border;
-      transition-duration: .2s;
-      transition-timing-function: linear;
-      display: grid;
-      place-items: center;
-      flex-grow: 1;
-      border-bottom: solid 1px transparent;
+    // a {
+    //   padding: 1rem;
+    //   display: inline-block;
+    //   transition-property: color, background, border;
+    //   transition-duration: .2s;
+    //   transition-timing-function: linear;
+    //   display: grid;
+    //   place-items: center;
+    //   flex-grow: 1;
+    //   border-bottom: solid 1px transparent;
 
-      &:hover, &:focus{
-        border-bottom: solid 1px var(--c-accent);
-      }
+    //   // &:hover, &:focus{
+    //   //   border-bottom: solid 1px var(--c-accent);
+    //   // }
 
-      &:active{
-        border-bottom: solid 1px var(--c-accent);
-        color: var(--c-accent);
-      }
-    }
+    //   &:active{
+    //     border-bottom: solid 1px var(--c-accent);
+    //     color: var(--c-accent);
+    //   }
+    // }
   }
   
   ul.main {
@@ -67,4 +58,31 @@
       font-size: 2rem;
     }
   }
+}
+
+a.navlink {
+
+  padding: 1rem;
+  display: inline-block;
+  transition-property: color, background, border;
+  transition-duration: .2s;
+  transition-timing-function: linear;
+  display: grid;
+  place-items: center;
+  flex-grow: 1;
+  border-bottom: solid 1px transparent;
+
+  &:hover, &:focus{
+    border-bottom: solid 1px var(--c-accent);
+  }
+
+  // &:active{
+  //   border-bottom: solid 1px var(--c-accent);
+  //   color: var(--c-accent);
+  // }
+}
+
+a.active {
+  // border-bottom: solid 1px var(--c-primary);
+  color: var(--c-primary);
 }

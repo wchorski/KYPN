@@ -28,7 +28,8 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  background: var(--c-body);
+  background: var(--cg-dark);
   // background: url('../public/assets/tiles/tile-dark-sqrs.webp');
   background-attachment: fixed;
   background-position: center;
@@ -70,12 +71,13 @@ a{
 a.button {
   border-radius: var(--br-dull);
   border: solid 1px var(--c-primary);
-  background-color: var(--c-primary);
+  // background-color: var(--c-primary);
   padding-inline: 1rem;
   transition: all .3s;
 
   &:hover, &:focus{
     background-color: var(--c-primary);
+    color: var(--c-txt-rev);
   }
 
   &:active{
@@ -85,3 +87,8 @@ a.button {
   }
 }
 
+span[aria-disabled='true'], a[aria-disabled='true'], button[aria-disabled='true']  {
+  color: var(--c-disabled);
+  pointer-events: unset;
+  cursor: not-allowed;
+}
