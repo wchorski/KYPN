@@ -88,6 +88,10 @@ article.thumbnail :global{
       gap: 1rem;
     }
   }
+
+  header:hover, header:focus {
+    border-left-color: var(--c-accent);
+  }
   
   p.excerpt {
     padding-inline: 1rem;

@@ -1,11 +1,12 @@
 'use client'
 // import { useGlobalContext } from "../lib/useSessionContext";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import Link from "next/link";
 import { MdAccountCircle } from "react-icons/md";
 import styles from '@styles/menus/session.module.scss'
 import SignOutButton from "./SignOutButton";
 import { NavLink } from "./NavLink";
+import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 
 // export const User = () => {
 //   return (
@@ -44,8 +45,11 @@ export function SessionBadge({ session, label, }: Props) {
 }
 
 
-export function useUser() {
-  // TODO GET THIS WORKING
+export function useSession() {
+  // TODO server side fetching GET THIS WORKING
+  // const client = getClient()
+  // const { data, error, loading } = await client.query({query})
+
   const { data } = useQuery(QUERY_USER_CURRENT)
   // console.log('++++++ useUser, ', data);
   return data?.authenticatedItem

@@ -1,3 +1,4 @@
+
 import React from 'react'
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,15 +8,17 @@ import { ProductDelete } from '@components/ecommerce/ProductDelete';
 import AddToCart from '@components/ecommerce/AddToCart';
 import { handlePhoto } from '../../lib/handleProductPhoto';
 import { ImageDynamic } from '../elements/ImageDynamic';
-import { useUser } from '@components/menus/Session';
-import { StyledPriceTag } from '../../styles/PriceTag.styled';
+import { useSession } from '@components/menus/Session';
+// import { StyledPriceTag } from '../../styles/PriceTag.styled';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { Product } from '../../lib/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
+import fetchSession from '@lib/fetchdata/fetchSession';
 
-export const ProductThumbnail = ({ id, name, excerpt, price, photo, image, status }: Product) => {
+export async function ProductThumbnail({ id, name, excerpt, price, photo, image, status }: Product) {
 
-  const session = useUser()
+  // const session = useSession()
+  const session = await fetchSession()
 
   return (
     <article className={styles.product} >

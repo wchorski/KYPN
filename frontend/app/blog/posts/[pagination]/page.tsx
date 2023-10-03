@@ -77,10 +77,10 @@ function Aside({categories, tags}:Aside) {
   return<>
     <div className="widget">
       <h2> Categories </h2>
-      <CategoriesPool categories={categories}/>
+      <CategoriesPool />
 
       <h2> Tags </h2>
-      <TagsPool tags={tags}/>
+      <TagsPool />
     </div>
   </>
 }

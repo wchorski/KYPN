@@ -2,14 +2,8 @@ import Link from "next/link"
 import styles from '@/styles/tags.module.scss'
 import fetchTags from "@lib/fetchdata/fetchTags"
 
-type Props = {
-  tags?: {
-    id:string,
-    name:string,
-  }[]
-}
 
-export async function TagsPool({ tags }:Props) {
+export async function TagsPool() {
 
   const data = await fetchTags()
 

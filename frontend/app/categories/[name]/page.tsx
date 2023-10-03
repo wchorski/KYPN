@@ -93,7 +93,7 @@ function Main(category:Category){
       <ul className={stylesProduct.product}>
       {category.products?.map(prod => (
         <li key={prod.id}>
-          {/* <ProductThumbnail {...prod}/> */}
+          <ProductThumbnail {...prod}/>
         </li>
       ))}
           
