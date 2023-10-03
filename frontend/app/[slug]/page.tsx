@@ -4,7 +4,7 @@ import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/la
 import { gql } from "@apollo/client"
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import { useRouter } from "next/navigation"
-import Error404 from "../404"
+import Error404 from "../not-found"
 import ErrorMessage from "@components/ErrorMessage"
 import { QueryLoading } from "@components/menus/QueryLoading"
 import { Content, Page } from "@lib/types"

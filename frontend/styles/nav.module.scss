@@ -4,6 +4,15 @@
   background-color: rgba(55, 55, 55, 0.559);
   width: 100%;
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover, a:focus {
+    color: var(--c-accent);
+  }
+
   div.siteWrapper {
     display: flex;
     justify-content: space-between;

@@ -12,6 +12,7 @@ import { PageTHeaderMainAside } from "@components/layouts/PageTemplates";
 import { Category, Tag } from "@lib/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
+import { ProductsList } from "@components/ecommerce/ProductsList";
 
 type Props = {
   params:{
@@ -24,11 +25,10 @@ export const metadata: Metadata = {
   description: envs.SITE_DESC,
 }
 
-export default async function BlogFeedPage({ params }:Props) {
+export default async function ShopPage({ params }:Props) {
 
   const client = getClient()
   const { data, error, loading } = await client.query({query})
-
 
   if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
@@ -64,11 +64,11 @@ type Main = {
 function Main({page}:Main) {
   
   return<>
-    <Pagination route='/blog/posts' page={(page) || 1} />
+    <Pagination route='/shop' page={(page) || 1} />
 
-    <BlogList page={page || 1} />
+    <ProductsList page={Number(page) || 1} />
 
-    <Pagination route='/blog/posts' page={(page) || 1} />
+    <Pagination route='/shop' page={(page) || 1} />
   </>
 }
 

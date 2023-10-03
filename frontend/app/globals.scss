@@ -41,10 +41,6 @@ body {
   //   rgb(var(--background-start-rgb));
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
 
 @media (prefers-color-scheme: dark) {
   html {
@@ -62,13 +58,19 @@ button{
 }
 
 a{
-  transition: color .3s;
+  color: var(--c-primary);
+  text-decoration-color: rgba(128, 128, 128, 0.478);
+  border-bottom: dotted 1px transparent;
+  transition-property: color, border;
+  transition-duration:  .3s;
+
   &:hover, &:focus{
     color: var(--c-accent);
+    border-bottom: dotted 1px var(--c-accent);
   }
 }
 
-a.button {
+a.button, button.button {
   border-radius: var(--br-dull);
   border: solid 1px var(--c-primary);
   // background-color: var(--c-primary);

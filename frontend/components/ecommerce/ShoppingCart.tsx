@@ -5,7 +5,7 @@ import moneyFormatter from '../../lib/moneyFormatter'
 import styles from '@styles/ecommerce/cart.module.scss'
 import { StyledSupreme } from '../../styles/Supreme.styled'
 import React from 'react'
-import { useUser } from '../menus/Session'
+import { useSession } from '../menus/Session'
 import CartItem from './CartItem'
 import { TbArrowBarToRight } from "react-icons/tb";
 import CartCount from './CartCount'
@@ -15,11 +15,11 @@ import { CartCount2 } from './CartCount2'
 
 export default function ShoppingCart() {
 
-  const customer = useUser()
+  const session = useSession()
   const { isOpen, openCart, closeCart } = useCart()
 
 
-  // if(!customer) return <p>Login to start shopping</p>
+  // if(!session) return <p>Login to start shopping</p>
 
   return (
     <div 
@@ -28,20 +28,20 @@ export default function ShoppingCart() {
         <h2>
            Cart
         </h2>
-        <CartCount2 count={customer?.cart.reduce(
+        <CartCount2 count={session?.cart.reduce(
           (tally: any, cartItem: any) => tally + cartItem.quantity,
           0
         )} />
         <button onClick={e => closeCart()} className='close'> <TbArrowBarToRight /></button>
       </header>
 
-      {customer?.cart.length <= 0 && <p>Add your first item</p>}
+      {session?.cart.length <= 0 && <p>Add your first item</p>}
       <ul>
-        {customer?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
+        {session?.cart.map((item: any) => <CartItem key={item.id} item={item} />)}
       </ul>
       
       <footer>
-        <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(customer?.cart))}</p>
+        <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(session?.cart))}</p>
         <Link
           href={'/shop/checkout'}
           onClick={() => closeCart()}

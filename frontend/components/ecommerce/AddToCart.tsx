@@ -1,7 +1,7 @@
 'use client'
 import { useMutation, gql } from '@apollo/client';
 import { useRouter } from 'next/navigation';
-import { useUser } from "../menus/Session";
+import { useSession } from "../menus/Session";
 import { MdShoppingBag } from 'react-icons/md';
 import { TbCheck, TbExclamationCircle, TbQuestionMark, TbLoader  } from 'react-icons/tb';
 import { QUERY_USER_CURRENT } from '../menus/Session';
@@ -16,7 +16,7 @@ type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 export default function AddToCart({ id }: { id: string }) {
 
   const [state, setstate] = useState<State>(undefined)
-  const session = useUser()
+  const session = useSession()
   const router = useRouter()
   const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
 
@@ -77,7 +77,7 @@ export default function AddToCart({ id }: { id: string }) {
       type="button" 
       disabled={loading || state !== undefined} 
       onClick={e => handleButton()}
-      className={stylesButton.addtocart + ' addtocart'}
+      className={' addtocart' + ' button'}
     >
       <span>Add To Cart <span style={{marginRight: 'auto'}} className='state'>{renderIcon(state)}</span> </span>
       
