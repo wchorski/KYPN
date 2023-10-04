@@ -1,4 +1,6 @@
 import styles from '@styles/footer.module.scss'
+import { SiGithub } from 'react-icons/si'
+import Link from 'next/link'
 
 
 export function Footer() {
@@ -12,6 +14,15 @@ export function Footer() {
           > 
             <span> {`There's a Will There's a Web.site`} </span>
           </a>
+
+          <span> | </span>
+
+          <Link
+              href="https://github.com/wchorski/kypn"
+              target={'_blank'}
+            >
+              <SiGithub />
+          </Link>
         </div>
     </footer>
   )

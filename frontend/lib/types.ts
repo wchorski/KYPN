@@ -414,17 +414,6 @@ export const TicketStatus = [
   },
 ]
 
-export enum INPUT_TYPES {
-  TEXT = 'text',
-  EMAIL = 'email',
-  TEXTAREA = 'textarea',
-  TIME = 'time',
-  DATE = 'date',
-  SELECT = 'select',
-  NUMBER = 'number',
-  DATETIME= 'datetime-local',
-}
-
 export type SelectOpt = {
   value:string,
   label:string,
@@ -433,7 +422,7 @@ export type SelectOpt = {
 export type InputObj = {
   name:string,
   disabled?:boolean,
-  type: 'text'|'email'|'textarea'|'time'|'date'|'select'|'number'|'datetime-local',
+  type: 'text'|'password'|'email'|'textarea'|'time'|'date'|'select'|'number'|'datetime-local',
   label: string,
   placeholder?:string,
   pattern?:string,

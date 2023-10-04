@@ -7,7 +7,7 @@ import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
 import { ApolloWrapper } from './ApolloWrapper'
-import ShoppingCart from '@components/ecommerce/ShoppingCart'
+// import ShoppingCart from '@components/ecommerce/ShoppingCart'
 import { Hero } from '@components/menus/Hero'
 import { envvars } from '@lib/envvars'
 // import { AsideBar } from '@/components/layouts/AsideBar'
@@ -37,7 +37,7 @@ export default function RootLayout({
 
       <ApolloWrapper>
 
-        <ShoppingCart />
+        {/* <ShoppingCart /> */}
 
         <Hero
           title={envvars.SITE_TITLE}

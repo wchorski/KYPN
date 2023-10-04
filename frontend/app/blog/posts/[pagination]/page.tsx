@@ -11,6 +11,8 @@ import { TagsPool } from "@/components/menus/TagsPool";
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates";
 import { Category, Tag } from "@lib/types";
 
+// todo depreciate this "pagination" route in favor of searchParams
+
 type Props = {
   params:{
     pagination:string | string[] | undefined,
@@ -61,7 +63,7 @@ function Main({page}:Main) {
   return<>
     <Pagination route='/blog/posts' page={(page) || 1} />
 
-    <BlogList page={page || 1} />
+    {/* <BlogList page={page || 1} /> */}
 
     <Pagination route='/blog/posts' page={(page) || 1} />
   </>

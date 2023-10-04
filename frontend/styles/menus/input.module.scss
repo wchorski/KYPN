@@ -1,0 +1,100 @@
+.input :global{
+  margin-bottom: 0;
+  position: relative;
+
+  .formInput{
+    display: flex;
+    width: 280px;
+  }
+
+  input{
+    padding: 15px;
+    margin: 10px 0px;
+    border-radius: 5px;
+    border: 1px solid gray;
+
+  }
+
+  /* fixes slight offset with other inputs */
+  input[type=date]{
+    padding: 16px;
+  }
+
+  select{
+    padding: 1em;
+    margin-top: 1em;
+  }
+
+  label{
+    display: block;
+  }
+  
+  span.label{
+    background-color: var(--c-primary);
+    color: var(--c-label);
+    border-radius: var(--br-sharp);
+    font-size: .8rem;
+    padding: 0 8px;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 1;
+    
+    left: 5px;
+    // transform: translateY(40%);
+    transition: all .3s;
+    
+  }
+
+  span.tooltip {
+    font-size: .8rem;
+    display: block;
+    transition: all .3s;
+
+    max-height: 0;
+    overflow: hidden;
+    
+  }
+  span.error{
+    color: red;
+  }
+
+  span.hint{
+    color: #858585;
+  }
+
+  span:empty{
+    padding: 0;
+  }
+
+  input:invalid:not(:placeholder-shown):focus{
+    border: 1px solid red;
+  }
+
+  input:invalid:not(:placeholder-shown):focus ~ span{
+    max-height: 30px;
+  }
+
+  textarea{
+    min-height: 10em;
+    padding: 2em 1em;
+  }
+
+  input{
+    font-size: 1.3rem;
+  }
+}
+
+.input.hidden{
+  display: none;
+}
+
+.input:has(input:hover, input:focus){
+  span.label{
+    background-color: var(--c-accent);
+    color: var(--c-dark);
+  }
+
+  input{
+    border: solid var(--c-accent) 1px;
+  }
+}
