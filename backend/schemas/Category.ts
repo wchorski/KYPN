@@ -3,6 +3,7 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer, } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
+import { slugFormat } from "../lib/slugFormat";
 
 
 
@@ -30,7 +31,16 @@ export const Category:Lists.Category = list({
 
   // this is the fields for our Tag list
   fields: {
-    name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    name: text({ 
+      isIndexed: 'unique', 
+      validation: { isRequired: true } ,
+      hooks: {
+        beforeOperation({resolvedData}) {
+          if(!resolvedData?.name) return console.log('Category: no name')
+          resolvedData.name = slugFormat(String(resolvedData.name))
+        },
+      }
+    }),
     excerpt: text({
       ui: {
         displayMode: 'textarea'

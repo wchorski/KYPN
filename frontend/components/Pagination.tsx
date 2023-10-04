@@ -132,7 +132,7 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
           Prev
         </span>
       ) : (
-        <Link href={`${route}/${page - 1}`} >
+        <Link href={`${route}?page=${page - 1}`} >
           <MdKeyboardArrowLeft />
           Prev
         </Link>
@@ -151,7 +151,7 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
           <MdKeyboardArrowRight />
         </span>
       ) : (
-        <Link href={`${route}/${page + 1}`} >
+        <Link href={`${route}?page=${page + 1}`} >
           Next
           <MdKeyboardArrowRight />
         </Link>
