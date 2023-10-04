@@ -2,8 +2,10 @@ import styles from '@styles/nav.module.scss'
 import Link from 'next/link'
 import { SiGithub } from 'react-icons/si'
 import { NavLink } from '@components/menus/NavLink'
+import { SessionBadge, useSession } from './Session'
 
 export function Nav() {
+
   return (
     <nav 
       className={styles.nav}
@@ -20,12 +22,7 @@ export function Nav() {
 
         <ul className='links utility'>
           <li>
-            <NavLink
-              href="https://github.com/wchorski/duplicati-dashboard"
-              target={'_blank'}
-            >
-              <SiGithub />
-            </NavLink>
+            <SessionBadge label='account'/>
           </li>
         </ul>
       </div>

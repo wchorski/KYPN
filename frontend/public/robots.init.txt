@@ -6,3 +6,6 @@ Allow: /shop
 Disallow: /admin/
 Disallow: /users/
 Disallow: /tickets/
+
+User-Agent: GPTBot
+Disallow: /

@@ -106,7 +106,7 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
 
   const handleItemCount = () => {
     if (route === '/shop') return data.productsCount
-    if (route === '/blog/posts') return data.postsCount
+    if (route === '/blog') return data.postsCount
     if (route === '/shop/subscriptions') return data.subscriptionPlansCount
     return 0
   }

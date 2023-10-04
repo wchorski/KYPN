@@ -1,15 +1,7 @@
 import { Pagination } from "@components/Pagination";
-import { BlogList } from "@components/blog/BlogList";
-import { useRouter } from 'next/navigation'
-import styles from "@/styles/blog/Blog.module.scss";
-import { gql } from "@apollo/client";
-import { getClient } from '@lib/gqlClient';
 import ErrorMessage from "@/components/ErrorMessage";
-import { QueryLoading } from "@/components/menus/QueryLoading";
-import { CategoriesPool } from "@/components/menus/CategoriesPool";
-import { TagsPool } from "@/components/menus/TagsPool";
+
 import { PageTHeaderMain } from "@components/layouts/PageTemplates";
-import { Category, Tag } from "@lib/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
 import { ProductsList } from "@components/ecommerce/ProductsList";
@@ -36,14 +28,14 @@ export const metadata: Metadata = {
 
 export default async function ShopPage({ params, searchParams }:Props) {
 
-  const categoryNames = searchParams.categories?.split(',') || []
-  console.log(searchParams);
+  const { page, categories } = searchParams
+  const categoryNames = categories?.split(',') || []
 
   return (
 
     <PageTHeaderMain
       header={Header()}
-      main={Main({page: Number(searchParams.page) || 1, categoryNames })}
+      main={Main({page: Number(page) || 1, categoryNames })}
     />
 
   )

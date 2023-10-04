@@ -12,11 +12,19 @@ import { PageTHeaderMainAside } from "@components/layouts/PageTemplates";
 import { Category, Tag } from "@lib/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
+import { Card } from "@components/layouts/Card";
+import { InfoCard } from "@components/blocks/InfoCard";
+import { fetchPosts } from "@lib/fetchdata/fetchBlogs";
 
 type Props = {
   params:{
     page:string | string[] | undefined,
   },
+  searchParams: { 
+    [key: string]: string | string[] | undefined, 
+    categories: string | undefined, 
+    page: string | undefined, 
+  }
 }
 
 export const metadata: Metadata = {
@@ -24,23 +32,18 @@ export const metadata: Metadata = {
   description: envs.SITE_DESC,
 }
 
-export default async function BlogFeedPage({ params }:Props) {
+export default async function BlogFeedPage({ params, searchParams }:Props) {
 
-  const client = getClient()
-  const { data, error, loading } = await client.query({query})
+  const { page, categories } = searchParams
+  const categoryNames = categories?.split(',') || []
 
-
-  if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
-
-  const {categories, tags} = data
 
   return (
 
     <PageTHeaderMainAside 
       header={Header()}
-      main={Main({page: Number(params.page)})}
-      aside={Aside({categories, tags})}
+      main={Main({page: Number(page) || 1, categoryNames})}
+      aside={Aside()}
     />
 
   )
@@ -59,46 +62,36 @@ function Header(){
 
 type Main = {
   page:number,
+  categoryNames:string[]
 }
 
-function Main({page}:Main) {
+async function Main({page, categoryNames}:Main) {
+
+  const {data, error} = await fetchPosts({page, categoryNames})
+  
+  if(error) return <ErrorMessage error={error}/>
   
   return<>
-    <Pagination route='/blog/posts' page={(page) || 1} />
+    <Pagination route='/blog' page={(page) || 1} />
 
-    <BlogList page={page || 1} />
+    <BlogList posts={data?.posts}/>
 
-    <Pagination route='/blog/posts' page={(page) || 1} />
+    <Pagination route='/blog' page={(page) || 1} />
   </>
 }
 
-type Aside = {
-  categories:Category[],
-  tags:Tag[],
-}
-
-function Aside({categories, tags}:Aside) {
+function Aside() {
   
   return<>
-    <div className="widget">
+    <Card>
       <h2> Categories </h2>
       <CategoriesPool />
 
+    </Card>
+
+    <Card>
       <h2> Tags </h2>
       <TagsPool />
-    </div>
+    </Card>
   </>
 }
-
-const query = gql`
-  query Query {
-    categories {
-      id
-      name
-    }
-    tags {
-      id
-      name
-    }
-  }
-`

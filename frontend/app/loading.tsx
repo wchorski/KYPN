@@ -7,7 +7,7 @@ type Props = {
 export default function ShopLoading ({ prop }:Props) {
   return (
     <div>
-      ShopLoading...
+      loading app...
       <LoadingAnim />
     </div>
   )

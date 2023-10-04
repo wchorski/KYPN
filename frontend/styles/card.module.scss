@@ -3,4 +3,11 @@
   padding: 1rem;
   margin-inline: 3px;
   border-radius: var(--br-dull);
+
 }
+.card > *:first-child {
+  margin-top: 0;
+}
+// .card > *:last-child {
+//   margin-bottom: 0;
+// }

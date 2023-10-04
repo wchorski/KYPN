@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from "../menus/Session";
 import { MdShoppingBag } from 'react-icons/md';
 import { TbCheck, TbExclamationCircle, TbQuestionMark, TbLoader  } from 'react-icons/tb';
-import { QUERY_USER_CURRENT } from '../menus/Session';
+// import { QUERY_USER_CURRENT } from '../menus/Session';
 import { useState } from 'react';
 import styles from '../../styles/eyecandy/SpinCycle.module.scss'
 import stylesButton from "@/styles/ecommerce/AddToCart.module.scss";
@@ -34,7 +34,7 @@ export default function AddToCart({ id }: { id: string }) {
           addToCartId: id,
           productId: id
         },
-        refetchQueries: [{ query: QUERY_USER_CURRENT }],
+        // refetchQueries: [{ query: QUERY_USER_CURRENT }],
       })
 
       await delay(500)

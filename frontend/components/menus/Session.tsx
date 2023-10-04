@@ -7,6 +7,7 @@ import styles from '@styles/menus/session.module.scss'
 import SignOutButton from "./SignOutButton";
 import { NavLink } from "./NavLink";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+// import { getClient } from "@lib/gqlClient";
 
 // export const User = () => {
 //   return (
@@ -15,11 +16,17 @@ import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 // }
 
 type Props = {
-  session:any,
   label:string,
 }
 
-export function SessionBadge({ session, label, }: Props) {
+export function SessionBadge({ label, }: Props) {
+
+  const session = useSession()
+  console.log(session);
+
+
+  if(!session) return <NavLink href="/auth"> Login </NavLink>
+  
 
   return (
     <div className={[styles.session_badge, 'toggle-menu', 'button'].join(' ')} id="session-badge" aria-label='account menu link'>
@@ -33,7 +40,7 @@ export function SessionBadge({ session, label, }: Props) {
         <li className="name">{session?.name}</li>
         <li className="email">{session?.email}</li>
         <li> <Link className="button" href={`/account`}> My Account </Link> </li>
-        {session.isAdmin && (
+        {session?.isAdmin && (
             <li>
               <NavLink href='/admin' className="button"> Admin Panel </NavLink>
             </li>
@@ -51,7 +58,10 @@ export function useSession() {
   // const { data, error, loading } = await client.query({query})
 
   const { data } = useQuery(QUERY_USER_CURRENT)
-  // console.log('++++++ useUser, ', data);
+  // const client = getClient()
+  // const { data, error } = await client.query({query})
+
+  console.log('++++++ useUser, ', data);
   return data?.authenticatedItem
 
   // const ctx = useGlobalContext()
