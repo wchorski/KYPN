@@ -12,7 +12,7 @@ export default async function fetchTags(){
     return data
     
   } catch (error) {
-    console.log('fetch CatsNTags: ', error)
+    console.log('fetch Tags: ', error)
   }
 }
 

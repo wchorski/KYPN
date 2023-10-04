@@ -14,6 +14,7 @@ import { BlockRenderer } from "@components/blocks/BlocksRenderer"
 import type { Metadata } from 'next'
 import { envs } from "@/envs"
 import { getClient } from "@lib/gqlClient"
+export const revalidate = 5;
  
 // export const metadata: Metadata = {
 //   title: "NEW " + envs.SITE_TITLE,

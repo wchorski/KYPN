@@ -1,78 +1,45 @@
 import { ProductThumbnail } from "@components/ecommerce/ProductThumbnail";
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { QueryLoading } from '@components/menus/QueryLoading';
 import { QueryError } from '@components/menus/QueryError';
 import styles from '@/styles/ecommerce/Product.module.scss'
 import { envvars } from "@lib/envvars";
+import { getClient } from "@lib/gqlClient";
+import { Product } from "@lib/types";
+import { List } from "@components/elements/List";
 
-const perPage = envvars.PERPAGE
 
 type ProdProps = {
   page: number,
-  categories?: {id:string}[]
+  categoryNames:string[],
+  products:Product[],
 }
 
-export function ProductsList({ page, categories = [] }: ProdProps) {
+export async function ProductsList({ products = [] }: ProdProps) {
 
-  const catArray = categories.map(cat => ({categories: { some: { id: { equals: cat.id }}}}))
 
-  const { loading, error, data } = useQuery(GET_PAGE_PRODUCTS_QUERY, {
-    variables: {
-      skip: page * perPage - perPage,
-      take: perPage,
-      orderBy: [
-        {
-          dateModified: "desc"
-        }
-      ],
-      where: {
-        OR: catArray,
-        NOT: [
-          {
-            OR: [
-              {
-                status: {
-                  equals: "DRAFT"
-                }
-              },
-              {
-                status: {
-                  equals: "PRIVATE"
-                }
-              },
-            ]
-          }
-        ]
-      },
-    }
-  })
-
-  if (loading) return <QueryLoading />
-  if (error) return <QueryError error={error} />
   // console.log({ data });
 
   return (
-    <ul className={styles.product}>
+    <List isAnimated={true} className={styles.product}>
       {/* {data.products.length <= 0 && (
         <p> No Products Available </p>
       )} */}
-      {data.products.map((prod: any) => {
+      {products?.map((prod: any) => {
         // console.log(prod);
 
         if(prod.status === 'DRAFT') return null
 
         return (
-          <li key={prod.id}>
-            <ProductThumbnail {...prod} />
+          <ProductThumbnail {...prod} />
+        )
 
-          </li>
-        );
       })}
-    </ul>
+    </List>
   )
 }
 
-export const GET_PAGE_PRODUCTS_QUERY = gql`
+const query = gql`
   query Query($where: ProductWhereInput!, $orderBy: [ProductOrderByInput!]!, $skip: Int!, $take: Int) {
     products(where: $where, orderBy: $orderBy, skip: $skip, take: $take) {
       excerpt

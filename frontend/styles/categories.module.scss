@@ -16,6 +16,10 @@ ul.categories {
     font-size: .7rem;
     transition: all .3s;
 
+    &::first-letter {
+      text-transform: uppercase;
+    }
+
     &:hover{
       background-color: transparent;
       color: var(--c-primary);

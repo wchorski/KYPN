@@ -8,16 +8,25 @@ import ErrorMessage from "@/components/ErrorMessage";
 import { QueryLoading } from "@/components/menus/QueryLoading";
 import { CategoriesPool } from "@/components/menus/CategoriesPool";
 import { TagsPool } from "@/components/menus/TagsPool";
-import { PageTHeaderMainAside } from "@components/layouts/PageTemplates";
+import { PageTHeaderMain } from "@components/layouts/PageTemplates";
 import { Category, Tag } from "@lib/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
 import { ProductsList } from "@components/ecommerce/ProductsList";
+import { fetchProducts } from "@lib/fetchdata/fetchProducts";
+
+export const revalidate = 5;
 
 type Props = {
   params:{
     page:string | string[] | undefined,
+    categories:string | string[] | undefined,
   },
+  searchParams: { 
+    [key: string]: string | string[] | undefined, 
+    categories: string | undefined, 
+    page: string | undefined, 
+  }
 }
 
 export const metadata: Metadata = {
@@ -25,22 +34,16 @@ export const metadata: Metadata = {
   description: envs.SITE_DESC,
 }
 
-export default async function ShopPage({ params }:Props) {
+export default async function ShopPage({ params, searchParams }:Props) {
 
-  const client = getClient()
-  const { data, error, loading } = await client.query({query})
-
-  if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
-
-  const {categories, tags} = data
+  const categoryNames = searchParams.categories?.split(',') || []
+  console.log(searchParams);
 
   return (
 
-    <PageTHeaderMainAside 
+    <PageTHeaderMain
       header={Header()}
-      main={Main({page: Number(params.page)})}
-      aside={Aside({categories, tags})}
+      main={Main({page: Number(searchParams.page) || 1, categoryNames })}
     />
 
   )
@@ -52,53 +55,27 @@ function Header(){
     <header style={{
       // display: 'none',
     }}>
-      <h1> Blog </h1>
+      <h1> Shop </h1>
     </header>
   )
 }
 
 type Main = {
   page:number,
+  categoryNames:string[],
 }
 
-function Main({page}:Main) {
+async function Main({page, categoryNames}:Main) {
+
+  const {data, error} = await fetchProducts({page, categoryNames})
   
+  if(error) return <ErrorMessage error={error}/>
+
   return<>
     <Pagination route='/shop' page={(page) || 1} />
 
-    <ProductsList page={Number(page) || 1} />
+    <ProductsList page={page} categoryNames={categoryNames || []} products={data.products}/>
 
     <Pagination route='/shop' page={(page) || 1} />
   </>
 }
-
-type Aside = {
-  categories:Category[],
-  tags:Tag[],
-}
-
-function Aside({categories, tags}:Aside) {
-  
-  return<>
-    <div className="widget">
-      <h2> Categories </h2>
-      <CategoriesPool />
-
-      <h2> Tags </h2>
-      <TagsPool />
-    </div>
-  </>
-}
-
-const query = gql`
-  query Query {
-    categories {
-      id
-      name
-    }
-    tags {
-      id
-      name
-    }
-  }
-`

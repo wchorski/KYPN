@@ -7,8 +7,9 @@ import { QueryError } from '../menus/QueryError';
 import { BlogListItem } from './BlogListItem';
 import styles from "@/styles/blog/Blog.module.scss";
 import { envvars } from '@lib/envvars';
-import { getClient } from '@lib/gqlClient';
 import { List } from '@components/elements/List';
+import { getClient } from '@lib/gqlClient';
+export const revalidate = 5;
 
 const perPage = envvars.PERPAGE
 
