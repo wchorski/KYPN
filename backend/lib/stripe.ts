@@ -1,7 +1,8 @@
 import Stripe from 'stripe';
 import 'dotenv/config'
+import { envs } from '../envs';
 
-const STRIPE_SECRET = process.env.STRIPE_SECRET || 'NO_STRIPE_KEY_SET'
+const STRIPE_SECRET = envs.STRIPE_SECRET
 // const STRIPE_SECRET = process.env.WILLIAM_C || 'NO_STRIPE_KEY_SET'
 // console.log('STRIPE_SECRET ======', STRIPE_SECRET);
 

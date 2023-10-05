@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client"
 import { envvars } from "@lib/envvars"
 import { getClient } from "@lib/gqlClient"
-import { Category } from "@lib/types"
+import { Category, Product } from "@lib/types"
 
 const perPage = envvars.PERPAGE
 
@@ -15,6 +15,7 @@ export async function fetchProducts({categoryNames, page}:Props){
   const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
 
   try {
+    console.log('--- FETCH PRODUCTS DATA --- ');
     const client = getClient()
     const { data } = await client.query({query, variables: {
       skip: page * perPage - perPage,
@@ -26,24 +27,33 @@ export async function fetchProducts({categoryNames, page}:Props){
       ],
       where: {
         OR: catConnects,
-        NOT: [
-          {
-            OR: [
-              {
-                status: {
-                  equals: "DRAFT"
-                }
-              },
-              {
-                status: {
-                  equals: "PRIVATE"
-                }
-              },
-            ]
-          }
-        ]
+        // todo don't need this because filtering happens at auth level
+        // NOT: [
+        //   {
+        //     OR: [
+        //       {
+        //         status: {
+        //           equals: "DRAFT"
+        //         }
+        //       },
+        //       {
+        //         status: {
+        //           equals: "PRIVATE"
+        //         }
+        //       },
+        //     ]
+        //   }
+        // ]
       },
     }})
+
+    const prodsbug = data.products.map((prod:Product) => ({
+      name: prod.name,
+      status: prod.status
+    }))
+
+    console.log({prodsbug});
+    
     
     return {data}
     

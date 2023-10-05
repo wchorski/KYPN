@@ -27,6 +27,14 @@ export const Product:Lists.Product = list({
     }
   },
 
+  ui: {
+
+    listView: {
+      initialColumns: ['name', 'price', 'stockCount', 'status', 'dateModified', 'author', 'categories' ],
+      initialSort: { field: 'start', direction: 'DESC'}
+    },
+  },
+
 
   fields: {
     // photo: relationship({
@@ -293,11 +301,12 @@ export const Product:Lists.Product = list({
 
       if (operation === 'create') {
         try {
-          const photo = await context.db.ProductImage.findOne({
-            where: {
-              id: item?.photoId
-            }
-          })
+          // todo not using ProductImg anymore?
+          // const photo = await context.db.ProductImage.findOne({
+          //   where: {
+          //     id: item?.photoId
+          //   }
+          // })
 
           const product = await stripeConfig.products.update(
             item?.stripeProductId || '',

@@ -9,7 +9,7 @@ import { QueryLoading } from "@/components/menus/QueryLoading";
 import { CategoriesPool } from "@/components/menus/CategoriesPool";
 import { TagsPool } from "@/components/menus/TagsPool";
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates";
-import { Category, Tag } from "@lib/types";
+import { Category, Post, Tag } from "@lib/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
 import { Card } from "@components/layouts/Card";
@@ -34,15 +34,22 @@ export const metadata: Metadata = {
 
 export default async function BlogFeedPage({ params, searchParams }:Props) {
 
+  
   const { page, categories } = searchParams
+  const currPage = Number(page) || 1
   const categoryNames = categories?.split(',') || []
+  
+  const {data, error} = await fetchPosts({page: currPage, categoryNames})
 
+  const {posts} = data
+
+  if(error) return <ErrorMessage error={error}/>
 
   return (
 
     <PageTHeaderMainAside 
       header={Header()}
-      main={Main({page: Number(page) || 1, categoryNames})}
+      main={Main({page: currPage, posts})}
       aside={Aside()}
     />
 
@@ -62,19 +69,17 @@ function Header(){
 
 type Main = {
   page:number,
-  categoryNames:string[]
+  posts:Post[]
 }
 
-async function Main({page, categoryNames}:Main) {
+function Main({posts, page}:Main) {
 
-  const {data, error} = await fetchPosts({page, categoryNames})
-  
-  if(error) return <ErrorMessage error={error}/>
+  if(!posts) <p> no posts found </p>
   
   return<>
     <Pagination route='/blog' page={(page) || 1} />
 
-    <BlogList posts={data?.posts}/>
+    <BlogList posts={posts}/>
 
     <Pagination route='/blog' page={(page) || 1} />
   </>

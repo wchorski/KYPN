@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import { MainContainer } from './MainContainer'
 import styles from '@styles/page.module.scss'
 import { AsideBar } from './AsideBar'
+
   
 type PageTHeaderMainAside = {
   // template:'header_main_aside'|'fullwidth',
@@ -10,7 +11,7 @@ type PageTHeaderMainAside = {
   aside:ReactNode,
 }
 
-export function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAside) {
+export async function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAside) {
 
 
   return (
@@ -42,7 +43,7 @@ type PageTHeaderMain = {
   header:ReactNode,
   main:ReactNode,
 }
-export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
+export async function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
 
 
   return (
@@ -67,7 +68,7 @@ export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
 type PageTMain = {
   main:ReactNode,
 }
-export function PageTMain ({ main }:PageTMain) {
+export async function PageTMain ({ main }:PageTMain) {
 
   return (
     <MainContainer>

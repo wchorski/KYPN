@@ -14,6 +14,7 @@ import { BlockRenderer } from "@components/blocks/BlocksRenderer"
 import type { Metadata } from 'next'
 import { envs } from "@/envs"
 import { getClient } from "@lib/gqlClient"
+import fetchPage from "@lib/fetchdata/fetchPage"
 export const revalidate = 5;
  
 // export const metadata: Metadata = {
@@ -32,16 +33,10 @@ export default async function PageBySlug ({
   params,
 }:Props) {
 
-  const client = getClient()
-  const { data, error, loading } = await client.query({query, variables: { where: { slug: params.slug } } })
-  // const { loading, error, data } = useQuery(
-  //   QUERY_PAGE_SINGLE, {
-  //     variables: { where: { slug: params.slug } }
-  //   }
-  // )
-  // console.log(data);
+  const {data, error} = await fetchPage(params.slug)
 
-  if (loading) return <QueryLoading />
+
+  // if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
   if (!data.page) return <Error404 />
 
@@ -153,32 +148,3 @@ function Aside(){
     </Card>
   </>
 }
-
-
-// //? Data Fetching
-const query = gql`
-  query Page($where: PageWhereUniqueInput!) {
-    page(where: $where) {
-      id
-      slug
-      title
-      template
-      dateCreated
-      dateModified
-      tags {
-        name
-      }
-      categories {
-        name
-      }
-      status
-      author{
-        id
-        name
-      }
-      content {
-        document(hydrateRelationships: true)
-      }
-    }
-  }
-`

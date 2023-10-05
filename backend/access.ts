@@ -216,7 +216,24 @@ export const rules = {
     if (permissions.canManageProducts({ session })) return true; // They can read everything!
     
     // They should only see available products (based on the status field)
-    return { status: {equals: 'AVAILABLE'} };
+    return { NOT: [
+        {
+          OR: [
+            {
+              status: {
+                equals: "DRAFT"
+              }
+            },
+            // todo if added a new state
+            // {
+            //   status: {
+            //     equals: "PRIVATE"
+            //   }
+            // },
+          ]
+        }
+      ]
+    }
   },
 
   canManageUsers({ session }: ListAccessArgs) {
