@@ -22,6 +22,8 @@ export async function ProductThumbnail({ id, name, excerpt, price, photo, image,
 
   return (
     <article className={styles.product} >
+      
+      {status === 'DRAFT' && <p> DRAFT PRODUCT </p> }
 
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
       <Link href={`/shop/product/${id}`} className='featured_image'>

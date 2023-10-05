@@ -22,59 +22,9 @@ export async function ProductsList({ products = [] }: ProdProps) {
 
   return (
     <List isAnimated={true} className={styles.product}>
-      {/* {data.products.length <= 0 && (
-        <p> No Products Available </p>
-      )} */}
-      {products?.map((prod: any) => {
-        // console.log(prod);
-
-        if(prod.status === 'DRAFT') return null
-
-        return (
-          <ProductThumbnail {...prod} />
-        )
-
-      })}
+      {products?.map((prod: any) =>  (
+        <ProductThumbnail {...prod} />
+      ))}
     </List>
   )
 }
-
-const query = gql`
-  query Query($where: ProductWhereInput!, $orderBy: [ProductOrderByInput!]!, $skip: Int!, $take: Int) {
-    products(where: $where, orderBy: $orderBy, skip: $skip, take: $take) {
-      excerpt
-      id
-      name
-      price
-      status
-      image
-      photo {
-        id
-        altText
-        image {
-          publicUrlTransformed
-        }
-      }
-    }
-  }
-`
-
-export const GET_ALL_PRODUCTS = gql`
-  query Products {
-    products {
-      id
-      excerpt
-      name
-      price
-      status
-      image
-      # photo {
-      #   id
-      #   altText
-      #   image {
-      #     publicUrlTransformed
-      #   }
-      # }
-    }
-  }
-`

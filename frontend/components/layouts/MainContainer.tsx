@@ -5,7 +5,7 @@ type Props = {
   children:ReactNode
 }
 
-export function MainContainer ({ columns, children }:Props) {
+export async function MainContainer ({ columns, children }:Props) {
 
   if(columns) return (
     <main 

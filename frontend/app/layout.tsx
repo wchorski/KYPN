@@ -11,6 +11,7 @@ import { ApolloWrapper } from './ApolloWrapper'
 import { Hero } from '@components/menus/Hero'
 import { envvars } from '@lib/envvars'
 // import { AsideBar } from '@/components/layouts/AsideBar'
+import { cookies } from 'next/dist/client/components/headers'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
 const paragraph = Barlow({ weight: '200', subsets: ['latin'], variable: '--font-paragraph' })
@@ -20,11 +21,19 @@ export const metadata: Metadata = {
   description: envs.SITE_DESC,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
+  const cookieStore = cookies()
+  const sessionObj = cookieStore.get('keystonejs-session')
+  const token = sessionObj?.value
+  console.log('&&&&&&&&&&&&&&& TOKEN &&&&&&&&&&&&&&&');
+  console.log({token});
+  
+
   return (
     <html lang="en">
       <body className={[
@@ -35,7 +44,7 @@ export default function RootLayout({
         // 'layout--main-aside',
       ].join(' ')}>
 
-      <ApolloWrapper>
+      <ApolloWrapper token={token}>
 
         {/* <ShoppingCart /> */}
 

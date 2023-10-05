@@ -1,15 +1,18 @@
+
 import { cookies } from 'next/headers'
  
 export async function POST(request: Request) {
 
+  console.log('auth API POST');
+  
 
   const body = await request.json()
 
-  console.log(body);
+  console.log({body});
   
   
-  const cookieStore = cookies()
-  const token = cookieStore.get('token')
+  // const cookieStore = cookies()
+  // const token = cookieStore.get('token')
 
   // console.log({token});
   
@@ -17,18 +20,21 @@ export async function POST(request: Request) {
   const oneDay = 24 * 60 * 60 * 1000
 
   cookies().set({
-    name: 'HEHEHEHE',
-    value: 'HAHAHAHA',
+    name: 'keystonejs-session',
+    value: body.token,
     httpOnly: true,
     path: '/',
-    expires: Date.now() - oneDay
+    maxAge: Date.now() - oneDay,
+    expires: Date.now() - oneDay,
   })
  
-  return new Response('Hello, Next.js!', {
-    status: 200,
-    // headers: { 'Set-Cookie': `noken=${token?.value}` },
-    headers: { 'Set-Cookie': `keystonejs-session=${body.token || 'NO_TOKEN_FOUND'}` },
-  }) 
+  return  Response.json({message: 'auth api POST success'})
+  // return new Response('Hello, Next.js!', {
+  //   status: 200,
+  //   // headers: { 'Set-Cookie': `noken=${token?.value}` },
+  //   headers: { 'Set-Cookie': `keystonejs-session=${body.token || 'NO_TOKEN_FOUND'}` },
+  // }) 
+
 }
 
 export async function GET(request: Request) {
@@ -37,12 +43,14 @@ export async function GET(request: Request) {
   // const cookieStore = cookies()
   // const token = cookieStore.get('token')
 
-  // console.log({token});
+  console.log('auth api GET');
+  const cookieStore = cookies()
+  const authCookie = cookieStore.get('keystonejs-session')
+  console.log({authCookie});
   
- 
-  return new Response('Hello, Next.js!', {
-    status: 200,
-    // headers: { 'Set-Cookie': `noken=${token?.value}` },
-    headers: { 'Set-Cookie': `fakeazztoken=${'just_kidding'}` },
-  }) 
+ return Response.json({message: 'auth api get'})
+  // return new Response(`token: ${JSON.stringify(token, null, 2)}`, {
+  //   status: 200,
+  //   headers: { 'Set-Cookie': `keystonejs-session=${token?.value}` },
+  // })
 }

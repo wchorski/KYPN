@@ -1,4 +1,4 @@
-const STRIPE_SECRET = process.env.STRIPE_SECRET="sk_test_****"
+const STRIPE_SECRET = process.env.STRIPE_SECRET || "sk_test_****"
 
 const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY

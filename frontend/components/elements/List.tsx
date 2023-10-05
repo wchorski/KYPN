@@ -35,6 +35,7 @@ export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, classN
             animationDuration: duration + 's',
             animationDelay: 0.1 * delay + 's'
           }}
+          key={1}
         >
           {children}
         </li>

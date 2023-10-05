@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 import useForm from "../../lib/useForm";
 import PasswordReset from '@components/menus/PasswordResetRequest';
 import { gql, useMutation } from "@apollo/client";
@@ -10,7 +10,6 @@ import styles from '@styles/menus/form.module.scss'
 import useForm2 from "@lib/useForm2";
 import { InputObj } from "@lib/types";
 import { FormInput } from "@components/elements/Forminput";
-import { cookies } from "next/headers";
 // import { PopupAnim } from "./PopupAnim";
 
 
@@ -18,7 +17,6 @@ export default function LoginForm() {
 
   // const { session, setSession } = useGlobalContext()
   const router = useRouter()
-  const nextCookies = cookies()
 
   // const [isReset, setIsReset] = useState(false)
   // const [isPopup, setIsPopup] = useState(false)
@@ -67,19 +65,14 @@ export default function LoginForm() {
       console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
       // console.log('token, ', res.data.authenticateUserWithPassword.sessionToken)
       const token = res.data.authenticateUserWithPassword.sessionToken
-      // const resAPI = await fetch(`/api/auth`, {
-      //   method: 'POST',
-      //   body: JSON.stringify({token})
-      // })
+      const resAPI = await fetch(`/api/auth`, {
+        method: 'POST',
+        body: JSON.stringify({token})
+      })
 
-      // const dataAPI = await resAPI.json()
-      // console.log(dataAPI)
+      const dataAPI = await resAPI.json()
+      console.log(dataAPI)
 
-      let cookie = `keystonejs-session=${token}`
-      cookie += `path=/`
-      cookie += `max-age=${ 60 * 60 * 24 * 1}`
-
-      document.cookie = cookie
       
       router.refresh()
       // router.push(`/home`)
@@ -93,10 +86,6 @@ export default function LoginForm() {
 
 
   return (<>
-
-    {nextCookies.get(`keystonejs-session`) 
-      ? <p>cookie found: {'blabla'}</p>
-      : <p> no cookie</p>}
 
     <form method="POST" onSubmit={handleSubmit} className={styles.form} >
 

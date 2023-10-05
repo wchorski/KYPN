@@ -6,6 +6,7 @@ import { envs } from "@/envs";
 import { Metadata } from "next";
 import { ProductsList } from "@components/ecommerce/ProductsList";
 import { fetchProducts } from "@lib/fetchdata/fetchProducts";
+import { Product } from "@lib/types";
 
 export const revalidate = 5;
 
@@ -29,13 +30,20 @@ export const metadata: Metadata = {
 export default async function ShopPage({ params, searchParams }:Props) {
 
   const { page, categories } = searchParams
+  const currPage = Number(page) || 1
   const categoryNames = categories?.split(',') || []
+
+  const {data, error} = await fetchProducts({page: currPage, categoryNames})
+  
+  const { products } = data
+
+  if(error) return <ErrorMessage error={error}/>
 
   return (
 
     <PageTHeaderMain
       header={Header()}
-      main={Main({page: Number(page) || 1, categoryNames })}
+      main={Main({page: currPage, categoryNames, products })}
     />
 
   )
@@ -55,18 +63,17 @@ function Header(){
 type Main = {
   page:number,
   categoryNames:string[],
+  products:Product[]
 }
 
-async function Main({page, categoryNames}:Main) {
+function Main({page, categoryNames, products}:Main) {
 
-  const {data, error} = await fetchProducts({page, categoryNames})
-  
-  if(error) return <ErrorMessage error={error}/>
+  if(!products) <p> no products found </p>
 
   return<>
     <Pagination route='/shop' page={(page) || 1} />
 
-    <ProductsList page={page} categoryNames={categoryNames || []} products={data.products}/>
+    <ProductsList page={page} categoryNames={categoryNames || []} products={products}/>
 
     <Pagination route='/shop' page={(page) || 1} />
   </>
