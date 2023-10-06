@@ -4,7 +4,7 @@ import { getClient } from "@lib/gqlClient";
 export default async function fetchPage(slug:string){
 
   try {
-    console.log('--- FETCH PAGE DATA --- ');
+    // console.log('--- FETCH PAGE DATA --- ');
     
     const client = getClient()
     const { data } = await client.query({query, variables: { where: { slug: slug } } })
@@ -12,7 +12,7 @@ export default async function fetchPage(slug:string){
     return {data}
     
   } catch (error) {
-    console.log('fetch Cats: ', error)
+    console.log('fetch Page: ', error)
     return { error }
   }
 }

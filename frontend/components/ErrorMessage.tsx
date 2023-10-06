@@ -30,9 +30,6 @@ const ErrorMessage = ({ error }: any) => {
   );
 };
 
-ErrorMessage.defaultProps = {
-  error: {},
-};
 
 ErrorMessage.propTypes = {
   error: PropTypes.object,

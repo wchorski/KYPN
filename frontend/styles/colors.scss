@@ -1,6 +1,15 @@
 .error {
   background-color: red;
   color: white;
+  padding-inline: 5px;
+  width: fit-content;
+}
+
+.success {
+  background-color: green;
+  color: white;
+  padding-inline: 5px;
+  width: fit-content;
 }
 
 hr {

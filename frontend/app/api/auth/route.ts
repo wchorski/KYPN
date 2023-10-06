@@ -54,3 +54,11 @@ export async function GET(request: Request) {
   //   headers: { 'Set-Cookie': `keystonejs-session=${token?.value}` },
   // })
 }
+
+export async function DELETE(request: Request){
+
+  cookies().delete('keystonejs-session')
+
+  return Response.json({message: 'cookie deleted'})
+
+}

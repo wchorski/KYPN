@@ -30,8 +30,6 @@ export default async function RootLayout({
   const cookieStore = cookies()
   const sessionObj = cookieStore.get('keystonejs-session')
   const token = sessionObj?.value
-  console.log('&&&&&&&&&&&&&&& TOKEN &&&&&&&&&&&&&&&');
-  console.log({token});
   
 
   return (

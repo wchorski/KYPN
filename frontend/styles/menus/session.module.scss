@@ -14,6 +14,12 @@
     font-size: .8rem;
   }
 
+  a.account-toggle {
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+  }
+
 
   /* svg{
     font-size: 2rem;
@@ -24,7 +30,7 @@
     position: absolute;
     pointer-events: none;
     top: 100%;
-    background-color: var(--c-body);
+    background-color: var(--c-txt-bg);
     display: flex;
     flex-direction: column;
     padding: .5em;
@@ -53,6 +59,9 @@
   a{
     /* padding: 0 !important; */
     margin: 0;
+    width: fit-content;
+    margin-left: auto;
+    text-align: right;
   }
 
 }

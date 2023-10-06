@@ -1,14 +1,12 @@
 import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { Section } from "@components/layouts/Section"
 
-type Props = {
-  prop:string
-}
 
-export default function ShopLoading ({ prop }:Props) {
+export default function AppLoading () {
   return (
-    <div>
-      loading app...
+    <Section layout={'1'}>
+      <p> loading app... </p>
       <LoadingAnim />
-    </div>
+    </Section>
   )
 }
