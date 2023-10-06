@@ -94,6 +94,23 @@ section.grid_1 {
       grid-column: 3/4;
     }
   }
+
+  section.grid_1_4 {
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.8 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 3/4;
+    }
+  }
   
   section.grid_2_1 {
   

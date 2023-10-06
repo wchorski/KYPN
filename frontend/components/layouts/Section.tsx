@@ -9,25 +9,33 @@ type Props = {
   bgImg?:string,
   col?:number,
   layout:GridLayout,
-  children:ReactNode|ReactNode[]
+  children:ReactNode|ReactNode[],
+  id?:string,
 }
 
 export function Section({
   pad = 1, 
-  bgColor = 'transparent', 
-  bgImg = '', 
+  bgColor, 
+  bgImg, 
   col,
   layout = '1_1',
-  children
+  children,
+  id,
 }:Props
 ) {
 
   const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
+  const inlineStyles = {}
+
+  if(bgImg) Object.assign(inlineStyles, {background: `url(${bgImg})`})
+  if(bgColor) Object.assign(inlineStyles, {backgroundColor: bgColor,}) 
+
   return (
     <section 
+      id={id}
       className={stylesArr.join(' ')}
-      style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
+      style={inlineStyles}
     >
 
       {isArray(children) ? children?.map((child:any, i:number) => (
@@ -42,26 +50,4 @@ export function Section({
     
     </section>
   )
-
-  // if(col) return (
-  //   <section 
-  //     className={styleArr.join(' ')} 
-  //     style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
-  //   >
-  //     <div className={styles[`col-${col}`]}>
-  //       {children}
-  //     </div>
-  //   </section>
-  // )
-
-  // return (
-  //   <section 
-  //     className={styleArr.join(' ')} 
-  //     style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
-  //   >
-  //     {/* <div className="siteWrapper" style={{paddingInline: pad + 'rem'}}> */}
-  //       {children}
-  //     {/* </div> */}
-  //   </section>
-  // )
 }
