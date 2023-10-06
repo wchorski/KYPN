@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { QueryLoading } from '@components/menus/QueryLoading';
 import ErrorMessage from '@components/ErrorMessage';
-// import { useQuery,  } from "@apollo/experimental-nextjs-app-support/ssr";
 import { gql } from "@apollo/client";
 import { getClient } from '@lib/gqlClient';
 import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
@@ -128,11 +127,11 @@ export default async function BlogPageBySlug({ params }:Props) {
 
       <footer>
         <h2 className='categories'>Categories: </h2>
-        <CategoriesPool categories={categories} />
+        <CategoriesPool />
 
 
         <h2 className='tags'>Tags:</h2>
-        <TagsPool tags={tags} />
+        <TagsPool />
       </footer>
 
     </article>
@@ -141,76 +140,6 @@ export default async function BlogPageBySlug({ params }:Props) {
     </>
   )
 }
-
-// type Main = {
-//   featured_image:string,
-//   title:string,
-//   author:User,
-//   dateCreated:string,
-//   featured_video:string,
-//   content: {
-//     document:any
-//   }
-//   categories:Category[],
-//   tags:Tag[]
-
-// }
-
-// function Main({featured_image, title, author, dateCreated, categories, content, featured_video, tags}:Main){
-
-//   return (
-//     <article className={styles.article} >
-
-//       <header
-//         style={{
-//           backgroundImage: `url(${featured_image})`
-//         }}
-//       >
-//         <ImageDynamic 
-//           photoIn={featured_image}
-//         />
-
-//         <div className={styles.title_wrap}>
-//           <h1>{title}</h1>
-          
-//           <ul className='meta'>
-//             {author && (
-//               <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
-//             )}
-//             <li> 
-//               <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
-//                 {datePrettyLocalDay(dateCreated)}
-//               </time>
-//             </li>
-
-//           </ul>
-//         </div>
-
-//       </header>
-
-//       {featured_video && (
-//         <YouTubeVideo
-//           url={featured_video}
-//           altText='featured video'
-//         />
-//       )}
-
-      
-//       <BlockRenderer document={content.document} />
-
-//       <footer>
-//         <h2 className='categories'>Categories: </h2>
-//         <CategoriesPool categories={categories} />
-
-
-//         <h2 className='tags'>Tags:</h2>
-//         <TagsPool tags={tags} />
-//       </footer>
-
-//     </article>
-//   )
-// }
-
 
 const query = gql`
   query Post($where: PostWhereUniqueInput!) {

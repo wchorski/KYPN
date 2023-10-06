@@ -12,8 +12,8 @@ export const User: Lists.User = list({
   access: {
     filter: {
       // todo will this cause privacy problems with clients?
-      query: () => true,
-      // query: rules.canManageUsers,
+      // query: () => true,
+      query: rules.canManageUsers,
       update: rules.canManageUsers,
       // delete: () => false,
     },

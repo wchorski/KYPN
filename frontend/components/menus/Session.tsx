@@ -41,10 +41,10 @@ export function SessionBadge({ label, }: Props) {
         <li className="email">{session?.email}</li>
         <li> <Link className="button" href={`/account`}> My Account </Link> </li>
         {session?.isAdmin && (
-            <li>
-              <NavLink href='/admin' className="button"> Admin Panel </NavLink>
-            </li>
-          )}
+          <li>
+            <NavLink href='/admin' className="button"> Admin Panel </NavLink>
+          </li>
+        )}
         <li><SignOutButton /></li>
       </ul>
     </div>
@@ -58,10 +58,12 @@ export function useSession() {
   // const { data, error, loading } = await client.query({query})
 
   const { data } = useQuery(QUERY_USER_CURRENT)
+  console.log({data});
+  
   // const client = getClient()
   // const { data, error } = await client.query({query})
 
-  console.log('++++++ useUser, ', data);
+  console.log('++++++ useSession data: ', data);
   return data?.authenticatedItem
 
   // const ctx = useGlobalContext()
