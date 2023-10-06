@@ -4,14 +4,6 @@
   background-color: rgba(55, 55, 55, 0.559);
   width: 100%;
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  a:hover, a:focus {
-    color: var(--c-accent);
-  }
 
   div.siteWrapper {
     display: flex;
@@ -62,6 +54,9 @@
 
   ul.utility{
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     svg {
       font-size: 2rem;
@@ -69,7 +64,7 @@
   }
 }
 
-a.navlink {
+.navlink {
 
   padding: 1rem;
   display: inline-block;
@@ -80,9 +75,16 @@ a.navlink {
   place-items: center;
   flex-grow: 1;
   border-bottom: solid 1px transparent;
+  text-decoration: none;
+  color: inherit;
 
   &:hover, &:focus{
     border-bottom: solid 1px var(--c-accent);
+    color: var(--c-accent);
+  }
+
+  span {
+    text-decoration: none;
   }
 
   // &:active{
@@ -90,6 +92,7 @@ a.navlink {
   //   color: var(--c-accent);
   // }
 }
+
 
 a.active {
   // border-bottom: solid 1px var(--c-primary);

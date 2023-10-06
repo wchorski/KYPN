@@ -10,8 +10,29 @@ import styles from '@styles/menus/form.module.scss'
 import useForm2 from "@lib/useForm2";
 import { InputObj } from "@lib/types";
 import { FormInput } from "@components/elements/Forminput";
+import { wait } from "@lib/waitTimeout";
 // import { PopupAnim } from "./PopupAnim";
 
+const inputs:InputObj[] = [
+  {
+    name: 'email',
+    label: 'email',
+    type: 'text',
+    placeholder: 'Link@hyrule.net',
+    errorMessage: 'email error',
+    required: true,
+    initial: ''
+  },
+  {
+    name: 'password',
+    label: 'password',
+    type: 'password',
+    placeholder: '***',
+    errorMessage: 'password error',
+    required: true,
+    initial: ''
+  },
+]
 
 export default function LoginForm() {
 
@@ -20,27 +41,6 @@ export default function LoginForm() {
 
   // const [isReset, setIsReset] = useState(false)
   // const [isPopup, setIsPopup] = useState(false)
-
-  const inputs:InputObj[] = [
-    {
-      name: 'email',
-      label: 'email',
-      type: 'text',
-      placeholder: 'Link@hyrule.net',
-      errorMessage: 'email error',
-      required: true,
-      initial: ''
-    },
-    {
-      name: 'password',
-      label: 'password',
-      type: 'password',
-      placeholder: '***',
-      errorMessage: 'password error',
-      required: true,
-      initial: ''
-    },
-  ]
 
   const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
 
@@ -75,7 +75,12 @@ export default function LoginForm() {
 
       
       router.refresh()
-      // router.push(`/home`)
+      router.push(`/home`)
+
+      // todo hacky way to get this to work. but it works for now
+      await wait(1000)
+      
+      window.location.reload()
     }
     // @ts-ignore
     // TODO setting local storage
@@ -93,7 +98,7 @@ export default function LoginForm() {
 
       <p className="error">{data?.authenticateUserWithPassword?.message}</p>
 
-      <fieldset>
+      <fieldset disabled={(loading || data) ? true : false} aria-busy={loading}>
         <FormInput 
           {...handleFindProps('email')}
           value={values['email']}
@@ -107,8 +112,19 @@ export default function LoginForm() {
         />
 
 
-        <button type="submit"> Login </button>
-        <button type="button" className="forgot-password"> Forgot your password? </button>
+        <button 
+          type="submit" 
+          disabled={(loading || data) ? true : false}
+        > 
+          Login 
+        </button>
+
+        <button 
+          type="button" 
+          className="forgot-password"
+        > 
+          Forgot your password? 
+        </button>
       </fieldset>
 
     </form>

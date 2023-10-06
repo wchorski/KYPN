@@ -18,7 +18,7 @@ export function NavLink ({ target = '_self',href, children, className = '' }:Pro
   
   let isActive = (href === `/${segment}`)
 
-  const styleArr = [styles.navlink, className]
+  const styleArr = [styles.navlink, className , 'navlink']
 
   return (
     <Link 

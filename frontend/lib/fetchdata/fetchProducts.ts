@@ -15,7 +15,7 @@ export async function fetchProducts({categoryNames, page}:Props){
   const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
 
   try {
-    console.log('--- FETCH PRODUCTS DATA --- ');
+    // console.log('--- FETCH PRODUCTS DATA --- ');
     const client = getClient()
     const { data } = await client.query({query, variables: {
       skip: page * perPage - perPage,
@@ -52,7 +52,7 @@ export async function fetchProducts({categoryNames, page}:Props){
       status: prod.status
     }))
 
-    console.log({prodsbug});
+    // console.log({prodsbug});
     
     
     return {data}

@@ -1,15 +1,26 @@
 import { gql } from "@apollo/client"
+import { envvars } from "@lib/envvars"
 import { getClient } from "@lib/gqlClient"
 
-export async function fetchUserById(id:string){
+export async function fetchUsers(page = 1, perPage = 25 ){
 
   try {
     const client = getClient()
     const { data } = await client.query({query, 
-      variables: { where: { id: id } }
+      variables: {
+        skip: page * perPage - perPage,
+        take: perPage,
+        orderBy: [
+          {
+            name: 'asc'
+          }
+        ]
+      },
     })
 
-    return {data}
+    const { users } = data
+
+    return { users }
     
   } catch (error) {
     console.log('fetch user by ID: ', error);
@@ -17,55 +28,17 @@ export async function fetchUserById(id:string){
   }
 }
 
-export const query = gql`
-  query User($where: UserWhereUniqueInput!) {
-    user(where: $where) {
+const query = gql`
+  query Users($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+    usersCount
+    users(take: $take, skip: $skip, orderBy: $orderBy) {
       id
       name
       nameLast
       email
-      isAdmin
-      isActive
-      image
-      posts {
-        id
-        status
-        slug
-        title
-        featured_image
-        excerpt
-        dateCreated
-      }
-      tickets {
-        id
-        status
-        holder{
-          id
-        }
-        event {
-          summary
-          id
-          start
-          end
-          location {
-            name
-            id
-            address
-          }
-        }
-      }
       role {
-        id
         name
-        canManageProducts
-        canSeeOtherUsers
-        canManageUsers
-        canManageRoles
-        canManageCart
-        canManageOrders
       }
-      dateCreated
-      dateModified
     }
   }
 `

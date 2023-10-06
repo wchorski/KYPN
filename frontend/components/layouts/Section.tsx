@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import styles from "@styles/elements/section.module.scss";
 import { GridLayout } from "@lib/types";
+import { isArray } from "@apollo/client/utilities";
 
 type Props = {
   pad?:number,
@@ -8,7 +9,7 @@ type Props = {
   bgImg?:string,
   col?:number,
   layout:GridLayout,
-  children:ReactNode[]
+  children:ReactNode|ReactNode[]
 }
 
 export function Section({
@@ -29,11 +30,15 @@ export function Section({
       style={{backgroundColor: bgColor, background: `url(${bgImg})`}}
     >
 
-      {children?.map((child:any, i:number) => (
+      {isArray(children) ? children?.map((child:any, i:number) => (
         <div key={i}> 
           {child} 
         </div>
-      )) }
+      )) : (
+        <div>
+          {children}
+        </div>
+      ) }
     
     </section>
   )

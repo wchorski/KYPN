@@ -11,7 +11,7 @@ type PageTHeaderMainAside = {
   aside:ReactNode,
 }
 
-export async function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAside) {
+export function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAside) {
 
 
   return (
@@ -43,7 +43,7 @@ type PageTHeaderMain = {
   header:ReactNode,
   main:ReactNode,
 }
-export async function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
+export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
 
 
   return (
@@ -68,7 +68,7 @@ export async function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
 type PageTMain = {
   main:ReactNode,
 }
-export async function PageTMain ({ main }:PageTMain) {
+export function PageTMain ({ main }:PageTMain) {
 
   return (
     <MainContainer>

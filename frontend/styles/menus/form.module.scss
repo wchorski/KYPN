@@ -12,13 +12,14 @@
 }
 
 .form :global {
-  display: grid;
-  gap: 1rem;
+  // display: grid;
+  // gap: 1rem;
   max-width: 20em;
-  margin-inline: auto;
+  width: 100%;
   padding: 1rem;
   border-radius: var(--br-soft);
   box-shadow: var(--boxs-1);
+  background: var(--c-txt-bg);
 
   label {
     display: grid;
@@ -47,19 +48,18 @@
 
   button[type='submit'] {
     max-width: fit-content;
-    background: var(--c-primary);
+    // background: var(--c-primary);
     border-radius: var(--br-sharp);
-    color: white;
-    border: solid 2px transparent;
+    color: var(--c-primary);
+    border: solid 2px var(--c-primary);
     font-size: 1rem;
     font-weight: 600;
     padding: 0.5rem 1.2rem;
     transition: all .3s;
 
     &:hover, &:focus{
-      background-color: var(--c-accent);
-      border: solid 2px var(--c-primary);
-      color: var(--c-primary);
+      border: solid 2px var(--c-accent);
+      color: var(--c-accent);
     }
   }
 
@@ -141,7 +141,6 @@
   font-weight: 600;
   /* min-width: 25em; */
   max-width: 30em;
-  margin-inline: auto;
   position: relative;
   min-width: 20em;
 

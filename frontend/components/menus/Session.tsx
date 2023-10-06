@@ -7,13 +7,10 @@ import styles from '@styles/menus/session.module.scss'
 import SignOutButton from "./SignOutButton";
 import { NavLink } from "./NavLink";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { LoadingAnim } from "@components/elements/LoadingAnim";
+import ErrorMessage from "@components/ErrorMessage";
 // import { getClient } from "@lib/gqlClient";
 
-// export const User = () => {
-//   return (
-//     <div>User</div>
-//   )
-// }
 
 type Props = {
   label:string,
@@ -21,25 +18,25 @@ type Props = {
 
 export function SessionBadge({ label, }: Props) {
 
-  const session = useSession()
-  console.log(session);
+  const {session, loading, error} = useSession()
+  // console.log(session)
 
-
+  if(loading) return <LoadingAnim />
+  if(error) return <ErrorMessage error={error}/>
   if(!session) return <NavLink href="/auth"> Login </NavLink>
-  
 
   return (
-    <div className={[styles.session_badge, 'toggle-menu', 'button'].join(' ')} id="session-badge" aria-label='account menu link'>
+    <div className={[styles.session_badge, 'toggle-menu', ].join(' ')} id="session-badge" aria-label='account menu link'>
       
-      <Link href={`/account`} className="button account-toggle">
+      <NavLink href={`/account`} className="account-toggle">
         <MdAccountCircle />
         <span>{label}</span>
-      </Link>
+      </NavLink>
 
       <ul className="sub-menu">
         <li className="name">{session?.name}</li>
         <li className="email">{session?.email}</li>
-        <li> <Link className="button" href={`/account`}> My Account </Link> </li>
+        <li> <NavLink className="button" href={`/account`}> My Account </NavLink> </li>
         {session?.isAdmin && (
           <li>
             <NavLink href='/admin' className="button"> Admin Panel </NavLink>
@@ -57,14 +54,15 @@ export function useSession() {
   // const client = getClient()
   // const { data, error, loading } = await client.query({query})
 
-  const { data } = useQuery(QUERY_USER_CURRENT)
-  console.log({data});
+  const { data, loading, error } = useQuery(QUERY_USER_CURRENT)
+  // console.log({data});
   
   // const client = getClient()
   // const { data, error } = await client.query({query})
 
-  console.log('++++++ useSession data: ', data);
-  return data?.authenticatedItem
+  // console.log('++++++ useSession data: ', data);
+  const session = data?.authenticatedItem
+  return {session, loading, error }
 
   // const ctx = useGlobalContext()
   // return ctx?.session

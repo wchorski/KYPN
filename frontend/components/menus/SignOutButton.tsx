@@ -3,6 +3,7 @@ import { gql, useMutation } from "@apollo/client"
 import { useRouter } from "next/navigation"
 import { QUERY_USER_CURRENT } from "./Session"
 import styles from '@/styles/elements/button.module.scss'
+import { wait } from "@lib/waitTimeout"
 
 export default function SignOutButton() {
 
@@ -13,12 +14,25 @@ export default function SignOutButton() {
   async function handleSignout() {
 
     try {
-      const res = await signOut({
+      const resGQL = await signOut({
         refetchQueries: [{ query: QUERY_USER_CURRENT }],
       })
-      console.log(res)
+      console.log(resGQL)
 
-      router.push(`/auth/signout`)
+      const resAuth = await fetch(`/api/auth`, {
+        method: 'DELETE',
+      })
+
+      const dataAuth = await resAuth.json()
+      console.log(dataAuth)
+
+      router.refresh()
+      router.push(`/auth?state=signout`)
+
+      // todo hacky way to get this to work. but it works for now
+      await wait(1000)
+      
+      window.location.reload()
 
     } catch (error) {
       console.log(error)

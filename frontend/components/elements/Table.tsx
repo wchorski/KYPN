@@ -1,7 +1,7 @@
 // cred - chatgpt lol
 import Link from 'next/link';
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styles from '@styles/elements/table.module.scss'
 import { NoData } from './NoData';
 
 interface TableProps {
@@ -13,7 +13,7 @@ interface TableProps {
 
 export function Table({ caption, cells, headers, route }: TableProps) {
 
-  const [keys, setKeys] = useState<any>(headers)
+  const keys = headers || []
   const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account', 'details']
   
 
@@ -30,7 +30,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
   return (
     <div role="region" aria-labelledby="Cap" tabIndex={0}>
 
-      <StyledTable role="table">
+      <table className={styles.table}  role="table">
         <caption role="caption"> {caption} </caption>
 
         <thead role="rowgroup">
@@ -57,7 +57,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
             </tr>
           ))}
         </tbody>
-      </StyledTable>
+      </table>
 
       {cells.length === 0 && <NoData />}
       
@@ -95,75 +95,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
       ]}
     /> */}
 
-const StyledTable = styled.table`
-  /* background-color: var(--c-light); */
-  border-collapse: collapse;
-  padding: 1rem;
-  width: 100%;
-  margin-bottom: 1em;
 
-  a{
-    color: var(--c-primary);
-
-    &:hover, &:focus{
-      color: var(--c-accent);
-    }
-  }
-
-  th, td, caption {
-    padding: .5rem 1rem;
-  }
-
-  caption{
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  th {
-    text-align: left;
-    background-color: var(--c-primary);
-    border-right: solid 1px black;
-    color: var(--c-txt);
-  }
-  tr:nth-of-type(2n) {
-    background-color: #9898983b;
-  }
-  td{
-    color: var(--c-txt-dark);
-  }
-
-  @media (max-width: 650px) {
-
-    th{
-      display: none;
-    }
-
-    td{
-      display: grid;
-      grid-template-columns: 15ch auto;
-      gap: .5rem;
-      padding: 0.7rem 1rem;
-    }
-
-    td:first-child{
-      padding-top: 2rem;
-    }
-    td:last-child{
-      padding-bottom: 2rem;
-    }
-
-    td::before {
-      content: attr(data-cell) ': ';
-      font-weight: 700;
-      text-transform: capitalize;
-    }
-  }
-
-  p.none{
-    color: var(--c-txt-rev)
-  }
-`
 function AddTableARIA() {
   try {
     var allTables = document.querySelectorAll('table');

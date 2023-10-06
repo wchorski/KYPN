@@ -1,4 +1,4 @@
-import { fetchUserById } from '@lib/fetchdata/fetchUsers'
+import { fetchUserById } from '@lib/fetchdata/fetchUserById'
 import { User } from '@lib/types';
 import { ReactNode } from 'react'
   

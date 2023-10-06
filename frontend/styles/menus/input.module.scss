@@ -31,15 +31,15 @@
   
   span.label{
     background-color: var(--c-primary);
-    color: var(--c-label);
+    color: var(--c-txt-rev);
     border-radius: var(--br-sharp);
     font-size: .8rem;
-    padding: 0 8px;
+    padding-inline: 4px;
     position: absolute;
     white-space: nowrap;
     z-index: 1;
-    
-    left: 5px;
+    top: -8px;
+    left: 3px;
     // transform: translateY(40%);
     transition: all .3s;
     
