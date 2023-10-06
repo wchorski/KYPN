@@ -1,8 +1,6 @@
 import { AsideBar } from "@/components/layouts/AsideBar"
 import { Card } from "@components/layouts/Card"
 import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
-import { gql } from "@apollo/client"
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import { useRouter } from "next/navigation"
 import Error404 from "../not-found"
 import ErrorMessage from "@components/ErrorMessage"
