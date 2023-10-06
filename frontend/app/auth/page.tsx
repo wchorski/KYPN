@@ -10,7 +10,7 @@ type Props = {
   }
 }
 
-export default function LoginPage({ searchParams }:Props) {
+export default async function LoginPage({ searchParams }:Props) {
 
   const { state } = searchParams
   
