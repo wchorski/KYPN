@@ -1,0 +1,36 @@
+{
+  "name": "keystone-app",
+  "version": "1.0.2",
+  "private": true,
+  "scripts": {
+    "ks:dev": "keystone dev",
+    "ks:build": "keystone build",
+    "ks:start": "keystone start",
+    "n:dev": "next dev -p 3000",
+    "n:build": "next build",
+    "generate": "keystone prisma generate",
+    "postinstall": "keystone build --no-ui --frozen",
+    "build": "yarn keystone build --no-ui && yarn next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@keystone-6/auth": "^7.0.0",
+    "@keystone-6/core": "^5.2.0",
+    "@keystone-6/fields-document": "^8.0.0",
+    "@prisma/client": "^4.16.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "googleapis": "^127.0.0",
+    "next": "^13.3.0",
+    "next-auth": "^4.23.2",
+    "nodemailer": "^6.9.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "stripe": "^14.1.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.12",
+    "prisma": "^4.16.2",
+    "typescript": "~5.0.0"
+  }
+}
