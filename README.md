@@ -47,6 +47,12 @@ following along with Wes Bos Tutorial
   - now you can `build` and `run` your app within a `docker container`
 
 ## Development
+
+> [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
+- any changes to **access** **filters** or **operations**
+> 1. keystone `ks:dev`
+> 2. next `n:dev`
+
 - don't forget to run and save these queries to the `seed_data.ts` 
   - `Query.Pages`
   - `Query.Services`

@@ -1,0 +1,62 @@
+version: '3'
+
+## "authtest-kypn" === unique app name
+
+services:
+
+  ## db container build seperately in ./db/compose.yml
+  # db:
+  #   container_name: authtest-kypn-db
+  #   image: postgres:15
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+  #     PGDATA: /data/postgres
+  #     POSTGRES_DB: ${DB_COLLECTION}
+  #   volumes:
+  #      - ./db/postgres:/data/postgres
+  #   ports:
+  #     - "${DB_PORT}:5432"
+  #   networks:
+  #     - this
+
+  backend:
+    container_name: authtest-kypn-backend
+    image: authtest-kypn-backend:latest # rename ALL 'authtest-kypn' to a unique name 
+    restart: unless-stopped
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile.backend
+    # ports: # expose this if you're not using a proxy
+    #   - 3001:3001
+    networks:
+      - this
+      - proxy # TODO turn back on when using proxy
+
+  frontend:
+    container_name: authtest-kypn-frontend
+    image: authtest-kypn-frontend:latest # rename ALL 'authtest-kypn' to a unique name 
+    restart: unless-stopped
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile.frontend
+    # ports: # expose this if you're not using a proxy
+    #   - 3000:3000
+    networks:
+      - this
+      - proxy # TODO turn back on when using proxy
+    # depends_on:
+    #   - db
+    #   # - backend
+
+networks:    
+  ## network first built in ./db/compose.yml, then linked with 'external: true' here
+  this:
+    name: authtest-kypn-network
+    driver: bridge  
+    external: true 
+  proxy:  # TODO turn back on when using proxy
+    name: nginx-prox-mgmt-3_default # whatever proxy container network
+    driver: bridge
+    external: true
