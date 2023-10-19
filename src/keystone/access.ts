@@ -115,6 +115,31 @@ export const rules = {
     
     // 2. If not, do they own this item?
     return { author:{ id:{ equals: session?.itemId } } }
+    // todo make a seperate "View Posts" filter
+    // return { 
+    //   OR: [
+    //     { author: { id: { equals: session?.itemId }} },
+    //     {
+    //       NOT: [
+    //         {
+    //           OR: [
+    //             {
+    //               status: {
+    //                 equals: "DRAFT"
+    //               }
+    //             },
+    //             // todo if added a new state
+    //             {
+    //               status: {
+    //                 equals: "PRIVATE"
+    //               }
+    //             },
+    //           ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // }
     
   },
   canManageLocations({ session }: ListAccessArgs) {

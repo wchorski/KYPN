@@ -16,7 +16,7 @@ import { useRef } from "react";
 function makeClient(token:string|undefined) {
   const httpLink = new HttpLink({
     // this needs to be an absolute url, as relative urls cannot be used in SSR
-    uri: envs.API_URI,
+    uri: envs.BACKEND_URL + '/api/graphql',
     headers: {
       Authorization: token ? `Bearer ${token}` : '',
       "keep-alive": "true",

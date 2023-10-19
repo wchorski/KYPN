@@ -17,7 +17,7 @@ const MAIL_USER = process.env.MAIL_USER
 const MAIL_PASS = process.env.MAIL_PASS
 const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 const SESSION_SECRET = process.env.SESSION_SECRET
-const BACKEND_URL = process.env.BACKEND_URL
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 const BACKEND_PORT = process.env.BACKEND_PORT || 'no_backend_port'
 const SEED_ME = process.env.SEED_ME
 
@@ -33,8 +33,7 @@ const NODE_ENV = process.env.NODE_ENV
 
 // FRONTEND
 const STRIPE_KEY          = process.env.NEXT_PUBLIC_STRIPE_KEY          || 'no_stripe_key'
-const STRIPE_SECRET_KEY   = process.env.STRIPE_SECRET_KEY               || 'no_stripe_secret'
-const API_URI             = process.env.NEXT_PUBLIC_API_URI             || 'no_api_uri'
+const STRIPE_SECRET_KEY   = process.env.STRIPE_SECRET_KEY               || 'no_stripe_secret'            || 'no_api_uri'
 const SITE_URI            = process.env.NEXT_PUBLIC_SITE_URI            || 'no_site_uri'
 const SITE_TITLE          = process.env.NEXT_PUBLIC_SITE_TITLE          || 'no_site_title'
 const SITE_DESC          = process.env.NEXT_PUBLIC_SITE_DESC          || 'no_site_desc'
@@ -48,7 +47,6 @@ export const envs = {
   WORK_FACTOR,
   STRIPE_KEY,
   STRIPE_SECRET_KEY,
-  API_URI,
   SITE_URI,
   SITE_TITLE,
   SITE_DESC,

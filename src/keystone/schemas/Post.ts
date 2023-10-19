@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+// @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer, checkbox } from "@keystone-6/core/fields";
@@ -11,8 +12,9 @@ export const Post:Lists.Post = list({
   
   access: {
     filter: {
-      // query: () => true,
-      query: rules.canManagePosts,
+      query: () => true,
+      // todo make intricate view rule to hide Draft or private posts
+      // query: rules.canManagePosts,
       update: rules.canManagePosts,
       delete: rules.canManagePosts,
     },

@@ -9,7 +9,7 @@ import { envs } from '@/envs'
 import { ApolloWrapper } from './ApolloWrapper'
 // import ShoppingCart from '@components/ecommerce/ShoppingCart'
 import { Hero } from '@components/menus/Hero'
-// import { AsideBar } from '@/components/layouts/AsideBar'
+// import { AsideBar } from '@components/layouts/AsideBar'
 import { cookies } from 'next/dist/client/components/headers'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })

@@ -243,7 +243,7 @@ export type Session = {
 
 export const nextAuthSessionStrategy = {
   async get({ context }: { context: Context }) {
-    console.log('nextAuthSessionStrategy nextAuthSessionStrategy nextAuthSessionStrategy')
+    
     const { req, res } = context;
     const { headers } = req ?? {};
     if (!headers?.cookie || !res) return;
@@ -254,8 +254,6 @@ export const nextAuthSessionStrategy = {
       const [key, value] = part.trim().split('=');
       cookies[key] = decodeURIComponent(value);
     }
-
-    console.log({cookies});
     
 
     const nextAuthSession = await getServerSession(

@@ -19,11 +19,7 @@ type Props = {
 
 export async function SessionBadge({ label, }: Props) {
 
-  const session = await getServerSession(nextAuthOptions);
-  console.log('==== app page SESSION ====');
-  console.log({session});
-  // console.log(session)
-
+  const session = await getServerSession(nextAuthOptions)
 
   if(!session) return <NavLink href="/api/auth/signin"> Login </NavLink>
 

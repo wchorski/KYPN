@@ -21,7 +21,7 @@ export const { getClient } = registerApolloClient(() => {
   const client = new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: new HttpLink({
-      uri: envs.API_URI,
+      uri: envs.BACKEND_URL + '/api/graphql',
       fetchOptions: {
         cache: "no-store",
         credentials: 'include',

@@ -1,66 +1,27 @@
 // import { StyledPagination } from '../styles/Pagination.styled'
-import { gql } from '@apollo/client';
-import Head from 'next/head'
+// import { gql } from '@apollo/client';
+// import Head from 'next/head'
 import Link from 'next/link'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import ErrorMessage from './ErrorMessage';
-import { QueryLoading } from './menus/QueryLoading';
+// import ErrorMessage from './ErrorMessage';
+// import { QueryLoading } from './menus/QueryLoading';
 import { envs } from "@/envs";
-import { getClient } from '@lib/gqlClient';
+// import { getClient } from '@lib/gqlClient';
 import styles from "@styles/menus/pagination.module.scss";
 
-const perPage = envvars.PERPAGE
+const perPage = envs.PERPAGE
 
 type PagProps = {
   page: number,
   route: string,
+  count:number,
 }
 
-export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
+export async function Pagination({ page, route = 'NOROUTE', count }: PagProps){
 
-  const client = getClient()
-  const { data, error, loading } = await client.query({query, 
-    variables: {
-      whereProducts: { NOT: [
-        {
-          status: {
-            equals: "DRAFT"
-          }
-        },
-        {
-          status: {
-            equals: "PRIVATE"
-          }
-        }
-      ]},
-      whereSubPlans: { NOT: [
-        {
-          status: {
-            equals: "DRAFT"
-          }
-        },
-        {
-          status: {
-            equals: "PRIVATE"
-          }
-        }
-      ]},
-      wherePosts: { NOT: [
-        {
-          status: {
-            equals: "DRAFT"
-          }
-        },
-        {
-          status: {
-            equals: "PRIVATE"
-          }
-        }
-      ]},
-    }
-  })
-  // todo make this modular with other Schema types
-  // const { error, loading, data } = useQuery(QUERY_MULTI_COUNT, {
+  console.log({count})
+  // const client = getClient()
+  // const { data, error, loading } = await client.query({query, 
   //   variables: {
   //     whereProducts: { NOT: [
   //       {
@@ -100,21 +61,22 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
   //     ]},
   //   }
   // })
+  // todo make this modular with other Schema types
 
-  if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
+  // if (loading) return <QueryLoading />
+  // if (error) return <ErrorMessage error={error} />
 
-  const handleItemCount = () => {
-    if (route === '/shop') return data.productsCount
-    if (route === '/blog') return data.postsCount
-    if (route === '/shop/subscriptions') return data.subscriptionPlansCount
-    return 0
-  }
+  // const handleItemCount = () => {
+  //   if (route === '/shop') return data.productsCount
+  //   if (route === '/blog') return data.postsCount
+  //   if (route === '/shop/subscriptions') return data.subscriptionPlansCount
+  //   return 0
+  // }
 
-  const pageCount = Math.ceil(handleItemCount() / perPage)
+  const pageCount = Math.ceil(count / perPage)
 
   
-  if(handleItemCount() <= perPage) return null
+  if(count <= perPage) return null
 
   return (<>
     {/* <Head>
@@ -141,11 +103,11 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
       <div className='count-cont'>
         <span> {page} of {pageCount}</span>
         <span data-testid='pagination-countTotal'>
-          {handleItemCount()} Total
+          {count} Total
         </span>
       </div>
 
-      {(page >= Math.ceil(handleItemCount() / perPage)) ? (
+      {(page >= Math.ceil(count / perPage)) ? (
         <span aria-disabled={true}>
           Next
           <MdKeyboardArrowRight />
@@ -163,10 +125,10 @@ export async function Pagination({ page, route = 'NOROUTE' }: PagProps){
   </>)
 }
 
-export const query = gql`
-  query Query($whereSubPlans: SubscriptionPlanWhereInput!, $whereProducts: ProductWhereInput!, $wherePosts: PostWhereInput!) {
-    subscriptionPlansCount(where: $whereSubPlans)
-    productsCount(where: $whereProducts)
-    postsCount(where: $wherePosts)
-  }
-`
+// export const query = gql`
+//   query Query($whereSubPlans: SubscriptionPlanWhereInput!, $whereProducts: ProductWhereInput!, $wherePosts: PostWhereInput!) {
+//     subscriptionPlansCount(where: $whereSubPlans)
+//     productsCount(where: $whereProducts)
+//     postsCount(where: $wherePosts)
+//   }
+// `

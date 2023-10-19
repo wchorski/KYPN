@@ -4,7 +4,7 @@ import { Footer } from '../menus/Footer'
 import { StyledMainCont } from '../../styles/elements/MainCont.styled'
 import styled from 'styled-components'
 import { AnnouncementsMarquee } from './AnnouncementsMarquee'
-import ShoppingCart from "@/components/ecommerce/ShoppingCart";
+import ShoppingCart from "@components/ecommerce/ShoppingCart";
 
 import { fontHeader, fontParagraph, fontExo, fontSub } from "../../styles/fonts";
 
