@@ -27,6 +27,8 @@ const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
 const GOOGLE_CAL_ID = process.env.GOOGLE_CAL_ID
 
+const PERPAGE = Number(process.env.NEXT_PUBLIC_PERPAGE) || 20
+
 const NODE_ENV = process.env.NODE_ENV
 
 // FRONTEND
@@ -42,6 +44,7 @@ const UMAMI_URL           = process.env.NEXT_PUBLIC_UMAMI_URL           || 'no_a
 const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT        || 'no_analytics_script'
 
 export const envs = {
+  PERPAGE,
   WORK_FACTOR,
   STRIPE_KEY,
   STRIPE_SECRET_KEY,

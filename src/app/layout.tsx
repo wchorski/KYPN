@@ -1,28 +1,85 @@
-import React from 'react';
-import '../styles/globals.css';
+import '@styles/globals.scss'
+import type { Metadata } from 'next'
+import { Inter, Barlow } from 'next/font/google'
+import layoutStyles from '@styles/layout.module.scss'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+import { Nav } from '@components/menus/Nav'
+import {Footer} from '@components/menus/Footer'
+import { envs } from '@/envs'
+import { ApolloWrapper } from './ApolloWrapper'
+// import ShoppingCart from '@components/ecommerce/ShoppingCart'
+import { Hero } from '@components/menus/Hero'
+// import { AsideBar } from '@/components/layouts/AsideBar'
+import { cookies } from 'next/dist/client/components/headers'
+
+const header = Inter({ subsets: ['latin'], variable: '--font-header' })
+const paragraph = Barlow({ weight: '200', subsets: ['latin'], variable: '--font-paragraph' })
+
+export const metadata: Metadata = {
+  title: envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+
+  const cookieStore = cookies()
+  const sessionObj = cookieStore.get('keystonejs-session')
+  const token = sessionObj?.value
+  
+
   return (
-    <html>
-      <head>
-        <title>Keystone + Next.js</title>
-        <meta
-          name="description"
-          content="Example to use Keystone APIs in a Next.js server environment."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-      <body>
-        <div className="container">
-          <div
-            style={{
-              padding: '0 2rem',
-            }}
-          >
-            <main style={{ display: 'flex', justifyContent: 'center' }}>{children}</main>
-          </div>
-        </div>
+    <html lang="en">
+      <body className={[
+        header.variable, 
+        paragraph.variable, 
+        'layout--fullwidth',
+        'layout'
+        // 'layout--main-aside',
+      ].join(' ')}>
+
+      <ApolloWrapper token={token}>
+
+        {/* <ShoppingCart /> */}
+
+        <Hero
+          title={envs.SITE_TITLE}
+          description={envs.SITE_DESC}
+          logoSrc={`/assets/private/logo.png`}
+          bgImg={'/assets/tiles/teal-restaurant.webp'}
+        >
+        </Hero>
+        
+        <Nav />
+      
+        {children}
+
+
+        {/* //? if you want a global sidebar */}
+        {/* <AsideBar>
+          <Card> 
+            <h3> one </h3>
+            <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum deleniti perferendis nesciunt suscipit inventore id, eos, est debitis cum fugit dolores aliquid, magnam ad veritatis quidem quia expedita! Provident, quas.</p>
+          </Card>
+          <Card> 
+            <h3> one </h3>
+            <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum deleniti perferendis nesciunt suscipit inventore id, eos, est debitis cum fugit dolores aliquid, magnam ad veritatis quidem quia expedita! Provident, quas.</p>
+          </Card>
+          <Card> 
+            <h3> one </h3>
+            <p> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum deleniti perferendis nesciunt suscipit inventore id, eos, est debitis cum fugit dolores aliquid, magnam ad veritatis quidem quia expedita! Provident, quas.</p>
+          </Card>
+        </AsideBar> */}
+
+
+
+        <Footer />
+        
+      </ApolloWrapper>
       </body>
     </html>
-  );
+  )
 }

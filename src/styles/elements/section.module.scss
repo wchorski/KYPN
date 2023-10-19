@@ -1,0 +1,177 @@
+section.section {
+  display: grid; 
+  grid-column: 1/-1;
+  gap: 1rem;
+  align-content: flex-start;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  // ? maybe do this? idk
+  // min-height: 50vh;
+  // min-height: 50dvh;
+  position: relative;
+  align-content: center;
+
+  // // debug
+  // > div {
+  //   border: dashed grey 1px;
+  // }
+  
+  
+}
+
+.content_center {
+  > div {
+    display: grid;
+    align-content: center;
+    // height: 50vh;
+    // height: 50dvh;
+  }
+}
+
+section.grid_1 {
+  grid-template-columns: 
+    minmax(0, 1fr) 
+    minmax(0, calc(var(--w-sitemax) - 1rem)) 
+    minmax(0, 1fr)
+  ;
+  
+  > div {
+    grid-column: 2/3;
+  }
+}
+
+@media screen and (width > 650px) {
+  
+  section.grid_1{
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div {
+      grid-column: 2/3;
+
+      > ul, > li {
+        padding-left: 1.5rem;
+      }
+    }
+  }
+
+  section.grid_1_1{
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.5 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.5 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 3/4;
+    }
+  }
+  
+  
+  section.grid_1_2 {
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.3 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.7 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 3/4;
+    }
+  }
+
+  section.grid_1_4 {
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.8 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 3/4;
+    }
+  }
+  
+  section.grid_2_1 {
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.7 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.3 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 3/4;
+    }
+  }
+  
+  section.grid_1_1_1 {  
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+    // grid-template-columns: repeat(3, 1fr);
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 4/5;
+    }
+  }
+  
+  section.grid_1_2_1 {
+  
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.59 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
+      minmax(0, 1fr)
+    ;
+    // grid-template-columns: repeat(3, 1fr);
+  
+    > div:first-child {
+      grid-column: 2/3;
+    }
+    > div:last-child {
+      grid-column: 4/5;
+    }
+  }
+}
+
+
+
+
+// section.grid_1_2_1{
+//   background-color: purple;
+//   display: grid;
+// }

@@ -14,6 +14,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@apollo/experimental-nextjs-app-support": "^0.4.3",
     "@keystone-6/auth": "^7.0.0",
     "@keystone-6/core": "^5.2.0",
     "@keystone-6/fields-document": "^8.0.0",
@@ -21,11 +22,17 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "googleapis": "^127.0.0",
+    "lightgallery": "^2.7.2",
     "next": "^13.3.0",
     "next-auth": "^4.23.2",
     "nodemailer": "^6.9.6",
+    "nprogress": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-slick": "^0.29.0",
+    "sass": "^1.69.4",
+    "slick-carousel": "^1.8.1",
     "stripe": "^14.1.0"
   },
   "devDependencies": {

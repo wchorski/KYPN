@@ -113,7 +113,7 @@ export const User: Lists.User = list({
       // }
     }),
     posts: relationship({ ref: 'Post.author', many: true }),
-    // pages: relationship({ ref: 'Page.author', many: true }),
+    pages: relationship({ ref: 'Page.author', many: true }),
     // servicesProvided: relationship({ ref: 'Service.employees', many: true }),
     // bookings: relationship({ ref: 'Booking.customer', many: true }),
     // gigs: relationship({ ref: 'Booking.employees', many: true }),
