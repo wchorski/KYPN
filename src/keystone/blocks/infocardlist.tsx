@@ -1,4 +1,4 @@
-
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -43,7 +43,7 @@ export const infocardlist = component({
     return (
       // <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -54,7 +54,7 @@ export const infocardlist = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',

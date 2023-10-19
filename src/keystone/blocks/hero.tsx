@@ -1,3 +1,4 @@
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -26,7 +27,7 @@ export const hero = component({
       <div>
         <NotEditable>
           <div
-            css={{
+            style={{
               backgroundImage: `url(${props.fields.imageSrc.value})`,
               backgroundPosition: 'center',
               backgroundSize: 'cover',
@@ -36,7 +37,7 @@ export const hero = component({
           />
         </NotEditable>
         {props.fields.caption.discriminant ? (
-          <div css={{ textAlign: 'center' }}>{props.fields.caption.value.element}</div>
+          <div style={{ textAlign: 'center' }}>{props.fields.caption.value.element}</div>
         ) : null}
       </div>
     );

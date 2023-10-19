@@ -72,7 +72,7 @@ export const lists: Lists = {
   // SubscriptionPlan,
   // SubscriptionItem,
   Product,
-  // CartItem,
+  CartItem,
   OrderItem,
   Order,
   // Coupon,
@@ -89,7 +89,7 @@ export const lists: Lists = {
 export const extendGraphqlSchema = graphql.extend(base => {
   return {
     mutation: {
-      // addToCart: addToCart(base),
+      addToCart: addToCart(base),
       // checkout: checkout(base),
       // checkoutSubscription: checkoutSubscription(base),
       // checkoutTicket: checkoutTicket(base),

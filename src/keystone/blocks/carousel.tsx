@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -11,7 +10,7 @@ export const carousel = component({
     return (
       <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -22,7 +21,7 @@ export const carousel = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',
@@ -36,7 +35,7 @@ export const carousel = component({
                 <img
                   role="presentation"
                   src={item.fields.imageSrc.value}
-                  css={{
+                  style={{
                     objectFit: 'cover',
                     objectPosition: 'center center',
                     height: 240,
@@ -45,12 +44,10 @@ export const carousel = component({
                   }}
                 />
                 <h1
-                  css={{
-                    '&&': {
-                      fontSize: '1.25rem',
-                      lineHeight: 'unset',
-                      marginTop: 8,
-                    },
+                  style={{
+                    fontSize: '1.25rem',
+                    lineHeight: 'unset',
+                    marginTop: 8,    
                   }}
                 >
                   {item.fields.title.value}

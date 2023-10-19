@@ -1,8 +1,7 @@
-'use client'
 // cred - Kevin Powell - https://www.youtube.com/watch?v=Z-3tPXf9a7M&t=388s
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
 import Link from "next/link"
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import styles from '@styles/blocs/infocard.module.scss'
 
 type InfoCard = {
@@ -27,30 +26,30 @@ type MousePosition = {
 
 export function InfoCard({content, buttonLink, buttonText, header, imageSrc, color, verticleAlign, padding, fontSize, width, children}:InfoCard) {
   
-  const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
+  // const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
 
-  const handleRotation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - left;
-    const y = event.clientY - top;
+  // const handleRotation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+  //   const x = event.clientX - left;
+  //   const y = event.clientY - top;
     
     
-    const relativeX = ((x / width) - 0.5) * 2;
-    const relativeY = ((y / height) - 0.5) * -2;
-    // console.log(relativeX,relativeY);
+  //   const relativeX = ((x / width) - 0.5) * 2;
+  //   const relativeY = ((y / height) - 0.5) * -2;
+  //   // console.log(relativeX,relativeY);
 
-    const amplifiy = 10;
-    const clampedX = parseFloat(relativeX.toFixed(1)) * amplifiy;
-    const clampedY = parseFloat(relativeY.toFixed(1)) * amplifiy;
+  //   const amplifiy = 10;
+  //   const clampedX = parseFloat(relativeX.toFixed(1)) * amplifiy;
+  //   const clampedY = parseFloat(relativeY.toFixed(1)) * amplifiy;
 
-    setMousePosition({ x: clampedX, y: clampedY });
-  }
+  //   setMousePosition({ x: clampedX, y: clampedY });
+  // }
 
-  const  handleMouseLeave = () => {
-    const mouseLeaveDelay = setTimeout(()=>{
-      setMousePosition({x:0,y:0})
-    }, 500);
-  }
+  // const  handleMouseLeave = () => {
+  //   const mouseLeaveDelay = setTimeout(()=>{
+  //     setMousePosition({x:0,y:0})
+  //   }, 500);
+  // }
 
   return (
     <article className={[styles.infocard, styles[`vAlign_${verticleAlign}`] ].join(' ')}  

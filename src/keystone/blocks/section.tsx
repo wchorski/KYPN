@@ -1,4 +1,4 @@
-
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -27,7 +27,7 @@ export const section = component({
   preview: function Preview(props) {
     return (
       <section
-        css={{
+        style={{
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
           backgroundPosition: 'center',

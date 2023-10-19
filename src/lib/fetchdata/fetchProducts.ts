@@ -14,8 +14,6 @@ export async function fetchProducts(page:number, categoryNames:string[], session
     const count = await keystoneContext.withSession(session).query.Product.count({
     
     })
-    console.log('HEYYYYY');
-    console.log({count});
     
 
     const products = await keystoneContext.withSession(session).query.Product.findMany({

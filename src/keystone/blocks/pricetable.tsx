@@ -1,4 +1,4 @@
-
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -49,7 +49,7 @@ export const pricetable = component({
     return (
       // <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -60,7 +60,7 @@ export const pricetable = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',
@@ -76,7 +76,7 @@ export const pricetable = component({
                 <img
                   role="presentation"
                   src={item.fields.imageSrc.value}
-                  css={{
+                  style={{
                     objectFit: 'cover',
                     objectPosition: 'center center',
                     height: 240,
@@ -86,12 +86,12 @@ export const pricetable = component({
                   />
 
                 <h3
-                  css={{
-                    '&&': {
+                  style={{
+                 
                       fontSize: '1.25rem',
                       lineHeight: 'unset',
                       marginTop: 8,
-                    },
+            
                   }}
                   >
                   {item.fields.title.value || item.fields.service.value?.data.name}
@@ -102,7 +102,7 @@ export const pricetable = component({
                 </div>
                 </NotEditable>
 
-                <div css={{ color: '#99a4b6', lineHeight: '30px' }}> {item.fields.content.element} </div>
+                <div style={{ color: '#99a4b6', lineHeight: '30px' }}> {item.fields.content.element} </div>
 
                 <NotEditable>
                   <button>{item.fields.buttonLabel.value}</button>

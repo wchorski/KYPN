@@ -19,7 +19,7 @@ type PagProps = {
 
 export async function Pagination({ page, route = 'NOROUTE', count }: PagProps){
 
-  console.log({count})
+  // old way when i was fetching from client
   // const client = getClient()
   // const { data, error, loading } = await client.query({query, 
   //   variables: {

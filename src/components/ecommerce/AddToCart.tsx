@@ -1,30 +1,24 @@
 'use client'
 import { useMutation, gql } from '@apollo/client';
-import { useRouter } from 'next/navigation';
-// import { useSession } from "../menus/Session";
 import { MdShoppingBag } from 'react-icons/md';
-import { TbCheck, TbExclamationCircle, TbQuestionMark, TbLoader  } from 'react-icons/tb';
-// import { QUERY_USER_CURRENT } from '../menus/Session';
+import { TbCheck, TbExclamationCircle, TbLoader  } from 'react-icons/tb';
+
 import { useState } from 'react';
-import styles from '../../styles/eyecandy/SpinCycle.module.scss'
-import stylesButton from "@styles/ecommerce/AddToCart.module.scss";
+import styles from '@styles/eyecandy/SpinCycle.module.scss'
+
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
-export default function AddToCart({ id }: { id: string }) {
+export default function AddToCart({ id }: { id: string }) {  
 
   const [state, setstate] = useState<State>(undefined)
-  // const session = useSession()
-  const session = undefined
-  const router = useRouter()
   const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
 
 
   async function handleButton() {
-
-    if (!session) return router.push(`/auth/login`)
+    // if (!session) return router.push(`/auth/login`)
 
     try {
 
@@ -37,6 +31,8 @@ export default function AddToCart({ id }: { id: string }) {
         },
         // refetchQueries: [{ query: QUERY_USER_CURRENT }],
       })
+      console.log(res);
+      
 
       await delay(500)
 
@@ -48,11 +44,8 @@ export default function AddToCart({ id }: { id: string }) {
       
     } catch (error) {
       setstate('error')
-      console.warn('addtocart error: ', error);
+      console.log('!!! addtocart error: ', error);
     }
-
-
-    // console.log({res});
 
   }
 

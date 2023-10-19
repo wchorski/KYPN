@@ -1,4 +1,3 @@
-// @ts-nocheck
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -74,20 +73,18 @@ export const callout = component({
 
     return (
       <div
-        css={{
+        style={{
           borderRadius: radii.small,
           display: 'flex',
           paddingLeft: spacing.medium,
           paddingRight: spacing.medium,
           borderLeft: `solid 5px ${intentConfig.foreground}`,
-        }}
-        style={{
           background: intentConfig.background,
         }}
       >
         <NotEditable>
           <div
-            css={{
+            style={{
               color: intentConfig.foreground,
               marginRight: spacing.small,
               marginTop: '1em',
@@ -96,7 +93,7 @@ export const callout = component({
             <intentConfig.icon />
           </div>
         </NotEditable>
-        <div css={{ flex: 1 }}>{props.fields.content.element}</div>
+        <div style={{ flex: 1 }}>{props.fields.content.element}</div>
       </div>
     );
   },

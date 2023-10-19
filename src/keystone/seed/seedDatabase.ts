@@ -357,6 +357,6 @@ export const seedDatabase = async (context: Context) => {
   // await seedSubscriptions(context)
   // await seedEventData(context)
   // await seedAddons(context)
-  // await seedPages(context)
+  await seedPages(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

@@ -15,6 +15,7 @@ import { getClient } from "@lib/gqlClient"
 import fetchPage from "@lib/fetchdata/fetchPage"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
+import { DocumentRender } from "../DocumentRender"
 export const revalidate = 5;
  
 // export const metadata: Metadata = {
@@ -138,7 +139,8 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
 function Main(content:any){
 
   return <>
-    <BlockRenderer document={content.document} />
+    {/* <BlockRenderer document={content.document} /> */}
+    <DocumentRender document={content.document} />
   </>
 }
 
