@@ -5,6 +5,7 @@ import type { DefaultJWT } from 'next-auth/jwt';
 import type { DefaultSession, DefaultUser } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialProvider from 'next-auth/providers/credentials';
+// @ts-ignore
 import type { Context } from '.keystone/types';
 // @ts-ignore
 import bcrypt from 'bcryptjs';
@@ -16,12 +17,7 @@ const NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'no_auth_url'
 const sessionSecret = process.env.NEXTAUTH_SECRET;
 const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
-// const hostName = new URL(NEXTAUTH_URL).hostname;
-const hostName = process.env.AUTH_HOSTNAME || 'no_hostname'
-console.log({hostName});
-
-
-
+const hostName = new URL(NEXTAUTH_URL).hostname
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext;
 
@@ -38,7 +34,7 @@ async function getKeystoneContext() {
     if (NODE_ENV !== 'production') {
       (globalThis as any)._keystoneContext = _keystoneContext;
     }
-  console.log('getKeystoneContext getKeystoneContext getKeystoneContext getKeystoneContext getKeystoneContext')
+
   return _keystoneContext;
 }
 
@@ -58,7 +54,7 @@ export const nextAuthOptions = {
       // let idObj = { authId: user.id }
       // @ts-ignore
       if(user._type === 'credentials') idObj = { id: user.id}
-      console.log({idObj})
+
       
 
       // check if the user exists in keystone
@@ -104,7 +100,6 @@ export const nextAuthOptions = {
       token: DefaultJWT;
     }) {
 
-      console.log('******** async session');
       // console.log({token});
       // console.log({session});
       const sudoContext = (await getKeystoneContext()).sudo();
@@ -142,22 +137,16 @@ export const nextAuthOptions = {
       };
 
       // if(seshUser.role) Object.assign(sessionObj, { data: { role: seshUser.role } })
-
-      console.log({sessionObj});
       
       
       return sessionObj
     },
-    redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {
-      console.log('>>> redirect');
-      console.log({hostName});
-      console.log({url});
-      console.log({baseUrl});
-      
-      
+
+    redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {      
       if (new URL(url).hostname === hostName) return Promise.resolve(url);
       return Promise.resolve(baseUrl);
     },
+
   },
 
   cookies: {
@@ -168,7 +157,7 @@ export const nextAuthOptions = {
         sameSite: "lax",
         path: "/",
         secure: useSecureCookies,
-        domain: (hostName.includes("localhost")) ? hostName : "." + hostName,
+        domain: (hostName === "localhost") ? hostName : "." + hostName,
       },
     },
   },

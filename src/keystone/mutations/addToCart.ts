@@ -1,6 +1,7 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql, config } from '@keystone-6/core';
+// @ts-ignore
 import { Context } from '.keystone/types';
 // import { relationship } from '@keystone-6/core/fields';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';

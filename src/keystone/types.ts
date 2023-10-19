@@ -270,7 +270,7 @@ export type Post = {
   featured_video?: string,
   content?: {
     document: any,
-  },
+  } | any,
   allow_comments?:boolean,
   author?: User|{connect:any},
   categories?: Category[]|{connect:any},

@@ -76,7 +76,7 @@ export const lists: Lists = {
   // OrderItem,
   // Order,
   // Coupon,
-  // Page,
+  Page,
   Post,
   // Event,
   // Ticket,

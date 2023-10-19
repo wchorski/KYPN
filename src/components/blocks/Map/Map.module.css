@@ -1,0 +1,12 @@
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-marker-icon::before{
+  content: 'xxxxxx';
+}
+
+.leaflet-marker-icon{
+  background-color: blue;
+}

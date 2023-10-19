@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+// @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { relationship, select, text, timestamp, integer, checkbox } from "@keystone-6/core/fields";
