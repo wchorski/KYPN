@@ -1,3 +1,4 @@
+
 import React, { ComponentProps } from 'react';
 import { DocumentRenderer } from '@keystone-6/document-renderer';
 import { Hero } from './Hero';
@@ -106,7 +107,8 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
     return <PostsList {...props}/>
   },
   infocard: props => {
-    return <InfoCard {...props}/>
+    // return <InfoCard {...props}/>
+    return <p> info card test </p>
   },
   infocardlist: props => {
     return <InfoCardList {...props}/>
@@ -150,13 +152,12 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 };
 
 export function BlockRenderer({ document }: CustomRendererProps) {
-  return (
-    <div className={['block-renderer', styles.blockrenderer].join(' ')}>
-      <DocumentRenderer
+  <div className={['block-renderer', styles.blockrenderer].join(' ')}>
+      {/* <DocumentRenderer
         renderers={defaultElementRenderers}
         componentBlocks={customComponentRenderers}
         document={document}
-      />
+      /> */}
+      <p> doc renderer debug </p>
     </div>
-  );
 }

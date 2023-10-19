@@ -1,4 +1,4 @@
-// @ts-nocheck
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -33,7 +33,7 @@ export const imagegallery = component({
     return (
       <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -44,7 +44,7 @@ export const imagegallery = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '31.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',
@@ -58,7 +58,7 @@ export const imagegallery = component({
                 <img
                   role="presentation"
                   src={item.fields.src.value}
-                  css={{
+                  style={{
                     objectFit: 'contain',
                     objectPosition: 'center center',
                     height: 240,
@@ -67,24 +67,23 @@ export const imagegallery = component({
                   }}
                 />
                 <p
-                  css={{
-                    '&&': {
-                      fontSize: '1.25rem',
-                      lineHeight: 'unset',
-                      marginTop: 8,
-                    },
+                  style={{
+
+                    fontSize: '1.25rem',
+                    lineHeight: 'unset',
+                    marginTop: 8,
+
                   }}
                 >
                   <strong>{item.fields.alt.value}</strong>
                   
                 </p>
                 <p
-                  css={{
-                    '&&': {
-                      fontSize: '1.25rem',
-                      lineHeight: 'unset',
-                      marginTop: 8,
-                    },
+                  style={{
+
+                    fontSize: '1.25rem',
+                    lineHeight: 'unset',
+          
                   }}
                 >
                   {item.fields.caption.value}

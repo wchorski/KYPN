@@ -8,7 +8,7 @@ require('dotenv').config()
 
 import { config } from '@keystone-6/core';
 
-import { lists } from './src/keystone/schema';
+import { extendGraphqlSchema, lists } from './src/keystone/schema';
 import { nextAuthSessionStrategy } from './session';
 // @ts-ignore
 import type { Context } from '.keystone/types';
@@ -53,7 +53,8 @@ export default config({
 
   },
   server: {
-    port: 3001,
+    port: Number(process.env.BACKEND_PORT) || 3001,
+    cors: { origin: [process.env.NEXT_PUBLIC_FRONTEND_URL], credentials: true },
   },
   ui: {
     // the following api routes are required for nextauth.js
@@ -85,6 +86,7 @@ export default config({
     },
   },
   lists,
+  extendGraphqlSchema,
   session: nextAuthSessionStrategy,
 })
 

@@ -120,14 +120,14 @@ export const User: Lists.User = list({
     // eventsHost: relationship({ ref: 'Event.hosts', many: true }),
     // eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
     // availability: relationship({ ref: 'Availability.employee', many: true }),
-    // cart: relationship({
-    //   ref: 'CartItem.user',
-    //   many: true,
-    //   ui: {
-    //     createView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'hidden' }
-    //   }
-    // }),
+    cart: relationship({
+      ref: 'CartItem.user',
+      many: true,
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' }
+      }
+    }),
 
     products: relationship({ ref: 'Product.author', many: true }),
     // subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),

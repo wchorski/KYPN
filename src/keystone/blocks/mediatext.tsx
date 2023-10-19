@@ -1,3 +1,4 @@
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -27,7 +28,7 @@ export const mediatext = component({
   preview: function Quote(props) {
     return (
       <div
-        css={{
+        style={{
           backgroundColor: '#f3f5f6',
           padding: '5px',
           position: 'relative',
@@ -36,11 +37,11 @@ export const mediatext = component({
           flexDirection: props.fields.rowReverse ? 'row-reverse' : 'row',
         }}
       >
-        <div css={{ fontStyle: 'italic', color: '#4A5568', flex: '1', padding: '10px'}}>
+        <div style={{ fontStyle: 'italic', color: '#4A5568', flex: '1', padding: '10px'}}>
           {props.fields.content.element}
         </div>
         <div 
-          css={{ 
+          style={{ 
             fontWeight: 'bold', 
             color: '#47546b', 
             background: `url(${props.fields.imageSrc.value})`,
@@ -53,7 +54,7 @@ export const mediatext = component({
         >
 
           <img 
-            css={{width: '1px', height: '1px', display: 'none'}}
+            style={{width: '1px', height: '1px', display: 'none'}}
             src={String(props.fields.imageSrc.value)} 
             alt={String(props.fields.imageAlt.value)}
           />

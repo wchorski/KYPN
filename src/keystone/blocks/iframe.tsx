@@ -1,4 +1,4 @@
-
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 

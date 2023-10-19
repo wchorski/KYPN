@@ -1,4 +1,4 @@
-
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -47,7 +47,7 @@ export const imagelinklist = component({
     return (
       // <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -58,7 +58,7 @@ export const imagelinklist = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '21.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',

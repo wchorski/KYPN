@@ -1,4 +1,4 @@
-// @ts-nocheck
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -11,7 +11,7 @@ export const slider = component({
     return (
       <NotEditable>
         <div
-          css={{
+          style={{
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
@@ -22,7 +22,7 @@ export const slider = component({
               <Box
                 key={item.key}
                 margin="xsmall"
-                css={{
+                style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
                   scrollSnapStop: 'always',
@@ -36,7 +36,7 @@ export const slider = component({
                 <img
                   role="presentation"
                   src={item.fields.imageSrc.value}
-                  css={{
+                  style={{
                     objectFit: 'cover',
                     objectPosition: 'center center',
                     height: 240,
@@ -45,12 +45,12 @@ export const slider = component({
                   }}
                 />
                 <h3
-                  css={{
-                    '&&': {
+                  style={{
+                 
                       fontSize: '1.25rem',
                       lineHeight: 'unset',
                       marginTop: 8,
-                    },
+                  
                   }}
                 >
                   {item.fields.title.value}

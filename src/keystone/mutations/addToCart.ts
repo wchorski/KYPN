@@ -8,15 +8,17 @@ import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/sch
 
 export const addToCart = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
-  args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productID: graphql.arg({ type: graphql.ID }) },
-  async resolve(source, { id, productID }, context: Context){
-    // console.log('****************** addToCart Mutation')
+  args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productId: graphql.arg({ type: graphql.ID }) },
+  async resolve(source, { id, productId }, context: Context){
+    console.log('****************** addToCart Mutation')
     const sesh = context.session    
+    console.log({context});
+    
         
-    if(!sesh.itemId){
+    if(!sesh){
       throw new Error('!!!! you must be logged in')
     }
-    const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: sesh.itemId } }, product: { id: {equals: productID} } }})
+    const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: sesh.itemId } }, product: { id: {equals: productId} } }})
     const [exisitingItem] = allCartItems
 
     if(exisitingItem){
@@ -31,7 +33,7 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
 
     return await context.db.CartItem.createOne({
       data: {
-        product: { connect: { id: productID }},
+        product: { connect: { id: productId }},
         user: { connect: { id: sesh.itemId }},
       },
     })

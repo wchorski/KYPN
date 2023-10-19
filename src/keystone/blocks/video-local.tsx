@@ -1,3 +1,4 @@
+'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -35,7 +36,7 @@ export const videoLocal = component({
     return (
       <NotEditable>
         <div
-          css={{
+          style={{
             overflow: 'hidden',
             paddingBottom: '56.25%',
             position: 'relative',

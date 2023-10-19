@@ -25,7 +25,7 @@ export default async function fetchPage(slug:string, session:any){
           name
         }
         content {
-          document(hydrateRelationships: true)
+          document
         }
       `
     });
