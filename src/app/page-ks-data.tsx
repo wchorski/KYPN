@@ -1,5 +1,5 @@
 import { keystoneContext } from '../keystone/context';
-import { DocumentRender } from './DocumentRender';
+import { BlockRender } from '../components/blocks/BlockRender';
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from '../../session'
 import type { Post, User } from "../keystone/types";
