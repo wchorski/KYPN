@@ -1,39 +1,38 @@
 
 import React, { ComponentProps } from 'react';
-import { DocumentRenderer } from '@keystone-6/document-renderer';
-import { Hero } from './Hero';
-import { Callout } from './Callout';
-import { Quote } from './Quote';
-import { Carousel } from './Carousel';
-import { Tweet } from './Tweet';
-import { YouTubeVideo } from './YouTubeVideo';
-import SliderSlick from './SliderSlick';
-import { MediaText } from './MediaText';
-import { Section } from './Section';
-import { EventsUpcoming } from './EventsUpcoming';
-import { PostsList } from './PostsList';
-import { InfoCard } from './InfoCard';
-import { BlockLayout } from './BlockLayout';
-import { ContactForm } from './ContactForm';
-import { SocialLinkNav } from './SocialLinkNav';
-import { IFrame } from './IFrame';
-import { PriceTable } from './PriceTable';
-import { InfoCardList } from './InfoCardList';
-import { ImageLinkList } from './ImageLinkList';
-import { VideoLocal } from './VideoLocal';
-import { ImageGallery } from './ImageGallery';
-import { ButtonLink } from './ButtonLink';
 import styles from '@styles/blocs/blockrenderer.module.scss'
-import { ProductListBlock } from './ProductListBlock';
-import { ImageBlock } from './ImageBlock';
-import { Paragraph } from './ParagraphBlock';
-import { HeadingBlock } from './HeadingBlock';
-import { List } from '@components/elements/List';
-import { ListBlock } from './ListBlock';
+import { DocumentRenderer, DocumentRendererProps } from '@keystone-6/document-renderer';
+import { Callout } from '@components/blocks/Callout';
+import { ImageBlock } from '@components/blocks/ImageBlock';
+import { ProductListBlock } from '@components/blocks/ProductListBlock';
+import { ButtonLink } from '@components/blocks/ButtonLink';
+import { ImageGallery } from '@components/blocks/ImageGallery';
+import { VideoLocal } from '@components/blocks/VideoLocal';
+import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
+import { Tweet } from '@components/blocks/Tweet';
+import { PriceTable } from '@components/blocks/PriceTable';
+import { MediaText } from '@components/blocks/MediaText';
+import { SocialLinkNav } from '@components/blocks/SocialLinkNav';
+import { ContactForm } from '@components/blocks/ContactForm';
+import { ImageLinkList } from '@components/blocks/ImageLinkList';
+import { InfoCardList } from '@components/blocks/InfoCardList';
+import { PostsList } from '@components/blocks/PostsList';
+import { EventsUpcoming } from '@components/blocks/EventsUpcoming';
+import { IFrame } from '@components/blocks/IFrame';
+import { Section } from '@components/blocks/Section';
+import SliderSlick from '@components/blocks/SliderSlick';
+import { Carousel } from '@components/blocks/Carousel';
+import { Quote } from '@components/blocks/Quote';
+import { Hero } from '@components/menus/Hero';
+import { InfoCard } from '@components/blocks/InfoCard';
+import { BlockLayout } from '@components/blocks/BlockLayout';
+import { Paragraph } from '@components/blocks/ParagraphBlock';
+import { HeadingBlock } from '@components/blocks/HeadingBlock';
 
-type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
-
-const defaultElementRenderers: CustomRendererProps['renderers'] = {
+// By default the DocumentRenderer will render unstyled html elements.
+// We're customising how headings are rendered here but you can customise
+// any of the renderers that the DocumentRenderer uses.
+const renderers: DocumentRendererProps['renderers'] = {
   block: {
     // all custom components are block components
     // so they will be wrapped with a <div /> by default
@@ -78,7 +77,10 @@ const defaultElementRenderers: CustomRendererProps['renderers'] = {
   },
 };
 
+type CustomRendererProps = ComponentProps<typeof DocumentRenderer>;
+
 const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
+
   hero: props => {
     return <Hero {...props} />;
   },
@@ -107,8 +109,8 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
     return <PostsList {...props}/>
   },
   infocard: props => {
-    // return <InfoCard {...props}/>
-    return <p> info card test </p>
+    return <InfoCard {...props}/>
+    
   },
   infocardlist: props => {
     return <InfoCardList {...props}/>
@@ -151,13 +153,23 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   },
 };
 
-export function BlockRenderer({ document }: CustomRendererProps) {
-  <div className={['block-renderer', styles.blockrenderer].join(' ')}>
-      {/* <DocumentRenderer
-        renderers={defaultElementRenderers}
+export function BlockRender({ document }: { document: any }) {
+
+  // return <DocumentRenderer 
+  //   document={document} 
+  //   componentBlocks={customComponentRenderers}
+  //   renderers={renderers} 
+  // />;
+
+  return (
+    <div className={['block-renderer', styles.blockrenderer].join(' ')}>
+      <DocumentRenderer
+        renderers={renderers}
         componentBlocks={customComponentRenderers}
         document={document}
-      /> */}
-      <p> doc renderer debug </p>
+      />
     </div>
+
+  )
+
 }

@@ -7,7 +7,6 @@ import ErrorMessage from "@components/ErrorMessage"
 import { QueryLoading } from "@components/menus/QueryLoading"
 import {  Page } from "@ks/types"
 import { datePretty } from "@lib/dateFormatter"
-import { BlockRenderer } from "@components/blocks/BlocksRenderer"
 
 import type { Metadata } from 'next'
 import { envs } from "@/envs"
@@ -15,7 +14,7 @@ import { getClient } from "@lib/gqlClient"
 import fetchPage from "@lib/fetchdata/fetchPage"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
-import { DocumentRender } from "../DocumentRender"
+import { BlockRender } from '@components/blocks/BlockRender'
 export const revalidate = 5;
  
 // export const metadata: Metadata = {
@@ -139,8 +138,7 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
 function Main(content:any){
 
   return <>
-    {/* <BlockRenderer document={content.document} /> */}
-    <DocumentRender document={content.document} />
+    <BlockRender document={content.document} />
   </>
 }
 
