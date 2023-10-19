@@ -3,15 +3,13 @@ import { keystoneContext } from "@ks/context"
 
 const perPage = envs.PERPAGE
 
-export async function fetchPosts(categoryNames:string[], page:number, session:any){
+export async function fetchPosts(page:number, categoryNames:string[], session:any){
 
   const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
 
   try {
 
     const count = await keystoneContext.withSession(session).query.Post.count({
-
-      
       where: { 
         NOT: [
           {
@@ -26,7 +24,6 @@ export async function fetchPosts(categoryNames:string[], page:number, session:an
           }
         ]
       },
-      
     })
 
     const posts = await keystoneContext.withSession(session).query.Post.findMany({

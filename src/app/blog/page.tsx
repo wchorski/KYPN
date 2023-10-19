@@ -37,7 +37,7 @@ export default async function BlogFeedPage({ params, searchParams }:Props) {
   const currPage = Number(page) || 1
   const categoryNames = categories?.split(',') || []
   
-  const { posts, count, error } = await fetchPosts(categoryNames, currPage, session )
+  const { posts, count, error } = await fetchPosts(currPage, categoryNames, session )
   
 
   if(error) return <ErrorMessage error={error}/>

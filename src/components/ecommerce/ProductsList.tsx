@@ -1,11 +1,6 @@
 import { ProductThumbnail } from "@components/ecommerce/ProductThumbnail";
-import { gql } from '@apollo/client'
-import { QueryLoading } from '@components/menus/QueryLoading';
-import { QueryError } from '@components/menus/QueryError';
 import styles from '@styles/ecommerce/Product.module.scss'
-import { envs } from "@/envs";
-import { getClient } from "@lib/gqlClient";
-import { Product } from "@lib/types";
+import { Product } from "@ks/types";
 import { List } from "@components/elements/List";
 
 

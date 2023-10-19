@@ -1,24 +1,21 @@
 
 import React from 'react'
-import Image from 'next/image';
 import Link from 'next/link';
 import styles from '@styles/ecommerce/Product.module.scss'
-import moneyFormatter from '../../lib/moneyFormatter';
 import { ProductDelete } from '@components/ecommerce/ProductDelete';
 import AddToCart from '@components/ecommerce/AddToCart';
-import { handlePhoto } from '../../lib/handleProductPhoto';
 import { ImageDynamic } from '../elements/ImageDynamic';
-import { useSession } from '@components/menus/Session';
-// import { StyledPriceTag } from '../../styles/PriceTag.styled';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
-import { Product } from '../../lib/types';
+import { Product } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import fetchSession from '@lib/fetchdata/fetchSession';
+import { getServerSession } from 'next-auth';
+import { nextAuthOptions } from '@/session';
 
 export async function ProductThumbnail({ id, name, excerpt, price, photo, image, status }: Product) {
 
   // const session = useSession()
-  const session = await fetchSession()
+  const session = await getServerSession(nextAuthOptions);
 
   return (
     <article className={styles.product} >
@@ -44,14 +41,14 @@ export async function ProductThumbnail({ id, name, excerpt, price, photo, image,
               ? <AddToCart id={id} />
               : <button disabled={true}> out of stock </button>
               
-            : <button disabled={true}> Login to shop </button>
+            : <Link href={`/api/auth/signin`}> Login to shop </Link>
           }
           
           <PriceTag price={price}/>
         </div>
       </div>
 
-      {session?.role?.canManageSubscriptionPlans && (
+      {session?.data?.role?.canManageSubscriptionPlans && (
         <div className="menu admin">
           <Link href={{ pathname: '/shop/subscriptions/update', query: { id: id }, }}> Edit ✏️ </Link>
           <ProductDelete id={id}> Delete </ProductDelete>
