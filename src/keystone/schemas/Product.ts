@@ -164,6 +164,9 @@ export const Product:Lists.Product = list({
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
       try {
         if (resolvedData && !resolvedData.author) {
+          // todo there is an error here
+          // console.log(context.session);
+          
           const currentUserId = await context.session.itemId;
           // console.log({ currentUserId });
           resolvedData.author = { connect: { id: currentUserId } };
