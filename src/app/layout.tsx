@@ -6,7 +6,7 @@ import layoutStyles from '@styles/layout.module.scss'
 import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
-import { ApolloWrapper } from './ApolloWrapper'
+// import { ApolloWrapper } from './ApolloWrapper'
 // import ShoppingCart from '@components/ecommerce/ShoppingCart'
 import { Hero } from '@components/menus/Hero'
 // import { AsideBar } from '@components/layouts/AsideBar'
@@ -41,7 +41,7 @@ export default async function RootLayout({
         // 'layout--main-aside',
       ].join(' ')}>
 
-      <ApolloWrapper token={token}>
+      {/* <ApolloWrapper token={token}> */}
 
         {/* <ShoppingCart /> */}
 
@@ -78,7 +78,7 @@ export default async function RootLayout({
 
         <Footer />
         
-      </ApolloWrapper>
+      {/* </ApolloWrapper> */}
       </body>
     </html>
   )
