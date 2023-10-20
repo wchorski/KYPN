@@ -15,11 +15,12 @@ export async function ProductsList({ products = [] }: ProdProps) {
 
   // console.log({ data });
 
-  return (
-    <List isAnimated={true} className={styles.product}>
-      {products?.map((prod: any) =>  (
-        <ProductThumbnail {...prod} />
-      ))}
-    </List>
-  )
+  // return (
+  //   <List isAnimated={true} className={styles.product}>
+  //     {products?.map((prod: any) =>  (
+  //       <ProductThumbnail {...prod} />
+  //     ))}
+  //   </List>
+  // )
+  return <p> products lul </p>
 }

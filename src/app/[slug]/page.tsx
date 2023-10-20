@@ -1,16 +1,15 @@
-import { AsideBar } from "@components/layouts/AsideBar"
+
 import { Card } from "@components/layouts/Card"
 import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
-import { useRouter } from "next/navigation"
+
 import Error404 from "../not-found"
 import ErrorMessage from "@components/ErrorMessage"
-import { QueryLoading } from "@components/menus/QueryLoading"
+
 import {  Page } from "@ks/types"
 import { datePretty } from "@lib/dateFormatter"
 
 import type { Metadata } from 'next'
-import { envs } from "@/envs"
-import { getClient } from "@lib/gqlClient"
+
 import fetchPage from "@lib/fetchdata/fetchPage"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"

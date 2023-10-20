@@ -3,7 +3,7 @@ import { envs } from '@/envs';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { Tag } from '@ks/types';
 import { client } from '@lib/request';
-import { gql, request } from 'graphql-request';
+import { gql } from 'graphql-request';
 import { parse } from "graphql";
 
 const endpoint = envs.FRONTEND_URL + '/api/graphql'

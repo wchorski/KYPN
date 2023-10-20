@@ -36,13 +36,18 @@ export async function ProductThumbnail({ id, name, excerpt, price, photo, image,
         <p className='desc'>{excerpt}</p>
 
         <div className="menu">
-          {session 
+
+
+          <AddToCart id={id} />
+   
+          
+          {/* {session 
             ? status !== 'OUT_OF_STOCK' 
               ? <AddToCart id={id} />
               : <button disabled={true}> out of stock </button>
               
             : <Link href={`/api/auth/signin`}> Login to shop </Link>
-          }
+          } */}
           
           <PriceTag price={price}/>
         </div>

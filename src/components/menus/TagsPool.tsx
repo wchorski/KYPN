@@ -5,11 +5,11 @@ import fetchTags from "@lib/fetchdata/fetchTags"
 
 export async function TagsPool() {
 
-  const data = await fetchTags()
+  const {tags} = await fetchTags()
 
   return (
     <ul className={styles.tags}>
-      {data?.tags.map((t: any) => (
+      {tags?.map((t: any) => (
         <Link key={t.name} className='tag' href={`/tags/${t.name}`} >{t.name}</Link>
       ))}
     </ul>
