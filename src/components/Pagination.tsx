@@ -3,10 +3,7 @@
 // import Head from 'next/head'
 import Link from 'next/link'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-// import ErrorMessage from './ErrorMessage';
-// import { QueryLoading } from './menus/QueryLoading';
 import { envs } from "@/envs";
-// import { getClient } from '@lib/gqlClient';
 import styles from "@styles/menus/pagination.module.scss";
 
 const perPage = envs.PERPAGE

@@ -1,10 +1,12 @@
 'use client'
-import { useMutation, gql } from '@apollo/client';
+import { gql } from 'graphql-request';
 import { MdShoppingBag } from 'react-icons/md';
 import { TbCheck, TbExclamationCircle, TbLoader  } from 'react-icons/tb';
 
 import { useState } from 'react';
 import styles from '@styles/eyecandy/SpinCycle.module.scss'
+import { parse } from 'graphql';
+import { client } from '@lib/request';
 
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
@@ -14,7 +16,7 @@ type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 export default function AddToCart({ id }: { id: string }) {  
 
   const [state, setstate] = useState<State>(undefined)
-  const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
+  // const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
 
 
   async function handleButton() {
@@ -23,14 +25,21 @@ export default function AddToCart({ id }: { id: string }) {
     try {
 
       setstate('pending')
+
+      const variables = {
+        addToCartId: id,
+        productId: id
+      }
+
+      const res = await client.request(mutation, variables)
       
-      const res = await addToCart({
-        variables: {
-          addToCartId: id,
-          productId: id
-        },
-        // refetchQueries: [{ query: QUERY_USER_CURRENT }],
-      })
+      // const res = await addToCart({
+      //   variables: {
+      //     addToCartId: id,
+      //     productId: id
+      //   },
+      //   // refetchQueries: [{ query: QUERY_USER_CURRENT }],
+      // })
       console.log(res);
       
 
@@ -69,7 +78,7 @@ export default function AddToCart({ id }: { id: string }) {
   return (<>
     <button 
       type="button" 
-      disabled={loading || state !== undefined} 
+      disabled={(state === 'loading') ? true : false} 
       onClick={e => handleButton()}
       className={' addtocart' + ' button'}
     >
@@ -80,9 +89,9 @@ export default function AddToCart({ id }: { id: string }) {
     </>);
 }
 
-const ADD_TO_CART_MUTATION = gql`
-  mutation Mutation($addToCartId: ID!, $productId: ID) {
-    addToCart(id: $addToCartId, productID: $productId) {
+const mutation = parse(gql`
+  mutation addToCart($addToCartId: ID!, $productId: ID) {
+    addToCart(id: $addToCartId, productId: $productId) {
       id
       quantity
       product {
@@ -90,4 +99,4 @@ const ADD_TO_CART_MUTATION = gql`
       }
     }
   }
-`
+`)

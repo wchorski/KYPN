@@ -8,7 +8,6 @@ import { BlogListItem } from './BlogListItem';
 import styles from "@styles/blog/Blog.module.scss";
 import { envs } from "@/envs";
 import { List } from '@components/elements/List';
-import { getClient } from '@lib/gqlClient';
 import { Post } from '@ks/types'
 export const revalidate = 5;
 

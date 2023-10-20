@@ -48,7 +48,7 @@ export default async function RootLayout({
         <Hero
           title={envs.SITE_TITLE}
           description={envs.SITE_DESC}
-          logoSrc={`/assets/private/logo.png`}
+          logoSrc={`/assets/logo.png`}
           bgImg={'/assets/tiles/teal-restaurant.webp'}
         >
         </Hero>

@@ -1,11 +1,9 @@
 // import { useGlobalContext } from "../lib/useSessionContext";
-import { gql } from "@apollo/client";
 import Link from "next/link";
 import { MdAccountCircle } from "react-icons/md";
 import styles from '@styles/menus/session.module.scss'
 import SignOutButton from "./SignOutButton";
 import { NavLink } from "./NavLink";
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
 import ErrorMessage from "@components/ErrorMessage";
 import { getServerSession } from "next-auth";
@@ -66,65 +64,65 @@ export async function SessionBadge({ label, }: Props) {
 //   // return ctx?.session
 // }
 
-export const QUERY_USER_CURRENT = gql`
-  query AuthenticatedItem {
-    authenticatedItem {
-      ... on User {
-        email
-        id
-        isAdmin
-        name
-        nameLast
-        role {
-          canManageCart
-          canManageOrders
-          canManageProducts
-          canManageServices
-          canManageRoles
-          canManageUsers
-          canSeeOtherUsers
-          canManageTickets
-          canManageEvents
-          canManagePosts
-          canManagePages
-          canManageLocations
-          canManageTags
-          canManageCategories
-          canManageSubscriptionPlans
-          canManageSubscriptionItems
-          canManageCoupons
-        }
-        tickets {
-          event {
-            id
-            start
-            summary
-          }
-          id
-          status
-        }
-        subscriptions {
-          id
-          subscriptionPlan {
-            id
-          }
-        }
-        cart {
-          id
-          quantity
-          product {
-            id
-            price
-            name
-            image
-            # photo {
-            #   image {
-            #     publicUrlTransformed
-            #   }
-            # }
-          }
-        }
-      }
-    }
-  }
-`
+// export const QUERY_USER_CURRENT = gql`
+//   query AuthenticatedItem {
+//     authenticatedItem {
+//       ... on User {
+//         email
+//         id
+//         isAdmin
+//         name
+//         nameLast
+//         role {
+//           canManageCart
+//           canManageOrders
+//           canManageProducts
+//           canManageServices
+//           canManageRoles
+//           canManageUsers
+//           canSeeOtherUsers
+//           canManageTickets
+//           canManageEvents
+//           canManagePosts
+//           canManagePages
+//           canManageLocations
+//           canManageTags
+//           canManageCategories
+//           canManageSubscriptionPlans
+//           canManageSubscriptionItems
+//           canManageCoupons
+//         }
+//         tickets {
+//           event {
+//             id
+//             start
+//             summary
+//           }
+//           id
+//           status
+//         }
+//         subscriptions {
+//           id
+//           subscriptionPlan {
+//             id
+//           }
+//         }
+//         cart {
+//           id
+//           quantity
+//           product {
+//             id
+//             price
+//             name
+//             image
+//             # photo {
+//             #   image {
+//             #     publicUrlTransformed
+//             #   }
+//             # }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link'
 import React from 'react'
-import styled from "styled-components";
 
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || "Shop"
 
@@ -21,93 +20,93 @@ export default function Header({options = default_options}:Props) {
 
 
   return (
-    <StyledHeader>
+    <header>
 
-      <StyledLogo>
+      <figure>
         <Link href={`/home`} > 
         {options.isLogo && (
           <Image src={'/assets/private/logo.svg'} width={100} height={100} alt='site logo'/>
         )}
         </Link>
-      </StyledLogo>
+      </figure>
 
       {options.isSiteTitle && (
         <Link href={`/home`} className='site-title'> <h1> {SITE_TITLE} </h1> </Link>
       )}
 
-    </StyledHeader>
+    </header>
   )
 }
 
-const StyledLogo = styled.div`
+// const StyledLogo = styled.div`
 
-  background-position: 0 0, 50px 50px;
-  background-size: 20px 20px;
-  display: flex;
-  align-items: center;
-  /* margin-left: 1rem; */
+//   background-position: 0 0, 50px 50px;
+//   background-size: 20px 20px;
+//   display: flex;
+//   align-items: center;
+//   /* margin-left: 1rem; */
 
-  &::before{
-    background-color: blue;
-    width: 100px;
-  }
+//   &::before{
+//     background-color: blue;
+//     width: 100px;
+//   }
 
   
-  a{
-    color: var(--c-txt-rev);
-    text-decoration: none;
-    flex: 1;
-    transition: opacity .3s;
+//   a{
+//     color: var(--c-txt-rev);
+//     text-decoration: none;
+//     flex: 1;
+//     transition: opacity .3s;
 
-    &:hover, &:focus{
-      opacity: .7;
-    }
-  }
+//     &:hover, &:focus{
+//       opacity: .7;
+//     }
+//   }
   
-`
+// `
 
-const StyledHeader = styled.header`
-  max-width: var(--maxWidth);
-  display: flex;
+// const StyledHeader = styled.header`
+//   max-width: var(--maxWidth);
+//   display: flex;
 
 
-  a.site-title{
+//   a.site-title{
 
-    text-shadow: #00000040 1px 1px 10px;
-    padding-inline: 1rem;
-    font-size: 1.5rem;
-    line-height: normal;
-    display: flex;
-    align-items: center;
-    color: var(--c-txt);
-    text-decoration: none;
+//     text-shadow: #00000040 1px 1px 10px;
+//     padding-inline: 1rem;
+//     font-size: 1.5rem;
+//     line-height: normal;
+//     display: flex;
+//     align-items: center;
+//     color: var(--c-txt);
+//     text-decoration: none;
 
-    &:hover, &:focus{
-      color: var(--c-accent);
-    }
-  }
+//     &:hover, &:focus{
+//       color: var(--c-accent);
+//     }
+//   }
 
-  .bar{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-content: space-between;
-    align-items: center;
-  }
+//   .bar{
+//     display: grid;
+//     grid-template-columns: auto 1fr;
+//     justify-content: space-between;
+//     align-items: center;
+//   }
 
-  .util-menu{
-    border-bottom: solid 1px var(--c-2, darkgrey);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
+//   .util-menu{
+//     border-bottom: solid 1px var(--c-2, darkgrey);
+//     display: grid;
+//     grid-template-columns: auto 1fr;
+//     justify-content: space-between;
+//     align-items: center;
+//     width: 100%;
+//   }
 
-  @media screen and (max-width: 500px){
-    a.site-title{
-      display: none;
-    }
-  }
+//   @media screen and (max-width: 500px){
+//     a.site-title{
+//       display: none;
+//     }
+//   }
   
   
-`
+// `
