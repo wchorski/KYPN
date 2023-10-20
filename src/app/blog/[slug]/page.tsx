@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { QueryLoading } from '@components/menus/QueryLoading';
 import ErrorMessage from '@components/ErrorMessage';
-// import { gql } from "@apollo/client";
+// import { gql } from "graphql-request";
 import { getClient } from '@lib/gqlClient';
 import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
 import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '@lib/dateFormatter';
@@ -16,6 +16,7 @@ import { Category, Post, Tag, User } from '@ks/types';
 import { envs } from '@/envs';
 import styles from '@styles/blog/blogpost.module.scss'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
+import { BlockRenderer } from '@components/blocks/BlockRender'
 
 export const revalidate = 5;
 
@@ -100,7 +101,7 @@ export default async function BlogPageBySlug({ params }:Props) {
               )}
               <li> 
                 <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
-                  {datePrettyLocalDay(dateCreated)}
+                  {datePrettyLocalDay(String(dateCreated))}
                 </time>
               </li>
 

@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "graphql-request";
 import { BlogList } from "../blog/BlogList"
 import { ProductsList } from "@components/ecommerce/ProductsList";
 import { ProductThumbnail } from "../ecommerce/ProductThumbnail";

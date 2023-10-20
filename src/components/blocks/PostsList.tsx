@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "graphql-request";
 import { BlogList } from "@components/blog/BlogList"
 
 type Props = {

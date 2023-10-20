@@ -7,6 +7,7 @@ import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/sch
 // import { keystoneContext } from '@ks/context';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/session';
+import { keystoneContext } from '@ks/context';
 
 export const addToCart = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
@@ -25,32 +26,31 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
     if(!session){
       throw new Error('!!!! you must be logged in')
     }
-    
+    // TODO completely forgot mutations *MUTATE* another frikin schema item
     // const res = await keystoneContext.withSession(session).query.CartItem.addToCart({
     // })
     // console.log({res});
     
         
-    // const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: sesh.itemId } }, product: { id: {equals: productId} } }})
-    // const [exisitingItem] = allCartItems
+    const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: session.itemId } }, product: { id: {equals: productId} } }})
+    const [exisitingItem] = allCartItems
 
-    // if(exisitingItem){
-    //   // console.log(`****** ${exisitingItem.quantity} exists in cart`);
-    //   return await context.db.CartItem.updateOne({
-    //     where: {id: exisitingItem.id},
-    //     data: {
-    //       quantity: exisitingItem.quantity+1, 
-    //     }
-    //   })
-    // }
+    if(exisitingItem){
+      // console.log(`****** ${exisitingItem.quantity} exists in cart`);
+      return await context.db.CartItem.updateOne({
+        where: {id: exisitingItem.id},
+        data: {
+          quantity: exisitingItem.quantity+1, 
+        }
+      })
+    }
 
-    // return await context.db.CartItem.createOne({
-    //   data: {
-    //     product: { connect: { id: productId }},
-    //     user: { connect: { id: sesh?.itemId }},
-    //   },
-    // })
+    return await context.db.CartItem.createOne({
+      data: {
+        product: { connect: { id: productId }},
+        user: { connect: { id: session?.itemId }},
+      },
+    })
 
-    return null
   }
 })

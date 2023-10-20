@@ -1,5 +1,5 @@
 'use client'
-import { gql } from "@apollo/client"
+import { gql } from "graphql-request"
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr"
 import ErrorMessage from "@components/ErrorMessage"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
