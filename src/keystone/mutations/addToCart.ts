@@ -13,15 +13,14 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
   args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productId: graphql.arg({ type: graphql.ID }) },
   async resolve(source, { id, productId }, context: Context){
     console.log('****************** addToCart Mutation')
-    console.log('Context Session');
-    console.log(context.session);
+    console.log('@@@ Context Session @@@');
     
     
 
-    const session = null
+    const session = context.session
     // const session = await getServerSession(nextAuthOptions);
     
-    // console.log(session);
+    console.log({session});
     
     if(!session){
       throw new Error('!!!! you must be logged in')

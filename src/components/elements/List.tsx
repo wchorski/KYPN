@@ -38,6 +38,7 @@ export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, classN
           }}
           key={1}
         >
+          only child:::: 
           {children}
         </li>
       )}

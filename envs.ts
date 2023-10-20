@@ -17,7 +17,7 @@ const MAIL_USER = process.env.MAIL_USER
 const MAIL_PASS = process.env.MAIL_PASS
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || 'no_frontend_url'
 const SESSION_SECRET = process.env.SESSION_SECRET
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
+const BACKEND_URL = String(process.env.NEXT_PUBLIC_BACKEND_URL) || "no_backend_URL_set"
 const BACKEND_PORT = process.env.BACKEND_PORT || 'no_backend_port'
 const SEED_ME = process.env.SEED_ME
 

@@ -9,19 +9,34 @@ import type { Permission } from './schemas/fields';
 
 
 export type Session = {
+  user: {
+    name:string,
+    email:string,
+  }
+  authId:string,
+  id:string,
   itemId: string;
-  listKey: string;
   data: {
-    name: string;
-    isAdmin: boolean;
-    role?: {
-      id: string;
-      name: string;
-    } & {
-      [key in Permission]: boolean;
-    };
+    role?: Role,
   };
-};
+}|null
+
+
+// ? didn't like "[key in Permission]: boolean;"
+// export type Session = {
+//   itemId?: string;
+//   listKey?: string;
+//   data?: {
+//     name: string;
+//     isAdmin?: boolean;
+//     role?: {
+//       id?: string;
+//       name?: string;
+//     } & {
+//       [key in Permission]: boolean;
+//     };
+//   };
+// }|null
 
 export type ListsAPI = KeystoneListsAPI<any /* KeystoneListsTypeInfo */>;
 export type GraphqlAPI = KeystoneGraphQLAPI<any /* KeystoneListsTypeInfo */>;
@@ -175,7 +190,7 @@ export type User = {
   subscriptionPlans: any[],
   subscriptions: any[],
   orders: OrderItem[],
-  role: any,
+  role: Role,
 }
 
 export type Availability = {
@@ -281,6 +296,28 @@ export type Role = {
   id: string,
   name: string,
   assignedTo: User,
+  name: string;
+  canManageProducts:boolean
+  canManageAddons:boolean
+  canManageBookings:boolean
+  canManageAvailability:boolean
+  canManageEvents:boolean
+  canManageAnnouncements:boolean
+  canManageTickets:boolean
+  canSeeOtherUsers:boolean
+  canManagePosts:boolean
+  canManageUsers:boolean
+  canManageRoles:boolean
+  canManageCart:boolean
+  canManageOrders:boolean
+  canManageCategories:boolean
+  canManageTags:boolean
+  canManageLocations:boolean
+  canManagePages:boolean
+  canManageServices:boolean
+  canManageSubscriptionPlans:boolean
+  canManageSubscriptionItems:boolean
+  canManageCoupons:boolean
 }
 
 export type Service = {

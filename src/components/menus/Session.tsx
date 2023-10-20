@@ -8,6 +8,7 @@ import { LoadingAnim } from "@components/elements/LoadingAnim";
 import ErrorMessage from "@components/ErrorMessage";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
+import { envs } from "@/envs";
 // import { getClient } from "@lib/gqlClient";
 
 
@@ -35,7 +36,7 @@ export async function SessionBadge({ label, }: Props) {
         <li> <NavLink className="button" href={`/account`}> My Account </NavLink> </li>
         {session?.data.role && (
           <li>
-            <NavLink href='/admin' className="button"> Admin Panel </NavLink>
+            <NavLink href={envs.BACKEND_URL} className="button"> Admin Panel </NavLink>
           </li>
         )}
         <li><SignOutButton /></li>

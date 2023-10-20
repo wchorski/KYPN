@@ -1,3 +1,4 @@
+// cred - https://github.com/egilkenson/keystone-next-auth
 // cred - https://github.com/egilkenson/keystone-next-auth/blob/main/frontend/src/lib/fetchProtectedRoute.js
 
 
@@ -18,7 +19,7 @@ import { NextRequest } from 'next/server';
 //  *
 //  * @link https://github.com/prisma-labs/graphql-request#passing-headers-in-each-request
 //  */
-export function fetchProtectedRoute(req:NextRequest, query:string, variables = {}): Promise<unknown> {
+export async function fetchProtectedRoute(req:NextRequest, query:string, variables = {}): Promise<unknown> {
 
 
   const cookieStore = cookies()
@@ -28,7 +29,7 @@ export function fetchProtectedRoute(req:NextRequest, query:string, variables = {
   const client = new GraphQLClient(envs.FRONTEND_URL + '/api/graphql')
   const requestHeaders = {
     ...req.headers,
-    authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token?.value}`
   }
   return client.request(query, variables, requestHeaders)
 }
