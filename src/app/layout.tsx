@@ -11,6 +11,7 @@ import { envs } from '@/envs'
 import { Hero } from '@components/menus/Hero'
 // import { AsideBar } from '@components/layouts/AsideBar'
 import { cookies } from 'next/dist/client/components/headers'
+import { Providers } from './providers'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
 const paragraph = Barlow({ weight: '200', subsets: ['latin'], variable: '--font-paragraph' })
@@ -40,7 +41,7 @@ export default async function RootLayout({
         'layout'
         // 'layout--main-aside',
       ].join(' ')}>
-
+      <Providers>
       {/* <ApolloWrapper token={token}> */}
 
         {/* <ShoppingCart /> */}
@@ -79,6 +80,8 @@ export default async function RootLayout({
         <Footer />
         
       {/* </ApolloWrapper> */}
+
+      </Providers>
       </body>
     </html>
   )

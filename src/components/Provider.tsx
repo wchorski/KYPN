@@ -1,5 +1,5 @@
 'use client'
-import { useApollo } from '@lib/apolloClient';
+// import { useApollo } from '@lib/apolloClient';
 import { CartStateProvider } from '@lib/cartState';
 import { GlobalContextProvider } from '@lib/useGlobalContext';
 import { ApolloProvider } from "@apollo/client";
@@ -9,11 +9,11 @@ const ProgressBar = dynamic(() => import('@components/ProgressBar'), { ssr: fals
 
 export function Providers({ children }: { children: React.ReactNode }) {
 
-  const apolloClient = useApollo(pageProps)
+  // const apolloClient = useApollo(pageProps)
   
   return (
     <GlobalContextProvider>
-      <ApolloProvider client={apolloClient}>
+      {/* <ApolloProvider client={apolloClient}> */}
         <CartStateProvider>
           <ProgressBar />
 
@@ -21,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 
         </CartStateProvider>
-      </ApolloProvider>
+      {/* </ApolloProvider> */}
     </GlobalContextProvider>
   );
 }

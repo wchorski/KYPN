@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from "graphql-request"
 import { getClient } from "@lib/gqlClient"
 
 export async function fetchUserById(id:string){
