@@ -2,7 +2,7 @@ import styles from '@styles/nav.module.scss'
 import Link from 'next/link'
 import { SiGithub } from 'react-icons/si'
 import { NavLink } from '@components/menus/NavLink'
-import { SessionBadge, useSession } from './Session'
+import { SessionBadge } from './Session'
 
 export function Nav() {
 
@@ -16,6 +16,7 @@ export function Nav() {
           <li> <NavLink href={`/home`}> Home </NavLink> </li>
           <li> <NavLink href={`/shop`}> Shop </NavLink> </li>
           <li> <NavLink href={`/blog`}> Blog </NavLink> </li>
+          <li> <NavLink href={`/users`}> Users </NavLink> </li>
           {/* <li> <Link href={`https://github.com/wchorski/duplicati-dashboard`}> API </Link> </li> */}
           {/* <li> <Link href={`/`}> Settings </Link> </li> */}
         </ul>

@@ -6,16 +6,29 @@ import { ProductDelete } from '@components/ecommerce/ProductDelete';
 import AddToCart from '@components/ecommerce/AddToCart';
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
-import { Product } from '@ks/types';
+import { Product, Session } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import fetchSession from '@lib/fetchdata/fetchSession';
-import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/session';
 
-export async function ProductThumbnail({ id, name, excerpt, price, photo, image, status }: Product) {
+type Props = {
+  product:Product,
+  session:any,
+}
 
-  // const session = useSession()
-  const session = await getServerSession(nextAuthOptions);
+function jsonVanilla(json:any){
+  const vanillastring = JSON.parse(JSON.stringify(json))
+  return vanillastring
+}
+
+export async function ProductThumbnail({product, session}: Props) {
+
+  // const sesh:Session = {}
+
+  if(!product) return  <p> no prod </p>
+
+  const { id, name, excerpt, price, photo, image, status } = product
+
 
   return (
     <article className={styles.product} >
@@ -38,7 +51,7 @@ export async function ProductThumbnail({ id, name, excerpt, price, photo, image,
         <div className="menu">
 
 
-          <AddToCart id={id} />
+          <AddToCart id={id} session={jsonVanilla(session)}/>
    
           
           {/* {session 

@@ -1,13 +1,9 @@
 // cred - https://github.com/jasonkuhrt/graphql-request/blob/HEAD/examples/typescript-typed-document-node.ts
-import { envs } from '@/envs';
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
-import { Tag } from '@ks/types';
 import { client } from '@lib/request';
 import { gql } from 'graphql-request';
 import { parse } from "graphql";
-
-const endpoint = envs.FRONTEND_URL + '/api/graphql'
-console.log({endpoint});
+import { Tag } from '@ks/types';
 
 
 export default async function fetchTags(){
@@ -18,9 +14,6 @@ export default async function fetchTags(){
 
     const { tags } = await client.request(query, variables)
     // const data = await request(endpoint, query)
-    console.log('** tag data; ');
-    
-    
     
 
     // if(error) return error

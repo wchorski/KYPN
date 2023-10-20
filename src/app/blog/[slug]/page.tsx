@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { QueryLoading } from '@components/menus/QueryLoading';
 import ErrorMessage from '@components/ErrorMessage';
-import { gql } from "@apollo/client";
+// import { gql } from "@apollo/client";
 import { getClient } from '@lib/gqlClient';
 import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
 import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '@lib/dateFormatter';
@@ -13,7 +13,6 @@ import { BreadCrumbs } from '@components/elements/BreadCrumbs';
 import { ImageDynamic } from '@components/elements/ImageDynamic';
 import Head  from 'next/head';
 import { Category, Post, Tag, User } from '@ks/types';
-import { BlockRenderer } from '@components/blocks/BlocksRenderer';
 import { envs } from '@/envs';
 import styles from '@styles/blog/blogpost.module.scss'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
@@ -141,38 +140,39 @@ export default async function BlogPageBySlug({ params }:Props) {
   )
 }
 
-const query = gql`
-  query Post($where: PostWhereUniqueInput!) {
-    post(where: $where) {
-      id
-      title
-      pinned
-      status
-      featured_image
-      featured_video
-      excerpt
-      dateModified
-      dateCreated
-      template
-      allow_comments
-      author {
-        id
-        name
-      }
-      categories {
-        name
-      }
-      tags {
-        name
-        productsCount
-        postsCount
-      }
-      content {
-        document
-      }
-    }
-  }
-`
+const query = ``
+// const query = gql`
+//   query Post($where: PostWhereUniqueInput!) {
+//     post(where: $where) {
+//       id
+//       title
+//       pinned
+//       status
+//       featured_image
+//       featured_video
+//       excerpt
+//       dateModified
+//       dateCreated
+//       template
+//       allow_comments
+//       author {
+//         id
+//         name
+//       }
+//       categories {
+//         name
+//       }
+//       tags {
+//         name
+//         productsCount
+//         postsCount
+//       }
+//       content {
+//         document
+//       }
+//     }
+//   }
+// `
 
 // const StyledBlogSingle = styled.article`
 

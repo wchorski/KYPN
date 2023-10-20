@@ -1,4 +1,5 @@
 import { list } from "@keystone-6/core";
+// @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, relationship, text } from "@keystone-6/core/fields";
@@ -12,7 +13,8 @@ export const Role:Lists.Role = list({
   // access: allowAll, 
   access: {
     operation: {
-      query: permissions.canManageRoles,  
+      query: () => true,  
+      // query: permissions.canManageRoles,  
       create: permissions.canManageRoles,
       delete: permissions.canManageRoles,
       update: permissions.canManageRoles,

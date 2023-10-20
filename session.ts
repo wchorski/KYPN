@@ -112,10 +112,29 @@ export const nextAuthOptions = {
             email
             password
             role {
+              id
               name
+              canManageProducts
+              canManageAddons
+              canManageBookings
+              canManageAvailability
+              canManageEvents
+              canManageAnnouncements
+              canManageTickets
+              canSeeOtherUsers
               canManagePosts
               canManageUsers
               canManageRoles
+              canManageCart
+              canManageOrders
+              canManageCategories
+              canManageTags
+              canManageLocations
+              canManagePages
+              canManageServices
+              canManageSubscriptionPlans
+              canManageSubscriptionItems
+              canManageCoupons
             }
           `
         });

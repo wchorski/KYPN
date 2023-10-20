@@ -37,6 +37,7 @@ export default async function ShopPage({ params, searchParams }:Props) {
   const categoryNames = categories?.split(',') || []
 
   const {products, count, error} = await fetchProducts(currPage, categoryNames, session)
+  
 
   if(error) return <ErrorMessage error={error}/>
 

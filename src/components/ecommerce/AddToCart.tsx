@@ -7,13 +7,14 @@ import { useState } from 'react';
 import styles from '@styles/eyecandy/SpinCycle.module.scss'
 import { parse } from 'graphql';
 import { client } from '@lib/request';
+import { Session } from '@ks/types';
 
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
-export default function AddToCart({ id }: { id: string }) {  
+export default function AddToCart({ id, session }: { id: string, session:Session }) {  
 
   const [state, setstate] = useState<State>(undefined)
   // const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
@@ -23,7 +24,6 @@ export default function AddToCart({ id }: { id: string }) {
     // if (!session) return router.push(`/auth/login`)
 
     try {
-
       setstate('pending')
 
       const variables = {
@@ -31,8 +31,10 @@ export default function AddToCart({ id }: { id: string }) {
         productId: id
       }
 
+      // ? yoga request
       const res = await client.request(mutation, variables)
       
+      // ? apollo request
       // const res = await addToCart({
       //   variables: {
       //     addToCartId: id,
@@ -40,15 +42,19 @@ export default function AddToCart({ id }: { id: string }) {
       //   },
       //   // refetchQueries: [{ query: QUERY_USER_CURRENT }],
       // })
+
+      // ? next api
+      // const res  = await fetch(`/api/addToCart`, {
+      //   method: 'POST',
+      //   body: JSON.stringify(variables)
+      // })
+
+
       console.log(res);
-      
 
       await delay(500)
-
       setstate('success')
-
       await delay(500)
-
       setstate(undefined)
       
     } catch (error) {
