@@ -13,25 +13,13 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
   args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productId: graphql.arg({ type: graphql.ID }) },
   async resolve(source, { id, productId }, context: Context){
-    console.log('****************** addToCart Mutation')
-    console.log('@@@ Context Session @@@');
     
-    
-
     const session = context.session
-    // const session = await getServerSession(nextAuthOptions);
-    
-    console.log({session});
     
     if(!session){
       throw new Error('!!!! you must be logged in')
     }
-    // TODO completely forgot mutations *MUTATE* another frikin schema item
-    // const res = await keystoneContext.withSession(session).query.CartItem.addToCart({
-    // })
-    // console.log({res});
-    
-        
+     
     const allCartItems = await context.db.CartItem.findMany({ where: { user: { id: { equals: session.itemId } }, product: { id: {equals: productId} } }})
     const [exisitingItem] = allCartItems
 

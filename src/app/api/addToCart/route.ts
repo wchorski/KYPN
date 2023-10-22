@@ -16,7 +16,7 @@ export async function POST(req:NextRequest) {
 
   try {
     // TODO haven't tried this yet!!!!
-    const response = await keystoneContext.withSession(session).CartItem.addToCart({
+    const response = await keystoneContext.withSession(session).query.CartItem.addToCart({
       addToCartId,
       productId,
     })

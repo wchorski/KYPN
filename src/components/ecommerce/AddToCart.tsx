@@ -17,7 +17,6 @@ type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 export default function AddToCart({ id, session }: { id: string, session:Session }) {  
 
   const [state, setstate] = useState<State>(undefined)
-  // const [addToCart, { loading }] = useMutation(ADD_TO_CART_MUTATION)
 
 
   async function handleButton() {
@@ -31,26 +30,9 @@ export default function AddToCart({ id, session }: { id: string, session:Session
         productId: id
       }
 
-      // ? yoga request
+
+      // ? gql-request (yoga) request
       const res = await client.request(mutation, variables)
-      
-      // ? apollo request
-      // const res = await addToCart({
-      //   variables: {
-      //     addToCartId: id,
-      //     productId: id
-      //   },
-      //   // refetchQueries: [{ query: QUERY_USER_CURRENT }],
-      // })
-
-      // ? next api
-      // const res  = await fetch(`/api/addToCart`, {
-      //   method: 'POST',
-      //   body: JSON.stringify(variables)
-      // })
-
-
-      console.log(res);
 
       await delay(500)
       setstate('success')
@@ -95,7 +77,8 @@ export default function AddToCart({ id, session }: { id: string, session:Session
     </>);
 }
 
-const mutation = parse(gql`
+
+const mutation = parse(`
   mutation addToCart($addToCartId: ID!, $productId: ID) {
     addToCart(id: $addToCartId, productId: $productId) {
       id

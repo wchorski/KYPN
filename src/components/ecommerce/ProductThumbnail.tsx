@@ -49,18 +49,14 @@ export async function ProductThumbnail({product, session}: Props) {
         <p className='desc'>{excerpt}</p>
 
         <div className="menu">
-
-
-          <AddToCart id={id} session={jsonVanilla(session)}/>
-   
           
-          {/* {session 
+          {session 
             ? status !== 'OUT_OF_STOCK' 
-              ? <AddToCart id={id} />
+              ? <AddToCart id={id} session={session}/>
               : <button disabled={true}> out of stock </button>
               
             : <Link href={`/api/auth/signin`}> Login to shop </Link>
-          } */}
+          }
           
           <PriceTag price={price}/>
         </div>

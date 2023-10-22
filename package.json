@@ -42,5 +42,9 @@
     "@types/nodemailer": "^6.4.12",
     "prisma": "^4.16.2",
     "typescript": "~5.0.0"
+  },
+  "resolutions": {
+    "graphql": "^16.8.1",
+    "**/graphql": "^16.8.1"
   }
 }
