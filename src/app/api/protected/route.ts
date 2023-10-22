@@ -1,10 +1,10 @@
 import { nextAuthOptions } from "@/session";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { keystoneContext } from "@ks/context";
-import { User } from "@ks/types";
+import { Post, User } from "@ks/types";
 import { fetchProtectedRoute } from "@lib/fetchdata/fetchProtectedRoute";
+import { client } from "@lib/request";
 import { parse } from "graphql";
-import { gql } from "graphql-request";
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import type { NextRequest, NextResponse } from "next/server";
@@ -18,6 +18,9 @@ export async function GET(req:NextRequest, res:NextResponse) {
 
   
   // TODO still don't know what i'm doing
+  // const variables = {
+    
+  // }
   const variables = {
     skip: page * perPage - perPage,
     take: perPage,
@@ -29,24 +32,23 @@ export async function GET(req:NextRequest, res:NextResponse) {
   }
 
   try {
+
+    // const response = await client.request(query)
     // @ts-ignore
-    const data = await fetchProtectedRoute(req, query, variables)
-    console.log({data});
-    return Response.json({ data })
+    const response = await fetchProtectedRoute(req, query, variables)
+    console.log({response});
+    return Response.json({ response })
     
   } catch (error) {
 
     return Response.json({ error })
   }
-
-  
-
 }
 
-const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(gql`
-  query getUsers($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
+  query getUsers {
     usersCount
-    users(take: $take, skip: $skip, orderBy: $orderBy) {
+    users {
       id
       name
       nameLast
@@ -57,3 +59,26 @@ const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> =
     }
   }
 `)
+// const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
+//   query getUsers($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+//     usersCount
+//     users(take: $take, skip: $skip, orderBy: $orderBy) {
+//       id
+//       name
+//       nameLast
+//       email
+//       role {
+//         name
+//       }
+//     }
+//   }
+// `)
+// const query: TypedDocumentNode<{ posts:Post[] }, never | Record<any, unknown>> = parse(`
+//   query getPosts {
+//     postsCount
+//     posts {
+//       id
+//       title
+//     }
+//   }
+// `)

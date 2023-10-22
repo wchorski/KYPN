@@ -29,7 +29,8 @@ export async function fetchProtectedRoute(req:NextRequest, query:string, variabl
   const client = new GraphQLClient(envs.FRONTEND_URL + '/api/graphql')
   const requestHeaders = {
     ...req.headers,
-    Authorization: `Bearer ${token?.value}`
+    Authorization: `Bearer ${`my bear token`}`,
+    'Set-Cookie': "next-auth.session-token=set_cookie_type_beat; Domain=localhost; Path=/; Expires=Tue, 21 Nov 2023 19:20:01 GMT; HttpOnly; SameSite=Lax"
   }
   return client.request(query, variables, requestHeaders)
 }

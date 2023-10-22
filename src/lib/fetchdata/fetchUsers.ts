@@ -4,6 +4,7 @@ import { gql } from 'graphql-request';
 import { parse } from "graphql";
 import { Tag, User } from '@ks/types';
 import { keystoneContext } from '@ks/context';
+import { fetchProtectedRoute } from './fetchProtectedRoute';
 
 // ? query from yoga client
 export async function fetchUsers(page = 1, perPage = 25, session:any ){
@@ -20,7 +21,17 @@ export async function fetchUsers(page = 1, perPage = 25, session:any ){
 
   try {
 
-    const { users } = await client.request(query, variables)
+    // const response = await fetchProtectedRoute(query, variables)
+    // console.log({response});
+    const response = await client.request(query)
+    console.log({response});
+    
+    const  users  = await keystoneContext.withSession(session).query.User.findMany({
+      query: q_users,
+      // ...variables
+    })
+    // console.log({users});
+    
 
     return { users }
     
@@ -32,11 +43,20 @@ export async function fetchUsers(page = 1, perPage = 25, session:any ){
 
 }
 
+const q_users = `
+  id
+  name
+  email
+  role {
+    name
+  }
+`
 
-const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(gql`
-  query getUsers($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+
+const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
+  query getUsers {
     usersCount
-    users(take: $take, skip: $skip, orderBy: $orderBy) {
+    users {
       id
       name
       nameLast
@@ -47,6 +67,20 @@ const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> =
     }
   }
 `)
+// const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
+//   query getUsers($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
+//     usersCount
+//     users(take: $take, skip: $skip, orderBy: $orderBy) {
+//       id
+//       name
+//       nameLast
+//       email
+//       role {
+//         name
+//       }
+//     }
+//   }
+// `)
 
 // // ? direct query from keystoneContext
 // export async function fetchUsers(page = 1, perPage = 25, session:any ){
