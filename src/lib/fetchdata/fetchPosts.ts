@@ -1,5 +1,6 @@
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
+import { Post } from "@ks/types"
 
 const perPage = envs.PERPAGE
 
@@ -24,7 +25,7 @@ export async function fetchPosts(page:number, categoryNames:string[], session:an
           }
         ]
       },
-    })
+    }) as number
 
     const posts = await keystoneContext.withSession(session).query.Post.findMany({
       skip: page * perPage - perPage,
@@ -54,7 +55,7 @@ export async function fetchPosts(page:number, categoryNames:string[], session:an
         ]
       },
       query: query,
-    })
+    }) as Post[]
     
     return { posts, count }
     

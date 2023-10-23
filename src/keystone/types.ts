@@ -174,6 +174,7 @@ export type User = {
   nameLast:string,
   email: string,
   password: string,
+  url:string,
   isAdmin: boolean,
   isActive: boolean,
   stripeCustomerId: string,
@@ -287,9 +288,11 @@ export type Post = {
     document: any,
   } | any,
   allow_comments?:boolean,
-  author?: User|{connect:any},
+  author?: User,
+  // |{connect:any},
   categories?: Category[]|{connect:any},
-  tags?: Tag[]|{connect:any},
+  tags?: Tag[],
+    // |{connect:any},
 } 
 
 export type Role = {

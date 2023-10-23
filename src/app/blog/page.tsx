@@ -66,8 +66,8 @@ function Header(){
 
 type Main = {
   page:number,
-  posts:Post[],
-  count:number,
+  posts:Post[]|undefined,
+  count:number|undefined,
 }
 
 function Main({posts, page, count}:Main) {

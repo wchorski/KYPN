@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { QueryLoading } from '@components/menus/QueryLoading';
 import ErrorMessage from '@components/ErrorMessage';
 // import { gql } from "graphql-request";
-import { getClient } from '@lib/gqlClient';
 import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
 import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '@lib/dateFormatter';
 import { TagsPool } from '@components/menus/TagsPool';
@@ -16,7 +15,12 @@ import { Category, Post, Tag, User } from '@ks/types';
 import { envs } from '@/envs';
 import styles from '@styles/blog/blogpost.module.scss'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
-import { BlockRenderer } from '@components/blocks/BlockRender'
+import { BlockRender } from '@components/blocks/BlockRender'
+import { fetchPost } from '@lib/fetchdata/fetchPost';
+import { getServerSession } from 'next-auth';
+import { nextAuthOptions } from '@/session';
+import { Metadata, ResolvingMetadata } from 'next';
+import { fetchProducts } from '@lib/fetchdata/fetchProducts';
 
 export const revalidate = 5;
 
@@ -24,20 +28,54 @@ type Props = {
   params:{
     slug:string | string[] | undefined,
   },
+  searchParams: { [key: string]: string | string[] | undefined }
   template:string,
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+ 
+  // fetch data
+  const session = getServerSession(nextAuthOptions)
+  const { post } = await fetchPost(String(params?.slug), session)
+
+  if(!post) return {
+    title: envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+
+  const { title, excerpt, featured_image, tags, author } = post
+  
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+ 
+  return {
+    title: title,
+    description: String(excerpt),
+    openGraph: {
+      images: [String(featured_image), ...previousImages],
+      title: title,
+      description: excerpt,
+      url: envs.SITE_URI + '/blog/' + params.slug,
+      type: 'article'
+    },
+    keywords: tags?.map(tag => tag.name).join(', '),
+    authors: [{name: author?.name, url: author?.url}]
+  }
 }
 
 
 export default async function BlogPageBySlug({ params }:Props) {
   
-  const client = getClient()
-  const { data, error, loading } = await client.query({query, 
-    variables: { where: { slug: params.slug } }
-  })
+  const session = getServerSession(nextAuthOptions)
+  const { post, error } = await fetchPost(String(params.slug), session)
 
-
-  if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
+
+  if(!post) return <p> post not found </p>
 
   const {
     id,
@@ -55,26 +93,14 @@ export default async function BlogPageBySlug({ params }:Props) {
     categories,
     tags,
     content,
-  }:Post = data.post
+  } = post
 
   if (status === 'DRAFT') return <p>This blog post is still a draft</p>
   if (status === 'PRIVATE') return <p>This blog post is private</p>
 
   return (
     <>
-      <Head>
-        <title> {title} </title>
-        <meta name="description"        content={excerpt} />
-        <meta name='keywords'           content={tags?.map(tag => tag.name).join(', ')} />
-        <meta name="author"             content={author?.name} />
-        <meta property="og:title"       content={title} />
-        <meta property="og:description" content={excerpt} />
-        <meta property="og:image"       content={featured_image} />
-        <meta property="og:url"         content={envs.SITE_URI + '/blog/' + params.slug} />
-        <meta property="og:type"        content="article" />
-      </Head>
-
-      <main>
+    <main>
         
     <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
       <BreadCrumbs />
@@ -122,7 +148,7 @@ export default async function BlogPageBySlug({ params }:Props) {
       )}
 
       <div className="siteWrapper">
-        <BlockRenderer document={content.document} />
+        <BlockRender document={content.document} />
       </div>
 
       <footer>

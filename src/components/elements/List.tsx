@@ -12,10 +12,29 @@ type Props = {
 
 export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, children }:Props) {
 
-  if(!children) return <p> no children </p>
+  if(!children) return null
 
   const stylesArr = [styles.linklist, className]
   isAnimated ? stylesArr.push(styles.animated) : ''
+
+  const allStyles = stylesArr.join(' ');
+
+  // return (
+  //   <ul className={stylesArr.join(' ')}>
+  //     {children.map((child, i) => (
+  //       <li
+  //         key={i}
+  //         style={{
+  //           animationDuration: duration + 's',
+  //           animationDelay: i * delay + 's'
+  //         }}
+  //       >
+  //         key: {i}
+  //         {child}
+  //       </li>
+  //     ))}
+  //   </ul>
+  // )
 
   return (
     <ul className={stylesArr.join(' ')}>
@@ -27,18 +46,17 @@ export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, classN
             animationDelay: i * delay + 's'
           }}
         >
-          key: {i}
+     
           {child}
         </li>
       )) : (
         <li
+          key={1}
           style={{
             animationDuration: duration + 's',
             animationDelay: 0.1 * delay + 's'
           }}
-          key={1}
         >
-          only child:::: 
           {children}
         </li>
       )}

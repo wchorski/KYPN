@@ -1,6 +1,7 @@
 import Link from "next/link"
 import styles from '@styles/categories.module.scss'
 import fetchCategories from "@lib/fetchdata/fetchCats"
+import { Category } from "@ks/types"
 
 export async function CategoriesPool() {
 
@@ -8,8 +9,10 @@ export async function CategoriesPool() {
 
   return (
     <ul className={styles.categories}>
-      {categories?.map((c: any) => (
-        <Link key={c.name} className='cat' href={`/categories/${c.name}`} >{c.name}</Link>
+      {categories?.map((c:Category, i:number) => (
+        <li key={i}>
+          <Link key={c.name} className='cat' href={`/categories/${c.name}`} >{c.name}</Link>
+        </li>
       ))}
     </ul>
   )

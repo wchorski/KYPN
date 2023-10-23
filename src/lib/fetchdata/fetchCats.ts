@@ -1,16 +1,16 @@
 import { gql } from 'graphql-request';
-import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { Category } from "@ks/types";
-import { client } from "@lib/request";
-import { parse } from "graphql";
+import { keystoneContext } from '@ks/context';
 
 export default async function fetchCategories(){
 
   try {
-    // const client = getClient()
-    // const { data, error, loading } = await client.query({query})
+
     const variables = {}
-    const { categories } = await client.request(query, variables)
+    const categories = await keystoneContext.query.Category.findMany({
+      query: query,
+      ...variables,
+    }) as Category[]
     
     return { categories }
     
@@ -21,11 +21,7 @@ export default async function fetchCategories(){
 }
 
 
-const query: TypedDocumentNode<{ categories:Category[] }, never | Record<any, never>> = parse(gql`
-  query getCats {
-    categories {
-      id
-      name
-    }
-  }
-`)
+const query = gql`
+  id
+  name
+`

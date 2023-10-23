@@ -4,8 +4,9 @@ ul.categories {
   gap: .3rem;
   margin-bottom: 1em;
   padding-inline: 0;
+  list-style: none;
 
-  > a{
+  > li > a{
     background-color: var(--c-dark);
     color: var(--c-txt-light);
     text-decoration: none;
