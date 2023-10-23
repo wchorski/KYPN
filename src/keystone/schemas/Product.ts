@@ -15,8 +15,8 @@ export const Product:Lists.Product = list({
   // access: allowAll,
   access: {
     filter: {
-      query: rules.canReadProducts,
-      // query: () => true,
+      // query: rules.canReadProducts,
+      query: () => true,
       delete: rules.canManageProducts,
       update: rules.canManageProducts,
     },

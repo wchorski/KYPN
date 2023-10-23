@@ -1,6 +1,4 @@
-import styled from "styled-components";
-
-export const StyledProductArticle = styled.article`
+article.product :global {
   position: relative;
   display: grid;
   grid-auto-columns: 1fr;
@@ -24,6 +22,10 @@ export const StyledProductArticle = styled.article`
     display: flex;
     flex-direction: column;
     height: 100%;
+  }
+
+  .content:empty {
+    display: none;
   }
 
   figure.featured_img{
@@ -62,9 +64,13 @@ export const StyledProductArticle = styled.article`
 
   footer{
     margin-top: auto;
-    h5.categories, h5.tags{
-      display: none;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    > div {
+      max-width: 15rem;
     }
   }
-
-`
+}
