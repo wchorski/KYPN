@@ -11,10 +11,10 @@ const perPage = envs.PERPAGE
 type PagProps = {
   page: number,
   route: string,
-  count:number,
+  count:number|undefined,
 }
 
-export async function Pagination({ page, route = 'NOROUTE', count }: PagProps){
+export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProps){
 
   // old way when i was fetching from client
   // const client = getClient()

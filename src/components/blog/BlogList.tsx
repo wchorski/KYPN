@@ -15,17 +15,17 @@ const perPage = envs.PERPAGE
 
 
 type ProdProps = {
-  posts:Post[]
+  posts:Post[]|undefined
 }
 
 export async function BlogList({ posts }: ProdProps) {
 
-
+  if(!posts) return null
 
   return (
     <List className={styles.blog} isAnimated={true}>
-      {posts?.map((item: any) => (
-        <BlogListItem {...item} />
+      {posts.map((item: any, i:number) => (
+        <BlogListItem {...item} key={i} />
       ))}
     </List>
   )

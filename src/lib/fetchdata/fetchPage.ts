@@ -1,9 +1,9 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { keystoneContext } from "@ks/context";
-import { Page } from "@ks/types";
+import { Page, Session } from "@ks/types";
 import { gql } from "graphql-request";
 
-export default async function fetchPage(slug:string, session:any){
+export default async function fetchPage(slug:string, session:Session){
 
   try {
 

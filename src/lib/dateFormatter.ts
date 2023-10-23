@@ -146,7 +146,10 @@ export function datePrettyLocalDayShort(date:string) {
   return newDate.toLocaleDateString("en-US", options);
 }
 
-export function datePrettyLocalTime(date:string) {
+export function datePrettyLocalTime(date:string|undefined) {
+
+  if(!date) return ''
+  
   const options = {
     // year: "numeric",
     // month: "long",
