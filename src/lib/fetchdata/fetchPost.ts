@@ -7,9 +7,10 @@ export async function fetchPost(slug:string, session:any){
 
   try {
 
-
-    const post = await keystoneContext.withSession(session).query.Post.findOne({
-      query,
+    // todo if you add permissions on schema 'access' then you gotta add session here
+    // const post = await keystoneContext.withSession(session).query.Post.findOne({
+    const post = await keystoneContext.query.Post.findOne({
+      query: query,
       where: {
         slug: slug
       }
@@ -47,5 +48,8 @@ const query = gql`
   categories {
     id
     name
+  }
+  content {
+    document
   }
 ` 
