@@ -21,6 +21,7 @@ import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/session';
 import { Metadata, ResolvingMetadata } from 'next';
 import { fetchProducts } from '@lib/fetchdata/fetchProducts';
+import { Card } from '@components/layouts/Card';
 
 export const revalidate = 5;
 
@@ -152,12 +153,16 @@ export default async function BlogPageBySlug({ params }:Props) {
       </div>
 
       <footer>
-        <h2 className='categories'>Categories: </h2>
-        <CategoriesPool />
+        <Card>
+          <h4 className='categories'>Categories: </h4>
+          <CategoriesPool />
+        </Card>
 
+        <Card>
+          <h4 className='tags'>Tags:</h4>
+          <TagsPool />
+        </Card>
 
-        <h2 className='tags'>Tags:</h2>
-        <TagsPool />
       </footer>
 
     </article>
@@ -167,7 +172,6 @@ export default async function BlogPageBySlug({ params }:Props) {
   )
 }
 
-const query = ``
 // const query = gql`
 //   query Post($where: PostWhereUniqueInput!) {
 //     post(where: $where) {

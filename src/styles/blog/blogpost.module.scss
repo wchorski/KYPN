@@ -65,9 +65,12 @@ article.article :global {
   footer{
     margin-top: 4rem;
     padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
 
-    h2.categories, h2.tags{
-      display: none;
+    > div {
+      max-width: 15rem;
     }
   }
 }
