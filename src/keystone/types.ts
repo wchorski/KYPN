@@ -122,6 +122,7 @@ export type Product = {
   categories: Category[],
   dateCreated: string,
   dateModified: string,
+  author:User,
 }
 
 export type ProductImage = {

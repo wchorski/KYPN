@@ -82,6 +82,18 @@ article.product :global{
     background-color: var(--c-dark);
     padding: 1rem;
   }
+
+  footer{
+    margin-top: 4rem;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    > div {
+      max-width: 15rem;
+    }
+  }
 }
 
 .outofstock {

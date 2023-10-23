@@ -67,6 +67,28 @@ export const nextAuthOptions = {
             canManagePosts
             canManageUsers
             canManageRoles
+            canManageProducts
+            canManageAddons
+            canManageBookings
+            canManageAvailability
+            canManageEvents
+            canManageAnnouncements
+            canManageTickets
+            canSeeOtherUsers
+            canManagePosts
+            canManageUsers
+            canManageRoles
+            canManageCart
+            canManageOrders
+            canManageCategories
+            canManageTags
+            canManageLocations
+            canManagePages
+            canManageServices
+            canManageSubscriptionPlans
+            canManageSubscriptionItems
+            canManageCoupons
+            canReadProducts
           }
         `
       });
@@ -135,6 +157,7 @@ export const nextAuthOptions = {
               canManageSubscriptionPlans
               canManageSubscriptionItems
               canManageCoupons
+              canReadProducts
             }
           `
         });
