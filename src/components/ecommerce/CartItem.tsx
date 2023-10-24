@@ -1,16 +1,18 @@
 'use client'
-import moneyFormatter from "../../lib/moneyFormatter"
+import moneyFormatter from "@lib/moneyFormatter"
 import styles from '@styles/ecommerce/cart.module.scss'
 import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
-import { handlePhoto } from "../../lib/handleProductPhoto"
-import { ImageDynamic } from "../elements/ImageDynamic"
-import { gql, useMutation } from "@apollo/client"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useState } from "react"
-import { CartItem as CartItemType } from "../../lib/types"
+import { CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
+import { client } from "@lib/request"
+import { gql } from "graphql-request"
 
 export default function CartItem({ item }: any) {
+
+  const [error, setError] = useState<any>(undefined)
 
   if (!item?.product) return (
     <li className={styles.item} >
@@ -21,17 +23,12 @@ export default function CartItem({ item }: any) {
 
   const { product: { id, description, name, price, photo, image}, quantity, id: cartItemId }:CartItemType = item
 
-  const [quantityState, setQuantityState] = useState(quantity)
-
-  const [ updateCartItem, {data, loading, error}] = useMutation(UPDATE_CARTITEM)
-
   async function updateQuantity(value:number){
     
-    console.log(value);
     
     try {
-     const res = await updateCartItem({
-      variables: {
+
+      const variables = {
         where: {
           id: cartItemId
         },
@@ -39,20 +36,21 @@ export default function CartItem({ item }: any) {
           quantity: value
         }
       }
-     })
+
+     const res = await client.request(mutation, variables)
 
     //  console.log(res);
      
 
     } catch (error) {
       console.warn('cart item udate error: ', error);
-      
+      setError(error)
     }
   }
 
 
   return (
-    <StyledCartItem>
+    <li className={styles.item}>
       {/* <Image
         priority
         src={handlePhoto(photo).image?.url}
@@ -81,11 +79,11 @@ export default function CartItem({ item }: any) {
       <CartRemoveItem id={item.id} />
 
       <ErrorMessage error={error}/>
-    </StyledCartItem>
+    </li>
   )
 }
 
-const UPDATE_CARTITEM = gql`
+const mutation = gql`
 
   mutation UpdateCartItem($where: CartItemWhereUniqueInput!, $data: CartItemUpdateInput!) {
     updateCartItem(where: $where, data: $data) {

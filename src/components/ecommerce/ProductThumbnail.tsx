@@ -52,7 +52,7 @@ export async function ProductThumbnail({product, session}: Props) {
           
           {session 
             ? status !== 'OUT_OF_STOCK' 
-              ? <AddToCart id={id} session={session}/>
+              ? <AddToCart product={product} sessionId={session.itemId}/>
               : <button disabled={true}> out of stock </button>
               
             : <Link href={`/api/auth/signin`}> Login to shop </Link>

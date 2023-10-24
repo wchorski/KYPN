@@ -57,39 +57,11 @@ export const nextAuthOptions = {
 
       
 
-      // check if the user exists in keystone
+      // check if the user exists in keystone ? don't need to fetch roles here right?
       const author = await sudoContext.query.User.findOne({
         where: idObj,
         query: `
           id
-          role {
-            name
-            canManagePosts
-            canManageUsers
-            canManageRoles
-            canManageProducts
-            canManageAddons
-            canManageBookings
-            canManageAvailability
-            canManageEvents
-            canManageAnnouncements
-            canManageTickets
-            canSeeOtherUsers
-            canManagePosts
-            canManageUsers
-            canManageRoles
-            canManageCart
-            canManageOrders
-            canManageCategories
-            canManageTags
-            canManageLocations
-            canManagePages
-            canManageServices
-            canManageSubscriptionPlans
-            canManageSubscriptionItems
-            canManageCoupons
-            canReadProducts
-          }
         `
       });
       // todo for now don't make new user if one does not exist
@@ -133,6 +105,16 @@ export const nextAuthOptions = {
             name
             email
             password
+            cart {
+              id
+              quantity
+              product {
+                id
+                price
+                name
+                image
+              }
+            }
             role {
               id
               name
@@ -170,6 +152,7 @@ export const nextAuthOptions = {
 
       const sessionObj = {
         ...session,
+        cart: foundUser?.cart,
         authId: token.sub,
         id: foundUser?.id,
         itemId: foundUser?.id,

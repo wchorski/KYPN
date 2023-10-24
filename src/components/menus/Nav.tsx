@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SiGithub } from 'react-icons/si'
 import { NavLink } from '@components/menus/NavLink'
 import { SessionBadge } from './Session'
+import { CartButton } from '@components/ecommerce/CartButton'
 
 export function Nav() {
 
@@ -22,6 +23,9 @@ export function Nav() {
         </ul>
 
         <ul className='links utility'>
+          <li>
+            <CartButton />
+          </li>
           <li>
             <SessionBadge label='account'/>
           </li>

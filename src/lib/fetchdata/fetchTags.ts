@@ -54,7 +54,8 @@ const query = gql`
   name
 `
 
-// const query = `
+//? if ur using a raw graphql request
+// const query = gql`
 //   query getTags {
 //     tags {
 //       id
@@ -63,11 +64,3 @@ const query = gql`
 //   }
 // `
 
-// const query: TypedDocumentNode<{ tags:Tag[] }, never | Record<any, never>> = parse(`
-//   query getTags {
-//     tags {
-//       id
-//       name
-//     }
-//   }
-// `)
