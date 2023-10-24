@@ -3,6 +3,7 @@ button.remove {
   background: none;
   border: 0;
   color: var(--c-desaturated);
+  padding-inline: .4rem;
 
 }
 .remove:hover, .remove:focus{
@@ -12,11 +13,11 @@ button.remove {
 
 li.item {
   padding: 1em 0;
-  border-bottom: 1px solid var(--c-accent);
+  border-bottom: 1px solid rgba(43, 43, 43, 0.424);
   display: flex;
   justify-content: space-between;
   grid-template-columns: auto 1fr auto;
-  background-color: var(--c-txt-cont);
+  background-color: var(--c-txt-bg);
   border-radius: var(--br-dull);
 
   img{
@@ -102,13 +103,14 @@ li.item {
   min-width: 500px;
   bottom: 0;
   transform: translateX(100%);
+  grid-column: 2/4;
 
 
   transition: all 0.3s;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
   z-index: 90010;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  align-content: start;
 
   header {
     border-bottom: 5px solid black;
@@ -146,31 +148,40 @@ li.item {
     gap: .3rem;
   }
 
-  button.close{
-    position: absolute;
-    top: 0;
-    left: -2em;
-    background-color: var(--c-desaturated);
-    border: none;
-    padding: 1rem;
-    font-size: 2rem;
-    transition: all .3s;
-    transition-delay: .1s;
-    transform: scaleX(0);
-    transform-origin: center right;
-    pointer-events: none;
-
-  }
   .close:hover, .close:focus{
     color: var(--c-txt);
   }
-
+  
 }
 .shoppingcart.open{
   transform: translateX(0%);
+}
 
-  button.close{
-    transform: scaleX(1);
-    pointer-events: initial;
+button.knob{
+  position: absolute;
+  top: 0;
+  left: -2em;
+  background-color: var(--c-desaturated);
+  border: none;
+  padding: 1rem;
+  font-size: 2rem;
+  transition: all .3s;
+  transition-delay: .1s;
+  transform: scaleX(0);
+  transform-origin: center right;
+  pointer-events: none;
+}
+
+div.open {
+  transform: translateX(0);
+}
+
+button.open{
+  transform: scaleX(1);
+  pointer-events: initial;
+  cursor: pointer;
+
+  &:hover{
+    color: var(--c-primary);
   }
 }

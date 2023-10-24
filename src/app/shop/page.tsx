@@ -65,11 +65,11 @@ function Header(){
 type Main = {
   page:number,
   categoryNames:string[],
-  products:Product[],
-  count:number,
+  products:Product[]|undefined,
+  count:number|undefined,
 }
 
-function Main({page, categoryNames, products, count}:Main) {
+function Main({page, categoryNames, products = [], count}:Main) {
 
   if(!products) <p> no products found </p>
 

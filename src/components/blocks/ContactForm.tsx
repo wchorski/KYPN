@@ -3,10 +3,10 @@ import { FormEvent, useState } from "react"
 import useForm from "../../lib/useForm"
 import styles from '@styles/menus/form.module.scss'
 import ErrorMessage from "../ErrorMessage"
-import { gql, useMutation } from "@apollo/client"
 import { QueryLoading } from "@components/menus/QueryLoading"
 // @ts-ignore
 import nProgress from 'nprogress'
+import { gql } from "graphql-request"
 
 type Form = {
   header?:string,
@@ -32,32 +32,32 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
     notes: ''
   })
 
-  const [mutate, { error, loading, data }] = useMutation(MUTATE_CONTACT)
+  // const [mutate, { error, loading, data }] = useMutation(MUTATE_CONTACT)
 
   async function handleSubmit(e: FormEvent){
     e.preventDefault()
     // console.table({inputs})
     
-    try {
-      nProgress.start()
-      const theDate = inputs.date ? new Date(inputs.date) : new Date()
-      inputs.date = theDate.toISOString()
-      console.log({inputs});
+    // try {
+    //   nProgress.start()
+    //   const theDate = inputs.date ? new Date(inputs.date) : new Date()
+    //   inputs.date = theDate.toISOString()
+    //   console.log({inputs});
       
 
-      const res = await mutate({
-        variables: inputs,
-      })
-      console.log({res});
-      nProgress.done()
-      setSuccessMsg('Thanks for your inquiry. We will reach out shortly')
+    //   const res = await mutate({
+    //     variables: inputs,
+    //   })
+    //   console.log({res});
+    //   nProgress.done()
+    //   setSuccessMsg('Thanks for your inquiry. We will reach out shortly')
 
-    } catch (err) {
-      console.warn('contact form error: ', err);
-    }
+    // } catch (err) {
+    //   console.warn('contact form error: ', err);
+    // }
   }
 
-  if(loading) return <QueryLoading />
+  // if(loading) return <QueryLoading />
 
   return (
     <form
@@ -66,11 +66,11 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
       style={{ background: color,}}
     >
 
-      <h2>{header}</h2>
+      <h2>contact form debug {header}</h2>
 
       {successMsg && <p>{successMsg}</p>}
 
-      <fieldset disabled={loading || successMsg ? true : false} aria-busy={loading} >
+      {/* <fieldset disabled={loading || successMsg ? true : false} aria-busy={loading} >
 
 
         <label htmlFor="name" className={isName ? '' : 'hidden'}>
@@ -114,9 +114,9 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
         </label>
 
         <button type="submit" disabled={loading || successMsg ? true : false}> {buttonLabel} </button>
-      </fieldset>
+      </fieldset> */}
 
-      {error && <ErrorMessage error={error} />}
+      {/* {error && <ErrorMessage error={error} />} */}
     </form>
   )
 }

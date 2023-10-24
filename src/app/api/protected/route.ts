@@ -5,6 +5,7 @@ import { Post, User } from "@ks/types";
 import { fetchProtectedRoute } from "@lib/fetchdata/fetchProtectedRoute";
 import { client } from "@lib/request";
 import { parse } from "graphql";
+import { gql } from "graphql-request";
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import type { NextRequest, NextResponse } from "next/server";
@@ -45,7 +46,7 @@ export async function GET(req:NextRequest, res:NextResponse) {
   }
 }
 
-const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
+const query = gql`
   query getUsers {
     usersCount
     users {
@@ -58,27 +59,4 @@ const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> =
       }
     }
   }
-`)
-// const query: TypedDocumentNode<{ users:User[] }, never | Record<any, unknown>> = parse(`
-//   query getUsers($take: Int, $skip: Int!, $orderBy: [UserOrderByInput!]!) {
-//     usersCount
-//     users(take: $take, skip: $skip, orderBy: $orderBy) {
-//       id
-//       name
-//       nameLast
-//       email
-//       role {
-//         name
-//       }
-//     }
-//   }
-// `)
-// const query: TypedDocumentNode<{ posts:Post[] }, never | Record<any, unknown>> = parse(`
-//   query getPosts {
-//     postsCount
-//     posts {
-//       id
-//       title
-//     }
-//   }
-// `)
+`

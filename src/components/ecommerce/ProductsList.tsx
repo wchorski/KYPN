@@ -23,8 +23,8 @@ export async function ProductsList({ products = [] }: ProdProps) {
 
   return (
     <List isAnimated={true} className={styles.product}>
-      {products?.map((prod: any) =>  (
-        <ProductThumbnail product={prod} session={session} />
+      {products?.map((prod: any, i) =>  (
+        <ProductThumbnail product={prod} session={session} key={i}/>
       ))}
     </List>
   )

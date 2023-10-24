@@ -35,7 +35,7 @@ export async function fetchProducts(page:number, categoryNames:string[], session
         status
         image
       `
-    })
+    }) as Product[]
 
     
     

@@ -48,26 +48,6 @@ body {
   }
 }
 
-button{
-  cursor: pointer;
-
-  &:active{
-    color: var(--c-accent);
-    background-color: var(--c-txt-rev);
-  }
-
-  &:disabled {
-
-    cursor: not-allowed;
-
-    background-color: var(--c-disabled);
-
-    &:hover {
-      color: inherit;
-      background-color: inherit;
-    }
-  }
-}
 
 a{
   color: var(--c-primary);
@@ -80,6 +60,10 @@ a{
     color: var(--c-accent);
     border-bottom: dotted 1px var(--c-accent);
   }
+}
+
+button {
+  cursor: pointer;
 }
 
 a.button, button.button {
@@ -98,6 +82,12 @@ a.button, button.button {
     color: var(--c-accent);
     background-color: var(--c-txt-rev);
     border: solid 1px var(--c-accent);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--c-disabled);
+    border-color: var(--c-disabled);
   }
 }
 

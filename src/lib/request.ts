@@ -1,7 +1,9 @@
+'use client'
 import { envs } from '@/envs';
 import { GraphQLClient } from 'graphql-request';
-// import { cookies } from 'next/headers'
 
+// ? can use on client side
+// import { cookies } from 'next/headers'
 // const cookieStore = cookies()
 // const token = cookieStore.get('next-auth.session-token')
 // console.log({token});

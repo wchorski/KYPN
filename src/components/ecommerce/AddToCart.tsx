@@ -7,16 +7,22 @@ import { useState } from 'react';
 import styles from '@styles/eyecandy/SpinCycle.module.scss'
 import { parse } from 'graphql';
 import { client } from '@lib/request';
-import { Session } from '@ks/types';
+import { Product } from '@ks/types';
+import { useCart } from '@components/context/CartStateContext';
 
 
+function plainJSON(json:any) {
+  const fixed = JSON.parse(JSON.stringify(json))
+  return fixed
+}
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
-export default function AddToCart({ id, session }: { id: string, session:any }) {  
+export default function AddToCart({ product, sessionId }: { product:Product, sessionId:string }) {  
 
   const [state, setstate] = useState<State>(undefined)
+  const { getUserCart } = useCart()
 
 
   async function handleButton() {
@@ -26,13 +32,14 @@ export default function AddToCart({ id, session }: { id: string, session:any }) 
       setstate('pending')
 
       const variables = {
-        addToCartId: id,
-        productId: id
+        addToCartId: product.id,
+        productId: product.id
       }
-
-
+      
       // ? gql-request (yoga) request
       const res = await client.request(mutation, variables)
+      // console.log({res});
+      getUserCart(sessionId)
 
       await delay(500)
       setstate('success')
@@ -66,7 +73,7 @@ export default function AddToCart({ id, session }: { id: string, session:any }) 
   return (<>
     <button 
       type="button" 
-      disabled={(state === 'loading') ? true : false} 
+      disabled={(state === 'pending')} 
       onClick={e => handleButton()}
       className={' addtocart' + ' button'}
     >
@@ -78,7 +85,7 @@ export default function AddToCart({ id, session }: { id: string, session:any }) 
 }
 
 
-const mutation = parse(`
+const mutation = gql`
   mutation addToCart($addToCartId: ID!, $productId: ID) {
     addToCart(id: $addToCartId, productId: $productId) {
       id
@@ -88,4 +95,4 @@ const mutation = parse(`
       }
     }
   }
-`)
+`

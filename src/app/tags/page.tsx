@@ -1,32 +1,59 @@
-import { Pagination } from "@components/Pagination";
-import { BlogList } from "@components/blog/BlogList";
-import styles from "@/styles/blog/Blog.module.scss";
+'use client'
 import ErrorMessage from "@components/ErrorMessage";
-import { CategoriesPool } from "@components/menus/CategoriesPool";
-import { TagsPool } from "@components/menus/TagsPool";
 import { PageTHeaderMain, PageTHeaderMainAside } from "@components/layouts/PageTemplates";
-import { Category, Post, Tag } from "@ks/types";
+import { Tag } from "@ks/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
-import { Card } from "@components/layouts/Card";
-import { InfoCard } from "@components/blocks/InfoCard";
-import { fetchPosts } from "@lib/fetchdata/fetchPosts";
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/session";
-import fetchTags from "@lib/fetchdata/fetchTags";
 import { Section } from "@components/layouts/Section";
 import Link from "next/link";
+import { TypedDocumentNode } from "@graphql-typed-document-node/core";
+import { parse } from "graphql";
+import { client } from "@lib/request";
+import { useEffect, useState } from "react";
+import { gql } from "graphql-request";
+import { LoadingAnim } from "@components/elements/LoadingAnim";
 
 
-export const metadata: Metadata = {
-  title: `Tags | ` + envs.SITE_TITLE,
-  description: envs.SITE_DESC,
-}
+// export const metadata: Metadata = {
+//   title: `Tags | ` + envs.SITE_TITLE,
+//   description: envs.SITE_DESC,
+// }
+type State = 'loading'|'error'|'success'|undefined
 
-export default async function TagsPage() {
+export default function TagsPage() {
 
-  const { tags, error } = await fetchTags()
 
+  // const { tags, error } = await fetchTags()
+  const [tags, setTags] = useState<Tag[]>([])
+  const [error, setError] = useState<undefined|any>(undefined)
+  const [state, setstate] = useState<State>(undefined)
+
+
+  async function getTags(){
+
+    const variables = {}
+
+    try {
+      setstate('loading')
+      const { tags }  = await client.request(query, variables) as { tags:Tag[]}
+      setTags(tags)
+      setstate('success')
+      
+    } catch (error) {
+      console.log({error})
+      setError(error)
+      setstate('error')
+    }
+  }
+
+  useEffect(() => {
+    getTags()
+  
+    // return () => 
+  }, [])
+  
+
+  if(state === 'loading') return <LoadingAnim />
   if(error) return <ErrorMessage error={error}/>
 
   return <>
@@ -70,18 +97,11 @@ function Main({tags}:Main) {
   </>
 }
 
-// function Aside() {
-  
-//   return<>
-//     <Card>
-//       <h2> Categories </h2>
-//       <CategoriesPool />
-
-//     </Card>
-
-//     <Card>
-//       <h2> Tags </h2>
-//       <TagsPool />
-//     </Card>
-//   </>
-// }
+const query = gql`
+  query getTags {
+    tags {
+      id
+      name
+    }
+  }
+`

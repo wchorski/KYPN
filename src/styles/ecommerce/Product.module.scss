@@ -16,12 +16,13 @@ ul.product{
   }
 }
 
+// thumbnail list item
 article.product :global{
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: var(--c-txt-bg);
+  
 
   a.featured_image img{
     height: 100%;
@@ -62,6 +63,7 @@ article.product :global{
     color: var(--c-txt);
     text-decoration: none;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
+    width: fit-content;
 
     h3{
       margin: 0;

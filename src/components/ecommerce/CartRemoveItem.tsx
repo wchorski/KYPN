@@ -1,27 +1,39 @@
-import { gql, useMutation } from "@apollo/client"
+'use client'
+
+import { useCart } from "@components/context/CartStateContext"
+import { client } from "@lib/request"
 import styles from '@styles/ecommerce/cart.module.scss'
+import { gql } from "graphql-request"
+import { useState } from "react"
 
 
 export default function CartRemoveItem({id}:{id:string}) {
 
-  const [mutate, {loading, error, data}] = useMutation(MUTATE_CART_REMOVE_ITEM)
+  const [isPending, setisPending] = useState(false)
+  const { removeFromCart } = useCart()
 
   async function handleMutation() {
-    const res = await mutate({
-      variables: {
+
+    try {
+      setisPending(true)
+      const variables = {
         where: {
           id: id
         }
-      },
-      update: handleUpdate,
-      // TODO ep 50, will come back to this. fix cache issues
-      // optimisticResponse: {
-      //   __typename: 'CartItem',
-      //   id: id,
-      // }
-    })
+      }
+  
+      const res = await client.request(mutation, variables)
+      console.log({res})
+      removeFromCart(id)
 
-    // console.log({res})
+      setisPending(false)
+      
+    } catch (error) {
+      console.log('cart removal: ', error);
+      
+      setisPending(false)
+    }
+
     
   }
 
@@ -34,7 +46,7 @@ export default function CartRemoveItem({id}:{id:string}) {
       className={styles.remove}  
       type="button" 
       title='Remove this item from cart'
-      disabled={loading}
+      disabled={isPending}
       onClick={handleMutation}
     >
       &times;
@@ -42,7 +54,7 @@ export default function CartRemoveItem({id}:{id:string}) {
   )
 }
 
-const MUTATE_CART_REMOVE_ITEM = gql`
+const mutation = gql`
   mutation DeleteCartItem($where: CartItemWhereUniqueInput!) {
     deleteCartItem(where: $where) {
       id
