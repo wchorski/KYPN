@@ -1,6 +1,6 @@
 'use client'
 import { envs } from '@/envs';
-import { GraphQLClient } from 'graphql-request';
+// import { GraphQLClient } from 'graphql-request';
 
 // ? can use on client side
 // import { cookies } from 'next/headers'
@@ -9,12 +9,14 @@ import { GraphQLClient } from 'graphql-request';
 // console.log({token});
 
 
-export const client = new GraphQLClient(
-  envs.FRONTEND_URL + '/api/graphql',
-  // {
-  //   headers: {
-  //     authorization: `Bearer ${token}`,
-  //   },
-  // }
+// export const client = new GraphQLClient(
+//   envs.FRONTEND_URL + '/api/graphql',
+//   // {
+//   //   headers: {
+//   //     authorization: `Bearer ${token}`,
+//   //   },
+//   // }
 
-);
+// );
+
+export const client = {}

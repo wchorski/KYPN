@@ -8,7 +8,6 @@ import { useState } from "react"
 import { CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
 import { client } from "@lib/request"
-import { gql } from "graphql-request"
 
 export default function CartItem({ item }: any) {
 
@@ -83,7 +82,7 @@ export default function CartItem({ item }: any) {
   )
 }
 
-const mutation = gql`
+const mutation = `
 
   mutation UpdateCartItem($where: CartItemWhereUniqueInput!, $data: CartItemUpdateInput!) {
     updateCartItem(where: $where, data: $data) {

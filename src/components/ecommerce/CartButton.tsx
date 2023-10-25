@@ -12,7 +12,7 @@ export function CartButton ({ prop }:Props) {
   const { isOpen, openCart } = useCart()
   
   return (
-    <button onClick={openCart} className={isOpen ? 'button open' : 'button'} data-tooltip="cart">
+    <button onClick={openCart} className={isOpen ? 'open' : ''} data-tooltip="cart">
       <MdShoppingBag className="cart"/>
     </button>
   )

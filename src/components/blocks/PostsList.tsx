@@ -1,4 +1,3 @@
-import { gql } from "graphql-request";
 import { BlogList } from "@components/blog/BlogList"
 
 type Props = {
@@ -36,7 +35,7 @@ export function PostsList({header, color, colorOverlay, imageSrc, categories,}:P
 }
 
 
-export const QUERY_POSTS_PAGINATED = gql`
+export const QUERY_POSTS_PAGINATED = `
   query Posts($where: PostWhereInput!, $orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int!) {
     posts(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       id

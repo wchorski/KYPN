@@ -4,9 +4,7 @@ import useForm from "../../lib/useForm"
 import styles from '@styles/menus/form.module.scss'
 import ErrorMessage from "../ErrorMessage"
 import { QueryLoading } from "@components/menus/QueryLoading"
-// @ts-ignore
-import nProgress from 'nprogress'
-import { gql } from "graphql-request"
+
 
 type Form = {
   header?:string,
@@ -122,7 +120,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
 }
 
 
-const MUTATE_CONTACT = gql`
+const MUTATE_CONTACT = `
 mutation Contact($name: String!, $email: String!, $phone: String!, $date: String!, $notes: String!) {
   contact(name: $name, email: $email, phone: $phone, date: $date, notes: $notes) {
     dateCreated

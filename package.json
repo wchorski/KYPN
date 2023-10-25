@@ -22,7 +22,6 @@
     "dotenv": "^16.3.1",
     "googleapis": "^127.0.0",
     "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0",
     "graphql-yoga": "^5.0.0",
     "lightgallery": "^2.7.2",
     "next": "^13.5.6",

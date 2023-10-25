@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { ReactNode } from "react"
 import styles from '@styles/nav.module.scss'
+import { useNavControl } from "@components/context/useGlobalContext"
 
 type Props = {
   href:string,
@@ -13,6 +14,7 @@ type Props = {
 
 export function NavLink ({ target = '_self',href, children, className = '' }:Props) {
 
+  const { toggleNav } = useNavControl()
   let segment = useSelectedLayoutSegment()
   // console.log(segment)
   
@@ -24,6 +26,7 @@ export function NavLink ({ target = '_self',href, children, className = '' }:Pro
     <Link 
       href={href}
       target={target}
+      onClick={toggleNav}
       className={isActive ? [...styleArr, styles.active,].join(' ') : styleArr.join(' ')}
     >
       {children}

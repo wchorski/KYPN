@@ -1,7 +1,5 @@
 'use client'
 import { CartItem, User } from "@ks/types";
-import { client } from "@lib/request";
-import { gql } from "graphql-request";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 const defaultCtx= {
@@ -40,7 +38,14 @@ function CartStateProvider ({children}:{children: ReactNode}){
     }
 
     try {
-      const { user } = await client.request(query, variables) as { user:User }
+      // const { user } = await client.request(query, variables) as { user:User }
+      const res = await fetch(`/api/graphqlprotected`, {
+        method: 'POST',
+        body: JSON.stringify({query, variables})
+      }) 
+      console.log({res})
+      // @ts-ignore
+      const { user }= res 
       // console.log(user.cart);
 
       if(!user.cart) return console.log('cart not found');
@@ -80,7 +85,9 @@ function CartStateProvider ({children}:{children: ReactNode}){
         toggleCart, 
         closeCart, 
         openCart,
+        // @ts-ignore
         cartItems,
+        // @ts-ignore
         setCartItems,
         getUserCart,
         removeFromCart,
@@ -97,7 +104,7 @@ function useCart(){
 }
 export {CartStateProvider, useCart}
 
-const query = gql`
+const query = `
   query getUserCart($where: UserWhereUniqueInput!) {
     user(where: $where) {
       cart {

@@ -22,6 +22,7 @@ article.product :global{
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
   
 
   a.featured_image img{

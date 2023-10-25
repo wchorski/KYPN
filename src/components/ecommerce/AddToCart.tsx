@@ -5,11 +5,8 @@ import { TbCheck, TbExclamationCircle, TbLoader  } from 'react-icons/tb';
 
 import { useState } from 'react';
 import styles from '@styles/eyecandy/SpinCycle.module.scss'
-import { parse } from 'graphql';
 import { client } from '@lib/request';
-import { Product } from '@ks/types';
 import { useCart } from '@components/context/CartStateContext';
-
 
 function plainJSON(json:any) {
   const fixed = JSON.parse(JSON.stringify(json))
@@ -19,7 +16,7 @@ const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
-export default function AddToCart({ product, sessionId }: { product:Product, sessionId:string }) {  
+export default function AddToCart({ productId, sessionId }: { productId:string, sessionId:string }) {  
 
   const [state, setstate] = useState<State>(undefined)
   const { getUserCart } = useCart()
@@ -32,14 +29,17 @@ export default function AddToCart({ product, sessionId }: { product:Product, ses
       setstate('pending')
 
       const variables = {
-        addToCartId: product.id,
-        productId: product.id
+        addToCartId: productId,
+        productId: productId
       }
       
       // ? gql-request (yoga) request
-      const res = await client.request(mutation, variables)
-      // console.log({res});
-      getUserCart(sessionId)
+      // const res = await client.request(mutation, variables)
+      const res = await fetch(`/api/addToCart`, {
+        method: 'POST',
+        body: JSON.stringify(variables)
+      })
+      console.log({res})
 
       await delay(500)
       setstate('success')
@@ -49,6 +49,9 @@ export default function AddToCart({ product, sessionId }: { product:Product, ses
     } catch (error) {
       setstate('error')
       console.log('!!! addtocart error: ', error);
+    } finally {
+      console.log('update user cart');
+      // getUserCart(sessionId)
     }
 
   }
@@ -85,14 +88,14 @@ export default function AddToCart({ product, sessionId }: { product:Product, ses
 }
 
 
-const mutation = gql`
-  mutation addToCart($addToCartId: ID!, $productId: ID) {
-    addToCart(id: $addToCartId, productId: $productId) {
-      id
-      quantity
-      product {
-        name
-      }
-    }
-  }
-`
+// const mutation = gql`
+//   mutation addToCart($addToCartId: ID!, $productId: ID) {
+//     addToCart(id: $addToCartId, productId: $productId) {
+//       id
+//       quantity
+//       product {
+//         name
+//       }
+//     }
+//   }
+// `

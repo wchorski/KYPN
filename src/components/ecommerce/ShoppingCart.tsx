@@ -10,7 +10,6 @@ import Link from 'next/link'
 import { CartCount2 } from './CartCount2'
 import { useSession } from 'next-auth/react'
 import type { CartItem as CartItemType, User } from '@ks/types'
-import { gql } from 'graphql-request'
 import { client } from '@lib/request'
 // todo if clicked off of cart then close the cart
 
@@ -24,22 +23,23 @@ export default function ShoppingCart() {
   const { isOpen, setIsOpen, openCart, closeCart, cartItems, setCartItems } = useCart()
 
   async function getUserCart(){
-    const variables = {
-      where: {
-        // @ts-ignore
-        id: session?.itemId
-      }
-    }
+    // const variables = {
+    //   where: {
+    //     // @ts-ignore
+    //     id: session?.itemId
+    //   }
+    // }
 
     try {
-      const { user } = await client.request(query, variables) as { user:User }
-      // console.log(user.cart);
+      // const { user } = await client.request(query, variables) as { user:User }
+      const res = await fetch(`/api/sessioncart`, {
+        method: 'POST',
+        body: JSON.stringify({})
+      }) 
+      const { user } = await res.json()
 
       if(!user.cart) return console.log('cart not found');
-      
-      // setCart(user.cart)
       setCartItems(user.cart)
-      
       
     } catch (error) {
       console.log('!!! getusercart: ', error);
@@ -129,19 +129,19 @@ export default function ShoppingCart() {
   )
 }
 
-const query = gql`
-  query getUserCart($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      cart {
-        id
-        quantity
-        product {
-          id
-          price
-          name
-          image
-        }
-      }
-    }
-  }
-`
+// const query = `
+//   query getUserCart($where: UserWhereUniqueInput!) {
+//     user(where: $where) {
+//       cart {
+//         id
+//         quantity
+//         product {
+//           id
+//           price
+//           name
+//           image
+//         }
+//       }
+//     }
+//   }
+// `
