@@ -23,29 +23,53 @@ export default function CartItem({ item }: any) {
   const { product: { id, description, name, price, photo, image}, quantity, id: cartItemId }:CartItemType = item
 
   async function updateQuantity(value:number){
-    
+
+    const variables = {
+      where: {
+        id: cartItemId
+      },
+      data: {
+        quantity: value
+      }
+    }
     
     try {
-
-      const variables = {
-        where: {
-          id: cartItemId
-        },
-        data: {
-          quantity: value
-        }
-      }
-
-     const res = await client.request(mutation, variables)
-
-    //  console.log(res);
-     
-
+      // const { user } = await client.request(query, variables) as { user:User }
+      const res = await fetch(`/api/mutation`, {
+        method: 'POST',
+        body: JSON.stringify({query, variables})
+      }) 
+      const data = await res.json()
+      console.log({data});
+    
+      
     } catch (error) {
       console.warn('cart item udate error: ', error);
       setError(error)
     }
   }
+
+  //   try {
+
+  //     const variables = {
+  //       where: {
+  //         id: cartItemId
+  //       },
+  //       data: {
+  //         quantity: value
+  //       }
+  //     }
+
+  //    const res = await client.request(mutation, variables)
+    
+  //   //  console.log(res);
+     
+
+  //   } catch (error) {
+  //     console.warn('cart item udate error: ', error);
+  //     setError(error)
+  //   }
+  // }
 
 
   return (
@@ -67,7 +91,7 @@ export default function CartItem({ item }: any) {
 
         <input 
           type="number" 
-          value={quantity}
+          defaultValue={quantity}
           onChange={e => updateQuantity(Number(e.target.value))}
           // todo only update once input is unselected
           // onBlur={e => updateQuantity(Number(e.target.value))}
@@ -82,7 +106,7 @@ export default function CartItem({ item }: any) {
   )
 }
 
-const mutation = `
+const query = `
 
   mutation UpdateCartItem($where: CartItemWhereUniqueInput!, $data: CartItemUpdateInput!) {
     updateCartItem(where: $where, data: $data) {

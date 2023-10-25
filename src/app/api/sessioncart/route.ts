@@ -31,8 +31,6 @@ export async function POST(req:NextRequest) {
     //     }
     //   }
     // })
-  
-    console.log('graphql context protected SUCCESS: ')
     // console.log({user});
     
     // return Response.json(response)
