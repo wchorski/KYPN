@@ -3,7 +3,7 @@
   backdrop-filter: blur(10px);
   background-color: rgba(55, 55, 55, 0.559);
   width: 100%;
-
+  position: relative;
 
   div.siteWrapper {
     display: flex;
@@ -44,13 +44,6 @@
     //   }
     // }
   }
-  
-  ul.main {
-    // background-color: rgb(56, 63, 80);
-    display: flex;
-    max-width: fit-content;
-    border-radius: 0 0 var(--br-dull) var(--br-dull);
-  }
 
   ul.utility{
     margin-left: auto;
@@ -58,10 +51,43 @@
     align-items: center;
     justify-content: center;
 
+    > li {
+      height: 100%;
+
+      > button {
+        height: 100%;
+        border: none;
+        background-color: transparent;
+        color: var(--c-txt);
+      }
+    }
+
     svg {
       font-size: 2rem;
     }
   }
+}
+
+ul.menu_main {
+  // background-color: rgb(56, 63, 80);
+  display: flex;
+  border-radius: 0 0 var(--br-dull) var(--br-dull);
+
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  background-color: var(--c-txt-bg);
+  width: 100%;
+  transition-property: max-height, background;
+  transition-duration: .7s;
+
+  max-height: 0;
+  overflow: hidden;
+  
+}
+
+ul.open {
+  max-height: 70vh;
 }
 
 .navlink {
@@ -93,8 +119,30 @@
   // }
 }
 
+button.navwich {
+  border: none;
+  font-size: 3rem;
+  display: grid;
+  align-content: center;
+  background-color: transparent;
+  color: var(--c-txt);
+}
 
-a.active {
-  // border-bottom: solid 1px var(--c-primary);
-  color: var(--c-primary);
+@media screen and (width > 600px) {
+  ul.menu_main {
+    flex-direction: row;
+    max-width: fit-content;
+    max-height: 50vh;
+    position: initial;
+    background-color: transparent;
+  }
+
+  button.navwich {
+    display: none;
+  }
+}
+
+// link or button
+.active {
+  color: var(--c-primary) !important;
 }

@@ -2,12 +2,10 @@
 // cred - https://the-guild.dev/graphql/yoga-server/docs/integrations/integration-with-nextjs
 import { getServerSession } from 'next-auth/next'
 import { cookies, headers } from 'next/headers'
-import type { Context } from '.keystone/types'
 import { createYoga } from 'graphql-yoga';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { keystoneContext } from '@ks/context';
 import { NextRequest } from 'next/server';
-import { startServerAndCreateNextHandler } from '@as-integrations/next';
 // TODO attempting to convert 'pages' api route to 'app' route
 // TODO giving up on this again...
 /*

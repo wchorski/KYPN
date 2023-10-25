@@ -1,11 +1,14 @@
 import styles from '@styles/nav.module.scss'
-import Link from 'next/link'
-import { SiGithub } from 'react-icons/si'
 import { NavLink } from '@components/menus/NavLink'
-import { SessionBadge } from './Session'
 import { CartButton } from '@components/ecommerce/CartButton'
+import { NavWichButton } from './NavWichButton'
+import { SessionBadge } from './Session'
+import { MainNavList } from './MainNavList'
 
 export function Nav() {
+
+  // const { isNavOpen, toggleNav } = useNavControl()
+  const isNavOpen = true
 
   return (
     <nav 
@@ -13,14 +16,10 @@ export function Nav() {
     >
 
       <div className="siteWrapper">
-        <ul className='main'>
-          <li> <NavLink href={`/home`}> Home </NavLink> </li>
-          <li> <NavLink href={`/shop`}> Shop </NavLink> </li>
-          <li> <NavLink href={`/blog`}> Blog </NavLink> </li>
-          <li> <NavLink href={`/users`}> Users </NavLink> </li>
-          {/* <li> <Link href={`https://github.com/wchorski/duplicati-dashboard`}> API </Link> </li> */}
-          {/* <li> <Link href={`/`}> Settings </Link> </li> */}
-        </ul>
+
+        <NavWichButton />
+
+        <MainNavList />
 
         <ul className='links utility'>
           <li>

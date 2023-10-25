@@ -3,7 +3,6 @@
 import { useCart } from "@components/context/CartStateContext"
 import { client } from "@lib/request"
 import styles from '@styles/ecommerce/cart.module.scss'
-import { gql } from "graphql-request"
 import { useState } from "react"
 
 
@@ -54,7 +53,7 @@ export default function CartRemoveItem({id}:{id:string}) {
   )
 }
 
-const mutation = gql`
+const mutation = `
   mutation DeleteCartItem($where: CartItemWhereUniqueInput!) {
     deleteCartItem(where: $where) {
       id

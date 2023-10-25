@@ -4,8 +4,6 @@ import { keystoneContext } from "@ks/context";
 import { Post, User } from "@ks/types";
 import { fetchProtectedRoute } from "@lib/fetchdata/fetchProtectedRoute";
 import { client } from "@lib/request";
-import { parse } from "graphql";
-import { gql } from "graphql-request";
 import { getServerSession } from "next-auth";
 import { cookies } from "next/headers";
 import type { NextRequest, NextResponse } from "next/server";
@@ -46,7 +44,7 @@ export async function GET(req:NextRequest, res:NextResponse) {
   }
 }
 
-const query = gql`
+const query = `
   query getUsers {
     usersCount
     users {
