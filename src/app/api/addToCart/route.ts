@@ -1,28 +1,23 @@
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
-import { gql } from "graphql-request"
 import { getServerSession } from "next-auth"
-import type { NextRequest } from "next/server"
+import { NextResponse, type NextRequest } from "next/server"
 
 export async function POST(req:NextRequest) {
 
   console.log('addToCart POST NEXT body: ')
   const request = await req.json()
-  const {addToCartId, productId } = request
-  const session = getServerSession(nextAuthOptions)
-
+  const { variables } = request
+  
   try {
+    const session = await getServerSession(nextAuthOptions)
     const response = await keystoneContext.withSession(session).graphql.run({
       query: query,
-      variables: {
-        addToCartId,
-        productId,
-      }
+      variables: variables,
     })
   
-    console.log('addToCart api route response: ', {response});
     // const data = await res.json()
-    return Response.json({message: 'heyyyy boi'})
+    return NextResponse.json(response)
     
   } catch (error) {
 

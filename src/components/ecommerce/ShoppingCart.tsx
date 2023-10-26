@@ -11,41 +11,37 @@ import { CartCount2 } from './CartCount2'
 import { useSession } from 'next-auth/react'
 import type { CartItem as CartItemType, User } from '@ks/types'
 import { client } from '@lib/request'
+import { LoadingAnim } from '@components/elements/LoadingAnim'
+import fetchSessionCart from '@lib/fetchdata/fetchSessionCart'
 // todo if clicked off of cart then close the cart
 
 export default function ShoppingCart() {
 
   // const [cart, setCart] = useState<CartItemType[]>([])
+  const [isPending, setIsPending] = useState(true)
   const elementRef = useRef<HTMLDivElement | null>(null);
   const { data: session, status }  = useSession()
   // console.log({session});
   
-  const { isOpen, setIsOpen, openCart, closeCart, cartItems, setCartItems } = useCart()
+  const { isOpen, setIsOpen, openCart, closeCart, cartItems, setCartItems, getUserCart } = useCart()
 
-  async function getUserCart(){
-    // const variables = {
-    //   where: {
-    //     // @ts-ignore
-    //     id: session?.itemId
-    //   }
-    // }
+  // async function getUserCart(){
+  //   // const variables = {
+  //   //   where: {
+  //   //     // @ts-ignore
+  //   //     id: session?.itemId
+  //   //   }
+  //   // }
 
-    try {
-      // const { user } = await client.request(query, variables) as { user:User }
-      const res = await fetch(`/api/sessioncart`, {
-        method: 'POST',
-        body: JSON.stringify({})
-      }) 
-      const { user } = await res.json()
+  //   const { user, error } = await fetchSessionCart()
 
-      if(!user.cart) return console.log('cart not found');
-      setCartItems(user.cart)
-      
-    } catch (error) {
-      console.log('!!! getusercart: ', error);
-      
-    }
-  }
+  //   if(!user?.cart) return console.log('no cart found for user');
+  //   if(error) console.log(error);
+    
+  //   setCartItems(user.cart)
+  //   setIsPending(false)
+
+  // }
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -62,14 +58,13 @@ export default function ShoppingCart() {
 
 
   useEffect(() => {
-    getUserCart()
-  
-    document.addEventListener('click', handleClickOutside);
+    // @ts-ignore 
+    if(!session?.itemId) return console.log('no session itemId found');
+    // @ts-ignore
+    getUserCart(session?.itemId)
 
-    return () => {
-      // Clean up the event listener when the component unmounts
-      document.removeEventListener('click', handleClickOutside);
-    };
+    setIsPending(false)
+  
   }, [session])
 
   useEffect(() => {
@@ -109,10 +104,11 @@ export default function ShoppingCart() {
           0
         )} />
       </header>
-
-      {cartItems?.length <= 0 && <p> No items found. <Link href={`/shop`}> Go to shop </Link> </p>}
+      
+      {isPending && <LoadingAnim /> }
+      {cartItems?.length <= 0 && <p> No items found. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>}
       <ul>
-        {cartItems?.map((item: any) => <CartItem key={item.id} item={item} />)}
+        {cartItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={session?.itemId}/>)}
       </ul>
       
       <footer>

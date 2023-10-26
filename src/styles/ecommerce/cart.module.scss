@@ -6,6 +6,10 @@ button.remove {
   padding-inline: .4rem;
 
 }
+.remove:active {
+  opacity: .7;
+  filter: brightness(0.85);
+}
 .remove:hover, .remove:focus{
   color: var(--c-error);
 }
@@ -183,5 +187,12 @@ button.open{
 
   &:hover{
     color: var(--c-primary);
+  }
+}
+
+button.addtocart {
+  svg {
+    font-size: 1.3rem;
+    margin-left: .3rem;
   }
 }

@@ -4,23 +4,42 @@ import styles from '@styles/ecommerce/cart.module.scss'
 import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { useState } from "react"
-import { CartItem as CartItemType } from "@ks/types"
+import { useEffect, useState } from "react"
+import { CartItem, CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
-import { client } from "@lib/request"
+import { useCart } from "@components/context/CartStateContext"
 
-export default function CartItem({ item }: any) {
+type UpdateCartItem = {
+  id:string,
+  quantity:number,
+}
+
+type Props = {
+  item:CartItem,
+  sessionId:string|undefined,
+}
+
+export default function CartItem({ item, sessionId }:Props) {
 
   const [error, setError] = useState<any>(undefined)
+  const { getUserCart } = useCart()
 
   if (!item?.product) return (
     <li className={styles.item} >
       <p>This cart item is no longer supplied by our store</p>
     </li>
   )
-
-
+  
   const { product: { id, description, name, price, photo, image}, quantity, id: cartItemId }:CartItemType = item
+
+  const [quantityState, setQuantityState] = useState(quantity)
+
+  useEffect(() => {
+    setQuantityState(quantity)
+  
+    // return () => 
+  }, [quantity])
+  
 
   async function updateQuantity(value:number){
 
@@ -35,17 +54,20 @@ export default function CartItem({ item }: any) {
     
     try {
       // const { user } = await client.request(query, variables) as { user:User }
-      const res = await fetch(`/api/mutation`, {
+      const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
         body: JSON.stringify({query, variables})
       }) 
-      const data = await res.json()
-      console.log({data});
+
+      const { updateCartItem } = await res.json() as { updateCartItem:UpdateCartItem}
+      setQuantityState(updateCartItem.quantity)
     
       
     } catch (error) {
       console.warn('cart item udate error: ', error);
       setError(error)
+    } finally {
+      getUserCart(sessionId)
     }
   }
 
@@ -72,15 +94,8 @@ export default function CartItem({ item }: any) {
   // }
 
 
-  return (
-    <li className={styles.item}>
-      {/* <Image
-        priority
-        src={handlePhoto(photo).image?.url}
-        alt={handlePhoto(item.photo).image?.altText ? handlePhoto(item.photo).image?.altText : 'no product photo'}
-        width={handlePhoto(photo).image?.width}
-        height={handlePhoto(photo).image?.height}
-      /> */}
+  return <>
+    <li className={styles.item} >
 
       <ImageDynamic photoIn={{ url: image, altText: `${name} featured image`, } || photo} />
 
@@ -91,7 +106,8 @@ export default function CartItem({ item }: any) {
 
         <input 
           type="number" 
-          defaultValue={quantity}
+          value={quantityState}
+          // defaultValue={quantity}
           onChange={e => updateQuantity(Number(e.target.value))}
           // todo only update once input is unselected
           // onBlur={e => updateQuantity(Number(e.target.value))}
@@ -101,9 +117,11 @@ export default function CartItem({ item }: any) {
 
       <CartRemoveItem id={item.id} />
 
-      <ErrorMessage error={error}/>
     </li>
-  )
+
+    <ErrorMessage error={error}/>
+  </>
+  
 }
 
 const query = `

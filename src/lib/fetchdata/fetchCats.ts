@@ -1,4 +1,3 @@
-import { gql } from 'graphql-request';
 import { Category } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
@@ -21,7 +20,7 @@ export default async function fetchCategories(){
 }
 
 
-const query = gql`
+const query = `
   id
   name
 `

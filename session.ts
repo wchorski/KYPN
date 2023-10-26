@@ -105,16 +105,6 @@ export const nextAuthOptions = {
             name
             email
             password
-            cart {
-              id
-              quantity
-              product {
-                id
-                price
-                name
-                image
-              }
-            }
             role {
               id
               name
@@ -152,7 +142,6 @@ export const nextAuthOptions = {
 
       const sessionObj = {
         ...session,
-        cart: foundUser?.cart,
         authId: token.sub,
         id: foundUser?.id,
         itemId: foundUser?.id,

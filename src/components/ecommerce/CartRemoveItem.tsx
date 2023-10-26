@@ -1,9 +1,11 @@
 'use client'
 
 import { useCart } from "@components/context/CartStateContext"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { client } from "@lib/request"
 import styles from '@styles/ecommerce/cart.module.scss'
 import { useState } from "react"
+// import { CgRemoveR } from "react-icons/cg"
 
 
 export default function CartRemoveItem({id}:{id:string}) {
@@ -21,10 +23,16 @@ export default function CartRemoveItem({id}:{id:string}) {
         }
       }
   
-      const res = await client.request(mutation, variables)
-      console.log({res})
-      removeFromCart(id)
+      // const res = await client.request(mutation, variables)
+      // console.log({res})
+      const res = await fetch(`/api/gql/protected`, {
+        method: 'POST',
+        body: JSON.stringify({query, variables})
+      }) 
+      const data = await res.json()
+      console.log({data})
 
+      removeFromCart(id)
       setisPending(false)
       
     } catch (error) {
@@ -35,10 +43,10 @@ export default function CartRemoveItem({id}:{id:string}) {
 
     
   }
-
-  function handleUpdate(cache:any, payload:any) {
-    cache.evict(cache.identify(payload.data.deleteCartItem))
-  }
+  // ? using react context instead of 'cache'
+  // function handleUpdate(cache:any, payload:any) {
+  //   cache.evict(cache.identify(payload.data.deleteCartItem))
+  // }
     
   return (
     <button 
@@ -46,14 +54,14 @@ export default function CartRemoveItem({id}:{id:string}) {
       type="button" 
       title='Remove this item from cart'
       disabled={isPending}
-      onClick={handleMutation}
+      onPointerUp={handleMutation}
     >
-      &times;
+      {isPending ? <LoadingAnim /> : <span> &times; </span>}
     </button>
   )
 }
 
-const mutation = `
+const query = `
   mutation DeleteCartItem($where: CartItemWhereUniqueInput!) {
     deleteCartItem(where: $where) {
       id

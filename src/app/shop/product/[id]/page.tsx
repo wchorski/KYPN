@@ -45,7 +45,7 @@ export async function generateMetadata(
   // read route params
  
   // fetch data
-  const session = getServerSession(nextAuthOptions)
+  const session = await getServerSession(nextAuthOptions)
   const { product } = await fetchProduct(String(params?.id), session)
 
   if(!product) return {
@@ -77,7 +77,7 @@ export async function generateMetadata(
 
 export default async function ProductPageById({ params }:Props) {
   
-  const session = getServerSession(nextAuthOptions)
+  const session = await getServerSession(nextAuthOptions)
   const { product, error } = await fetchProduct(String(params.id), session)
 
   if (error) return <ErrorMessage error={error} />
@@ -141,7 +141,7 @@ function Main({ product, session }:Main) {
 
             <p><span className="price"> {moneyFormatter(price)} </span> </p>
   
-            <AddToCart id={id} session={session}/>
+            <AddToCart productId={id} sessionId={session.itemId}/>
 
             <div className='description-wrap'>
               <BlockRender document={description.document} />
