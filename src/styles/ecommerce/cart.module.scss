@@ -72,26 +72,26 @@ li.item {
   min-width: 2.5rem;
   font-feature-settings: 'tnum';
   font-variant-numeric: tabular-nums;
-  animation: bigSmall .3s;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   outline: solid white 1px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 
   span {
     transition: all .3s;
+    animation: bigSmall .3s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 @keyframes bigSmall {
   0% { 
-    font-size: 25px;
-    padding: 1rem;
+    transform: translateY(100%);
+    
   }
   100% { 
-    font-size: 2px;
-    padding: 0.2rem;
+    transform: translateY(0);
   }
 }
 
@@ -103,7 +103,7 @@ li.item {
   height: 100%;
   top: 0;
   right: 0;
-  width: 40%;
+  // width: 40%;
   // min-width: 500px;
   bottom: 0;
   transform: translateX(100%);
@@ -164,10 +164,10 @@ li.item {
 button.knob{
   position: absolute;
   top: 0;
-  left: -2em;
+  left: 0;
   background-color: var(--c-desaturated);
   border: none;
-  padding: 1rem;
+  padding:  .5rem 1rem;
   font-size: 2rem;
   transition: all .3s;
   transition-delay: .1s;

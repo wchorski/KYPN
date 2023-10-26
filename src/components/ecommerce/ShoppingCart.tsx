@@ -90,7 +90,7 @@ export default function ShoppingCart() {
       <header>
         <button 
           onClick={e => closeCart()} 
-          className={isOpen ? [styles.knob, styles.open].join(' ') : styles.knob}
+          className={isOpen ? [styles.knob, styles.open, ].join(' ') : styles.knob }
           title="close cart"
         > 
           <TbArrowBarToRight />

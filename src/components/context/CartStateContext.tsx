@@ -57,6 +57,11 @@ function CartStateProvider ({children}:{children: ReactNode}){
       console.log('cart context');
       
       console.log(user.cart)
+      user.cart.sort((a:CartItem, b:CartItem) => {
+        // Use localeCompare to compare strings
+        return a.id.localeCompare(b.id);
+      });
+
       setCartItems(user.cart)
       
       
