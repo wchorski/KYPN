@@ -13,7 +13,7 @@ const defaultCtx= {
   setCartItems: (cartItems:CartItem[]) => [],
   addToCart: (cartItem:CartItem) => {},
   removeFromCart: (id:string) => {},
-  getUserCart: (sessionId:string) => {},
+  getUserCart: (sessionId:string|undefined) => {},
 }
 
 const LocalStateContext = createContext(defaultCtx)
@@ -30,7 +30,12 @@ function CartStateProvider ({children}:{children: ReactNode}){
   //   setCartItems(prev => [...prev, cartItem])
   // }
 
-  async function getUserCart(sessionId:string){
+  // TODO add an updateUserCart that acts like a cache, instead of always requesting the sever the whole new cart
+
+  async function getUserCart(sessionId:string|undefined){
+
+    if(!sessionId) return console.log('no sessionId for getUserCart context');
+    
     const variables = {
       where: {
         id: sessionId
@@ -39,30 +44,29 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
     try {
       // const { user } = await client.request(query, variables) as { user:User }
-      const res = await fetch(`/api/graphqlprotected`, {
+      const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
         body: JSON.stringify({query, variables})
       }) 
-      console.log({res})
-      // @ts-ignore
-      const { user }= res 
+      const data = await res.json()
+      const { user } = data 
       // console.log(user.cart);
 
       if(!user.cart) return console.log('cart not found');
       
-      // setCart(user.cart)
+      console.log('cart context');
+      
+      console.log(user.cart)
       setCartItems(user.cart)
       
       
     } catch (error) {
       console.log('!!! getusercart: ', error);
-      
+      return { error }
     }
   }
 
   function removeFromCart(id:string){
-    console.log('remove from cart');
-    console.log({id});
     const updatedItems = cartItems.filter(item => item.id !== id);
     setCartItems(updatedItems)
   }

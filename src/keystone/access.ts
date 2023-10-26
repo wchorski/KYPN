@@ -21,7 +21,7 @@ const generatedPermissions = Object.fromEntries(
     permissionsList.map((permission:any) => [
         permission,
         function ({ session }: ListAccessArgs) {     
-               
+          // @ts-ignore
           return !!session?.data.role?.[permission];
         },
     ])
@@ -263,6 +263,7 @@ export const rules = {
   },
 
   canManageUsers({ session }: ListAccessArgs) {
+    
     if (!isLoggedIn({ session })) return false;
     
     if (permissions.canManageUsers({ session })) return true;

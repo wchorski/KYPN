@@ -1,10 +1,10 @@
 'use client'
-import { gql } from 'graphql-request';
 import { MdShoppingBag } from 'react-icons/md';
 import { TbCheck, TbExclamationCircle, TbLoader  } from 'react-icons/tb';
 
 import { useState } from 'react';
-import styles from '@styles/eyecandy/SpinCycle.module.scss'
+import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
+import styles from '@styles/ecommerce/cart.module.scss'
 import { client } from '@lib/request';
 import { useCart } from '@components/context/CartStateContext';
 
@@ -37,9 +37,10 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
       // const res = await client.request(mutation, variables)
       const res = await fetch(`/api/addToCart`, {
         method: 'POST',
-        body: JSON.stringify(variables)
+        body: JSON.stringify({variables})
       })
-      console.log({res})
+      const data = await res.json()
+      // console.log({data})
 
       await delay(500)
       setstate('success')
@@ -51,7 +52,7 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
       console.log('!!! addtocart error: ', error);
     } finally {
       console.log('update user cart');
-      // getUserCart(sessionId)
+      getUserCart(sessionId)
     }
 
   }
@@ -60,7 +61,7 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
 
     switch (state) {
       case 'pending':
-        return <TbLoader className={styles.spin}/>
+        return <TbLoader className={stylesAnim.spin}/>
         
       case 'success':
         return <TbCheck />
@@ -78,24 +79,14 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
       type="button" 
       disabled={(state === 'pending')} 
       onClick={e => handleButton()}
-      className={' addtocart' + ' button'}
+      className={styles.addtocart + ' button'}
     >
-      <span>Add To Cart <span style={{marginRight: 'auto'}} className='state'>{renderIcon(state)}</span> </span>
+      <span>
+        Add To Cart 
+        <span style={{marginRight: 'auto'}} className='state'>{renderIcon(state)}</span> 
+      </span>
       
     </button>
     
     </>);
 }
-
-
-// const mutation = gql`
-//   mutation addToCart($addToCartId: ID!, $productId: ID) {
-//     addToCart(id: $addToCartId, productId: $productId) {
-//       id
-//       quantity
-//       product {
-//         name
-//       }
-//     }
-//   }
-// `

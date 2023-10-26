@@ -11,8 +11,6 @@ export async function POST(req:NextRequest) {
   
   // const { variables } = request
   const session = await getServerSession(nextAuthOptions)
-  console.log('*** session ID: ', session?.itemId);
-  
 
   try {
 

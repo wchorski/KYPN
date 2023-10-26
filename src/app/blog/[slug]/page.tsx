@@ -40,7 +40,7 @@ export async function generateMetadata(
   // read route params
  
   // fetch data
-  const session = getServerSession(nextAuthOptions)
+  const session = await getServerSession(nextAuthOptions)
   const { post } = await fetchPost(String(params?.slug), session)
 
   if(!post) return {
@@ -60,7 +60,7 @@ export async function generateMetadata(
       images: [String(featured_image), ...previousImages],
       title: title,
       description: excerpt,
-      url: envs.SITE_URI + '/blog/' + params.slug,
+      url: envs.FRONTEND_URL + '/blog/' + params.slug,
       type: 'article'
     },
     keywords: tags?.map(tag => tag.name).join(', '),
@@ -71,7 +71,7 @@ export async function generateMetadata(
 
 export default async function BlogPageBySlug({ params }:Props) {
   
-  const session = getServerSession(nextAuthOptions)
+  const session = await getServerSession(nextAuthOptions)
   const { post, error } = await fetchPost(String(params.slug), session)
 
   if (error) return <ErrorMessage error={error} />

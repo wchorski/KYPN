@@ -64,6 +64,19 @@ a{
 
 button {
   cursor: pointer;
+  transition-property: color, background-color, filter;
+  transition-duration: .3s;
+  
+  > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // svg {
+  //   font-size: 1.3rem;
+  //   margin-left: .2rem;
+  // }
 }
 
 a.button, button.button {

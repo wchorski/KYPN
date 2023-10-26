@@ -18,7 +18,7 @@ export async function POST(req:NextRequest) {
     const data = await keystoneContext.withSession(session).graphql.run({
       query: query,
       variables: variables
-    })
+    }) as object
     // console.log({data})
     
     // return Response.json(response)
