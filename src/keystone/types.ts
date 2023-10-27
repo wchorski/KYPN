@@ -10,8 +10,9 @@ import type { Permission } from './schemas/fields';
 
 export type Session = {
   user: {
-    name:string,
-    email:string,
+    name?:string | null | undefined,
+    email?:string | null | undefined,
+    image?:string | null | undefined,
   }
   authId:string,
   id:string,

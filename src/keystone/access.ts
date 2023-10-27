@@ -190,11 +190,6 @@ export const rules = {
 
   canManageTickets({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
-    // console.log('=========== SESSION');
-    // console.log({session});
-    // todo why context return undefined?
-    // console.log('=========== CONTEXT');
-    // console.log({context});
 
     // 1. compair against permissions checkbox
     if (permissions.canManageTickets({ session })) return true;

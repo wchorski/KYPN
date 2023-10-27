@@ -93,9 +93,6 @@ export const nextAuthOptions = {
       session: DefaultSession; // required by next-auth, not by us
       token: DefaultJWT;
     }) {
-
-      // console.log({token});
-      // console.log({session});
       const sudoContext = (await getKeystoneContext()).sudo();
         // check if the user exists in keystone
         const foundUser = await sudoContext.query.User.findOne({

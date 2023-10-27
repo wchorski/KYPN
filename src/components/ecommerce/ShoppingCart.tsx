@@ -18,7 +18,6 @@ export default function ShoppingCart() {
   const [isPending, setIsPending] = useState(true)
   const elementRef = useRef<HTMLDivElement | null>(null);
   const { data: session, status }  = useSession()
-  // console.log({session});
   
   const { isOpen, setIsOpen, openCart, closeCart, cartItems, setCartItems, getUserCart } = useCart()
 
