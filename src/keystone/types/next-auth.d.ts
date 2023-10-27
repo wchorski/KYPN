@@ -13,6 +13,7 @@ declare module "next-auth" {
       nameLast:string,
       email:string,
       id:string,
+      stripeCustomerId:string,
     }
     itemId:string,
     authId:string,

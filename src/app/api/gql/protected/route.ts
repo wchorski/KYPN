@@ -10,6 +10,8 @@ export async function POST(req:NextRequest) {
   // console.log({request});
   
   const { query, variables } = request
+  // console.log({request});
+  
   
   try {
     const session = await getServerSession(nextAuthOptions)
@@ -19,6 +21,7 @@ export async function POST(req:NextRequest) {
       query: query,
       variables: variables
     }) as object
+    console.log('GQL PROTECTED ROUTE');
     // console.log({data})
     
     // return Response.json(response)

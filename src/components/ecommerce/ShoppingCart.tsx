@@ -9,11 +9,8 @@ import { TbArrowBarToRight } from "react-icons/tb";
 import Link from 'next/link'
 import { CartCount2 } from './CartCount2'
 import { useSession } from 'next-auth/react'
-import type { CartItem as CartItemType, User } from '@ks/types'
-import { client } from '@lib/request'
+
 import { LoadingAnim } from '@components/elements/LoadingAnim'
-import fetchSessionCart from '@lib/fetchdata/fetchSessionCart'
-// todo if clicked off of cart then close the cart
 
 export default function ShoppingCart() {
 

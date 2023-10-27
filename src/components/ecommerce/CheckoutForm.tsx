@@ -1,41 +1,38 @@
 'use client'
-import { StyledSickButton } from "../../styles/SickButton.styled"
-import { gql, useMutation } from "@apollo/client"
 import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js"
 import { loadStripe, } from "@stripe/stripe-js"
-import { useRouter } from "next/router"
-import nProgress from "nprogress"
+import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
-import styled from "styled-components"
 import ErrorMessage from "../ErrorMessage"
-import { useCart } from "../../lib/cartState";
-import { QUERY_USER_CURRENT, useUser } from "../menus/Session"
+import { useSession } from "next-auth/react"
+import styles from '@styles/ecommerce/checkoutform.module.scss'
+import { useCart } from "@components/context/CartStateContext"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { envs } from "@/envs"
 
 // TODO Add blocker stops stripe.com requests thinks it's X site
-const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || 'NO_FRONTEND_STRIPE_KEY_IN_ENV'
-const stripeLib = loadStripe(STRIPE_KEY)
+const stripeLib = loadStripe(envs.STRIPE_PUBLIC_KEY as string)
 
 function CheckoutFormChild() {
 
-  const session = useUser()
+  const {data: session, status} = useSession()
 
   const router = useRouter()
   const { closeCart } = useCart()
   const [errorStripe, setError] = useState<any>()
+  const [errorBackend, setErrorBackend] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
   const stripe = useStripe()
   const elements = useElements()
 
-  const [mutateCheckout, { error, loading, data }] = useMutation(MUTATE_CHECKOUT_ORDER, {
-    refetchQueries: [{ query: QUERY_USER_CURRENT }]
-  })
+  // const [mutateCheckout, { error, loading, data }] = useMutation(MUTATE_CHECKOUT_ORDER, {
+  //   // refetchQueries: [{ query: QUERY_USER_CURRENT }]
+  // })
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setIsLoading(true)
-
-    nProgress.start()
-
+    
     // try {
       // @ts-ignore
       const { paymentMethod, error } = await stripe?.createPaymentMethod({
@@ -43,34 +40,46 @@ function CheckoutFormChild() {
         elements,
         params: {
           billing_details: {
-            name: session ? session.name : 'Anonymous Name',
-            email: session ? session.email : 'Anonymous Email',
+            name: session ? session.user.name : 'Anonymous Name',
+            email: session ? session.user.email : 'Anonymous Email',
           },
         },
       });
+
+      console.log('%%% CHECKOUT %%%');
+      console.log(paymentMethod);
+      
   
       if (error) {
         console.warn(error)
-        nProgress.done()
         setIsLoading(false)
         setError(error)
         return //stops checkout
       }
   
-      const res = await mutateCheckout({
-        variables: {
-          token: paymentMethod.id,
-        }
-      })
-      console.log('FINISHED ORDER', res);
+    //   // const res = await mutateCheckout({
+    //   //   variables: {
+    //   //     token: paymentMethod.id,
+    //   //   }
+    //   // })
+    //   // console.log('FINISHED ORDER', res);
+    //   const variables = {
+    //     token: paymentMethod.id
+    //   }
+    //   const res = await fetch('/api/gql/protected', {
+    //     method: 'POST',
+    //     body: JSON.stringify({query, variables})
+    //   })
+
+    //   const data = await res.json()
+    //   console.log({data});
+    //   if(data.error) setErrorBackend(errorBackend)
   
       setIsLoading(false)
-      nProgress.done()
       console.log('check end')
   
-      closeCart()
-  
-      router.push(`/shop/orders/${res.data.checkout.id}`)
+      // todo orders page
+      // router.push(`/shop/orders/${res.data.checkout.id}`)
       
     // } catch (err) {
     //   console.warn(error)
@@ -82,19 +91,23 @@ function CheckoutFormChild() {
   }
 
   return (
-    <StyledCheckoutForm onSubmit={e => handleSubmit(e)}>
+    <form className={styles.checkout}  onSubmit={e => handleSubmit(e)}>
 
-      {(errorStripe || error) && (<>
-        <ErrorMessage error={errorStripe || error} />
+      {(errorStripe || errorBackend) && (<>
+        <ErrorMessage error={errorStripe || errorBackend} />
       </>)}
 
       <CardElement />
 
-      <button className="medium submit" disabled={isLoading}>
-        Checkout
+      <button 
+        className={[styles.submit, 'button'].join(' ')} 
+        disabled={isLoading}
+        type={'submit'}
+      >
+        {isLoading ? <LoadingAnim /> : 'Checkout'}
       </button>
 
-    </StyledCheckoutForm>
+    </form>
   )
 }
 
@@ -106,28 +119,10 @@ export function CheckoutForm() {
   )
 }
 
-const MUTATE_CHECKOUT_ORDER = gql`
+const query = `
   mutation Checkout($token: String!) {
     checkout(token: $token) {
       id
     }
   }
-`
-
-const StyledCheckoutForm = styled.form`
-  box-shadow: 0 1px 2px 2px black;
-  background-color: azure;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 1rem;
-  display: grid;
-  grid-gap: 1rem;
-
-  max-width: 30em;
-
-  button.submit{
-    display: grid;
-    align-items: center;
-  }
-
 `

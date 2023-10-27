@@ -50,20 +50,15 @@ function CartStateProvider ({children}:{children: ReactNode}){
       }) 
       const data = await res.json()
       const { user } = data 
-      // console.log(user.cart);
 
       if(!user.cart) return console.log('cart not found');
       
-      console.log('cart context');
-      
-      console.log(user.cart)
       user.cart.sort((a:CartItem, b:CartItem) => {
         // Use localeCompare to compare strings
         return a.id.localeCompare(b.id);
       });
 
       setCartItems(user.cart)
-      
       
     } catch (error) {
       console.log('!!! getusercart: ', error);
