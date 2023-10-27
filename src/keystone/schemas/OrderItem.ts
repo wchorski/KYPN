@@ -72,7 +72,7 @@ export const OrderItem:Lists.OrderItem = list({
             // @ts-ignore
             data: currData
           })
-          console.log({updatedProduct});
+          // console.log({updatedProduct});
           
         } catch (error) {
           console.log('Order Item Create Error: ', error);

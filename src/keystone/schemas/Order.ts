@@ -44,6 +44,33 @@ export const Order:Lists.Order = list({
     // ticketItems: relationship({ ref: 'Ticket.order', many: true }),
     user: relationship({ ref: 'User.orders' }),
     charge: text(),
-    createdAt: timestamp(),
+    stripeSessionId: text(),
+    status: select({
+      options: [
+        { label: 'open', value: 'OPEN' },
+        { label: 'complete', value: 'COMPLETE' },
+        { label: 'expired', value: 'EXPIRED' },
+      ],
+      defaultValue: 'DRAFT',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    payment_status: select({
+      options: [
+        { label: 'paid', value: 'PAID' },
+        { label: 'no_payment_required', value: 'NO_PAYMENT_REQUIRED' },
+        { label: 'unpaid', value: 'UNPAID' },
+      ],
+      defaultValue: 'DRAFT',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    shipping_address: text(),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
 })

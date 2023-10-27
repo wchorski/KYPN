@@ -2,16 +2,17 @@
 
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
-import {CartItem, Order} from '@ks/types';
+import {CartItem, Order, Session} from '@ks/types';
 import stripe from "@lib/get-stripejs";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { fetchGqlProtected } from "@lib/fetchdata/fetchGqlProtected";
+import { keystoneContext } from "@ks/context";
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const headersList = headers();
-    const {cartItems} = await req.json();
+    const { cartItems } = await req.json();
     const cartDetailsArray: CartItem[] = Object.values(cartItems) as CartItem[];
 
     const lineItems = cartDetailsArray.map((item: CartItem) => {
@@ -21,10 +22,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
             currency: 'usd',
             product_data: {
               name: item.product.name,
+              images: [item.product.image],
+              metadata: {
+                cartItemId: item.id,
+                productId: item.product.id,
+              }
             },
             unit_amount: item.product.price,
           },
           quantity: item.quantity,
+
         };
     });
 
@@ -32,34 +39,72 @@ export async function POST(req: NextRequest, res: NextResponse) {
       
       const userSession = await getServerSession(nextAuthOptions)
 
+      const isStockAvailable = await checkStockCount(userSession)
+
+      if(!isStockAvailable) throw new Error('not enought stock is not available')
+
       const session = await stripe.checkout.sessions.create({
         customer_email: userSession?.user?.email || '',
-        // customer: userSession?.user?.stripeCustomerId || '',
-        payment_method_types: ["card"],
+        // customer: userSession?.stripeCustomerId || userSession?.itemId,
+        payment_method_types: ["card", ],
         line_items: lineItems,
         mode: "payment",
-        // TODO send to ordr complete receipt
-        success_url: `${headersList.get("origin")}/orders`,
+        success_url: `${headersList.get("origin")}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${headersList.get("origin")}/shop/checkout`,
-      });
-
-      //? backend update
-      const variables = {
-        chargeId: session.id
-      }
-      const { data: order, error } = await fetchGqlProtected(query, variables) as {data:Order, error:unknown}
-      if(!error) console.log('stripe checkout gql prot error: ', error);
-      
-      
-      console.log(order);
-      
+      })
 
       return NextResponse.json({sessionId: session.id});
 
-    } catch (err) {
-        console.log(err)
-        return NextResponse.json({error: "Error creating checkout session"});
+    } catch (error) {
+      console.log('!!! api/stripecheckout ERROR');
+      console.log(error)
+      return NextResponse.json({error, message: "Error creating stripe checkout session"});
     }
+}
+
+async function checkStockCount(session:any){
+
+  if(!session) return false
+
+  console.log({session});
+  
+
+  //Query the current user
+  const user = await keystoneContext.withSession(session).query.User.findOne({
+    where: { id: session.itemId },
+    query:
+      `
+        id
+        name
+        email
+        orders {
+          id
+        }
+        cart {
+          id
+          quantity
+          product {
+            id
+            name
+            price
+            stockCount
+            image
+          }
+        }
+      `,
+  })
+
+  const isStockAvailable = await Promise.all(user.cart.map( async (item:CartItem) => {
+
+    if(item.quantity > item.product.stockCount){
+      console.log(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
+      return false
+    } 
+    
+    return true
+  }))
+
+  return isStockAvailable
 }
 
 const query = `

@@ -5,9 +5,12 @@ import {loadStripe} from "@stripe/stripe-js";
 import { useCart } from "@components/context/CartStateContext";
 import { envs } from "@/envs";
 import { BsStripe } from "react-icons/bs";
+import { useState } from "react";
+import ErrorMessage from "@components/ErrorMessage";
 
 export default function StripeCheckoutButton() {
     const { cartItems } = useCart()
+    const [errorObj, setErrorObj] = useState<unknown>()
 
     const redirectToCheckout = async () => {
         try {
@@ -31,19 +34,25 @@ export default function StripeCheckoutButton() {
             const stripeError = await stripe.redirectToCheckout({sessionId});
 
             if (stripeError) {
-                console.error(stripeError);
+              console.log('!!! StripeCheckoutButton stripe Error: ');
+              console.error(stripeError);
+              setErrorObj(stripeError)
             }
         } catch (error) {
-            console.error(error);
+          console.log('!!! StripeCheckoutButton Error: ');
+          console.error(error);
+          setErrorObj(error)
         }
     };
 
-    return (
-        <button
-          onClick={() => cartItems.length > 0 && redirectToCheckout()}
-          disabled={cartItems.length === 0}
-          className="button">
-          Checkout with Stripe <BsStripe />
-        </button>
-    );
+    return <>
+      {errorObj && <ErrorMessage error={errorObj}/>}
+      <button
+        onClick={() => cartItems.length > 0 && redirectToCheckout()}
+        disabled={cartItems.length === 0}
+        className="button">
+        Checkout with Stripe <BsStripe />
+      </button>
+    </>
+  
 }
