@@ -102,6 +102,7 @@ export const nextAuthOptions = {
           where: { email: session.user?.email },
           query: `
             id
+            stripeCustomerId
             name
             email
             password
@@ -144,6 +145,7 @@ export const nextAuthOptions = {
         ...session,
         authId: token.sub,
         id: foundUser?.id,
+        stripeCustomerId: foundUser?.stripeCustomerId,
         itemId: foundUser?.id,
         data: {
           role: foundUser?.role,
@@ -200,6 +202,7 @@ export const nextAuthOptions = {
           where: { email: credentials?.email },
           query: `
             id
+            stripeCustomerId
             name
             email
             password
@@ -258,6 +261,7 @@ export const nextAuthOptions = {
             img: foundUser.img,
             user: {
               email: foundUser.email,
+              stripeCustomerId: foundUser.stripeCustomerId,
             }
           }
         }

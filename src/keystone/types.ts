@@ -58,8 +58,6 @@ export type ListAccessArgs = {
 
 export type CartItem = {
   id: string,
-  name: string,
-  price: number,
   quantity: number,
   product: Product
 

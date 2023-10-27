@@ -5,19 +5,7 @@
 // If you want to learn more about how lists are configured, please read
 // - https://keystonejs.com/docs/config/lists
 
-import { graphql, list } from '@keystone-6/core';
-import { allowAll } from '@keystone-6/core/access';
-
-// see https://keystonejs.com/docs/fields/overview for the full list of fields
-//   this is a few common fields for an example
-import {
-  text,
-  relationship,
-  password,
-  timestamp,
-  checkbox,
-  select,
-} from '@keystone-6/core/fields';
+import { graphql } from '@keystone-6/core';
 
 // the document field is a more complicated field, so it has it's own package
 import { document } from '@keystone-6/fields-document';
@@ -33,7 +21,7 @@ import { Ticket } from "./schemas/Ticket";
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
 // @ts-ignore
-import type { Lists, Context } from '.keystone/types';
+import type { Lists } from '.keystone/types';
 
 import { OrderItem } from './schemas/OrderItem';
 import { User } from './schemas/User';
@@ -90,7 +78,7 @@ export const extendGraphqlSchema = graphql.extend(base => {
   return {
     mutation: {
       addToCart: addToCart(base),
-      // checkout: checkout(base),
+      checkout: checkout(base),
       // checkoutSubscription: checkoutSubscription(base),
       // checkoutTicket: checkoutTicket(base),
       // contact: contact(base),

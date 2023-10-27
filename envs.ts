@@ -1,4 +1,4 @@
-const STRIPE_SECRET = process.env.STRIPE_SECRET || "sk_test_****"
+const STRIPE_SECRET = process.env.STRIPE_SECRET 
 
 const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME
 const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY
@@ -32,8 +32,7 @@ const PERPAGE = Number(process.env.NEXT_PUBLIC_PERPAGE) || 20
 const NODE_ENV = process.env.NODE_ENV
 
 // FRONTEND
-const STRIPE_KEY          = process.env.NEXT_PUBLIC_STRIPE_KEY          || 'no_stripe_key'
-const STRIPE_SECRET_KEY   = process.env.STRIPE_SECRET_KEY               || 'no_stripe_secret'            || 'no_api_uri'
+const STRIPE_PUBLIC_KEY   = process.env.NEXT_PUBLIC_STRIPE_KEY         
 const SITE_TITLE          = process.env.NEXT_PUBLIC_SITE_TITLE          || 'no_site_title'
 const SITE_DESC          = process.env.NEXT_PUBLIC_SITE_DESC          || 'no_site_desc'
 const ADMIN_EMAIL_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_EMAIL_ADDRESS || 'no_admin_email_address'
@@ -44,8 +43,7 @@ const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT        || 'no_a
 export const envs = {
   PERPAGE,
   WORK_FACTOR,
-  STRIPE_KEY,
-  STRIPE_SECRET_KEY,
+  STRIPE_PUBLIC_KEY,
   SITE_TITLE,
   SITE_DESC,
   ADMIN_EMAIL_ADDRESS,
