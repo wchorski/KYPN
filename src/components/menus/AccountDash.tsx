@@ -1,38 +1,22 @@
-'use client'
-import { gql } from "graphql-request"
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr"
-import ErrorMessage from "@components/ErrorMessage"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { NoData } from "@components/elements/NoData"
 import { Table } from "@components/elements/Table"
 import { TicketList } from "@components/events/TicketList"
 import { Section } from "@components/layouts/Section"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
-import { Booking, Order, Ticket } from "@lib/types"
+import { Booking, Order, Ticket, User } from "@ks/types"
 import styles from '@styles/menus/dashboard.module.scss'
-import Link from "next/link"
-import { BsQrCode } from "react-icons/bs"
+
 
 type Props = {
-  userId:string,
-  dashState:string
+  dashState:string,
+  user:User,
 }
 
-export default function AccountDash ({ userId, dashState }:Props) {
+export default async function AccountDash ({ user, dashState, }:Props) {
 
-  const { data, loading, error, } = useQuery(
-    USER_DASH_QUERY, {
-      variables: { where: { id: userId } }
-    })
-
-  if(loading) return <LoadingAnim />
-  if(error) return <ErrorMessage error={error} />
-  if(!data?.user) return <p> User not found </p>
-
-  const { user } = data
-
-  console.log(user);
+  console.log('### ACCOUNT DASH');
+  console.log({user});
   
 
   const bookingCells = user?.bookings?.map((book:Booking) => ({
@@ -42,15 +26,17 @@ export default function AccountDash ({ userId, dashState }:Props) {
     details: book.id,
   }))
   
-  const orderCells = data.user.orders.map((order:Order) => ({
-    date: datePrettyLocalDay(order.createdAt || ''),
-    time: datePrettyLocalTime(order.createdAt || '') ,
+  // const orderCells = [] as any
+  // @ts-ignore
+  const orderCells = user.orders.map((order:Order) => ({
+    date: datePrettyLocalDay(order.dateCreated || ''),
+    time: datePrettyLocalTime(order.dateCreated || '') ,
     total: moneyFormatter(order.total),
     count: order.items.reduce((accumulator, it) => {
       return accumulator + it.quantity;
     }, 0),
     details: order.id,
-  }))
+  })) 
 
   return (
     <div className={styles.dashboard}>
@@ -107,7 +93,7 @@ export default function AccountDash ({ userId, dashState }:Props) {
               'details',
             ]}
             cells={orderCells}
-            route={`/shop/orders`}
+            route={`/orders`}
           />
         </Section>
 
@@ -179,46 +165,3 @@ export default function AccountDash ({ userId, dashState }:Props) {
       </div>
   )
 }
-
-const USER_DASH_QUERY = gql`
-  query User($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      bookings {
-        id
-        price
-        start
-        service {
-          name
-        }
-        status
-      }
-      subscriptions{
-        id
-        subscriptionPlan {
-          id
-          name
-        }
-        status
-      }
-      orders{
-        id
-        total
-        items{
-          quantity
-        }
-        createdAt
-      }
-      tickets {
-        id
-        event {
-          start
-          summary
-          location {
-            id
-            name
-          }
-        }
-      }
-    }
-  }
-`

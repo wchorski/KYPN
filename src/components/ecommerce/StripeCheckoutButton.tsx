@@ -40,13 +40,13 @@ export default function StripeCheckoutButton() {
 
         if(!isStockAvailable) return setMessageState(message)
 
-        // const stripeError = await stripe.redirectToCheckout({sessionId});
+        const stripeError = await stripe.redirectToCheckout({sessionId});
 
-        // if (stripeError) {
-        //   console.log('!!! StripeCheckoutButton stripe Error: ');
-        //   console.error(stripeError);
-        //   setErrorObj(stripeError)
-        // }
+        if (stripeError) {
+          console.log('!!! StripeCheckoutButton stripe Error: ');
+          console.error(stripeError);
+          setErrorObj(stripeError)
+        }
 
       } catch (error) {
         console.log('!!! StripeCheckoutButton Error: ');

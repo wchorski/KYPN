@@ -41,7 +41,7 @@ export const Order:Lists.Order = list({
     }),
     total: integer(),
     items: relationship({ ref: 'OrderItem.order', many: true }),
-    // ticketItems: relationship({ ref: 'Ticket.order', many: true }),
+    ticketItems: relationship({ ref: 'Ticket.order', many: true }),
     user: relationship({ ref: 'User.orders' }),
     charge: text(),
     stripeSessionId: text(),

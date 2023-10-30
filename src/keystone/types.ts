@@ -150,9 +150,7 @@ export type Order = {
   charge: string,
   total: number,
   dateCreated: string,
-  user: {
-    id: string,
-  }
+  user: User,
   items: [OrderItem]
 }
 
@@ -163,7 +161,9 @@ export type OrderItem = {
   price: number,
   quantity: number,
   productId: string,
+  product:Product,
   photo: Photo,
+  image:string,
   dateCreated: string,
   dateModified: string,
 }
@@ -192,6 +192,7 @@ export type User = {
   subscriptions: any[],
   orders: OrderItem[],
   role: Role,
+  tickets: Ticket[]
 }
 
 export type Availability = {
