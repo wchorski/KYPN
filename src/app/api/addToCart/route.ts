@@ -5,36 +5,39 @@ import { NextResponse, type NextRequest } from "next/server"
 
 export async function POST(req:NextRequest) {
 
-  console.log('addToCart POST NEXT body: ')
   const request = await req.json()
   const { variables } = request
   
   try {
     const session = await getServerSession(nextAuthOptions)
-    const response = await keystoneContext.withSession(session).graphql.run({
+    const data = await keystoneContext.withSession(session).graphql.run({
       query: query,
       variables: variables,
+    }) as object
+
+    return NextResponse.json({
+      ...data
+    }, {
+      status: 222,
     })
-  
-    // const data = await res.json()
-    return NextResponse.json(response)
     
   } catch (error) {
 
-    console.log('addToCart api route: ', error);
-    throw new Error('addToCart api route Error')
+    console.log('/api/addToCart route: ', error);
+    return NextResponse.json({
+      error
+    }, {
+      status: 555,
+    })
     
   }
 }
 
+// ? complains when i query anything other than quantity.... idk why
 const query = `
   mutation addToCart($addToCartId: ID!, $productId: ID) {
     addToCart(id: $addToCartId, productId: $productId) {
-      id
       quantity
-      product {
-        name
-      }
     }
   }
 `

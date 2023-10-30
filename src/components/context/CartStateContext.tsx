@@ -1,6 +1,12 @@
 'use client'
 import { CartItem, User } from "@ks/types";
+import { calcTotalPrice } from "@lib/calcTotalPrice";
 import { ReactNode, createContext, useContext, useState } from "react";
+
+type CartContext = {
+  isOpen: boolean,
+  cartTotal:number,
+}
 
 const defaultCtx= {
   isOpen: false,
@@ -14,6 +20,7 @@ const defaultCtx= {
   addToCart: (cartItem:CartItem) => {},
   removeFromCart: (id:string) => {},
   getUserCart: (sessionId:string|undefined) => {},
+  cartTotal: 0,
 }
 
 const LocalStateContext = createContext(defaultCtx)
@@ -21,14 +28,15 @@ const LocalStateContext = createContext(defaultCtx)
 function CartStateProvider ({children}:{children: ReactNode}){
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [cartTotal, setCartTotal] = useState<number>(0)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
 
-  // function addToCart(cartItem:CartItem){
-  //   console.log('add to cart');
+  function addToCart(cartItem:CartItem){
+    console.log('add to cart');
     
-  //   console.log({cartItem});
-  //   setCartItems(prev => [...prev, cartItem])
-  // }
+    console.log({cartItem});
+    setCartItems(prev => [...prev, cartItem])
+  }
 
   // TODO add an updateUserCart that acts like a cache, instead of always requesting the sever the whole new cart
 
@@ -49,9 +57,10 @@ function CartStateProvider ({children}:{children: ReactNode}){
         body: JSON.stringify({query, variables})
       }) 
       const data = await res.json()
+      
       const { user } = data 
 
-      if(!user.cart) return console.log('cart not found');
+      if(!user?.cart) return console.log('!!! user or cart not found');
       
       user.cart.sort((a:CartItem, b:CartItem) => {
         // Use localeCompare to compare strings
@@ -59,10 +68,11 @@ function CartStateProvider ({children}:{children: ReactNode}){
       });
 
       setCartItems(user.cart)
+      const total = calcTotalPrice(user.cart)
+      setCartTotal(total)
       
     } catch (error) {
       console.log('!!! getusercart: ', error);
-      return { error }
     }
   }
 
@@ -93,6 +103,8 @@ function CartStateProvider ({children}:{children: ReactNode}){
         cartItems,
         // @ts-ignore
         setCartItems,
+        cartTotal,
+        addToCart,
         getUserCart,
         removeFromCart,
       }}

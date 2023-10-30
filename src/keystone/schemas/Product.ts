@@ -162,18 +162,19 @@ export const Product:Lists.Product = list({
     // TODO use this to create a default 'slug' automatically based on product name
     // if no user set, connect to current session user
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
-      try {
-        if (resolvedData && !resolvedData.author) {
-          // todo there is an error here
-          // console.log(context.session);
-          
-          const currentUserId = await context.session.itemId;
-          // console.log({ currentUserId });
-          resolvedData.author = { connect: { id: currentUserId } };
-        }
-      } catch (err) { console.warn(err) }
-
+      
       if (operation === 'create') {
+        
+        try {
+          if (resolvedData && !resolvedData.author) {
+            // todo there is an error here
+            // console.log(context.session);
+            
+            const currentUserId = await context.session.itemId;
+            // console.log({ currentUserId });
+            resolvedData.author = { connect: { id: currentUserId } };
+          }
+        } catch (err) { console.warn(err) }
 
 
         const res = await stripeConfig.products.create({
