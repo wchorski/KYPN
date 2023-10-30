@@ -7,6 +7,7 @@ import { envs } from "@/envs";
 import { BsStripe } from "react-icons/bs";
 import { useState } from "react";
 import ErrorMessage from "@components/ErrorMessage";
+import { LoadingAnim } from "@components/elements/LoadingAnim";
 
 export default function StripeCheckoutButton() {
     const { cartItems } = useCart()
@@ -50,8 +51,13 @@ export default function StripeCheckoutButton() {
       <button
         onClick={() => cartItems.length > 0 && redirectToCheckout()}
         disabled={cartItems.length === 0}
-        className="button">
-        Checkout with Stripe <BsStripe />
+        className="button large">
+        
+        {cartItems.length === 0 ? (
+          <LoadingAnim />
+        ) : (
+          <span> Checkout with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
+        )}
       </button>
     </>
   

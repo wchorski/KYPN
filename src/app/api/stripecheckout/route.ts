@@ -56,8 +56,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return NextResponse.json({sessionId: session.id});
 
     } catch (error) {
-      console.log('!!! api/stripecheckout ERROR');
-      console.log(error)
+      console.log('!!! api/stripecheckout ERROR: ', error)
       return NextResponse.json({error, message: "Error creating stripe checkout session"});
     }
 }
@@ -66,45 +65,48 @@ async function checkStockCount(session:any){
 
   if(!session) return false
 
-  console.log({session});
-  
-
-  //Query the current user
-  const user = await keystoneContext.withSession(session).query.User.findOne({
-    where: { id: session.itemId },
-    query:
-      `
-        id
-        name
-        email
-        orders {
+  try {
+    //Query the current user
+    const user = await keystoneContext.withSession(session).query.User.findOne({
+      where: { id: session.itemId },
+      query:
+        `
           id
-        }
-        cart {
-          id
-          quantity
-          product {
+          name
+          email
+          orders {
             id
-            name
-            price
-            stockCount
-            image
           }
-        }
-      `,
-  })
-
-  const isStockAvailable = await Promise.all(user.cart.map( async (item:CartItem) => {
-
-    if(item.quantity > item.product.stockCount){
-      console.log(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
-      return false
-    } 
+          cart {
+            id
+            quantity
+            product {
+              id
+              name
+              price
+              stockCount
+              image
+            }
+          }
+        `,
+    })
+  
+    const isStockAvailable = await Promise.all(user.cart.map( async (item:CartItem) => {
+  
+      if(item.quantity > item.product.stockCount){
+        console.log(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
+        return false
+      } 
+      
+      return true
+    }))
+  
+    return isStockAvailable
     
-    return true
-  }))
-
-  return isStockAvailable
+  } catch (error) {
+    console.log('!!! checkStockCount ERROR: ', error)
+    
+  }
 }
 
 const query = `

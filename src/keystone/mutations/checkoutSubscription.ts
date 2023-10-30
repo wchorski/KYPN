@@ -200,7 +200,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         },
       }).catch((error:any) => {
         console.log('+++++++ catch checkout error');
-        console.log(error);
+        console.log('!!! MUTATION checkoutSubscription ERROR', error);
       })
       // todo do i need this now that i'm using "stockMax" instead of "stockCount"?
       // type SubPlan = {

@@ -72,11 +72,6 @@ button {
     justify-content: center;
     align-items: center;
   }
-
-  // svg {
-  //   font-size: 1.3rem;
-  //   margin-left: .2rem;
-  // }
 }
 
 a.button, button.button {
@@ -102,6 +97,11 @@ a.button, button.button {
     background-color: var(--c-disabled);
     border-color: var(--c-disabled);
   }
+}
+
+button.large {
+  padding: 1rem;
+  font-size: 1.3rem;
 }
 
 span[aria-disabled='true'], a[aria-disabled='true'], button[aria-disabled='true']  {

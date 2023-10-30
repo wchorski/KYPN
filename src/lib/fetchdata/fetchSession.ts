@@ -1,4 +1,4 @@
-import { gql } from "graphql-request";
+
 import { getClient } from "@lib/gqlClient";
 
 export default async function fetchSession(){
@@ -7,7 +7,7 @@ export default async function fetchSession(){
     const client = getClient()
     const { data, error, loading } = await client.query({query})
 
-    if(error) return console.log(error)
+    if(error) return console.log('!!! fetchSession ERROR: ', error)
     
     
     return data
@@ -17,7 +17,7 @@ export default async function fetchSession(){
   }
 }
 
-const query = gql`
+const query = `
   query AuthenticatedItem {
     authenticatedItem {
       ... on User {

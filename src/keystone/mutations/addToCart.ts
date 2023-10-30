@@ -11,7 +11,10 @@ import { keystoneContext } from '@ks/context';
 
 export const addToCart = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
-  args: { id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), productId: graphql.arg({ type: graphql.ID }) },
+  args: { 
+    id: graphql.arg({ type: graphql.nonNull(graphql.ID) }), 
+    productId: graphql.arg({ type: graphql.ID }) 
+  },
   async resolve(source, { id, productId }, context: Context){
     
     const session = context.session
@@ -25,20 +28,21 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
 
     if(exisitingItem){
       // console.log(`****** ${exisitingItem.quantity} exists in cart`);
-      return await context.db.CartItem.updateOne({
+      const cartItemUpdate = await context.db.CartItem.updateOne({
         where: {id: exisitingItem.id},
         data: {
           quantity: exisitingItem.quantity+1, 
         }
       })
+    } else {
+      const cartItemAdded = await context.db.CartItem.createOne({
+        data: {
+          product: { connect: { id: productId }},
+          user: { connect: { id: session?.itemId }},
+        },
+      })
     }
 
-    return await context.db.CartItem.createOne({
-      data: {
-        product: { connect: { id: productId }},
-        user: { connect: { id: session?.itemId }},
-      },
-    })
-
+    return {status: 'success', message: 'mutation addToCart Completed'}
   }
 })

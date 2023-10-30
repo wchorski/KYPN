@@ -11,33 +11,14 @@ import { CartCount2 } from './CartCount2'
 import { useSession } from 'next-auth/react'
 
 import { LoadingAnim } from '@components/elements/LoadingAnim'
+import { CartItemsList } from './CartItemsList'
+import { CartTotal } from './CartTotal'
 
 export default function ShoppingCart() {
 
-  // const [cart, setCart] = useState<CartItemType[]>([])
-  const [isPending, setIsPending] = useState(true)
   const elementRef = useRef<HTMLDivElement | null>(null);
-  const { data: session, status }  = useSession()
   
-  const { isOpen, setIsOpen, openCart, closeCart, cartItems, setCartItems, getUserCart } = useCart()
-
-  // async function getUserCart(){
-  //   // const variables = {
-  //   //   where: {
-  //   //     // @ts-ignore
-  //   //     id: session?.itemId
-  //   //   }
-  //   // }
-
-  //   const { user, error } = await fetchSessionCart()
-
-  //   if(!user?.cart) return console.log('no cart found for user');
-  //   if(error) console.log(error);
-    
-  //   setCartItems(user.cart)
-  //   setIsPending(false)
-
-  // }
+  const { isOpen, closeCart, cartItems, } = useCart()
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
@@ -52,17 +33,6 @@ export default function ShoppingCart() {
     [isOpen]
   );
 
-
-  useEffect(() => {
-    // @ts-ignore 
-    if(!session?.itemId) return console.log('no session itemId found');
-    // @ts-ignore
-    getUserCart(session?.itemId)
-
-    setIsPending(false)
-  
-  }, [session])
-
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
 
@@ -72,10 +42,6 @@ export default function ShoppingCart() {
     };
   }, [handleClickOutside])
   
-  
-
-
-  // if(!session) return <p>Login to start shopping</p>
 
   return (
     <div 
@@ -101,14 +67,13 @@ export default function ShoppingCart() {
         )} />
       </header>
       
-      {isPending && <LoadingAnim /> }
-      {cartItems?.length <= 0 && <p> No items found. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>}
-      <ul>
-        {cartItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={session?.itemId}/>)}
-      </ul>
+      <CartItemsList />
       
       <footer>
-        <p> <span>Total: </span> {moneyFormatter(calcTotalPrice(cartItems))}</p>
+        <p> 
+          <span>Total: </span> 
+          <CartTotal />
+        </p>
         <Link
           href={'/shop/checkout'}
           onClick={() => closeCart()}

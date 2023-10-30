@@ -26,7 +26,7 @@ export const Order:Lists.Order = list({
 
   ui: {
     listView: {
-      initialColumns: ['label', 'createdAt', 'user', 'createdAt']
+      initialColumns: ['label', 'dateCreated', 'user', ]
     }
   },
 
@@ -51,7 +51,7 @@ export const Order:Lists.Order = list({
         { label: 'complete', value: 'COMPLETE' },
         { label: 'expired', value: 'EXPIRED' },
       ],
-      defaultValue: 'DRAFT',
+      defaultValue: 'COMPLETE',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
@@ -63,7 +63,7 @@ export const Order:Lists.Order = list({
         { label: 'no_payment_required', value: 'NO_PAYMENT_REQUIRED' },
         { label: 'unpaid', value: 'UNPAID' },
       ],
-      defaultValue: 'DRAFT',
+      defaultValue: 'PAID',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

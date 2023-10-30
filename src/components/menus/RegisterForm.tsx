@@ -198,7 +198,6 @@ export const MUTATION_USER_REGSITER = gql`
       name
       isAdmin
       id
-      createdAt
     }
   }
 `

@@ -2,7 +2,10 @@ import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { useCart } from "@components/context/CartStateContext"
 import CartItem from "@components/ecommerce/CartItem"
+import { CartItemsList } from "@components/ecommerce/CartItemsList"
+import { CartTotal } from "@components/ecommerce/CartTotal"
 import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
+import { CheckoutTest } from "@components/ecommerce/CheckoutTest"
 import StripeCheckoutButton from "@components/ecommerce/StripeCheckoutButton"
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
 import { calcTotalPrice } from "@lib/calcTotalPrice"
@@ -38,29 +41,22 @@ function Header(){
 
 async function Main(sessionId:string){
 
-  const { cart, error } = await fetchSessionCart()
-
-  if(error) return <ErrorMessage error={error}/>
-
   return <>
-    {cart && cart?.length <= 0 
-    ? <p> Cart is empty. <Link href={`/shop`}> Go to shop </Link> </p>
-    : (<>
+
+    <CartItemsList />
     
-      <ul className="items">
-        {cart?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId} />)}
-      </ul>
+    <footer>
+      <hr />
 
-      
-      <footer>
-        <hr />
-
-        <p className="total"> <strong>Total: </strong> {moneyFormatter(calcTotalPrice(cart))}</p>
-        {/* <CheckoutForm /> */}
-      </footer>
-
+      <p className="total"> 
+        <strong>Total: </strong> 
+        <CartTotal />
+      </p>
+      {/* <CheckoutForm /> */}
       <StripeCheckoutButton />
-    </>)}
+    </footer>
+
+   
   </>
 }
 

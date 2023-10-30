@@ -162,7 +162,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         user: { connect: { id: user.id } },
         charge: charge.id,
 
-        createdAt: now.toISOString(),
+        dateCreated: now.toISOString(),
       },
     })
 

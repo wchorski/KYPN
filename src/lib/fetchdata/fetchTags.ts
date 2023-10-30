@@ -1,7 +1,6 @@
 // cred - https://github.com/jasonkuhrt/graphql-request/blob/HEAD/examples/typescript-typed-document-node.ts
 import { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { client } from '@lib/request';
-import { gql } from 'graphql-request';
 import { parse } from "graphql";
 import { Tag } from '@ks/types';
 import { keystoneContext } from '@ks/context';
@@ -49,7 +48,7 @@ export default async function fetchTags(){
 
 
 
-const query = gql`
+const query = `
   id
   name
 `

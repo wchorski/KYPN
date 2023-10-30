@@ -19,29 +19,16 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
 
   args: { 
-    chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }) 
+    chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
+    customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
   },
 
   // 1. Make sure they are signed in
-  async resolve(source, { chargeId }, context: Context) {
-    //check if the user is logged in. If not, return an error
-    console.log('+++++ checkout session ++++ ');
-    
-    const session = await getServerSession(nextAuthOptions)
-    // const session = context.session;
-    console.log('+++++ checkout session 2 ++++ ');
-    
-    if (!session?.itemId) {
-      console.log('!!! no session found');
-      
-      throw new Error('You must be logged in to create an order. :/ ');
-    }
-
-    console.log('+++++ checkout session 3 ++++ ');
+  async resolve(source, { chargeId, customerEmail }, context: Context) {
 
     //Query the current user
     const user = await context.query.User.findOne({
-      where: { id: session.itemId },
+      where: { email: customerEmail },
       query:
         `
           id
@@ -65,46 +52,10 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     })
     // console.log('===== FOUND USER')
     // console.log({ user })
-
-    // ? i check this before webhook
-    // const currCart = await Promise.all(user.cart.map( async (item:CartItem) => {
-    //   try {
-    //     if(item.quantity > item.product.stockCount){
-    //       throw new Error(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
-          
-    //     } 
-        
-    //   } catch (error) {
-    //     console.error('!!!! checkout ERROR: ', error);
-    //     throw new Error(`Checkout Error: ${error}`);
-    //   }
-    // }))
-    
-    // 2. calc the total price for their order
-    // const totalOrder = user.cart.reduce((accumulator: number, cartItem: CartItem) => {
-    //   const amountCartItem = cartItem.quantity * cartItem.product.price
-    //   return accumulator + amountCartItem
-    // }, 0)
+    if(!user) throw new Error(`!!! checkout, No user Found with email: ${customerEmail}`)
 
 
-
-    // // 3. create the charge with the stripe library
-
-    // // TODO using stripe hosted form from next front end 
-    // const charge = await stripeConfig.paymentIntents.create({
-    //   amount: totalOrder,
-    //   currency: 'USD',
-    //   confirm: true,
-    //   payment_method: token,
-    // }).catch((err: any) => {
-    //   console.log(err);
-    //   throw new Error(err.message);
-    // });
-    // console.log(charge)
-    // console.log('CHARGE MADE')
-
-    // console.log('===== HEYYYYYYYYYYYYYYYYYYY')
-
+    if(user.cart.length <= 0) throw new Error('!!! No cart items found')
     //Create an order based on the cart item
     const orderItems = user.cart.map((cartItem: CartItem) => {
 
@@ -128,20 +79,19 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         items: { create: orderItems },
         user: { connect: { id: user.id } },
         charge: chargeId,
-
-        createdAt: now.toISOString(),
+        dateCreated: now.toISOString(),
+        // todo make logic that handles open, expired, unpaid, no_payment states
+        status: 'COMPLETE',
+        payment_status: 'PAID',
       },
     })
-    console.log({order});
+    // console.log({order});
     
 
     //Clean up! Delete all cart items
     await context.db.CartItem.deleteMany({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
-
-    console.log('---- CART ITEMS DELETED');
-    
 
     // mailCheckoutReceipt(
     //   order.id, 
@@ -154,7 +104,11 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     // )
 
     // return order
-    return { status: 'success'}
+    return { 
+      status: 'success', 
+      message: 'checkout successful', 
+      order
+    }
   }
 })
 

@@ -19,7 +19,7 @@ type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 export default function AddToCart({ productId, sessionId }: { productId:string, sessionId:string }) {  
 
   const [state, setstate] = useState<State>(undefined)
-  const { getUserCart } = useCart()
+  const { getUserCart, } = useCart()
 
 
   async function handleButton() {
@@ -46,14 +46,14 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
       setstate('success')
       await delay(500)
       setstate(undefined)
+
+      console.log('+++ update user cart');
+      getUserCart(sessionId)
       
     } catch (error) {
       setstate('error')
       console.log('!!! addtocart error: ', error);
-    } finally {
-      console.log('update user cart');
-      getUserCart(sessionId)
-    }
+    } 
 
   }
 
