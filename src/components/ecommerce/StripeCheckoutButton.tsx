@@ -11,49 +11,62 @@ import { LoadingAnim } from "@components/elements/LoadingAnim";
 
 export default function StripeCheckoutButton() {
     const { cartItems } = useCart()
+    const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
+    const [messageState, setMessageState] = useState<string|undefined>()
 
     const redirectToCheckout = async () => {
-        try {
-            if(!envs.STRIPE_PUBLIC_KEY) return console.log('!!! NO STRIPE PUBLIC KEY');
-            
-            const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
+      
+      try {
+        setIsPending(true)
 
-            if (!stripe) throw new Error('Stripe failed to initialize.');
+        if(!envs.STRIPE_PUBLIC_KEY) return console.log('!!! NO STRIPE PUBLIC KEY');
+        
+        const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
 
-            const checkoutResponse = await fetch('/api/stripecheckout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({cartItems}),
-            });
+        if (!stripe) throw new Error('Stripe failed to initialize.');
 
-            const {sessionId} = await checkoutResponse.json();
-            
+        const response = await fetch('/api/stripecheckout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({cartItems}),
+        });
 
-            const stripeError = await stripe.redirectToCheckout({sessionId});
+        const data = await response.json();
+        console.log({data});
+        const { sessionId, message , isStockAvailable } = data
 
-            if (stripeError) {
-              console.log('!!! StripeCheckoutButton stripe Error: ');
-              console.error(stripeError);
-              setErrorObj(stripeError)
-            }
-        } catch (error) {
-          console.log('!!! StripeCheckoutButton Error: ');
-          console.error(error);
-          setErrorObj(error)
-        }
+        if(!isStockAvailable) return setMessageState(message)
+
+        // const stripeError = await stripe.redirectToCheckout({sessionId});
+
+        // if (stripeError) {
+        //   console.log('!!! StripeCheckoutButton stripe Error: ');
+        //   console.error(stripeError);
+        //   setErrorObj(stripeError)
+        // }
+
+      } catch (error) {
+        console.log('!!! StripeCheckoutButton Error: ');
+        console.error(error);
+        setErrorObj(error)
+
+      } finally {
+        setIsPending(false)
+      }
     };
 
     return <>
       {errorObj && <ErrorMessage error={errorObj}/>}
+      {messageState && <p className="error"> {messageState} </p>}
       <button
         onClick={() => cartItems.length > 0 && redirectToCheckout()}
-        disabled={cartItems.length === 0}
+        disabled={isPending || cartItems.length === 0}
         className="button large">
         
-        {cartItems.length === 0 ? (
+        {(isPending || cartItems.length === 0) ? (
           <LoadingAnim />
         ) : (
           <span> Checkout with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
