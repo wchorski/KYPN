@@ -38,10 +38,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     try {
       
       const userSession = await getServerSession(nextAuthOptions)
+      if(!userSession) throw new Error('!!! /api/stripecheckout Must loggin to check out')
+      const { isStockAvailable, message } = await checkStockCount(userSession)
 
-      const isStockAvailable = await checkStockCount(userSession)
-
-      if(!isStockAvailable) throw new Error('not enought stock is not available')
+      if(!isStockAvailable) {
+        console.log('/api/stripecheckout isStockavail check ERROR: ', message)
+      }
 
       const session = await stripe.checkout.sessions.create({
         customer_email: userSession?.user?.email || '',
@@ -53,60 +55,58 @@ export async function POST(req: NextRequest, res: NextResponse) {
         cancel_url: `${headersList.get("origin")}/shop/checkout`,
       })
 
-      return NextResponse.json({sessionId: session.id});
+      return NextResponse.json({sessionId: session.id, isStockAvailable, message});
 
     } catch (error) {
       console.log('!!! api/stripecheckout ERROR: ', error)
-      return NextResponse.json({error, message: "Error creating stripe checkout session"});
+      return NextResponse.json({error, message: "!!! Error creating stripe checkout session"});
     }
 }
 
 async function checkStockCount(session:any){
 
-  if(!session) return false
-
-  try {
-    //Query the current user
-    const user = await keystoneContext.withSession(session).query.User.findOne({
-      where: { id: session.itemId },
-      query:
-        `
+  const user = await keystoneContext.withSession(session).query.User.findOne({
+    where: { id: session.itemId },
+    query:
+      `
+        id
+        name
+        email
+        orders {
           id
-          name
-          email
-          orders {
+        }
+        cart {
+          id
+          quantity
+          product {
             id
+            name
+            price
+            stockCount
+            image
           }
-          cart {
-            id
-            quantity
-            product {
-              id
-              name
-              price
-              stockCount
-              image
-            }
-          }
-        `,
-    })
-  
-    const isStockAvailable = await Promise.all(user.cart.map( async (item:CartItem) => {
-  
-      if(item.quantity > item.product.stockCount){
-        console.log(`Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`);
-        return false
-      } 
-      
-      return true
-    }))
-  
-    return isStockAvailable
+        }
+      `,
+  })
+
+  let message = ''
+
+  const isStockAvailable = await Promise.all(user.cart.map( async (item:CartItem) => {
+
+    if(item.quantity > item.product.stockCount){
+      message = `Insufficent Stock for ${item.product.name}. Only ${item.product.stockCount} available`
+      return false
+    } 
     
-  } catch (error) {
-    console.log('!!! checkStockCount ERROR: ', error)
-    
+    message = `All items are in stock`
+    return true
+  }))
+
+  return { 
+    isStockAvailable: isStockAvailable[0], 
+    message 
   }
+    
 }
 
 const query = `
