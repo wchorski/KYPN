@@ -7,7 +7,7 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
 import { CartItem, CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 
 type UpdateCartItem = {
   id:string,

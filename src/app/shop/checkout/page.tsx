@@ -1,6 +1,6 @@
 import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import CartItem from "@components/ecommerce/CartItem"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
 import { CartTotal } from "@components/ecommerce/CartTotal"

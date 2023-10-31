@@ -6,7 +6,7 @@ import { useState } from 'react';
 import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
 import styles from '@styles/ecommerce/cart.module.scss'
 import { client } from '@lib/request';
-import { useCart } from '@components/context/CartStateContext';
+import { useCart } from '@components/hooks/CartStateContext';
 
 function plainJSON(json:any) {
   const fixed = JSON.parse(JSON.stringify(json))

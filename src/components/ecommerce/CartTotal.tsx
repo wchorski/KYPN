@@ -1,5 +1,5 @@
 'use client'
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import moneyFormatter from "@lib/moneyFormatter"
 
 export function CartTotal () {
