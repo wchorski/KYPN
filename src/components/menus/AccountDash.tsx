@@ -1,3 +1,4 @@
+
 import { NoData } from "@components/elements/NoData"
 import { Table } from "@components/elements/Table"
 import { TicketList } from "@components/events/TicketList"
@@ -7,17 +8,14 @@ import moneyFormatter from "@lib/moneyFormatter"
 import { Booking, Order, Ticket, User } from "@ks/types"
 import styles from '@styles/menus/dashboard.module.scss'
 
-
 type Props = {
   dashState:string,
   user:User,
 }
 
-export default async function AccountDash ({ user, dashState, }:Props) {
+export default function AccountDash ({ user, dashState, }:Props) {
 
-  console.log('### ACCOUNT DASH');
-  console.log({user});
-  
+
 
   const bookingCells = user?.bookings?.map((book:Booking) => ({
     date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
@@ -48,20 +46,10 @@ export default async function AccountDash ({ user, dashState, }:Props) {
           </h3>
 
           <ul>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
+            <li> {user.name}</li>
+            <li> {user.email}</li>
           </ul>
+
         </Section>
 
         <hr /> 
@@ -105,21 +93,6 @@ export default async function AccountDash ({ user, dashState, }:Props) {
             Subscriptions
           </h3>
 
-          <ul>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-          </ul>
         </Section>
 
         <hr /> 
@@ -130,21 +103,6 @@ export default async function AccountDash ({ user, dashState, }:Props) {
             Downloads
           </h3>
 
-          <ul>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-            <li>one</li>
-          </ul>
         </Section>
 
         <hr /> 
