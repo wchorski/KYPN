@@ -31,6 +31,10 @@
     color: var(--c-txt);
 
     &:hover{
+      color: var(--c-primary);
+    }
+
+    &:active {
       color: var(--c-accent);
     }
   }
@@ -70,6 +74,83 @@
   }
 }
 
+.grid_7{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: calc(100% - 75px);
+  // grid-template-rows: repeat(3, 1fr);
+
+  &.calendar-body{
+    min-height: 20vh;
+  }
+
+  & .calendar-cell{
+    height: calc(100% - 27px - 40px);
+  }
+}
+
+.is28Days{
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.isNot28Days {
+  grid-template-rows: repeat(3, 1fr);
+}
+
 .calendar{
-  background-color: goldenrod;
+  background-color: var(--c-txt-bg);
+}
+
+.head_day {
+  text-align: center;
+  border: 1px solid var(--c-desaturated);
+  padding: 5px;
+  background: var(--c-txt-bg)
+}
+
+.cell_day{
+  border: solid 1px var(--c-desaturated);
+  text-align: right;
+  padding: 5px;
+  min-height: 6em;
+
+  label{
+    padding: 5px;
+    border-radius: 50%;
+    color: var(--c-txt);
+  }
+}
+
+.cell_active {
+  background-color: var(--c-primary); 
+  color: var(--c-txt-primary) !important; 
+  border: solid 1px var(--c-txt-rev);
+}
+
+.event_chip {
+  display: grid;
+
+  > a.event-button{
+    text-align: left;
+    margin-bottom: 5px;
+    background-color: var(--c-primary);
+    text-decoration: none;
+    color: var(--c-txt);
+    padding: 5px;
+    border-radius: var(--br-sharp);
+    border: solid 1px var(--c-primary);
+    font-size: small;
+
+    &:hover, &:focus{
+      border: solid 1px var(--c-secondary);
+      background-color: var(--c-txt-cont);
+      color: var(--c-secondary);
+    }
+
+    &:active{
+      border: solid 1px var(--c-accent);
+      color: var(--c-accent);
+    }
+  }
 }

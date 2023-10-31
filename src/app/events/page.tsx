@@ -6,6 +6,8 @@ import fetchEvents from "@lib/fetchdata/fetchEvents"
 import { Metadata, ResolvingMetadata } from "next"
 import styles from '@styles/events/events.module.scss'
 import { EventCard } from "@components/events/EventCard"
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md"
+import { EventsCalendar } from "@components/events/EventsCalendar"
 
 type Props = {
   params:{
@@ -13,7 +15,7 @@ type Props = {
   },
   searchParams: {
     [key: string]: string | string[] | undefined, 
-    q: string | undefined, 
+    date: string | undefined, 
   }
 }
 
@@ -26,14 +28,15 @@ const today = new Date()
 const thisMonth = new Date(today.getFullYear(), today.getMonth())
 
 export default async function EventsPage ({ params, searchParams }:Props) {
-
-  const { events, count, error } = await fetchEvents(thisMonth)
   
+  const dateParam  = searchParams?.date || today.toDateString()
+  const date = new Date(dateParam).toDateString()
+  const { events, count, error } = await fetchEvents(thisMonth)
 
   return (
     <PageTHeaderMain 
       header={Header()}
-      main={Main(events, count)}
+      main={Main( events, count, date )}
     />
   )
 }
@@ -45,22 +48,26 @@ function Header(){
   </header>
 }
 
-function Main(events:Event[]|undefined, count:number|undefined){
+function Main(
+  events:Event[]|undefined, 
+  count:number|undefined,
+  date:string
+){
 
   return<>
     <Section layout={'1'}>
-      calendar
+      <EventsCalendar date={date} events={events} />
     </Section>
 
     <Section layout={'1'}>
       <ul className={styles.events}>
-        <li>
-          {events?.map(e => (
-            <li key={e.id}>
-              <EventCard {...e} />
-            </li>
-          ))}
-        </li>
+    
+        {events?.map(e => (
+          <li key={e.id}>
+            <EventCard {...e} />
+          </li>
+        ))}
+    
       </ul>
     </Section>
   </>

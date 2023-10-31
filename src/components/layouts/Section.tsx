@@ -1,7 +1,6 @@
 import { ReactNode } from "react"
 import styles from "@styles/elements/section.module.scss";
-import { GridLayout } from "@lib/types";
-import { isArray } from "@apollo/client/utilities";
+import { GridLayout } from "@ks/types";
 
 type Props = {
   pad?:number,
@@ -38,7 +37,7 @@ export function Section({
       style={inlineStyles}
     >
 
-      {isArray(children) ? children?.map((child:any, i:number) => (
+      {Array.isArray(children) ? children?.map((child:any, i:number) => (
         <div key={i}> 
           {child} 
         </div>

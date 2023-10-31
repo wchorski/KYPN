@@ -22,6 +22,8 @@ export type Session = {
   };
 }|null
 
+export type GridLayout = '1'|'1_1'|'1_2'|'2_1'|'1_4'|'1_1_1'|'1_2_1'
+
 
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {

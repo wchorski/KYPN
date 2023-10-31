@@ -1,5 +1,5 @@
 'use client'
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { useSession } from "next-auth/react"
 import Link from "next/link"

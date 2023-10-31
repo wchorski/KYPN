@@ -2,7 +2,7 @@
 // cred - https://blog.stackademic.com/integrating-stripe-checkout-mode-with-next-js-13-7fbf1680c600
 
 import {loadStripe} from "@stripe/stripe-js";
-import { useCart } from "@components/context/CartStateContext";
+import { useCart } from "@components/hooks/CartStateContext";
 import { envs } from "@/envs";
 import { BsStripe } from "react-icons/bs";
 import { useState } from "react";

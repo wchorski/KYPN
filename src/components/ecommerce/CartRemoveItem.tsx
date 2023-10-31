@@ -1,6 +1,6 @@
 'use client'
 
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { client } from "@lib/request"
 import styles from '@styles/ecommerce/cart.module.scss'

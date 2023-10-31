@@ -1,6 +1,6 @@
 'use client'
 import { calcTotalPrice } from '@lib/calcTotalPrice'
-import { useCart } from '@components/context/CartStateContext'
+import { useCart } from '@components/hooks/CartStateContext'
 import moneyFormatter from '@lib/moneyFormatter'
 import styles from '@styles/ecommerce/cart.module.scss'
 import React, { useCallback, useEffect, useRef, useState } from 'react'

@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react"
 import ErrorMessage from "../ErrorMessage"
 import { useSession } from "next-auth/react"
 import styles from '@styles/ecommerce/checkoutform.module.scss'
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { envs } from "@/envs"
 

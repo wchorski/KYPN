@@ -1,6 +1,6 @@
 'use client'
 
-import { useCart } from "@components/context/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import { MdShoppingBag } from "react-icons/md"
 
 type Props = {

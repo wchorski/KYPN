@@ -54,9 +54,10 @@ section.grid_1 {
     > div {
       grid-column: 2/3;
 
-      > ul, > li {
-        padding-left: 1.5rem;
-      }
+      // todo could mess up document rich text
+      // > ul, > li {
+      //   padding-left: 1.5rem;
+      // }
     }
   }
 
