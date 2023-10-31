@@ -1,5 +1,4 @@
 import ErrorMessage from '@components/ErrorMessage'
-import { LoadingAnim } from '@components/elements/LoadingAnim'
 import { Table } from '@components/elements/Table'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
@@ -50,7 +49,7 @@ function Header(){
 
   return (
     <header>
-      <h1> Users Server Component </h1>
+      <h1> Site Users </h1>
     </header>
   )
 }
@@ -65,7 +64,7 @@ function Main({cells}:Main){
   return <>
     <Section layout={'1'}>
       <Table 
-        caption="Users"
+        caption=""
         route="/users"
         headers={[
           'name',

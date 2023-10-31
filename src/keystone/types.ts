@@ -74,6 +74,7 @@ export type Coupon = {
 }
 
 export type Event = {
+  id:string,
   summary:string,
   location:Location,
   start: string,
@@ -86,7 +87,7 @@ export type Event = {
     document: any,
   }
   excerpt:string,
-  photo:string,
+  image:string,
   status:string,
   dateCreated:string,
   dateModified:string,

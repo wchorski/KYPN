@@ -1,35 +1,11 @@
 import styles from '@styles/events/events.module.scss'
-import { datePrettyLocalDay, datePrettyLocalTime, datePrettyLocalDayShort } from "../../lib/dateFormatter"
+import { datePrettyLocalTime, datePrettyLocalDayShort } from "@lib/dateFormatter"
 import { IoMdTime } from "react-icons/io";
 import { MdLocationOn } from "react-icons/md";
 import Link from "next/link";
 import { ImageDynamic } from "../elements/ImageDynamic";
-import { Event } from "../../lib/types";
-
-// import Image from "next/image";
-
-// const img = 'https://cdn.pixabay.com/photo/2022/05/19/19/09/avocado-7207993_960_720.jpg'
-// const datetime = '2011-11-18T14:00:00.000'
-// const title = 'Event Title'
-// const location = {
-//   name: 'Party Town',
-//   street: '840 Deering Ct W', 
-//   town: 'West Chicago, Illinois, 60185', 
-//   country: 'USA',
-//   link: '/locations/1'
-// }
-// const url = '/events/1'
-
-// type Event = {
-//   photo:string,
-//   start:string,
-//   summary:string,
-//   location?: {
-//     name:string,
-//     id:string,
-//   }
-//   id:string,
-// }
+import { Event } from "@ks/types";
+import Image from 'next/image';
 
 export function EventCard({image, start, summary, location, id}:Event) {
   return (

@@ -110,6 +110,7 @@ export const Event:Lists.Event = list({
         { label: 'Postponed', value: 'POSTPONED' },
         { label: 'Canceled', value: 'CANCELED' },
         { label: 'Past', value: 'PAST' },
+        { label: 'Draft', value: 'DRAFT' },
       ],
       defaultValue: 'ACTIVE',
       ui: {

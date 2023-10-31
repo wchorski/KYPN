@@ -4,22 +4,14 @@ import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/la
 
 import Error404 from "../not-found"
 import ErrorMessage from "@components/ErrorMessage"
-
 import {  Page } from "@ks/types"
 import { datePretty } from "@lib/dateFormatter"
-
-import type { Metadata } from 'next'
-
 import fetchPage from "@lib/fetchdata/fetchPage"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
 import { BlockRender } from '@components/blocks/BlockRender'
+import { envs } from "@/envs"
+import { Metadata, ResolvingMetadata } from "next"
 export const revalidate = 5;
  
-// export const metadata: Metadata = {
-//   title: "NEW " + envs.SITE_TITLE,
-//   description: envs.SITE_DESC,
-// }
 
 type Props = {
   params:{
@@ -28,13 +20,25 @@ type Props = {
   template:string,
 }
 
+export async function generateMetadata(
+  { params }:Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata>  {
+
+  const { slug } = params
+
+  return {
+    title: slug + ' | ' + envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+}
+
 export default async function PageBySlug ({
   params,
 }:Props) {
 
-  const session = await getServerSession(nextAuthOptions);
 
-  const { page , error} = await fetchPage(params.slug, session)
+  const { page , error} = await fetchPage(params.slug)
 
 
   // if (loading) return <QueryLoading />

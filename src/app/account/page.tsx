@@ -33,7 +33,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
   
   return (
     <Section layout={'1_4'}>
-      <div>
+  
 
         {/* <h2>{session?.user?.name}</h2> */}
 
@@ -41,6 +41,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
           <ul>
             <li>
               <Link 
+                // href={'/account#main'}
                 href={'/account?dashState=main#main'}
                 className={dashState === 'main' ? styles.linkactive : styles.dashlink}
               >
@@ -49,6 +50,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
             <li>
               <Link 
+                // href={'/account#orders'}
                 href={'/account?dashState=orders#orders'}
                 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}
               >
@@ -57,6 +59,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
             <li>
               <Link 
+                // href={'/account#subscriptions'}
                 href={'/account?dashState=subscriptions#subscriptions'}
                 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
               >
@@ -65,6 +68,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
             <li>
               <Link 
+                // href={'/account#downloads'}
                 href={'/account?dashState=downloads#downloads'}
                 className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}
               >
@@ -73,6 +77,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
             <li>
               <Link 
+                // href={'/account#tickets'}
                 href={'/account?dashState=tickets#tickets'}
                 className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}
               >
@@ -81,7 +86,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
           </ul>
         </nav>
-      </div>
+
 
       <AccountDash dashState={dashState} user={user} />
     </Section>
@@ -89,7 +94,10 @@ export default async function AccountPage ({ params, searchParams }:Props) {
 }
 
 const USER_DASH_QUERY = `
-      
+  id
+  name
+  email
+  phone
   bookings {
     id
     price

@@ -1,10 +1,14 @@
+import { nextAuthOptions } from "@/session";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { keystoneContext } from "@ks/context";
 import { Page, Session } from "@ks/types";
+import { getServerSession } from "next-auth";
 
-export default async function fetchPage(slug:string, session:Session){
+export default async function fetchPage(slug:string){
 
   try {
+
+    const session = await getServerSession(nextAuthOptions);
 
     const page = await keystoneContext.withSession(session).query.Page.findOne({
       where: { slug: slug },
