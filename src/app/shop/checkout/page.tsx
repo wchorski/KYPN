@@ -1,18 +1,11 @@
 import { nextAuthOptions } from "@/session"
-import ErrorMessage from "@components/ErrorMessage"
-import { useCart } from "@components/hooks/CartStateContext"
-import CartItem from "@components/ecommerce/CartItem"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
 import { CartTotal } from "@components/ecommerce/CartTotal"
-import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
-import { CheckoutTest } from "@components/ecommerce/CheckoutTest"
 import StripeCheckoutButton from "@components/ecommerce/StripeCheckoutButton"
-import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
-import { calcTotalPrice } from "@lib/calcTotalPrice"
-import fetchSessionCart from "@lib/fetchdata/fetchSessionCart"
-import moneyFormatter from "@lib/moneyFormatter"
+import { PageTHeaderMain, } from "@components/layouts/PageTemplates"
 import { getServerSession } from "next-auth"
-import Link from "next/link"
+import styles from '@styles/ecommerce/cart.module.scss'
+import { Section } from "@components/layouts/Section"
 
 type Props = {
   searchParams:{q:string}
@@ -24,10 +17,10 @@ export default async function CheckoutPage ({ params, searchParams }:Props) {
   const session = await getServerSession(nextAuthOptions)
 
   return (
-    <PageTHeaderMainAside 
+    <PageTHeaderMain 
       header={Header()}
       main={Main(session?.itemId)}
-      aside={Aside()}
+
     />
   )
 }
@@ -42,27 +35,27 @@ function Header(){
 async function Main(sessionId:string){
 
   return <>
+    <Section layout={'1'}>
 
-    <CartItemsList />
-    
-    <footer>
-      <hr />
+  
+        <CartItemsList />
+        
+        <footer
+          className={styles.footer} 
+        >
+          <hr />
 
-      <p className="total"> 
-        <strong>Total: </strong> 
-        <CartTotal />
-      </p>
-      {/* <CheckoutForm /> */}
-      <StripeCheckoutButton />
-    </footer>
+          <p className="total"> 
+            <span>Total: </span> 
+            <CartTotal />
+          </p>
+          {/* <CheckoutForm /> */}
+          <StripeCheckoutButton />
+        </footer>
+     
+      
+    </Section>
 
    
-  </>
-}
-
-function Aside(){
-
-  return <>
-    aside
   </>
 }

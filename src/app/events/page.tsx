@@ -43,9 +43,13 @@ export default async function EventsPage ({ params, searchParams }:Props) {
 
 function Header(){
 
-  return <header>
-    <h1> Events </h1>
-  </header>
+  return (
+    <header
+      style={{display: 'none'}}
+    >
+      <h1> Events </h1>
+    </header>
+  )
 }
 
 function Main(

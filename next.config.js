@@ -4,6 +4,9 @@ const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL + '/:match*' || 'no_anal
 
 const nextConfig = {
   // reactStrictMode: true,
+  experimental: {
+    serverActions: true,
+  },
   async redirects() {
     return [
       {

@@ -1,7 +1,6 @@
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
 import { Post, Session } from "@ks/types"
-import { gql } from "graphql-request"
 
 export async function fetchPost(slug:string, session:any){
 
@@ -24,7 +23,7 @@ export async function fetchPost(slug:string, session:any){
   }
 }
 
-const query = gql`
+const query = `
   id
   title
   featured_image

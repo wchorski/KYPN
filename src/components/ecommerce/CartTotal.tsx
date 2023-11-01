@@ -6,8 +6,8 @@ export function CartTotal () {
 
   const { cartTotal } = useCart()
   return (
-    <span>
+    <strong>
       {moneyFormatter(cartTotal)}
-    </span>
+    </strong>
   )
 }

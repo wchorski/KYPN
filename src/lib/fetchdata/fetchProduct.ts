@@ -1,7 +1,6 @@
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
 import { Product } from "@ks/types"
-import { gql } from "graphql-request"
 
 const perPage = envs.PERPAGE
 
@@ -24,7 +23,7 @@ export async function fetchProduct(id:string, session:any){
   }
 }
 
-const query = gql`
+const query = `
   id
   name
   image

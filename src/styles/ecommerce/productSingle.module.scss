@@ -46,12 +46,6 @@ article.product :global {
     }
   }
 
-  .description-wrap{
-    padding: 1rem 1rem;
-    backdrop-filter: contrast(80%) blur(3px);
-    border-radius: var(--br-sharp);
-  }
-
   button.subscribe, button.addtocart{
     margin: 2rem 0;
     padding: 1rem;
@@ -73,4 +67,11 @@ article.product :global {
       max-width: 15rem;
     }
   }
+}
+
+.description_wrap{
+  margin: 1.5rem 0;
+  padding: 1rem;
+  backdrop-filter: contrast(80%) blur(3px);
+  border-radius: var(--br-sharp);
 }

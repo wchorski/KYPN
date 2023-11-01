@@ -1,25 +1,16 @@
 
-import Link from 'next/link';
-import { QueryLoading } from '@components/menus/QueryLoading';
 import ErrorMessage from '@components/ErrorMessage';
-// import { gql } from "graphql-request";
-import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
-import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '@lib/dateFormatter';
 import { TagsPool } from '@components/menus/TagsPool';
 import { CategoriesPool } from '@components/menus/CategoriesPool';
-import { MediaText } from '@components/blocks/MediaText';
 import { BreadCrumbs } from '@components/elements/BreadCrumbs';
 import { ImageDynamic } from '@components/elements/ImageDynamic';
-import Head  from 'next/head';
-import { Category, Post, Product, Session, Tag, User } from '@ks/types';
+import { Product,} from '@ks/types';
 import { envs } from '@/envs';
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
 import { BlockRender } from '@components/blocks/BlockRender'
-import { fetchPost } from '@lib/fetchdata/fetchPost';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/session';
 import { Metadata, ResolvingMetadata } from 'next';
-import { fetchProducts } from '@lib/fetchdata/fetchProducts';
 import { Card } from '@components/layouts/Card';
 import { fetchProduct } from '@lib/fetchdata/fetchProduct';
 import { OutOfStockLabel } from '@components/elements/OutOfStockLabel';
@@ -66,7 +57,7 @@ export async function generateMetadata(
       images: [String(image), ...previousImages],
       title: name,
       description: excerpt,
-      url: envs.FRONTEND_URL + '/shop/product/' + params.id,
+      url: envs.FRONTEND_URL + '/shop/products/' + params.id,
       type: 'article'
     },
     keywords: tags?.map(tag => tag.name).join(', '),
@@ -143,7 +134,7 @@ function Main({ product, session }:Main) {
   
             <AddToCart productId={id} sessionId={session.itemId}/>
 
-            <div className='description-wrap'>
+            <div className={styles.description_wrap}>
               <BlockRender document={description.document} />
             </div>
           </div>

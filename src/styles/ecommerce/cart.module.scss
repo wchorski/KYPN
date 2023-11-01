@@ -15,11 +15,11 @@ button.remove {
 }
 
 
-li.item {
+li.item :global{
   padding: 1em 0;
   border-bottom: 1px solid rgba(43, 43, 43, 0.424);
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   grid-template-columns: auto 1fr auto;
   background-color: var(--c-txt-bg);
   border-radius: var(--br-dull);
@@ -35,16 +35,24 @@ li.item {
     margin: 0;
   }
 
+  p {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
   em{
     font-size: 1rem;
+    color: var(--c-txt-sub);
   }
 
   h5{
     margin-right: auto;
+    font-size: 1rem;
   }
 
   .perItemTotal{
     padding: 0 1em;
+    margin-left: auto;
   }
 
   input{
@@ -194,5 +202,16 @@ button.addtocart {
   svg {
     font-size: 1.3rem;
     margin-left: .3rem;
+  }
+}
+
+footer.footer {
+  text-align: right;
+
+  p{
+    font-size: 3rem;
+  }
+  p, button {
+    margin-left: auto;
   }
 }

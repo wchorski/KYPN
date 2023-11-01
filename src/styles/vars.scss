@@ -3,6 +3,7 @@
   --c-txt-rev: black;
   --c-txt-bg: hsl(197deg 8.74% 24.25%);
   --c-txt-primary: black;
+  --c-txt-sub: rgb(150, 150, 150);
   --c-tertiary: hsl(316, 62%, 58%);
   --c-secondary: hsl(343, 56%, 68%);
   --c-body: hsl(193, 19%, 15%);
@@ -66,6 +67,7 @@
   --card-border-rgb: 131, 134, 135;
 
   --boxs-1: #00000024 2px 2px 11px 2px;
+  --boxs-2: #00000066 4px 4px 15px 2px;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -59,6 +59,10 @@
         border: none;
         background-color: transparent;
         color: var(--c-txt);
+
+        &:hover, &:active {
+          color: var(--c-primary);
+        }
       }
     }
 
@@ -126,6 +130,9 @@ button.navwich {
   align-content: center;
   background-color: transparent;
   color: var(--c-txt);
+  &:hover, &:active {
+    color: var(--c-primary);
+  }
 }
 
 @media screen and (width > 600px) {

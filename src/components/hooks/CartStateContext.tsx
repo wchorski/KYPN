@@ -70,9 +70,13 @@ function CartStateProvider ({children}:{children: ReactNode}){
       setCartItems(user.cart)
       const total = calcTotalPrice(user.cart)
       setCartTotal(total)
+
+      return { success: true }
       
     } catch (error) {
       console.log('!!! getusercart: ', error);
+
+      return { success: false, error }
     }
   }
 

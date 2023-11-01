@@ -21,7 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   
   try{
     event = stripe.webhooks.constructEvent(payload, signature!, envs.STRIPE_WEBHOOK_SECRET as string)
-    console.log('+++ STRIPE WEBHOOK: ', event?.type);
+    console.log('💳 STRIPE WEBHOOK: ', event?.type);
       
     switch (event?.type) {
       case "checkout.session.completed":

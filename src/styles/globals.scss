@@ -83,6 +83,7 @@ a.button, button.button {
   transition: all .3s;
   display: grid;
   align-content: center;
+  text-align: center;
 
   &:hover, &:focus{
     background-color: var(--c-primary);

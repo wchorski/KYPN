@@ -214,7 +214,7 @@ export const Product:Lists.Product = list({
             // @ts-ignore //todo might cause problems
             unit_amount: resolvedData.price,
           },
-          url: process.env.FRONTEND_URL + '/shop/product/' + resolvedData.id
+          url: process.env.FRONTEND_URL + '/shop/products/' + resolvedData.id
 
         })
           .then(async (res) => {
