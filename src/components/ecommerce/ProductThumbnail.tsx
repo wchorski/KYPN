@@ -36,13 +36,13 @@ export async function ProductThumbnail({product, session}: Props) {
       {status === 'DRAFT' && <p> DRAFT PRODUCT </p> }
 
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
-      <Link href={`/shop/product/${id}`} className='featured_image'>
+      <Link href={`/shop/products/${id}`} className='featured_image'>
         <ImageDynamic photoIn={image} />
       </Link>
 
 
       <div className="container">
-        <Link href={`/shop/product/${id}`} className='title'>
+        <Link href={`/shop/products/${id}`} className='title'>
           <h3>{name}</h3>
         </Link>
 

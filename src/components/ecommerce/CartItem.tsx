@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { CartItem, CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
 import { useCart } from "@components/hooks/CartStateContext"
+import Link from "next/link"
 
 type UpdateCartItem = {
   id:string,
@@ -71,38 +72,16 @@ export default function CartItem({ item, sessionId }:Props) {
     }
   }
 
-  //   try {
-
-  //     const variables = {
-  //       where: {
-  //         id: cartItemId
-  //       },
-  //       data: {
-  //         quantity: value
-  //       }
-  //     }
-
-  //    const res = await client.request(mutation, variables)
-    
-  //   //  console.log(res);
-     
-
-  //   } catch (error) {
-  //     console.warn('cart item udate error: ', error);
-  //     setError(error)
-  //   }
-  // }
-
 
   return <>
     <li className={styles.item} >
 
       <ImageDynamic photoIn={{ url: image, altText: `${name} featured image`, } || photo} />
 
-      <h5>{name}</h5>
-
-      <div className="perItemTotal">
-        <p>{moneyFormatter(price * quantity)}</p>
+      <div>
+        <h5>
+          <Link href={`/shop/products/${id}`}> {name} </Link>
+        </h5>
 
         <input 
           type="number" 
@@ -112,7 +91,12 @@ export default function CartItem({ item, sessionId }:Props) {
           // todo only update once input is unselected
           // onBlur={e => updateQuantity(Number(e.target.value))}
         /> 
-        <em> &times; {moneyFormatter(price)} each </em>
+      </div>
+
+      <div className="perItemTotal">
+        <p>{moneyFormatter(price * quantity)}</p>
+
+        <em> {moneyFormatter(price)} each </em>
       </div>
 
       <CartRemoveItem id={item.id} />

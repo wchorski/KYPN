@@ -24,6 +24,11 @@ export function ImageDynamic({ photoIn, className }: Props) {
       width={state.image.width}
       height={state.image.height}
       className={className}
+      // style={{
+      //   width: '100%',
+      //   height: 'auto',
+      //   aspectRatio: 'auto',
+      // }}
     />
   )
 

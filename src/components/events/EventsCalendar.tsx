@@ -31,7 +31,9 @@ export async function EventsCalendar ({ date, events }:Props) {
   }
 
   return (
-    <div>
+    <div
+      className={styles.hide_on_mobile} 
+    >
 
       <header className={styles.header}>
         <Link 
@@ -99,7 +101,7 @@ export async function EventsCalendar ({ date, events }:Props) {
                     className={styles.event_chip}
                     key={event.id}
                   >
-                    <Link href={`/events/e/${event.id}`} className="event-button">
+                    <Link href={`/events/${event.id}`} className="event-button">
                       {event.summary}
                       <br /> 
                       @ {datePrettyLocalTime(event.start || '')}

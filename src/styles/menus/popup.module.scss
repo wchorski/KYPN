@@ -1,0 +1,15 @@
+dialog.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  border-radius: var(--br-sharp);
+  box-shadow: var(--boxs-2);
+}
+
+.popup::backdrop {
+  backdrop-filter: blur(2px) saturate(20%) brightness(60%);
+}
+
+// fixed top-50 left-50 -translate-x-50 -translate-y-50 z-10  rounded-xl backdrop:bg-gray-800/50

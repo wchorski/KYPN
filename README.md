@@ -53,6 +53,14 @@ following along with Wes Bos Tutorial
 > 1. keystone `ks:dev`
 > 2. next `n:dev`
 
+### Stripe
+
+using stripe CLI have it listen to this webhook
+
+```sh
+stripe listen --forward-to http://localhost:3000/api/stripe/webhook
+```
+
 - don't forget to run and save these queries to the `seed_data.ts` 
   - `Query.Pages`
   - `Query.Services`
