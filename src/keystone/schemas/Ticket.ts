@@ -13,7 +13,7 @@ export const Ticket:Lists.Ticket = list({
   access: {
     filter: {
       // query: rules.canReadProducts,
-      // todo only query if ticket is the holder
+      // TODO TODO TODO TODO only query if ticket is the holder
       query: () => true,
       // @ts-ignore //todo might cause problems
       delete: rules.canManageTickets,
@@ -46,6 +46,7 @@ export const Ticket:Lists.Ticket = list({
       ref: 'Event.tickets',
       many: false,
     }),
+    email: text(),
     holder: relationship({
       ref: 'User.tickets',
       many: false,
@@ -73,32 +74,22 @@ export const Ticket:Lists.Ticket = list({
 
   },
 
-  hooks: {
-    beforeOperation: async ({ operation, resolvedData, context }) => {
-      if(operation === 'create'){
+  // hooks: {
+  //   beforeOperation: async ({ operation, resolvedData, context }) => {
+  //     if(operation === 'create'){
 
-        if(!resolvedData.event?.connect) throw new Error("NO EVENT Connect ID FOUND");
+  //       if(!resolvedData.event?.connect) throw new Error("NO EVENT Connect ID FOUND");
         
-        const event = await context.db.Event.findOne({
-          where: { id: resolvedData.event?.connect.id}
-        })
-        if(!event) throw new Error("No Event Found");
-        console.log({event});
-        
-        // TODO check to see if Event seats less than or equal to 0. throw error
-        // const charge = await stripe.paymentIntents.create({
-        //   amount: Number(event.price),
-        //   currency: 'USD',
-        //   confirm: true,
-        //   payment_method: token,
-        // }).catch((err: any) => {
-        //   console.log(err);
-        //   throw new Error(err.message);
-        // });
-
-      }
+  //       const event = await context.db.Event.findOne({
+  //         where: { id: resolvedData.event?.connect.id}
+  //       })
+  //       if(!event) throw new Error("No Event Found");
+  //       // console.log({event});
 
 
-    },
-  }
+  //     }
+
+
+  //   },
+  // }
 })

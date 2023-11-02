@@ -93,6 +93,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
 
+    // TODO don't foret to add back email sending
     // mailCheckoutReceipt(
     //   order.id, 
     //   [user.email, ADMIN_EMAIL_ADDRESS],
@@ -106,7 +107,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     // return order
     return { 
       status: 'success', 
-      message: 'checkout successful', 
+      message: 'checkout cart successful', 
       order
     }
   }

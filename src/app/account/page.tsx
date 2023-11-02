@@ -126,6 +126,7 @@ const USER_DASH_QUERY = `
   tickets {
     id
     event {
+      id
       start
       summary
       location {

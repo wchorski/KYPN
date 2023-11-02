@@ -2,11 +2,22 @@
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { useEffect, useRef, useState } from "react"
 import { 
+  // @ts-ignore
   experimental_useFormState as useFormState, 
+  // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
 
-type Fields = any
+import formStyles from '@styles/menus/form.module.scss'
+import { Event, User } from "@ks/types"
+import { envs } from "@/envs"
+import { loadStripe } from "@stripe/stripe-js"
+
+type Fields = {
+  event: string,
+  email: string,
+  quantity: number,
+}
 
 type FormState = {
   message: string,
@@ -15,10 +26,11 @@ type FormState = {
 }
 
 type Props = {
-  prop?:string
+  event:Event,
+  user?:User,
 }
 
-export function TicketForm ({ prop }:Props) {
+export function TicketForm ({ event, user }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -30,14 +42,18 @@ export function TicketForm ({ prop }:Props) {
   //     age: '',
   //   }
   // })
-  const [formState, formAction] = useFormState(onSubmit, {
+
+  const defaultFormData = {
     message: '',
     errors: undefined,
     fieldValues: {
-      email: '',
-      age: '',
+      event: event.id || '',
+      email: user?.email || '',
+      quantity: 1,
     }
-  })
+  }
+
+  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
 
   useEffect(() => {
     if(formState.message === 'success'){
@@ -46,70 +62,147 @@ export function TicketForm ({ prop }:Props) {
   }, [formState])
 
   async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
+    // console.log('START FORM');
+    // console.log({data});
     
     const email = data.get('email') as string
-    const age = data.get('age') as string
+    const event = data.get('event') as string
+    const quantity = Number(data.get('quantity') as string)
+
+    const inputValues = {
+      email,
+      event,
+      quantity
+    }
+
+    // const formattedData = {
+    //   event: {
+    //     connect: {
+    //       id: event
+    //     }
+    //   },
+    //   holder: {
+    //     connect: {
+    //       email: email
+    //     }
+    //   },
+    // }
 
     try {
 
+      if(!envs.STRIPE_PUBLIC_KEY) return {
+        ...formState,
+        message: '!!! NO STRIPE PUBLIC KEY'
+      }
+
+      const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
+      if (!stripe) throw new Error('Stripe failed to initialize.');
+
       if(typeof email !== 'string') throw new Error('email is not string')
-      if(typeof age !== 'number') throw new Error('age is not number')
-      console.log('data: ', data);
+      if(typeof event !== 'string') throw new Error('event is not string')
+      if(typeof quantity !== 'number') throw new Error('quantity is not number')
+
+      const res = await fetch(`/api/checkout/tickets`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          event,
+          quantity,
+        }),
+      })
+
+      const data = await res.json()
+      // console.log('Ticketform res, ', {data});
+
+      const { sessionId, message , isSeatsAvailable, error } = data
+
+        if(!isSeatsAvailable) return {
+          ...formState,
+          message: message
+        }
+
+        const stripeError = await stripe.redirectToCheckout({sessionId});
+
+        if (stripeError) {
+          console.log('!!! StripeCheckoutButton stripe Error: ');
+          console.error(stripeError);
+          
+          return {
+            ...formState,
+            message: stripeError
+          }
+        }
 
       return {
+        ...formState,
         message: 'success',
-        errors: undefined,
-        fieldValues: {
-          email: '',
-          age: '',
-        }
       }
       
     } catch (error) {
+      console.log(error);
+      
       return {
         message: 'error',
         errors: {
+          event: 'fix event field',
           email: 'fix email field',
-          age: 'fix age field'
+          quantity: 'fix quantity field'
         },
-        fieldValues: {
-          email,
-          age,
-        }
+        fieldValues: inputValues
       }
     }
   }
 
   return (
     <form
-      // action={onSubmit}
+      action={formAction}
       ref={formRef}
+      className={formStyles.form} 
     >
-      <legend> Ticket Form </legend>
+      <fieldset>
+        <legend> Ticket Form </legend>
 
-      <div>
-        <label htmlFor="email"> Email </label>
-        <input 
-          name={'email'}
-          id={'email'}
-          placeholder="yanny@mail.lan"
-          type={'text'}
-          defaultValue={formState.fieldValues.email}
-        />
-        <span className="error"> {formState.errors?.email} </span>
-      </div>
+        <label htmlFor="email">
+          <span> Event </span>
+          <input 
+            name={'event'}
+            id={'event'}
+            placeholder=""
+            type={'text'}
+            defaultValue={formState.fieldValues.event}
+          />
+          <span className="error"> {formState.errors?.event} </span>
+        </label>
 
-      <div>
-        <label htmlFor="age"> Email </label>
-        <input 
-          name={'age'}
-          id={'age'}
-          placeholder="30"
-          type={'number'}
-          defaultValue={formState.fieldValues.age}
-        />
-        <span className="error"> {formState.errors?.age} </span>
-      </div>
+        <label htmlFor="email">
+          <span> Email </span>
+          <input 
+            name={'email'}
+            id={'email'}
+            placeholder="yanny@mail.lan"
+            type={'text'}
+            defaultValue={formState.fieldValues.email}
+          />
+          <span className="error"> {formState.errors?.email} </span>
+        </label>
+
+        <label htmlFor="age">
+          <span> Quantity </span>
+          <input 
+            name={'quantity'}
+            id={'quantity'}
+            placeholder="1"
+            type={'number'}
+            defaultValue={formState.fieldValues.quantity}
+          />
+          <span className="error"> {formState.errors?.quantity} </span>
+        </label>
+      </fieldset>
+
+      <p className={'error'}> {formState.message} </p>
 
       <SubmitButton />
     </form>

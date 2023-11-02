@@ -24,6 +24,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
               name: item.product.name,
               images: [item.product.image],
               metadata: {
+                type: 'checkout.cart',
                 cartItemId: item.id,
                 productId: item.product.id,
               }
@@ -31,18 +32,17 @@ export async function POST(req: NextRequest, res: NextResponse) {
             unit_amount: item.product.price,
           },
           quantity: item.quantity,
-
         };
     });
 
     try {
       
       const userSession = await getServerSession(nextAuthOptions)
-      if(!userSession) throw new Error('!!! /api/stripecheckout Must loggin to check out')
+      if(!userSession) throw new Error('!!! /api/checkout/cart Must loggin to check out')
       const { isStockAvailable, message } = await checkStockCount(userSession)
 
       if(!isStockAvailable) {
-        console.log('/api/stripecheckout isStockavail check ERROR: ', message)
+        console.log('/api/checkout/cart isStockavail check ERROR: ', message)
       }
 
       const session = await stripe.checkout.sessions.create({
@@ -53,12 +53,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         mode: "payment",
         success_url: `${headersList.get("origin")}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${headersList.get("origin")}/shop/checkout`,
+        metadata: {
+          type: 'checkout.cart',
+        }
       })
 
       return NextResponse.json({sessionId: session.id, isStockAvailable, message});
 
     } catch (error) {
-      console.log('!!! api/stripecheckout ERROR: ', error)
+      console.log('!!! api/checkout/cart ERROR: ', error)
       return NextResponse.json({error, message: "!!! Error creating stripe checkout session"});
     }
 }

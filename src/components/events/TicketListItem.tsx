@@ -1,5 +1,5 @@
 import { datePrettyLocalDay } from "@lib/dateFormatter"
-import { Ticket } from "@lib/types"
+import { Ticket } from "@ks/types"
 import Link from "next/link"
 import { BsQrCode } from "react-icons/bs"
 
@@ -11,7 +11,7 @@ export function TicketListItem ({ ticket }:Props) {
   return (
     <li key={ticket.id}>
       <div className="meta">
-        <Link href={`/events/e/${ticket.event?.id}`}>
+        <Link href={`/events/${ticket.event?.id}`}>
           <strong>{ticket.event?.summary}</strong>
         </Link>
         <br />
@@ -23,7 +23,7 @@ export function TicketListItem ({ ticket }:Props) {
         <br />
       </div>
 
-      <Link href={`/tickets/${ticket.id}`} data-tooltip="ticket link QR code" className="button qrbutton"> 
+      <Link href={`/tickets/${ticket.id}`} target={'_blank'} data-tooltip="ticket link QR code" className="button qrbutton"> 
         <BsQrCode />
       </Link>
 
