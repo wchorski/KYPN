@@ -42,6 +42,7 @@
     "@aws-sdk/signature-v4-multi-region": "^3.433.0",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@types/nodemailer": "^6.4.12",
+    "@types/react-dom": "^18.2.14",
     "prisma": "^4.16.2",
     "typescript": "~5.0.0"
   },

@@ -8,6 +8,11 @@
 .card > *:first-child {
   margin-top: 0;
 }
+
+.center{
+  display: grid;
+  align-content: center;
+}
 // .card > *:last-child {
 //   margin-bottom: 0;
 // }
