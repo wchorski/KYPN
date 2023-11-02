@@ -16,6 +16,7 @@ import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
 import DialogPopup from "@components/menus/Dialog"
+import { TicketForm } from "@components/tickets/TicketForm"
 
 type Props = {
   params:{
@@ -109,6 +110,9 @@ function Main(
       <p> get them tickets right here dog </p>
     </DialogPopup>
 
+    {/* //todo put this in popup later */}
+    <TicketForm />
+
     <article>
     <Section layout="1_2">
 
@@ -143,7 +147,7 @@ function Main(
           <ul className="meta">
             <li>{datePrettyLocalDay(start || '')}</li>
             <li>{datePrettyLocalTime(start || '')}</li>
-            <li># of seats: {seats}</li>
+            <li> capacity: {seats}</li>
             <li>
               <address>
                 {location?.name}
@@ -161,8 +165,18 @@ function Main(
         <Card >
 
           <Section layout="1_1">
-            <div className="info-cont">
-              <strong>Purchase Ticket</strong> 
+            <div 
+              className="info-cont"
+              style={{
+                display: 'grid',
+                alignContent: 'center',
+                height: '100%',
+              }}
+            >
+              <strong>
+                Purchase Ticket
+              </strong> 
+
               {/* <br/> */}
               {/* <small>sub text</small>  */}
             </div>
@@ -181,7 +195,7 @@ function Main(
         
         <br />
         <h3>About</h3>
-        <div className='description-wrap'>
+        <div className={styles.description}>
           <BlockRender document={description.document} />
         </div>
 

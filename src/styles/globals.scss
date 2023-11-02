@@ -75,7 +75,7 @@ button {
   }
 }
 
-a.button, button.button {
+.button {
   border-radius: var(--br-dull);
   border: solid 1px var(--c-primary);
   // background-color: var(--c-primary);
@@ -103,7 +103,7 @@ a.button, button.button {
   }
 }
 
-button.large {
+.large {
   padding: 1rem;
   font-size: 1.3rem;
 }
