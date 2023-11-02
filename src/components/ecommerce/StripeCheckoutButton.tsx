@@ -21,21 +21,19 @@ export default function StripeCheckoutButton() {
         setIsPending(true)
 
         if(!envs.STRIPE_PUBLIC_KEY) return console.log('!!! NO STRIPE PUBLIC KEY');
-        
         const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
-
         if (!stripe) throw new Error('Stripe failed to initialize.');
 
-        const response = await fetch('/api/stripecheckout', {
+        const response = await fetch('/api/checkout/cart', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({cartItems}),
         });
 
         const data = await response.json();
-        console.log({data});
+        
         const { sessionId, message , isStockAvailable } = data
 
         if(!isStockAvailable) return setMessageState(message)

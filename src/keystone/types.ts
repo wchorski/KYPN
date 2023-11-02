@@ -98,6 +98,8 @@ export type Event = {
 }
 
 export type Ticket = {
+  id:string,
+  email:string,
   qrcode:string,
   event: Event,
   holder: User,

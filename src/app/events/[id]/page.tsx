@@ -67,7 +67,7 @@ export default async function EventByID({ params }:Props) {
 
   const { id } = params
   const { event, error } = await fetchEvent(params.id)
-  const session = getServerSession(nextAuthOptions)
+  const session = await getServerSession(nextAuthOptions)
   
   if(error) return <ErrorMessage error={error}/>
   
@@ -99,8 +99,6 @@ function Main(
   const {image, summary, excerpt, description, tickets = [], price, start, end, seats, hosts, location, categories, tags} = event
 
   return<>
-
-    <Link href={`?${new URLSearchParams({ popup: 'modal'})}`}> popup </Link>
     
     <DialogPopup 
       title="Purchase Ticket"
@@ -111,7 +109,7 @@ function Main(
     </DialogPopup>
 
     {/* //todo put this in popup later */}
-    <TicketForm />
+    <TicketForm event={event} user={session?.user}/>
 
     <article>
     <Section layout="1_2">

@@ -10,29 +10,31 @@ import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/sch
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
 
-export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
+export const checkoutTickets = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('Ticket'),
 
   args: { 
-    token: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+    chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     eventId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+    customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     quantity: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
+    amount_total: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
   },
 
   // 1. Make sure they are signed in
-  async resolve(source, { token, eventId, quantity }, context: Context) {
+  async resolve(source, { chargeId, eventId, quantity, customerEmail, amount_total }, context: Context) {
     //check if the user is logged in. If not, return an error
-    const session = context.session;
-    console.log('+++++ checkout Ticket session ++++ ');
-    // console.log(session);
+    // const session = context.session;
+    // console.log('+++++ checkout Ticket session ++++ ');
+    // // console.log(session);
 
-    if (!session.itemId) {
-      throw new Error('You must be logged in to create ticket. :/ ');
-    }
+    // if (!session.itemId) {
+    //   throw new Error('You must be logged in to create ticket. :/ ');
+    // }
 
     //Query the current user
     const user = await context.query.User.findOne({
-      where: { id: session.itemId },
+      where: { email: customerEmail },
       query:
         `
           id
@@ -44,11 +46,10 @@ export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
     // console.log({ user })
     // if(!resolvedData.event?.connect) throw new Error("NO EVENT Connect ID FOUND");
         
-      const event = await context.query.Event.findOne({
-        where: { id: eventId}
-      })
-      if(!event) throw new Error("No Event Found");
-      console.log({event});
+    const event = await context.query.Event.findOne({
+      where: { id: eventId}
+    })
+    if(!event) throw new Error("No Event Found");
 
     
     // 2. calc the total price for their order
@@ -60,17 +61,6 @@ export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
 
     // 3. create the charge with the stripe library
 
-    const charge = await stripeConfig.paymentIntents.create({
-      amount: totalOrder,
-      currency: 'USD',
-      confirm: true,
-      payment_method: token,
-    }).catch((err: any) => {
-      console.log(err);
-      throw new Error(err.message);
-    });
-    // console.log(charge)
-    // console.log('CHARGE MADE')
 
 
     //Create an order based on the cart item
@@ -78,21 +68,19 @@ export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
       event: { connect: { id: eventId }},
       holder: { connect: { id: user.id }},
       cost: event.price,
+      email: customerEmail,
     }));
-
-    console.log({ ticketItems });
-
+    // console.log({ ticketItems });
 
 
     const now = new Date
     const order = await context.db.Order.createOne({
       data: {
-        total: charge.amount,
+        total: amount_total,
         ticketItems: { create: ticketItems },
         user: { connect: { id: user.id } },
-        charge: charge.id,
-
-        createdAt: now.toISOString(),
+        charge: chargeId,
+        dateCreated: now.toISOString(),
       },
     })
 
@@ -101,6 +89,7 @@ export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
     //   where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     // })
 
+    // todo SEND EMAIL
     // mailCheckoutReceipt(
     //   order.id, 
     //   [user.email, ADMIN_EMAIL_ADDRESS],
@@ -111,11 +100,10 @@ export const checkoutTicket = (base: BaseSchemaMeta) => graphql.field({
     //   totalOrder,
     // )
 
-    return order
+    return { 
+      status: 'success', 
+      message: 'checkout tickets successful', 
+      order
+    }
   }
 })
-
-
-function handleMail(){
-
-}

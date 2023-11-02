@@ -30,6 +30,11 @@
     font-size: .8rem;
   }
 
+  legend{
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
   input,
   textarea,
   select {
@@ -56,6 +61,7 @@
     font-weight: 600;
     padding: 0.5rem 1.2rem;
     transition: all .3s;
+    margin-top: 1.5rem;
 
     &:hover, &:focus{
       border: solid 2px var(--c-accent);
