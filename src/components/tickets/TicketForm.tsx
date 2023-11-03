@@ -1,6 +1,6 @@
 'use client'
 import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
@@ -33,15 +33,6 @@ type Props = {
 export function TicketForm ({ event, user }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
-
-  // const [formState, setFormState] = useState<any>({
-  //   message: '',
-  //   errors: undefined,
-  //   fieldValues: {
-  //     email: '',
-  //     age: '',
-  //   }
-  // })
 
   const defaultFormData = {
     message: '',

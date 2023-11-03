@@ -31,8 +31,10 @@
   }
 
   legend{
+    margin-top: 2.5rem;
     font-weight: bold;
     font-size: 1.2rem;
+    color: var(--c-txt-sub);
   }
 
   input,
@@ -146,7 +148,7 @@
   line-height: 1.5;
   font-weight: 600;
   /* min-width: 25em; */
-  max-width: 30em;
+  // max-width: 30em;
   position: relative;
   min-width: 20em;
 
