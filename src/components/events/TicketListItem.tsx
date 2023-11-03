@@ -15,6 +15,8 @@ export function TicketListItem ({ ticket }:Props) {
           <strong>{ticket.event?.summary}</strong>
         </Link>
         <br />
+        <small>{ticket.orderCount}</small>
+        <br />
         <small>{datePrettyLocalDay(ticket.event?.start || '')}</small>
         <br />
         <Link href={`/locations/${ticket.event?.location?.id}`}>

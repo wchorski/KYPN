@@ -18,6 +18,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       quantity,
     } = await req.json();
 
+    console.log(email, eventId, quantity);
+    
+
     try {
 
       const event = await keystoneContext.query.Event.findOne({
@@ -28,9 +31,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
           image
           seats
           price
-          tickets {
-            id
-          }
         `,
       })
 
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 name: `Ticket to ${event.summary} (${i+1} of ${quantity})`,
                 images: [event.image],
                 metadata: {
-                  eventId: event.id,
+                  eventId: eventId,
                   ticketIndex: `${i+1} of ${quantity}`
                 }
               },
@@ -70,10 +70,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         line_items: lineItems,
         mode: "payment",
         success_url: `${headersList.get("origin")}/account?dashState=tickets#tickets`,
-        cancel_url: `${headersList.get("origin")}/events/${event.id}`,
+        cancel_url: `${headersList.get("origin")}/events/${eventId}`,
         metadata: {
           type: 'checkout.tickets',
-          eventId: event.id,
+          eventId: eventId,
           quantity: quantity,
         }
       })
@@ -87,13 +87,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 async function checkSeatCount(event:Event, quantity:number){
-
+  
   let message = ''
   let isSeatsAvailable = true
 
-  if(quantity + event.tickets.length > event.seats){
+  const seatsTaken = await keystoneContext.query.Ticket.count({
+    where: { 
+      event: {
+        id: {
+          equals: event.id
+        }
+      }
+    },
+  }) as number
+
+  if(quantity + seatsTaken > event.seats){
     isSeatsAvailable = false
-    message = `not enough seats available, only ${event.seats - event.tickets.length} seats left.`
+    message = `not enough seats available, only ${event.seats - seatsTaken} seats left.`
   }
 
   return { 

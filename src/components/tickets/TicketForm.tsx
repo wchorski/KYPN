@@ -14,7 +14,7 @@ import { envs } from "@/envs"
 import { loadStripe } from "@stripe/stripe-js"
 
 type Fields = {
-  event: string,
+  // event: string,
   email: string,
   quantity: number,
 }
@@ -47,7 +47,7 @@ export function TicketForm ({ event, user }:Props) {
     message: '',
     errors: undefined,
     fieldValues: {
-      event: event.id || '',
+      // event: event.id || '',
       email: user?.email || '',
       quantity: 1,
     }
@@ -63,30 +63,20 @@ export function TicketForm ({ event, user }:Props) {
 
   async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
     // console.log('START FORM');
-    // console.log({data});
+    console.log({data});
     
     const email = data.get('email') as string
-    const event = data.get('event') as string
+    // const event = data.get('event') as string
     const quantity = Number(data.get('quantity') as string)
 
     const inputValues = {
       email,
-      event,
+      event: event.id,
       quantity
     }
+    console.log({inputValues});
+    
 
-    // const formattedData = {
-    //   event: {
-    //     connect: {
-    //       id: event
-    //     }
-    //   },
-    //   holder: {
-    //     connect: {
-    //       email: email
-    //     }
-    //   },
-    // }
 
     try {
 
@@ -99,7 +89,7 @@ export function TicketForm ({ event, user }:Props) {
       if (!stripe) throw new Error('Stripe failed to initialize.');
 
       if(typeof email !== 'string') throw new Error('email is not string')
-      if(typeof event !== 'string') throw new Error('event is not string')
+      // if(typeof event !== 'string') throw new Error('event is not string')
       if(typeof quantity !== 'number') throw new Error('quantity is not number')
 
       const res = await fetch(`/api/checkout/tickets`, {
@@ -109,7 +99,7 @@ export function TicketForm ({ event, user }:Props) {
         },
         body: JSON.stringify({
           email,
-          event,
+          event: event.id,
           quantity,
         }),
       })
@@ -141,15 +131,16 @@ export function TicketForm ({ event, user }:Props) {
         message: 'success',
       }
       
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
       
       return {
-        message: 'error',
+        message: error?.message,
+        // TODO validate each field
         errors: {
-          event: 'fix event field',
-          email: 'fix email field',
-          quantity: 'fix quantity field'
+          // event: '',
+          email: '',
+          quantity: ''
         },
         fieldValues: inputValues
       }
@@ -163,9 +154,9 @@ export function TicketForm ({ event, user }:Props) {
       className={formStyles.form} 
     >
       <fieldset>
-        <legend> Ticket Form </legend>
+        <legend> Get Tickets </legend>
 
-        <label htmlFor="email">
+        {/* <label htmlFor="event">
           <span> Event </span>
           <input 
             name={'event'}
@@ -173,9 +164,10 @@ export function TicketForm ({ event, user }:Props) {
             placeholder=""
             type={'text'}
             defaultValue={formState.fieldValues.event}
+            readOnly={true}
           />
           <span className="error"> {formState.errors?.event} </span>
-        </label>
+        </label> */}
 
         <label htmlFor="email">
           <span> Email </span>
@@ -185,6 +177,7 @@ export function TicketForm ({ event, user }:Props) {
             placeholder="yanny@mail.lan"
             type={'text'}
             defaultValue={formState.fieldValues.email}
+            readOnly={formState.fieldValues.email}
           />
           <span className="error"> {formState.errors?.email} </span>
         </label>

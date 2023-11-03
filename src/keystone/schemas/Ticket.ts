@@ -1,9 +1,11 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists, Context } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
+import { integer, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
+import { Event } from "@ks/types";
+import { datePrettyLocalDay } from "../../lib/dateFormatter";
 
 
 export const Ticket:Lists.Ticket = list({
@@ -29,18 +31,45 @@ export const Ticket:Lists.Ticket = list({
   },
 
   // todo hide these again
-  // ui: {
-  //   // hide backend from non admins
-  // isHidden: true,
-  //   listView: {
-  //     initialColumns: ['dateTime', 'service', 'customer', 'employees'],
-  //     initialSort: { field: 'dateTime', direction: 'DESC'}
-  //   },
-  // },
+  ui: {
+    // hide backend from non admins
+    // isHidden: true,
+    listView: {
+      initialColumns: ['eventStart', 'eventSummary', 'email', 'status',],
+      initialSort: { field: 'eventStart', direction: 'ASC'}
+    },
+  },
 
 
   fields: {
-
+    eventSummary: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item:any, args, context) {
+          const event = await context.query.Event.findOne({
+            where: {id: item.eventId || '' },
+            query: `
+              summary
+            `
+          }) as Event
+          return event.summary;
+        },
+      })
+    }),
+    eventStart: virtual({
+      field: graphql.field({
+        type: graphql.DateTime,
+        async resolve(item:any, args, context) {
+          const event = await context.query.Event.findOne({
+            where: {id: item.eventId || ''},
+            query: `
+              start
+            `
+          }) as Event
+          return new Date(event.start);
+        },
+      })
+    }),
     qrcode: text(),
     event: relationship({
       ref: 'Event.tickets',
@@ -51,6 +80,7 @@ export const Ticket:Lists.Ticket = list({
       ref: 'User.tickets',
       many: false,
     }),
+    orderCount: text(),
     cost: integer({validation: {isRequired: true}, defaultValue: 0}),
     chargeId: text(),
     order: relationship({ ref: 'Order.ticketItems' }),
@@ -69,8 +99,8 @@ export const Ticket:Lists.Ticket = list({
         createView: { fieldMode: 'edit' }
       }
     }),
-    dateCreated: timestamp(),
-    dateModified: timestamp(),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
 
   },
 

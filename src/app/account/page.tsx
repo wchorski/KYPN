@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
 import { User } from "@ks/types"
+import { LoginToView } from "@components/menus/LoginToView"
 
 type Props = {
   searchParams:{
@@ -21,7 +22,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
   const { dashState = 'main' } = searchParams
   
   const session = await getServerSession(nextAuthOptions)
-  if(!session) return <p> <Link href={`/api/auth/signin`}> Login </Link> to view account </p>
+  if(!session) return <LoginToView />
 
   const user = await keystoneContext.withSession(session).query.User.findOne({
     // TODO have pagination in mind (or maybe by date filtering?)
@@ -125,6 +126,7 @@ const USER_DASH_QUERY = `
   }
   tickets {
     id
+    orderCount
     event {
       id
       start
