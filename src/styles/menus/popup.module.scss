@@ -59,7 +59,7 @@ dialog[open].open {
   margin: 1rem;
 
   h2{
-    margin-top: .4rem;
+    margin: 1rem 0;
   }
 }
 
@@ -80,6 +80,10 @@ button.close {
   &:active{
     opacity: 0.7;
   }
+}
+
+.buttons_wrap {
+  margin-top: 1.5rem;
 }
 
 

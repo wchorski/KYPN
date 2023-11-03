@@ -28,6 +28,8 @@ const query = `
   qrcode
   id
   status
+  email
+  orderCount
   holder {
     id
     name

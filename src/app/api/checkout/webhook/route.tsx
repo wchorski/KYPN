@@ -23,7 +23,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // TODO push all this data when creating new Order
         console.log(event.data.object.id);
         console.log(event.data.object.metadata?.type);
-        // console.log(JSON.stringify(event.data, null, 2));
         
         // console.log(event.data.object.amount_subtotal);
         // console.log(event.data.object.amount_total);
@@ -112,7 +111,8 @@ async function afterSuccessfulCheckout(charge:Charge, type:ChargeType){
 }
 
 async function checkoutTickets(charge:Charge, customerEmail:string|null|undefined){
-
+  
+  
   const variables = {
     chargeId: charge.id,
     eventId: charge.metadata.eventId,

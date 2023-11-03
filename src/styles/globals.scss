@@ -97,7 +97,6 @@ button {
   }
 
   &:disabled {
-    cursor: not-allowed;
     background-color: var(--c-disabled);
     border-color: var(--c-disabled);
   }
@@ -112,4 +111,17 @@ span[aria-disabled='true'], a[aria-disabled='true'], button[aria-disabled='true'
   color: var(--c-disabled);
   pointer-events: unset;
   cursor: not-allowed;
+}
+
+input, button, a {
+  &:disabled{
+    cursor: not-allowed;
+    border-color: var(--c-disabled);
+  }
+}
+
+input:read-only {
+  cursor: not-allowed;
+  border-color: var(--c-disabled) !important;
+  color: var(--c-disabled);
 }

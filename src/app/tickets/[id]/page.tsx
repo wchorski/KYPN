@@ -30,7 +30,7 @@ export default async function TicketByIdPage ({ params, searchParams }:Props) {
 
 function Header() {
   
-  return <header>
+  return <header style={{display: 'none'}}>
     <h1> Ticket </h1>
   </header>
 }
@@ -39,7 +39,7 @@ function Main(ticket:Ticket|undefined){
 
   if(!ticket) return <p> ticket not found </p>
 
-  const { id, status, event, holder } = ticket
+  const { id, status, event, holder, email, orderCount } = ticket
 
   return<>
   <Section layout="1">
@@ -56,8 +56,10 @@ function Main(ticket:Ticket|undefined){
         </li>
         <li>{datePrettyLocalDay(event.start || '')}</li>
         <li>{event.location?.name}</li>
+        <li>{orderCount}</li>
         <li>{holder?.name} {holder?.nameLast}</li>
-        <li>{holder?.email}</li>
+        <li>{holder?.email || email}</li>
+        <li>{holder?.email || email}</li>
       </ul>
 
       <div className="qrcode-cont">

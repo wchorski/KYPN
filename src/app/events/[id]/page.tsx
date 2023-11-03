@@ -101,15 +101,13 @@ function Main(
   return<>
     
     <DialogPopup 
-      title="Purchase Ticket"
+      title={`${summary}`}
       onClose={onClose}
       onOk={onOk}
+      buttonLabel=""
     >
-      <p> get them tickets right here dog </p>
+      <TicketForm event={event} user={session?.user}/>
     </DialogPopup>
-
-    {/* //todo put this in popup later */}
-    <TicketForm event={event} user={session?.user}/>
 
     <article>
     <Section layout="1_2">

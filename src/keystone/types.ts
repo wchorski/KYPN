@@ -83,7 +83,7 @@ export type Event = {
   end:string,
   price:number,
   hosts:User[],
-  tickets: any[],
+  tickets: Ticket[],
   seats:number,
   description: {
     document: any,
@@ -104,7 +104,7 @@ export type Ticket = {
   event: Event,
   holder: User,
   status: string,
-  
+  orderCount: string,
 }
 
 export type Product = {

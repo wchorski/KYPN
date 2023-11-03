@@ -87,15 +87,17 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
 
                 {children}
 
-                <div>
-                  <button
-                    onClick={clickOk}
-                    className={`button`}
-                  >
-                    {buttonLabel}
-                  </button>
+                {buttonLabel && (
+                  <div className={styles.buttons_wrap} >
+                    <button
+                      onClick={clickOk}
+                      className={`button`}
+                    >
+                      {buttonLabel}
+                    </button>
 
-                </div>
+                  </div>
+                )}
               </div>
         
             </div>
