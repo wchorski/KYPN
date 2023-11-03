@@ -349,14 +349,14 @@ export const seedDatabase = async (context: Context) => {
   await seedTags(context)
   // // await seedAvail(context)
   await seedPosts(context)
-  // await seedLocations(context)
+  await seedLocations(context)
   
-  // await seedServices(context)
+  await seedServices(context)
   // // await seedProductImages(context)
   await seedProducts(context)
   // await seedSubscriptions(context)
   await seedEventData(context)
-  // await seedAddons(context)
+  await seedAddons(context)
   await seedPages(context)
   console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
 };

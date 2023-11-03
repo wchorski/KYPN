@@ -1,10 +1,21 @@
 import styles from '@styles/error.module.scss'
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import PropTypes from 'prop-types';
 import { MdError } from 'react-icons/md';
+import { Section } from './layouts/Section';
 
 const ErrorMessage = ({ error }: any) => {
+
+  return(
+    <Section layout={'1'}>
+      <ErrorContents error={error} />
+    </Section>
+  )
+
+}
+
+const ErrorContents = ({ error }: any) => {
 
   if (!error || !error.message) return null;
   // console.log('error, ', error);

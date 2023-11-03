@@ -9,21 +9,26 @@ import type { Permission } from './schemas/fields';
 
 
 export type Session = {
-  user: {
+  user?: {
     name?:string | null | undefined,
     email?:string | null | undefined,
     image?:string | null | undefined,
-  }
+  } | undefined,
   authId:string,
   id:string,
   itemId: string;
   data: {
     role?: Role,
   };
-}|null
+  expires: string,
+}
 
 export type GridLayout = '1'|'1_1'|'1_2'|'2_1'|'1_4'|'1_1_1'|'1_2_1'
 
+export type SelectOption  = {
+  value:string,
+  label:string,
+}
 
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {
@@ -342,6 +347,7 @@ export type Service = {
   bookings: Booking[],
   categories: Category[],
   tags: Tag[],
+  locations: Location[],
 }
 
 export type Location = {

@@ -116,7 +116,7 @@ span[aria-disabled='true'], a[aria-disabled='true'], button[aria-disabled='true'
 input, button, a {
   &:disabled{
     cursor: not-allowed;
-    border-color: var(--c-disabled);
+    border-color: var(--c-disabled) !important;
   }
 }
 
