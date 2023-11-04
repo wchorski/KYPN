@@ -115,7 +115,7 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
 export function calcEndTime(start:string, duration:string){
   const date = new Date(start);
   date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000);
-  console.log('calcendtime, ', date.toISOString());
+  // console.log('calcendtime, ', date.toISOString());
   
   return date.toISOString();
 

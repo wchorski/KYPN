@@ -12,7 +12,6 @@ import { Hero } from '@components/menus/Hero'
 // import { AsideBar } from '@components/layouts/AsideBar'
 import { cookies } from 'next/dist/client/components/headers'
 import { Providers } from './providers'
-import { ShoppingCart2 } from '@components/ecommerce/ShoppingCart2'
 import ShoppingCart from '@components/ecommerce/ShoppingCart'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })

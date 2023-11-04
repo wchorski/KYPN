@@ -5,8 +5,8 @@ export async function POST(req:NextRequest) {
 
   const request = await req.json()
   const { query, variables } = request
-  console.log({query})
-  console.log({variables})
+  // console.log({query})
+  // console.log({variables})
   
   try {
     
@@ -23,7 +23,7 @@ export async function POST(req:NextRequest) {
     })
     
   } catch (error) {
-    console.log('/api/gql/protected ERROR: ', error);
+    console.log('/api/gql/noauth ERROR: ', error);
     return NextResponse.json({
       error,
     }, {
