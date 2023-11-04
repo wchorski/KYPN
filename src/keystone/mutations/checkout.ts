@@ -108,7 +108,8 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     return { 
       status: 'success', 
       message: 'checkout cart successful', 
-      order
+      order,
+      id: order.id,
     }
   }
 })

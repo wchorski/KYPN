@@ -84,7 +84,8 @@ export const checkoutTickets = (base: BaseSchemaMeta) => graphql.field({
     return { 
       status: 'success', 
       message: 'checkout tickets successful', 
-      order
+      order,
+      id: order.id,
     }
   }
 })

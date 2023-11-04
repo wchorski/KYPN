@@ -45,6 +45,7 @@ import { Announcement } from './schemas/Announcement';
 import { checkoutSubscription } from './mutations/checkoutSubscription';
 import { Coupon } from './schemas/Coupon';
 import { checkoutTickets } from './mutations/checkoutTickets';
+import { bookAService } from './mutations/bookAService';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -79,6 +80,7 @@ export const extendGraphqlSchema = graphql.extend(base => {
     mutation: {
       addToCart: addToCart(base),
       checkout: checkout(base),
+      bookAService: bookAService(base),
       // checkoutSubscription: checkoutSubscription(base),
       checkoutTickets: checkoutTickets(base),
       // contact: contact(base),

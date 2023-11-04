@@ -106,163 +106,156 @@ export const Booking:Lists.Booking = list({
   },
   hooks: {
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
-      // try {
-      //   if (resolvedData && !resolvedData.user) {
-      //     const currentUserId = await context.session.itemId;
-      //     // console.log({ currentUserId });
-      //     resolvedData.user = { connect: { id: currentUserId } };
-      //   }
-      // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
 
-        let description:string = ''
+        // let description:string = ''
 
-        description += 'CLIENT: ' + resolvedData?.name + ' | <' + resolvedData?.email + '>' + ' | ' + resolvedData?.phone + '\n'
-        description += 'STATUS: ' + resolvedData.status + ' \n'
+        // description += 'CLIENT: ' + resolvedData?.name + ' | <' + resolvedData?.email + '>' + ' | ' + resolvedData?.phone + '\n'
+        // description += 'STATUS: ' + resolvedData.status + ' \n'
 
-        resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
+        // resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
 
-        if(resolvedData.service){
-          const selectedService= await context.db.Service.findOne({
-            where: { id: resolvedData.service.connect?.id  },
-          }) 
-          if(selectedService) {
-            resolvedData.durationInHours = selectedService.durationInHours
-            resolvedData.price = selectedService.price
-            resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
-            description += 'SERVICE: ' + selectedService.name + ' \n\n'
+        // if(resolvedData.service){
+        //   const selectedService= await context.db.Service.findOne({
+        //     where: { id: resolvedData.service.connect?.id  },
+        //   }) 
+        //   if(selectedService) {
+        //     resolvedData.durationInHours = selectedService.durationInHours
+        //     resolvedData.price = selectedService.price
+        //     resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
+        //     description += 'SERVICE: ' + selectedService.name + ' \n\n'
 
-            const day = new Date(resolvedData.start || '').getDay()
-            // console.log({day})
-            // @ts-ignore
-            if(!selectedService.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
-          }
-        }
+        //     const day = new Date(resolvedData.start || '').getDay()
+        //     // console.log({day})
+        //     // @ts-ignore
+        //     if(!selectedService.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
+        //   }
+        // }
 
-        if(resolvedData.location){
-          const selectedLocation = await context.query.Location.findOne({
-            where: { id: resolvedData.location.connect?.id  },
-            query: `
-              name
-              rooms
-              bookings {
-                start
-                end
-              }
-            `
-          }) as Location
-          if(selectedLocation) {
-            // console.log({selectedLocation})
+        // if(resolvedData.location){
+        //   const selectedLocation = await context.query.Location.findOne({
+        //     where: { id: resolvedData.location.connect?.id  },
+        //     query: `
+        //       name
+        //       rooms
+        //       bookings {
+        //         start
+        //         end
+        //       }
+        //     `
+        //   }) as Location
+        //   if(selectedLocation) {
+        //     // console.log({selectedLocation})
 
-            // check to see if this booking's start/end lands on any of the gig's start/end
-            const gig = {
-              start: String(resolvedData.start),
-              end: resolvedData.end
-            }
-            const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)
+        //     // check to see if this booking's start/end lands on any of the gig's start/end
+        //     const gig = {
+        //       start: String(resolvedData.start),
+        //       end: resolvedData.end
+        //     }
+        //     const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)
             
-            // check to see if # of bookings is more than # of rooms avail
-            if(overlapCount > selectedLocation.rooms){
-              throw new Error(`CONFLICT for Location ${selectedLocation.name}: All rooms booked within this time range`)
-            }
+        //     // check to see if # of bookings is more than # of rooms avail
+        //     if(overlapCount > selectedLocation.rooms){
+        //       throw new Error(`CONFLICT for Location ${selectedLocation.name}: All rooms booked within this time range`)
+        //     }
             
-          }
-        }
+        //   }
+        // }
 
-        if(resolvedData.addons){
-          const selectedAddons = await context.query.Addon.findMany({ 
-            // @ts-ignore //todo might cause problems
-            where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
-            query: `
-              price
-              name
-            `
-          }) as Addon[]
+        // if(resolvedData.addons){
+        //   const selectedAddons = await context.query.Addon.findMany({ 
+        //     // @ts-ignore //todo might cause problems
+        //     where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
+        //     query: `
+        //       price
+        //       name
+        //     `
+        //   }) as Addon[]
   
-          if(selectedAddons){
-            let addonNames = ''
-            selectedAddons.map(addon => {
-              // @ts-ignore //todo might cause problems
-              resolvedData.price += addon.price
-              addonNames +=  '- ' + addon.name + '\n '
-            })
-            description += 'ADDONS: \n' + addonNames + ' \n\n'
-          }
-        }
+        //   if(selectedAddons){
+        //     let addonNames = ''
+        //     selectedAddons.map(addon => {
+        //       // @ts-ignore //todo might cause problems
+        //       resolvedData.price += addon.price
+        //       addonNames +=  '- ' + addon.name + '\n '
+        //     })
+        //     description += 'ADDONS: \n' + addonNames + ' \n\n'
+        //   }
+        // }
         
 
-        if(resolvedData.employees){
-          const bookedEmployees = await context.query.User.findMany({ 
-            // @ts-ignore //todo might cause problems
-            where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
-            query: `
-              id 
-              name
-              email
-              availability{
-                id
-                start
-                end
-                type
-                status
-                durationInHours
-              }
-              gigs {
-                id
-                start
-                end
-                durationInHours
-              }
-            `
-          }) as User[]
+        // if(resolvedData.employees){
+        //   const bookedEmployees = await context.query.User.findMany({ 
+        //     // @ts-ignore //todo might cause problems
+        //     where: { id: { in: resolvedData.employees.connect.map((user:User) => user.id) }, },
+        //     query: `
+        //       id 
+        //       name
+        //       email
+        //       availability{
+        //         id
+        //         start
+        //         end
+        //         type
+        //         status
+        //         durationInHours
+        //       }
+        //       gigs {
+        //         id
+        //         start
+        //         end
+        //         durationInHours
+        //       }
+        //     `
+        //   }) as User[]
           
           
-          // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
-          let employeeNames = ''
-          bookedEmployees.map(emp => {
-            // console.log('---------')
-            // console.log(emp.name)
+        //   // console.log('+*+*+*+*+*+*+*+*+*+*+*+*+*+*');
+        //   let employeeNames = ''
+        //   bookedEmployees.map(emp => {
+        //     // console.log('---------')
+        //     // console.log(emp.name)
   
-            if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.availability))
-              console.log(`+++ Open Day no vaction set for ${emp.name}`)
-             else 
-              throw new Error(`CONFLICT: vacation day for ${emp.name}`)
+        //     if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.availability))
+        //       console.log(`+++ Open Day no vaction set for ${emp.name}`)
+        //      else 
+        //       throw new Error(`CONFLICT: vacation day for ${emp.name}`)
   
-            if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.gigs))
-              console.log(`+++ No Gigs yet set for ${emp.name}`)
-             else 
-              throw new Error(`CONFLICT: double booking ${emp.name} `)
+        //     if(dateCheckAvail(String(resolvedData.start), String(resolvedData.end), emp.gigs))
+        //       console.log(`+++ No Gigs yet set for ${emp.name}`)
+        //      else 
+        //       throw new Error(`CONFLICT: double booking ${emp.name} `)
 
-              employeeNames +=  emp.email + ', '
-          })
+        //       employeeNames +=  emp.email + ', '
+        //   })
 
-          description += 'EMPLOYEES: ' + employeeNames + ' \n'
-        }
-        // console.log({resolvedData});
+        //   description += 'EMPLOYEES: ' + employeeNames + ' \n'
+        // }
+        // // console.log({resolvedData});
 
-        description += 'NOTES: \n' + resolvedData.notes
-        description += 'URL: '     + 'before resolve'
+        // description += 'NOTES: \n' + resolvedData.notes
+        // description += 'URL: '     + 'before resolve'
         
-        // todo refactor to the 'afterOperation' - but don't forget employee conflict
-        const calRes = await createCalendarEvent({
-          summary: resolvedData.summary || '',
-          description: description,
-          start: {
-            dateTime: new Date(resolvedData.start || '').toISOString(),
-            // timeZone: 'America/Chicago',
-          },
-          end: {
-            dateTime: resolvedData.end,
-            // timeZone: 'America/Chicago',
-          },
-        })
+        // // todo refactor to the 'afterOperation' - but don't forget employee conflict
+        // const calRes = await createCalendarEvent({
+        //   summary: resolvedData.summary || '',
+        //   description: description,
+        //   start: {
+        //     dateTime: new Date(resolvedData.start || '').toISOString(),
+        //     // timeZone: 'America/Chicago',
+        //   },
+        //   end: {
+        //     dateTime: resolvedData.end,
+        //     // timeZone: 'America/Chicago',
+        //   },
+        // })
 
-        console.log('%%%%%% HELP ME after cal %%%%%%%');
+        // console.log('%%%%%% HELP ME after cal %%%%%%%');
         
-        // console.log({calRes})
-        // @ts-ignore //todo might cause problems
-        resolvedData.google = calRes
+        // // console.log({calRes})
+        // // @ts-ignore //todo might cause problems
+        // resolvedData.google = calRes
       }
 
 
@@ -270,111 +263,61 @@ export const Booking:Lists.Booking = list({
       if (operation === 'update') {
         // TODO still check for availablility of employee here
 
-        let currPrice:number = Number(item.price)
+        // let currPrice:number = Number(item.price)
   
-        if(resolvedData.service?.connect || resolvedData.service?.disconnect){
+        // if(resolvedData.service?.connect || resolvedData.service?.disconnect){
           
-          if(item.serviceId){
-            const prevService = await context.db.Service.findOne({
-              //@ts-ignore
-              where: { id: item.serviceId  },
-            })          
-            currPrice = Math.max(currPrice - Number(prevService?.price), 0) //don't go below zero
-          }     
+        //   if(item.serviceId){
+        //     const prevService = await context.db.Service.findOne({
+        //       //@ts-ignore
+        //       where: { id: item.serviceId  },
+        //     })          
+        //     currPrice = Math.max(currPrice - Number(prevService?.price), 0) //don't go below zero
+        //   }     
 
-          if(resolvedData.service?.connect){
-            const selectedService = await context.db.Service.findOne({
-              //@ts-ignore
-              where: { id: resolvedData.service.connect.id  },
-            }) 
-            currPrice = Math.max(currPrice + Number(selectedService?.price), 0) //don't go below zero
-          }
-        }
-        
-
-        if(resolvedData.addons?.connect || resolvedData.addons?.disconnect){
-
-          if(resolvedData.addons?.disconnect){
-            const disconnectedAddons = await context.query.Addon.findMany({ 
-              // @ts-ignore //todo might cause problems
-              where: { id: { in: resolvedData.addons.disconnect.map((addon:Addon) => addon.id) }, },
-              query: `
-                price
-              `
-            })
-
-            const prices = disconnectedAddons.map(addon => addon.price)
-            const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
-            currPrice -= priceTotal
-          }
-
-          if(resolvedData.addons?.connect){
-            const disconnectedAddons = await context.query.Addon.findMany({ 
-              // @ts-ignore //todo might cause problems
-              where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
-              query: `
-                price
-              `
-            })
-
-            const prices = disconnectedAddons.map(addon => addon.price)
-            const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
-            currPrice += priceTotal
-          }
-        }
-
-        resolvedData.price = currPrice
-        resolvedData.dateModified = new Date().toISOString()
-        // console.log('+++++++++ booking update');
-        // const filteredData = Object.fromEntries(
-        //   Object.entries(resolvedData).filter(([key, value]) => value !== undefined)
-        // );
-        // // console.log({filteredData});
-        // // console.log({item});
-        // // console.log({resolvedData});
-        // const newData = { ...item, ...filteredData}
-        // // console.log({newData});
-
-        // const thisBooking = await context.query.Booking.findOne({
-        //   where: {id: item.id},
-        //   query: `
-        //     employees {
-        //       name
-        //     }
-        //     addons {
-        //       name
-        //     }
-        //   `
-        // }) as Booking
-        // console.log(thisBooking.employees);
-        // console.log(thisBooking.addons);
-
-        // const selectedService = await context.query.Service.findOne({
-        //   where: { id: item.serviceId  },
-        //   query: `
-        //     name
-        //   `
-        // }) as Service
-        
-
-        // const calRes = await updateCalendarEvent(
-        //   item.google.id,
-        //   {
-        //     summary: newData.summary,
-        //     description: 'SERVICE: ' + selectedService.name + '\n ' + 'NOTES: ' + newData.notes,
-        //     start: {
-        //       dateTime: newData.start.toISOString(),
-        //       // timeZone: 'America/Chicago',
-        //     },
-        //     end: {
-        //       dateTime: newData.end.toISOString(),
-        //       // timeZone: 'America/Chicago',
-        //     },
+        //   if(resolvedData.service?.connect){
+        //     const selectedService = await context.db.Service.findOne({
+        //       //@ts-ignore
+        //       where: { id: resolvedData.service.connect.id  },
+        //     }) 
+        //     currPrice = Math.max(currPrice + Number(selectedService?.price), 0) //don't go below zero
         //   }
-        // )
-        // // console.log({calRes})
-        // // @ts-ignore //todo might cause problems
-        // resolvedData.google = calRes
+        // }
+        
+
+        // if(resolvedData.addons?.connect || resolvedData.addons?.disconnect){
+
+        //   if(resolvedData.addons?.disconnect){
+        //     const disconnectedAddons = await context.query.Addon.findMany({ 
+        //       // @ts-ignore //todo might cause problems
+        //       where: { id: { in: resolvedData.addons.disconnect.map((addon:Addon) => addon.id) }, },
+        //       query: `
+        //         price
+        //       `
+        //     })
+
+        //     const prices = disconnectedAddons.map(addon => addon.price)
+        //     const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
+        //     currPrice -= priceTotal
+        //   }
+
+        //   if(resolvedData.addons?.connect){
+        //     const disconnectedAddons = await context.query.Addon.findMany({ 
+        //       // @ts-ignore //todo might cause problems
+        //       where: { id: { in: resolvedData.addons.connect.map((addon:Addon) => addon.id) }, },
+        //       query: `
+        //         price
+        //       `
+        //     })
+
+        //     const prices = disconnectedAddons.map(addon => addon.price)
+        //     const priceTotal = prices.reduce((partialSum, a) => partialSum + a, 0);
+        //     currPrice += priceTotal
+        //   }
+        // }
+
+        // resolvedData.price = currPrice
+        // resolvedData.dateModified = new Date().toISOString()
         
       }
 
@@ -392,118 +335,95 @@ export const Booking:Lists.Booking = list({
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
       if (operation === 'create') {
-        let customer = {
-          id: 'non registered user',
-          name: 'non registered user',
-          email: 'non registered user',
-          phone: 'non registered user',
-        }
-        console.log('===========');
+        // let customer = {
+        //   id: 'non registered user',
+        //   name: 'non registered user',
+        //   email: 'non registered user',
+        //   phone: 'non registered user',
+        // }
+        // console.log('===========');
         
-        console.log(resolvedData.employees?.connect);
-        // @ts-ignore
-        const employeesIds = resolvedData.employees?.connect.flatMap(emp => emp.id)
-        const employeesObjs = await context.db.User.findMany({ where: { id: {in: employeesIds.map((userId:string) => userId)} } })
-        const employeesEmails = employeesObjs.flatMap(emp => emp.email) as string[]
-        // console.log({item});
+        // console.log(resolvedData.employees?.connect);
+        // // @ts-ignore
+        // const employeesIds = resolvedData.employees?.connect.flatMap(emp => emp.id)
+        // const employeesObjs = await context.db.User.findMany({ where: { id: {in: employeesIds.map((userId:string) => userId)} } })
+        // const employeesEmails = employeesObjs.flatMap(emp => emp.email) as string[]
 
-        const serviceObj = await context.db.Service.findOne({ where: { id: item.serviceId as string } })
-        // console.log({serviceObj});
+        // const serviceObj = await context.db.Service.findOne({ where: { id: item.serviceId as string } })
         
         
-        // todo email employees and customer too. right now it just emails admin_email
-        if (item?.customerId) {
-          // @ts-ignore //todo might cause problems
-          customer = await context.db.User.findOne({ where: { id: item?.customerId } })
-          mailBookingCreated(
-            item.id as string,
-            [EMAIL_ADDRESS, item?.email as string, ...employeesEmails],
-            {
-              id: customer.id,
-              name: customer.name,
-              email: customer.email,
-              phone: customer.phone,
-            },
-            {
-              id: employeesObjs[0].id as string,
-              name: employeesObjs[0].name as string,
-            },
-            customer.name,
-            customer.email,
-            {
-              email: item?.email as string,
-              name: item?.name as string,
-              phone: item?.phone as string,
-              // @ts-ignore
-              start: datePrettyLocal(item?.start.toISOString() , 'full'),
-              service: {
-                id: serviceObj?.id as string,
-                name: serviceObj?.name as string,
-              }
-            },
-            item.notes as string,
-          )
-        } else if(item){
-          mailBookingCreated(
-            item.id as string,
-            // @ts-ignore
-            [EMAIL_ADDRESS, item?.email, ...employeesEmails],
-            {
-              id: customer.id,
-              name: customer.name,
-              email: customer.email,
-              phone: customer.phone,
-            },
-            {
-              id: employeesObjs[0].id,
-              name: employeesObjs[0].name,
-            },
-            customer.name,
-            customer.email,
-            {
-              // @ts-ignore
-              email: item?.email,
-              // @ts-ignore
-              name: item?.name,
-              // @ts-ignore
-              phone: item?.phone,
-              // @ts-ignore
-              start: datePrettyLocal(item?.start.toISOString(), 'full'),
-              service: {
-                id: serviceObj?.id || '',
-                name: serviceObj?.name || '',
-              }
-            },
-            item.notes,
-          )
-        }
-        // console.log({item});
-        
-        // console.log({ item });
-        // console.log({ resolvedData });
-        // const calRes = await createCalendarEvent({
-        //   summary: item.summary,
-        //   description: item.notes,
-        //   start: {
-        //     dateTime: item.start,
-        //     // timeZone: 'America/Chicago',
-        //   },
-        //   end: {
-        //     dateTime: item.end,
-        //     // timeZone: 'America/Chicago',
-        //   },
-        // })
-        // console.log({calRes})
+        // // todo email employees and customer too. right now it just emails admin_email
+        // if (item?.customerId) {
+        //   // @ts-ignore //todo might cause problems
+        //   customer = await context.db.User.findOne({ where: { id: item?.customerId } })
+        //   mailBookingCreated(
+        //     item.id as string,
+        //     [EMAIL_ADDRESS, item?.email as string, ...employeesEmails],
+        //     {
+        //       id: customer.id,
+        //       name: customer.name,
+        //       email: customer.email,
+        //       phone: customer.phone,
+        //     },
+        //     {
+        //       id: employeesObjs[0].id as string,
+        //       name: employeesObjs[0].name as string,
+        //     },
+        //     customer.name,
+        //     customer.email,
+        //     {
+        //       email: item?.email as string,
+        //       name: item?.name as string,
+        //       phone: item?.phone as string,
+        //       // @ts-ignore
+        //       start: datePrettyLocal(item?.start.toISOString() , 'full'),
+        //       service: {
+        //         id: serviceObj?.id as string,
+        //         name: serviceObj?.name as string,
+        //       }
+        //     },
+        //     item.notes as string,
+        //   )
+        // } else if(item){
+        //   mailBookingCreated(
+        //     item.id as string,
+        //     // @ts-ignore
+        //     [EMAIL_ADDRESS, item?.email, ...employeesEmails],
+        //     {
+        //       id: customer.id,
+        //       name: customer.name,
+        //       email: customer.email,
+        //       phone: customer.phone,
+        //     },
+        //     {
+        //       id: employeesObjs[0].id,
+        //       name: employeesObjs[0].name,
+        //     },
+        //     customer.name,
+        //     customer.email,
+        //     {
+        //       email: item?.email,
+        //       name: item?.name,
+        //       phone: item?.phone,
+        //       // @ts-ignore
+        //       start: datePrettyLocal(item?.start.toISOString(), 'full'),
+        //       service: {
+        //         id: serviceObj?.id || '',
+        //         name: serviceObj?.name || '',
+        //       }
+        //     },
+        //     item.notes,
+        //   )
+        // }
 
-        // item.google = calRes
-
-        const calResponse = await handleCalendarEvent(item, context)
+        // const calResponse = await handleCalendarEvent(item, context)
   
       }
 
       if(operation === 'update'){
 
-        const calResponse = await handleCalendarEvent(item, context)
+        // TODO calendar integrations
+        // const calResponse = await handleCalendarEvent(item, context)
         // resolvedData.google = calResponse
       }
 

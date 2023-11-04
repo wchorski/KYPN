@@ -10,6 +10,7 @@ import {
 } from "react-dom"
 import formStyles from '@styles/menus/form.module.scss'
 import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { calcEndTime } from "@lib/dateCheck"
 
 type Fields = {
   // event: string,
@@ -51,8 +52,8 @@ const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm ({ services, addons, session }:Props) {
 
-  function getServiceName(id:string){
-    return services.find((x) => x.id === id)?.name 
+  function getServicePicked(id:string){
+    return services.find((x) => x.id === id) 
   }
   
 
@@ -81,20 +82,18 @@ export function BookingForm ({ services, addons, session }:Props) {
 
   const [formState, formAction] = useFormState<FormState>(onSubmit, defaultFormData)
 
-  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
-    console.log('START FORM');
-    console.log({data});
+  async function onSubmit(prevState: FormState, formdata: FormData): Promise<FormState>{
     
-    const service   = data.get('service') as string
-    const location  = data.get('location') as string
-    const staff     = data.get('staff') as string
-    const date      = data.get('date') as string
-    const timeStart = data.get('timeStart') as string
-    const timeEnd   = data.get('timeEnd') as string
-    const name      = data.get('name') as string
-    const email     = data.get('email') as string
-    const phone     = data.get('phone') as string
-    const notes     = data.get('notes') as string
+    const service   = formdata.get('service') as string
+    const location  = formdata.get('location') as string
+    const staff     = formdata.get('staff') as string
+    const date      = formdata.get('date') as string
+    const timeStart = formdata.get('timeStart') as string
+    const timeEnd   = formdata.get('timeEnd') as string
+    const name      = formdata.get('name') as string
+    const email     = formdata.get('email') as string
+    const phone     = formdata.get('phone') as string
+    const notes     = formdata.get('notes') as string
 
     const inputValues:Fields = {
       service,
@@ -116,19 +115,33 @@ export function BookingForm ({ services, addons, session }:Props) {
 
       if(typeof email !== 'string') throw new Error('email is not string')
 
-      const formattedData= {
-        service: (service) ? { connect: { id: service } } : null,
-        location: (location) ? { connect: { id: location } } : null,
-        employees: (staff) ? { connect: [{ id: staff }] } : null,
-        start: new Date(`${date}T${timeStart}`).toISOString(),
-        summary: name + ' | ' + getServiceName(service),
-        email: email,
-        phone: phone,
-        name: name,
-        // dateTime: new Date(values.datetime_local).toISOString(),
-        notes: notes,
-      }
+      // const formattedData= {
+      //   service: (service) ? { connect: { id: service } } : null,
+      //   location: (location) ? { connect: { id: location } } : null,
+      //   employees: (staff) ? { connect: [{ id: staff }] } : null,
+      //   start: new Date(`${date}T${timeStart}`).toISOString(),
+      //   summary: name + ' | ' + getServiceName(service),
+      //   email: email,
+      //   phone: phone,
+      //   name: name,
+      //   // dateTime: new Date(values.datetime_local).toISOString(),
+      //   notes: notes,
+      // }
 
+      const data = {
+        summary: `${name} | ${getServicePicked(service)?.name}`,
+        serviceId: service,
+        locationId: location,
+        addonIds: ['one', 'two', 'three'],
+        employeeId: staff,
+        start: new Date(date +'T'+ timeStart).toISOString(),
+        // end: calcEndTime(date+'T'+ timeStart, String(getServicePicked(service)?.durationInHours)),
+        customerName: name,
+        customerEmail: email,
+        customerPhone: phone,
+        notes: notes,
+        amountTotal: 123,
+      }
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -137,20 +150,19 @@ export function BookingForm ({ services, addons, session }:Props) {
         },
         body: JSON.stringify({
           query: `
-            mutation Mutation($data: BookingCreateInput!) {
-              createBooking(data: $data) {
+            mutation BookAService($serviceId: String!, $start: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerName: String, $customerEmail: String!, $customerPhone: String, $notes: String, $amountTotal: Int) {
+              bookAService(serviceId: $serviceId, start: $start, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerName: $customerName, customerEmail: $customerEmail, customerPhone: $customerPhone, notes: $notes, amount_total: $amountTotal) {
                 id
-                start
               }
             }
           `,
-          variables:{ data: formattedData},
+          variables:{ ...data },
         }),
       })
 
-      const data = await res.json()
-      console.log({data});
-      if(data.error) throw new Error('ERROR submitting booking form. Please refresh the page and try again')
+      const resData = await res.json()
+      console.log({resData});
+      if(resData.error) throw new Error(resData.error.message)
       
       // // return check to see if employee is avail
       
@@ -184,31 +196,25 @@ export function BookingForm ({ services, addons, session }:Props) {
   }
 
   function handleOptionsUpdate(id:string){
-    console.log("%%% handleOptionsUpdate", id);
-    console.log(formState);
+    // console.log("%%% handleOptionsUpdate", id);
+    // console.log(formState);
     
     
     const foundLocations = services.find((x) => x.id === id)?.locations || []
     
     const locationOpts = foundLocations.map((obj) => { return {value: obj.id, label: obj.name} } )
-    console.log(locationOpts);
     setLocationOptions(locationOpts)
 
     const foundStaff = services.find((x: any) => x.id === id)?.employees || []
     const staffOpts = foundStaff.map((empl:any) => { return {value: empl.id, label: empl.name} } )
-    console.log(staffOpts);
     setStaffOptions(staffOpts)
   }
 
   useEffect(() => {
-    console.log('form state has changed');
-    console.log({formState});
     
     const currentServiceId = formState.fieldValues.service
 
-    if(!currentServiceId) return console.log('no service selected');
-    console.log('selected serviceId: ', currentServiceId);
-    
+    if(!currentServiceId) return console.log('no service selected');    
 
     const foundLocations = services.find((x: any) => x.id === currentServiceId)?.locations 
     const locationOpts = foundLocations?.map((obj:any) => { return {value: obj.id, label: obj.name} } )
@@ -254,7 +260,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'location'}
             placeholder="-- select location --"
             defaultValue={formState.fieldValues.location}
-            required={true}
+            required={false}
           >
             <option value={''}> -- select location -- </option>
 
@@ -272,7 +278,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'staff'}
             placeholder="-- select staff member --"
             defaultValue={formState.fieldValues.staff}
-            required={true}
+            required={false}
           >
             <option value={''}> -- select staff member -- </option>
 
@@ -323,7 +329,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             type={'time'}
             defaultValue={formState.fieldValues.timeEnd}
             readOnly={formState.fieldValues.timeEnd}
-            required={true}
+            required={false}
           />
           <span className="error"> {formState.errors?.timeEnd} </span>
         </label>
@@ -342,7 +348,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             type={'text'}
             defaultValue={formState.fieldValues.name}
             readOnly={formState.fieldValues.name}
-            required={true}
+            required={false}
           />
           <span className="error"> {formState.errors?.name} </span>
         </label>
