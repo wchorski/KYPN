@@ -30,6 +30,12 @@ export type SelectOption  = {
   label:string,
 }
 
+export type CheckboxOption  = {
+  value:string,
+  label:string,
+  isChecked:boolean,
+}
+
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {
 //   itemId?: string;
@@ -348,6 +354,7 @@ export type Service = {
   categories: Category[],
   tags: Tag[],
   locations: Location[],
+  addons:Addon[],
 }
 
 export type Location = {

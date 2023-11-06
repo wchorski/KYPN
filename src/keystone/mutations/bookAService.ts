@@ -42,24 +42,14 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     amount_total,
     }, context: Context) {
 
-    console.log('%%%%% bookAService %%%');
+    const contextSudo = context.sudo()
     
-    console.log(serviceId);
-    console.log(locationId);
-    console.log(addonIds);
-    console.log(customerEmail);
-    console.log(start);
-    
-    // // USER
-    // const user = await context.query.User.findOne({
-    //   where: { email: customerEmail },
-    //   query:`
-    //     id
-    //     name
-    //     email
-    //     phone
-    //   `
-    // })
+    // USER
+    const userCount = await contextSudo.query.User.count({
+      where: { email: { equals: customerEmail, } },
+    }) as number
+
+    const hasAccount = (userCount === 1) ? true : false
     
     // SERVICE 
     const service = await context.query.Service.findOne({
@@ -68,9 +58,9 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         id
         name
         durationInHours
+        price
       `
     })
-    console.log({service});
     
     // if(selectedService) {
     //   selectedService.durationInHours = selectedService.durationInHours
@@ -83,32 +73,41 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     //   if(!selectedService.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
     // }
 
-    // // ADDONS
+    // ADDONS
+    const pickedAddons = await context.query.Addon.findMany({
+      where: {
+        OR: addonIds?.map(id => ({id: { equals: id }} ))
+      },
+      query: `
+        price
+      `
+    })
+    // const pickedAddons = addons.filter(ad => addonIds.includes(ad.id))
+    const addonsCombinedPrice = pickedAddons.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0);
+    // return addonsPrice + getServicePicked(serviceId).price
 
 
-    // // PRICING 
+    // PRICING 
     
     // BOOKING
-    const booking = await context.sudo().db.Booking.createOne({
+    const booking = await contextSudo.db.Booking.createOne({
       data: {
         summary: `${customerName || customerEmail} | ${service?.name}`,
         service: { connect: { id: serviceId } },
         location: (locationId) ? { connect: { id: locationId } } : null,
         // employees: (employeeId) ? { connect: [{ id: employeeId }] } : null,
+        addons: { connect: addonIds?.map(id => ({id: id}))},
         start: start,
         end: calcEndTime(start, service.durationInHours),
         durationInHours: service.durationInHours,
-        // TODO anonymous customers can't query Users
-        customer: { connect: { email: customerEmail }},
+        customer: (hasAccount) ? { connect: { email: customerEmail }} : null,
         name: customerName || '',
         email: customerEmail || '',
         phone: customerPhone || '',
         notes: notes || '',
+        price: service.price + addonsCombinedPrice,
       },
-    })
-    console.log('+++ BOOOKING CREATED +++');
-    console.log({booking});
-    
+    })    
     
 
     // todo SEND EMAIL

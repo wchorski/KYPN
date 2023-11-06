@@ -7,6 +7,7 @@ import { document } from '@keystone-6/fields-document';
 // @ts-ignore
 import { componentBlocks } from "../blocks";
 import { permissions, rules } from "../access";
+import { slugFormat } from "@lib/slugFormat";
 
 export const Post:Lists.Post = list({
   
@@ -38,7 +39,13 @@ export const Post:Lists.Post = list({
   // this is the fields for our Post list
   fields: {
     title: text({ validation: { isRequired: true } }),
-    slug: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    slug: text({ isIndexed: 'unique', validation: { isRequired: true },
+      hooks: {
+        beforeOperation({resolvedData}) {
+          if(!resolvedData?.slug) return console.log('Post: no slug')
+          resolvedData.slug = slugFormat(String(resolvedData.slug))
+        },
+    }}),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
     status: select({

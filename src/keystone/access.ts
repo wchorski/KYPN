@@ -258,7 +258,7 @@ export const rules = {
   },
 
   canManageUsers({ session }: ListAccessArgs) {
-    
+
     if (!isLoggedIn({ session })) return false;
     
     if (permissions.canManageUsers({ session })) return true;

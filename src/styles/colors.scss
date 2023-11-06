@@ -3,6 +3,7 @@
   color: white;
   padding-inline: 5px;
   width: fit-content;
+  padding: 0 1rem;
 }
 
 .success {
@@ -10,6 +11,11 @@
   color: white;
   padding-inline: 5px;
   width: fit-content;
+  padding: 0 1rem;
+}
+
+.subtext{
+  color: var(--c-txt-sub)
 }
 
 hr {

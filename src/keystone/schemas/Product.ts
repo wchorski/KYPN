@@ -8,6 +8,7 @@ import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
+import { slugFormat } from "@lib/slugFormat";
 
 const FRONTEND_URL = process.env.FRONTEND_URL
 
@@ -55,14 +56,9 @@ export const Product:Lists.Product = list({
       validation: { isRequired: true },
       isIndexed: 'unique',
       hooks: {
-        validateInput: ({ addValidationError, resolvedData, fieldKey }) => {
-          const inputValue = resolvedData[fieldKey];
-
-          if (!inputValue) return
-          // @ts-ignore //todo might cause problems
-          if (!inputValue.match(/^[a-z0-9]+(?:-[A-Za-z0-9]+)*$/)) {
-            addValidationError(`Can only contain lower case "a-z" and dash "-" characters.`);
-          }
+        beforeOperation({resolvedData}) {
+          if(!resolvedData?.slug) return console.log('Product: no slug')
+          resolvedData.slug = slugFormat(String(resolvedData.slug))
         },
       }
     }),
