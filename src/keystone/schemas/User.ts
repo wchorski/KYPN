@@ -61,6 +61,9 @@ export const User: Lists.User = list({
 
 
     password: text({
+      access: {
+        read: () => false,
+      },
       hooks: { beforeOperation: async ({ operation,resolvedData}) => {
 
         if(operation === 'create' || operation === 'update'){

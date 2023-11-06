@@ -68,7 +68,7 @@ export const Booking:Lists.Booking = list({
     service: relationship({ ref: 'Service.bookings', many: false }),
     location: relationship({ ref: 'Location.bookings', many: false }),
     addons: relationship({ ref: 'Addon.bookings', many: true }),
-    price: integer({ defaultValue: 0 }),
+    price: integer({ defaultValue: 0, validation: { isRequired: true } }),
     employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
     email: text(),

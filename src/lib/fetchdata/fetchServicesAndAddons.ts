@@ -30,6 +30,9 @@ const queryAddons = `
   name
   excerpt
   price
+  services {
+    id
+  }
 `
 
 const queryServices = `
