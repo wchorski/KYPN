@@ -366,6 +366,7 @@ export type Location = {
   bookings: Booking[],
   categories: Category[],
   tags: Tag[],
+  bookings:Booking[],
 }
 
 export type SubscriptionPlan = {

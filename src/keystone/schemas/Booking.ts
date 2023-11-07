@@ -322,12 +322,12 @@ export const Booking:Lists.Booking = list({
       }
 
       if(operation === 'delete'){
-        console.log({item});
+        // console.log({item});
         
         // @ts-ignore
         if(!item.google.id) return console.log('no google cal id');
         // @ts-ignore
-        console.log('GOOOGLE CAL ID:::: ', item.google.id);
+        // console.log('GOOOGLE CAL ID:::: ', item.google.id);
         // @ts-ignore
         const calResponse = await deleteCalendarEvent(item.google.id)
       }

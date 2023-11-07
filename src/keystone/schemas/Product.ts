@@ -8,7 +8,7 @@ import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
-import { slugFormat } from "@lib/slugFormat";
+import { slugFormat } from "../../lib/slugFormat";
 
 const FRONTEND_URL = process.env.FRONTEND_URL
 

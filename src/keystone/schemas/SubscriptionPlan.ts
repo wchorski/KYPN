@@ -8,7 +8,7 @@ import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
 import 'dotenv/config'
 import { componentBlocks } from "../blocks";
-import { slugFormat } from "@lib/slugFormat";
+import { slugFormat } from "../../lib/slugFormat";
 
 const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
 const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'

@@ -13,6 +13,7 @@ import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { calcEndTime } from "@lib/dateCheck"
 import moneyFormatter from "@lib/moneyFormatter"
 import gridStyles from '@styles/elements/section.module.scss'
+import { datePrettyLocal, timePrettyTo12HourFormat } from "@lib/dateFormatter"
 
 type Fields = {
   // event: string,
@@ -448,7 +449,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'date'}
             type={'date'}
             defaultValue={formState.fieldValues.date}
-            readOnly={formState.fieldValues.date}
+            // readOnly={formState.fieldValues.date}
             required={true}
           />
           <span className="error"> {formState.errors?.date} </span>
@@ -461,7 +462,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'timeStart'}
             type={'time'}
             defaultValue={formState.fieldValues.timeStart}
-            readOnly={formState.fieldValues.timeStart}
+            // readOnly={formState.fieldValues.timeStart}
             required={true}
           />
           <span className="error"> {formState.errors?.timeStart} </span>
@@ -493,7 +494,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'name'}
             type={'text'}
             defaultValue={formState.fieldValues.name}
-            readOnly={formState.fieldValues.name}
+            // readOnly={formState.fieldValues.name}
             required={false}
           />
           <span className="error"> {formState.errors?.name} </span>
@@ -507,7 +508,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             placeholder="yanny@mail.lan"
             type={'text'}
             defaultValue={formState.fieldValues.email}
-            readOnly={formState.fieldValues.email}
+            // readOnly={formState.fieldValues.email}
             required={true}
           />
           <span className="error"> {formState.errors?.email} </span>
@@ -521,7 +522,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             placeholder="312 312 1234"
             type={'phone'}
             defaultValue={formState.fieldValues.phone}
-            readOnly={formState.fieldValues.phone}
+            // readOnly={formState.fieldValues.phone}
             required={false}
           />
           <span className="error"> {formState.errors?.phone} </span>
@@ -534,7 +535,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             id={'email'}
             placeholder="..."
             defaultValue={formState.fieldValues.notes}
-            readOnly={formState.fieldValues.notes}
+            // readOnly={formState.fieldValues.notes}
             required={false}
           />
           <span className="error"> {formState.errors?.notes} </span>
@@ -565,6 +566,13 @@ export function BookingForm ({ services, addons, session }:Props) {
           <tr>
             <td> Staff: </td>
             <td> {formAside.staff || <span className="subtext" > n/a </span>} </td>
+          </tr>
+          <tr>
+            <td> Start Date: </td>
+            <td> 
+              {formAside.date ? datePrettyLocal(formAside.date, 'day') : <span className="subtext" > n/a </span>} 
+              {formAside.timeStart ? '@' + timePrettyTo12HourFormat(formAside.timeStart) : ''} 
+            </td>
           </tr>
           <tr>
             <td> Addons: </td>

@@ -7,7 +7,7 @@ import { document } from '@keystone-6/fields-document';
 // @ts-ignore
 import { componentBlocks } from "../blocks";
 import { permissions, rules } from "../access";
-import { slugFormat } from "@lib/slugFormat";
+import { slugFormat } from "../../lib/slugFormat";
 
 export const Page:Lists.Page = list({
 
