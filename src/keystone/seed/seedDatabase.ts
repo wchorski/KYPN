@@ -18,7 +18,7 @@ import {
 } from './seed_data';
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
-import { Category, Post, Product, Tag, User } from '../types';
+import { Addon, Category, Post, Product, Service, Tag, User } from '../types';
 
 const seedUsers = async (context: Context) => {
   const { db } = context.sudo();
@@ -164,7 +164,8 @@ const seedProducts = async (context: Context) => {
     where: {
       slug: { in: seedObjects.map(obj => obj.slug) },
     },
-  });
+  })
+  
   const objsToCreate = seedObjects.filter(
     //@ts-ignore
     seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
@@ -250,7 +251,8 @@ const seedServices = async (context: Context) => {
     },
   });
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+    // @ts-ignore
+    seedObj => !objectsAlreadyInDatabase.some((p: Service) => p.name === seedObj.name)
   );
 
   objsToCreate.map(obj => {
@@ -265,13 +267,18 @@ const seedServices = async (context: Context) => {
 const seedAddons = async (context: Context) => {
   const { db } = context.sudo();
   const seedObjects: any[] = addons_seedjson;
+  
   const objectsAlreadyInDatabase = await db.Addon.findMany({
     where: {
       name: { in: seedObjects.map(obj => obj.name) },
     },
   });
+
+  // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
+  
   const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+    // @ts-ignore
+    seedObj => !objectsAlreadyInDatabase.some((p: Addon) => p.name === seedObj.name)
   );
 
   objsToCreate.map(obj => {
