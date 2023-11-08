@@ -36,6 +36,11 @@ export type CheckboxOption  = {
   isChecked:boolean,
 }
 
+export type DayTimes = {
+  day: Date,
+  times: string[]
+}
+
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {
 //   itemId?: string;
@@ -414,4 +419,13 @@ export type Addon = {
 
 export type IDObj = {
   id: string,
+}
+
+export type DateRange = {
+  start:Date,
+  end:Date,
+}
+export type StringRange = {
+  start:string,
+  end:string,
 }

@@ -61,12 +61,13 @@ type DateOptions = {
 }
 
 export function timePrettyTo12HourFormat(timeString:string) {
+  
   const [hours, minutes, seconds] = timeString.split(':');
   const date = new Date();
   date.setHours(Number(hours));
-  date.setMinutes(Number(minutes));
-  date.setSeconds(Number(seconds));
-
+  date.setMinutes(Number(minutes) || 0);
+  date.setSeconds(Number(seconds) || 0);
+  
   const options = {
     hour: 'numeric',
     minute: 'numeric',
@@ -82,7 +83,7 @@ export function datePrettyLocal(date:string, option:'day'|'time'|'full') {
   
   let options = {}
   switch (option) {
-    case DATE_OPTION.FULL:
+    case 'full':
       options = {
         year: "numeric",
         month: "long",
@@ -94,6 +95,14 @@ export function datePrettyLocal(date:string, option:'day'|'time'|'full') {
         minute: "numeric",
         hour12: true
       };
+      break;
+
+    case 'day':
+      options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }
       break;
   
     default:

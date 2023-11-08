@@ -1,4 +1,4 @@
-export default function moneyFormatter(amount = 0){
+export default function moneyFormatter(amount:number|undefined = 0){
   const options = {
     style: 'currency',
     currency: 'USD',

@@ -1,5 +1,5 @@
 'use client'
-import { Addon, Location, SelectOption, Service, Session } from "@ks/types"
+import { Addon, Availability, Booking, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
 import { generateTimesArray } from "@lib/generateTimesArray"
 import { useEffect, useRef, useState } from "react"
 import { 
@@ -14,6 +14,11 @@ import { calcEndTime } from "@lib/dateCheck"
 import moneyFormatter from "@lib/moneyFormatter"
 import gridStyles from '@styles/elements/section.module.scss'
 import { datePrettyLocal, timePrettyTo12HourFormat } from "@lib/dateFormatter"
+import { CalendarDatePicker } from "./Calendar"
+import { filterBuisnessTimes, findUniqueDays, isDateRangeAvailable } from "@lib/filterTimeAVail"
+import { findEmployeeBusyRanges } from "@lib/userUtils"
+import { TimePicker } from "./TimePicker"
+import { findOverlapTimes } from "@lib/dateCheckCal"
 
 type Fields = {
   // event: string,
@@ -45,7 +50,10 @@ type Props = {
 type FormAside = {
   service: Service|undefined,
   location: string,
-  staff: string,
+  staff: {
+    id:string,
+    name:string,
+  },
   addons: Addon[],
   date: string,
   timeStart: string,
@@ -63,25 +71,33 @@ const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm ({ services, addons, session }:Props) {
 
-  function getServicePicked(id:string){
-    return services.find((x) => x.id === id) as Service
-  }
+  const serviceRef = useRef<HTMLSelectElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const dateRef = useRef<HTMLInputElement>(null)
+  const timeRef = useRef<HTMLInputElement>(null)
 
   const serviceOptions = services.map((serv:any) => { return {value: serv.id, label: serv.name,} }) as SelectOption[]
   const [staffOptions, setStaffOptions] = useState<SelectOption[]>([])
   const [locationOptions, setLocationOptions] = useState<SelectOption[]>([])
   const [addonOptions, setAddonOptions] = useState<AddonCheckboxOptions[]>([])
+  const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
+  const [partialDates, setPartialDates] = useState<DayTimes[]>([])
   const [formAside, setFormAside] = useState<FormAside>({
     service: undefined,
     location: '',
-    staff: '',
+    // @ts-ignore
+    staff: {},
     addons: [],
     date: '',
     timeStart: '',
     total: 0,
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
+  function getServicePicked(id:string){
+    // if(!id) return {price: 0}
+    
+    return services.find((x) => x.id === id) as Service
+  }
 
   const defaultFormState:FormState = {
     message: '',
@@ -268,6 +284,7 @@ export function BookingForm ({ services, addons, session }:Props) {
       formRef.current?.reset()
     }
   }, [formState])
+  
 
   function updateFormAside(type:'service'|'location'|'staff'|'addon'|'date'|'time', id:string, isChecked?:boolean){
 
@@ -290,7 +307,7 @@ export function BookingForm ({ services, addons, session }:Props) {
 
       case 'staff':
         label = staffOptions.find(opt => opt.value === id )?.label || ''
-        setFormAside(prev => ({...prev, staff: label }))
+        setFormAside(prev => ({...prev, staff: {name: label, id: id} }))
         break;
 
       case 'addon':
@@ -317,6 +334,14 @@ export function BookingForm ({ services, addons, session }:Props) {
           }))
         }
         break;
+
+      case 'date':
+        setFormAside(prev => ({...prev, date: id }))
+        break;
+
+      case 'time':
+        setFormAside(prev => ({...prev, timeStart: id }))
+        break;
     
       default:
         break;
@@ -334,6 +359,115 @@ export function BookingForm ({ services, addons, session }:Props) {
     });
     return updatedCheckboxes
   };
+
+  function findPartialDays(id:string) {
+
+    const pickedService = services.find((x: any) => x.id === formAside.service?.id)
+
+    const selectedEmpl = pickedService?.employees.find((x:any) => x.id === id)
+    if(!selectedEmpl) return setBlackoutDates([])
+
+    const buisnessHours = {
+      start: pickedService?.buisnessHourOpen || '',
+      end: pickedService?.buisnessHourClosed || '',
+    }
+    const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
+    
+    const buisnessTimeStrings = filterBuisnessTimes(genTimeStrings, buisnessHours)
+    const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
+
+    const partialDays:DayTimes[] = []
+    const busyDays = uniqueBusyDays.filter((day) => {
+      const openTimes = buisnessTimeStrings.filter((time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number)
+        const testStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hours, minutes, seconds)
+        const testEnd = new Date(testStart)
+        testEnd.setMinutes(testEnd.getMinutes() + Number(pickedService?.durationInHours) * 60)
+
+        return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
+      })
+
+      // console.log({openTimes})
+      partialDays.push({
+        day,
+        times: openTimes
+      })
+
+
+      return openTimes.length > 0 ? true : false
+    })
+
+
+    const blackoutDays = partialDays.filter(d => {
+      return (d.times.length <= 0)
+    })
+    const blackoutDts = blackoutDays.map(d => d.day)
+    
+    setBlackoutDates(blackoutDts)
+    setPartialDates(partialDays)
+  }
+
+  function handleBlackoutTimes(date:string|undefined){
+    // console.log('----- handleBlackoutTimes ----');
+    // console.log({date})
+    if(!date) return []
+    if(!formAside.staff.id || !formAside.service?.id) return []
+    let currentTimes:string[] = generateTimesArray().map(t => t.value)
+    const pickedService = services.find(serv => serv.id === formAside.service?.id)
+    const pickedStaff = services[0].employees.find(emp => emp.id === formAside.staff.id)
+    // console.log({date});
+    
+    // * gigs / bookings
+    const staffGigsLocal = pickedStaff?.gigs?.flatMap((gig:Booking) => {
+      
+      const start = new Date(gig.start).toLocaleDateString('en-CA')
+      const end   = new Date(gig.end).toLocaleDateString('en-CA')
+      return [start, end]
+    })
+    
+    
+    if(staffGigsLocal?.includes(date)){
+      const gigs = pickedStaff?.gigs?.filter((obj:Booking) => {
+        return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
+      })
+      
+      gigs?.map(gig => {
+        const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService?.durationInHours))
+        currentTimes = filteredTimeStarts || [] 
+      })
+    }
+    
+    
+    // * availability
+    const staffAvailLocal = pickedStaff?.availability?.flatMap((avail:Availability) => {
+      const start = new Date(avail.start).toLocaleDateString('en-CA')
+      const end   = new Date(avail.end).toLocaleDateString('en-CA')
+      
+      return [start, end]
+    })
+
+
+    if(staffAvailLocal?.includes(date)){
+       // find the gig
+       const avails = pickedStaff?.availability?.filter((obj:Availability) => {
+        return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
+      })
+      
+      avails?.map(avail => {
+        const filteredTimeStarts = findOverlapTimes({start: avail.start, end: avail.end}, currentTimes, date, Number(pickedService?.durationInHours))
+        currentTimes = filteredTimeStarts || []  
+      })
+
+    }
+
+    if(!staffGigsLocal?.includes(date) && !staffAvailLocal?.includes(date)){
+      const defaultTimes = generateTimesArray().map(t => t.value)
+      return defaultTimes
+    }
+
+    return currentTimes
+
+  }
   
 
   return <div className={formStyles.grid_wrap} >
@@ -348,6 +482,7 @@ export function BookingForm ({ services, addons, session }:Props) {
         <label htmlFor={'service'}>
           <span> Service </span>
           <select
+            ref={serviceRef}
             name={'service'}
             id={'service'}
             placeholder="-- select service --"
@@ -394,7 +529,10 @@ export function BookingForm ({ services, addons, session }:Props) {
             placeholder="-- select staff member --"
             defaultValue={formState.fieldValues.staff}
             required={false}
-            onChange={(e) => updateFormAside('staff', e.target.value) }
+            onChange={(e) => {
+              updateFormAside('staff', e.target.value)
+              findPartialDays(e.target.value)
+            } }
           >
             <option value={''}> -- select staff member -- </option>
 
@@ -445,41 +583,53 @@ export function BookingForm ({ services, addons, session }:Props) {
         <label htmlFor="date">
           <span> Date of Engagment </span>
           <input 
+            ref={dateRef}
             name={'date'}
             id={'date'}
             type={'date'}
             defaultValue={formState.fieldValues.date}
             // readOnly={formState.fieldValues.date}
             required={true}
+            onChange={(e) => {updateFormAside('date', e.target.value); console.log(e.target.value)} }
           />
           <span className="error"> {formState.errors?.date} </span>
         </label>
+        <CalendarDatePicker 
+          // key={Number(formAside.staff)}
+          blackoutDays={blackoutDates}
+          buisnessDays={getServicePicked(serviceRef.current?.value || '')?.buisnessDays || []}
+          dateRef={dateRef}
+          timeRef={timeRef}
+        />
+
 
         <label htmlFor="timeStart">
           <span> Start Time </span>
           <input 
+            ref={timeRef}
             name={'timeStart'}
             id={'timeStart'}
             type={'time'}
             defaultValue={formState.fieldValues.timeStart}
+            onChange={(e) => {
+              updateFormAside('time', e.target.value)
+              handleBlackoutTimes(e.target.value)
+            }}
             // readOnly={formState.fieldValues.timeStart}
             required={true}
           />
           <span className="error"> {formState.errors?.timeStart} </span>
         </label>
 
-        {/* <label htmlFor="timeEnd">
-          <span> End Time </span>
-          <input 
-            name={'timeEnd'}
-            id={'timeEnd'}
-            type={'time'}
-            defaultValue={formState.fieldValues.timeEnd}
-            readOnly={formState.fieldValues.timeEnd}
-            required={false}
-          />
-          <span className="error"> {formState.errors?.timeEnd} </span>
-        </label> */}
+        <TimePicker 
+          key={dateRef.current?.value}
+          timeRef={timeRef}
+          times={handleBlackoutTimes(dateRef.current?.value)} 
+          partialDates={partialDates}
+          // todo setting 'service' to empty string causes error here
+          buisnessHours={{start: getServicePicked(formAside.service?.id || '')?.buisnessHourOpen || '', end: getServicePicked(formAside.service?.id || '')?.buisnessHourClosed || ''}}
+          serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
+        />
 
       </fieldset>
       
@@ -565,13 +715,13 @@ export function BookingForm ({ services, addons, session }:Props) {
           </tr>
           <tr>
             <td> Staff: </td>
-            <td> {formAside.staff || <span className="subtext" > n/a </span>} </td>
+            <td> {formAside.staff.name || <span className="subtext" > n/a </span>} </td>
           </tr>
           <tr>
             <td> Start Date: </td>
             <td> 
               {formAside.date ? datePrettyLocal(formAside.date, 'day') : <span className="subtext" > n/a </span>} 
-              {formAside.timeStart ? '@' + timePrettyTo12HourFormat(formAside.timeStart) : ''} 
+              {formAside.timeStart ? ' @ ' + timePrettyTo12HourFormat(formAside.timeStart) : ''} 
             </td>
           </tr>
           <tr>
