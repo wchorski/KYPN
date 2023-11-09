@@ -1,6 +1,7 @@
 import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { BookingForm } from "@components/bookings/BookingForm"
+import { Button } from "@components/elements/Button"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 import { Addon, Service, Session,  } from "@ks/types"

@@ -1,5 +1,5 @@
 // cred - https://www.youtube.com/watch?v=ecjaXnL2CUs&list=PLdoAUl4PfSFs_9yDIf-HODc6nPteNCww9&index=1
-import { RefObject, useState } from 'react'
+import { RefObject, useEffect, useState } from 'react'
 import Calendar from 'react-calendar'
 import styles from '@styles/menus/bookingCalendar.module.scss'
 
@@ -7,11 +7,11 @@ type iProps = {
   blackoutDays: Date[]
   // setValues: any,
   buisnessDays: number[],
-  dateRef: RefObject<HTMLInputElement>,
-  timeRef: RefObject<HTMLInputElement>,
+  onDateCallback: (date:string) => void,
+  // timeRef: RefObject<HTMLInputElement>,
 }
 
-export const CalendarDatePicker = ({ dateRef, timeRef, blackoutDays, buisnessDays,}:iProps) => {
+export const CalendarDatePicker = ({ onDateCallback, blackoutDays, buisnessDays = [1,2,3,4,5,6,7,0]}:iProps) => {
 
   // const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
@@ -19,8 +19,18 @@ export const CalendarDatePicker = ({ dateRef, timeRef, blackoutDays, buisnessDay
   // todo why do i have to convert to string?
   const blackoutStrings = blackoutDays.map(d => d.toString())
 
+  // useEffect(() => {
+  //   setAnimTrig(prev => prev + 1)
+  
+  //   // return () => 
+  // }, [pickedDate])
+  
+
   return (
-    <div className={styles.calendar_wrap} >
+    <div 
+      // key={animTrig}
+      className={styles.calendar_wrap} 
+    >
 
       <Calendar
         minDate={new Date()}
@@ -30,9 +40,7 @@ export const CalendarDatePicker = ({ dateRef, timeRef, blackoutDays, buisnessDay
         // value={value}
         onClickDay={(date) => {      
           // setValues((prev:any) => ({...prev, date: formatDateToYYYYMMDD(date), timeStart: '', timeEnd: ''}))
-          if(!dateRef.current || !timeRef.current) return console.log('no react refs found');
-          dateRef.current.value = formatDateToYYYYMMDD(date)
-          timeRef.current.value = ''
+          onDateCallback(formatDateToYYYYMMDD(date))
         }}
         tileDisabled={({date}) => blackoutStrings.includes(date.toString()) || !buisnessDays.includes(date.getDay()) }
       // value={date}
@@ -44,12 +52,10 @@ export const CalendarDatePicker = ({ dateRef, timeRef, blackoutDays, buisnessDay
 
 
 function formatDateToYYYYMMDD(date:Date) {
-  console.log({date});
   
   const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
   // @ts-ignore
   const formattedDate =  date.toLocaleDateString('en-CA', options);
-  console.log({formattedDate});
   
   return formattedDate
 }

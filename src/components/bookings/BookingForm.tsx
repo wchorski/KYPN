@@ -1,7 +1,9 @@
 'use client'
+// cred - https://www.sumologic.com/blog/react-hook-typescript/
+// cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
 import { Addon, Availability, Booking, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
 import { generateTimesArray } from "@lib/generateTimesArray"
-import { useEffect, useRef, useState } from "react"
+import { ReducerAction, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
@@ -47,18 +49,33 @@ type Props = {
   session:Session,
 }
 
-type FormAside = {
-  service: Service|undefined,
+type FormReducer = {
+  service?: Service,
   location: string,
-  staff: {
+  locationOptions: SelectOption[],
+  staff?: {
     id:string,
     name:string,
-  },
-  addons: Addon[],
+  }|undefined,
+  staffOptions: SelectOption[],
+  addonOptions: AddonCheckboxOptions[],
   date: string,
-  timeStart: string,
+  time: string,
   total:number,
 }
+
+type FormAsideAction =
+  | { type: 'RESET' }
+  | { type: 'SET_SERVICE'; payload:string }
+  | { type: 'SET_LOCATION'; payload:string }
+  | { type: 'SET_LOCATION_OPTIONS'; payload:SelectOption[] }
+  | { type: 'SET_STAFF'; payload:string }
+  | { type: 'SET_STAFF_OPTIONS'; payload:SelectOption[] }
+  | { type: 'SET_ADDON_OPTIONS'; payload:AddonCheckboxOptions[] }
+  | { type: 'SET_DATE'; payload:string }
+  | { type: 'SET_TIME'; payload:string }
+  | { type: 'SET_TOTAL'; payload:number }
+  | { type: 'ADDON_CHECKBOX'; payload:{value:string, isChecked:boolean} }
 
 type AddonCheckboxOptions = {
   name:string,
@@ -74,24 +91,118 @@ export function BookingForm ({ services, addons, session }:Props) {
   const serviceRef = useRef<HTMLSelectElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const dateRef = useRef<HTMLInputElement>(null)
+  const [buisnessDays, setBuisnessDays] = useState<number[]>([])
+  const [buisnessHours, setBuisnessHours] = useState<{start: string,end: string}>({start: '', end: ''})
+  const [pickedDate, setPickedDate] = useState<string>('')
+  const onDateCallback = useCallback((date:string) => {    
+    if(!dateRef.current) return
+    dateRef.current.value = date
+    setPickedDate(dateRef.current?.value || '')
+    onTimeCallback('')
+  }, [])
+
   const timeRef = useRef<HTMLInputElement>(null)
+  const [pickedTime, setPickedTime] = useState<string>('')
+  const onTimeCallback = useCallback((time:string) => {    
+   if(!timeRef.current) return
+    timeRef.current.value = time
+    setPickedTime(timeRef.current?.value || '')
+  }, [])
+
+  // const timeCallback = useCallback((time:string) => {
+  //   if (time !== null) {
+  //     setPickedTime(time)
+  //     if(!timeRef.current) return console.log('timeRef is null'); 
+  //     timeRef.current.value = time
+  //   }
+  // },[]);
 
   const serviceOptions = services.map((serv:any) => { return {value: serv.id, label: serv.name,} }) as SelectOption[]
-  const [staffOptions, setStaffOptions] = useState<SelectOption[]>([])
-  const [locationOptions, setLocationOptions] = useState<SelectOption[]>([])
-  const [addonOptions, setAddonOptions] = useState<AddonCheckboxOptions[]>([])
   const [blackoutDates, setBlackoutDates] = useState<Date[]>([])
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
-  const [formAside, setFormAside] = useState<FormAside>({
-    service: undefined,
-    location: '',
-    // @ts-ignore
-    staff: {},
-    addons: [],
+
+  const defaultFormReducer:FormReducer = {
+    addonOptions: [],
+    locationOptions: [],
+    staffOptions: [],
     date: '',
-    timeStart: '',
+    location: '',
+    time: '',
     total: 0,
-  })
+  }
+  const reducer = (state:FormReducer, action:FormAsideAction):FormReducer => {
+    
+    switch (action.type) {
+
+      case 'SET_SERVICE':
+        const pickedService = services.find(serv => serv.id === action.payload)
+        const foundLocations = pickedService?.locations || []
+        const locationOpts = foundLocations.map((obj) => { return {value: obj.id, label: obj.name} } )
+        const foundStaff = pickedService?.employees || []
+        const staffOpts = foundStaff.map((empl:any) => { return {value: empl.id, label: empl.name} } )
+        const serviceAddons = addons.filter(addon => addon.services.flatMap(serv => serv.id).includes(action.payload))
+        const addonOptions:AddonCheckboxOptions[] = serviceAddons.map(ad => ({
+          name: ad.name,
+          label: ad.name,
+          id: ad.id,
+          isChecked:false,
+          price: ad.price,
+        }))
+        return { 
+          ...state, 
+          service: pickedService, 
+          locationOptions: locationOpts, 
+          staffOptions: staffOpts, 
+          addonOptions: addonOptions,
+        }
+
+      case 'SET_LOCATION':
+        const locationLabel = state.locationOptions.find(opt => opt.value === action.payload )?.label || ''
+        return { ...state, location: locationLabel }
+
+      case 'SET_LOCATION_OPTIONS':
+        return { ...state, locationOptions: action.payload}
+
+      case 'SET_STAFF':
+        const staffLabel = state.staffOptions.find(opt => opt.value === action.payload )?.label || ''
+        return { ...state, staff: {name: staffLabel, id: action.payload} }
+
+      case 'SET_STAFF_OPTIONS':
+        return { ...state, staffOptions: action.payload}
+
+      case 'SET_ADDON_OPTIONS':
+        return { ...state, addonOptions: action.payload}
+
+      case 'ADDON_CHECKBOX':
+        const addonBoxId = action.payload.value
+        const currAddons = [...state.addonOptions, addons.find(ad => ad.id === addonBoxId)]
+        const updatedCheckboxes = state.addonOptions.map((checkbox) => {
+          if (checkbox.id === addonBoxId) {
+            return { ...checkbox, isChecked: action.payload.isChecked};
+          }
+          return checkbox;
+        })
+        return {
+          ...state,
+          addonOptions: updatedCheckboxes,
+          total: calcTotalPrice(updatedCheckboxes.filter(opt => opt.isChecked).flatMap(ad => ad.id), state.service?.id)
+        }
+      case 'SET_DATE':
+        return { ...state, date: action.payload }
+
+      case 'SET_TIME':
+        return { ...state, time: action.payload }
+
+
+      case 'RESET':
+        return defaultFormReducer
+
+      default:
+        throw new Error();
+    }
+  }
+  const [formReducer, formDispatch] = useReducer(reducer, defaultFormReducer)
+
 
   function getServicePicked(id:string){
     // if(!id) return {price: 0}
@@ -139,7 +250,7 @@ export function BookingForm ({ services, addons, session }:Props) {
     const phone     = formdata.get('phone') as string
     const notes     = formdata.get('notes') as string
     // const addonIds = addons.map(addon => formdata.get(addon.name) ).filter(item => item !== null) as string[]
-    const addonIds = addonOptions.filter(addon => addon.isChecked).flatMap(addon => addon.id ) as string[]
+    const addonIds = formReducer.addonOptions.filter(addon => addon.isChecked).flatMap(addon => addon.id ) as string[]
     
 
     const inputValues:Fields = {
@@ -233,35 +344,18 @@ export function BookingForm ({ services, addons, session }:Props) {
 
   function handleServiceUpdate(id:string){
 
-    // formRef.current?.reset()
-    // const serviceInputRef =  formRef.current?.querySelector('input[name="service"]');
-    // if(serviceInputRef) serviceInputRef.value = id
-
     const pickedService = services.find((x: any) => x.id === id)
-    
 
-    const foundLocations = pickedService?.locations || []
-    
-    const locationOpts = foundLocations.map((obj) => { return {value: obj.id, label: obj.name} } )
-    setLocationOptions(locationOpts)
+    // onDateCallback('')
+    onTimeCallback('')
+    setBuisnessDays(pickedService?.buisnessDays || [])
+    setBuisnessHours(
+      {start: pickedService?.buisnessHourOpen || '', end: pickedService?.buisnessHourClosed || ''}
 
-    const foundStaff = pickedService?.employees || []
-    const staffOpts = foundStaff.map((empl:any) => { return {value: empl.id, label: empl.name} } )
-    setStaffOptions(staffOpts)
-
-    const serviceAddons = addons.filter(addon => addon.services.flatMap(serv => serv.id).includes(id))
-    const addonOptions:AddonCheckboxOptions[] = serviceAddons.map(ad => ({
-      name: ad.name,
-      label: ad.name,
-      id: ad.id,
-      isChecked:false,
-      price: ad.price,
-    }))
-    console.log({addonOptions});
-
-    
-    setAddonOptions(addonOptions)
-    setFormAside(prev => ({...prev, addons: [], total: pickedService?.price || 0 }))
+    )
+    formDispatch({type: 'SET_ADDON_OPTIONS', payload: []})
+    formDispatch({type: 'SET_TOTAL', payload: pickedService?.price || 0 })
+    // setFormAside(prev => ({...prev, addons: [], total: pickedService?.price || 0 }))
     // todo def hacky, could make seperaate <Checkbox /> component and handle state there
     // @ts-ignore
     document.querySelectorAll('input[type=checkbox]').forEach( el => el.checked = false );
@@ -269,14 +363,11 @@ export function BookingForm ({ services, addons, session }:Props) {
 
   useEffect(() => {
     
-    const currentServiceId = formState.fieldValues.service
-
-    if(!currentServiceId) return console.log('no service selected');    
-
-    const foundLocations = services.find((x: any) => x.id === currentServiceId)?.locations 
-    const locationOpts = foundLocations?.map((obj:any) => { return {value: obj.id, label: obj.name} } )
-    setLocationOptions(locationOpts || [])
-
+    // const currentServiceId = formState.fieldValues.service
+    // if(!currentServiceId) return console.log('no service selected');    
+    // const foundLocations = services.find((x: any) => x.id === currentServiceId)?.locations 
+    // const locationOpts = foundLocations?.map((obj:any) => { return {value: obj.id, label: obj.name} } )
+    // setLocationOptions(locationOpts || [])
     // const serviceAddons = addons.filter(addon => getServicePicked(currentServiceId)?.addons.flatMap(addon => addon.id).includes(addon.id))
     // setAddonOptions(serviceAddons)
     
@@ -286,72 +377,8 @@ export function BookingForm ({ services, addons, session }:Props) {
   }, [formState])
   
 
-  function updateFormAside(type:'service'|'location'|'staff'|'addon'|'date'|'time', id:string, isChecked?:boolean){
-
-    let label = ''
-
-    switch (type) {
-      case 'service':
-        const foundService = services.find(serv => serv.id === id )
-        setFormAside(prev => ({
-            ...prev, 
-            service: foundService,
-            total: calcTotalPrice(addonOptions.filter(opt => opt.isChecked).flatMap(ad => ad.id), foundService?.id)
-          }))
-        break;
-
-      case 'location':
-        label = locationOptions.find(opt => opt.value === id )?.label || ''
-        setFormAside(prev => ({...prev, location: label }))
-        break;
-
-      case 'staff':
-        label = staffOptions.find(opt => opt.value === id )?.label || ''
-        setFormAside(prev => ({...prev, staff: {name: label, id: id} }))
-        break;
-
-      case 'addon':
-        if(isChecked) {
-          const currAddons = [...formAside.addons, addons.find(ad => ad.id === id)]
-          const updatedCheckboxes = handleCheckboxChange(id)
-          setAddonOptions(updatedCheckboxes)
-          // @ts-ignore
-          setFormAside(prev => ({
-            ...prev, 
-            addons: currAddons,
-            // @ts-ignore
-            total: calcTotalPrice(updatedCheckboxes.filter(opt => opt.isChecked).flatMap(ad => ad.id), prev.service?.id) 
-          }))
-
-        }  else if(!isChecked){
-          const filtAddons = formAside.addons.filter(ad => ad.id !== id)
-          const updatedCheckboxes = handleCheckboxChange(id)
-          setAddonOptions(updatedCheckboxes)
-          setFormAside(prev => ({
-            ...prev, 
-            addons: filtAddons,
-            total: calcTotalPrice(updatedCheckboxes.filter(opt => opt.isChecked).flatMap(ad => ad.id), prev.service?.id) 
-          }))
-        }
-        break;
-
-      case 'date':
-        setFormAside(prev => ({...prev, date: id }))
-        break;
-
-      case 'time':
-        setFormAside(prev => ({...prev, timeStart: id }))
-        break;
-    
-      default:
-        break;
-    }
-
-    // price
-  }
-
   function handleCheckboxChange(id:string) {
-    const updatedCheckboxes = addonOptions.map((checkbox) => {
+    const updatedCheckboxes = formReducer.addonOptions.map((checkbox) => {
       if (checkbox.id === id) {
         return { ...checkbox, isChecked: !checkbox.isChecked };
       }
@@ -362,7 +389,7 @@ export function BookingForm ({ services, addons, session }:Props) {
 
   function findPartialDays(id:string) {
 
-    const pickedService = services.find((x: any) => x.id === formAside.service?.id)
+    const pickedService = services.find((x: any) => x.id === formReducer.service?.id)
 
     const selectedEmpl = pickedService?.employees.find((x:any) => x.id === id)
     if(!selectedEmpl) return setBlackoutDates([])
@@ -410,11 +437,13 @@ export function BookingForm ({ services, addons, session }:Props) {
   function handleBlackoutTimes(date:string|undefined){
     // console.log('----- handleBlackoutTimes ----');
     // console.log({date})
-    if(!date) return []
-    if(!formAside.staff.id || !formAside.service?.id) return []
     let currentTimes:string[] = generateTimesArray().map(t => t.value)
-    const pickedService = services.find(serv => serv.id === formAside.service?.id)
-    const pickedStaff = services[0].employees.find(emp => emp.id === formAside.staff.id)
+    if(!date) return currentTimes
+
+    if(!formReducer.staff?.id || !formReducer.service?.id) return currentTimes
+    
+    const pickedService = services.find(serv => serv.id === formReducer.service?.id)
+    const pickedStaff = services[0].employees.find(emp => emp.id === formReducer.staff?.id)
     // console.log({date});
     
     // * gigs / bookings
@@ -489,8 +518,10 @@ export function BookingForm ({ services, addons, session }:Props) {
             defaultValue={formState.fieldValues.service}
             required={true}
             onChange={(e) => {
-              handleServiceUpdate(e.target.value)
-              updateFormAside('service', e.target.value)
+              // handleServiceUpdate(e.target.value)
+              // updateFormAside('service', e.target.value)
+              formDispatch({type: 'SET_SERVICE', payload: e.target.value } )
+              // formDispatch({type: 'SET_TOTAL', payload: calcTotalPrice(addonOptions.filter(opt => opt.isChecked).flatMap(ad => ad.id), foundService?.id)} )
             }}
           >
             <option value={''}> -- select service -- </option>
@@ -510,11 +541,11 @@ export function BookingForm ({ services, addons, session }:Props) {
             placeholder="-- select location --"
             defaultValue={formState.fieldValues.location}
             required={false}
-            onChange={(e) => updateFormAside('location', e.target.value) }
+            onChange={(e) => formDispatch({type: 'SET_LOCATION', payload: e.target.value }) }
           >
             <option value={''}> -- select location -- </option>
 
-            {locationOptions.map((opt,i) => (
+            {formReducer.locationOptions?.map((opt,i) => (
               <option key={i} value={opt.value} > {opt.label} </option>
             ))}
           </select>
@@ -530,13 +561,13 @@ export function BookingForm ({ services, addons, session }:Props) {
             defaultValue={formState.fieldValues.staff}
             required={false}
             onChange={(e) => {
-              updateFormAside('staff', e.target.value)
+              formDispatch({type: 'SET_STAFF', payload: e.target.value })
               findPartialDays(e.target.value)
-            } }
+            }}
           >
             <option value={''}> -- select staff member -- </option>
 
-            {staffOptions.map((opt,i) => (
+            {formReducer.staffOptions?.map((opt,i) => (
               <option key={i} value={opt.value} > {opt.label} </option>
             ))}
           </select>
@@ -548,7 +579,7 @@ export function BookingForm ({ services, addons, session }:Props) {
 
           <h5> Add-Ons</h5>
           <div className={formStyles.addons_wrap} >
-            {addonOptions.map(addon => (
+            {formReducer.addonOptions.map(addon => (
                 <label 
                   key={addon.name}
                   htmlFor={addon.name}
@@ -561,7 +592,10 @@ export function BookingForm ({ services, addons, session }:Props) {
                     readOnly={false}
                     defaultChecked={addon.isChecked}
                     onChange={(e) => {
-                      updateFormAside('addon', e.target.value, e.target.checked)
+                      formDispatch({type: 'ADDON_CHECKBOX', payload: {
+                        value: e.target.value,
+                        isChecked: e.target.checked
+                      }})
                     }}
                   />
                   <span> 
@@ -590,16 +624,15 @@ export function BookingForm ({ services, addons, session }:Props) {
             defaultValue={formState.fieldValues.date}
             // readOnly={formState.fieldValues.date}
             required={true}
-            onChange={(e) => {updateFormAside('date', e.target.value); console.log(e.target.value)} }
+            onChange={(e) => formDispatch({type: 'SET_DATE', payload: e.target.value}) }
           />
           <span className="error"> {formState.errors?.date} </span>
         </label>
         <CalendarDatePicker 
-          // key={Number(formAside.staff)}
-          blackoutDays={blackoutDates}
-          buisnessDays={getServicePicked(serviceRef.current?.value || '')?.buisnessDays || []}
-          dateRef={dateRef}
-          timeRef={timeRef}
+          // blackoutDays={blackoutDates}
+          blackoutDays={[]}
+          buisnessDays={buisnessDays}
+          onDateCallback={onDateCallback}
         />
 
 
@@ -612,7 +645,7 @@ export function BookingForm ({ services, addons, session }:Props) {
             type={'time'}
             defaultValue={formState.fieldValues.timeStart}
             onChange={(e) => {
-              updateFormAside('time', e.target.value)
+              formDispatch({type: 'SET_TIME', payload: e.target.value})
               handleBlackoutTimes(e.target.value)
             }}
             // readOnly={formState.fieldValues.timeStart}
@@ -623,12 +656,13 @@ export function BookingForm ({ services, addons, session }:Props) {
 
         <TimePicker 
           key={dateRef.current?.value}
-          timeRef={timeRef}
+          onTimeCallback={onTimeCallback}
           times={handleBlackoutTimes(dateRef.current?.value)} 
-          partialDates={partialDates}
+          pickedTime={pickedTime}            
           // todo setting 'service' to empty string causes error here
-          buisnessHours={{start: getServicePicked(formAside.service?.id || '')?.buisnessHourOpen || '', end: getServicePicked(formAside.service?.id || '')?.buisnessHourClosed || ''}}
-          serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
+          buisnessHours={buisnessHours}
+          // partialDates={partialDates}
+          // serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
         />
 
       </fieldset>
@@ -702,33 +736,33 @@ export function BookingForm ({ services, addons, session }:Props) {
       <SubmitButton />
     </form>
 
-    <aside key={formAside.addons.length}>
+    <aside key={formReducer.addonOptions.length}>
       <table>
         <tbody>
           <tr>
             <td> Service: </td>
-            <td> {formAside.service?.name} </td>
+            <td> {formReducer.service?.name} </td>
           </tr>
           <tr>
             <td> Location: </td>
-            <td> {formAside.location || <span className="subtext" > n/a </span>} </td>
+            <td> {formReducer.location || <span className="subtext" > n/a </span>} </td>
           </tr>
           <tr>
             <td> Staff: </td>
-            <td> {formAside.staff.name || <span className="subtext" > n/a </span>} </td>
+            <td> {formReducer.staff?.name || <span className="subtext" > n/a </span>} </td>
           </tr>
           <tr>
             <td> Start Date: </td>
             <td> 
-              {formAside.date ? datePrettyLocal(formAside.date, 'day') : <span className="subtext" > n/a </span>} 
-              {formAside.timeStart ? ' @ ' + timePrettyTo12HourFormat(formAside.timeStart) : ''} 
+              {formReducer.date ? datePrettyLocal(formReducer.date, 'day') : <span className="subtext" > n/a </span>} 
+              {formReducer.time ? ' @ ' + timePrettyTo12HourFormat(formReducer.time) : ''} 
             </td>
           </tr>
           <tr>
             <td> Addons: </td>
             <td> 
               <ul>
-                {addonOptions.filter(opt => opt.isChecked).map((ad, i) => (
+                {formReducer.addonOptions.filter(opt => opt.isChecked).map((ad, i) => (
                   <li key={i}>
                     {ad.name}
                   </li>
@@ -738,7 +772,7 @@ export function BookingForm ({ services, addons, session }:Props) {
           </tr>
           <tr>
             <td>Total: </td>
-            <td>{moneyFormatter(getServicePicked(formAside.service?.id || '')?.price + addonOptions.filter(addon => addon.isChecked).reduce((accumulator, addon) =>  accumulator + addon.price, 0))}</td>
+            <td>{moneyFormatter(getServicePicked(formReducer.service?.id || '')?.price + formReducer.addonOptions.filter(addon => addon.isChecked).reduce((accumulator, addon) =>  accumulator + addon.price, 0))}</td>
           </tr>
         </tbody>
       </table>
