@@ -8,6 +8,7 @@
   /* flex-wrap: wrap; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  // grid-template-columns: 1fr 1fr ;
   gap: .1em;
   /* flex-direction: column; */
 
@@ -28,10 +29,10 @@
   button{
     border-radius: 50px;
     min-width: 5rem;
-    border: solid 2px var(--c-txt);
+    border: solid 1px var(--c-txt-sub);
     
     &:hover, &focus{
-      border: solid 2px var(--c-accent);
+      border: solid 1px var(--c-accent);
       
     }
   }
@@ -39,7 +40,8 @@
 
   .active{
     background-color: var(--c-accent);
-    border: solid 2px var(--c-accent);
+    border: solid 1px var(--c-accent);
+    color: var(--c-txt-accent);
   }
 
   @keyframes reveal {
