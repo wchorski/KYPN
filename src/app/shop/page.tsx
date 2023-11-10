@@ -6,9 +6,12 @@ import { envs } from "@/envs";
 import { Metadata } from "next";
 import { ProductsList } from "@components/ecommerce/ProductsList";
 import { fetchProducts } from "@lib/fetchdata/fetchProducts";
-import { Product } from "@ks/types";
+import { Product, SubscriptionPlan } from "@ks/types";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
+import { fetchSubscriptionPlans } from "@lib/fetchdata/fetchSubscriptionPlans";
+import { SubscriptionPlanList } from "@components/ecommerce/SubscriptionPlanList";
+import { Section } from "@components/layouts/Section";
 
 export const revalidate = 5;
 
@@ -36,16 +39,18 @@ export default async function ShopPage({ params, searchParams }:Props) {
   const currPage = Number(page) || 1
   const categoryNames = categories?.split(',') || []
 
-  const {products, count, error} = await fetchProducts(currPage, categoryNames, session)
+  const {products, count: countProducts, error: errorProducts} = await fetchProducts(currPage, categoryNames, session)
+  const {subscriptionPlans, count: countSubPlans, error: errorSubPlans} = await fetchSubscriptionPlans(currPage, categoryNames, session)
   
 
-  if(error) return <ErrorMessage error={error}/>
+  if(errorProducts) return <ErrorMessage error={errorProducts}/>
+  if(errorSubPlans) return <ErrorMessage error={errorSubPlans}/>
 
   return (
 
     <PageTHeaderMain
       header={Header()}
-      main={Main({page: currPage, categoryNames, products, count })}
+      main={Main({page: currPage, categoryNames, products, countProducts, subscriptionPlans, countSubPlans })}
     />
 
   )
@@ -66,18 +71,28 @@ type Main = {
   page:number,
   categoryNames:string[],
   products:Product[]|undefined,
-  count:number|undefined,
+  countProducts:number|undefined,
+  subscriptionPlans:SubscriptionPlan[]|undefined,
+  countSubPlans:number|undefined,
 }
 
-function Main({page, categoryNames, products = [], count}:Main) {
+function Main({page, categoryNames = [], products = [], countProducts, subscriptionPlans = [], countSubPlans}:Main) {
 
   if(!products) <p> no products found </p>
+  if(!subscriptionPlans) <p> no subscriptionPlans found </p>
 
   return<>
-    <Pagination route='/shop' page={(page) || 1} count={count}/>
+    <Section layout={'1'}>
+      <Pagination route='/shop' page={(page) || 1} count={countSubPlans}/>
+        <SubscriptionPlanList page={page} categoryNames={categoryNames} plans={subscriptionPlans}/>
+      <Pagination route='/shop' page={(page) || 1} count={countSubPlans}/>
+    </Section>
 
-    <ProductsList page={page} categoryNames={categoryNames || []} products={products}/>
-
-    <Pagination route='/shop' page={(page) || 1} count={count}/>
+    <hr />
+    <Section layout={'1'}>
+      <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
+        <ProductsList page={page} categoryNames={categoryNames} products={products}/>
+      <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
+    </Section>
   </>
 }

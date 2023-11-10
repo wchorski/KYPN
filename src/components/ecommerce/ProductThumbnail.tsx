@@ -16,11 +16,6 @@ type Props = {
   session:any,
 }
 
-function jsonVanilla(json:any){
-  const vanillastring = JSON.parse(JSON.stringify(json))
-  return vanillastring
-}
-
 export async function ProductThumbnail({product, session}: Props) {
 
   // const sesh:Session = {}
@@ -58,7 +53,7 @@ export async function ProductThumbnail({product, session}: Props) {
             : <Link href={`/api/auth/signin`}> Login to shop </Link>
           }
           
-          <PriceTag price={price}/>
+          <PriceTag price={price} />
         </div>
       </div>
 

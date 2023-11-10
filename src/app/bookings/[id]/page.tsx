@@ -4,13 +4,15 @@ import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
 import { UserBadge } from '@components/menus/UserBadge'
 import { Booking } from '@ks/types'
-import { datePrettyLocal } from '@lib/dateFormatter'
+import { dateInputFormat, datePrettyLocal, timeInputFormat } from '@lib/dateFormatter'
 import fetchBooking from '@lib/fetchdata/fetchBooking'
 import moneyFormatter from '@lib/moneyFormatter'
 import Link from 'next/link'
 import { FiEdit } from 'react-icons/fi'
 import styles from "@styles/booking/booking.module.scss";
 import { CgExternal } from 'react-icons/cg'
+import DialogPopup from '@components/menus/Dialog'
+import { BookingFormUpdate } from '@components/bookings/BookingFormUpdate'
 
 type Props = {
   searchParams:{q:string}
@@ -27,16 +29,16 @@ export default async function BookingSinglePage ({ params, searchParams }:Props)
 
   return (
     <PageTHeaderMain
-      header={Header()}
+      header={Header(booking?.status)}
       main={Main(booking)}
     />
   )
 }
 
-function Header(){
+function Header(status:string|undefined){
 
   return<header>
-    <h1> Booking Status:  </h1>
+    <h1> Booking Status: {status}  </h1>
   </header>
 }
 
@@ -45,16 +47,44 @@ function Main(booking:Booking|undefined){
   if(!booking) <p> no bookings found </p>
 
   const { id, email, phone, name, location, service, price, notes, addons, employees, customer, dateModified, start, end } = booking as Booking
-
+  
   return<>
+    <DialogPopup 
+      title={`Feature Not Yet Ready`}
+      // onClose={() => null}
+      // onOk={() => null}
+      buttonLabel="Ok"
+    >
+      <p> Updating a booking is almost ready. For now, create a new booking and we will cancel the previous booking</p>
+      <Link href={`/bookings`}> Create new booking </Link>
+      {/* <BookingFormUpdate /> */}
+    </DialogPopup>
+    
     <Section layout={'1'}>
       <div className={styles.booking_single} >
 
         <div className="edit-buttons">
-          <Link href={`/bookings/update/${id}`} className="edit button" target={'_blank'}
+          {/* //TODO add a way to update form */}
+          {/* <Link 
+            className="edit button" 
+            href={`/bookings?${
+              new URLSearchParams({
+                bookingId: id,
+                serviceId: service.id,
+                date: dateInputFormat(start),
+                time: timeInputFormat(start),
+              })
+            }`} 
             // onClick={() => setBookingState(data?.booking)}
           > 
-          <FiEdit /> Edit 
+            <FiEdit /> Edit 
+          </Link> */}
+
+          <Link 
+            className='edit button'
+            href={`?${new URLSearchParams({ popup: 'modal'})}`}
+          >
+            <FiEdit /> Edit
           </Link>
         </div>
 

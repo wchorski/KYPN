@@ -258,6 +258,13 @@ export type Booking = {
   }
 }
 
+export type BookingPrevious = {
+  bookingId:string,
+  serviceId:string,
+  date:string,
+  time:string,
+}
+
 export type Category = {
   id: string,
   name: string,

@@ -60,6 +60,16 @@ type DateOptions = {
 
 }
 
+export function dateInputFormat(date:string){
+  const dateObj = new Date(date)
+  return dateObj.toLocaleDateString('fr-CA', {year: 'numeric', month: '2-digit', day: '2-digit'})
+}
+
+export function timeInputFormat(time:string){
+  const dateObj = new Date(time)
+  return dateObj.toLocaleTimeString('en-CA', {hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
+}
+
 export function timePrettyTo12HourFormat(timeString:string) {
   
   const [hours, minutes, seconds] = timeString.split(':');

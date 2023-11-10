@@ -2,7 +2,7 @@ import { list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text,  } from "@keystone-6/core/fields";
+import { image, integer, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
@@ -159,6 +159,9 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       ref: 'Category.subscriptions',
       many: true,
     }),
+
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
 
 
