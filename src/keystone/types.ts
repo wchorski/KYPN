@@ -194,6 +194,8 @@ export type User = {
   name: string,
   nameLast:string,
   email: string,
+  phone:string,
+  image:string,
   password: string,
   url:string,
   isAdmin: boolean,
@@ -239,6 +241,7 @@ export type Booking = {
   employees: User[],
   addons:Addon[],
   customer: User,
+  location:Location,
   email:string,
   phone:string,
   name:string,
@@ -415,6 +418,7 @@ export type Addon = {
   bookings: Booking[],
   categories: Category[],
   tags: Tag[],
+  excerpt:string,
 }
 
 export type IDObj = {

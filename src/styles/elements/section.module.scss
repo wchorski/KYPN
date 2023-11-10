@@ -1,7 +1,7 @@
 section.section {
   display: grid; 
   grid-column: 1/-1;
-  gap: 1rem;
+  // gap: 1rem;
   align-content: flex-start;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -32,12 +32,18 @@ section.section {
 section.grid_1 {
   grid-template-columns: 
     minmax(0, 1fr) 
-    minmax(0, calc(var(--w-sitemax) - 1rem)) 
+    minmax(0, calc(var(--w-sitemax) + 1rem)) 
     minmax(0, 1fr)
   ;
   
   > div {
     grid-column: 2/3;
+  }
+}
+
+@media screen and (width > 829px) and (width < 1617px) {
+  section.section {
+    gap: 1rem;
   }
 }
 
@@ -47,7 +53,7 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) + 1rem)) 
       minmax(0, 1fr)
     ;
   
@@ -65,8 +71,8 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.5 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.5 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.5 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.5 + 1rem)) 
       minmax(0, 1fr)
     ;
   
@@ -83,8 +89,8 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.3 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.7 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.3 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.7 + 1rem)) 
       minmax(0, 1fr)
     ;
   
@@ -100,8 +106,8 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.8 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.8 + 1rem)) 
       minmax(0, 1fr)
     ;
   
@@ -117,8 +123,8 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.7 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.3 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.7 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.3 + 1rem)) 
       minmax(0, 1fr)
     ;
   
@@ -134,9 +140,9 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.33 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.33 + 1rem)) 
       minmax(0, 1fr)
     ;
     // grid-template-columns: repeat(3, 1fr);
@@ -153,9 +159,9 @@ section.grid_1 {
   
     grid-template-columns: 
       minmax(0, 1fr) 
-      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.59 - 1rem)) 
-      minmax(0, calc(var(--w-sitemax) * 0.2 - 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.59 + 1rem)) 
+      minmax(0, calc(var(--w-sitemax) * 0.2 + 1rem)) 
       minmax(0, 1fr)
     ;
     // grid-template-columns: repeat(3, 1fr);
