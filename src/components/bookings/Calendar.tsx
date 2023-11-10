@@ -36,7 +36,7 @@ export const CalendarDatePicker = ({ onDateCallback, blackoutDays, buisnessDays 
         minDate={new Date()}
         className={'REACT-CALENDAR p-2'}
         view='month'
-        calendarType='US'
+        calendarType='gregory'
         // value={value}
         onClickDay={(date) => {      
           // setValues((prev:any) => ({...prev, date: formatDateToYYYYMMDD(date), timeStart: '', timeEnd: ''}))
