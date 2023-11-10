@@ -3,11 +3,12 @@ import styles from '@styles/ecommerce/pricetag.module.scss'
 
 type Props = {
   price:number,
+  subtext?:string,
 }
 
 // todo this is a very short list of currencies but should cover anything relevant to me
 
-export function PriceTag({price}:Props) {
+export function PriceTag({price, subtext}:Props) {
 
   const money = moneyFormatter(price)
   let currency = '$'
@@ -22,8 +23,9 @@ export function PriceTag({price}:Props) {
         return (<>
           <span className="amount"> 
             <sup className="currency">{currency}</sup> 
-            {dollars}
+            {dollars} 
             <span className="cents">.{cents}</span> 
+            <small className="subtext">{subtext}</small> 
           </span>
         </>)
 
@@ -33,14 +35,16 @@ export function PriceTag({price}:Props) {
         return (<>
           <small className="currency"> {currency} </small> 
           <span className="amount"> {money.replace(currency, '')} </span>
+          <small className="subtext">{subtext}</small> 
         </>)
         
       case money.includes('Kč'):
         currency = 'Kč'
 
         return (<>
-          <span className="amount"> {money.replace(currency, '')} </span>
+          <span className="amount"> {money.replace(currency, '')}</span>
           <small className="currency"> {currency} </small> 
+          <small className="subtext">{subtext}</small> 
         </>)
 
       case money.includes('€'):
@@ -48,6 +52,7 @@ export function PriceTag({price}:Props) {
         return (<>
           <small className="currency"> {currency} </small> 
           <span className="amount"> {money.replace(currency, '')} </span>
+          <small className="subtext">{subtext}</small> 
         </>)
     
       default:

@@ -1,22 +1,22 @@
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { Category, Product } from "@ks/types"
+import {  SubscriptionPlan } from "@ks/types"
 
 const perPage = envs.PERPAGE
 
-export async function fetchProducts(page:number, categoryNames:string[], session:any){
+export async function fetchSubscriptionPlans(page:number, categoryNames:string[], session:any){
 
   const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
 
   
   try {
     
-    const count = await keystoneContext.withSession(session).query.Product.count({
+    const count = await keystoneContext.withSession(session).query.SubscriptionPlan.count({
     
     })
     
 
-    const products = await keystoneContext.withSession(session).query.Product.findMany({
+    const subscriptionPlans = await keystoneContext.withSession(session).query.SubscriptionPlan.findMany({
       skip: page * perPage - perPage,
       take: perPage,
       orderBy: [
@@ -48,21 +48,38 @@ export async function fetchProducts(page:number, categoryNames:string[], session
           },
         ],
       },
-      query: `
-        excerpt
-        id
-        name
-        price
-        status
-        image
-      `
-    }) as Product[]
-
+      query: query
+    }) as SubscriptionPlan[]
     
     
-    return { products, count }
+    return { subscriptionPlans, count }
     
   } catch (error) {
     return {error}
   }
 }
+
+const query = `
+  id
+  author {
+    id
+    name
+  }
+  categories {
+    id
+    name
+  }
+  name
+  excerpt
+  billing_interval
+  image
+  image
+  price
+  slug
+  status
+  stockMax
+  tags {
+    id
+    name
+  }
+`

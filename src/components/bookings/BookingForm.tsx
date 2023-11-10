@@ -1,7 +1,7 @@
 'use client'
 // cred - https://www.sumologic.com/blog/react-hook-typescript/
 // cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
-import { Addon, Availability, Booking, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
+import { Addon, Availability, Booking, BookingPrevious, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
 import { generateTimesArray } from "@lib/generateTimesArray"
 import { ReducerAction, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { 
@@ -49,6 +49,7 @@ type Props = {
   services:Service[],
   addons:Addon[],
   session:Session,
+  prevBooking?:BookingPrevious,
 }
 
 type StateRed = {
@@ -102,7 +103,7 @@ type AddonCheckboxOptions = {
 }
 const genTimeStrings = generateTimesArray().map((t) => t.value)
 
-export function BookingForm ({ services, addons, session }:Props) {
+export function BookingForm ({ services, addons, session, prevBooking }:Props) {
 
   const serviceRef = useRef<HTMLSelectElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -126,14 +127,15 @@ export function BookingForm ({ services, addons, session }:Props) {
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
   const defaultstateRed:StateRed = {
+    service: prevBooking?.serviceId ? getServicePicked(prevBooking.serviceId): undefined,
     buisnessDays: [],
     buisnessHours: {start: '00:00:00', end: '23:59:00' },
     addonOptions: [],
     locationOptions: [],
     staffOptions: [],
-    date: '',
+    date: prevBooking?.date || '',
     location: '',
-    time: '',
+    time: prevBooking?.time || '',
     total: 0,
   }
   const reducer = (state:StateRed, action:FormAsideAction):StateRed => {
@@ -205,6 +207,8 @@ export function BookingForm ({ services, addons, session }:Props) {
           total: calcTotalPrice(updatedCheckboxes.filter(opt => opt.isChecked).flatMap(ad => ad.id), state.service?.id)
         }
       case 'SET_DATE':
+        console.log(action.payload);
+        
         return { ...state, date: action.payload }
 
       case 'SET_TIME':
@@ -236,12 +240,12 @@ export function BookingForm ({ services, addons, session }:Props) {
     message: '',
     errors: undefined,
     fieldValues: {
-      service: '',
+      service: prevBooking?.serviceId || '',
       location: '',
       staff: '',
       addonIds: [],
-      date: '',
-      timeStart: '',
+      date: prevBooking?.date || '',
+      timeStart: prevBooking?.time || '',
       // timeEnd: '',
       name: '',
       email: session?.user?.email || '',

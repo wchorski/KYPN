@@ -9,7 +9,7 @@
     width: 100%;
     border-bottom: solid 10px var(--c-txt);
     border-collapse: collapse;
-    background: var(--c-desaturated);
+    // background: var(--c-desaturated);
 
     td{
       padding: 1rem .7rem;
@@ -40,7 +40,9 @@
       margin: 0;
       color: var(--c-txt-primary);
       font-size: 1rem;
-      border: solid 2px var(--c-accent);
+      border: solid 2px var(--c-primary);
+      background-color: var(--c-primary);
+      box-shadow: var(--boxs-2);
 
       svg{
         font-size: 1rem;

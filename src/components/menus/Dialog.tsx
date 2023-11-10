@@ -9,8 +9,8 @@ import { IoMdClose } from 'react-icons/io'
 type Props = {
     title: string,
     buttonLabel?:string,
-    onClose: () => void,
-    onOk: () => void,
+    onClose?: () => void,
+    onOk?: () => void,
     children: React.ReactNode,
 }
 
@@ -49,11 +49,11 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
       dialogRef.current?.close()
       console.log('dialog.tsx closeDialog');
       router.back()
-      onClose()
+      if(onClose) onClose()
     }
 
     const clickOk = () => {
-      onOk()
+      if(onOk) onOk()
       router.back()
       closeDialog()
     }

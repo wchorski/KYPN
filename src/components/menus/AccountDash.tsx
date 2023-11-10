@@ -20,6 +20,7 @@ export default function AccountDash ({ user, dashState, }:Props) {
   const bookingCells = user?.bookings?.map((book:Booking) => ({
     date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
     service: book.service.name,
+    status: book.status,
     // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
     details: book.id,
   }))
@@ -65,6 +66,7 @@ export default function AccountDash ({ user, dashState, }:Props) {
             headers={[
               'service',
               'date',
+              'status',
               'details',
             ]}
             cells={bookingCells}

@@ -11,3 +11,8 @@ table {
     margin: 0;
   }
 }
+
+hr {
+  margin: 4rem auto;
+  max-width: var(--w-sitemax);
+}

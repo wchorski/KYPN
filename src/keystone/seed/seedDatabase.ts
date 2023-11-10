@@ -361,7 +361,7 @@ export const seedDatabase = async (context: Context) => {
   await seedServices(context)
   // // await seedProductImages(context)
   await seedProducts(context)
-  // await seedSubscriptions(context)
+  await seedSubscriptions(context)
   await seedEventData(context)
   await seedAddons(context)
   await seedPages(context)

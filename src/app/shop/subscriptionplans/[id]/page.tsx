@@ -4,7 +4,7 @@ import { TagsPool } from '@components/menus/TagsPool';
 import { CategoriesPool } from '@components/menus/CategoriesPool';
 import { BreadCrumbs } from '@components/elements/BreadCrumbs';
 import { ImageDynamic } from '@components/elements/ImageDynamic';
-import { Product,} from '@ks/types';
+import { SubscriptionPlan, Tag,} from '@ks/types';
 import { envs } from '@/envs';
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
 import { BlockRender } from '@components/blocks/BlockRender'
@@ -12,7 +12,7 @@ import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '@/session';
 import { Metadata, ResolvingMetadata } from 'next';
 import { Card } from '@components/layouts/Card';
-import { fetchProduct } from '@lib/fetchdata/fetchProduct';
+import { fetchSubscriptionPlan } from '@lib/fetchdata/fetchSubscriptionPlan';
 import { OutOfStockLabel } from '@components/elements/OutOfStockLabel';
 import moneyFormatter from '@lib/moneyFormatter';
 import AddToCart from '@components/ecommerce/AddToCart';
@@ -38,14 +38,14 @@ export async function generateMetadata(
  
   // fetch data
   const session = await getServerSession(nextAuthOptions)
-  const { product } = await fetchProduct(String(params?.id), session)
+  const { subscriptionPlan } = await fetchSubscriptionPlan(String(params?.id), session)
 
-  if(!product) return {
+  if(!subscriptionPlan) return {
     title: envs.SITE_TITLE,
     description: envs.SITE_DESC,
   }
 
-  const { name, excerpt, image, tags, author } = product
+  const { name, excerpt, image, tags, author } = subscriptionPlan
   
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -58,29 +58,29 @@ export async function generateMetadata(
       images: [String(image), ...previousImages],
       title: name,
       description: excerpt,
-      url: envs.FRONTEND_URL + '/shop/products/' + params.id,
+      url: envs.FRONTEND_URL + '/shop/SubscriptionPlans/' + params.id,
       type: 'article'
     },
-    keywords: tags?.map(tag => tag.name).join(', '),
+    keywords: tags?.map((tag:Tag) => tag.name).join(', '),
     authors: [{name: author?.name, url: author?.url}]
   }
 }
 
 
-export default async function ProductPageById({ params }:Props) {
+export default async function SubscriptionPlanPageById({ params }:Props) {
   
   const session = await getServerSession(nextAuthOptions)
-  const { product, error } = await fetchProduct(String(params.id), session)
+  const { subscriptionPlan, error } = await fetchSubscriptionPlan(String(params.id), session)
 
   if (error) return <ErrorMessage error={error} />
 
-  if(!product) return <p> post not found </p>
+  if(!subscriptionPlan) return <p> post not found </p>
 
   return (
     <>
     <PageTHeaderMain 
-      header={Header(product?.name)}
-      main={Main({product, session})}
+      header={Header(subscriptionPlan?.name)}
+      main={Main({subscriptionPlan, session})}
     />
     </>
   )
@@ -93,30 +93,30 @@ function Header(name:string){
       <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
         <BreadCrumbs />
       </div>
-      <h1> Product: {name} </h1>
+      <h1> SubscriptionPlan: {name} </h1>
 
     </header>
   </>
 }
 
 type Main = {
-  product:Product,
+  subscriptionPlan:SubscriptionPlan,
   session:any,
 }
 
 
-function Main({ product, session }:Main) {
+function Main({ subscriptionPlan, session }:Main) {
 
-  const { id, name, image, price, description, excerpt, status, categories, tags, author} = product
+  const { id, name, image, price, description, excerpt, status, categories, tags, author, billing_interval} = subscriptionPlan
 
   return <>
 
     <Section layout={'1'}>
 
-      {status === 'DRAFT' && <p className='warning'>This product is still a draft</p>}
-      {status === 'PRIVATE' && <p className='warning'>This product is private</p>}
+      {status === 'DRAFT' && <p className='warning'>This SubscriptionPlan is still a draft</p>}
+      {status === 'PRIVATE' && <p className='warning'>This SubscriptionPlan is private</p>}
         
-      <article className={styles.product}  data-testid='singleProduct'>
+      <article className={styles.product}  data-testid='singleSubscriptionPlan'>
 
         <aside>
           {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
@@ -131,9 +131,12 @@ function Main({ product, session }:Main) {
           <div className="details">
             <h2>{name}</h2>
 
-            <p> <PriceTag price={price} /></p>
+            <p> <PriceTag price={price} subtext={`/${billing_interval}`}/> </p>
   
-            <AddToCart productId={id} sessionId={session.itemId}/>
+            {/* <AddToCart SubscriptionPlanId={id} sessionId={session.itemId}/> */}
+            <button className={'button'} >
+              TODO START SUBSCRIPTION with STRIPE
+            </button>
 
             <div className={styles.description_wrap}>
               <BlockRender document={description.document} />

@@ -18,6 +18,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('Booking'),
 
   args: { 
+    // bookingId: graphql.arg({ type: graphql.String }),
     serviceId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     locationId: graphql.arg({ type: graphql.String }),
     addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
