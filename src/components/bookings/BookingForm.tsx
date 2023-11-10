@@ -22,6 +22,7 @@ import { findEmployeeBusyRanges } from "@lib/userUtils"
 import { TimePicker } from "./TimePicker"
 import { findOverlapTimes } from "@lib/dateCheckCal"
 import Link from "next/link"
+import { BsFillBookmarkFill } from "react-icons/bs"
 
 type Fields = {
   // event: string,
@@ -724,6 +725,7 @@ export function BookingForm ({ services, addons, session }:Props) {
       </form>
     ) : (
       <div className={formStyles.success_message} >
+        <BsFillBookmarkFill />
         <h2> Success! </h2>
         <p> Your booking is being processed. For the next steps, we'll reach out with instructions via the contact provided. </p>
         <ul>

@@ -178,6 +178,15 @@
   padding: 1rem;
   position: relative;
 
+  svg {
+    position: absolute;
+    top: -10%;
+    right: 5%;
+    font-size: 4rem;
+    color: var(--c-primary);
+    animation: animBookmark 1s infinite alternate;
+  }
+
   h2 {
     margin-top: 0;
   }
@@ -200,6 +209,12 @@
     bottom: 0;
     right: 0;
     transform: rotate(0deg);
+  }
+}
+
+@keyframes animBookmark {
+  100% {
+    top: -8%;
   }
 }
 
