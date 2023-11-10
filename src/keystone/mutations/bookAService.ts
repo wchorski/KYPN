@@ -42,7 +42,22 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     notes,
     start,
     amount_total,
-    }, context: Context) {
+  }, context: Context) {
+
+    // console.log({ 
+    //   serviceId, 
+    //   locationId,
+    //   addonIds, 
+    //   employeeId, 
+    //   customerEmail, 
+    //   customerName, 
+    //   customerPhone, 
+    //   notes,
+    //   start,
+    //   amount_total,
+    // });
+    
+
 
     const contextSudo = context.sudo()
     let description = ''
@@ -73,64 +88,67 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     if(!service.buisnessDays?.includes(day)) throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
 
     // Location
-    const selectedLocation = await contextSudo.query.Location.findOne({
-      where: { id: locationId  },
-      query: `
+    if(locationId){
+
+      const selectedLocation = await contextSudo.query.Location.findOne({
+        where: { id: locationId  },
+        query: `
         name
         rooms
         bookings {
           start
           end
         }
-      `
-    }) as Location
-    if(selectedLocation) {
-      // console.log({selectedLocation})
-
-      // check to see if this booking's start/end lands on any of the gig's start/end
-      const gig = {
-        start: start,
-        end: end
+        `
+      }) as Location
+      if(selectedLocation) {
+        // console.log({selectedLocation})
+        
+        // check to see if this booking's start/end lands on any of the gig's start/end
+        const gig = {
+          start: start,
+          end: end
+        }
+        const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)      
+        
+        // check to see if # of bookings is more than # of rooms avail
+        if(overlapCount > selectedLocation.rooms){
+          throw new Error(`CONFLICT for Location ${selectedLocation.name}: All ${selectedLocation.rooms} rooms booked within this time range`)
+        }
+        
+        description += 'LOCATION: ' + selectedLocation.name + ' \n'
       }
-      const overlapCount = dateOverlapCount(gig, selectedLocation.bookings)      
-      
-      // check to see if # of bookings is more than # of rooms avail
-      if(overlapCount > selectedLocation.rooms){
-        throw new Error(`CONFLICT for Location ${selectedLocation.name}: All ${selectedLocation.rooms} rooms booked within this time range`)
-      }
-      
-      description += 'LOCATION: ' + selectedLocation.name + ' \n'
     }
-
+      
     // Employee Availability
     if(employeeId){
       
       const bookedEmployees = await contextSudo.query.User.findMany({ 
         where: { id: { in: [employeeId] }, },
         query: `
-          id 
-          name
-          email
-          availability{
-            id
-            start
-            end
-            type
-            status
-            durationInHours
-          }
-          gigs {
-            id
-            start
-            end
-            durationInHours
-          }
+        id 
+        name
+        email
+        availability{
+          id
+          start
+          end
+          type
+          status
+          durationInHours
+        }
+        gigs {
+          id
+          start
+          end
+          durationInHours
+        }
         `
-    }) as User[]
-    
-
-    let employeeNames = ''
-    bookedEmployees.map(emp => {
+      }) as User[]
+        
+        
+      let employeeNames = ''
+      bookedEmployees.map(emp => {
       console.log('---------')
       console.log(emp.name)
 
@@ -161,6 +179,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     })
     
     // PRICING 
+    // @ts-ignore
     const addonsCombinedPrice = pickedAddons.reduce((accumulator:number, currentValue:Addon) => accumulator + currentValue.price, 0);
     const priceTotal = service.price + addonsCombinedPrice
 
@@ -195,6 +214,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         phone: customerPhone || '',
         notes: notes || '',
         price: priceTotal,
+        // @ts-ignore
         google: calRes,
       },
     })    

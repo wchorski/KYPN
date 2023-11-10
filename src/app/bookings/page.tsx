@@ -17,6 +17,7 @@ export default async function BookingsPage ({ params, searchParams }:Props) {
 
   const { services, addons, error } = await fetchServicesAndAddons()
   const session = await getServerSession(nextAuthOptions)
+  
 
   if(error) return <ErrorMessage error={error} />
 
@@ -33,7 +34,7 @@ function Header(){
   
   return <header>
     <h1>
-      Create a Booking
+      Book a Service
     </h1>
   </header>
 }
