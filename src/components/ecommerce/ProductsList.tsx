@@ -1,5 +1,5 @@
 import { ProductThumbnail } from "@components/ecommerce/ProductThumbnail";
-import styles from '@styles/ecommerce/Product.module.scss'
+import styles from '@styles/ecommerce/product.module.scss'
 import { Product } from "@ks/types";
 import { List } from "@components/elements/List";
 import { getServerSession } from "next-auth";

@@ -58,7 +58,7 @@ following along with Wes Bos Tutorial
 using stripe CLI have it listen to this webhook
 
 ```sh
-stripe listen --forward-to http://localhost:3000/api/stripe/webhook
+stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 ```
 
 - don't forget to run and save these queries to the `seed_data.ts` 

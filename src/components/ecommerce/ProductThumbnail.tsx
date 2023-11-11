@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Link from 'next/link';
-import styles from '@styles/ecommerce/Product.module.scss'
+import styles from '@styles/ecommerce/product.module.scss'
 import { ProductDelete } from '@components/ecommerce/ProductDelete';
 import AddToCart from '@components/ecommerce/AddToCart';
 import { ImageDynamic } from '../elements/ImageDynamic';

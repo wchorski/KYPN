@@ -19,10 +19,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       
     switch (event?.type) {
       case "checkout.session.completed":
-        console.log('*** STRIPE WEBHOOK: checkout.session.completed');
         // TODO push all this data when creating new Order
-        console.log(event.data.object.id);
-        console.log(event.data.object.metadata?.type);
+        console.log('💳 type: ', event.data.object.metadata?.type);
         
         // console.log(event.data.object.amount_subtotal);
         // console.log(event.data.object.amount_total);
@@ -39,6 +37,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
       case 'product.updated':
         // handle other type of stripe events
         break;
+
+      case 'invoice.paid':
+        // Continue to provision the subscription as payments continue to be made.
+        // Store the status in your database and check when a user accesses your service.
+        // This approach helps you avoid hitting rate limits.
+        break;
+
+      case 'invoice.payment_failed':
+        // The payment failed or the customer does not have a valid payment method.
+        // The subscription becomes past_due. Notify your customer and send them to the
+        // customer portal to update their payment information.
+        console.log(JSON.stringify(event.data.object, null, 2))
+        // @ts-ignore
+        afterFailure(event.data.object as Charge, event.data.object.metadata?.type)
+        break;
+
       default:
         // other events that we don't handle
         break;
@@ -84,6 +98,7 @@ type Charge = {
   metadata: {
     type?: ChargeType,
     eventId?:string,
+    subscriptionplanId?:string,
     quantity?:number,
   }
 }
@@ -102,9 +117,36 @@ async function afterSuccessfulCheckout(charge:Charge, type:ChargeType){
       checkoutTickets(charge, charge.customer_details.email)
       break;
 
+    case 'checkout.subscriptionplan':
+      checkoutSubscription(charge, charge.customer_details.email)
+      break;
+
     default:
       console.log('!!! NO CHARGE TYPE LISTED');
       
+      break;
+  }
+
+}
+
+async function afterFailure(charge:Charge, type:ChargeType){
+
+
+  switch (type) {
+    // case 'checkout.cart':
+    //   checkoutCart(charge.id, charge.customer_details.email)
+    //   break;
+    
+    // case 'checkout.tickets':
+    //   checkoutTickets(charge, charge.customer_details.email)
+    //   break;
+
+    case 'checkout.subscriptionplan':
+      checkoutSubscriptionFail(charge)
+      break;
+
+    default:
+      console.log('!!! NO CHARGE TYPE LISTED');
       break;
   }
 
@@ -138,6 +180,53 @@ async function checkoutTickets(charge:Charge, customerEmail:string|null|undefine
 const queryTickets = `
   mutation CheckoutTickets($chargeId: String!, $customerEmail: String!, $eventId: String!, $quantity: Int!, $amount_total: Int!) {
     checkoutTickets(chargeId: $chargeId, customerEmail: $customerEmail, eventId: $eventId, quantity: $quantity, amount_total: $amount_total ) {
+      status
+    }
+  }
+`
+
+async function checkoutSubscriptionFail(charge:Charge){
+
+  const updatedSubItem = await keystoneContext.sudo().query.SubscriptionItem.updateOne({
+    where: {
+      id: charge.metadata.subscriptionplanId 
+    },
+    data: {
+      status: 'DELINQUENT',
+    }
+  })
+
+  console.log('!!! checkoutSubscriptionFail: ', updatedSubItem)
+  
+}
+
+async function checkoutSubscription(charge:Charge, customerEmail:string|null|undefined){
+  
+  const vars = {
+    customPrice: charge.amount_total,
+    amountTotal: charge.amount_total,
+    planId: charge.metadata.subscriptionplanId,
+    chargeId: charge.id,
+    customerEmail: customerEmail,
+  }
+
+  try {
+
+    const data = await keystoneContext.sudo().graphql.run({
+      query: querycheckoutSubscription,
+      variables: vars,
+    })
+    
+
+  } catch (error) {
+    console.log('!!! checkoutSubscription ERROR: ', error);
+    
+  }
+}
+
+const querycheckoutSubscription = `
+  mutation CheckoutSubscription($customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $customerEmail: String!) {
+    checkoutSubscription(custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, customerEmail: $customerEmail) {
       status
     }
   }

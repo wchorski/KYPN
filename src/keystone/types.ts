@@ -386,7 +386,7 @@ export type Location = {
 
 export type SubscriptionPlan = {
   id: string,
-  photo: ProductImage,
+  image: string,
   author: User,
   name: string,
   slug: string,
@@ -399,7 +399,7 @@ export type SubscriptionPlan = {
   stripeProductId: string,
   stripePriceId: string,
   billing_interval: string,
-  items: any[]
+  items: SubscriptionItem[]
   stockMax: number,
   tags: Tag[],
   categories: Category[],

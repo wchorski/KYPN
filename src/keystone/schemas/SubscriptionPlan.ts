@@ -206,7 +206,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
             type: 'subscription'
           },
           images: [
-            photo_url
+            resolvedData.image || ''
           ],
           // @ts-ignore
           attributes: [
@@ -283,7 +283,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
               description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt || 'no_description',
               default_price: newPrice.id,
               images: [
-                photo_url
+                resolvedData.image
               ],
               metadata: {
                 // @ts-ignore //todo might cause problems

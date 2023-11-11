@@ -164,6 +164,11 @@ export const User: Lists.User = list({
           })
           .catch(err => { console.warn(err) })
       }
+
+      if(operation === 'delete'){
+        // todo - delete all stripe data too
+        // https://stripe.com/docs/financial-connections/disconnections
+      }
     },
 
     afterOperation: async ({ operation, resolvedData, item }) => {

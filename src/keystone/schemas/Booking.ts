@@ -87,6 +87,7 @@ export const Booking:Lists.Booking = list({
         { label: 'Lead', value: 'LEAD' },
         { label: 'Paid', value: 'PAID' },
         { label: 'Down Payment', value: 'DOWNPAYMENT' },
+        { label: 'Hold', value: 'HOLD' },
       ],
       defaultValue: 'LEAD',
       ui: {

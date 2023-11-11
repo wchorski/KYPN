@@ -1,4 +1,4 @@
-import styles from '@styles/ecommerce/Product.module.scss'
+import styles from '@styles/ecommerce/product.module.scss'
 
 export function OutOfStockLabel() {
   return (
