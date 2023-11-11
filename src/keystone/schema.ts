@@ -81,7 +81,7 @@ export const extendGraphqlSchema = graphql.extend(base => {
       addToCart: addToCart(base),
       checkout: checkout(base),
       bookAService: bookAService(base),
-      // checkoutSubscription: checkoutSubscription(base),
+      checkoutSubscription: checkoutSubscription(base),
       checkoutTickets: checkoutTickets(base),
       // contact: contact(base),
     },

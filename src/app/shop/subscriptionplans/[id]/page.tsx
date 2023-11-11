@@ -19,6 +19,8 @@ import AddToCart from '@components/ecommerce/AddToCart';
 import styles from '@styles/ecommerce/productSingle.module.scss'
 import { Section } from '@components/layouts/Section';
 import { PriceTag } from '@components/ecommerce/PriceTag';
+import StripeSubscriptionButton from '@components/ecommerce/StripeSubscriptionButton';
+import Link from 'next/link';
 
 export const revalidate = 5;
 
@@ -134,9 +136,11 @@ function Main({ subscriptionPlan, session }:Main) {
             <p> <PriceTag price={price} subtext={`/${billing_interval}`}/> </p>
   
             {/* <AddToCart SubscriptionPlanId={id} sessionId={session.itemId}/> */}
-            <button className={'button'} >
-              TODO START SUBSCRIPTION with STRIPE
-            </button>
+            {session ? (
+              <StripeSubscriptionButton id={id} />
+            ): (
+              <p> <Link href={`/api/auth/signin`} > Login </Link> or <Link href={`/api/auth/signup`}> Create an Account </Link></p>
+            )}
 
             <div className={styles.description_wrap}>
               <BlockRender document={description.document} />

@@ -47,7 +47,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
       const session = await stripe.checkout.sessions.create({
         customer_email: userSession?.user?.email || '',
-        // customer: userSession?.stripeCustomerId || userSession?.itemId,
+        // todo try connect existing stripe customer first
+        // customer: userSession.stripeCustomerId || null,
         payment_method_types: ["card", ],
         line_items: lineItems,
         mode: "payment",
@@ -111,11 +112,3 @@ async function checkStockCount(session:any){
   }
     
 }
-
-const query = `
-  mutation Checkout($chargeId: String!) {
-    checkout(chargeId: $chargeId) {
-      id
-    }
-  }
-`

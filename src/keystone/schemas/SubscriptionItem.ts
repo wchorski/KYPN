@@ -30,7 +30,10 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
   ui: {
     listView: {
-      initialColumns: ['user', 'subscriptionPlan', 'status', 'custom_price', 'billing_interval']
+      initialColumns: ['user', 'subscriptionPlan', 'status', 'custom_price', 'billing_interval', 'dateModified'],
+      initialSort: {
+        field: 'dateModified', direction: 'DESC'
+      }
     }
   },
 
@@ -111,75 +114,10 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
   hooks: {
 
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
-      // try {
-      //   if (resolvedData && !resolvedData.user) {
-      //     const currentUserId = await context.session.itemId;
-      //     // console.log({ currentUserId });
-      //     resolvedData.user = { connect: { id: currentUserId } };
-      //   }
-      // } catch (err) { console.warn(err) }
 
-      if (operation === 'create') {
-        // todo moving this to checkoutSubscription
-        // // console.log(resolvedData.subscriptionPlan.connect)
-
-        // const currUser = await context.db.User.findOne({ where: { id: resolvedData.user?.connect?.id } })
-        // const currSub = await context.db.SubscriptionPlan.findOne({ where: { id: resolvedData.subscriptionPlan?.connect?.id } })
-        // // console.log({ currSub });
-
-        // if (!resolvedData.custom_price) {
-        //   // todo add this for sale or other stuff
-        // }
-        // console.log('==== NEW SUBSCR ITEM');     
+      // if (operation === 'create') {
         
-        // try {
-        //   const resStripe = await stripeConfig.subscriptions.create({
-   
-        //     customer: currUser?.stripeCustomerId || 'no_stripe_user_id',
-        //     description: currSub?.name + ' | ' + currSub?.id,
-        //     items: [
-        //       { 
-        //         price: currSub?.stripePriceId,
-      
-        //         metadata: {
-        //           subscriptionPlanId: currSub?.id || 'no_sub_id',
-        //           // todo get subscriptionItem Id. prob have to use afterOperation
-        //           subscriptionPlanItemId: currSub?.id|| 'no_item_id',
-        //           subscriptionPlanName: currSub?.name || 'no_sub_name',
-        //         } 
-        //       },
-        //     ],
-        //     metadata: {
-        //       subscriptionPlanId: currSub?.id|| 'no_sub_id',
-        //       subscriptionPlanName: currSub?.name || 'no_sub_name',
-        //     }
-        //   })
-          
-        //   console.log('======= STRIPE RES');
-          
-        //   console.log(resStripe);
-          
-        // } catch (err:any) {
-        //   // console.log('uh oh, ', error);
-
-        //   switch (err.type) {
-        //     case 'StripeCardError':
-        //       console.log(`A payment error occurred: ${err.message}`);
-        //       break;
-        //     case 'StripeInvalidRequestError':
-        //       console.log('An invalid request occurred.');
-        //       break;
-        //     default:
-        //       console.log('Another problem occurred, maybe unrelated to Stripe.');
-        //       break;
-        //   }
-
-        //   throw new Error(`TYPE: ${err.type}, MESSAGE: ${err.message}`);
-          
-        // }
-
-        
-      }
+      // }
 
       if (operation === 'update') {
 
@@ -194,8 +132,9 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
           throw new Error('!!!!!!!! sub item is canceled and cannot be re-activated')
         }
         
+        // TODO handle stripe payment if user pauses, is delinquent, or cancels subscriptionItem
         // @ts-ignore
-        if(resolvedData.status) handleStatusChange(context, item, String(resolvedData.status))
+        // if(resolvedData.status) handleStatusChange(context, item, String(resolvedData.status))
           
       }
     },
@@ -271,8 +210,4 @@ async function handleStatusChange(context:any, item:any, status:'ACTIVE'|'SUSPEN
     throw new Error("Sub Item Status Change Error: ", error.message);
     
   }
-}
-
-async function handlePlanUpdate(context:any, quantity:number){
-
 }

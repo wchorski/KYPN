@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 import { BlogList } from "../blog/BlogList"
 import { ProductsList } from "@components/ecommerce/ProductsList";
 import { ProductThumbnail } from "../ecommerce/ProductThumbnail";
-import styles from '@styles/ecommerce/Product.module.scss'
+import styles from '@styles/ecommerce/product.module.scss'
 
 
 type Props = {
