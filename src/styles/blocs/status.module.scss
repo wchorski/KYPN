@@ -1,0 +1,27 @@
+.status {
+  background-color: var(--c-txt-bg);
+  border-radius: var(--br-dull);
+  padding: .5rem 1rem;
+  border: solid 1px;
+  border-left-width: 10px;
+}
+
+.ACTIVE, .TRIAL, .DOWNPAYMENT {
+  border-color: rgb(0, 132, 255);
+}
+
+.SUSPENDED, .PAUSED, .POSTPONED, .HOLD {
+  border-color: rgb(174, 174, 0);
+}
+
+.EXPIRED, .DELINQUENT {
+  border-color: rgb(148, 3, 7);
+}
+
+.CANCELED, .LEAD {
+  border-color: rgb(107, 130, 141);
+}
+
+.PAID {
+  border-color: rgb(89, 201, 110);
+}

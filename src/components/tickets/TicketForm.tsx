@@ -186,7 +186,9 @@ export function TicketForm ({ event, user }:Props) {
         </label>
       </fieldset>
 
-      <p className={'error'}> {formState.message} </p>
+      <p className={(formState.message === 'success') ? 'success' : 'error'}> 
+        {formState.message} 
+      </p>
 
       <SubmitButton />
     </form>

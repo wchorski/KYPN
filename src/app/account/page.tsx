@@ -115,6 +115,8 @@ const USER_DASH_QUERY = `
       name
     }
     status
+    dateModified
+    dateCreated
   }
   orders{
     id

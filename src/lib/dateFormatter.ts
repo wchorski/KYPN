@@ -222,3 +222,9 @@ export function calcDurationHuman(decimal:string){
   if(!hours && !minutes) return undefined
   return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
 }
+
+export function dateDaysLapsed(start:string, end:string) {
+  const date1 = new Date(start).getTime()
+  const date2 = new Date(end).getTime()
+  return Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
+}
