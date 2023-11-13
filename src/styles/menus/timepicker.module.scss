@@ -1,0 +1,57 @@
+.timepickerlist :global{
+  column-count: 3;
+  min-height: 11em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  // grid-template-columns: 1fr 1fr ;
+  gap: .1em;
+  /* flex-direction: column; */
+
+  li{
+    /* width: 6em; */
+    animation-duration: .3s;
+    animation-name: reveal;
+    animation-timing-function: ease;
+  }
+  /* li:nth-child(n+1):nth-child(-n+4),
+  li:nth-child(8n+1),
+  li:nth-child(8n+2),
+  li:nth-child(8n+3),
+  li:nth-child(8n+4) {
+    border-bottom: solid #959595 1px;
+  } */
+
+  button{
+    border-radius: 50px;
+    min-width: 5rem;
+    border: solid 1px var(--c-txt-sub);
+    
+    &:hover, &focus{
+      border: solid 1px var(--c-accent);
+      
+    }
+  }
+
+
+  .active{
+    background-color: var(--c-accent);
+    border: solid 1px var(--c-accent);
+    color: var(--c-txt-accent);
+  }
+
+  @keyframes reveal {
+    0% { 
+      transform: translateX(-3px);
+      opacity: 0.4;
+    }
+    100% { 
+      transform: translateX(0px);
+      opacity: 1;
+    }
+  }
+}

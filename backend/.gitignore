@@ -1,6 +1,0 @@
-/seed/seed_data.ts
-node_modules
-.keystone/admin
-keystone.db
-*.log
-private/**

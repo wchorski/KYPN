@@ -1,0 +1,170 @@
+// LAYOUT
+// body{
+//   display: flex;
+//   flex-direction: column;
+
+//   > main {
+//     flex: 1;
+//   }
+// }
+
+// // debug
+// .siteWrapper{
+//   border-left: 8px dashed yellow;
+//   border-right: 8px dashed yellow;
+// }
+
+.layout--fullwidth{
+  // background: blue;
+  display: grid;
+    
+  
+  grid-template-areas: 
+    "headr   headr  headr   headr"
+    "navi    navi   navi    navi"
+    "main    main   main    main"
+    "footer  footer footer  footer"
+  ;
+  grid-template-columns: 
+    minmax(0, 1fr) 
+    minmax(0, calc(var(--w-sitemax) / 2)) 
+    minmax(0, calc(var(--w-sitemax) / 2)) 
+    minmax(0, 1fr);
+  align-content: flex-start;
+
+  // // debug
+  // border: dotted 1px aqua;
+  // > * {
+  //   border: dashed 2px red;
+  // }
+}
+
+
+
+.layout--main-aside{
+
+  > aside {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-inline: 1rem;
+  }
+}
+
+@media (width > 830px) {
+
+  .layout--main-aside{
+    display: grid;
+    
+  
+    grid-template-areas: 
+      "headr   headr  headr   headr"
+      "navi    navi   navi    navi"
+      "main    main   aside   aside"
+      "footer  footer footer  footer"
+    ;
+    grid-template-columns: 
+      minmax(0, 1fr) 
+      minmax(0, calc(var(--w-sitemax) / 2 + var(--w-aside))) 
+      minmax(0, calc(var(--w-sitemax) /2 - var(--w-aside))) 
+      minmax(0, 1fr);
+    align-content: flex-start;
+
+    // // debug
+    // border: dotted 1px aqua;
+    // > * {
+    //   border: dashed 2px red;
+    // }
+
+    > header {
+      grid-area: headr;
+      grid-column: 1 / -1;
+    }
+  
+    > nav {
+      grid-area: navi;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      grid-column: 1 / -1;
+    }
+  
+    > main, > .page-wrapper {
+      grid-area: main;
+      grid-column: 2 / 3;
+    }
+  
+    > aside {
+      grid-area: aside;
+      grid-column: 3 / 4;
+      position: sticky;
+      top: 4em;
+    }
+  
+    > footer {
+      grid-area: footer;
+      grid-column: 1 / -1;
+    }
+  }
+  
+}
+
+
+// all layouts have
+
+.layout {
+
+  // todo can i catch all any future layout? "&--*" ?
+  &--main-aside, &--fullwidth{
+    // border: double white 10px;
+    // todo do i even need row template?
+    // grid-template-rows: auto 1fr auto;
+
+    // // debug
+    // > * {
+    //   border: dashed pink 2px;
+    // }
+
+    > header {
+      grid-area: headr;
+      grid-column: 1 / -1;
+    }
+
+    > nav {
+      grid-area: navi;
+      grid-column: 1 / -1;
+
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+  
+    > footer {
+      grid-area: footer;
+      grid-column: 1 / -1;
+    }
+    
+  }
+
+  &--fullwidth {
+    > main, > .page-wrapper  {
+      grid-area: main;
+      grid-column: 1 / -1;
+    }
+  
+  }
+
+  &--main-aside {
+    > main {
+      grid-area: main;
+      grid-column: 2 / 3;
+    }
+  
+    > aside {
+      grid-area: aside;
+      grid-column: 3 / 4;
+      position: sticky;
+      top: 4em;
+    }
+  }
+}

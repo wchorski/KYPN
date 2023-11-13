@@ -1,0 +1,116 @@
+ul.product{
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: repeat(auto-fit, minmax(min(18em, 100%), 1fr));
+  list-style: none;
+  padding-inline: 0;
+
+  > li {
+    box-shadow: var(--boxs-3);
+  }
+
+  img{
+    width: 100%;
+    object-fit: cover;
+    background: var(--cg-stripes);
+  }
+}
+
+// thumbnail list item
+article.product :global{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  max-width: 30rem;
+  background-color: var(--c-txt-bg);
+  
+
+  a.featured_image img{
+    height: 100%;
+    min-height: 14em;
+    min-height: 14em;
+    box-shadow: var(--boxs-1);
+    transition: all .3s ease-in-out;
+  }
+
+  .container{
+    /* background-color: var(--c-light); */
+    background-color: var(--c-txt-cont);
+    /* background: var(--cg-primary); */
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  p.desc{
+    flex-grow: 1;
+    word-wrap: break-word;
+  }
+
+  a.featured_image{
+    &:hover, &:focus{
+
+      img{
+        transform: scale(1.01);
+        filter: contrast(1.2);
+      }
+    }
+  }
+  a.title{
+    display: inline;
+    line-height: 1.3;
+    font-size: 2rem;
+    color: var(--c-txt);
+    text-decoration: none;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.311);
+    width: fit-content;
+
+    h3{
+      margin: 0;
+    }
+
+    &:hover, &:focus{
+      color: var(--c-light);
+    }
+  }
+  
+
+  .menu{
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+  .admin{
+    background-color: var(--c-dark);
+    padding: 1rem;
+  }
+
+  footer{
+    margin-top: 4rem;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    > div {
+      max-width: 15rem;
+    }
+  }
+}
+
+.outofstock {
+  padding: 2rem;
+  background-color: white;
+  color: black;
+  opacity: .9;
+  position: absolute;
+  top: 25%;
+  width: 103%;
+  left: -.5rem;
+  text-align: center;
+  transform: skew(0deg, 2deg);
+  box-shadow: var(--boxs-1);
+}
