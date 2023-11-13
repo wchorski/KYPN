@@ -414,7 +414,8 @@ export type SubscriptionItem = {
   isActive: boolean,
   isDelinquent: boolean,
   user: User,
-  stripeId:string,
+  stripeSubscriptionId:string,
+  stripeChargeId:string,
   dateCreated:string,
   dateModified:string,
 

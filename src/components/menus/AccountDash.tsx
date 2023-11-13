@@ -7,6 +7,7 @@ import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
 import styles from '@styles/menus/dashboard.module.scss'
+import { Card } from "@components/layouts/Card"
 
 type Props = {
   dashState:string,
@@ -47,7 +48,7 @@ export default function AccountDash ({ user, dashState, }:Props) {
   return (
     <div className={styles.dashboard}>
 
-        <Section layout={'1'} id="main">
+        <Card id="main">
 
           <h3 className={dashState === 'main' ? styles.linkactive : styles.dashlink}>
             Dashboard
@@ -58,11 +59,11 @@ export default function AccountDash ({ user, dashState, }:Props) {
             <li> {user.email}</li>
           </ul>
 
-        </Section>
+        </Card>
 
         <hr /> 
 
-        <Section layout={'1'} id="orders">
+        <Card id="orders">
   
           <h3 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}>
             Orders / Services
@@ -92,18 +93,18 @@ export default function AccountDash ({ user, dashState, }:Props) {
             cells={orderCells}
             route={`/orders`}
           />
-        </Section>
+        </Card>
 
         <hr /> 
 
-        <Section layout={'1'} id="subscriptions">
+        <Card id="subscriptions">
           
           <h3 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}>
             Subscriptions
           </h3>
 
           <Table 
-            caption="Subscriptions"
+            caption=""
             headers={[
               'date',
               'plan',
@@ -114,21 +115,21 @@ export default function AccountDash ({ user, dashState, }:Props) {
             route={`/subscriptions`}
           />
 
-        </Section>
+        </Card>
 
         <hr /> 
 
-        <Section layout={'1'} id="downloads">
+        <Card id="downloads">
           
           <h3 className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}>
             Downloads
           </h3>
 
-        </Section>
+        </Card>
 
         <hr /> 
 
-        <Section layout={'1'} id="tickets">
+        <Card id="tickets">
           
           <h3 className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}>
             Tickets
@@ -139,7 +140,7 @@ export default function AccountDash ({ user, dashState, }:Props) {
 
           
           <TicketList tickets={user?.tickets}/>
-        </Section>
+        </Card>
 
       </div>
   )

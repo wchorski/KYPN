@@ -7,6 +7,7 @@ import { permissions, rules } from "../access";
 import { validate } from "graphql";
 import stripeConfig from "../../lib/stripe";
 import 'dotenv/config'
+import { SubscriptionItem as TypeSubsItem } from "../types";
 // import { SubscriptionItem, SubscriptionItem } from "../types";
 
 
@@ -103,7 +104,8 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       //   },
       // }
     }),
-    stripeId: text(),
+    stripeChargeId: text(),
+    stripeSubscriptionId: text(),
     coupons: relationship({
       ref: 'Coupon.subscriptionItems',
       many: true,
@@ -134,8 +136,8 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
         }
         
         // TODO handle stripe payment if user pauses, is delinquent, or cancels subscriptionItem
-        // @ts-ignore
-        // if(resolvedData.status) handleStatusChange(context, item, String(resolvedData.status))
+
+        if(resolvedData.status) handleStatusChange( item.id, item.stripeSubscriptionId, resolvedData.status as TypeSubsItem['status'])
           
       }
     },
@@ -148,61 +150,51 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
 
 
-async function handleStatusChange(context:any, item:any, status:'ACTIVE'|'SUSPENDED'|'PAUSED'|'CANCELED',){
+async function handleStatusChange(subItemId:string, stripeSubscriptionId:string, status:TypeSubsItem['status'],){
   
-  console.log(' **** status update *****'); 
-  console.log(status);
+  // console.log(' **** status update *****'); 
+  // console.log(status);
 
-  const thePlan = await context.db.SubscriptionPlan.findOne({
-    where: { id: item.subscriptionPlanId },
-    query: `
-      stockMax
-    `,
-  })
+  // const thePlan = await context.db.SubscriptionPlan.findOne({
+  //   where: { id: item.subscriptionPlanId },
+  //   query: `
+  //     stockMax
+  //   `,
+  // })
 
   try {
-    if(status === 'PAUSED'){
-      const resStripe = await stripeConfig.subscriptions.update(
-        item.stripeId,
-        {
-          pause_collection: {
-            behavior: 'void'
-          },
-          metadata: {
-            subscriptionItemId: item.id
+
+    switch (status) {
+      case 'PAUSED':
+        const resPause = await stripeConfig.subscriptions.update(
+          stripeSubscriptionId,
+          {
+            pause_collection: {
+              behavior: 'void'
+            },
+            metadata: {
+              subscriptionItemId: subItemId
+            }
           }
-        }
-      )
+        )
+        break;
 
-      // console.log({resStripe});
-    }
-
-    if(status === 'ACTIVE'){
-      const resStripe = await stripeConfig.subscriptions.update(
-        item.stripeId,
-        {
-          pause_collection: '',
-        }
-      );
-
-      // console.log({resStripe});
-    }
-
-    console.log({item});
+      case 'ACTIVE':
+        const resActive = await stripeConfig.subscriptions.update(
+          stripeSubscriptionId,
+          {
+            pause_collection: '',
+          }
+        )
+        break;
+      
+      case 'CANCELED':
+        const resCancle = await stripeConfig.subscriptions.cancel(stripeSubscriptionId);
     
-
-    if(status === 'CANCELED'){
-      const resStripe = await stripeConfig.subscriptions.cancel(item.stripeId);
-      // todo using stockMax now
-      // const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
-      //   where: { id: item.subscriptionPlanId },
-      //   data: {
-      //     stockCount: thePlan.stockCount + 1,
-      //   },
-      // })
-      // console.log({resStripe});
+      default:
+        console.log('### SubscriptionItem Schema. status not supported')
+        break;
     }
-
     
     
   } catch (error) {
