@@ -16,3 +16,23 @@ hr {
   margin: 4rem auto;
   max-width: var(--w-sitemax);
 }
+
+// form
+ul.radio {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0;
+
+  .current{
+    text-decoration: underline;
+  }
+}
+
+fieldset {
+  margin: 1rem 0;
+}
+
+a {
+  width: fit-content;
+}

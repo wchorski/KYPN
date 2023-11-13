@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { IoMdClose } from 'react-icons/io'
 
 type Props = {
-    title: string,
+    title?: string,
     buttonLabel?:string,
     onClose?: () => void,
     onOk?: () => void,

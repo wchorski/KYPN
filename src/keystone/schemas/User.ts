@@ -4,11 +4,12 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
-import stripeConfig from "../../lib/stripe";
+import stripeConfig, { stripeCustomerDelete } from "../../lib/stripe";
 import { timesArray } from "../../lib/timeArrayCreator";
 // @ts-ignore
 import bcrypt from 'bcryptjs'
 import { envs } from "../../../envs";
+import { User as TypeUser } from "../types";
 
 
 export const User: Lists.User = list({
@@ -146,7 +147,7 @@ export const User: Lists.User = list({
     }),
   },
   hooks: {
-    beforeOperation: async ({ operation, resolvedData }: { operation: any, resolvedData: any }) => {
+    beforeOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item:any }) => {
 
       if (operation === 'create') {
         const customer = await stripeConfig.customers.create({
@@ -162,12 +163,14 @@ export const User: Lists.User = list({
               resolvedData.stripeCustomerId = customer.id
             } 
           })
-          .catch(err => { console.warn(err) })
+          .catch(err => { console.log(err) })
       }
 
       if(operation === 'delete'){
         // todo - delete all stripe data too
         // https://stripe.com/docs/financial-connections/disconnections
+        const deleted = await stripeCustomerDelete(item.stripeCustomerId)
+          .catch(error => console.log('!!! stripe customer delete error: ', error))
       }
     },
 

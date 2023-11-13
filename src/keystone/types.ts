@@ -246,7 +246,7 @@ export type Booking = {
   phone:string,
   name:string,
   notes: string,
-  status: string,
+  status: 'ACTIVE'|'POSTPONED'|'CANCELED'|'LEAD'|'PAID'|'DOWNPAYMENT'|'HOLD',
   dateCreated: string,
   dateModified: string,
   google?:{
@@ -407,12 +407,16 @@ export type SubscriptionPlan = {
 
 export type SubscriptionItem = {
   id: string,
+  status:'ACTIVE'|'TRIAL'|'EXPIRED'|'CANCELED'|'SUSPENDED'|'PAUSED'|'DELINQUENT',
   custom_price: number,
+  billing_interval: 'day'|'week'|'month'|'year',
   subscriptionPlan: SubscriptionPlan,
   isActive: boolean,
   isDelinquent: boolean,
   user: User,
   stripeId:string,
+  dateCreated:string,
+  dateModified:string,
 
 }
 

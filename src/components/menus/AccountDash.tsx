@@ -5,7 +5,7 @@ import { TicketList } from "@components/events/TicketList"
 import { Section } from "@components/layouts/Section"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
-import { Booking, Order, Ticket, User } from "@ks/types"
+import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
 import styles from '@styles/menus/dashboard.module.scss'
 
 type Props = {
@@ -36,6 +36,13 @@ export default function AccountDash ({ user, dashState, }:Props) {
     }, 0),
     details: order.id,
   })) 
+
+  const subscriptionCells = user.subscriptions?.map((sub:SubscriptionItem) => ({
+    date: sub.dateCreated,
+    plan: sub.subscriptionPlan.name,
+    status: sub.status,
+    details: sub.id,
+  }))
 
   return (
     <div className={styles.dashboard}>
@@ -94,6 +101,18 @@ export default function AccountDash ({ user, dashState, }:Props) {
           <h3 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}>
             Subscriptions
           </h3>
+
+          <Table 
+            caption="Subscriptions"
+            headers={[
+              'date',
+              'plan',
+              'status',
+              'details',
+            ]}
+            cells={subscriptionCells}
+            route={`/subscriptions`}
+          />
 
         </Section>
 

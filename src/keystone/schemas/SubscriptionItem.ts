@@ -81,7 +81,8 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
-      }
+      },
+      validation: { isRequired: true},
     }),
     addons: relationship({ ref: 'Addon.subscriptionItems', many: true }),
     user: relationship({

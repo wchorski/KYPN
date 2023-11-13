@@ -13,3 +13,7 @@ export function slugFormat(name:string) {
 
   return slug;
 }
+
+export function stringCapFirstLetter(string:string){
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
