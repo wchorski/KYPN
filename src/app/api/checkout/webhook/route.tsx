@@ -21,6 +21,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       case "checkout.session.completed":
         // TODO push all this data when creating new Order
         console.log('💳 type: ', event.data.object.metadata?.type);
+        // console.log('💳 : object ', JSON.stringify(event.data.object, null, 2))
         
         // console.log(event.data.object.amount_subtotal);
         // console.log(event.data.object.amount_total);
@@ -101,6 +102,7 @@ type Charge = {
     subscriptionplanId?:string,
     quantity?:number,
   }
+  subscription?:string,
 }
 
 type ChargeType = 'checkout.tickets'|'checkout.cart'|string|undefined
@@ -133,10 +135,12 @@ async function afterFailure(charge:Charge, type:ChargeType){
 
 
   switch (type) {
+    // todo handle failure of cart. might not need to do since payment will imidiatly fail
     // case 'checkout.cart':
     //   checkoutCart(charge.id, charge.customer_details.email)
     //   break;
     
+    // todo handle failure of tickets
     // case 'checkout.tickets':
     //   checkoutTickets(charge, charge.customer_details.email)
     //   break;
@@ -208,6 +212,7 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
     planId: charge.metadata.subscriptionplanId,
     chargeId: charge.id,
     customerEmail: customerEmail,
+    stripeSubscriptionId: charge.subscription
   }
 
   try {
@@ -225,8 +230,8 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
 }
 
 const querycheckoutSubscription = `
-  mutation CheckoutSubscription($customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $customerEmail: String!) {
-    checkoutSubscription(custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, customerEmail: $customerEmail) {
+  mutation CheckoutSubscription($stripeSubscriptionId: String!, $customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $customerEmail: String!) {
+    checkoutSubscription(stripeSubscriptionId: $stripeSubscriptionId, custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, customerEmail: $customerEmail) {
       status
     }
   }

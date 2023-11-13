@@ -3,7 +3,7 @@ ul.product{
   grid-gap: 1em;
   grid-template-columns: repeat(auto-fit, minmax(min(18em, 100%), 1fr));
   list-style: none;
-  padding-inline: 1rem;
+  padding-inline: 0;
 
   > li {
     box-shadow: var(--boxs-3);

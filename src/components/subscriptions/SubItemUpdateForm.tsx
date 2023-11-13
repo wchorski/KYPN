@@ -87,7 +87,7 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
       })
 
       const { updateSubscriptionItem, error } = await res.json()
-      // console.log('subitemForm res, ', {data});
+      console.log('subitemForm res, ', {data});
       if(error) throw new Error(error.message)
 
       if(updateSubscriptionItem) router.push(`/account?dashState=subscriptions#subscriptions`)

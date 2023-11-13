@@ -55,9 +55,14 @@ function Main(subscriptionItem:SubscriptionItem|undefined){
       title='Update Subscription'
       buttonLabel='ok'
     >
-      <p> change the status </p>
+      {status === 'CANCELED' ? (
+        <p>Cancled subscriptions can not be re-activated. Head to our shop and <Link href={`/shop`}> start new subscription </Link></p>
+      ):(<>
+        <p> change the status </p>
+        <SubItemUpdateForm status={status} subPlanId={id} />
+      </>)
 
-      <SubItemUpdateForm status={status} subPlanId={id} />
+      }
     </DialogPopup>
 
     <Section layout={'1'}>

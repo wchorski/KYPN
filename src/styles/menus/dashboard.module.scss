@@ -56,17 +56,13 @@ nav.dashnav {
 
 .linkactive{
   background-color: var(--c-txt-bg);
-  color: var(--c-primary);
-  border-bottom: solid 1px var(--c-primary);
+  color: var(--c-accent);
+  border-bottom: solid 1px var(--c-accent);
   width: fit-content;
 }
 
 .dashboard {
-  section {
-    background-color: var(--c-txt-bg);
-    border-radius: var(--br-dull);
-    // height: 80vh;
-    // height: 80dvh;
+  .card {
     scroll-behavior: smooth;
   }
 }

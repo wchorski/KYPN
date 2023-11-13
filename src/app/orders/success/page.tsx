@@ -76,7 +76,7 @@ function Main(customer_details:Customer, amount_total:number, status:'complete'|
 
       <p>total: {moneyFormatter(amount_total)}</p>
 
-      <Link href={`/orders`}> view orders ⇢ </Link>
+      <Link href={`/account`}> view orders ⇢ </Link>
 
     </Section>
   </>
