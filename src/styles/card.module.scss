@@ -1,0 +1,29 @@
+.card{
+  background-color: var(--c-txt-bg);
+  padding: 1rem;
+  margin-inline: 3px;
+  border-radius: var(--br-dull);
+
+}
+.card > *:first-child {
+  margin-top: 0;
+}
+
+.center{
+  display: grid;
+  align-content: center;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  > div {
+    display: grid;
+    align-content: center;
+  }
+}
+// .card > *:last-child {
+//   margin-bottom: 0;
+// }

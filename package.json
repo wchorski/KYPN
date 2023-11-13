@@ -1,0 +1,55 @@
+{
+  "name": "keystone-app",
+  "version": "1.0.2",
+  "private": true,
+  "scripts": {
+    "ks:dev": "keystone dev",
+    "ks:build": "keystone build",
+    "ks:start": "keystone start",
+    "n:dev": "next dev -p 3000",
+    "n:build": "next build",
+    "generate": "keystone prisma generate",
+    "postinstall": "keystone build --no-ui --frozen",
+    "build": "yarn keystone build --no-ui && yarn next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@keystone-6/auth": "^7.0.0",
+    "@keystone-6/core": "^5.2.0",
+    "@keystone-6/fields-document": "^8.0.0",
+    "@prisma/client": "^4.16.2",
+    "@stripe/react-stripe-js": "^2.3.1",
+    "@stripe/stripe-js": "^2.1.10",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "googleapis": "^127.0.0",
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^5.0.0",
+    "lightgallery": "^2.7.2",
+    "next": "^13.5.6",
+    "next-auth": "^4.23.2",
+    "nodemailer": "^6.9.6",
+    "nprogress": "^0.2.0",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.2.0",
+    "react-calendar": "^4.6.1",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.11.0",
+    "react-slick": "^0.29.0",
+    "sass": "^1.69.4",
+    "slick-carousel": "^1.8.1",
+    "stripe": "^14.2.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/signature-v4-multi-region": "^3.437.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "@types/nodemailer": "^6.4.12",
+    "@types/react-dom": "^18.2.14",
+    "prisma": "^4.16.2",
+    "typescript": "~5.0.0"
+  },
+  "resolutions": {
+    "graphql": "^16.8.1",
+    "**/graphql": "^16.8.1"
+  }
+}

@@ -1,0 +1,25 @@
+version: '3'
+
+## "authtest-kypn" === unique app name
+
+services:
+  db:
+    container_name: authtest-kypn-db
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+      POSTGRES_DB: ${DB_COLLECTION}
+    volumes:
+        - ./postgres:/data/postgres
+    ports:
+      - "${DB_PORT}:5432"
+    networks:
+      - this
+
+networks:    
+  this:
+    name: authtest-kypn-network
+    driver: bridge  

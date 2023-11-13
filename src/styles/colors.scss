@@ -1,0 +1,29 @@
+.error {
+  background-color: rgb(184, 1, 1);
+  color: white;
+  padding-inline: 5px;
+  width: fit-content;
+  padding: 0 1rem;
+}
+
+.success {
+  background-color: green;
+  color: white;
+  padding-inline: 5px;
+  width: fit-content;
+  padding: 0 1rem;
+}
+
+.subtext{
+  color: var(--c-txt-sub)
+}
+
+hr {
+  border-color: var(--c-desaturated);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  transition-property: background, color;
+  transition-duration: .3s;
+  transition-timing-function: ease-in;
+}
