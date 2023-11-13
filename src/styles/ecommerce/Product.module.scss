@@ -23,6 +23,8 @@ article.product :global{
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  max-width: 30rem;
+  background-color: var(--c-txt-bg);
   
 
   a.featured_image img{
