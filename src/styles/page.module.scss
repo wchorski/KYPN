@@ -2,7 +2,7 @@ $--w-sitemax: 100em;
 
 .page {
   display: grid;
-  gap: 1rem;
+  // gap: 1rem;
   // leaves those lovely lil inline gaps on mobile, but expands fully on desktop
   grid-template-columns: minmax(0, 1fr) minmax(0, var(--w-sitemax)) minmax(0, 1fr);
   

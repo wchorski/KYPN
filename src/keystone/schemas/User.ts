@@ -28,8 +28,7 @@ export const User: Lists.User = list({
       query: () => true,
       create: () => true,
       // todo NEED TO FIX THIS
-      // update: () => permissions.canManageUsers,
-      update: permissions.isLoggedIn,
+      update: permissions.canManageUsers,
       delete: permissions.canManageUsers,
     },
   },

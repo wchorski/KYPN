@@ -113,12 +113,12 @@ function Main({ product, session }:Main) {
 
     <Section layout={'1'}>
 
-      {status === 'DRAFT' && <p className='warning'>This product is still a draft</p>}
-      {status === 'PRIVATE' && <p className='warning'>This product is private</p>}
         
       <article className={styles.product}  data-testid='singleProduct'>
 
         <aside>
+          {status === 'DRAFT' && <p className='warning'>This product is still a draft</p>}
+          {status === 'PRIVATE' && <p className='warning'>This product is private</p>}
           {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
 
           <figure className="img-frame featured_img">

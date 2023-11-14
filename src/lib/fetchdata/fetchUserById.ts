@@ -1,15 +1,18 @@
-import { gql } from "graphql-request"
-import { getClient } from "@lib/gqlClient"
+import { nextAuthOptions } from "@/session";
+import { keystoneContext } from "@ks/context";
+import { User } from "@ks/types";
+import { getServerSession } from "next-auth";
 
 export async function fetchUserById(id:string){
 
   try {
-    const client = getClient()
-    const { data } = await client.query({query, 
-      variables: { where: { id: id } }
-    })
+    const session = await getServerSession(nextAuthOptions)
+    const user = await keystoneContext.withSession(session).query.User.findOne({
+      query, 
+      where: { id: id }
+    }) as User
 
-    return {data}
+    return { user }
     
   } catch (error) {
     console.log('fetch user by ID: ', error);
@@ -17,55 +20,53 @@ export async function fetchUserById(id:string){
   }
 }
 
-export const query = gql`
-  query User($where: UserWhereUniqueInput!) {
-    user(where: $where) {
+export const query = `
+
+  id
+  name
+  nameLast
+  email
+  isAdmin
+  isActive
+  image
+  posts {
+    id
+    status
+    slug
+    title
+    featured_image
+    excerpt
+    dateCreated
+  }
+  tickets {
+    id
+    status
+    holder{
       id
-      name
-      nameLast
-      email
-      isAdmin
-      isActive
-      image
-      posts {
-        id
-        status
-        slug
-        title
-        featured_image
-        excerpt
-        dateCreated
-      }
-      tickets {
-        id
-        status
-        holder{
-          id
-        }
-        event {
-          summary
-          id
-          start
-          end
-          location {
-            name
-            id
-            address
-          }
-        }
-      }
-      role {
-        id
+    }
+    event {
+      summary
+      id
+      start
+      end
+      location {
         name
-        canManageProducts
-        canSeeOtherUsers
-        canManageUsers
-        canManageRoles
-        canManageCart
-        canManageOrders
+        id
+        address
       }
-      dateCreated
-      dateModified
     }
   }
+  role {
+    id
+    name
+    canManageProducts
+    canSeeOtherUsers
+    canManageUsers
+    canManageRoles
+    canManageCart
+    canManageOrders
+  }
+  dateCreated
+  dateModified
+
 `

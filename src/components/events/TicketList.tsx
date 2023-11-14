@@ -9,6 +9,7 @@ type Props = {
 }
 
 export function TicketList ({ tickets, children }:Props) {
+  console.log({tickets});
   return (
     <ul className={styles.tickets} >
       {children ? children : tickets?.map(tick => <TicketListItem ticket={tick}/>) }

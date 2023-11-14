@@ -23,6 +23,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     try {
 
+      const userSession = await getServerSession(nextAuthOptions)
+
       const event = await keystoneContext.query.Event.findOne({
         where: { id: eventId },
         query:`
@@ -32,7 +34,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           seats
           price
         `,
-      })
+      }) as Event
 
       const { isSeatsAvailable, message } = await checkSeatCount(event, quantity)
 
@@ -64,8 +66,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       // console.log('+++ ticket', {lineItems});
       
       const session = await stripe.checkout.sessions.create({
-        customer_email: email || 'anonymous',
-        // customer: userSession?.stripeCustomerId || userSession?.itemId,
+        // customer_email: email || 'anonymous',
+        customer: userSession?.stripeCustomerId,
         payment_method_types: ["card", ],
         line_items: lineItems,
         mode: "payment",
@@ -91,7 +93,7 @@ async function checkSeatCount(event:Event, quantity:number){
   let message = ''
   let isSeatsAvailable = true
 
-  const seatsTaken = await keystoneContext.query.Ticket.count({
+  const seatsTaken = await keystoneContext.sudo().query.Ticket.count({
     where: { 
       event: {
         id: {

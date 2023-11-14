@@ -136,7 +136,7 @@ export default function AccountDash ({ user, dashState, }:Props) {
           </h3>
 
           
-          {!user?.tickets && <NoData /> }
+          {user.tickets.length === 0 && <NoData /> }
 
           
           <TicketList tickets={user?.tickets}/>

@@ -100,7 +100,7 @@ function Main(booking:Booking|undefined){
               <td> <label>Client: </label> </td>
               <td>
                 {customer ? (
-                  <Link href={`/user/${customer.id}`}>
+                  <Link href={`/users/${customer.id}`}>
                     {customer?.name}
                   </Link>
                 ) : (

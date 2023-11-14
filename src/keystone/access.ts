@@ -189,25 +189,41 @@ export const rules = {
   },
 
   canManageTickets({ session }: ListAccessArgs) {
+
     if (!isLoggedIn({ session })) return false;
 
-    // 1. compair against permissions checkbox
+    // 1. has role permission?
     if (permissions.canManageTickets({ session })) return true;
+
+    if(!session) return false 
     
-    // 2. If not, are they a host of this event?
-    // todo if ticket's event's host === session.user.id return true
+    // 2. are they a host of this event, or tocket holder?
+    // ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen
     return { 
-      event: {
-        hosts: { 
-          some: {
-            id: { 
-              in: [session?.itemId]
+      OR: [
+        {
+          event: {
+            hosts: {
+              some: {
+                id: {
+                  in: [
+                    session.itemId
+                  ]
+                }
+              }
             }
           }
-        } 
-      }
+        },
+        {
+          holder: {
+            id: {
+              equals: session.itemId
+            }
+          }
+        }
+      ]
     }
-    // return { host: { id: { equals: session?.itemId }} }
+    // return { holder: { id: { equals: session?.itemId }} }
   },
 
 

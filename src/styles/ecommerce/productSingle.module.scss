@@ -6,7 +6,7 @@ article.product :global {
   min-height: 800px;
   max-width: var(--maxWidth);
   align-items: start;
-  gap: 2em;
+  gap: 1em;
 
   @media screen and (width < 600px){
     grid-auto-flow: row;
@@ -17,7 +17,7 @@ article.product :global {
   }
 
   .content{
-    padding: 0 1rem;
+    // padding: 0 1rem;
     padding-bottom: 5rem;
     display: flex;
     flex-direction: column;

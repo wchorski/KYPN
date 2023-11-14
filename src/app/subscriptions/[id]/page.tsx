@@ -90,7 +90,7 @@ function Main(subscriptionItem:SubscriptionItem|undefined){
             <td> <label>Client: </label> </td>
             <td>
               {user ? (
-                <Link href={`/user/${user.id}`}>
+                <Link href={`/users/${user.id}`}>
                   {user?.name}
                 </Link>
               ) : (

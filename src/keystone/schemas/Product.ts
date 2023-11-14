@@ -314,8 +314,7 @@ export const Product:Lists.Product = list({
             item?.stripeProductId as string,
             {
               images: [
-                // @ts-ignore //todo might cause problems
-                photo?.image?._meta.secure_url
+                item.image
               ],
             }
           )
