@@ -7,13 +7,14 @@ type Props = {
     altText:string,
   }|string|undefined,
   className?:string,
+  alt?:string,
 }
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn, className }: Props) {
+export function ImageDynamic({ photoIn, className, alt }: Props) {
   
   // console.log(photoIn);
   
-  const state = handlePhoto(photoIn)
+  const state = handlePhoto(photoIn, alt)
   // const [state, setState] = useState<any>(handlePhoto(photoIn))
 
 
@@ -34,14 +35,14 @@ export function ImageDynamic({ photoIn, className }: Props) {
 
 }
 
-function handlePhoto(photo: any) {
+function handlePhoto(photo: any, alt?:string) {
   
 
   if (!photo ) {
     return {
-      altText: 'no product image',
+      altText: alt || 'no alt text for this image',
       image: {
-        url: `/assets/private/placeholder.png`,
+        url: `/assets/placeholder.png`,
         width: 300,
         height: 300,
       }
@@ -68,7 +69,7 @@ function handlePhoto(photo: any) {
     return {
       altText: photo.altText,
       image: {
-        url: `/assets/private/placeholder.png`,
+        url: `/assets/placeholder.png`,
         width: 300,
         height: 300,
       }

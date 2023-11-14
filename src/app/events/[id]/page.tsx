@@ -12,6 +12,7 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { RiFileEditFill } from "react-icons/ri"
 import styles from '@styles/events/event.module.scss'
+import styleProduct from '@styles/ecommerce/productSingle.module.scss'
 import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
@@ -106,11 +107,17 @@ function Main(
       onOk={onOk}
       buttonLabel=""
     >
-      <TicketForm event={event} user={session?.user}/>
+      {session ? (
+        <TicketForm event={event} user={session?.user}/>
+      ) : (
+        <p> must have an account to order tickets and redeem tickets.
+          <Link href={`/api/auth/signin`}> Login </Link> or <Link href={`/auth/register`}> Create an Account </Link>
+        </p>
+      )}
     </DialogPopup>
 
-    <article>
-    <Section layout="1_2">
+    <Section layout="1">
+    <article className={styleProduct.product} >
 
       <header>
         <div className="container">
@@ -121,7 +128,7 @@ function Main(
             />
           </picture>
 
-          <h3>{summary}</h3>
+          {/* <h3>{summary}</h3> */}
           <ul className="categories">
             {categories?.map(cat => (
               <li key={cat.id}>
@@ -140,7 +147,7 @@ function Main(
             options={['Apple','Google','Yahoo','iCal']}
           /> */}
 
-          <ul className="meta">
+          <ul className="meta unstyled">
             <li>{datePrettyLocalDay(start || '')}</li>
             <li>{datePrettyLocalTime(start || '')}</li>
             <li> capacity: {seats}</li>
@@ -155,7 +162,7 @@ function Main(
         </div>
       </header>
 
-      <div className="content">
+      <div className={styles.content}>
         <h1>{summary}</h1>
 
         <Card >
@@ -236,8 +243,8 @@ function Main(
         )} 
       </div>
 
-    </Section>
     </article>
+    </Section>
   
   </>
 }

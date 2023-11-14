@@ -36,3 +36,13 @@ fieldset {
 a {
   width: fit-content;
 }
+
+img {
+  font-style: italic;
+  color: var(--c-txt-sub);
+}
+
+ul.unstyled{
+  padding-inline: 0;
+  list-style: none;
+}

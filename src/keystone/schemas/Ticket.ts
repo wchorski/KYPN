@@ -14,16 +14,14 @@ export const Ticket:Lists.Ticket = list({
   // access: allowAll,
   access: {
     filter: {
-      // query: rules.canReadProducts,
-      // TODO TODO TODO TODO only query if ticket is the holder
-      query: () => true,
-      // @ts-ignore //todo might cause problems
+      // query: () => true,
+      query: rules.canManageTickets,
       delete: rules.canManageTickets,
-      // @ts-ignore //todo might cause problems
       update: rules.canManageTickets,
     },
     operation: {
-      query: () => true,
+      // query: () => true,
+      query: permissions.isLoggedIn,
       create: permissions.isLoggedIn,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,

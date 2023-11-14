@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import Image from "next/image";
 import styles from '@styles/menus/hero.module.scss'
+import Link from 'next/link';
   
 type Props = {
   title:string,
@@ -19,16 +20,20 @@ export function Hero ({ children, title, description, logoSrc, bgImg = '' }:Prop
       }}
     >
       <div className="siteWrapper">
-        <Image 
-          src={logoSrc}
-          alt='site Logo'
-          width={100}
-          height={200}
-          className='site-logo'
-        />
+        <Link href={`/home`}>
+          <Image 
+            src={logoSrc}
+            alt='site Logo'
+            width={150}
+            height={200}
+            className='site-logo'
+          />
+        </Link>
 
         <div>
-          <h1>{title}</h1>
+          <Link href={`/home`} style={{color: 'white', textDecoration: 'none'}}>
+            <h1>{title}</h1>
+          </Link>
 
           <p>{description}</p>
         </div>

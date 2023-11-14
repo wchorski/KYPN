@@ -1,16 +1,20 @@
 import { Ticket } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/session";
 
 export default async function fetchTicket(id:string){
 
   try {
+
+    const session = await getServerSession(nextAuthOptions)
 
     const variables = {
       where: {
         id: id,
       }
     }
-    const ticket = await keystoneContext.query.Ticket.findOne({
+    const ticket = await keystoneContext.withSession(session).query.Ticket.findOne({
       query: query,
       ...variables,
     }) as Ticket

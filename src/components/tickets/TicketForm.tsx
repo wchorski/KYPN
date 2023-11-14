@@ -1,6 +1,6 @@
 'use client'
 import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useEffect, useRef } from "react"
+import { useEffect, useReducer, useRef } from "react"
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
@@ -12,6 +12,7 @@ import formStyles from '@styles/menus/form.module.scss'
 import { Event, User } from "@ks/types"
 import { envs } from "@/envs"
 import { loadStripe } from "@stripe/stripe-js"
+import moneyFormatter from "@lib/moneyFormatter"
 
 type Fields = {
   // event: string,
@@ -30,9 +31,41 @@ type Props = {
   user?:User,
 }
 
+type StateRed = {
+  email:string,
+  total:number,
+}
+
+type Action =
+  | { type: 'RESET' }
+  | { type: 'SET_PRICE'; payload:number }
+
 export function TicketForm ({ event, user }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
+
+  const defaultstateRed:StateRed = {
+    email: user?.email || '',
+    total: event.price,
+  }
+  const reducer = (state:StateRed, action:Action):StateRed => {
+    
+    switch (action.type) {
+      case 'SET_PRICE':
+        return {
+          ...state,
+          total: action.payload
+        }
+
+      case 'RESET': 
+      return defaultstateRed
+
+      default:
+        throw new Error()
+    }
+  }
+  
+  const [stateRed, dispatchRed] = useReducer(reducer, defaultstateRed)
 
   const defaultFormData = {
     message: '',
@@ -54,7 +87,7 @@ export function TicketForm ({ event, user }:Props) {
 
   async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
     // console.log('START FORM');
-    console.log({data});
+    // console.log({data});
     
     const email = data.get('email') as string
     // const event = data.get('event') as string
@@ -65,9 +98,6 @@ export function TicketForm ({ event, user }:Props) {
       event: event.id,
       quantity
     }
-    console.log({inputValues});
-    
-
 
     try {
 
@@ -96,7 +126,6 @@ export function TicketForm ({ event, user }:Props) {
       })
 
       const data = await res.json()
-      // console.log('Ticketform res, ', {data});
 
       const { sessionId, message , isSeatsAvailable, error } = data
 
@@ -181,10 +210,13 @@ export function TicketForm ({ event, user }:Props) {
             placeholder="1"
             type={'number'}
             defaultValue={formState.fieldValues.quantity}
+            onChange={(e) => dispatchRed({type: 'SET_PRICE', payload: event.price * Number(e.target.value)})}
           />
           <span className="error"> {formState.errors?.quantity} </span>
         </label>
       </fieldset>
+
+      <span> subtotal: {moneyFormatter(stateRed.total)}</span>
 
       <p className={(formState.message === 'success') ? 'success' : 'error'}> 
         {formState.message} 
