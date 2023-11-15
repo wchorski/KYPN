@@ -8,13 +8,15 @@ import moneyFormatter from "@lib/moneyFormatter"
 import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
 import styles from '@styles/menus/dashboard.module.scss'
 import { Card } from "@components/layouts/Card"
+import Link from "next/link"
 
 type Props = {
   dashState:string,
   user:User,
+  tickets:Ticket[]|undefined
 }
 
-export default function AccountDash ({ user, dashState, }:Props) {
+export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
 
 
 
@@ -138,8 +140,10 @@ export default function AccountDash ({ user, dashState, }:Props) {
           
           {user.tickets.length === 0 && <NoData /> }
 
-          
-          <TicketList tickets={user?.tickets}/>
+          {tickets.length === 0 && (
+            <p> No tickets found. Check out all <Link href={`/events`}> upcoming events</Link> </p>
+          )}
+          <TicketList tickets={tickets}/>
         </Card>
 
       </div>
