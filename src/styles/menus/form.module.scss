@@ -41,13 +41,27 @@
     display: grid;
     gap: .2rem;
   }
+
+  label.required {
+    span:first-child::after {
+      content: "*";
+      color: red;
+    }
+  }
+  label:has(input:required) {
+    span:first-child::after {
+      content: "*";
+      color: red;
+    }
+  }
+
   span.label{
     font-weight: lighter;
     font-size: .8rem;
   }
 
   legend{
-    margin-top: 2.5rem;
+    margin-top: 1rem;
     font-weight: bold;
     font-size: 1.2rem;
     color: var(--c-txt-sub);
@@ -109,12 +123,13 @@
       height: 5px;
       content: '';
       display: block;
-      background-image: linear-gradient(
-        to right,
-        var(--c-desaturated) 0%,
-        var(--c-light) 70%,
-        var(--c-desaturated) 100%
-      );
+      border-bottom: solid 1px var(--c-txt-sub);
+      // background-image: linear-gradient(
+      //   to right,
+      //   var(--c-primary) 0%,
+      //   var(--c-desaturated) 70%,
+      //   var(--c-primary) 100%
+      // );
       margin-bottom: 1em;
     }
     &[aria-busy='true']::before {

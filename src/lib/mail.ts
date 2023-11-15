@@ -2,14 +2,15 @@
 import { createTransport, getTestMessageUrl } from "nodemailer";
 import moneyFormatter from '../lib/moneyFormatter'
 import { datePrettyLocal } from "./dateFormatter";
+import { envs } from "../../envs";
 
-const MAIL_HOST = process.env.MAIL_HOST || 'update .env file'
-const MAIL_PORT = process.env.MAIL_PORT || 'update .env file'
-const MAIL_USER = process.env.MAIL_USER || 'update .env file'
-const MAIL_PASS = process.env.MAIL_PASS || 'update .env file'
-const SITE_TITLE = process.env.SITE_TITLE || ''
-const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email'
-const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
+const MAIL_HOST = envs.MAIL_HOST
+const MAIL_PORT = envs.MAIL_PORT
+const MAIL_USER = envs.MAIL_USER
+const MAIL_PASS = envs.MAIL_PASS
+const SITE_TITLE = envs.SITE_TITLE
+const ADMIN_EMAIL_ADDRESS = envs.ADMIN_EMAIL_ADDRESS
+const FRONTEND_URL = envs.FRONTEND_URL
 
 const transport = createTransport({
   service: 'gmail',
@@ -42,15 +43,16 @@ type FormValues = {
   name?:string,
   phone?:string,
   email:string,
-  start:string,
-  service: {
+  notes?:string,
+  start?:string,
+  service?: {
     id:string,
     name:string,
   }
 }
 
 type Customer = {
-  id:string,
+  id:string|undefined|null,
   name?:string,
   email?:string,
   phone?:string,
@@ -70,7 +72,20 @@ type OrderItem = {
   price:number,
 }
 
-function templateBooking(id: string, customer:Customer, employee:Employee, name: string, email: string, formValues:FormValues, msg: string): string {
+
+type TemplateBooking = {
+  id: string, 
+  formValues:FormValues, 
+  customer:Customer, 
+  employee?:Employee, 
+}
+
+function templateBooking({
+  id, 
+  formValues, 
+  customer, 
+  employee, 
+}: TemplateBooking) {
   return `
     <div className="email" style="
       border: 1px solid black;
@@ -81,7 +96,7 @@ function templateBooking(id: string, customer:Customer, employee:Employee, name:
     ">
       <h2> New Booking Info, </h2>
 
-      <h4> Client: </h4>
+      <h4> Registered User: </h4>
       <table>
         <tbody>
           <tr>
@@ -117,7 +132,7 @@ function templateBooking(id: string, customer:Customer, employee:Employee, name:
           </tr>
           <tr>
             <td> Service: </td>
-            <td>${formValues.service.name}</td>
+            <td>${formValues?.service?.name}</td>
           </tr>
           <tr>
             <td> Event Start: </td>
@@ -125,18 +140,18 @@ function templateBooking(id: string, customer:Customer, employee:Employee, name:
           </tr>
           <tr>
             <td> Employees: </td>
-            <td><a href="${process.env.FRONTEND_URL}/users/${employee.id}"> ${employee.name}  </a> </td>
+            <td><a href="${FRONTEND_URL}/users/${employee?.id}"> ${employee?.name}  </a> </td>
           </tr>
         </tbody>
       </table>
       <br />
 
-      <h4> Message: </h4>
-      <p>${msg}</p>
+      <h4> Notes: </h4>
+      <p>${formValues.notes}</p>
       <br />
 
       <p>
-        <a href="${process.env.FRONTEND_URL}/bookings/${id}"> View Booking </a>
+        <a href="${FRONTEND_URL}/bookings/${id}"> View Booking </a>
       </p>
 
       <p>- ${SITE_TITLE}</p>
@@ -168,7 +183,7 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
     from: ADMIN_EMAIL_ADDRESS,
     subject: 'Your password reset token!',
     html: makeANiceEmail(`Your Password Reset Token is here!
-      <a href="${process.env.FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
+      <a href="${FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
     `),
   }).catch(err => {
     
@@ -177,13 +192,28 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
     
   } ))
 
-  if (MAIL_USER.includes('ethereal.email') && info) {
+  if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }
 }
 
-export async function mailBookingCreated(id: string, to: string[], customer:Customer, employee:Employee, name: string, email: string, formValues:FormValues, message: string,
+type MailBookingCreate = {
+  id: string, 
+  to: string[], 
+  customer:Customer, 
+  employee?:Employee, 
+  formValues:FormValues, 
+  message?: string,
+}
+
+export async function mailBookingCreated({
+  id, 
+  to, 
+  customer, 
+  employee, 
+  formValues, 
+}:MailBookingCreate
 ): Promise<void> {
   // email the user a token
 
@@ -191,29 +221,16 @@ export async function mailBookingCreated(id: string, to: string[], customer:Cust
     to,
     from: ADMIN_EMAIL_ADDRESS,
     subject: 'New Booking Created!',
-    html: templateBooking(
+    html: templateBooking({
       id,
       customer,
       employee,
-      name,
-      email,
       formValues,
-      `
-        ${message}
-      `
-    ),
-    // html: makeANiceEmail(`
-    //   Here is the info, \n\n
-    //   - name: ${name} \n
-    //   - email: ${email} \n\n
+    }),
 
-    //   message: ${message} \n\n
-
-    //   <a href="${process.env.FRONTEND_URL}/booking/${id}> View Booking | Admin Dashboard </a>
-    // `),
   }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
 
-  if (MAIL_USER.includes('ethereal.email') && info) {
+  if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }
@@ -237,7 +254,7 @@ export async function mailCheckoutReceipt(id: string, to: string[], customerName
     ),
   }).catch(err => console.log('%%%% mail.ts Checkout ERROR: ', err) ))
 
-  if (MAIL_USER.includes('ethereal.email') && info) {
+  if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
 
   }

@@ -13,6 +13,7 @@ import styles from "@styles/booking/booking.module.scss";
 import { CgExternal } from 'react-icons/cg'
 import DialogPopup from '@components/menus/Dialog'
 import { BookingFormUpdate } from '@components/bookings/BookingFormUpdate'
+import { StatusBadge } from '@components/StatusBadge'
 
 type Props = {
   searchParams:{q:string}
@@ -26,6 +27,7 @@ export default async function BookingSinglePage ({ params, searchParams }:Props)
   const { booking, error } = await fetchBooking(id)
 
   if(error) return <ErrorMessage error={error}/>
+  if(!booking) <p> booking not found </p>
 
   return (
     <PageTHeaderMain
@@ -35,16 +37,17 @@ export default async function BookingSinglePage ({ params, searchParams }:Props)
   )
 }
 
-function Header(status:string|undefined){
+function Header(status?:Booking['status']){
 
   return<header>
-    <h1> Booking Status: {status}  </h1>
+    <Section layout={'1'}>
+      <h1> Booking Status </h1>
+      <StatusBadge type={'booking'} status={status}/>
+    </Section>
   </header>
 }
 
 function Main(booking:Booking|undefined){
-
-  if(!booking) <p> no bookings found </p>
 
   const { id, email, phone, name, location, service, price, notes, addons, employees, customer, dateModified, start, end } = booking as Booking
   

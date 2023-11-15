@@ -215,6 +215,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         phone: customerPhone || '',
         notes: notes || '',
         price: priceTotal,
+        status: (serviceId && employeeId) ? 'HOLD' : 'LEAD',
         // @ts-ignore
         google: calRes,
       },

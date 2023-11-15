@@ -1,5 +1,6 @@
 import { ReactNode } from "react"
-import styles from "@styles/section.module.scss";
+// import styles from "@styles/section.module.scss";
+import styles from "@styles/elements/section.module.scss";
 
 type Props = {
   children:ReactNode|ReactNode[]

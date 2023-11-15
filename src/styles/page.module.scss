@@ -55,7 +55,7 @@ $--w-sitemax: 100em;
     
       > header {
         grid-area: heading;
-        grid-column: 2 / 4;
+        grid-column: 1 / -1;
         // margin-bottom: 1rem;
         // padding-inline: 1rem;
       }
