@@ -15,12 +15,12 @@ dialog.popup:modal {
   padding: 0;
   margin: 0;
   opacity: 0;
-  transition: all 3s ease;
+  transition: background 3s ease;
 
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.0);
     backdrop-filter: blur(0) saturate(0) brightness(0);
-    transition: all 3s;
+    transition: background 3s;
   }
   border: none;
 }
@@ -30,12 +30,12 @@ dialog[open].open {
   transform: translateY(0px) skew(0, 0);
   pointer-events: auto;
   opacity: 1;
-  transition: all 3s;
+  transition: background 3s;
   background: rgba(0, 0, 0, 0.4);
 
   &::backdrop {
     backdrop-filter: blur(2px) saturate(20%) brightness(80%);
-    transition: all 3s;
+    transition: background 3s;
   }
 }
 

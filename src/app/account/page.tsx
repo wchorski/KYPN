@@ -129,6 +129,7 @@ const USER_DASH_QUERY = `
   tickets {
     id
     orderCount
+    status
     event {
       id
       start

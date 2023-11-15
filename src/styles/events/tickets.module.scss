@@ -9,6 +9,13 @@ ul.tickets :global {
 
     display: flex;
 
+    .actions_wrap {
+      margin-left: auto;
+      display: flex;
+      gap: .3rem;
+
+    }
+
     .qrbutton{
       margin-left: auto;
 
@@ -24,6 +31,7 @@ article.ticket :global {
   box-shadow: var(--boxs-1);
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   padding-bottom: 1em;
   margin-bottom: 1em;
   border-radius: var(--br-sharp);
@@ -58,12 +66,15 @@ article.ticket :global {
   }
 
   .status{
-    background-color: var(--c-primary);
-    color: var(--c-txt-rev);
-    padding: .1em 1em .1em 1em;
+    // background-color: var(--c-primary);
+    background-color: var(--c-txt-bg);
+    padding: .1em 1em;
     position: absolute;
     bottom: 0;
     right: 0;
+    border-style: solid;
+    border-width: 2px;
+    border-right-width: 15px;
     border-radius: 15px 0 0 0;
   }
 
