@@ -58,6 +58,7 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
       closeDialog()
     }
 
+    // todo hide and show with style components so i can get a smooth transition
     const dialog: JSX.Element | null = (showPopup === 'modal') || (showPopup === 'dialog')
         ? (
           

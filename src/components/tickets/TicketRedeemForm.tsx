@@ -1,19 +1,22 @@
 'use client'
-import ErrorMessage from "@components/ErrorMessage"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { SubscriptionPlan } from "@ks/types"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useRouter } from 'next/navigation'
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
   // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
+import { Ticket } from "@ks/types"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 
-import { useRouter } from 'next/navigation'
+type Props = {
+  ticketId:string
+  status:string,
+}
 
 type Fields = {
-  status:SubscriptionPlan['status'],
+  status:Ticket['status'],
 }
 
 type FormState = {
@@ -22,38 +25,26 @@ type FormState = {
   fieldValues: Fields,
 }
 
-type Props = {
-  subPlanId:string,
-  status:SubscriptionPlan['status']
-}
-
 const statusOptions = [
-  {value: 'ACTIVE', label: 'Active'},
-  {value: 'PAUSED', label: 'Pause'},
-  {value: 'CANCELED', label: 'Cancel'},
+  {value: 'ATTENDED', label: 'Attended'},
+  {value: 'CONFIRMED', label: 'Unredeemed'},
 ]
 
-export function SubItemUpdateForm ({ subPlanId, status }:Props) {
+export function TicketRedeemForm ({ ticketId, status }:Props) {
+
+  const [statusState, setStatusState] = useState(status)
 
   const formRef = useRef<HTMLFormElement>(null)
   const router = useRouter()
-
   const defaultFormData = {
     message: '',
     errors: undefined,
     fieldValues: {
-      subPlanId: subPlanId,
+      ticketId: ticketId,
       status: status,
     }
   }
-
   const [formState, formAction] = useFormState(onSubmit, defaultFormData)
-
-  useEffect(() => {
-    if(formState.message === 'success'){
-      formRef.current?.reset()
-    }
-  }, [formState])
 
   async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
 
@@ -62,7 +53,7 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
     const inputValues = {
       status,
     }
-
+    console.log({inputValues});
 
     try {
 
@@ -77,7 +68,7 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
           query: query,
           variables: {
             where: {
-              id: subPlanId,
+              id: ticketId,
             },
             data: {
               status: status
@@ -86,11 +77,15 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
         }),
       })
 
-      const { updateSubscriptionItem, error } = await res.json()
-      console.log('subitemForm res, ', {data});
+      const { updateTicket, error } = await res.json()
+      console.log('ticketRedeemForm res, ', updateTicket);
       if(error) throw new Error(error.message)
 
-      if(updateSubscriptionItem) router.push(`/account?dashState=subscriptions#subscriptions`)
+      if(updateTicket) {
+        setStatusState(inputValues.status)
+        router.refresh()
+        router.push(`/tickets/${ticketId}`)
+      }
       // const { sessionId, message, error } = data
 
 
@@ -112,9 +107,16 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
       }
     }
   }
+
+  // useEffect(() => {
+  //   if(formState.message === 'success'){
+  //     formRef.current?.reset()
+  //   }
+  // }, [formState])
   
   return (
     <form action={formAction} ref={formRef}>
+      {statusState}
       <fieldset>
         <ul className="radio">
           {statusOptions.map((stat, i) => (
@@ -125,11 +127,11 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
                 name="status"  
                 id={stat.value + '-' + i}
                 value={stat.value}
-                defaultChecked={stat.value === formState.fieldValues.status}
+                defaultChecked={stat.value === statusState}
                 // onChange={handleChange}
                 // checked={stat.value === t.status ? true : false}
               />
-              {stat.value === formState.fieldValues.status ? <strong className="current">{stat.label}</strong> : <span> {stat.label} </span>}
+              {stat.value === statusState ? <strong className="current">{stat.label}</strong> : <span> {stat.label} </span>}
 
             </label>
           ))}
@@ -139,6 +141,7 @@ export function SubItemUpdateForm ({ subPlanId, status }:Props) {
       <p className={(formState.message === 'success') ? 'success' : 'error'}> 
         {formState.message} 
       </p>
+
       <SubmitButton />
       
     </form>
@@ -161,24 +164,9 @@ function SubmitButton(){
 }
 
 const query = `
-  mutation UpdateSubscriptionItem($where: SubscriptionItemWhereUniqueInput!, $data: SubscriptionItemUpdateInput!) {
-    updateSubscriptionItem(where: $where, data: $data) {
-      id
+  mutation UpdateTicket($where: TicketWhereUniqueInput!, $data: TicketUpdateInput!) {
+    updateTicket(where: $where, data: $data) {
       status
     }
   }
 `
-  //     billing_interval
-  //     custom_price
-  //     dateCreated
-  //     dateModified
-  //     stripeId
-  //     subscriptionPlan {
-  //       id
-  //       name
-  //     }
-  //     user {
-  //       email
-  //       id
-  //       name
-  //     }

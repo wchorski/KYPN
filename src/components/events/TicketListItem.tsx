@@ -2,12 +2,15 @@ import { datePrettyLocalDay } from "@lib/dateFormatter"
 import { Ticket } from "@ks/types"
 import Link from "next/link"
 import { BsQrCode } from "react-icons/bs"
+import { StatusBadge } from "@components/StatusBadge"
 
 type Props = {
   ticket:Ticket
 }
 
 export function TicketListItem ({ ticket }:Props) {
+
+
   return (
     <li key={ticket.id}>
       <div className="meta">
@@ -25,9 +28,13 @@ export function TicketListItem ({ ticket }:Props) {
         <br />
       </div>
 
-      <Link href={`/tickets/${ticket.id}`} target={'_blank'} data-tooltip="ticket link QR code" className="button qrbutton"> 
-        <BsQrCode />
-      </Link>
+      <div className={'actions_wrap'}>
+        <StatusBadge type={'ticket'} status={ticket.status}/>
+
+        <Link href={`/tickets/${ticket.id}`} target={'_blank'} data-tooltip="ticket link QR code" className="button qrbutton"> 
+          <BsQrCode />
+        </Link>
+      </div>
 
     </li>
   )

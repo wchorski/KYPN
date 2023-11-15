@@ -86,12 +86,14 @@ export const Ticket:Lists.Ticket = list({
       options: [
         { label: 'Pending', value: 'PENDING' },
         { label: 'Confirmed', value: 'CONFIRMED' },
+        { label: 'Paid', value: 'PAID' },
+        { label: 'Unpaid', value: 'UNPAID' },
         { label: 'Attended', value: 'ATTENDED' },
         { label: 'Canceled', value: 'CANCELED' },
         { label: 'Rejected', value: 'REJECTED' },
         { label: 'Past', value: 'PAST' },
       ],
-      defaultValue: 'CONFIRMED',
+      defaultValue: 'PAID',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
@@ -102,22 +104,23 @@ export const Ticket:Lists.Ticket = list({
 
   },
 
-  // hooks: {
-  //   beforeOperation: async ({ operation, resolvedData, context }) => {
-  //     if(operation === 'create'){
+  hooks: {
+    beforeOperation: async ({ operation, resolvedData, context, item }) => {
+      // if(operation === 'create'){
 
-  //       if(!resolvedData.event?.connect) throw new Error("NO EVENT Connect ID FOUND");
-        
-  //       const event = await context.db.Event.findOne({
-  //         where: { id: resolvedData.event?.connect.id}
-  //       })
-  //       if(!event) throw new Error("No Event Found");
-  //       // console.log({event});
+      // }
+    
+      if(operation === 'update'){
+
+        console.log('### TICKET UPDATE: ', item.status);
+
+        if(item.status === 'ATTENDED') {
+          // console.log(`!!!!!!!! This ticket has already been redeemed: ${item.id}`);
+          throw new Error(`!!! This ticket has already been redeemed: ${item.id}`)
+        }
+      }
 
 
-  //     }
-
-
-  //   },
-  // }
+    },
+  }
 })
