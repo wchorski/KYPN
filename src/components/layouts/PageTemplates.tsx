@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import { MainContainer } from './MainContainer'
 import styles from '@styles/page.module.scss'
 import { AsideBar } from './AsideBar'
@@ -41,9 +41,12 @@ export function PageTHeaderMainAside ({ header, main, aside }:PageTHeaderMainAsi
 type PageTHeaderMain = {
   // template:'header_main_aside'|'HeaderMain',
   header:ReactNode,
+  headerBgImg?:string,
+  headerBgColor?:string,
+  headerStyles?:CSSProperties,
   main:ReactNode,
 }
-export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
+export function PageTHeaderMain ({ header, main, headerBgImg, headerBgColor, headerStyles }:PageTHeaderMain) {
 
 
   return (
@@ -53,8 +56,16 @@ export function PageTHeaderMain ({ header, main }:PageTHeaderMain) {
       styles['header_main'],
     ].join(' ')} >
 
-   
-      {header}
+      <header
+        className={styles.header}
+        style={{
+          backgroundImage: `url(${headerBgImg})`,
+          backgroundColor: headerBgColor,
+          ...headerStyles,
+        }}
+      >
+        {header}
+      </header>
 
 
       <MainContainer>

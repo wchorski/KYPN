@@ -69,10 +69,17 @@ export default async function PageBySlug ({
   if (status === 'PRIVATE') return <p>This blog post is private</p>
   
 
-  if(template === 'FULLWIDTH') return (
+  if(template === 'FULLWIDTH' || template === 'FULLWIDTH_WITHHEADER') return (
     <PageTHeaderMain
       header={Header({dateCreated, dateModified, title, author, featured_image, template})} 
       main={Main(content)}
+      headerStyles={{
+        backgroundImage: `url(${featured_image})`,
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
+      }}
     />
   )
 
@@ -103,16 +110,16 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
   
   return (
 
-    <header
-        className='page'
-        style={{
-          backgroundImage: `url(${featured_image})`,
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
-        }}
-      >
+    // <header
+    //     className='page'
+    //     style={{
+    //       backgroundImage: `url(${featured_image})`,
+    //       backgroundPosition: 'center',
+    //       backgroundRepeat: 'no-repeat',
+    //       backgroundSize: 'cover',
+    //       display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
+    //     }}
+    //   >
 
       <div className='overlay'>
         <h1>{title}</h1>
@@ -133,7 +140,7 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
         {/* <span>View Count : 12345</span> */}
 
       </div>
-    </header>
+    // </header>
   )
 }
 
