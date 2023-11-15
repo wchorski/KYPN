@@ -48,6 +48,8 @@ following along with Wes Bos Tutorial
 
 > [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
 
+> [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
+
 - any changes to **access** **filters** or **operations**
 
 > 1. keystone `ks:dev`

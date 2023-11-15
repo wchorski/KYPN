@@ -1,12 +1,21 @@
 'use client'
-import { FormEvent, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import useForm from "../../lib/useForm"
 import styles from '@styles/menus/form.module.scss'
+import { 
+  // @ts-ignore
+  experimental_useFormState as useFormState, 
+  // @ts-ignore
+  experimental_useFormStatus as useFormStatus 
+} from "react-dom"
 import ErrorMessage from "../ErrorMessage"
 import { QueryLoading } from "@components/menus/QueryLoading"
+import { User } from "@ks/types"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { useSession } from "next-auth/react"
 
 
-type Form = {
+type Props = {
   header?:string,
   color?:string,
   buttonLabel?:string,
@@ -16,114 +25,246 @@ type Form = {
   isNotes?: boolean,
 }
 
-export function ContactForm({header, color, buttonLabel = 'submit', isName=true, isPhone=true, isDate=true, isNotes=true}:Form) {
+type Fields = {
+  name:string,
+  phone:string,
+  date:string,
+  time:string,
+  email:string,
+  notes:string,
+}
 
-  const [successMsg, setSuccessMsg] = useState<string|undefined>(undefined)
+type FormState = {
+  message: string,
+  status: 'success'|'pending'|'error'|'',
+  errors: Record<keyof Fields, string> | undefined,
+  fieldValues: Fields,
+}
+
+export function ContactForm({header, color, buttonLabel = 'submit', isName=true, isPhone=true, isDate=true, isNotes=true,}:Props) {
+
+  const {data: session, status} = useSession()
+  const formRef = useRef<HTMLFormElement>(null)
   // const [error, setError] = useState({message: ''})
   // const [loading, setLoading] = useState(false)
 
-  const { inputs, handleChange, clearForm, resetForm } = useForm({
-    name: '',
-    email: '',
-    phone: '',
-    date: '',
-    notes: ''
-  })
+  const defaultFormData = {
+    message: '',
+    status: '',
+    errors: undefined,
+    fieldValues: {
+      // event: event.id || '',
+      name: '',
+      phone: '',
+      date: '',
+      time: '',
+      email: session?.user?.email || '',
+      notes: '',
+    }
+  }
+
+  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
 
   // const [mutate, { error, loading, data }] = useMutation(MUTATE_CONTACT)
 
-  async function handleSubmit(e: FormEvent){
-    e.preventDefault()
-    // console.table({inputs})
+  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
     
-    // try {
-    //   nProgress.start()
-    //   const theDate = inputs.date ? new Date(inputs.date) : new Date()
-    //   inputs.date = theDate.toISOString()
-    //   console.log({inputs});
+    const name = data.get('name') as string
+    const phone = data.get('phone') as string
+    const date = data.get('date') as string
+    const time = data.get('time') as string
+    const email = data.get('email') as string
+    const notes = data.get('notes') as string
+    
+
+    const inputValues = {
+      name,
+      phone,
+      date,
+      time,
+      email,
+      notes,
+    }
+
+    try {
+
+      if(typeof email !== 'string') throw new Error('email is not string')
+
+      const res = await fetch(`/api/gql/noauth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: MUTATE_CONTACT,
+          variables: {
+            name,
+            phone,
+            start: new Date(date + 'T' + time).toISOString(),
+            email,
+            notes,
+            customerId: session?.itemId,
+          }
+        }),
+      })
+
+      const data = await res.json()
+      const { contact, error } = data
+
+      if(error) throw new Error(error.message)
+
+      return {
+        ...formState,
+        status: 'success',
+        message: 'Message sent! We will reach out to you via the contact provided',
+      }
       
-
-    //   const res = await mutate({
-    //     variables: inputs,
-    //   })
-    //   console.log({res});
-    //   nProgress.done()
-    //   setSuccessMsg('Thanks for your inquiry. We will reach out shortly')
-
-    // } catch (err) {
-    //   console.warn('contact form error: ', err);
-    // }
+    } catch (error:any) {
+      console.log(error);
+      
+      return {
+        message: error?.message,
+        status: 'error',
+        // TODO validate each field
+        errors: {
+          name: '',
+          phone: '',
+          date: '',
+          time: '',
+          email: '',
+          notes: '',
+        },
+        fieldValues: inputValues
+      }
+    }
   }
-
-  // if(loading) return <QueryLoading />
 
   return (
     <form
       className={styles.form}  
-      onSubmit={(e: FormEvent) => handleSubmit(e)} 
+      action={formAction}
       style={{ background: color,}}
+      ref={formRef}
     >
 
-      <h2>contact form debug {header}</h2>
+      <fieldset>
+        <legend> {header} </legend>
 
-      {successMsg && <p>{successMsg}</p>}
-
-      {/* <fieldset disabled={loading || successMsg ? true : false} aria-busy={loading} >
-
-
-        <label htmlFor="name" className={isName ? '' : 'hidden'}>
-          Name
-          <input type="text" id="name" name="name" placeholder="name..."
-            value={inputs.name}
-            onChange={handleChange}
+        <label htmlFor="name">
+          <span> name </span>
+          <input 
+            name={'name'}
+            id={'name'}
+            placeholder=""
+            type={'text'}
+            defaultValue={formState.fieldValues.name}
+            // readOnly={formState.fieldValues.name}
+            required={false}
           />
+          <span className="error"> {formState.errors?.name} </span>
         </label>
 
-        <label htmlFor="email">
-          Email
-          <input required type="email" id="email" name="email" placeholder="johnwick@emal.com..."
-            value={inputs.email}
-            onChange={handleChange}
+        <label htmlFor="phone">
+          <span> phone </span>
+          <input 
+            name={'phone'}
+            id={'phone'}
+            placeholder=""
+            type={'tel'}
+            defaultValue={formState.fieldValues.phone}
+            // readOnly={formState.fieldValues.phone}
+            required={false}
           />
+          <span className="error"> {formState.errors?.phone} </span>
         </label>
 
-        <label htmlFor="phone" className={isPhone ? '' : 'hidden'}>
-          Phone Number
-          <input type="phone" id="phone" name="phone" placeholder="123 234-3456..."
-            value={inputs.phone}
-            onChange={handleChange}
+        <label htmlFor="date">
+          <span> date </span>
+          <input 
+            name={'date'}
+            id={'date'}
+            placeholder=""
+            type={'date'}
+            defaultValue={formState.fieldValues.date}
+            // readOnly={formState.fieldValues.date}
+            required={false}
           />
+          <span className="error"> {formState.errors?.date} </span>
         </label>
 
-        <label htmlFor="date" className={isDate ? '' : 'hidden'}>
-          Day of Event
-          <input type="date" id="date" name="date" 
-            value={inputs.date}
-            onChange={handleChange}
+        <label htmlFor="time">
+          <span> time </span>
+          <input 
+            name={'time'}
+            id={'time'}
+            placeholder=""
+            type={'time'}
+            defaultValue={formState.fieldValues.time}
+            // readOnly={formState.fieldValues.time}
+            required={false}
           />
+          <span className="error"> {formState.errors?.time} </span>
         </label>
 
-        <label htmlFor="notes" className={isNotes ? '' : 'hidden'}>
-          Description
-          <textarea id="notes" name="notes" placeholder="explain your event in more detail..."
-            value={inputs.notes}
-            onChange={handleChange}
+        <label htmlFor="email" className="required">
+          <span> Email </span>
+          <input 
+            name={'email'}
+            id={'email'}
+            placeholder=""
+            type={'text'}
+            defaultValue={formState.fieldValues.email}
+            // readOnly={formState.fieldValues.email}
+            required={true}
           />
+          <span className="error"> {formState.errors?.email} </span>
         </label>
 
-        <button type="submit" disabled={loading || successMsg ? true : false}> {buttonLabel} </button>
-      </fieldset> */}
+        <label htmlFor="notes">
+          <span> notes </span>
+          <textarea 
+            name={'notes'}
+            id={'notes'}
+            placeholder="..."
+            defaultValue={formState.fieldValues.notes}
+            // readOnly={formState.fieldValues.notes}
+            required={false}
+          />
+          <span className="error"> {formState.errors?.notes} </span>
+        </label>
 
-      {/* {error && <ErrorMessage error={error} />} */}
+
+      </fieldset>
+
+      <p className={formState.status}> 
+        {formState.message} 
+      </p>
+
+      <SubmitButton />
     </form>
+  )
+}
+
+function SubmitButton(){
+
+  const { pending, } = useFormStatus()
+
+  return(
+    <button
+      disabled={pending}
+      type={'submit'}
+    >
+      {pending ? <LoadingAnim /> : 'Submit'}
+    </button>
   )
 }
 
 
 const MUTATE_CONTACT = `
-mutation Contact($name: String!, $email: String!, $phone: String!, $date: String!, $notes: String!) {
-  contact(name: $name, email: $email, phone: $phone, date: $date, notes: $notes) {
-    dateCreated
+  mutation Contact($name: String!, $phone: String!, $start: String!, $notes: String!, $email: String!, $customerId: String) {
+    contact(name: $name, phone: $phone, start: $start, notes: $notes, email: $email, customerId: $customerId) {
+      status
+      id
+    }
   }
-}
 `

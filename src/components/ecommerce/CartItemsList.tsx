@@ -15,7 +15,7 @@ export function CartItemsList () {
 
   useEffect(() => {
 
-    if(!session?.itemId) return console.log('no session itemId found');
+    if(!session?.itemId) return 
     
     (async () => {
       //TODO id how to get getUserCart to be async
