@@ -28,6 +28,7 @@ import { InfoCard } from '@components/blocks/InfoCard';
 import { BlockLayout } from '@components/blocks/BlockLayout';
 import { Paragraph } from '@components/blocks/ParagraphBlock';
 import { HeadingBlock } from '@components/blocks/HeadingBlock';
+import { CodeBlock } from './CodeBlock';
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -48,8 +49,8 @@ const renderers: DocumentRendererProps['renderers'] = {
       return <blockquote className={`blockquote`}>{children}</blockquote>;
     },
     // block code ``` ```
-    code({ children }) {
-      return <pre className={`pre`}>{children}</pre>;
+    code(props) {
+      return <CodeBlock {...props} />;
     },
     paragraph(props) {
       return  <Paragraph {...props}/>;
