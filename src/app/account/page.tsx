@@ -9,6 +9,7 @@ import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
 import { User } from "@ks/types"
 import { LoginToView } from "@components/menus/LoginToView"
+import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 
 type Props = {
   searchParams:{
@@ -31,6 +32,8 @@ export default async function AccountPage ({ params, searchParams }:Props) {
     },
     query: USER_DASH_QUERY,
   }) as User
+
+  const {tickets, error } = await fetchTicketsByUser(user.id)
   
   return (
     <Section layout={'1_4'}>
@@ -89,7 +92,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
         </nav>
 
 
-      <AccountDash dashState={dashState} user={user} />
+      <AccountDash dashState={dashState} user={user} tickets={tickets} />
     </Section>
   )
 }

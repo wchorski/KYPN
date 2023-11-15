@@ -38,24 +38,6 @@ export const query = `
     excerpt
     dateCreated
   }
-  tickets {
-    id
-    status
-    holder{
-      id
-    }
-    event {
-      summary
-      id
-      start
-      end
-      location {
-        name
-        id
-        address
-      }
-    }
-  }
   role {
     id
     name
