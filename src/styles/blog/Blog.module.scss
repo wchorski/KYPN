@@ -86,6 +86,10 @@ article.thumbnail :global{
     .meta{
       display: flex;
       gap: 1rem;
+
+      svg {
+        margin-right: .3rem;
+      }
     }
   }
 

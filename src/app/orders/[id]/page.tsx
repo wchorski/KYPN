@@ -7,9 +7,9 @@ import { datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import styles from '@styles/ecommerce/cart.module.scss'
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
+import styles from '@styles/ecommerce/cart.module.scss'
 
 type Props = {
   searchParams:{q:string}

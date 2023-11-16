@@ -11,13 +11,13 @@ import { Metadata, ResolvingMetadata } from "next"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { RiFileEditFill } from "react-icons/ri"
-import styles from '@styles/events/event.module.scss'
 import styleProduct from '@styles/ecommerce/productSingle.module.scss'
 import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
 import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
+import styles from '@styles/events/event.module.scss'
 
 type Props = {
   params:{

@@ -44,7 +44,6 @@ export const contact = (base: BaseSchemaMeta) => graphql.field({
     const user = await db.User.findOne({
       where: { id: customerId },
     })
-    console.log({user});
 
     mailBookingCreated({
       id: booking.id,

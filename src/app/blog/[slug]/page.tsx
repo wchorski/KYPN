@@ -13,7 +13,6 @@ import { ImageDynamic } from '@components/elements/ImageDynamic';
 import Head  from 'next/head';
 import { Category, Post, Tag, User } from '@ks/types';
 import { envs } from '@/envs';
-import styles from '@styles/blog/blogpost.module.scss'
 import { BlockRender } from '@components/blocks/BlockRender'
 import { fetchPost } from '@lib/fetchdata/fetchPost';
 import { getServerSession } from 'next-auth';
@@ -21,6 +20,7 @@ import { nextAuthOptions } from '@/session';
 import { Metadata, ResolvingMetadata } from 'next';
 import { fetchProducts } from '@lib/fetchdata/fetchProducts';
 import { Card } from '@components/layouts/Card';
+import styles from '@styles/blog/blogpost.module.scss'
 
 export const revalidate = 5;
 

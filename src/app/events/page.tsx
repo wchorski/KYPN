@@ -4,10 +4,10 @@ import { Event } from '@ks/types'
 import { Section } from "@components/layouts/Section"
 import fetchEvents from "@lib/fetchdata/fetchEvents"
 import { Metadata, ResolvingMetadata } from "next"
-import styles from '@styles/events/events.module.scss'
 import { EventCard } from "@components/events/EventCard"
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md"
 import { EventsCalendar } from "@components/events/EventsCalendar"
+import styles from '@styles/events/events.module.scss'
 
 type Props = {
   params:{

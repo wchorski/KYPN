@@ -1,10 +1,8 @@
 // docs - https://react-slick.neostack.com/docs/api
 // cred - https://stackoverflow.com/questions/49028877/slick-carousel-force-slides-to-have-the-same-height
 import * as React from 'react';
-// import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Slide, tSlide } from "./Slide";
 import styles from '@styles/blocs/slider.module.scss'
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 import { ReactNode } from 'react';

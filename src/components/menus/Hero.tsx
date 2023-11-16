@@ -16,7 +16,8 @@ export function Hero ({ children, title, description, logoSrc, bgImg = '' }:Prop
     <header 
       className={styles.hero}
       style={{
-        background: `url(${bgImg})`
+        background: `url(${bgImg})`,
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className="siteWrapper">

@@ -8,10 +8,10 @@ import { TicketRedeemForm } from "@components/tickets/TicketRedeemForm"
 import { Ticket } from "@ks/types"
 import { datePrettyLocalDay } from "@lib/dateFormatter"
 import fetchTicket from "@lib/fetchdata/fetchTicket"
-import styles from '@styles/events/tickets.module.scss'
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import statusStyles from '@styles/blocs/status.module.scss'
+import styles from '@styles/events/tickets.module.scss'
 
 type Props = {
   searchParams:{q:string}

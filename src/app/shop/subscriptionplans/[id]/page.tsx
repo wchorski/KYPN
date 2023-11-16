@@ -16,11 +16,11 @@ import { fetchSubscriptionPlan } from '@lib/fetchdata/fetchSubscriptionPlan';
 import { OutOfStockLabel } from '@components/elements/OutOfStockLabel';
 import moneyFormatter from '@lib/moneyFormatter';
 import AddToCart from '@components/ecommerce/AddToCart';
-import styles from '@styles/ecommerce/productSingle.module.scss'
 import { Section } from '@components/layouts/Section';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import StripeSubscriptionButton from '@components/ecommerce/StripeSubscriptionButton';
 import Link from 'next/link';
+import styles from '@styles/ecommerce/productSingle.module.scss'
 
 export const revalidate = 5;
 
@@ -60,7 +60,7 @@ export async function generateMetadata(
       images: [String(image), ...previousImages],
       title: name,
       description: excerpt,
-      url: envs.FRONTEND_URL + '/shop/SubscriptionPlans/' + params.id,
+      url: envs.FRONTEND_URL + '/shop/subscriptionplans/' + params.id,
       type: 'article'
     },
     keywords: tags?.map((tag:Tag) => tag.name).join(', '),

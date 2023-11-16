@@ -1,5 +1,4 @@
 import { Section } from "@components/layouts/Section"
-import styles from '@styles/menus/dashboard.module.scss'
 import Link from "next/link"
 import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop, } from "react-icons/md"
 import { HiOutlineTicket } from "react-icons/hi"
@@ -10,6 +9,7 @@ import { keystoneContext } from "@ks/context"
 import { User } from "@ks/types"
 import { LoginToView } from "@components/menus/LoginToView"
 import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
+import styles from '@styles/menus/dashboard.module.scss'
 
 type Props = {
   searchParams:{

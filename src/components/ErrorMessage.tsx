@@ -1,9 +1,9 @@
-import styles from '@styles/error.module.scss'
 import React, { ReactNode } from 'react';
 
 import PropTypes from 'prop-types';
 import { MdError } from 'react-icons/md';
 import { Section } from './layouts/Section';
+import styles from '@styles/error.module.scss'
 
 const ErrorMessage = ({ error }: any) => {
 

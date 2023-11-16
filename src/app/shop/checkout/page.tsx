@@ -4,8 +4,8 @@ import { CartTotal } from "@components/ecommerce/CartTotal"
 import StripeCheckoutButton from "@components/ecommerce/StripeCheckoutButton"
 import { PageTHeaderMain, } from "@components/layouts/PageTemplates"
 import { getServerSession } from "next-auth"
-import styles from '@styles/ecommerce/cart.module.scss'
 import { Section } from "@components/layouts/Section"
+import styles from '@styles/ecommerce/cart.module.scss'
 
 type Props = {
   searchParams:{q:string}
