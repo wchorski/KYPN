@@ -5,7 +5,6 @@ import { MdLocationOn } from "react-icons/md";
 import Link from "next/link";
 import { ImageDynamic } from "../elements/ImageDynamic";
 import { Event } from "@ks/types";
-import Image from 'next/image';
 
 export function EventCard({image, start, summary, location, id}:Event) {
   return (
@@ -14,40 +13,43 @@ export function EventCard({image, start, summary, location, id}:Event) {
         <ImageDynamic photoIn={image}/>
       </div>
 
-      <div>
-        <time dateTime={start} className="date-short"> 
-          {datePrettyLocalDayShort(start || '')} 
-        </time>
-      </div>
+      <div className='content'>
 
-      <div className="details">
-        <Link href={`/events/e/${id}`}>
-          <h4> {summary} </h4>
-        </Link>
+        <div>
+          <time dateTime={start} className="date-short"> 
+            {datePrettyLocalDayShort(start || '')} 
+          </time>
+        </div>
 
-        <time dateTime={start}> 
-          <IoMdTime />
-          {/* {datePrettyLocalDay(start)}  */}
-          {/* @  */}
-          {datePrettyLocalTime(start || '')}
-        </time>
-
-        {location && (
-          <Link href={`/locations/${location.id}`}>
-              <address>
-                <MdLocationOn />
-                {location?.name} 
-                <br />
-                {location?.address}
-                {/* {address.street} <br /> */}
-                {/* {address.town} <br /> */}
-                {/* {address.country} <br /> */}
-              </address>
+        <div className="details">
+          <Link href={`/events/e/${id}`}>
+            <h4> {summary} </h4>
           </Link>
-        )}
-      </div>
 
-      <a href={`/events/e/${id}`} className="view button medium"> view </a>
+          <time dateTime={start}> 
+            <IoMdTime />
+            {/* {datePrettyLocalDay(start)}  */}
+            {/* @  */}
+            {datePrettyLocalTime(start || '')}
+          </time>
+
+          {location && (
+            <Link href={`/locations/${location.id}`}>
+                <address>
+                  <MdLocationOn />
+                  {location?.name} 
+                  <br />
+                  {location?.address}
+                  {/* {address.street} <br /> */}
+                  {/* {address.town} <br /> */}
+                  {/* {address.country} <br /> */}
+                </address>
+            </Link>
+          )}
+        </div>
+
+        <a href={`/events/e/${id}`} className="view button medium"> view </a>
+      </div>
 
     </article>
   )

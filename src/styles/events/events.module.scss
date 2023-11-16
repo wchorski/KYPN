@@ -9,19 +9,29 @@ ul.events {
 
 article.event :global{
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   border: solid 1px var(--c-desaturated);
-  padding: 1em;
+  // padding: 1em;
   transition: border .2s ease-in;
   color: var(--c-txt);
 
-  h4{
-    margin: 0;
+  
+  img{
+    width: 6em;
+    height: 100%;
+    aspect-ratio: auto;
+    padding: -1rem;
   }
 
-  img{
-    width: 5em;
-    height: auto;
+  .content{
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  h4{
+    margin: 0;
   }
 
   time.date-short{
