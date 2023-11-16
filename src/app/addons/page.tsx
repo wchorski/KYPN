@@ -16,9 +16,11 @@ export default async function AddonsPage ({ params, searchParams }:Props) {
 
 function Header(){
 
-  return<header>
-    <h1> AddonsPage </h1>
-  </header>
+  return<>
+    <Section layout={'1'}>
+      <h1> AddonsPage </h1>
+      </Section>
+    </>
 }
 
 function Main(){

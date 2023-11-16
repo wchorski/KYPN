@@ -27,9 +27,11 @@ export default async function CheckoutPage ({ params, searchParams }:Props) {
 
 function Header(){
 
-  return <header>
-    <h1> Checkout </h1>
-  </header >
+  return <>
+    <Section layout={'1'}>
+      <h1> Checkout </h1>
+    </Section>
+  </>
 }
 
 async function Main(sessionId:string){

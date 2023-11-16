@@ -30,9 +30,11 @@ export default async function UserByIdPage ({ params, searchParams }:Props) {
 
 function Header(name?:string){
 
-  return<header>
-    <h1> User: {name} </h1>
-  </header>
+  return<>
+    <Section layout={'1'}>
+      <h1> User: {name} </h1>
+    </Section>
+  </>
 }
 
 function Main(user?:User){

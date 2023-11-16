@@ -91,13 +91,14 @@ export default async function SubscriptionPlanPageById({ params }:Props) {
 function Header(name:string){
 
   return <>
-    <header style={{display: 'none'}}>
+
+    <Section layout={'1'}>
       <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
         <BreadCrumbs />
       </div>
-      <h1> SubscriptionPlan: {name} </h1>
+      <h1 style={{display: 'none'}}> SubscriptionPlan: {name} </h1>
+    </Section>
 
-    </header>
   </>
 }
 

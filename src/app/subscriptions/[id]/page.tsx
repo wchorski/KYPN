@@ -31,17 +31,19 @@ export default async function SubscriptionItemByIdPage ({ params, searchParams }
 
 function Header(status:SubscriptionItem['status']|undefined, excerpt:string|undefined){
 
-  return<header>
-    <h1> Subscription </h1>
-    <StatusBadge type={'subscriptionItem'} status={status} />
-    <Link 
-      className=''
-      style={{margin: '0 1rem'}}
-      href={`?${new URLSearchParams({ popup: 'modal'})}`}
-    > 
-      edit 
-    </Link>
-  </header>
+  return<>
+    <Section layout={'1'}>
+      <h1> Subscription </h1>
+      <StatusBadge type={'subscriptionItem'} status={status} />
+      <Link 
+        className=''
+        style={{margin: '0 1rem'}}
+        href={`?${new URLSearchParams({ popup: 'modal'})}`}
+      > 
+        edit 
+      </Link>
+    </Section>
+  </>
 }
 
 function Main(subscriptionItem:SubscriptionItem|undefined){

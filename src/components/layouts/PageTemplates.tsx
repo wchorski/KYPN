@@ -44,9 +44,10 @@ type PageTHeaderMain = {
   headerBgImg?:string,
   headerBgColor?:string,
   headerStyles?:CSSProperties,
+  headerIsDisplayed?:boolean
   main:ReactNode,
 }
-export function PageTHeaderMain ({ header, main, headerBgImg, headerBgColor, headerStyles }:PageTHeaderMain) {
+export function PageTHeaderMain ({ header, main, headerBgImg, headerBgColor, headerStyles, headerIsDisplayed = true }:PageTHeaderMain) {
 
 
   return (
@@ -61,6 +62,7 @@ export function PageTHeaderMain ({ header, main, headerBgImg, headerBgColor, hea
         style={{
           backgroundImage: `url(${headerBgImg})`,
           backgroundColor: headerBgColor,
+          display: headerIsDisplayed ? 'block' : 'none',
           ...headerStyles,
         }}
       >

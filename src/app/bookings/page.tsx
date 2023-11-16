@@ -52,11 +52,12 @@ export default async function BookingsPage ({ params, searchParams }:Props) {
 
 function Header(){
   
-  return <header>
-    <h1>
-      Book a Service
-    </h1>
-  </header>
+
+return<>
+<Section layout={'1'}>
+  <h1> Book a Service </h1>
+  </Section>
+</>
 }
 
 type Main = {

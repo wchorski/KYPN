@@ -30,13 +30,11 @@ export default async function CategoriesPage() {
 
 function Header(){
 
-  return (
-    <header style={{
-      // display: 'none',
-    }}>
+  return <>
+    <Section layout={'1'}>
       <h1> Categories </h1>
-    </header>
-  )
+    </Section>
+  </>
 }
 
 type Main = {
