@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import styles from '@styles/ecommerce/cart.module.scss'
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
+import { Section } from "@components/layouts/Section"
 
 type Props = {
   searchParams:{q:string}
@@ -42,9 +43,12 @@ export default async function OrderByIdPage ({ params, searchParams }:Props) {
 
 function Header(){
 
-  return <header>
-    <h1> Order Receipt </h1>
-  </header>
+  return<>
+    <Section layout={'1'}>
+      <h1> Order Receipt </h1>
+    </Section>
+  </>
+  
 }
 
 function Main(order:Order){

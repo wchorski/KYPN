@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Metadata } from 'next';
 import { envs } from '@/envs';
 import { useRouter } from "next/navigation";
+import { Section } from '@components/layouts/Section'
 
 export const metadata: Metadata = {
   title: `404 | ` + envs.SITE_TITLE,
@@ -24,14 +25,17 @@ export default function Error404() {
 
 function Header() {
   
-  return (
+
+  return<>
+    <Section layout={'1'}>
     <center>
-      <header>
+   
         <h1> 404 </h1>
-      </header>
+     
 
     </center>
-  )
+    </Section>
+  </>
 }
 
 function Main(){

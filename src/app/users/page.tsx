@@ -47,11 +47,12 @@ export default async function UsersPage ({ children }:Props) {
 
 function Header(){
 
-  return (
-    <header>
-      <h1> Site Users </h1>
-    </header>
-  )
+  return<>
+    <Section layout={'1'}>
+      <h1> Users </h1>
+    </Section>
+  </>
+  
 }
 
 type Main = {

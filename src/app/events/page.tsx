@@ -36,6 +36,7 @@ export default async function EventsPage ({ params, searchParams }:Props) {
   return (
     <PageTHeaderMain 
       header={Header()}
+      headerIsDisplayed={false}
       main={Main( events, count, date )}
     />
   )
@@ -43,13 +44,13 @@ export default async function EventsPage ({ params, searchParams }:Props) {
 
 function Header(){
 
-  return (
-    <header
-      style={{display: 'none'}}
-    >
+
+  return<>
+    <Section layout={'1'}>
       <h1> Events </h1>
-    </header>
-  )
+    </Section>
+  </>
+  
 }
 
 function Main(

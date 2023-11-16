@@ -14,7 +14,6 @@ import Head  from 'next/head';
 import { Category, Post, Tag, User } from '@ks/types';
 import { envs } from '@/envs';
 import styles from '@styles/blog/blogpost.module.scss'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates';
 import { BlockRender } from '@components/blocks/BlockRender'
 import { fetchPost } from '@lib/fetchdata/fetchPost';
 import { getServerSession } from 'next-auth';

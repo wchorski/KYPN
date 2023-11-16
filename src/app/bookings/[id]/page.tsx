@@ -39,12 +39,12 @@ export default async function BookingSinglePage ({ params, searchParams }:Props)
 
 function Header(status?:Booking['status']){
 
-  return<header>
+  return<>
     <Section layout={'1'}>
       <h1> Booking Status </h1>
       <StatusBadge type={'booking'} status={status}/>
     </Section>
-  </header>
+  </>
 }
 
 function Main(booking:Booking|undefined){

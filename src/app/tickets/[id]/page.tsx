@@ -31,6 +31,7 @@ export default async function TicketByIdPage ({ params, searchParams }:Props) {
   return(
     <PageTHeaderMain 
       header={Header()}
+      headerIsDisplayed={false}
       main={Main(ticket, session?.itemId, session?.data.role.canManageTickets)}
     />
   )
@@ -38,9 +39,11 @@ export default async function TicketByIdPage ({ params, searchParams }:Props) {
 
 function Header() {
   
-  return <header style={{display: 'none'}}>
-    <h1> Ticket </h1>
-  </header>
+  return <>
+    <Section layout={'1'}>
+      <h1> Ticket </h1>
+    </Section>
+  </>
 }
 
 function Main(ticket:Ticket|undefined, sessionId?:string, canManageTickets?:boolean){

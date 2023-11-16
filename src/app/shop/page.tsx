@@ -58,13 +58,11 @@ export default async function ShopPage({ params, searchParams }:Props) {
 
 function Header(){
 
-  return (
-    <header style={{
-      // display: 'none',
-    }}>
+  return<>
+    <Section layout={'1'}>
       <h1> Shop </h1>
-    </header>
-  )
+    </Section>
+  </>
 }
 
 type Main = {

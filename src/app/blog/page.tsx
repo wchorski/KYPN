@@ -13,6 +13,7 @@ import { InfoCard } from "@components/blocks/InfoCard";
 import { fetchPosts } from "@lib/fetchdata/fetchPosts";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
+import { Section } from "@components/layouts/Section";
 
 type Props = {
   params:{
@@ -55,13 +56,14 @@ export default async function BlogFeedPage({ params, searchParams }:Props) {
 
 function Header(){
 
-  return (
-    <header style={{
-      // display: 'none',
-    }}>
-      <h1> Blog </h1>
-    </header>
-  )
+
+  return<>
+<Section layout={'1'}>
+<h1> Blog </h1>
+  </Section>
+</>
+
+  
 }
 
 type Main = {

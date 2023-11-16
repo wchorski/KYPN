@@ -47,11 +47,13 @@ export default async function OrderSuccessPage ({ params, searchParams }:Props) 
 
 function Header(status:'complete'|string,){
 
-  return <header>
-    <h1> Order Details </h1>
-    {status !== 'complete' && <span className="error"> error </span>}
-    {status === 'complete' && <span className="success"> success </span>}
-  </header>
+  return <>
+    <Section layout={'1'}>
+      <h1> Order Details </h1>
+      {status !== 'complete' && <span className="error"> error </span>}
+      {status === 'complete' && <span className="success"> success </span>}
+    </Section>
+  </>
 }
 
 function Main(customer_details:Customer, amount_total:number, status:'complete'|string, ){
