@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { ReactNode } from "react"
-import styles from '@styles/blocs/pricetable.module.scss'
 import moneyFormatter from "../../lib/moneyFormatter"
 import { formatHours } from "../../lib/dateFormatter"
+import styles from '@styles/blocs/pricetable.module.scss'
 
 type Props = {
   items: {

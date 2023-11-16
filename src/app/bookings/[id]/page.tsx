@@ -9,11 +9,11 @@ import fetchBooking from '@lib/fetchdata/fetchBooking'
 import moneyFormatter from '@lib/moneyFormatter'
 import Link from 'next/link'
 import { FiEdit } from 'react-icons/fi'
-import styles from "@styles/booking/booking.module.scss";
 import { CgExternal } from 'react-icons/cg'
 import DialogPopup from '@components/menus/Dialog'
 import { BookingFormUpdate } from '@components/bookings/BookingFormUpdate'
 import { StatusBadge } from '@components/StatusBadge'
+import styles from "@styles/booking/booking.module.scss";
 
 type Props = {
   searchParams:{q:string}

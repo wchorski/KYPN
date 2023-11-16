@@ -1,6 +1,5 @@
 
 import React, { ComponentProps } from 'react';
-import styles from '@styles/blocs/blockrenderer.module.scss'
 import { DocumentRenderer, DocumentRendererProps } from '@keystone-6/document-renderer';
 import { Callout } from '@components/blocks/Callout';
 import { ImageBlock } from '@components/blocks/ImageBlock';
@@ -29,6 +28,7 @@ import { BlockLayout } from '@components/blocks/BlockLayout';
 import { Paragraph } from '@components/blocks/ParagraphBlock';
 import { HeadingBlock } from '@components/blocks/HeadingBlock';
 import { CodeBlock } from './CodeBlock';
+import styles from '@styles/blocs/blockrenderer.module.scss'
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise

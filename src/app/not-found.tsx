@@ -1,12 +1,11 @@
 'use client'
-import styles from '../styles/elements/404.module.scss'
-import { envvars } from '../lib/envvars'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import Link from 'next/link'
 import { Metadata } from 'next';
 import { envs } from '@/envs';
 import { useRouter } from "next/navigation";
 import { Section } from '@components/layouts/Section'
+import styles from '../styles/elements/404.module.scss'
 
 export const metadata: Metadata = {
   title: `404 | ` + envs.SITE_TITLE,

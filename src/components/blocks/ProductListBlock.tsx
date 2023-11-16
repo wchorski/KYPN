@@ -1,8 +1,4 @@
-import { gql } from "graphql-request";
-import { BlogList } from "../blog/BlogList"
 import { ProductsList } from "@components/ecommerce/ProductsList";
-import { ProductThumbnail } from "../ecommerce/ProductThumbnail";
-import styles from '@styles/ecommerce/product.module.scss'
 
 
 type Props = {
@@ -33,7 +29,11 @@ export function ProductListBlock({header, color, colorOverlay, imageSrc, categor
             {header}
           </h2>
           
-          <ProductsList page={1} categories={categories}/>
+          <ProductsList 
+            page={1} 
+            products={[]}
+            categoryNames={categories.flatMap(cat => cat.id)}
+          />
           {/* <BlogList page={1} categories={categories}/> */}
         </div>
       </div>

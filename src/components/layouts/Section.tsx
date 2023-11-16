@@ -1,11 +1,11 @@
-import { ReactNode } from "react"
-import styles from "@styles/elements/section.module.scss";
+import { CSSProperties, ReactNode } from "react"
 import { GridLayout } from "@ks/types";
+// import styles from "@styles/elements/section.module.scss";
 
 type Props = {
   pad?:number,
-  bgColor?:string,
-  bgImg?:string,
+  imageSrc?:string,
+  color?:string,
   col?:number,
   layout:GridLayout,
   children:ReactNode|ReactNode[],
@@ -14,21 +14,25 @@ type Props = {
 
 export function Section({
   pad = 1, 
-  bgColor, 
-  bgImg, 
+  imageSrc, 
+  color, 
   col,
   layout = '1_1',
   children,
   id,
 }:Props
 ) {
+  //                                  gotta put a '_' in front because css no like numbers as class names
+  const stylesArr = ['section', `grid`, [`_${layout}`] ]
+  // todo trying global instead of module
+  // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
-  const stylesArr = [styles.section, styles[`grid_${layout}`] ]
+  const inlineStyles = {
+    
+  } as CSSProperties
 
-  const inlineStyles = {}
-
-  if(bgImg) Object.assign(inlineStyles, {background: `url(${bgImg})`})
-  if(bgColor) Object.assign(inlineStyles, {backgroundColor: bgColor,}) 
+  if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})
+  if(color) Object.assign(inlineStyles, {backgroundColor: color,}) 
 
   return (
     <section 

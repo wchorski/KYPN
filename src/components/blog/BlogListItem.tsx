@@ -50,10 +50,10 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, dateMod
                   <Link className='author' href={`/users/${author?.id}`}> <CgProfile /> {author?.name}</Link>
                 </small>
               )}
-              <small className='date'> 
+              <time dateTime={dateModified} title='Publication update date'> 
                 <FiCalendar />
                 {datePretty(dateModified)}
-              </small>
+              </time>
           </div>
         </header>
         

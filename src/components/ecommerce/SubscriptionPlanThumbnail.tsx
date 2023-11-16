@@ -22,7 +22,7 @@ export async function SubscriptionPlanThumbnail({SubscriptionPlan, session}: Pro
 
   if(!SubscriptionPlan) return  <p> no subscription plan </p>
 
-  const { id, name, excerpt, price, photo, image, status, billing_interval } = SubscriptionPlan
+  const { id, name, excerpt, price, image, status, billing_interval } = SubscriptionPlan
 
 
   return (
@@ -31,13 +31,13 @@ export async function SubscriptionPlanThumbnail({SubscriptionPlan, session}: Pro
       {status === 'DRAFT' && <p> DRAFT SubscriptionPlan </p> }
 
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
-      <Link href={`/shop/SubscriptionPlans/${id}`} className='featured_image'>
+      <Link href={`/shop/subscriptionplans/${id}`} className='featured_image'>
         <ImageDynamic photoIn={image} />
       </Link>
 
 
       <div className="container">
-        <Link href={`/shop/SubscriptionPlans/${id}`} className='title'>
+        <Link href={`/shop/subscriptionplans/${id}`} className='title'>
           <h3>{name}</h3>
         </Link>
 

@@ -10,6 +10,7 @@ import fetchPage from "@lib/fetchdata/fetchPage"
 import { BlockRender } from '@components/blocks/BlockRender'
 import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
+import { Section } from "@components/layouts/Section"
 export const revalidate = 5;
  
 
@@ -108,40 +109,30 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
 
   // console.log(dateCreated);
   
-  return (
+  return <>
 
-    // <header
-    //     className='page'
-    //     style={{
-    //       backgroundImage: `url(${featured_image})`,
-    //       backgroundPosition: 'center',
-    //       backgroundRepeat: 'no-repeat',
-    //       backgroundSize: 'cover',
-    //       display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
-    //     }}
-    //   >
+    <Section layout={'1'}>
+      
+    
+      <h1>{title}</h1>
 
-      <div className='overlay'>
-        <h1>{title}</h1>
-
-        <span>
-          <em> Published on {datePretty(dateCreated)}</em>
-          <br />
-          <em> Modified on {datePretty(dateModified)}</em>
-        </span>
+      <span>
+        <em> Published on {datePretty(dateCreated)}</em>
         <br />
+        <em> Modified on {datePretty(dateModified)}</em>
+      </span>
+      <br />
 
-        {author?.name ? (
-          <span>
-            <em> · by {author?.name}</em>
-          </span>
-        ) : null}
+      {author?.name && (
+        <span>
+          <em> · by {author?.name}</em>
+        </span>
+      )}
 
-        {/* <span>View Count : 12345</span> */}
+      {/* <span>View Count : 12345</span> */}
 
-      </div>
-    // </header>
-  )
+  </Section>
+  </>
 }
 
 

@@ -16,6 +16,11 @@ const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 
+type Props = {
+  productId:string,
+  sessionId:string,
+}
+
 export default function AddToCart({ productId, sessionId }: { productId:string, sessionId:string }) {  
 
   const [state, setstate] = useState<State>(undefined)

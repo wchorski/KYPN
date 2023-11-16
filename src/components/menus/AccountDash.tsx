@@ -6,9 +6,9 @@ import { Section } from "@components/layouts/Section"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
-import styles from '@styles/menus/dashboard.module.scss'
 import { Card } from "@components/layouts/Card"
 import Link from "next/link"
+import styles from '@styles/menus/dashboard.module.scss'
 
 type Props = {
   dashState:string,

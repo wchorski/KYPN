@@ -16,9 +16,10 @@ import { fetchProduct } from '@lib/fetchdata/fetchProduct';
 import { OutOfStockLabel } from '@components/elements/OutOfStockLabel';
 import moneyFormatter from '@lib/moneyFormatter';
 import AddToCart from '@components/ecommerce/AddToCart';
-import styles from '@styles/ecommerce/productSingle.module.scss'
 import { Section } from '@components/layouts/Section';
 import { PriceTag } from '@components/ecommerce/PriceTag';
+import styles from '@styles/ecommerce/productSingle.module.scss'
+import Link from 'next/link';
 
 export const revalidate = 5;
 
@@ -134,7 +135,11 @@ function Main({ product, session }:Main) {
 
             <p> <PriceTag price={price} /></p>
   
-            <AddToCart productId={id} sessionId={session.itemId}/>
+            {session ? (
+              <AddToCart productId={id} sessionId={session.itemId}/>
+            ) : (
+              <Link href={`/api/auth/signin`}> login to shop </Link>
+            )}
 
             <div className={styles.description_wrap}>
               <BlockRender document={description.document} />

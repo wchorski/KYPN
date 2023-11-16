@@ -1,6 +1,5 @@
 import { Pagination } from "@components/Pagination";
 import { BlogList } from "@components/blog/BlogList";
-import styles from "@/styles/blog/Blog.module.scss";
 import ErrorMessage from "@components/ErrorMessage";
 import { CategoriesPool } from "@components/menus/CategoriesPool";
 import { TagsPool } from "@components/menus/TagsPool";
@@ -58,10 +57,10 @@ function Header(){
 
 
   return<>
-<Section layout={'1'}>
-<h1> Blog </h1>
-  </Section>
-</>
+    <Section layout={'1'}>
+      <h1> Blog </h1>
+    </Section>
+  </>
 
   
 }
@@ -77,11 +76,14 @@ function Main({posts, page, count}:Main) {
   if(!posts) <p> no posts found </p>
   
   return<>
+  <Section layout={'1'}>
+
     <Pagination route='/blog' page={(page) || 1} count={count}/>
 
     <BlogList posts={posts}/>
 
     <Pagination route='/blog' page={(page) || 1} count={count}/>
+  </Section>
   </>
 }
 
