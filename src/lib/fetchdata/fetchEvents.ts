@@ -1,30 +1,20 @@
 import { Category, Event } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchEvents(currentDate:Date){
+export default async function fetchEvents(dateSelectedString:string){
+
+  const dateSelected = new Date(dateSelectedString)
 
   try {
 
-    // const variables = {
-    //   where: {
-    //     start: {
-    //       gte: new Date(currentDate.getFullYear(), currentDate.getMonth()).toISOString(),
-    //       lt: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1).toISOString()
-    //     }
-    //   },
-    //   orderBy: [
-    //     {
-    //       start: 'desc'
-    //     }
-    //   ]
-    // }
-    const variables = {
+    const events = await keystoneContext.query.Event.findMany({
+      query: query,
       where: { 
         AND: [ 
           {
             start: {
-              gte: new Date(currentDate.getFullYear(), currentDate.getMonth()).toISOString(),
-              lt: new Date(currentDate.getFullYear(), currentDate.getMonth() + 24).toISOString()
+              gte: dateSelected.toISOString(),
+              lt: new Date(dateSelected.getFullYear(), dateSelected.getMonth() + 24).toISOString()
             },
           },
           {
@@ -50,19 +40,41 @@ export default async function fetchEvents(currentDate:Date){
       },
       orderBy: [
         {
-          start: 'desc'
+          start: 'asc'
         }
       ]
-    }
-
-    const events = await keystoneContext.query.Event.findMany({
-      query: query,
-      ...variables
     }) as Event[]
 
     const count = await keystoneContext.query.Event.count({
-
-      ...variables,
+      where: { 
+        AND: [ 
+          {
+            start: {
+              gte: dateSelected.toISOString(),
+              lt: new Date(dateSelected.getFullYear(), dateSelected.getMonth() + 24).toISOString()
+            },
+          },
+          {
+            NOT: [
+              {
+                status: {
+                  equals: "DRAFT"
+                }
+              },
+              {
+                status: {
+                  equals: "CANCELED"
+                }
+              },
+              {
+                status: {
+                  equals: "PAST"
+                }
+              },
+            ]
+          }
+        ]
+      }
     }) as number
     
     return { events, count }

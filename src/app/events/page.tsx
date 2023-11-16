@@ -31,7 +31,7 @@ export default async function EventsPage ({ params, searchParams }:Props) {
   
   const dateParam  = searchParams?.date || today.toDateString()
   const date = new Date(dateParam).toDateString()
-  const { events, count, error } = await fetchEvents(thisMonth)
+  const { events, count, error } = await fetchEvents(date)
 
   return (
     <PageTHeaderMain 
