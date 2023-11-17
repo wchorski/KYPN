@@ -127,7 +127,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
   const [partialDates, setPartialDates] = useState<DayTimes[]>([])
 
   const defaultstateRed:StateRed = {
-    service: prevBooking?.serviceId ? getServicePicked(prevBooking.serviceId): undefined,
+    service: (prevBooking?.serviceId) ? getServicePicked(prevBooking.serviceId): undefined,
     buisnessDays: [],
     buisnessHours: {start: '00:00:00', end: '23:59:00' },
     addonOptions: [],
@@ -207,8 +207,6 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
           total: calcTotalPrice(updatedCheckboxes.filter(opt => opt.isChecked).flatMap(ad => ad.id), state.service?.id)
         }
       case 'SET_DATE':
-        console.log(action.payload);
-        
         return { ...state, date: action.payload }
 
       case 'SET_TIME':
@@ -335,7 +333,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
 
       const { bookAService, error } = await res.json()
       if(error) throw new Error(error.message)
-      console.log(bookAService);
+      // console.log(bookAService);
       dispatchRed({type: 'SET_BOOKING_ID', payload: bookAService.id})
       dispatchRed({type: 'SET_CUSTOMER', payload: {name, email, phone}})
       // // return check to see if employee is avail
@@ -572,6 +570,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
           {addons.length > 0 && <>
 
             <h5> Add-Ons</h5>
+            {stateRed.addonOptions.length === 0 && <p className="subtext"> no addons available </p>}
             <div className={formStyles.addons_wrap} >
               {stateRed.addonOptions.map(addon => (
                   <label 

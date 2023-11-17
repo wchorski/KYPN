@@ -14,6 +14,7 @@ article.product :global {
 
   aside{
     position: relative;
+    height: 100%;
   }
 
   .content{
@@ -35,6 +36,8 @@ article.product :global {
     display: grid;
     grid-template-rows: minmax(0,1fr) auto;
     resize: both;
+    position: sticky;
+    top: 4rem;
     /* border: 2px dashed var(--c-accent); */
     
     img{

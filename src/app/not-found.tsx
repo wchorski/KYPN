@@ -27,12 +27,19 @@ function Header() {
 
   return<>
     <Section layout={'1'}>
-    <center>
+
    
-        <h1> 404 </h1>
+        <h1
+          style={{
+            textAlign: 'center',
+            marginInline: 'auto',
+          }}
+        > 
+          404 
+        </h1>
      
 
-    </center>
+
     </Section>
   </>
 }

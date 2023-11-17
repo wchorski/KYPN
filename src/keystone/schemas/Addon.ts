@@ -35,12 +35,13 @@ export const Addon:Lists.Addon = list({
 
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true },
-    hooks: {
-      beforeOperation({resolvedData}) {
-        if(!resolvedData?.name) return console.log('Category: no name')
-        resolvedData.name = slugFormat(String(resolvedData.name))
-      },
+      hooks: {
+        beforeOperation({resolvedData}) {
+          if(!resolvedData?.name) return console.log('Category: no name')
+          resolvedData.name = slugFormat(String(resolvedData.name))
+        },
     }}),
+    image: text(),
     excerpt: text({
       ui: {
         displayMode: 'textarea'

@@ -53,6 +53,7 @@ header.header :global {
     padding: .6rem;
     border-radius: var(--br-dull);
     font-size: 1rem;
+    color: var(--c-txt-primary)
   }
 }
 
@@ -101,22 +102,24 @@ table.pricetable :global{
 
 }
 
-table.pricetable::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40%;
-  background: rgba(255, 255, 255, 0.03);
-  z-index: 1;
-  transform: skewY(-5deg) scale(1.5);
-  pointer-events: none;
+@media (min-width: 650px) {
+  table.pricetable::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: rgba(101, 101, 101, 0.03);
+    z-index: 1;
+    transform: skewY(-5deg) scale(1.5);
+    pointer-events: none;
+  }
 }
 
 @media (max-width: 650px) {
 
-  table.pricetable{
+  table.pricetable :global{
 
     thead, tfoot{
       display: none;

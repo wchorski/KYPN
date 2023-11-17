@@ -358,6 +358,7 @@ export type Role = {
 export type Service = {
   id: string,
   name: string,
+  image:string,
   description: string,
   price: number,
   durationInHours: string,
@@ -424,6 +425,7 @@ export type SubscriptionItem = {
 export type Addon = {
   id: string,
   name: string,
+  image:string,
   description: string,
   price: number,
   services: Service[],

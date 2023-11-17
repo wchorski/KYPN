@@ -31,13 +31,13 @@ export const Service:Lists.Service = list({
 
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    image: text(),
     description: text({
       ui: {
         displayMode: 'textarea'
       }
     }),
     price: integer({ defaultValue: 0 }),
-    addons: relationship({ref: 'Addon.services', many: true}),
     durationInHours: decimal({
       defaultValue: '6',
       precision: 5,
@@ -76,6 +76,7 @@ export const Service:Lists.Service = list({
       ],
       defaultValue: [0, 1, 2, 3, 4, 5, 6]
     }),
+    addons: relationship({ref: 'Addon.services', many: true}),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     locations: relationship({ ref: 'Location.services', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),
