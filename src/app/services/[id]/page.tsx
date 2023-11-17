@@ -76,7 +76,7 @@ function Main(service?:Service){
 
       <Link href={`/bookings?serviceId=${id}`} className='button large'> Book this Service </Link>
 
-      <h2> Addons Available </h2>
+      <h2 id='addons'> Addons Available </h2>
       <List>
         {addons?.map(ad => (
           <Link key={ad.id} href={`/addons/${ad.id}`}> {ad.name}</Link>

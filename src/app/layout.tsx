@@ -13,6 +13,7 @@ import { Hero } from '@components/menus/Hero'
 import { cookies } from 'next/dist/client/components/headers'
 import { Providers } from './providers'
 import ShoppingCart from '@components/ecommerce/ShoppingCart'
+import { AnnouncementBanner } from '@components/elements/AnnouncementBanner'
 
 const header = Inter({ subsets: ['latin'], variable: '--font-header' })
 const paragraph = Barlow({ weight: '200', subsets: ['latin'], variable: '--font-paragraph' })
@@ -48,6 +49,8 @@ export default async function RootLayout({
         <ShoppingCart />
         {/* <ShoppingCart2 /> */}
 
+        <AnnouncementBanner />
+        
         <Hero
           title={envs.SITE_TITLE}
           description={envs.SITE_DESC}

@@ -327,6 +327,16 @@ export type Post = {
     // |{connect:any},
 } 
 
+export type Announcement = {
+  link:string,
+  start:string,
+  end:string,
+  type:'MAINTENANCE'|'NORMAL'|'CRITICAL'|'SALE',
+  content: {
+    document: any,
+  }
+}
+
 export type Role = {
   id: string,
   name: string,
