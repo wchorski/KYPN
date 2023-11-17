@@ -1,0 +1,127 @@
+.announcement :global {
+  --c-banner: #dbdbdb;
+  /* width: 100%; */
+  /* border: 1px solid var(--c-accent); */
+  /* border-radius: 10% 0 0 0 ; */
+  // border-radius:10px/40%;
+  margin: .2rem 1rem;
+
+  background-color: var(--c-primary);
+  
+  position: relative;
+
+  /* z-index: 9003; */
+  height: 300px;
+  /* overflow: hidden; */
+  display: flex;
+  transition: all .5s;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+
+  .content-cont{
+    padding: 0 1rem;
+    margin: 0 auto;
+  }
+
+  a.btnlink{
+    font-size: 2rem;
+    margin-left: auto;
+
+    border-bottom: 5px dashed var(--c-accent);
+    padding: 1em;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transform: scale(1);
+    transition: all .3s;
+
+    &:hover, &:focus{
+      background-color: var(--c-accent);
+      border-bottom: 2px dashed var(--c-primary);
+      color: var(--c-txt-rev);
+    }
+
+    /* &.focused{
+      transform: scale(1.2);
+    } */
+  }
+
+
+  button.close{
+    /* position: absolute; */
+    top: 0;
+    right: 0;
+    /* margin: 1em; */
+    padding: 1em;
+    font-size: 20px;
+    border: none;
+    background-color: transparent;
+    transition: all .3s;
+    height: 100%;
+    
+    &:hover{
+      background-color: #00000064;
+      color: white;
+    }
+  }
+
+
+  span.msg {
+    flex-grow: 1;
+    padding: 1em;
+    font-size: 3em;
+    color: var(--c-txt);
+    /* position: absolute; */
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    line-height: 50px;
+    text-align: center;
+    
+    /* transform:translateX(100%); */
+    
+    /* animation: example1 15s linear infinite; */
+  }
+
+  @keyframes example1 {
+    0%   { 
+    
+      transform: translateX(100%); 		
+    }
+    100% { 
+    
+      transform: translateX(-100%); 
+    }
+  }
+
+}
+
+// .announcement:before {
+//   content: "";
+//   position: absolute;
+//   top: 0%;
+//   left: 0%;
+//   width: 0px;
+//   height: 0px;
+//   border-bottom: 70px solid var(--c-accent);
+//   border-left: 70px solid transparent;
+//   box-shadow: 7px 2px 7px rgba(0,0,0,0.3);
+// }
+
+// .announcement:after {
+//   content: "";
+//   position: absolute;
+//   top: 0%;
+//   left: 0%;
+//   width: 0px;
+//   height: 0px;
+//   border-top: 69px solid var(--c-bg); 
+//   border-right: 69px solid transparent;
+// }
+
+.announcement.closed{
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}

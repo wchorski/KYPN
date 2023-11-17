@@ -45,7 +45,7 @@ function Main(services?:Service[], addons?:Addon[]){
       </List>
     </Section>
     <Section layout={'1'}>
-      <h2> Add-Ons</h2>
+      <h2 id='addons'> Add-Ons</h2>
       <List>
         {addons?.map(serv => (
           <Link href={`/services/${serv.id}`}> {serv.name}</Link>

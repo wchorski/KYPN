@@ -20,6 +20,7 @@
     
   
   grid-template-areas: 
+    "banner  banner banner  banner"
     "headr   headr  headr   headr"
     "navi    navi   navi    navi"
     "main    main   main    main"
@@ -59,6 +60,7 @@
     
   
     grid-template-areas: 
+      "banner  banner banner  banner"
       "headr   headr  headr   headr"
       "navi    navi   navi    navi"
       "main    main   aside   aside"
@@ -76,6 +78,10 @@
     // > * {
     //   border: dashed 2px red;
     // }
+    .banner_wrap {
+      grid-area: banner;
+      grid-column: 1/-1;
+    }
 
     > header {
       grid-area: headr;
@@ -125,6 +131,11 @@
     // > * {
     //   border: dashed pink 2px;
     // }
+
+    .banner_wrap {
+      grid-area: banner;
+      grid-column: 1/-1;
+    }
 
     > header {
       grid-area: headr;
