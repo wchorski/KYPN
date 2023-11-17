@@ -43,7 +43,7 @@ export const componentBlocks = {
   contactform,
   sociallinknav,
   iframe,
-  // pricetable,
+  pricetable,
   hero,
   carousel,
   quote,

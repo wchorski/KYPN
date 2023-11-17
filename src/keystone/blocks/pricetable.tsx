@@ -1,10 +1,12 @@
-'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
-import { Box, jsx } from '@keystone-ui/core';
+import { jsx, Box } from '@keystone-ui/core';
 import { component, fields, NotEditable, } from '@keystone-6/fields-document/component-blocks';
 import moneyFormatter from '../../lib/moneyFormatter';
+import { envs } from '../../../envs';
+
+const FRONTEND_URL = envs.FRONTEND_URL
 
 export const pricetable = component({
   label: 'Price Table',
@@ -13,10 +15,10 @@ export const pricetable = component({
       fields.object({
         imageSrc: fields.url({
           label: 'Image URL',
-          defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
+          defaultValue: FRONTEND_URL + '/assets/placeholder.png',
         }),
         title: fields.text({
-          label: 'Title',
+          label: 'Custom Title',
         }),
         service: fields.relationship({
           label: 'Service',
@@ -45,7 +47,6 @@ export const pricetable = component({
   },
   preview: function Preview(props) {
     
-    
     return (
       // <NotEditable>
         <div
@@ -55,8 +56,7 @@ export const pricetable = component({
             scrollSnapType: 'y mandatory',
           }}
         >
-          {props.fields.items.elements.map(item => {
-            return (
+          {props.fields.items.elements.map(item => (
               <Box
                 key={item.key}
                 margin="xsmall"
@@ -71,6 +71,7 @@ export const pricetable = component({
                   background: '#eff3f6',
                 }}
               >
+                
                 <NotEditable>
 
                 <img
@@ -108,8 +109,7 @@ export const pricetable = component({
                   <button>{item.fields.buttonLabel.value}</button>
                 </NotEditable>
               </Box>
-            );
-          })}
+            ))}
         </div>
       // </NotEditable>
     );

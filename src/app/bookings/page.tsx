@@ -17,10 +17,10 @@ type Props = {
     date?:string,
     time?:string,
   }
-  params:{id:string}
+  // params:{id:string}
 }
 
-export default async function BookingsPage ({ params, searchParams }:Props) {
+export default async function BookingsPage ({ searchParams }:Props) {
 
   const { bookingId, serviceId, locationId, staffId, date, time } = searchParams
 
@@ -45,7 +45,7 @@ export default async function BookingsPage ({ params, searchParams }:Props) {
     <PageTHeaderMain 
       header={Header()}
       // @ts-ignore
-      main={Main({services, addons, session, prevBooking: bookingId ? prevBooking : null })}
+      main={Main({services, addons, session, prevBooking })}
     />
   )
 }

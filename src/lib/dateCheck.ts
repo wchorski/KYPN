@@ -142,3 +142,10 @@ export function dayOfWeek(num:number){
       return 'day of week error'
   }
 }
+
+export function daysOfWeek(numbers:number[]){
+ 
+  const daysOfWeek = numbers.map(num => dayOfWeek(num)) as string[]
+
+  return daysOfWeek
+}
