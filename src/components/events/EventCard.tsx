@@ -22,7 +22,7 @@ export function EventCard({image, start, summary, location, id}:Event) {
         </div>
 
         <div className="details">
-          <Link href={`/events/e/${id}`}>
+          <Link href={`/events/${id}`}>
             <h4> {summary} </h4>
           </Link>
 

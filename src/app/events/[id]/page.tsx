@@ -165,34 +165,29 @@ function Main(
       <div className={styles.content}>
         <h1>{summary}</h1>
 
-        <Card >
+        <Card layout={'flex'}>
 
-          <Section layout="1_1">
-            <div 
-              className="info-cont"
-              style={{
-                display: 'grid',
-                alignContent: 'center',
-                height: '100%',
-              }}
-            >
-              <strong>
-                Purchase Ticket
-              </strong> 
+          <div 
+            className="info-cont"
+            style={{
+              display: 'grid',
+              alignContent: 'center',
+              height: '100%',
+            }}
+          >
+            <strong>
+              Purchase Ticket
+            </strong> 
 
-              {/* <br/> */}
-              {/* <small>sub text</small>  */}
-            </div>
+            {/* <br/> */}
+            {/* <small>sub text</small>  */}
+          </div>
 
-            <AddTicketButton 
-              // setIsPopup={setIsPopup}
-              price={price} 
-              date={start} 
-            />
-          </Section>
-          
-
-
+          <AddTicketButton 
+            // setIsPopup={setIsPopup}
+            price={price} 
+            date={start} 
+          />
 
         </Card>
         
