@@ -1,5 +1,6 @@
 import fetchAnnouncements from "@lib/fetchdata/fetchAnnouncements"
 import { AnnouncementsMarquee } from "./AnnouncementsMarquee"
+import { BlockRender } from "@components/blocks/BlockRender"
 
 type Props = {
   prop?:string
@@ -8,9 +9,12 @@ type Props = {
 export async function AnnouncementBanner ({ prop }:Props) {
 
   const {announcements, error } = await fetchAnnouncements()
+
+  if (!announcements || announcements.length === 0) return null
+
   return (
-    <div className="banner_wrap">
-      <AnnouncementsMarquee announcements={announcements}/>
-    </div>
+    <AnnouncementsMarquee announcement={announcements[0]}>
+      <BlockRender document={announcements[0].content.document} />
+    </AnnouncementsMarquee>
   )
 }

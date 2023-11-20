@@ -1,5 +1,4 @@
-
-import React, { ComponentProps } from 'react';
+import { ComponentProps, Fragment } from 'react';
 import { DocumentRenderer, DocumentRendererProps } from '@keystone-6/document-renderer';
 import { Callout } from '@components/blocks/Callout';
 import { ImageBlock } from '@components/blocks/ImageBlock';
@@ -40,7 +39,7 @@ const renderers: DocumentRendererProps['renderers'] = {
     // we can override that to whatever wrapper we want
     // for eg. using React.Fragment wraps the component with nothing
     // @ts-ignore
-    block: React.Fragment,
+    block: Fragment,
     layout: props => {
       return <BlockLayout {...props} />
     },

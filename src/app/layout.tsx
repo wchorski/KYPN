@@ -44,10 +44,8 @@ export default async function RootLayout({
         // 'layout--main-aside',
       ].join(' ')}>
       <Providers>
-      {/* <ApolloWrapper token={token}> */}
 
         <ShoppingCart />
-        {/* <ShoppingCart2 /> */}
 
         <AnnouncementBanner />
         
@@ -84,8 +82,6 @@ export default async function RootLayout({
 
         <Footer />
         
-      {/* </ApolloWrapper> */}
-
       </Providers>
       </body>
     </html>

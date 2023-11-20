@@ -48,10 +48,10 @@ function Main(){
 
   const router = useRouter()
 
-  function handleLink(e:any){
-    e.preventDefaults()
-    router.back()
-  }
+  // function handleLink(e:any){
+  //   e.preventDefaults()
+  //   router.back()
+  // }
 
   return <>
     <center>
@@ -64,7 +64,7 @@ function Main(){
       <p> This page does not exist.  <br /> <br />
         <Link 
           href={`/`} 
-          onClick={handleLink}
+          // onClick={handleLink}
         > 
           ⇠ Return to previous Page 
         </Link> 
