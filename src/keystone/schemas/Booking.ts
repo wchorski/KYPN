@@ -6,12 +6,13 @@ import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
-import { mailBookingCreated } from "../../lib/mail";
+import { mailBooking } from "../../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
 import { createCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from "../../lib/googleapi/calCreate";
 import { datePrettyLocal } from "../../lib/dateFormatter";
 import { isLoggedIn, permissions, rules } from "../access";
+import { envs } from "../../../envs";
 
 
 const now = new Date();
@@ -45,7 +46,7 @@ export const Booking:Lists.Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'end', 'summary', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'end', 'summary', 'status', 'service', 'customer', 'employees'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -123,10 +124,77 @@ export const Booking:Lists.Booking = list({
         if(!item.google.id) return console.log('no google cal id');
         // @ts-ignore
         const calResponse = await deleteCalendarEvent(item.google.id)
+
+        const employees = await context.sudo().query.User.findMany({
+          where: {
+            gigs: {
+              some: {
+                id: {
+                  equals: item.id
+                }
+              }
+            }
+          },
+          query: `
+            id
+            email
+          `
+        }) as User[]
+
+        const employeeEmails = employees.flatMap( emp => emp.email)
+
+        const mail = await mailBooking({
+          to: [envs.ADMIN_EMAIL_ADDRESS, item?.email || '', ...employeeEmails],
+          operation,
+          // @ts-ignore
+          booking: item,
+        })
       }
 
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
+
+      // console.log('## Booking', {item})
+      
+      if(operation === 'create' || operation === 'update'){
+
+        const service = await context.sudo().query.Service.findOne({
+          where: { id: item.serviceId || 'no_serviceId'},
+          query: `
+            id
+            name
+          `
+        }) as Service|undefined
+
+        const employees = await context.sudo().query.User.findMany({
+          where: {
+            gigs: {
+              some: {
+                id: {
+                  equals: item.id
+                }
+              }
+            }
+          },
+          query: `
+            id
+            email
+          `
+        }) as User[]
+
+        const employeeEmails = employees.flatMap( emp => emp.email)
+
+        const mail = await mailBooking({
+          to: [envs.ADMIN_EMAIL_ADDRESS, item?.email || '', ...employeeEmails],
+          operation,
+          // @ts-ignore
+          booking: {
+            ...item,
+            service,
+          },
+        })
+      }
+
       if (operation === 'create') {
         // let customer = {
         //   id: 'non registered user',

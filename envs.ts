@@ -26,6 +26,8 @@ const WORK_FACTOR = Number(process.env.WORK_FACTOR) || 13
 
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
 const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL
+const COLOR_PRIMARY = process.env.NEXT_PUBLIC_COLOR_PRIMARY || '#abdbe8'
+const COLOR_TXT_PRIMARY = process.env.NEXT_PUBLIC_COLOR_TXT_PRIMARY || '#576768'
 const GOOGLE_CAL_ID = process.env.GOOGLE_CAL_ID
 
 const PERPAGE = Number(process.env.NEXT_PUBLIC_PERPAGE) || 20
@@ -40,6 +42,8 @@ const ADMIN_EMAIL_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_EMAIL_ADDRESS || 'no_a
 const UMAMI_ID            = process.env.NEXT_PUBLIC_UMAMI_ID            || 'no_analytics_id'
 const UMAMI_URL           = process.env.NEXT_PUBLIC_UMAMI_URL           || 'no_analytics_url'
 const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT        || 'no_analytics_script'
+const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO 
+
 
 export const envs = {
   PERPAGE,
@@ -48,7 +52,10 @@ export const envs = {
   STRIPE_WEBHOOK_SECRET,
   STRIPE_SECRET,
   SITE_TITLE,
+  COLOR_PRIMARY,
+  COLOR_TXT_PRIMARY,
   SITE_DESC,
+  ASSET_REPO,
   ADMIN_EMAIL_ADDRESS,
   UMAMI_ID,
   UMAMI_URL,

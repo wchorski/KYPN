@@ -3,6 +3,7 @@ import { envs } from '../../envs';
 import {
   Body,
   Button,
+  Column,
   Container,
   Head,
   Hr,
@@ -14,66 +15,44 @@ import {
   Section,
   Text,
 } from '@react-email/components';
-import { CSSProperties } from 'react'
+import * as React from 'react'
 import { datePrettyLocal } from '../lib/dateFormatter';
 
 type BookingEmailProps =  {
-  operation?: 'create'|'update'|'delete',
-  booking?: Booking,
+  operation: 'create'|'update'|'delete',
+  booking: Booking,
   imgUrl?:string,
 }
 
-export function BookingEmail({
-  operation = 'create',
-  booking = {
-    name: 'yandle',
-    email: 'yan@m.lan',
-    phone: '123 123 1234',
-    // @ts-ignore
-    service: {
-      name: 'big serv',
-    },
-    status: "HOLD",
-    start: '2023-11-23T09:00',
-
-  },
+export default function BookingEmail({
+  operation,
+  booking,
   imgUrl =  envs.FRONTEND_URL + `/assets/logo.png`,
 }: BookingEmailProps){
+
   const previewText = `Booking: ${operation}`;
 
   return (
     <Html>
-      <Head />
-      <Preview> preview: {previewText}</Preview>
+      <Preview>{previewText}</Preview>
 
       <Body style={main}>
         <Section style={main}>
           <Container style={container}>
-            <Section>
-              <Img
-                src={envs.FRONTEND_URL + '/assets/logo.png'}
-                width="96"
-                height="30"
-                alt={envs.SITE_TITLE + ' logo'}
-              />
-            </Section>
-            <Section>
-              <Img
-                src={imgUrl}
-                width="96"
-                height="96"
-                alt={envs.SITE_TITLE + ' logo'}
-                style={userImage}
-              />
-            </Section>
-            <Section style={{ paddingBottom: '20px' }}>
-              <Row>
+            <Row>
+              <Column>
                 <Text style={heading}> Booking </Text>
                 <Text style={subheading}> {operation} </Text>
-
+              </Column>
+              <Column>
                 <Button style={button} href={envs.FRONTEND_URL + `/bookings/${booking.id}`}>
                   View Account
                 </Button>
+              </Column>
+            </Row>
+  
+            <Section style={{ paddingBottom: '20px' }}>
+              <Row>
 
                 <Container style={review}>
                   <table>
@@ -105,29 +84,45 @@ export function BookingEmail({
                     </tbody>
                   </table>
                   
+                  <Text>
+                    Notes:
+                  </Text>
+                  <Text>
+                    {booking.notes}
+                  </Text>
+                  
                 </Container>
                 
               </Row>
 
               <Container style={footer}>
-                <Text>
-                  <Link href={envs.FRONTEND_URL} style={link}>
-                    {envs.SITE_TITLE}
-                  </Link>
-                </Text>
+                <Row>
+                  <Img
+                    src={imgUrl}
+                    width="50"
+                    height="50"
+                    alt={envs.SITE_TITLE + ' logo'}
+                  />
+                  <Text>
+                    <Link href={envs.FRONTEND_URL} style={link}>
+                      {envs.SITE_TITLE}
+                    </Link>
+                  </Text>   
+                </Row>
               </Container>
 
+              <Hr style={hr} />
+              
+              <Section>
+                <Row>
+                  <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={reportLink}>
+                    request help
+                  </Link>
+                </Row>
+              </Section>
+
             </Section>
 
-            <Hr style={hr} />
-
-            <Section>
-              <Row>
-                <Link href={`mail:${envs.ADMIN_EMAIL_ADDRESS}`} style={reportLink}>
-                  report a problem
-                </Link>
-              </Row>
-            </Section>
           </Container>
         </Section>
       </Body>
@@ -143,7 +138,7 @@ const status = {
   borderStyle: 'solid',
   borderWidth: '1px',
   borderLeftWidth: '10px',
-} as CSSProperties
+} as React.CSSProperties
 
 const BLUE = 'rgb(0, 132, 255)'
 const YELLOW = 'rgb(224, 224, 47)'
@@ -212,6 +207,7 @@ const container = {
   margin: '0 auto',
   padding: '20px 0 48px',
   width: '580px',
+  display: 'flex',
 };
 
 const userImage = {
@@ -226,11 +222,11 @@ const heading = {
   fontWeight: '700',
   color: '#484848',
   marginBottom: '0',
-} as CSSProperties;
+} as React.CSSProperties;
 
 const subheading = {
   marginTop: '0',
-} as CSSProperties
+} as React.CSSProperties
 
 const paragraph = {
   fontSize: '18px',
@@ -246,9 +242,9 @@ const review = {
 };
 
 const button = {
-  backgroundColor: '#ff5a5f',
+  backgroundColor: envs.COLOR_PRIMARY,
   borderRadius: '3px',
-  color: '#fff',
+  color: envs.COLOR_TXT_PRIMARY,
   fontSize: '18px',
   textDecoration: 'none',
   textAlign: 'center' as const,
@@ -257,11 +253,11 @@ const button = {
   padding: '15px',
   margin: '10px 0',
 
-} as CSSProperties
+} as React.CSSProperties
 
 const link = {
   ...paragraph,
-  color: '#ff5a5f',
+  color: envs.COLOR_PRIMARY,
   display: 'block',
 };
 
@@ -279,4 +275,4 @@ const hr = {
 const footer = { 
   background: '#323232',
   padding: '1rem',
-} as CSSProperties
+} as React.CSSProperties

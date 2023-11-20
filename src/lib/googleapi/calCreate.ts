@@ -66,7 +66,7 @@ export async function deleteCalendarEvent(eventId:string){
 
 
     console.log('📅 googleapi cal delete success, ');
-    console.log({response});
+    // console.log({response});
 
     return { 
       message: 'successful calendar deletion'
