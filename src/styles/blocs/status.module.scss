@@ -15,10 +15,10 @@
 }
 
 .SUSPENDED, .PAUSED, .POSTPONED, .HOLD, .PENDING {
-  border-color: rgb(174, 174, 0);
+  border-color: rgb(224, 224, 47);
 }
 
-.EXPIRED, .DELINQUENT, .CANCELED, .REJECTED {
+.EXPIRED, .DELINQUENT, .REJECTED {
   border-color: rgb(148, 3, 7);
 }
 
