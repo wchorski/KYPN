@@ -8,6 +8,12 @@ import { User } from '@ks/types'
 import { ReactNode } from 'react'
 import { getServerSession } from 'next-auth'
 import { nextAuthOptions } from '@/session'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Users | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
   
 type Props = {
   children:ReactNode

@@ -1,8 +1,15 @@
+import { envs } from "@/envs";
 import { PageTHeaderMain } from "@components/layouts/PageTemplates";
 import { Section } from "@components/layouts/Section";
 import stripe from "@lib/get-stripejs";
 import moneyFormatter from "@lib/moneyFormatter";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: 'Success | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{ session_id:string}

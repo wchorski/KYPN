@@ -26,7 +26,7 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-  title: `Shop | ` + envs.SITE_TITLE,
+  title: `Blog | ` + envs.SITE_TITLE,
   description: envs.SITE_DESC,
 }
 

@@ -1,10 +1,18 @@
+import { envs } from '@/envs'
 import { List } from '@components/elements/List'
 import { Card } from '@components/layouts/Card'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
 import { Addon, Service } from '@ks/types'
 import fetchServicesAndAddons from '@lib/fetchdata/fetchServicesAndAddons'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Services | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
+
 type Props = {
   searchParams:{q:string}
   params:{id:string}

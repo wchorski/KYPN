@@ -1,3 +1,4 @@
+import { envs } from '@/envs'
 import { StatusBadge } from '@components/StatusBadge'
 import { PriceTag } from '@components/ecommerce/PriceTag'
 import { ImageDynamic } from '@components/elements/ImageDynamic'
@@ -10,7 +11,14 @@ import { SubscriptionItem } from '@ks/types'
 import { dateDaysLapsed, datePrettyLocal } from '@lib/dateFormatter'
 import fetchSubscriptionItem from '@lib/fetchdata/fetchSubscriptionItem'
 import moneyFormatter from '@lib/moneyFormatter'
+import { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Subscription Status | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
+
 type Props = {
   searchParams:{q:string}
   params:{id:string}

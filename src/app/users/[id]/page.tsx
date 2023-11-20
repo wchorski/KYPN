@@ -5,7 +5,22 @@ import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
 import { User } from '@ks/types'
 import { fetchUserById } from '@lib/fetchdata/fetchUserById'
+import { Metadata, ResolvingMetadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata(
+  { params }:Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata>  {
+
+  const { id } = params
+  const { user , error} = await fetchUserById(id)
+
+  return {
+    title: (user?.name || user?.email) + ' | ' + envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+}
 
 type Props = {
   searchParams:{q:string}
@@ -22,17 +37,17 @@ export default async function UserByIdPage ({ params, searchParams }:Props) {
 
   return (
     <PageTHeaderMain
-      header={Header(user?.name)}
+      header={Header(user?.name, user?.email)}
       main={Main(user)}
     />
   )
 }
 
-function Header(name?:string){
+function Header(name?:string, email?:string){
 
   return<>
     <Section layout={'1'}>
-      <h1> User: {name} </h1>
+      <h1> {name || email} </h1>
     </Section>
   </>
 }

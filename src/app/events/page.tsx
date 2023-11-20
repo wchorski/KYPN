@@ -9,6 +9,11 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-i
 import { EventsCalendar } from "@components/events/EventsCalendar"
 import styles from '@styles/events/events.module.scss'
 
+export const metadata: Metadata = {
+  title: 'Events | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
+
 type Props = {
   params:{
     slug:string,
@@ -17,11 +22,6 @@ type Props = {
     [key: string]: string | string[] | undefined, 
     date: string | undefined, 
   }
-}
-
-export const metadata: Metadata = {
-  title: 'Events' + envs.SITE_TITLE,
-  description: envs.SITE_DESC,
 }
 
 const today = new Date()

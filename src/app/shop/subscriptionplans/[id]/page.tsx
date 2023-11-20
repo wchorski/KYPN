@@ -47,7 +47,7 @@ export async function generateMetadata(
     description: envs.SITE_DESC,
   }
 
-  const { name, excerpt, image, tags, author } = subscriptionPlan
+  const { name, excerpt, image, tags, author, categories } = subscriptionPlan
   
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -55,15 +55,15 @@ export async function generateMetadata(
   return {
     metadataBase: new URL(envs.FRONTEND_URL),
     title: name,
-    description: String(excerpt),
+    description: excerpt,
     openGraph: {
-      images: [String(image), ...previousImages],
+      images: [image, ...previousImages],
       title: name,
       description: excerpt,
       url: envs.FRONTEND_URL + '/shop/subscriptionplans/' + params.id,
       type: 'article'
     },
-    keywords: tags?.map((tag:Tag) => tag.name).join(', '),
+    keywords: tags?.map((tag:Tag) => tag.name).join(', ') + + ' ' + categories?.map(cat => cat.name).join(', '),
     authors: [{name: author?.name, url: author?.url}]
   }
 }

@@ -10,6 +10,13 @@ import { User } from "@ks/types"
 import { LoginToView } from "@components/menus/LoginToView"
 import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 import styles from '@styles/menus/dashboard.module.scss'
+import { Metadata } from "next"
+import { envs } from "@/envs"
+
+export const metadata: Metadata = {
+  title: 'Account | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{

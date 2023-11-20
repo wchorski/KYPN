@@ -147,7 +147,7 @@ export default async function BlogPageBySlug({ params }:Props) {
         </div>
       )}
 
-      <div className="siteWrapper">
+      <div className="content">
         <BlockRender document={content.document} />
       </div>
 

@@ -14,6 +14,28 @@ import DialogPopup from '@components/menus/Dialog'
 import { BookingFormUpdate } from '@components/bookings/BookingFormUpdate'
 import { StatusBadge } from '@components/StatusBadge'
 import styles from "@styles/booking/booking.module.scss";
+import { Metadata, ResolvingMetadata } from 'next'
+import { envs } from '@/envs'
+
+// export async function generateMetadata(
+//   { params }:Props,
+//   parent: ResolvingMetadata,
+// ): Promise<Metadata>  {
+
+//   const { id } = params
+//   const { booking , error} = await fetchBooking(id)
+
+//   return {
+//     title: 'Booking Status | ' + envs.SITE_TITLE,
+//     description: envs.SITE_DESC,
+//   }
+// }
+
+export const metadata: Metadata = {
+  title: 'Booking Status | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
+
 
 type Props = {
   searchParams:{q:string}
