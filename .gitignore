@@ -1,8 +1,9 @@
 node_modules
 .keystone
+.next
+.react-email
 keystone.db
 *.log
-.next
 .env
 /db/**
 !/db/compose.example.yml

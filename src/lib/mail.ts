@@ -4,8 +4,9 @@ import moneyFormatter from '../lib/moneyFormatter'
 import { datePrettyLocal } from "./dateFormatter";
 import { envs } from "../../envs";
 import { render } from "@react-email/render";
-import { BookingEmail } from "../emails/bookings";
-import { StarterEmail } from "../emails/starter";
+import  BookingEmail  from "../emails/bookings";
+import { Booking } from "@ks/types";
+
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT
@@ -201,33 +202,28 @@ export async function sendPasswordResetEmail(resetToken: string, to: string
   }
 }
 
-type MailBookingCreate = {
-  id: string, 
+type MailBooking= {
   to: string[], 
-  customer:Customer, 
-  employee?:Employee, 
-  formValues:FormValues, 
-  message?: string,
+  operation:'create'|'update'|'delete',
+  booking:Booking, 
 }
 
 
 // const bookingHtml = render(<BookingEmail />)
-const bookingHtml = render(StarterEmail({url: "https://example.com"}))
 
-export async function mailBookingCreated({
-  id, 
+export async function mailBooking({
   to, 
-  customer, 
-  employee, 
-  formValues, 
-}:MailBookingCreate
+  operation,
+  booking, 
+}:MailBooking
 ): Promise<void> {
-  // email the user a token
+
+  const bookingHtml = render(BookingEmail({booking, operation}))
 
   const info = (await transport.sendMail({
     to,
     from: ADMIN_EMAIL_ADDRESS,
-    subject: 'New Booking Created!',
+    subject: `Booking: ${operation} ${booking.status}`,
     html: bookingHtml,
     // html: templateBooking({
     //   id,

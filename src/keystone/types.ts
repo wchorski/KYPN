@@ -236,7 +236,7 @@ export type Booking = {
   end: string,
   summary: string,
   durationInHours: string,
-  service: Service,
+  service?: Service,
   price: number,
   employees: User[],
   addons:Addon[],

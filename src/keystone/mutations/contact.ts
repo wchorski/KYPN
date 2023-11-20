@@ -2,7 +2,7 @@
 import { graphql } from '@keystone-6/core';
 import { Context } from '.keystone/types';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { mailBookingCreated } from '../../lib/mail';
+import { mailBooking } from '../../lib/mail';
 import { envs } from '../../../envs';
 import { Booking } from '../types';
 import { datePrettyLocal } from '../../lib/dateFormatter';
@@ -23,7 +23,7 @@ export const contact = (base: BaseSchemaMeta) => graphql.field({
   async resolve(source, { name, email, phone, notes, start, customerId }, context:Context) {
 
     // const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
-    const summary = `[LEAD] ${name ? name : email ? email : phone ? phone : 'no_info'}`
+    const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
 
     const now = new Date().toISOString()
 
@@ -45,24 +45,24 @@ export const contact = (base: BaseSchemaMeta) => graphql.field({
       where: { id: customerId },
     })
 
-    mailBookingCreated({
-      id: booking.id,
-      to: [envs.ADMIN_EMAIL_ADDRESS, email],
-      customer: { 
-        id: customerId, 
-        name: user?.name, 
-        email: user?.email, 
-        phone: user?.phone, 
-      },
-      formValues: {
-        name,
-        email,
-        phone,
-        start: datePrettyLocal(start, 'full'),
-        notes,
-      },
+    // mailBooking({
+    //   id: booking.id,
+    //   to: [envs.ADMIN_EMAIL_ADDRESS, email],
+    //   customer: { 
+    //     id: customerId, 
+    //     name: user?.name, 
+    //     email: user?.email, 
+    //     phone: user?.phone, 
+    //   },
+    //   booking: {
+    //     name,
+    //     email,
+    //     phone,
+    //     start: datePrettyLocal(start, 'full'),
+    //     notes,
+    //   },
 
-    })
+    // })
   
   
     return booking

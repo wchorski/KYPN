@@ -14,7 +14,7 @@ type Props = {
 const now = new Date()
 
 export function AnnouncementsMarquee({ announcements }: Props) {
-  console.log({announcements});
+  // console.log({announcements});
 
   const dayLater = new Date(now.getFullYear(), now.getMonth(), now.getDay() + 1 ).toISOString()
   // console.log({yearLater});
