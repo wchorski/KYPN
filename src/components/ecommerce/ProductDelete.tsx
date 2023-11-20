@@ -1,30 +1,28 @@
-import { gql, useMutation } from "@apollo/client";
+'use client'
 
 export const ProductDelete = ({id, children}: any) => {
-
-  const [deleteProduct, {loading}] = useMutation(MUTATION_PRODUCT_DELETE)
 
   async function handleDelete() {
 
     if(! confirm('delete product?')) return 
 
     try {
-      const res = await deleteProduct({
-        variables: {where: {id: id}},
-        update: handleCache,
-      })
-      // console.log({res});
+
+      const res = await fetch(`/api/gql/protected`, {
+        method: 'POST',
+        body: JSON.stringify({
+          query, 
+          variables: {where: {id: id}}
+        })
+      }) 
+
+      const data = await res.json()
+      console.log({data});
       
       
     } catch (err) {
       console.warn(err);
     }
-  }
-
-  function handleCache(cache:any, payload:any) {
-    // console.log({payload})
-    cache.evict(cache.identify(payload.data.deleteProduct))
-    
   }
 
   return (
@@ -37,7 +35,7 @@ export const ProductDelete = ({id, children}: any) => {
   )
 }
 
-const MUTATION_PRODUCT_DELETE = gql`
+const query = `
   mutation Mutation($where: ProductWhereUniqueInput!) {
     deleteProduct(where: $where) {
       id

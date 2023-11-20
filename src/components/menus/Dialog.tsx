@@ -68,7 +68,12 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
               onTransitionEnd={handleTransitionEnd}
             >
 
-            <button className={styles.background} onClick={closeDialog}>  </button>
+            <button 
+              className={styles.background} 
+              // onClick={closeDialog}
+            > 
+             {/* if user clicks off of dialog box, close it */}
+            </button>
 
             <div className={styles.card}>
 
@@ -77,7 +82,7 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
                 <h2 className="text-2xl">{title}</h2>
 
                 <button
-                  onClick={closeDialog}
+                  // onClick={closeDialog}
                   className={styles.close}
                 >
                   <IoMdClose />
@@ -91,7 +96,7 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
                 {buttonLabel && (
                   <div className={styles.buttons_wrap} >
                     <button
-                      onClick={clickOk}
+                      // onClick={clickOk}
                       className={`button`}
                     >
                       {buttonLabel}

@@ -6,7 +6,7 @@
   // border-radius:10px/40%;
   margin: .2rem 1rem;
 
-  background-color: var(--c-primary);
+  // background-color: var(--c-primary);
   
   position: relative;
 
@@ -120,7 +120,7 @@
 //   border-right: 69px solid transparent;
 // }
 
-.announcement.closed{
+.closed{
   height: 0;
   margin: 0;
   pointer-events: none;

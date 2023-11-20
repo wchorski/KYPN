@@ -36,8 +36,6 @@ export default async function fetchAnnouncements(){
         }
       ]
     }) as Announcement[]
-
-    console.log({announcements});
     
     return { announcements }
     

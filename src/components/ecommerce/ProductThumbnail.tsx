@@ -10,6 +10,7 @@ import { Product, Session } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import fetchSession from '@lib/fetchdata/fetchSession';
 import { nextAuthOptions } from '@/session';
+import { envs } from '@/envs';
 
 type Props = {
   product:Product,
@@ -59,8 +60,8 @@ export async function ProductThumbnail({product, session}: Props) {
 
       {session?.data?.role?.canManageSubscriptionPlans && (
         <div className="menu admin">
-          <Link href={{ pathname: '/shop/subscriptions/update', query: { id: id }, }}> Edit ✏️ </Link>
-          <ProductDelete id={id}> Delete </ProductDelete>
+          <Link href={envs.BACKEND_URL + `/products/${id}`} target={'_blank'}> Edit ✏️ </Link>
+          {/* <ProductDelete id={id}> Delete </ProductDelete> */}
         </div>
       )}
     </article>
