@@ -3,6 +3,9 @@ import { createTransport, getTestMessageUrl } from "nodemailer";
 import moneyFormatter from '../lib/moneyFormatter'
 import { datePrettyLocal } from "./dateFormatter";
 import { envs } from "../../envs";
+import { render } from "@react-email/render";
+import { BookingEmail } from "../emails/bookings";
+import { StarterEmail } from "../emails/starter";
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT
@@ -207,6 +210,10 @@ type MailBookingCreate = {
   message?: string,
 }
 
+
+// const bookingHtml = render(<BookingEmail />)
+const bookingHtml = render(StarterEmail({url: "https://example.com"}))
+
 export async function mailBookingCreated({
   id, 
   to, 
@@ -221,12 +228,13 @@ export async function mailBookingCreated({
     to,
     from: ADMIN_EMAIL_ADDRESS,
     subject: 'New Booking Created!',
-    html: templateBooking({
-      id,
-      customer,
-      employee,
-      formValues,
-    }),
+    html: bookingHtml,
+    // html: templateBooking({
+    //   id,
+    //   customer,
+    //   employee,
+    //   formValues,
+    // }),
 
   }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
 
@@ -235,6 +243,7 @@ export async function mailBookingCreated({
 
   }
 }
+
 
 export async function mailCheckoutReceipt(id: string, to: string[], customerName:string, emailAdmin: string, items:OrderItem[], date:string, totalOrder:number
 ): Promise<void> {
