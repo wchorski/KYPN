@@ -10,6 +10,47 @@ import { List } from '@components/elements/List'
 import Link from 'next/link'
 import { timePretty } from '@lib/dateFormatter'
 import { daysOfWeek } from '@lib/dateCheck'
+import { Metadata, ResolvingMetadata } from 'next'
+import { getServerSession } from 'next-auth'
+import { nextAuthOptions } from '@/session'
+import { envs } from '@/envs'
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+ 
+  // fetch data
+  const session = await getServerSession(nextAuthOptions)
+  const { service, error } = await fetchService(params?.id)
+
+  if(!service) return {
+    title: envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+
+  const { id, name, description, image, categories, tags} = service
+  
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+  
+  return {
+    metadataBase: new URL(envs.FRONTEND_URL),
+    title: name,
+    description: description,
+    openGraph: {
+      images: [String(image), ...previousImages],
+      title: name,
+      description: description,
+      url: envs.FRONTEND_URL + '/bookings?serviceId=' + id,
+      type: 'article'
+    },
+    keywords: tags?.map(tag => tag.name).join(', ') + ' ' + categories?.map(cat => cat.name).join(', '),
+    // authors: [{name: author?.name, url: author?.url}]
+  }
+}
+
 type Props = {
   searchParams:{q:string}
   params:{id:string}

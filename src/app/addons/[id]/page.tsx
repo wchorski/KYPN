@@ -1,3 +1,4 @@
+import { envs } from '@/envs'
 import { PriceTag } from '@components/ecommerce/PriceTag'
 import { ImageDynamic } from '@components/elements/ImageDynamic'
 import { List } from '@components/elements/List'
@@ -6,7 +7,23 @@ import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
 import { Addon } from '@ks/types'
 import fetchAddon from '@lib/fetchdata/fetchAddon'
+import { Metadata, ResolvingMetadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata(
+  { params }:Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata>  {
+
+  const { id } = params
+  const { addon , error} = await fetchAddon(id)
+
+  return {
+    title: addon?.name + ' | ' + envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+}
+
 type Props = {
   searchParams:{q:string}
   params:{id:string}

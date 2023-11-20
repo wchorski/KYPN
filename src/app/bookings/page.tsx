@@ -1,3 +1,4 @@
+import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { BookingForm } from "@components/bookings/BookingForm"
@@ -6,7 +7,13 @@ import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 import { Addon, Booking, BookingPrevious, Service, Session,  } from "@ks/types"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
+import { Metadata } from "next"
 import { getServerSession } from "next-auth"
+
+export const metadata: Metadata = {
+  title: 'Bookings | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{

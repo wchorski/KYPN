@@ -216,7 +216,7 @@ export function TicketForm ({ event, user }:Props) {
         </label>
       </fieldset>
 
-      <span> subtotal: {moneyFormatter(stateRed.total)}</span>
+      <p> subtotal: {moneyFormatter(stateRed.total)}</p>
 
       <p className={(formState.message === 'success') ? 'success' : 'error'}> 
         {formState.message} 

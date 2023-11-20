@@ -70,33 +70,33 @@ export default function DialogPopup({ title, onClose, onOk, buttonLabel = 'OK', 
 
             <button 
               className={styles.background} 
-              // onClick={closeDialog}
+              onClick={closeDialog}
             > 
              {/* if user clicks off of dialog box, close it */}
             </button>
 
             <div className={styles.card}>
 
-              <div className="flex flex-row justify-between mb-4 pt-2 px-5 bg-yellow-400">
+              <div>
 
-                <h2 className="text-2xl">{title}</h2>
+                <h2>{title}</h2>
 
                 <button
-                  // onClick={closeDialog}
+                  onClick={closeDialog}
                   className={styles.close}
                 >
                   <IoMdClose />
                 </button>
               </div>
 
-              <div>
+              <div className={styles.content}>
 
                 {children}
 
                 {buttonLabel && (
                   <div className={styles.buttons_wrap} >
                     <button
-                      // onClick={clickOk}
+                      onClick={clickOk}
                       className={`button`}
                     >
                       {buttonLabel}

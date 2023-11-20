@@ -23,14 +23,6 @@ import Link from 'next/link';
 
 export const revalidate = 5;
 
-type Props = {
-  params:{
-    id:string | string[] | undefined,
-  },
-  searchParams: { [key: string]: string | string[] | undefined }
-  template:string,
-}
-
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -46,7 +38,7 @@ export async function generateMetadata(
     description: envs.SITE_DESC,
   }
 
-  const { name, excerpt, image, tags, author } = product
+  const { name, excerpt, image, tags, author, categories } = product
   
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -54,19 +46,26 @@ export async function generateMetadata(
   return {
     metadataBase: new URL(envs.FRONTEND_URL),
     title: name,
-    description: String(excerpt),
+    description: excerpt,
     openGraph: {
-      images: [String(image), ...previousImages],
+      images: [image, ...previousImages],
       title: name,
       description: excerpt,
       url: envs.FRONTEND_URL + '/shop/products/' + params.id,
       type: 'article'
     },
-    keywords: tags?.map(tag => tag.name).join(', '),
+    keywords: tags?.map(tag => tag.name).join(', ') + ' ' + categories?.map(cat => cat.name).join(', '),
     authors: [{name: author?.name, url: author?.url}]
   }
 }
 
+type Props = {
+  params:{
+    id:string | string[] | undefined,
+  },
+  searchParams: { [key: string]: string | string[] | undefined }
+  template:string,
+}
 
 export default async function ProductPageById({ params }:Props) {
   

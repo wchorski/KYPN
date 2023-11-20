@@ -12,6 +12,13 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import statusStyles from '@styles/blocs/status.module.scss'
 import styles from '@styles/events/tickets.module.scss'
+import { Metadata } from "next"
+import { envs } from "@/envs"
+
+export const metadata: Metadata = {
+  title: 'Ticket | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{q:string}

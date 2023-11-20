@@ -22,7 +22,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
 
   const bookingCells = user?.bookings?.map((book:Booking) => ({
     date: datePrettyLocalDay(book.start || '') + ' ' + datePrettyLocalTime(book.start || ''),
-    service: book.service.name,
+    service: book.service?.name || '-- service not selected --',
     status: book.status,
     // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
     details: book.id,

@@ -172,7 +172,8 @@ export type Order = {
   total: number,
   dateCreated: string,
   user: User,
-  items: [OrderItem]
+  items: [OrderItem],
+  ticketItems:Ticket[],
 }
 
 export type OrderItem = {

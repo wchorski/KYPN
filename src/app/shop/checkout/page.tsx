@@ -6,6 +6,13 @@ import { PageTHeaderMain, } from "@components/layouts/PageTemplates"
 import { getServerSession } from "next-auth"
 import { Section } from "@components/layouts/Section"
 import styles from '@styles/ecommerce/cart.module.scss'
+import { Metadata } from "next"
+import { envs } from "@/envs"
+
+export const metadata: Metadata = {
+  title: 'Checkout | ' +  envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{q:string}
@@ -37,23 +44,26 @@ function Header(){
 async function Main(sessionId:string){
 
   return <>
-    <Section layout={'1'}>
+    <Section layout={'1_1'}>
 
-  
-        <CartItemsList />
-        
-        <footer
-          className={styles.footer} 
-        >
-          <hr />
+        <div>
+          <CartItemsList />
+          
+          <footer
+            className={styles.footer} 
+          >
+            <hr />
 
-          <p className="total"> 
-            <span>Total: </span> 
-            <CartTotal />
-          </p>
-          {/* <CheckoutForm /> */}
-          <StripeCheckoutButton />
-        </footer>
+            <p className="total"> 
+              <span>Total: </span> 
+              <CartTotal />
+            </p>
+            {/* <CheckoutForm /> */}
+            <StripeCheckoutButton />
+          </footer>
+        </div>
+
+        <div></div>
      
       
     </Section>

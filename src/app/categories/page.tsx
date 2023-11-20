@@ -9,7 +9,7 @@ import fetchCategories from "@lib/fetchdata/fetchCats";
 
 
 export const metadata: Metadata = {
-  title: `Tags | ` + envs.SITE_TITLE,
+  title: `Categoires | ` + envs.SITE_TITLE,
   description: envs.SITE_DESC,
 }
 

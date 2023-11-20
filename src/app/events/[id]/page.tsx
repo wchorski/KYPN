@@ -5,7 +5,7 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { PageTMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 import { Event, Session, Tag } from "@ks/types"
-import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
+import { datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import { Metadata, ResolvingMetadata } from "next"
 import { getServerSession } from "next-auth"
@@ -19,24 +19,11 @@ import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
 import styles from '@styles/events/event.module.scss'
 
-type Props = {
-  params:{
-    id:string,
-  },
-  searchParams: { 
-    [key: string]: string | string[] | undefined, 
-    q: string | undefined, 
-  }
-}
-
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // read route params
  
-  // fetch data
-  const session = await getServerSession(nextAuthOptions)
   const { event, error } = await fetchEvent(params.id)
 
   if(!event) return {
@@ -45,7 +32,6 @@ export async function generateMetadata(
   }
 
   const { summary, excerpt, image, tags, hosts } = event
-  
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
  
@@ -61,6 +47,16 @@ export async function generateMetadata(
     },
     keywords: tags?.map((tag:Tag) => tag.name).join(', '),
     authors: hosts?.map(host => ({name: host.name, email: host.email, url: host.email}))
+  }
+}
+
+type Props = {
+  params:{
+    id:string,
+  },
+  searchParams: { 
+    [key: string]: string | string[] | undefined, 
+    q: string | undefined, 
   }
 }
 
@@ -107,6 +103,7 @@ function Main(
       onOk={onOk}
       buttonLabel=""
     >
+      <p>{datePrettyLocal(start, 'full')}</p>
       {session ? (
         <TicketForm event={event} user={session?.user}/>
       ) : (

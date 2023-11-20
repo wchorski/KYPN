@@ -13,25 +13,25 @@ import { Metadata, ResolvingMetadata } from "next"
 import { Section } from "@components/layouts/Section"
 export const revalidate = 5;
  
-
-type Props = {
-  params:{
-    slug:string,
-  },
-  template:string,
-}
-
 export async function generateMetadata(
   { params }:Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata>  {
 
   const { slug } = params
+  const { page , error} = await fetchPage(slug)
 
   return {
-    title: slug + ' | ' + envs.SITE_TITLE,
+    title: page?.title + ' | ' + envs.SITE_TITLE,
     description: envs.SITE_DESC,
   }
+}
+
+type Props = {
+  params:{
+    slug:string,
+  },
+  template:string,
 }
 
 export default async function PageBySlug ({

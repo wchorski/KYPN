@@ -10,6 +10,14 @@ import Link from "next/link"
 import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 import styles from '@styles/ecommerce/cart.module.scss'
+import { Metadata } from "next"
+import { envs } from "@/envs"
+import { TicketList } from "@components/events/TicketList"
+
+export const metadata: Metadata = {
+  title: 'Order Receipt | ' + envs.SITE_TITLE,
+  description: envs.SITE_DESC,
+}
 
 type Props = {
   searchParams:{q:string}
@@ -54,8 +62,6 @@ function Header(){
 function Main(order:Order){
 
   return <>
-
-      <h2>Order Receipt</h2>
       <table>
         <tbody>
           <tr>
@@ -68,7 +74,9 @@ function Main(order:Order){
           </tr>
           <tr>
             <td>Item Count:</td>
-            <td>{order.items.reduce((total, item) => total + item.quantity, 0)}</td>
+            <td>
+              {order.items.reduce((total, item) => total + item.quantity, 0) + order.ticketItems.length}
+            </td>
           </tr>
           <tr>
             <td>Date:</td>
@@ -103,12 +111,16 @@ function Main(order:Order){
           </li>
         ))}
       </ul>
+
+      <TicketList tickets={order?.ticketItems}/>
     
   </>
 }
 
 function Aside(){
-  return <p> aside </p>
+  return<>
+  {/* possible a order history per client? idk */}
+  </>
 }
 
 function orderTotalCount(countArray:number[]){
@@ -125,6 +137,16 @@ const query = `
     price
     quantity
     image
+  }
+  ticketItems {
+    id
+    orderCount
+    status
+    event {
+      summary
+      start
+      price
+    }
   }
   user{
     id
