@@ -16,18 +16,18 @@ export async function EventsCalendar ({ date, events }:Props) {
 
   function nextMonth(date:string,){
     const curDate = new Date(date)
-    const mon = curDate.getMonth();
-    curDate.setMonth(mon + 1);
+    const firstOfMonth = new Date(curDate.getFullYear(), curDate.getMonth())
+    firstOfMonth.setMonth(curDate.getMonth() + 1);
 
-    return curDate.toDateString()
+    return firstOfMonth.toDateString()
   }
 
   function prevMonth(date:string,){
     const curDate = new Date(date)
-    const mon = curDate.getMonth();
-    curDate.setMonth(mon - 1);
+    const firstOfMonth = new Date(curDate.getFullYear(), curDate.getMonth())
+    firstOfMonth.setMonth(curDate.getMonth() - 1);
 
-    return curDate.toDateString()
+    return firstOfMonth.toDateString()
   }
 
   return (
