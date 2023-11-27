@@ -28,6 +28,7 @@ import { User } from './schemas/User';
 import { Order } from './schemas/Order';
 import { addToCart } from './mutations/addToCart';
 import { checkout } from './mutations/checkout';
+import { passwordRequestLink } from './mutations/passwordRequestLink';
 import { Role } from './schemas/Role';
 import { Page } from './schemas/Page';
 import { Post } from './schemas/Post';
@@ -46,6 +47,7 @@ import { checkoutSubscription } from './mutations/checkoutSubscription';
 import { Coupon } from './schemas/Coupon';
 import { checkoutTickets } from './mutations/checkoutTickets';
 import { bookAService } from './mutations/bookAService';
+import { passwordReset } from './mutations/passwordReset';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -84,6 +86,8 @@ export const extendGraphqlSchema = graphql.extend(base => {
       checkoutSubscription: checkoutSubscription(base),
       checkoutTickets: checkoutTickets(base),
       contact: contact(base),
+      passwordRequestLink: passwordRequestLink(base),
+      passwordReset: passwordReset(base),
     },
   }
 })

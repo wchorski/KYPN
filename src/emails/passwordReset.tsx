@@ -16,15 +16,23 @@ import {
 import * as React from 'react';
 
 interface TwitchResetPasswordEmailProps {
-  username?: string;
+  user: {
+    email:string,
+    name?:string,
+    id:string,
+  }
   updatedDate?: Date;
+  resetToken:string,
+  resetLink:string
 }
 
 const baseUrl = envs.FRONTEND_URL
 
 export default function PasswordRestEmail({
-  username = 'zenorocha',
+  user = {email: 'z@m.lan', name: 'Zenon', id: '123'},
   updatedDate = new Date('June 23, 2022 4:06:00 pm UTC'),
+  resetToken = '123',
+  resetLink = envs.FRONTEND_URL + `/auth/password-reset?token=${resetToken}`
 }: TwitchResetPasswordEmailProps){
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
@@ -48,15 +56,20 @@ export default function PasswordRestEmail({
             </Row>
           </Section>
           <Section style={content}>
-            <Text style={paragraph}>Hi {username},</Text>
+            <Text style={paragraph}>Hi {user.name},</Text>
             <Text style={paragraph}>
-              You requested a password rest on {' '}
-              {formattedDate}. If you did not request to rest your password, ignore this request and consider changing your password to a more secure option.
+              You requested a password reset on {' '}
+              {formattedDate}. If you did not request to reset your password, 
+              ignore this request and consider changing your password to a more secure option by
+              <Link href={envs.FRONTEND_URL + `/auth/login`}> Logging into your Account </Link>
             </Text>
             <Text style={paragraph}>
 
-              <Button href={"#"} style={button}>
-                reset your account password
+              <Button 
+                href={resetLink} 
+                style={button}
+              >
+                reset your password
               </Button>
 
             </Text>
@@ -65,10 +78,9 @@ export default function PasswordRestEmail({
               account.
             </Text>
             <Text style={paragraph}>
-              Still have questions? Please contact
+              Still have questions? Please contact our support email 
               <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
-                {' '}
-                Our Support Email 
+                {envs.ADMIN_EMAIL_ADDRESS}
               </Link>
             </Text>
             <Text style={paragraph}>
