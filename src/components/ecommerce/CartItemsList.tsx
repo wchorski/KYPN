@@ -20,7 +20,7 @@ export function CartItemsList () {
     (async () => {
       //TODO id how to get getUserCart to be async
       // @ts-ignore
-      getUserCart(session?.itemId).then(
+      await getUserCart(session?.itemId).then(
         setIsPending(false)
       )
     })();
@@ -30,9 +30,8 @@ export function CartItemsList () {
   }, [session])
   
   return <>
-    {isPending || cartItems?.length <= 0 && <LoadingAnim /> }
-    {/* //TODO id how to get getUserCart to be async */}
-    {/* {!isPending && cartItems?.length <= 0 && <p> Cart is empty. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>} */}
+    {isPending && <LoadingAnim /> }
+    {!isPending && cartItems?.length <= 0 && <p> Cart is empty. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>}
     <ul 
       style={{padding: '0'}}
     >

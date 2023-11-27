@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Html } from '@react-email/html';
-import { Button } from '@react-email/button';
+import { Text, Button } from '@react-email/components';
 
 type Props = {
   url:string,
@@ -12,6 +12,7 @@ export default function StarterEmail(props:Props) {
   return (
     <Html lang="en">
       <Button href={url}>Click me</Button>
+      <Text> hey there starter </Text>
     </Html>
   );
 }

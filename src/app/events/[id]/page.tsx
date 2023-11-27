@@ -17,6 +17,7 @@ import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
 import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
+import {AddToCalendarButton} from'add-to-calendar-button-react';
 import styles from '@styles/events/event.module.scss'
 
 export async function generateMetadata(
@@ -144,23 +145,35 @@ function Main(
             options={['Apple','Google','Yahoo','iCal']}
           /> */}
 
-          <ul className="meta unstyled">
-            <li>{datePrettyLocalDay(start || '')}</li>
-            <li>{datePrettyLocalTime(start || '')}</li>
-            <li> capacity: {seats}</li>
-            <li>
-              <address>
-                {location?.name}
-                <br />
-                {location?.address}
-              </address>
-            </li>
-          </ul>
         </div>
       </header>
 
       <div className={styles.content}>
         <h1>{summary}</h1>
+
+        <ul className="meta unstyled">
+          <li>{datePrettyLocalDay(start || '')}</li>
+          <li>{datePrettyLocalTime(start || '')}</li>
+          <li> capacity: {seats}</li>
+          <li>
+            <address>
+              {location?.name}
+              <br />
+              {location?.address}
+            </address>
+          </li>
+        </ul>
+
+        {/* //TODO why does this not show anything? */}
+        <AddToCalendarButton
+          name={summary}
+          startDate={new Date(start || '').toLocaleDateString('en-Ca')}
+          startTime={new Date(start || '').toLocaleTimeString('en-CA', {hour12:false })}
+          endDate={new Date(end || '').toLocaleDateString('en-Ca')}
+          endTime={new Date(end || '').toLocaleTimeString('en-CA', {hour12:false })}
+          timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+          options={['Apple','Google','Yahoo','iCal']}
+        />
 
         <Card layout={'flex'}>
 

@@ -25,6 +25,7 @@
     "@react-email/render": "^0.0.9",
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.10",
+    "add-to-calendar-button-react": "^2.4.3",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "googleapis": "^127.0.0",

@@ -116,6 +116,7 @@ li.item :global{
   bottom: 0;
   transform: translateX(100%);
   grid-column: 2/4;
+  max-width: 50rem;
 
 
   transition: all 0.3s;

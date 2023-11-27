@@ -174,6 +174,7 @@ export type Order = {
   user: User,
   items: [OrderItem],
   ticketItems:Ticket[],
+  status:'OPEN'|'COMPLETE'|'EXPIRED'
 }
 
 export type OrderItem = {
@@ -430,7 +431,7 @@ export type SubscriptionItem = {
   stripeChargeId:string,
   dateCreated:string,
   dateModified:string,
-
+  notes:string,
 }
 
 export type Addon = {

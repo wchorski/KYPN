@@ -6,7 +6,6 @@ import {CartItem, Order, Session} from '@ks/types';
 import stripe from "@lib/get-stripejs";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
-import { fetchGqlProtected } from "@lib/fetchdata/fetchGqlProtected";
 import { keystoneContext } from "@ks/context";
 
 

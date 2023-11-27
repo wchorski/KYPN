@@ -83,6 +83,8 @@ function CartStateProvider ({children}:{children: ReactNode}){
   function removeFromCart(id:string){
     const updatedItems = cartItems.filter(item => item.id !== id);
     setCartItems(updatedItems)
+    const total = calcTotalPrice(updatedItems)
+    setCartTotal(total)
   }
 
   function toggleCart() {

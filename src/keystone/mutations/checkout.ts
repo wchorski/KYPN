@@ -7,7 +7,6 @@ import { Context } from '.keystone/types';
 import stripeConfig from '../../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { CartItem, Product } from '../types';
-import { mailCheckoutReceipt } from '../../lib/mail';
 import { calcTotalPrice } from '../../lib/calcTotalPrice';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '../../../session';
@@ -93,16 +92,6 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
 
-    // TODO don't foret to add back email sending
-    // mailCheckoutReceipt(
-    //   order.id, 
-    //   [user.email, ADMIN_EMAIL_ADDRESS],
-    //   user.name,
-    //   ADMIN_EMAIL_ADDRESS,
-    //   orderItems,
-    //   now.toISOString(),
-    //   totalOrder,
-    // )
 
     // return order
     return { 
@@ -113,8 +102,3 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     }
   }
 })
-
-
-function handleMail(){
-
-}

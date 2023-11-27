@@ -7,7 +7,9 @@ import { permissions, rules } from "../access";
 import { validate } from "graphql";
 import stripeConfig from "../../lib/stripe";
 import 'dotenv/config'
-import { SubscriptionItem as TypeSubsItem } from "../types";
+import { SubscriptionItem as TypeSubsItem, User } from "../types";
+import { mailSubscription } from "../../lib/mail";
+import { envs } from "../../../envs";
 // import { SubscriptionItem, SubscriptionItem } from "../types";
 
 
@@ -85,6 +87,11 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
       },
       validation: { isRequired: true},
     }),
+    notes: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     addons: relationship({ ref: 'Addon.subscriptionItems', many: true }),
     user: relationship({
       ref: 'User.subscriptions',
@@ -141,10 +148,30 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
           
       }
     },
-    // afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
+    afterOperation: async ({ operation, resolvedData, item, context }) => {
 
+      if(operation === 'create' || operation === 'update'){
 
-    // },
+        const customer = await context.sudo().db.User.findOne({
+          where: {id: item?.userId},
+
+        }) as any
+
+        // @ts-ignore
+        const subscriptionItem = await context.sudo().db.SubscriptionItem.findOne({
+          where: {id: item?.id}
+        }) as TypeSubsItem
+
+        if(!subscriptionItem) return console.log('!!! no sub item found');
+        
+
+        const mail = await mailSubscription({
+          to: [envs.ADMIN_EMAIL_ADDRESS, customer?.email],
+          operation,
+          subscriptionItem,
+        })
+      }
+    },
   },
 })
 

@@ -1,6 +1,7 @@
 import { ImageDynamic } from '@components/elements/ImageDynamic'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
+import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
   searchParams:{q:string}
   params:{id:string}

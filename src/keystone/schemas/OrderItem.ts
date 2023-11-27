@@ -74,9 +74,9 @@ export const OrderItem:Lists.OrderItem = list({
           })
           // console.log({updatedProduct});
           
-        } catch (error) {
-          console.log('Order Item Create Error: ', error);
-          throw new Error('Order Item Create Error: ???');
+        } catch (error: any) {
+          console.log('!!! Order Item Create Error: ', error);
+          throw new Error('Order Item Create Error: ' + error.message);
           
         }
         
