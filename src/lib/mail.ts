@@ -8,6 +8,8 @@ import  BookingEmail  from "../emails/bookings";
 import { Booking, Order, SubscriptionItem } from "../keystone/types";
 import OrdersEmail from "../emails/orders";
 import SubscriptionItemEmail from "../emails/subscriptionItem";
+import PasswordResetEmail from "../emails/passwordReset";
+import PasswordResetConfirmEmail from "../emails/passwordResetConfirm";
 
 
 const MAIL_HOST = envs.MAIL_HOST
@@ -181,20 +183,61 @@ function templateBooking({
 //   to?: (string)[] | null;
 // }
 
-export async function sendPasswordResetEmail(resetToken: string, to: string
-): Promise<void> {
+type PasswordRequest = {
+  to:string[],
+  resetToken:string,
+  user:{
+    email:string,
+    name?:string,
+    id:string,
+  }
+}
+
+export async function mailPasswordRequest({to, resetToken, user}:PasswordRequest): Promise<void> {
   // email the user a token
+
+  const resetLink = envs.FRONTEND_URL + `/auth/password-reset?token=${resetToken}`
+
+  const html = render(PasswordResetEmail({user, updatedDate: new Date(), resetToken, resetLink }))
   const info = (await transport.sendMail({
     to,
     from: ADMIN_EMAIL_ADDRESS,
-    subject: 'Your password reset token!',
-    html: makeANiceEmail(`Your Password Reset Token is here!
-      <a href="${FRONTEND_URL}/auth/reset?token=${resetToken}">Click Here to reset</a>
-    `),
+    subject: 'Password Reset Requested',
+    html,
   }).catch(err => {
     
-    console.log('%%%% mail.ts ERROR: ', err)
-    throw new Error("mail smpt error: " + err);
+    console.log('!!! mailPasswordReset ERROR: ', err)
+    throw new Error("mail smpt error: " + err.message);
+    
+  } ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
+}
+
+type PasswordResetConfirm = {
+  to:string[],
+  user:{
+    email:string,
+    name?:string,
+    id:string,
+  }
+}
+export async function mailPasswordResetConfirm({to, user}:PasswordResetConfirm): Promise<void> {
+  // email the user a token
+
+  const html = render(PasswordResetConfirmEmail({user, updatedDate: new Date() }))
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: 'Password Reset Confirmed',
+    html,
+  }).catch(err => {
+    
+    console.log('!!! mailPasswordResetConfirm ERROR: ', err)
+    throw new Error("mail smpt error: " + err.message);
     
   } ))
 

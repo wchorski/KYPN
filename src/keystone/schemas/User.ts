@@ -62,7 +62,7 @@ export const User: Lists.User = list({
 
     password: text({
       access: {
-        read: () => false,
+        read: () => true,
       },
       hooks: { beforeOperation: async ({ operation,resolvedData}) => {
 

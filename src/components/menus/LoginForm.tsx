@@ -1,14 +1,19 @@
 'use client'
 import useForm from "../../lib/useForm";
-import PasswordReset from '@components/menus/PasswordResetRequest';
+import PasswordReset from '@components/menus/PasswordRequestForm';
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import  {QUERY_USER_CURRENT}  from '@lib/queries/session';
 import Link from "next/link";
 import styles from '@styles/menus/form.module.scss'
 // import { useState } from "react";
-import useForm2 from "@lib/useForm2";
-import { InputObj } from "@lib/types";
+import { 
+  // @ts-ignore
+  experimental_useFormState as useFormState, 
+  // @ts-ignore
+  experimental_useFormStatus as useFormStatus 
+} from "react-dom"
+// import { InputObj } from "@ks/types";
 import { FormInput } from "@components/elements/Forminput";
 import { wait } from "@lib/waitTimeout";
 // import { PopupAnim } from "./PopupAnim";

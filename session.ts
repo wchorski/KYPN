@@ -9,12 +9,13 @@ import CredentialProvider from 'next-auth/providers/credentials';
 import type { Context } from '.keystone/types';
 // @ts-ignore
 import bcrypt from 'bcryptjs';
+import { envs } from './envs';
 
 // WARNING: you need to change this
 // console.log(process.env.NEXTAUTH_URL);
 const NODE_ENV = process.env.NODE_ENV
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'no_auth_url'
-const sessionSecret = process.env.NEXTAUTH_SECRET;
+const NEXTAUTH_URL = envs.NEXTAUTH_URL!
+const sessionSecret = envs.SESSION_SECRET;
 const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(NEXTAUTH_URL).hostname
