@@ -28,21 +28,6 @@ type BookingEmailProps =  {
   imgUrl?:string,
 }
 
-// @ts-ignore
-const testSubItem = {
-  status: 'ACTIVE',
-  billing_interval: 'month',
-  dateCreated: '2023-11-23T14:00:00',
-  custom_price: 30023,
-  user: {
-    name: 'Victor',
-    email: 'vic@m.lan',
-  },
-  subscriptionPlan: {
-    name: 'Coolness Subscription'
-  },
-} as SubscriptionItem
-
 export default function SubscriptionItemEmail({
   operation,
   subscriptionItem: subItem = testSubItem,
@@ -144,3 +129,18 @@ export default function SubscriptionItemEmail({
     </Html>
   );
 }
+
+// @ts-ignore
+const testSubItem = {
+  status: 'ACTIVE',
+  billing_interval: 'month',
+  dateCreated: '2023-11-23T14:00:00',
+  custom_price: 30023,
+  user: {
+    name: 'Victor',
+    email: 'vic@m.lan',
+  },
+  subscriptionPlan: {
+    name: 'Coolness Subscription'
+  },
+} as SubscriptionItem

@@ -245,8 +245,6 @@ type MailOrder = {
 
 export async function mailOrder({to, operation, order }:MailOrder): Promise<void> {
   // email the user a token
-  console.log('### mailOder begin ###');
-  
 
   const html = render(OrdersEmail({operation, order}))
 
@@ -261,7 +259,6 @@ export async function mailOrder({to, operation, order }:MailOrder): Promise<void
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
   }
 
-  console.log('### mailOder end ###');
 }
 
 type MailSub = {
@@ -278,7 +275,7 @@ export async function mailSubscription({to, operation, subscriptionItem }:MailSu
   const info = (await transport.sendMail({
     to,
     from: ADMIN_EMAIL_ADDRESS,
-    subject: 'Subscription Status',
+    subject: `Subscription: ${subscriptionItem.status}`,
     html,
   }).catch(err => console.log('!!! mailSubscription ERROR: ', err) ))
 

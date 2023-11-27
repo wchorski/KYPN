@@ -42,7 +42,13 @@ export default async function AccountPage ({ params, searchParams }:Props) {
 
   const {tickets, error } = await fetchTicketsByUser(user.id)
   
-  return (
+  return <main>
+    <header style={{display: 'none'}}>
+      <Section layout={'1'}>
+        <h1> Account </h1>
+      </Section>
+    </header>
+
     <Section layout={'1_4'}>
   
 
@@ -101,7 +107,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
 
       <AccountDash dashState={dashState} user={user} tickets={tickets} />
     </Section>
-  )
+  </main>
 }
 
 const USER_DASH_QUERY = `

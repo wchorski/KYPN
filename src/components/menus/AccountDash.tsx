@@ -41,7 +41,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
   })) 
 
   const subscriptionCells = user.subscriptions?.map((sub:SubscriptionItem) => ({
-    date: sub.dateCreated,
+    started: datePrettyLocalDay(sub.dateCreated || ''),
     plan: sub.subscriptionPlan.name,
     status: sub.status,
     details: sub.id,
@@ -108,7 +108,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
           <Table 
             caption=""
             headers={[
-              'date',
+              'started',
               'plan',
               'status',
               'details',
