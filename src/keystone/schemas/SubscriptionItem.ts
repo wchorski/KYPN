@@ -152,14 +152,29 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
 
       if(operation === 'create' || operation === 'update'){
 
-        const customer = await context.sudo().db.User.findOne({
+        const customer = await context.sudo().query.User.findOne({
           where: {id: item?.userId},
+          query: `
+            email
+          `
+        }) as User
 
-        }) as any
-
-        // @ts-ignore
-        const subscriptionItem = await context.sudo().db.SubscriptionItem.findOne({
-          where: {id: item?.id}
+        const subscriptionItem = await context.sudo().query.SubscriptionItem.findOne({
+          where: {id: item?.id},
+          query: `
+            id
+            status
+            billing_interval
+            dateCreated
+            custom_price
+            user {
+              name
+              email
+            }
+            subscriptionPlan {
+              name
+            }
+          `
         }) as TypeSubsItem
 
         if(!subscriptionItem) return console.log('!!! no sub item found');

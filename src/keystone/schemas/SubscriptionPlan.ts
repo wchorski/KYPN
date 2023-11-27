@@ -169,15 +169,19 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
 
-      try {
-        if (resolvedData && !resolvedData.author) {
-          const currentUserId = await context.session.itemId;
-          // console.log({ currentUserId });
-          resolvedData.author = { connect: { id: currentUserId } };
-        }
-      } catch (err) { console.warn(err) }
-
+      
       if (operation === 'create') {
+        console.log('### context.session')
+        console.log(context.session);
+        
+        
+        try {
+          if (resolvedData && !resolvedData.author) {
+            const currentUserId = await context.session.itemId;
+            // console.log({ currentUserId });
+            resolvedData.author = { connect: { id: currentUserId } };
+          }
+        } catch (err) { console.warn(err) }
         // console.log('resolvedData.photo.connect.id', resolvedData.photo.connect.id);
 
         let photo_url = IMG_PLACEHOLDER
