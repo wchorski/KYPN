@@ -1,4 +1,4 @@
-import { Booking } from '../keystone/types';
+import { SubscriptionItem } from '../keystone/types';
 import { envs } from '../../envs';
 import { emailStyles } from "./emailStyes";
 import {
@@ -18,22 +18,38 @@ import {
 } from '@react-email/components';
 import * as React from 'react'
 import { datePrettyLocal } from '../lib/dateFormatter';
+import moneyFormatter from '../lib/moneyFormatter';
 
 const { main, container, heading, subheading, button, footer, hr, link, paragraph, reportLink, review, status, statusState, userImage } = emailStyles
 
 type BookingEmailProps =  {
   operation: 'create'|'update'|'delete',
-  booking: Booking,
+  subscriptionItem: SubscriptionItem,
   imgUrl?:string,
 }
 
-export default function BookingEmail({
+// @ts-ignore
+const testSubItem = {
+  status: 'ACTIVE',
+  billing_interval: 'month',
+  dateCreated: '2023-11-23T14:00:00',
+  custom_price: 30023,
+  user: {
+    name: 'Victor',
+    email: 'vic@m.lan',
+  },
+  subscriptionPlan: {
+    name: 'Coolness Subscription'
+  },
+} as SubscriptionItem
+
+export default function SubscriptionItemEmail({
   operation,
-  booking,
+  subscriptionItem: subItem = testSubItem,
   imgUrl =  envs.FRONTEND_URL + `/assets/logo.png`,
 }: BookingEmailProps){
 
-  const previewText = `Booking: ${operation}`;
+  const previewText = `Subscription: ${operation}`;
 
   return (
     <Html>
@@ -44,11 +60,11 @@ export default function BookingEmail({
           <Container style={container}>
             <Row>
               <Column>
-                <Text style={heading}> Booking </Text>
+                <Text style={heading}> Subscription </Text>
                 <Text style={subheading}> {operation} </Text>
               </Column>
               <Column align='right'>
-                <Button style={button} href={envs.FRONTEND_URL + `/bookings/${booking?.id}`}>
+                <Button style={button} href={envs.FRONTEND_URL + `/subscriptions/${subItem?.id}`}>
                   View Account
                 </Button>
               </Column>
@@ -62,27 +78,23 @@ export default function BookingEmail({
                     <tbody>
                       <tr>
                         <td> Status: </td>
-                        <td><span style={{...status, ...statusState[booking?.status]}}> {booking?.status} </span></td>
+                        <td><span style={{...status, ...statusState[subItem?.status]}}> {subItem?.status} </span></td>
                       </tr>
                       <tr>
                         <td> Client: </td>
-                        <td>{booking?.name}</td>
+                        <td>{subItem?.user?.name || subItem?.user?.email}</td>
                       </tr>
                       <tr>
-                        <td> Email: </td>
-                        <td>{booking?.email}</td>
+                        <td> Plan: </td>
+                        <td>{subItem?.subscriptionPlan?.name}</td>
                       </tr>
                       <tr>
-                        <td> Phone: </td>
-                        <td>{booking?.phone}</td>
+                        <td> Price: </td>
+                        <td> {moneyFormatter(subItem.custom_price)} <small>{subItem.billing_interval}</small> </td>
                       </tr>
                       <tr>
-                        <td> Service: </td>
-                        <td>{booking?.service?.name}</td>
-                      </tr>
-                      <tr>
-                        <td> Event Start: </td>
-                        <td>{datePrettyLocal(booking?.start, 'full')}</td>
+                        <td> Start: </td>
+                        <td>{datePrettyLocal(subItem?.dateCreated, 'full')}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -91,7 +103,7 @@ export default function BookingEmail({
                     Notes:
                   </Text>
                   <Text>
-                    {booking?.notes}
+                    {subItem?.notes}
                   </Text>
                   
                 </Container>

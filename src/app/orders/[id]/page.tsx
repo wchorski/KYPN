@@ -62,6 +62,7 @@ function Header(){
 function Main(order:Order){
 
   return <>
+  <Section layout={'1'}>
       <table>
         <tbody>
           <tr>
@@ -113,6 +114,8 @@ function Main(order:Order){
       </ul>
 
       <TicketList tickets={order?.ticketItems}/>
+
+  </Section>
     
   </>
 }

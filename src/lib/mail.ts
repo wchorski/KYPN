@@ -5,7 +5,9 @@ import { datePrettyLocal } from "./dateFormatter";
 import { envs } from "../../envs";
 import { render } from "@react-email/render";
 import  BookingEmail  from "../emails/bookings";
-import { Booking } from "@ks/types";
+import { Booking, Order, SubscriptionItem } from "../keystone/types";
+import OrdersEmail from "../emails/orders";
+import SubscriptionItemEmail from "../emails/subscriptionItem";
 
 
 const MAIL_HOST = envs.MAIL_HOST
@@ -225,14 +227,8 @@ export async function mailBooking({
     from: ADMIN_EMAIL_ADDRESS,
     subject: `Booking: ${operation} ${booking.status}`,
     html: bookingHtml,
-    // html: templateBooking({
-    //   id,
-    //   customer,
-    //   employee,
-    //   formValues,
-    // }),
 
-  }).catch(err => console.log('%%%% mail.ts ERROR: ', err) ))
+  }).catch(err => console.log('!!! mailBooking ERROR: ', err) ))
 
   if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
@@ -240,24 +236,51 @@ export async function mailBooking({
   }
 }
 
+type MailOrder = {
+  to:string[],
+  operation:'create'|'update'|'delete',
+  order:Order, 
+}
 
-export async function mailCheckoutReceipt(id: string, to: string[], customerName:string, emailAdmin: string, items:OrderItem[], date:string, totalOrder:number
-): Promise<void> {
+
+export async function mailOrder({to, operation, order }:MailOrder): Promise<void> {
   // email the user a token
+  console.log('### mailOder begin ###');
+  
+
+  const html = render(OrdersEmail({operation, order}))
 
   const info = (await transport.sendMail({
     to,
     from: ADMIN_EMAIL_ADDRESS,
-    subject: 'Order Receipt',
-    html: templateReceipt(
-      id,
-      customerName || 'anonymous',
-      emailAdmin,
-      items,
-      date,
-      totalOrder,
-    ),
-  }).catch(err => console.log('%%%% mail.ts Checkout ERROR: ', err) ))
+    subject: `Order: ${order.status}`,
+    html,
+  }).catch(err => console.log('!!! mailOrder ERROR: ', err) ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+  }
+
+  console.log('### mailOder end ###');
+}
+
+type MailSub = {
+  to:string[],
+  operation:'create'|'update'|'delete',
+  subscriptionItem:SubscriptionItem, 
+}
+
+export async function mailSubscription({to, operation, subscriptionItem }:MailSub): Promise<void> {
+  // email the user a token
+
+  const html = render(SubscriptionItemEmail({operation, subscriptionItem}))
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: 'Subscription Status',
+    html,
+  }).catch(err => console.log('!!! mailSubscription ERROR: ', err) ))
 
   if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
