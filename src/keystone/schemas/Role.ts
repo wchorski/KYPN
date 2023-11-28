@@ -7,7 +7,7 @@ import { permissions } from "../access";
 import { permissionFields } from "./permissions";
 // import { permissionFields } from "./authFields";
 
-
+// @ts-ignore
 export const Role:Lists.Role = list({
   // todo modern keystone 6 way of doing permissions
   // access: allowAll, 

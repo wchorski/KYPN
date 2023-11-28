@@ -7,12 +7,16 @@ import {
   // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { LoadingAnim } from '@components/elements/LoadingAnim';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { envs } from '@/envs';
 import { useRouter } from 'next/navigation';
+import { TbCheck, TbExclamationCircle, TbLoader } from 'react-icons/tb';
+import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
+
+type State = 'pending'|'error'|'success'|undefined
 
 type Fields = {
   email: string,
@@ -31,6 +35,8 @@ type Props = {
 }
 
 export function LoginForm({providers}:Props) {
+
+  const [state, setstate] = useState<State>(undefined)
 
   const router = useRouter()
   // const { session, setSession } = useGlobalContext()
@@ -57,11 +63,6 @@ export function LoginForm({providers}:Props) {
 
     try {
 
-      console.log({
-        email,
-        password
-      });
-
       const res = await signIn("credentials", { 
         email, 
         password, 
@@ -79,6 +80,7 @@ export function LoginForm({providers}:Props) {
       }
 
 
+      router.refresh()
       router.push(`/account`)
 
       return {
@@ -102,6 +104,18 @@ export function LoginForm({providers}:Props) {
       
     }
   }
+
+  async function socialSignin(id:string){
+    try {
+      setstate('pending')
+      await signIn(id)
+      // setstate('success')
+      
+    } catch (error) {
+      console.log(error);
+      setstate('error')
+    }
+  }
   
   const getIcon =(id:string) => {
     switch (id) {
@@ -122,6 +136,23 @@ export function LoginForm({providers}:Props) {
     }
   }
 
+  const statusIcon = (state:State) => {
+
+    switch (state) {
+      case 'pending':
+        return <TbLoader className={stylesAnim.spin}/>
+        
+      case 'success':
+        return <TbCheck />
+
+      case 'error':
+        return <TbExclamationCircle />
+    
+      default:
+        return null
+    }
+  }
+
 
   return (<>
 
@@ -136,6 +167,7 @@ export function LoginForm({providers}:Props) {
             id={'email'}
             placeholder="sam@hotmail.com"
             type={'text'}
+            required={true}
             defaultValue={formState.fieldValues.email}
             autoComplete={'email'}
           />
@@ -148,6 +180,7 @@ export function LoginForm({providers}:Props) {
             id={'password'}
             placeholder="***"
             type={'password'}
+            required={true}
             defaultValue={formState.fieldValues.password}
           />
         </label>
@@ -171,7 +204,7 @@ export function LoginForm({providers}:Props) {
       </fieldset>
 
       <fieldset>
-        <legend> or with Social </legend>
+        <legend> or with Social {statusIcon(state)}</legend>
 
         
         {Object.values(providers).filter((prov:any) => prov.id !== 'credentials').map((provider:any) => (
@@ -180,7 +213,8 @@ export function LoginForm({providers}:Props) {
               key={provider.name}
               type='button'
               className={'button large'}
-              onClick={() => signIn(provider.id)}
+              disabled={(state === 'pending')}
+              onClick={() => socialSignin(provider.id)}
             >
               Login with {provider.name} {getIcon(provider.id)}
             </button>

@@ -171,10 +171,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
       
       if (operation === 'create') {
-        console.log('### context.session')
-        console.log(context.session);
-        
-        
+
         try {
           if (resolvedData && !resolvedData.author) {
             const currentUserId = await context.session.itemId;
