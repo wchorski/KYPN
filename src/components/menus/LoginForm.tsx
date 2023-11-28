@@ -1,160 +1,177 @@
 'use client'
-import useForm from "../../lib/useForm";
-import PasswordReset from '@components/menus/PasswordRequestForm';
-import { gql, useMutation } from "@apollo/client";
-import { useRouter } from "next/navigation";
-import  {QUERY_USER_CURRENT}  from '@lib/queries/session';
-import Link from "next/link";
 import styles from '@styles/menus/form.module.scss'
-// import { useState } from "react";
+import { FaGithub, FaFacebookSquare, FaTwitter, FaGoogle, FaTwitterSquare } from "react-icons/fa";
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
   // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
-// import { InputObj } from "@ks/types";
-import { FormInput } from "@components/elements/Forminput";
-import { wait } from "@lib/waitTimeout";
-// import { PopupAnim } from "./PopupAnim";
+import { useRef } from 'react';
+import { LoadingAnim } from '@components/elements/LoadingAnim';
+import { signIn } from 'next-auth/react';
 
-const inputs:InputObj[] = [
-  {
-    name: 'email',
-    label: 'email',
-    type: 'text',
-    placeholder: 'Link@hyrule.net',
-    errorMessage: 'email error',
-    required: true,
-    initial: ''
-  },
-  {
-    name: 'password',
-    label: 'password',
-    type: 'password',
-    placeholder: '***',
-    errorMessage: 'password error',
-    required: true,
-    initial: ''
-  },
-]
+type Fields = {
+  email: string,
+  password:string,
+}
 
-export default function LoginForm() {
+type FormState = {
+  message: string,
+  status: 'success'|'error',
+  errors: Record<keyof Fields, string> | undefined,
+  fieldValues: Fields,
+}
+
+type Props = {
+  providers:any,
+}
+
+export function LoginForm({providers}:Props) {
 
   // const { session, setSession } = useGlobalContext()
-  const router = useRouter()
-
-  // const [isReset, setIsReset] = useState(false)
-  // const [isPopup, setIsPopup] = useState(false)
-
-  const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
-
-  const [loginUser, { data, error, loading }] = useMutation(MUTATION_USER_LOGIN)
-
-  async function handleSubmit(e: any) {
-    e.preventDefault()
-    // console.log(inputs)
-    const res = await loginUser({
-      variables: values,
-      // refetchQueries: [{ query: QUERY_USER_CURRENT }]
-    })
-    // console.log('res', res)
-
-    if (res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordFailure")
-      console.log('LOGIN FAILED, ', res.data.authenticateUserWithPassword.message)
-    // TODO why is it creating an empty session object
-    // console.log(session);
-
-
-    if (res.data.authenticateUserWithPassword.__typename === "UserAuthenticationWithPasswordSuccess"){
-      // console.log('LOGIN SUCCESS, ', res.data.authenticateUserWithPassword)
-      // console.log('token, ', res.data.authenticateUserWithPassword.sessionToken)
-      const token = res.data.authenticateUserWithPassword.sessionToken
-      const resAPI = await fetch(`/api/auth`, {
-        method: 'POST',
-        body: JSON.stringify({token})
-      })
-
-      const dataAPI = await resAPI.json()
-      // console.log(dataAPI)
-
-      
-      router.refresh()
-      router.push(`/home`)
-
-      // todo hacky way to get this to work. but it works for now
-      await wait(1000)
-      
-      window.location.reload()
+  const defaultFormData = {
+    message: '',
+    errors: undefined,
+    fieldValues: {
+      email: '',
+      password: '',
     }
-    // @ts-ignore
-    // TODO setting local storage
-    // setSession(prev => ({...prev, ...res.data.authenticateUserWithPassword.item}) )
-    // localStorage.setItem('session', JSON.stringify(res.data.authenticateUserWithPassword))
-    // useLocalStorage('session', JSON.stringify(res.data.authenticateUserWithPassword))
+  }
+  const formRef = useRef<HTMLFormElement>(null)
+  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+
+
+  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
+    const email = data.get('email') as string
+    const password = data.get('password') as string
+
+    const inputValues = {
+      email,
+      password,
+    }
+
+    try {
+
+      console.log({
+        email,
+        password
+      });
+
+      const res = await signIn("credentials", { email, password})
+      console.log(res);
+      
+      
+      return {
+        ...formState,
+        status: 'success',
+        message: 'login successful',
+      }
+      
+    } catch (error:any) {
+      console.log('!!! Login Form ERROR: ', error.message);
+      return {
+        status: 'error',
+        message: error?.message,
+        // TODO validate each field
+        errors: {
+          email: '',
+          password: '',
+        },
+        fieldValues: inputValues
+      }
+      
+    }
+  }
+  
+  const getIcon =(id:string) => {
+    switch (id) {
+      case 'github':
+        return <FaGithub />
+
+      case 'facebook':
+        return <FaFacebookSquare />
+
+      case 'twitter':
+        return <FaTwitterSquare />
+
+      case 'google':
+        return <FaGoogle />
+    
+      default:
+        return null
+    }
   }
 
 
   return (<>
 
-    <form method="POST" onSubmit={handleSubmit} className={styles.form} >
+    <form action={formAction} className={styles.form}>
 
-      <h2> Login </h2>
+      <fieldset>
 
-      <p className="error">{data?.authenticateUserWithPassword?.message}</p>
+        <label htmlFor="email">
+          Email
+          <input 
+            name={'email'}
+            id={'email'}
+            placeholder="sam@hotmail.com"
+            type={'text'}
+            defaultValue={formState.fieldValues.email}
+            autoComplete={'email'}
+          />
+        </label>
 
-      <fieldset disabled={(loading || data) ? true : false} aria-busy={loading}>
-        <FormInput 
-          {...handleFindProps('email')}
-          value={values['email']}
-          onChange={handleChange}
-        />
+        <label htmlFor="password">
+          Password
+          <input 
+            name={'password'}
+            id={'password'}
+            placeholder="***"
+            type={'password'}
+            defaultValue={formState.fieldValues.password}
+          />
+        </label>
 
-        <FormInput 
-          {...handleFindProps('password')}
-          value={values['password']}
-          onChange={handleChange}
-        />
+        <p className={formState.status}> 
+          {formState.message} 
+        </p>
 
+        <SubmitButton />
 
-        <button 
-          type="submit" 
-          disabled={(loading || data) ? true : false}
-        > 
-          Login 
-        </button>
-
-        <button 
-          type="button" 
-          className="forgot-password"
-        > 
-          Forgot your password? 
-        </button>
       </fieldset>
 
+      <fieldset>
+        <legend> or with Social </legend>
+
+        
+        {Object.values(providers).filter((prov:any) => prov.id !== 'credentials').map((provider:any) => (
+
+            <button 
+              key={provider.name}
+              type='button'
+              className={'button large'}
+              onClick={() => signIn(provider.id)}
+            >
+              Login with {provider.name} {getIcon(provider.id)}
+            </button>
+        ))}
+      </fieldset>
     </form>
-    
-    {/* <PopupAnim isPopup={isReset} setIsPopup={setIsReset}>
-      <PasswordReset />
-    </PopupAnim> */}
+
   </>)
 }
 
-export const MUTATION_USER_LOGIN = gql`
-  mutation Mutation($email: String!, $password: String!) {
-    authenticateUserWithPassword(email: $email, password: $password) {
-      ... on UserAuthenticationWithPasswordSuccess {
-        item {
-          id
-          name
-          email
-          isAdmin
-        }
-        sessionToken
-      }
-      ... on UserAuthenticationWithPasswordFailure {
-        message
-      }
-    }
-  }
-`
+function SubmitButton(){
+
+  const { pending, } = useFormStatus()
+
+  return(
+    <button
+      disabled={pending}
+      type={'submit'}
+    >
+      {pending ? <LoadingAnim /> : 'Login'}
+    </button>
+  )
+}
