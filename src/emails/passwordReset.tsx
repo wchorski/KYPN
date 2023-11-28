@@ -23,7 +23,7 @@ interface TwitchResetPasswordEmailProps {
   }
   updatedDate?: Date;
   resetToken:string,
-  resetLink:string
+  resetLink:string,
 }
 
 const baseUrl = envs.FRONTEND_URL
@@ -32,7 +32,7 @@ export default function PasswordRestEmail({
   user = {email: 'z@m.lan', name: 'Zenon', id: '123'},
   updatedDate = new Date('June 23, 2022 4:06:00 pm UTC'),
   resetToken = '123',
-  resetLink = envs.FRONTEND_URL + `/auth/password-reset?token=${resetToken}`
+  resetLink = envs.FRONTEND_URL + `/auth/password-reset?email=${user.email}&token=${resetToken}`
 }: TwitchResetPasswordEmailProps){
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',

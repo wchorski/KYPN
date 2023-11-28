@@ -4,17 +4,18 @@ import { PasswordResetForm } from '@components/menus/PasswordResetForm'
 type Props = {
   searchParams:{
     token:string,
+    email:string,
   }
 }
 
 export default async function PasswordResetPage ({  searchParams }:Props) {
 
-  const { token } = searchParams
+  const { token, email } = searchParams
 
   return (
     <PageTHeaderMain
       header={Header()}
-      main={Main(token)}
+      main={Main(token, email)}
     />
   )
 }
@@ -28,11 +29,11 @@ function Header(){
   </>
 }
 
-function Main(token:string,){
+function Main(token:string, email:string){
 
   return<>
     <Section layout={'1'}>
-      <PasswordResetForm token={token}  />
+      <PasswordResetForm token={token} email={email} />
     </Section>
   </>
 }

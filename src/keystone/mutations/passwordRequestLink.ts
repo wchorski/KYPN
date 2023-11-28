@@ -30,13 +30,14 @@ export const passwordRequestLink = (base: BaseSchemaMeta) => graphql.field({
           id
           name
           email
+          password
         `,
     }) as User
     // console.log('===== FOUND USER')
     // console.log({ user })
     if(!user) throw new Error(`!!! passwordResetLink, No user Found with email: ${email}`)
 
-    const secret = envs.SESSION_SECRET + envs.SESSION_SECRET
+    const secret = envs.SESSION_SECRET + user.password
     const payload = {
       id: user.id,
       email: user.email
@@ -47,7 +48,11 @@ export const passwordRequestLink = (base: BaseSchemaMeta) => graphql.field({
     const mail = await mailPasswordRequest({
      to: [email],
      resetToken: token,
-     user, 
+     user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+     }, 
     })
 
 
