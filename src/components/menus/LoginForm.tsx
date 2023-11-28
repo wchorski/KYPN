@@ -58,8 +58,8 @@ export function LoginForm({providers}:Props) {
         password
       });
 
-      const res = await signIn("credentials", { email, password})
-      console.log(res);
+      const res = await signIn("credentials", { email, password, callbackUrl: '/account'})
+      // console.log(res);
       
       
       return {

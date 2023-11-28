@@ -1,204 +1,224 @@
 'use client'
-import useForm from "../../lib/useForm";
 import styles from '@styles/menus/form.module.scss'
-import { gql, useMutation } from "@apollo/client";
-import { QUERY_USER_CURRENT } from "./Session";
-import ErrorMessage from "../ErrorMessage";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { MUTATION_USER_LOGIN } from "./LoginForm";
-import { InputObj } from "@lib/types";
-import useForm2 from "@lib/useForm2";
-import { FormInput } from "@components/elements/Forminput";
-import { wait } from "@lib/waitTimeout";
 
-const inputs:InputObj[] = [
-  {
-    name: 'name',
-    label: 'name',
-    type: 'text',
-    placeholder: 'Bobby...',
-    errorMessage: 'name error',
-    required: true,
-    initial: ''
-  },
-  {
-    name: 'nameLast',
-    label: 'nameLast',
-    type: 'text',
-    placeholder: 'Smith...',
-    errorMessage: 'nameLast error',
-    required: true,
-    initial: ''
-  },
-  {
-    name: 'email',
-    label: 'email',
-    type: 'text',
-    placeholder: 'Link@hyrule.net',
-    errorMessage: 'email error',
-    required: true,
-    initial: ''
-  },
-  {
-    name: 'password',
-    label: 'password',
-    type: 'password',
-    placeholder: '***',
-    errorMessage: 'password error',
-    required: true,
-    initial: ''
-  },
-  {
-    name: 'passwordConfirm',
-    label: 'passwordConfirm',
-    type: 'password',
-    placeholder: '***',
-    errorMessage: 'passwordConfirm error',
-    required: true,
-    initial: ''
-  },
-]
+import { 
+  // @ts-ignore
+  experimental_useFormState as useFormState, 
+  // @ts-ignore
+  experimental_useFormStatus as useFormStatus 
+} from "react-dom"
+import { useRef } from 'react';
+import { LoadingAnim } from '@components/elements/LoadingAnim';
+import Link from 'next/link';
+import { signIn } from 'next-auth/react';
+import { envs } from '@/envs';
 
-export function RegisterForm() {
+type Fields = {
+  name:string,
+  email:string,
+  password: string,
+  passwordConfirm: string,
+}
 
-  const router = useRouter()
-  const [successMsg, setSuccessMsg] = useState<string|undefined>()
-  const [isPassMatch, setIsPassMatch] = useState<boolean|undefined>(undefined)
+type FormState = {
+  message: string,
+  status: 'success'|'error',
+  errors: Record<keyof Fields, string> | undefined,
+  fieldValues: Fields,
+}
 
-  // const { session, setSession } = useGlobalContext()
+type Props = {
+  id?:string,
+}
 
-  const {values, handleFindProps, handleChange, clearForm, resetForm } = useForm2(inputs)
-  // const { inputs, handleChange, clearForm, resetForm } = useForm({
-  //   name: '',
-  //   nameLast: '',
-  //   email: '',
-  //   password: '',
-  //   passwordConfirm: '',
-  // })
+export function RegsiterForm({id}:Props) {
 
-  const [registerUser, { data, error, loading }] = useMutation(MUTATION_USER_REGSITER)
-  const [loginUser, { data: dataLogin, error: errorLogin, loading: loadingLogin }] = useMutation(MUTATION_USER_LOGIN)
 
-  async function handleSubmit(e: any) {
-    e.preventDefault()
-
-    if (values.name === '', values.email === '', values.password === '') return console.warn('inputs are empty, ', inputs);
-
-    if(values.password !== values.passwordConfirm) {
-      console.warn('passwords do not match')
-      setIsPassMatch(false)
-      return 
+  const defaultFormData = {
+    message: '',
+    errors: undefined,
+    fieldValues: {
+      name: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
     }
-    
-    const inputsFormatted = {
-      name: values.name,
-      nameLast: values.nameLast,
-      email: values.email,
-      password: values.password,
+  }
+  const formRef = useRef<HTMLFormElement>(null)
+  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+
+
+  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
+
+    const name = data.get('name') as string
+    const email = data.get('email') as string
+    const password = data.get('password') as string
+    const passwordConfirm = data.get('passwordConfirm') as string
+
+    const inputValues = {
+      name,
+      email,
+      password,
+      passwordConfirm,
     }
 
-    const resRegister = await registerUser({
-      variables: { data: inputsFormatted },
-      refetchQueries: [{ query: QUERY_USER_CURRENT }]
-    }).catch(console.error)
-    console.log('res', resRegister)
+    try {
 
-    if (resRegister?.data.createUser.__typename !== "User")
-      console.log('REGy FAILED, ', resRegister?.data.authenticateUserWithPassword.message)
-    // TODO why is it creating an empty session object
-    // console.log(session);
-
-
-    if (resRegister?.data.createUser.__typename === "User") {
-      console.log('Regy SUCCESS, ', resRegister?.data.createUser)
-      setSuccessMsg(`Success! New account registered: ${values.email}`)
-
-      const resLogin = await loginUser({
-        variables: {
-          email: values.email,
-          password: values.password
+      if(password !== passwordConfirm) return {
+        ...formState,
+        status: 'error',
+        message: 'Passwords do not Match',
+        errors: {
+          password: '',
+          passwordConfirm: '',
         },
-        refetchQueries: [{ query: QUERY_USER_CURRENT }]
-      }).catch(console.error)
+      }
 
-      console.log(resLogin);
+      const res = await fetch(`/api/gql/noauth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            mutation CreateUser($data: UserCreateInput!) {
+              createUser(data: $data) {
+                dateCreated
+              }
+            }
+          `,
+          variables: {
+            data: {
+              name,
+              email,
+              password
+            }
+          }
+        }),
+      })
 
-      await wait(1000)
+      const data = await res.json()
+      console.log(data);
       
-      router.push(`/account`)
-    }
+      const { error } = data
 
+      if(error) return {
+        ...formState,
+        status: 'error',
+        message: error.message,
+      }
+
+      const signRes = await signIn("credentials", { email, password, callbackUrl: envs.FRONTEND_URL + '/account' })
+      
+      return {
+        ...formState,
+        status: 'success',
+        message: 'New account successfully created',
+      }
+      
+    } catch (error:any) {
+      console.log('!!! Regsiter Form ERROR: ', error.message);
+      return {
+        status: 'error',
+        message: error?.message,
+        // TODO validate each field
+        errors: {
+          name: '',
+          email: '',
+          password: '',
+          passwordConfirm: '',
+        },
+        fieldValues: inputValues
+      }
+      
+    }
   }
 
 
   return (<>
 
-    <form method="POST" onSubmit={handleSubmit} className={styles.form}>
+    <form action={formAction} className={styles.form}>
 
-      <h2> Register </h2>
 
-      <p className="success">{successMsg}</p>
+        <fieldset>
+          <legend> Register New Account </legend>
 
-      <ErrorMessage error={error} />
+          <label htmlFor="name">
+            Name
+            <input 
+              name={'name'}
+              id={'name'}
+              placeholder=""
+              type={'text'}
+              defaultValue={formState.fieldValues.name}
+              autoComplete={'name'}
+            />
+          </label>
 
-      <fieldset disabled={loading || Boolean(successMsg)} aria-busy={loading}>
+          <label htmlFor="email">
+            Email
+            <input 
+              name={'email'}
+              id={'email'}
+              placeholder=""
+              type={'email'}
+              defaultValue={formState.fieldValues.email}
+              autoComplete={'email'}
+            />
+          </label>
 
-        <FormInput 
-          {...handleFindProps('name')}
-          value={values['name']}
-          onChange={handleChange}
-        />
+          <label htmlFor="password">
+            New Password
+            <input 
+              name={'password'}
+              id={'password'}
+              placeholder=""
+              type={'password'}
+              defaultValue={formState.fieldValues.password}
+            />
+          </label>
+          <label htmlFor="passwordConfirm">
+            Confirm Password 
+            <input 
+              name={'passwordConfirm'}
+              id={'passwordConfirm'}
+              placeholder=""
+              type={'password'}
+              defaultValue={formState.fieldValues.passwordConfirm}
+            />
+          </label>
 
-        <FormInput 
-          {...handleFindProps('nameLast')}
-          value={values['nameLast']}
-          onChange={handleChange}
-        />
+          <p className={formState.status}> 
+            {formState.message}
+          </p>
 
-        <FormInput 
-          {...handleFindProps('email')}
-          value={values['email']}
-          onChange={handleChange}
-        />
+          {formState.status !== 'success' ? (
+            <SubmitButton />
+          ) : (
+            <Link href={`/account`}> view account </Link>
+          )}
 
-        <FormInput 
-          {...handleFindProps('password')}
-          value={values['password']}
-          onChange={handleChange}
-        />
-
-        <FormInput 
-          {...handleFindProps('passwordConfirm')}
-          value={values['passwordConfirm']}
-          onChange={handleChange}
-        />
-
-        {isPassMatch && <p className="error"> password does not match </p>}
-
-        <button 
-          type="submit"
-          disabled={loading || Boolean(successMsg)}
-        > 
-          Create Account 
-        </button>
-      </fieldset>
-
+        </fieldset>
     </form>
   </>)
 }
 
-export const MUTATION_USER_REGSITER = gql`
-  mutation Mutation($data: UserCreateInput!) {
-    createUser(data: $data) {
-      email
-      password {
-        isSet
-      }
-      name
-      isAdmin
-      id
-    }
-  }
-`
+function SubmitButton(){
 
+  const { pending, } = useFormStatus()
+
+  return(
+    <button
+      disabled={pending}
+      type={'submit'}
+    >
+      {pending ? <LoadingAnim /> : 'Create'}
+    </button>
+  )
+}
+
+// export const MUTATION_PASSWORD_RESET = `
+//   mutation SendUserPasswordResetLink($email: String!) {
+//     sendUserPasswordResetLink(email: $email)
+//   }
+// `

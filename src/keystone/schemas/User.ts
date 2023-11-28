@@ -10,6 +10,7 @@ import { timesArray } from "../../lib/timeArrayCreator";
 import bcrypt from 'bcryptjs'
 import { envs } from "../../../envs";
 import { User as TypeUser } from "../types";
+import { mailVerifyUser } from "@lib/mail";
 
 
 export const User: Lists.User = list({
@@ -36,9 +37,10 @@ export const User: Lists.User = list({
   ui: {
     // hide backend from non admins
     hideCreate: args => !permissions.canManageUsers(args),
-    // listView: {
-    //   initialColumns: ['', 'createdAt', 'user', 'createdAt']
-    // },
+    listView: {
+      initialColumns: ['name', 'nameLast', 'email', 'role'],
+      initialSort: { field: 'dateCreated', direction: 'DESC'}
+    },
   },
 
 
@@ -174,6 +176,21 @@ export const User: Lists.User = list({
     },
 
     afterOperation: async ({ operation, resolvedData, item }) => {
+
+      if(operation === 'create'){
+
+        const mail = await mailVerifyUser({
+          to: [item.email, envs.ADMIN_EMAIL_ADDRESS],
+          user: {
+            email: item.email,
+            name: item.name,
+            id: item.id,
+          },
+        })
+        
+      }
+
+
       if (operation === 'update') {
 
         const customer = await stripeConfig.customers.update(

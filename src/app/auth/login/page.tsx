@@ -4,6 +4,7 @@ import { Section } from '@components/layouts/Section'
 import { LoginForm } from '@components/menus/LoginForm'
 import { PasswordRequestForm } from '@components/menus/PasswordRequestForm'
 import { PasswordResetForm } from '@components/menus/PasswordResetForm'
+import { RegsiterForm } from '@components/menus/RegisterForm'
 import { getServerSession } from 'next-auth'
 import { getCsrfToken, getProviders } from 'next-auth/react'
 import Link from 'next/link'
@@ -60,9 +61,8 @@ function Main(providers:any, reset?:string, sessionEmail?:string|null){
 
       
       <div>
-        {/* <LoginForm /> */}
 
-        <h4> Register Form </h4>
+        <RegsiterForm />
 
       </div>
     </Section>
