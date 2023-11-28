@@ -19,17 +19,17 @@ export default async function LocationByIdPage ({ params, searchParams }:Props) 
 
   return (
     <PageTHeaderMain
-      header={Header()}
+      header={Header(location?.name)}
       main={Main(location)}
     />
   )
 }
 
-function Header(){
+function Header(name?:string){
 
   return<>
     <Section layout={'1'}>
-      <h1> LocationByIdPage </h1>
+      <h1> {name} </h1>
     </Section>
   </>
 }
@@ -37,13 +37,12 @@ function Header(){
 function Main(location:Location|undefined){
 
   if(!location) return <NoData />
-  
+
   const { name, address, } = location
 
   return<>
     <Section layout={'1'}>
       <article className={styles.location} >
-        <h1>{name}</h1>
 
         <address>
           {address}
