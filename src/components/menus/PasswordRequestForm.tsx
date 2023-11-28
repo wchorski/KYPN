@@ -100,6 +100,7 @@ export function PasswordRequestForm() {
               id={'email'}
               placeholder="sam@hotmail.com"
               type={'text'}
+              required={true}
               defaultValue={formState.fieldValues.email}
               autoComplete={'email'}
             />

@@ -19,6 +19,7 @@ import {
 //@ts-ignore
 import { prepareToUpload } from '../prepareToUpload.js';
 import { Addon, Category, Post, Product, Service, Tag, User } from '../types';
+import { slugFormat } from '../../lib/slugFormat';
 
 const seedUsers = async (context: Context) => {
   const { db } = context.sudo();
@@ -267,22 +268,26 @@ const seedServices = async (context: Context) => {
 const seedAddons = async (context: Context) => {
   const { db } = context.sudo();
   const seedObjects: any[] = addons_seedjson;
+
+  // const slugNames = seedObjects.map(obj => slugFormat(obj.name))
   
   const objectsAlreadyInDatabase = await db.Addon.findMany({
     where: {
-      name: { in: seedObjects.map(obj => obj.name) },
+      slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
     },
   });
-
+  
+  
   // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
   
   const objsToCreate = seedObjects.filter(
-    // @ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((p: Addon) => p.name === seedObj.name)
-  );
+    seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
+  )
+
+  console.log('### Addons objsToCreate: ', {objsToCreate});
 
   objsToCreate.map(obj => {
-    console.log(" + Addon: " + obj.name)
+    console.log(" + Addon: " + obj.slug)
   })
 
   await db.Addon.createMany({

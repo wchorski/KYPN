@@ -20,7 +20,7 @@ export async function SessionBadge({ label, }: Props) {
 
   const session = await getServerSession(nextAuthOptions)
 
-  if(!session) return <NavLink href="/auth/login"> Login </NavLink>
+  if(!session) return <NavLink href="/auth"> Login </NavLink>
 
   return (
     <div className={[styles.session_badge, 'toggle-menu', ].join(' ')} id="session-badge" aria-label='account menu link'>

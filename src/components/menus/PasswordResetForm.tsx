@@ -156,6 +156,7 @@ export function PasswordResetForm({token, email}:Props) {
               id={'password'}
               placeholder=""
               type={'password'}
+              required={true}
               defaultValue={formState.fieldValues.password}
             />
           </label>
@@ -166,6 +167,7 @@ export function PasswordResetForm({token, email}:Props) {
               id={'passwordConfirm'}
               placeholder=""
               type={'password'}
+              required={true}
               defaultValue={formState.fieldValues.passwordConfirm}
             />
           </label>
@@ -177,7 +179,7 @@ export function PasswordResetForm({token, email}:Props) {
           {formState.status !== 'success' ? (
             <SubmitButton />
           ) : (
-            <Link href={`/auth/login`}> Login </Link>
+            <Link href={`/auth`}> Login </Link>
           )}
 
         </fieldset>

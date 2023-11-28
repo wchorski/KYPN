@@ -28,7 +28,7 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
 
 
   async function handleButton() {
-    // if (!session) return router.push(`/auth/login`)
+    // if (!session) return router.push(`/auth`)
 
     try {
       setstate('pending')

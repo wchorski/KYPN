@@ -61,7 +61,7 @@ export default function PasswordRestEmail({
               You requested a password reset on {' '}
               {formattedDate}. If you did not request to reset your password, 
               ignore this request and consider changing your password to a more secure option by
-              <Link href={envs.FRONTEND_URL + `/auth/login`}> Logging into your Account </Link>
+              <Link href={envs.FRONTEND_URL + `/auth`}> Logging into your Account </Link>
             </Text>
             <Text style={paragraph}>
 

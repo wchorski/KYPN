@@ -11,6 +11,7 @@ import bcrypt from 'bcryptjs'
 import { envs } from "../../../envs";
 import { User as TypeUser } from "../types";
 import { mailVerifyUser } from "../../lib/mail";
+import { generateRandomString } from "../../lib/generate";
 
 
 export const User: Lists.User = list({
@@ -51,7 +52,7 @@ export const User: Lists.User = list({
     //   if no name is provided, an error will be displayed
     name: text({ validation: { isRequired: true } }),
     nameLast: text(),
-    authId: text(),
+    authId: text({isIndexed: 'unique', validation: { isRequired: true } }),
     image: text({}),
     phone: text({}),
     email: text({

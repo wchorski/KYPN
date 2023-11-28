@@ -45,7 +45,7 @@ async function getKeystoneContext() {
 export const nextAuthOptions = {
   secret: sessionSecret,
   pages: {
-    signIn: '/auth/login',
+    signIn: envs.FRONTEND_URL + '/auth',
     
   },
   callbacks: {
@@ -183,8 +183,8 @@ export const nextAuthOptions = {
   providers: [
     // allow anyone with a GitHub account to sign up as an author
     GithubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+      clientId: envs.GITHUB_AUTH_ID,
+      clientSecret: envs.GITHUB_AUTH_SECRET,
     }),
     GoogleProvider({
       clientId: envs.GOOGLE_AUTH_ID,

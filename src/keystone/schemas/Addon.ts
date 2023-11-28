@@ -34,11 +34,12 @@ export const Addon:Lists.Addon = list({
 
 
   fields: {
-    name: text({ isIndexed: 'unique', validation: { isRequired: true },
+    name: text({ isIndexed: 'unique', validation: { isRequired: true }}),
+    slug: text({ isIndexed: 'unique', validation: { isRequired: true },
       hooks: {
-        beforeOperation({resolvedData}) {
-          if(!resolvedData?.name) return console.log('Category: no name')
-          resolvedData.name = slugFormat(String(resolvedData.name))
+        beforeOperation({resolvedData,}) {
+          if(!resolvedData?.slug) return console.log('Addon: no slug set')
+          resolvedData.slug = slugFormat(String(resolvedData.slug))
         },
     }}),
     image: text(),

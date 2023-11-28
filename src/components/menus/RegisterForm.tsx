@@ -91,6 +91,7 @@ export function RegsiterForm({id}:Props) {
             data: {
               name,
               email,
+              authId: email,
               password
             }
           }
@@ -150,6 +151,7 @@ export function RegsiterForm({id}:Props) {
               id={'name'}
               placeholder=""
               type={'text'}
+              required={true}
               defaultValue={formState.fieldValues.name}
               autoComplete={'name'}
             />
@@ -162,6 +164,7 @@ export function RegsiterForm({id}:Props) {
               id={'email'}
               placeholder=""
               type={'email'}
+              required={true}
               defaultValue={formState.fieldValues.email}
               autoComplete={'email'}
             />
@@ -174,6 +177,7 @@ export function RegsiterForm({id}:Props) {
               id={'password'}
               placeholder=""
               type={'password'}
+              required={true}
               defaultValue={formState.fieldValues.password}
             />
           </label>
@@ -184,6 +188,7 @@ export function RegsiterForm({id}:Props) {
               id={'passwordConfirm'}
               placeholder=""
               type={'password'}
+              required={true}
               defaultValue={formState.fieldValues.passwordConfirm}
             />
           </label>

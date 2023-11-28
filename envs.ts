@@ -1,6 +1,8 @@
 // AUTH
 const GOOGLE_AUTH_ID = process.env.GOOGLE_AUTH_ID!
 const GOOGLE_AUTH_SECRET = process.env.GOOGLE_AUTH_SECRET!
+const GITHUB_AUTH_ID = process.env.GITHUB_AUTH_ID!
+const GITHUB_AUTH_SECRET = process.env.GITHUB_AUTH_SECRET!
 
 const STRIPE_SECRET = process.env.STRIPE_SECRET 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET
@@ -51,6 +53,8 @@ const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO
 
 
 export const envs = {
+  GITHUB_AUTH_ID,
+  GITHUB_AUTH_SECRET,
   GOOGLE_AUTH_ID,
   GOOGLE_AUTH_SECRET,
   PERPAGE,
