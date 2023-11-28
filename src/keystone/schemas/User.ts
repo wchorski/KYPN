@@ -10,7 +10,7 @@ import { timesArray } from "../../lib/timeArrayCreator";
 import bcrypt from 'bcryptjs'
 import { envs } from "../../../envs";
 import { User as TypeUser } from "../types";
-import { mailVerifyUser } from "@lib/mail";
+import { mailVerifyUser } from "../../lib/mail";
 
 
 export const User: Lists.User = list({
@@ -187,7 +187,7 @@ export const User: Lists.User = list({
             id: item.id,
           },
         })
-        
+
       }
 
 

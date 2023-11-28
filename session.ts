@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import type { DefaultJWT } from 'next-auth/jwt';
 import type { DefaultSession, DefaultUser } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 import CredentialProvider from 'next-auth/providers/credentials';
 // @ts-ignore
 import type { Context } from '.keystone/types';
@@ -184,6 +185,10 @@ export const nextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    GoogleProvider({
+      clientId: envs.GOOGLE_AUTH_ID,
+      clientSecret: envs.GOOGLE_AUTH_SECRET,
     }),
 
     CredentialProvider({

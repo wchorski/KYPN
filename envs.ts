@@ -1,3 +1,7 @@
+// AUTH
+const GOOGLE_AUTH_ID = process.env.GOOGLE_AUTH_ID!
+const GOOGLE_AUTH_SECRET = process.env.GOOGLE_AUTH_SECRET!
+
 const STRIPE_SECRET = process.env.STRIPE_SECRET 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET
 
@@ -47,6 +51,8 @@ const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO
 
 
 export const envs = {
+  GOOGLE_AUTH_ID,
+  GOOGLE_AUTH_SECRET,
   PERPAGE,
   WORK_FACTOR,
   STRIPE_PUBLIC_KEY,

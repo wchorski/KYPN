@@ -25,9 +25,10 @@ type FormState = {
 
 type Props = {
   token:string,
+  email:string,
 }
 
-export function PasswordResetForm({token}:Props) {
+export function PasswordResetForm({token, email}:Props) {
 
   // const { session, setSession } = useGlobalContext()
   const defaultFormData = {
@@ -92,8 +93,8 @@ export function PasswordResetForm({token}:Props) {
         },
         body: JSON.stringify({
           query: `
-            mutation PasswordReset($password: String!, $token: String!) {
-              passwordReset(password: $password, token: $token) {
+            mutation PasswordReset($password: String!, $token: String!, $email: String!) {
+              passwordReset(password: $password, token: $token, email: $email) {
                 dateModified
               }
             }
@@ -101,6 +102,7 @@ export function PasswordResetForm({token}:Props) {
           variables: {
             password: password,
             token,
+            email,
           }
         }),
       })

@@ -25,16 +25,27 @@ export const passwordReset = (base: BaseSchemaMeta) => graphql.field({
   args: { 
     password: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     token: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+    email: graphql.arg({ type: graphql.nonNull(graphql.String) }),
   },
 
   // 1. Make sure they are signed in
-  async resolve(source, { password, token }, context: Context) {
+  async resolve(source, { password, token, email }, context: Context) {
     
-    const secret = envs.SESSION_SECRET + envs.SESSION_SECRET
+    
+    try { 
+      
+      const foundUser = await context.sudo().query.User.findOne({
+        where: { email: email },
+        query: `
+        password
+        `
+      })
+      if(!foundUser) throw new Error('!!! passwordReset: no foundUser found in database')
 
-    try {
+      const secret = envs.SESSION_SECRET + foundUser.password
+
       // verify token
-      const payload = await jwt.verify(token, secret) as Payload    
+      const payload = await jwt.verify(token, secret) as Payload   
 
       // update user
       const user = await context.sudo().db.User.updateOne({

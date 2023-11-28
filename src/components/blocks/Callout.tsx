@@ -4,10 +4,11 @@ import styles from '@styles/blocs/Callout.module.scss'
 
 type CalloutProps = {
   intent: 'info' | 'warning' | 'error' | 'success';
-  content: ReactNode;
+  content?: ReactNode;
+  children: ReactNode;
 };
 
-export function Callout({ intent, content }: CalloutProps) {
+export function Callout({ intent, content, children }: CalloutProps) {
 
   return (
     <blockquote
@@ -17,8 +18,14 @@ export function Callout({ intent, content }: CalloutProps) {
       //   borderColor,
       // }}
     >
+
       <i className={`icon ${styles.icon} `}  />
-      <div style={{ flex: 1 }}>{content}</div>
+
+      <div style={{ flex: 1 }}>
+        {content}
+        {children}
+      </div>
+
     </blockquote>
   );
 }

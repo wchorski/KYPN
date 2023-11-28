@@ -10,6 +10,9 @@ import {
 import { useRef } from 'react';
 import { LoadingAnim } from '@components/elements/LoadingAnim';
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { envs } from '@/envs';
+import { useRouter } from 'next/navigation';
 
 type Fields = {
   email: string,
@@ -29,6 +32,7 @@ type Props = {
 
 export function LoginForm({providers}:Props) {
 
+  const router = useRouter()
   // const { session, setSession } = useGlobalContext()
   const defaultFormData = {
     message: '',
@@ -58,10 +62,25 @@ export function LoginForm({providers}:Props) {
         password
       });
 
-      const res = await signIn("credentials", { email, password, callbackUrl: '/account'})
+      const res = await signIn("credentials", { 
+        email, 
+        password, 
+        redirect: false,
+        callbackUrl: envs.FRONTEND_URL + '/account'
+      })
       // console.log(res);
-      
-      
+      // @ts-ignore
+      const { error, status, ok, url } =  res
+
+      if(error) return {
+        ...formState,
+        status: 'error',
+        message: 'Login failed. Please check credentials',
+      }
+
+
+      router.push(`/account`)
+
       return {
         ...formState,
         status: 'success',
@@ -137,7 +156,17 @@ export function LoginForm({providers}:Props) {
           {formState.message} 
         </p>
 
-        <SubmitButton />
+        <div className='flex gap-1'>
+          <SubmitButton />
+
+          <Link 
+            href={`?${new URLSearchParams({ popup: 'modal'})}`}
+          > 
+            password reset
+          </Link>
+        </div>
+
+ 
 
       </fieldset>
 

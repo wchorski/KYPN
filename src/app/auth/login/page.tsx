@@ -1,6 +1,8 @@
 import { nextAuthOptions } from '@/session'
+import { Callout } from '@components/blocks/Callout'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
+import DialogPopup from '@components/menus/Dialog'
 import { LoginForm } from '@components/menus/LoginForm'
 import { PasswordRequestForm } from '@components/menus/PasswordRequestForm'
 import { PasswordResetForm } from '@components/menus/PasswordResetForm'
@@ -10,13 +12,16 @@ import { getCsrfToken, getProviders } from 'next-auth/react'
 import Link from 'next/link'
 import { CSSProperties } from 'react'
 type Props = {
-  searchParams:{reset:string}
-  params:{id:string}
+  searchParams:{
+    reset:string,
+    error:string,
+  }
+ 
 }
 
-export default async function LoginPage ({ params, searchParams }:Props) {
+export default async function LoginPage ({ searchParams }:Props) {
 
-  const { reset } = searchParams
+  const { error } = searchParams
 
   const session = await getServerSession(nextAuthOptions)
 
@@ -25,7 +30,7 @@ export default async function LoginPage ({ params, searchParams }:Props) {
   return (
     <PageTHeaderMain
       header={Header()}
-      main={Main(providers, reset, session?.user?.email)}
+      main={Main(providers, session?.user?.email, error)}
     />
   )
 }
@@ -39,24 +44,24 @@ function Header(){
   </>
 }
 
-function Main(providers:any, reset?:string, sessionEmail?:string|null){
+function Main(providers:any, sessionEmail?:string|null, error?:'CredentialsSignin'|string){
 
   return<>
+    <DialogPopup buttonLabel=''>
+      <p> Forgot your password? </p>
+      <PasswordRequestForm /> 
+    </DialogPopup>
+
     <Section layout={'1_1'}>
 
       <div style={styleForms}>
-        {sessionEmail && <p> currently logged in with email {sessionEmail}</p>}
+        {sessionEmail && <Callout intent={'info'}>
+          <p> currently logged in with email <strong> {sessionEmail} </strong> </p>  
+        </Callout>}
+
+        {error && <Callout intent={'error'}> <p> Login failed. Please try again </p></Callout>}
         <LoginForm providers={providers} />
 
-        {reset ? (
-          <PasswordRequestForm />
-        ) : (
-          <Link 
-            href={`?${new URLSearchParams({ reset: 'true'})}`}
-          > 
-            password reset
-          </Link>
-        )}
       </div>
 
       

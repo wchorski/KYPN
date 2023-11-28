@@ -33,29 +33,7 @@ export function PasswordRequestForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const [formState, formAction] = useFormState(onSubmit, defaultFormData)
 
-  // async function handleSubmit(e: any) {
-  //   e.preventDefault()
 
-  //   if (inputs.email === '') return console.warn('inputs are empty, ', inputs)
-  //   // console.log(inputs)
-
-  //   const res = await passwordReset({
-  //     variables: { email: inputs.email },
-  //     refetchQueries: [{ query: QUERY_USER_CURRENT }]
-  //   }).catch(console.error)
-  //   console.log('res', res)
-
-  //   if (!res?.data.sendUserPasswordResetLink)
-  //     console.log('pass reset FAILED, ')
-
-  //   if (res?.data.sendUserPasswordResetLink)
-  //     console.log('pass reset success, ')
-
-
-  //   // Router.push({
-  //   //   pathname: `/shop/product/${res.data.createProduct.id}`,
-  //   // })    
-  // }
 
   async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
     const email = data.get('email') as string
@@ -65,8 +43,6 @@ export function PasswordRequestForm() {
     }
 
     try {
-
-      console.log(email);
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -111,11 +87,11 @@ export function PasswordRequestForm() {
 
   return (<>
 
-    <form action={formAction} className={styles.form}>
+    <form action={formAction} className={styles.form} ref={formRef}>
 
 
         <fieldset>
-          <legend> Password Reset Request </legend>
+          <legend> Request a password reset  </legend>
 
           <label htmlFor="email">
             Email
@@ -129,11 +105,15 @@ export function PasswordRequestForm() {
             />
           </label>
 
-          <p className={(formState.status === 'success') ? 'success' : 'error'}> 
-            {formState.message} 
-          </p>
+          {formState.status === 'success' ? (
+            <p className={formState.status}> 
+              {formState.message} 
+            </p>
+          ) : (
+            <SubmitButton />
+          )}
+          
 
-          <SubmitButton />
 
         </fieldset>
     </form>
