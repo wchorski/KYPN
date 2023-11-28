@@ -22,13 +22,15 @@ interface TwitchResetPasswordEmailProps {
     id:string,
   }
   updatedDate?: Date;
+  verifyLink:string
 }
 
 const baseUrl = envs.FRONTEND_URL
 
-export default function PasswordRestConfirmEmail({
+export default function UserVerifyEmail({
   user = {email: 'z@m.lan', name: 'Zenon', id: '123'},
   updatedDate = new Date('June 23, 2022 4:06:00 pm UTC'),
+  verifyLink = envs.FRONTEND_URL + `/auth/verify?userEmail${user.email}`
 }: TwitchResetPasswordEmailProps){
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
@@ -38,7 +40,7 @@ export default function PasswordRestConfirmEmail({
   return (
     <Html>
       <Head />
-      <Preview> Successful password change for {envs.SITE_TITLE} account</Preview>
+      <Preview> Verify new {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={logo}>
@@ -52,25 +54,26 @@ export default function PasswordRestConfirmEmail({
             </Row>
           </Section>
           <Section style={content}>
-            <Text style={paragraph}>Hi {user.name},</Text>
+            <Text style={paragraph}> Welcome {user.name},</Text>
             <Text style={paragraph}>
-              Your password was successfully changedon {' '}
-              {formattedDate}. If you did not reset your password, 
-              consider changing your password to a more secure option as soon as possible by 
+              You created a new account with us on {' '}
+              {formattedDate}. Follow the below link to verify your new account.
             </Text>
+
+            <Text style={paragraph}>
+              If you did not create a new account, 
+              ignore this email and send us a message to remove your information.
+            </Text>
+
             <Text style={paragraph}>
 
               <Button 
-                href={envs.FRONTEND_URL + `/account`} 
+                href={verifyLink} 
                 style={button}
               >
-                Logging into your Account
+                Verify your Account
               </Button>
 
-            </Text>
-            <Text style={paragraph}>
-              Remember to use a password that is both strong and unique to your
-              account.
             </Text>
             <Text style={paragraph}>
               Still have questions? Please contact our support email {' '}
@@ -88,12 +91,6 @@ export default function PasswordRestConfirmEmail({
 
         <Section style={footer}>
           <Row>
-            {/* <Column align="right" style={{ width: '50%', paddingRight: '8px' }}>
-              <Img src={`${baseUrl}/static/twitch-icon-twitter.png`} />
-            </Column>
-            <Column align="left" style={{ width: '50%', paddingLeft: '8px' }}>
-              <Img src={`${baseUrl}/static/twitch-icon-facebook.png`} />
-            </Column> */}
           </Row>
           <Text style={{ textAlign: 'center', color: '#706a7b' }}>
             <Button href={envs.FRONTEND_URL}> {envs.SITE_TITLE}</Button> <br />

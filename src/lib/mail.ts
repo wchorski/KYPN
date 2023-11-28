@@ -10,6 +10,7 @@ import OrdersEmail from "../emails/orders";
 import SubscriptionItemEmail from "../emails/subscriptionItem";
 import PasswordResetEmail from "../emails/passwordReset";
 import PasswordResetConfirmEmail from "../emails/passwordResetConfirm";
+import UserVerifyEmail from "../emails/userVerify";
 
 
 const MAIL_HOST = envs.MAIL_HOST
@@ -81,108 +82,6 @@ type OrderItem = {
 }
 
 
-type TemplateBooking = {
-  id: string, 
-  formValues:FormValues, 
-  customer:Customer, 
-  employee?:Employee, 
-}
-
-function templateBooking({
-  id, 
-  formValues, 
-  customer, 
-  employee, 
-}: TemplateBooking) {
-  return `
-    <div className="email" style="
-      border: 1px solid black;
-      padding: 20px;
-      font-family: sans-serif;
-      line-height: 2;
-      font-size: 20px;
-    ">
-      <h2> New Booking Info, </h2>
-
-      <h4> Registered User: </h4>
-      <table>
-        <tbody>
-          <tr>
-            <td>Name: </td>
-            <td> <a href="${process.env.FRONTEND_URL}/users/${customer.id}"> ${customer.name}  </a> </td>
-          </tr>
-          <tr>
-            <td>Email: </td>
-            <td>${customer.email}</td>
-          </tr>
-          <tr>
-            <td>Phone: </td>
-            <td>${customer.phone}</td>
-          </tr>
-        </tbody>
-      </table>
-      <br />
-
-      <h4> Form Info: </h4>
-      <table>
-        <tbody>
-          <tr>
-            <td> Name: </td>
-            <td>${formValues.name}</td>
-          </tr>
-          <tr>
-            <td> Email: </td>
-            <td>${formValues.email}</td>
-          </tr>
-          <tr>
-            <td> Phone: </td>
-            <td>${formValues.phone}</td>
-          </tr>
-          <tr>
-            <td> Service: </td>
-            <td>${formValues?.service?.name}</td>
-          </tr>
-          <tr>
-            <td> Event Start: </td>
-            <td>${formValues.start}</td>
-          </tr>
-          <tr>
-            <td> Employees: </td>
-            <td><a href="${FRONTEND_URL}/users/${employee?.id}"> ${employee?.name}  </a> </td>
-          </tr>
-        </tbody>
-      </table>
-      <br />
-
-      <h4> Notes: </h4>
-      <p>${formValues.notes}</p>
-      <br />
-
-      <p>
-        <a href="${FRONTEND_URL}/bookings/${id}"> View Booking </a>
-      </p>
-
-      <p>- ${SITE_TITLE}</p>
-    </div>
-  `;
-}
-
-
-// export interface MailResponse {
-//   accepted?: (string)[] | null;
-//   rejected?: (null)[] | null;
-//   envelopeTime: number;
-//   messageTime: number;
-//   messageSize: number;
-//   response: string;
-//   envelope: Envelope;
-//   messageId: string;
-// }
-// export interface Envelope {
-//   from: string;
-//   to?: (string)[] | null;
-// }
-
 type PasswordRequest = {
   to:string[],
   resetToken:string,
@@ -192,7 +91,6 @@ type PasswordRequest = {
     id:string,
   }
 }
-
 export async function mailPasswordRequest({to, resetToken, user}:PasswordRequest): Promise<void> {
   // email the user a token
 
@@ -208,6 +106,38 @@ export async function mailPasswordRequest({to, resetToken, user}:PasswordRequest
     
     console.log('!!! mailPasswordReset ERROR: ', err)
     throw new Error("mail smpt error: " + err.message);
+    
+  } ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
+}
+
+type UserVerify = {
+  to:string[],
+  user:{
+    email:string,
+    name?:string,
+    id:string,
+  }
+}
+export async function mailVerifyUser({to, user}:UserVerify): Promise<void> {
+  // email the user a token
+
+  const verifyLink = envs.FRONTEND_URL + `/auth/verify?email=${user.email}`
+
+  const html = render(UserVerifyEmail({user, updatedDate: new Date(), verifyLink }))
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: 'New Account Registered',
+    html,
+  }).catch(err => {
+    
+    console.log('!!! mailVerifyUser ERROR: ', err)
+    throw new Error("!!! mailVerifyUser: " + err.message);
     
   } ))
 

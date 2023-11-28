@@ -78,7 +78,7 @@ export default function PasswordRestEmail({
               account.
             </Text>
             <Text style={paragraph}>
-              Still have questions? Please contact our support email 
+              Still have questions? Please contact our support email {' '}
               <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
                 {envs.ADMIN_EMAIL_ADDRESS}
               </Link>

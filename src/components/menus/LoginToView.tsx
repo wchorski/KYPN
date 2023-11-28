@@ -8,7 +8,10 @@ type Props = {
 }
 
 export function LoginToView ({ children }:Props) {
-  return (
+  return<main> 
+    <header>
+      
+    </header>
     <Section layout={'1'}>
 
       <p style={{fontSize: '2rem'}}> 
@@ -20,5 +23,5 @@ export function LoginToView ({ children }:Props) {
       </p>
       {children}
     </Section>
-  )
+  </main>
 }
