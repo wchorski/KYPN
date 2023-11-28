@@ -1,5 +1,6 @@
-//@ts-nocheck
+
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const DynamicMap = dynamic(() => import('./DynamicMap'), {
   ssr: false
@@ -17,6 +18,7 @@ export type tMap = {
 
 const Map = ({address}:tMap) => {
 
+  if(address.startsWith('http')) return <Link href={address} className={'button large'} >{address}</Link>
 
   return (
     <div style={{ aspectRatio: DEFAULT_WIDTH / DEFAULT_HEIGHT }}>

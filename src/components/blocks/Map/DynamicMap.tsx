@@ -1,5 +1,6 @@
-
+'use client'
 import { useEffect, useState } from 'react';
+// @ts-ignore
 import Leaflet from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -7,7 +8,6 @@ import 'leaflet/dist/leaflet.css';
 import styles from './Map.module.css';
 import { QueryLoading } from '../../menus/QueryLoading';
 import { tMap } from './Map';
-import Link from 'next/link';
 
 const myaddress = "111 S Michigan Ave, Chicago, IL 60603 United States"; // Replace with your desired address
 
@@ -15,6 +15,7 @@ const myaddress = "111 S Michigan Ave, Chicago, IL 60603 United States"; // Repl
 const Map = ({  address,  }:tMap) => {
   let mapClassName = styles.map;
 
+  const [isFound, setIsFound] = useState(true)
   const [coordinance, setCoordinance] = useState<number[]>()
 
 
@@ -24,7 +25,6 @@ const Map = ({  address,  }:tMap) => {
 
 
   useEffect(() => {
-    if(address.startsWith('http')) return console.log('web address');
     
     (async function init() {
       // @ts-ignore
@@ -41,6 +41,9 @@ const Map = ({  address,  }:tMap) => {
     )}`)
       .then(res => res.json())
       .then(data => {
+        if(data.length === 0) return setIsFound(false)
+        console.log(data);
+        
         const latitude = parseFloat(data[0].lat);
         const longitude = parseFloat(data[0].lon);
         setCoordinance([latitude, longitude])
@@ -51,7 +54,7 @@ const Map = ({  address,  }:tMap) => {
   
   }, []);
   
-  if(address.startsWith('http')) return <Link href={address}>{address}</Link>
+  if(!isFound) return <p className='error'> address not found on map </p>
   if(!coordinance) return <QueryLoading />
 
   return (<>
@@ -68,9 +71,11 @@ const Map = ({  address,  }:tMap) => {
       {/* {children(ReactLeaflet, Leaflet)} */}
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        // @ts-ignore
         attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
       />
       <Marker 
+      // @ts-ignore
         icon={Leaflet.icon({
           iconUrl: '/assets/private/logo.png',
           iconRetinaUrl: '/assets/private/logo.png',
