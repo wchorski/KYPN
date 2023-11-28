@@ -64,50 +64,6 @@ a{
   }
 }
 
-button {
-  cursor: pointer;
-  transition-property: color, background-color, filter;
-  transition-duration: .3s;
-  
-  > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-}
-
-.button {
-  border-radius: var(--br-dull);
-  border: solid 1px var(--c-primary);
-  // background-color: var(--c-primary);
-  padding-inline: 1rem;
-  transition: all .3s;
-  display: grid;
-  align-content: center;
-  text-align: center;
-
-  &:hover, &:focus{
-    background-color: var(--c-primary);
-    color: var(--c-txt-rev);
-  }
-
-  &:active{
-    color: var(--c-accent);
-    background-color: var(--c-txt-rev);
-    border: solid 1px var(--c-accent);
-  }
-
-  &:disabled {
-    background-color: var(--c-disabled);
-    border-color: var(--c-disabled);
-  }
-}
-
-.large {
-  padding: 1rem;
-  font-size: 1.3rem;
-}
-
 span[aria-disabled='true'], a[aria-disabled='true'], button[aria-disabled='true']  {
   color: var(--c-disabled);
   pointer-events: unset;

@@ -43,6 +43,10 @@ async function getKeystoneContext() {
 // see https://next-auth.js.org/configuration/options for more
 export const nextAuthOptions = {
   secret: sessionSecret,
+  pages: {
+    signIn: '/auth/login',
+    
+  },
   callbacks: {
     async signIn({ user }: { user: DefaultUser }) {
       // console.log('callbacks, signIn ------- ');
@@ -189,7 +193,6 @@ export const nextAuthOptions = {
         password: { label: "Password", type: "password", placeholder: "******" },
       },
       authorize: async (credentials:any, req:any) => {
-        console.log('authorize authorize authorize authorize authorize');
         // console.log({credentials});
 
         if(!credentials?.email && !credentials?.password && !credentials) console.log('insufficent credentials');
