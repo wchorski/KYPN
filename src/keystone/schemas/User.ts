@@ -12,6 +12,7 @@ import { envs } from "../../../envs";
 import { User as TypeUser } from "../types";
 import { mailVerifyUser } from "../../lib/mail";
 import { generateRandomString } from "../../lib/generate";
+import { tokenEmailVerify } from "../../lib/tokenEmailVerify";
 
 
 export const User: Lists.User = list({
@@ -106,7 +107,7 @@ export const User: Lists.User = list({
     }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
-
+    isVerified: checkbox(),
     role: relationship({
       ref: 'Role.assignedTo',
       // todo add access control
@@ -180,8 +181,11 @@ export const User: Lists.User = list({
 
       if(operation === 'create'){
 
+        const token = await tokenEmailVerify({email: item.email, id: item.id})
+
         const mail = await mailVerifyUser({
           to: [item.email, envs.ADMIN_EMAIL_ADDRESS],
+          token,
           user: {
             email: item.email,
             name: item.name,

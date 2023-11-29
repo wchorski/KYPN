@@ -24,9 +24,14 @@ export const Role:Lists.Role = list({
     hideCreate: (args) => !permissions.canManageRoles(args),
     hideDelete: (args) => !permissions.canManageRoles(args),
     isHidden: (args) => !permissions.canManageRoles(args),
+    listView: {
+      initialColumns: ['label', 'assignedTo', 'role'],
+      initialSort: { field: 'label', direction: 'DESC'}
+    },
   },
   fields: {
     name: text({ validation: { isRequired: true}, isIndexed: 'unique' }),
+    label: text({ validation: { isRequired: true}, isIndexed: 'unique' }),
     ...permissionFields,
     assignedTo: relationship({
       ref: 'User.role', 

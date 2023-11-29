@@ -117,16 +117,17 @@ export async function mailPasswordRequest({to, resetToken, user}:PasswordRequest
 
 type UserVerify = {
   to:string[],
+  token:string,
   user:{
     email:string,
     name?:string,
     id:string,
   }
 }
-export async function mailVerifyUser({to, user}:UserVerify): Promise<void> {
+export async function mailVerifyUser({to, user, token}:UserVerify): Promise<void> {
   // email the user a token
 
-  const verifyLink = envs.FRONTEND_URL + `/auth/verify?email=${user.email}`
+  const verifyLink = envs.FRONTEND_URL + `/auth/verify?email=${user.email}&token=${token}`
 
   const html = render(UserVerifyEmail({user, updatedDate: new Date(), verifyLink }))
   const info = (await transport.sendMail({

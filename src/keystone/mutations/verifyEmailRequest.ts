@@ -1,0 +1,70 @@
+// docs - https://keystonejs.com/docs/guides/schema-extension
+import { graphql } from '@keystone-6/core';
+import { Context } from '.keystone/types';
+import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
+import { mailBooking, mailVerifyUser } from '../../lib/mail';
+import { envs } from '../../../envs';
+// @ts-ignore
+import { tokenEmailVerify } from '../../lib/tokenEmailVerify';
+
+type Payload = {
+  id:string,
+  email:string,
+  iat:number,
+  exp: number
+}
+
+export const verifyEmailRequest = (base: BaseSchemaMeta) => graphql.field({
+
+  type: base.object('User'),
+
+  args: { 
+    email: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+  },
+
+  async resolve(source, { email }, context:Context) {
+
+    const { query } = context.sudo();
+
+    try {
+      const foundUser = await query.User.findOne({
+        where: { email },
+        query: `
+          id
+          email
+          name
+          role{
+            name
+          }
+        `
+      })
+      if(!foundUser) throw new Error('!!! no user found')
+      
+      if(foundUser.role?.name) throw new Error('!!! user already is of role: ' + JSON.stringify(foundUser.role.label, null, 2))
+
+      // verify token
+      const token = await tokenEmailVerify({email: foundUser.email, id: foundUser.id})
+
+      const mail = await mailVerifyUser({
+        to: [foundUser.email, ],
+        token,
+        user: {
+          email: foundUser.email,
+          name: foundUser.name,
+          id: foundUser.id,
+        },
+      })
+
+      return {status: 'success', message: 'email verification sent out to email'}
+      
+      
+    } catch (error:any) {
+      // console.log('!!! verifyEmail mutation: ', error);
+      // return {error}
+      throw new Error(error)
+    }
+
+    
+
+  }
+})

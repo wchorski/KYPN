@@ -12,6 +12,7 @@ import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 import styles from '@styles/menus/dashboard.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 
 export const metadata: Metadata = {
   title: 'Account | ' + envs.SITE_TITLE,
@@ -43,9 +44,14 @@ export default async function AccountPage ({ params, searchParams }:Props) {
   const {tickets, error } = await fetchTicketsByUser(user.id)
   
   return <main>
-    <header style={{display: 'none'}}>
+    <header >
       <Section layout={'1'}>
-        <h1> Account </h1>
+        <h1 style={{display: 'none'}}> Account </h1>
+
+        {!session.data.role && (
+          <VerifyEmailCard email={user.email} />
+        )}
+        
       </Section>
     </header>
 
@@ -104,7 +110,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
           </ul>
         </nav>
 
-
+    
       <AccountDash dashState={dashState} user={user} tickets={tickets} />
     </Section>
   </main>
