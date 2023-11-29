@@ -46,14 +46,12 @@ export const verifyEmail = (base: BaseSchemaMeta) => graphql.field({
 
       // verify token
       const payload = await jwt.verify(token, secret) as Payload 
-
-      console.log(`### BASIC_ROLE= ${envs.BASIC_USER_ROLE_NAME}`);
-      
       
       const user = await query.User.updateOne({
         where: { email },
         data: {
           role: { connect: { name: envs.BASIC_USER_ROLE_NAME } },
+          // @ts-ignore
           isVerified: true,
         }
       })

@@ -19,14 +19,10 @@ export async function fetchVerifyEmail(email:string, token:string){
       }
     }) as any
 
-    console.log('### fetchVerifyEmail ### ');
-    
-    console.log({data});
-    
     return { data }
     
   } catch (error) {
-    console.log('!!! fetchVerifyEmail ERROR: ', error);
+    // console.log('!!! fetchVerifyEmail ERROR: ', error);
     return {error}
   }
 }
