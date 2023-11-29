@@ -273,6 +273,7 @@ const seedAddons = async (context: Context) => {
   
   const objectsAlreadyInDatabase = await db.Addon.findMany({
     where: {
+      // @ts-ignore
       slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
     },
   });
@@ -283,8 +284,6 @@ const seedAddons = async (context: Context) => {
   const objsToCreate = seedObjects.filter(
     seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
   )
-
-  console.log('### Addons objsToCreate: ', {objsToCreate});
 
   objsToCreate.map(obj => {
     console.log(" + Addon: " + obj.slug)

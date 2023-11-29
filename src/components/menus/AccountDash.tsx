@@ -50,102 +50,102 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
   return (
     <div className={styles.dashboard}>
 
-        <Card id="main">
+      <Card id="main">
 
-          <h3 className={dashState === 'main' ? styles.linkactive : styles.dashlink}>
-            Dashboard
-          </h3>
+        <h3 className={dashState === 'main' ? styles.linkactive : styles.dashlink}>
+          Dashboard
+        </h3>
 
-          <ul>
-            <li> {user.name}</li>
-            <li> {user.email}</li>
-          </ul>
+        <ul>
+          <li> {user.name}</li>
+          <li> {user.email}</li>
+        </ul>
 
-        </Card>
+      </Card>
 
-        <hr /> 
+      <hr /> 
 
-        <Card id="orders">
-  
-          <h3 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}>
-            Orders / Services
-          </h3>
+      <Card id="orders">
 
-          <Table 
-            caption="Services"
-            headers={[
-              'service',
-              'date',
-              'status',
-              'details',
-            ]}
-            cells={bookingCells}
-            route={`/bookings`}
-          />
+        <h3 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}>
+          Orders / Services
+        </h3>
 
-          <Table 
-            caption="Orders"
-            headers={[
-              'date',
-              'time',
-              'total',
-              'count',
-              'details',
-            ]}
-            cells={orderCells}
-            route={`/orders`}
-          />
-        </Card>
+        <Table 
+          caption="Services"
+          headers={[
+            'service',
+            'date',
+            'status',
+            'details',
+          ]}
+          cells={bookingCells}
+          route={`/bookings`}
+        />
 
-        <hr /> 
+        <Table 
+          caption="Orders"
+          headers={[
+            'date',
+            'time',
+            'total',
+            'count',
+            'details',
+          ]}
+          cells={orderCells}
+          route={`/orders`}
+        />
+      </Card>
 
-        <Card id="subscriptions">
-          
-          <h3 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}>
-            Subscriptions
-          </h3>
+      <hr /> 
 
-          <Table 
-            caption=""
-            headers={[
-              'started',
-              'plan',
-              'status',
-              'details',
-            ]}
-            cells={subscriptionCells}
-            route={`/subscriptions`}
-          />
+      <Card id="subscriptions">
+        
+        <h3 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}>
+          Subscriptions
+        </h3>
 
-        </Card>
+        <Table 
+          caption=""
+          headers={[
+            'started',
+            'plan',
+            'status',
+            'details',
+          ]}
+          cells={subscriptionCells}
+          route={`/subscriptions`}
+        />
 
-        <hr /> 
+      </Card>
 
-        <Card id="downloads">
-          
-          <h3 className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}>
-            Downloads
-          </h3>
+      <hr /> 
 
-        </Card>
+      <Card id="downloads">
+        
+        <h3 className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}>
+          Downloads
+        </h3>
 
-        <hr /> 
+      </Card>
 
-        <Card id="tickets">
-          
-          <h3 className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}>
-            Tickets
-          </h3>
+      <hr /> 
 
-          
-          {user.tickets.length === 0 && <NoData /> }
+      <Card id="tickets">
+        
+        <h3 className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}>
+          Tickets
+        </h3>
 
-          {tickets.length === 0 && (
-            <p> No tickets found. Check out all <Link href={`/events`}> upcoming events</Link> </p>
-          )}
-          <TicketList tickets={tickets}/>
-        </Card>
+        
+        {user.tickets.length === 0 && <NoData /> }
 
-      </div>
+        {tickets.length === 0 && (
+          <p> No tickets found. Check out all <Link href={`/events`}> upcoming events</Link> </p>
+        )}
+        <TicketList tickets={tickets}/>
+      </Card>
+
+    </div>
   )
 }

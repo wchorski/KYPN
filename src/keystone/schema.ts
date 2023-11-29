@@ -48,6 +48,8 @@ import { Coupon } from './schemas/Coupon';
 import { checkoutTickets } from './mutations/checkoutTickets';
 import { bookAService } from './mutations/bookAService';
 import { passwordReset } from './mutations/passwordReset';
+import { verifyEmail } from './mutations/verifyEmail';
+import { verifyEmailRequest } from './mutations/verifyEmailRequest';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -88,6 +90,8 @@ export const extendGraphqlSchema = graphql.extend(base => {
       contact: contact(base),
       passwordRequestLink: passwordRequestLink(base),
       passwordReset: passwordReset(base),
+      verifyEmailRequest: verifyEmailRequest(base),
+      verifyEmail: verifyEmail(base),
     },
   }
 })
