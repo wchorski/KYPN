@@ -44,14 +44,15 @@
 
   label.required {
     span:first-child::after {
-      content: "*";
-      color: red;
+      content: " *";
+      padding-inline: 3px;
+      // color: red;
     }
   }
   label:has(input:required) {
     span:first-child::after {
-      content: "*";
-      color: red;
+      content: " *";
+      // color: red;
     }
   }
 

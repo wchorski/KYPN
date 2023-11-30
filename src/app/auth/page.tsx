@@ -1,3 +1,4 @@
+import { envs } from '@/envs'
 import { nextAuthOptions } from '@/session'
 import { Callout } from '@components/blocks/Callout'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
@@ -7,16 +8,22 @@ import { LoginForm } from '@components/menus/LoginForm'
 import { PasswordRequestForm } from '@components/menus/PasswordRequestForm'
 import { PasswordResetForm } from '@components/menus/PasswordResetForm'
 import { RegsiterForm } from '@components/menus/RegisterForm'
+import { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import { getCsrfToken, getProviders } from 'next-auth/react'
 import Link from 'next/link'
 import { CSSProperties } from 'react'
+
+export const metadata: Metadata = {
+  title: 'Login | ' + envs.SITE_TITLE,
+  description: 'Login, register, or recover account',
+}
+
 type Props = {
   searchParams:{
     reset:string,
     error:string,
   }
- 
 }
 
 export default async function LoginPage ({ searchParams }:Props) {
