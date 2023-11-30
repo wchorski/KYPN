@@ -12,6 +12,8 @@ import { LoadingAnim } from '@components/elements/LoadingAnim';
 import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { envs } from '@/envs';
+import { passwordRegExp } from '@lib/regexPatterns';
+import { Card } from '@components/layouts/Card';
 
 type Fields = {
   name:string,
@@ -64,15 +66,27 @@ export function RegsiterForm({id}:Props) {
 
     try {
 
-      if(password !== passwordConfirm) return {
-        ...formState,
-        status: 'error',
-        message: 'Passwords do not Match',
-        errors: {
-          password: '',
-          passwordConfirm: '',
-        },
-      }
+      if(!passwordRegExp.test(password)) throw new Error('password does not meet requirements')
+      // return {
+      //   ...formState,
+      //   status: 'error',
+      //   message: 'password does not meet requirements',
+      //   errors: {
+      //     password: 'try a different password',
+      //     passwordConfirm: '',
+      //   },
+      // }
+
+      if(password !== passwordConfirm) throw new Error('passwords do not match')
+      // return {
+      //   ...formState,
+      //   status: 'error',
+      //   message: 'Passwords do not Match',
+      //   // errors: {
+      //   //   password: '',
+      //   //   passwordConfirm: '',
+      //   // },
+      // }
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -126,8 +140,8 @@ export function RegsiterForm({id}:Props) {
         errors: {
           name: '',
           email: '',
-          password: '',
-          passwordConfirm: '',
+          password: passwordRegExp.test(password) ? '' : 'try a different password',
+          passwordConfirm: (password !== passwordConfirm) ? 'check this password' : '',
         },
         fieldValues: inputValues
       }
@@ -144,45 +158,63 @@ export function RegsiterForm({id}:Props) {
         <fieldset>
           <legend> Register New Account </legend>
 
-          <label htmlFor="name">
-            Name
+          <label htmlFor="name" className='required'>
+            <span title='is required'>Name</span>
             <input 
               name={'name'}
               id={'name'}
               placeholder=""
               type={'text'}
               required={true}
+              pattern='.{3,}'
               defaultValue={formState.fieldValues.name}
               autoComplete={'name'}
             />
+            <span className='error'>{formState.errors?.name}</span>
           </label>
 
-          <label htmlFor="email">
-            Email
+          <label htmlFor="email" className='required'>
+            <span title='is required'>Email</span>
             <input 
               name={'email'}
               id={'email'}
               placeholder=""
               type={'email'}
               required={true}
+              pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
               defaultValue={formState.fieldValues.email}
               autoComplete={'email'}
             />
+            <span className='error'>{formState.errors?.email}</span>
           </label>
 
-          <label htmlFor="password">
-            New Password
+          <label htmlFor="password" className='required'>
+            <span title='is required'> New Password </span>
             <input 
               name={'password'}
               id={'password'}
               placeholder=""
-              type={'password'}
+              // type={'password'}
+              pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}|:<>?~-]).{8,32}'
               required={true}
               defaultValue={formState.fieldValues.password}
             />
+            <span className='error'>{formState.errors?.password}</span>
           </label>
-          <label htmlFor="passwordConfirm">
-            Confirm Password 
+
+          <Card bgColor='#252525'>
+            <h5> requirements </h5>
+            <ul className='unstyled'>
+              <li> 8 - 32 characters </li>
+              <li> one Capital letter </li>
+              <li> one special character !@#$&* </li>
+              <li> one number </li>
+              <li> three lower case letters </li>
+            </ul>
+            
+          </Card>
+          <label htmlFor="passwordConfirm" className='required'>
+            <span title='is required'> Confirm Password  </span>
             <input 
               name={'passwordConfirm'}
               id={'passwordConfirm'}
@@ -191,6 +223,7 @@ export function RegsiterForm({id}:Props) {
               required={true}
               defaultValue={formState.fieldValues.passwordConfirm}
             />
+            <span className='error'>{formState.errors?.passwordConfirm}</span>
           </label>
 
           <p className={formState.status}> 

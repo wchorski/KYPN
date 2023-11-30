@@ -16,7 +16,7 @@ import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 
 export const metadata: Metadata = {
   title: 'Account | ' + envs.SITE_TITLE,
-  description: envs.SITE_DESC,
+  description: 'dashboard for orders, subscriptions, bookings, tickets, downloads',
 }
 
 type Props = {

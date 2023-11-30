@@ -73,20 +73,21 @@ export function VerifyEmailCard ({ email }:Props) {
   return (
     <Callout intent={'warning'}>
       <h4> Verify Account </h4>
-      <p> This account's email has not yet been verified. </p>
-      <p> Request a fresh verification link via email to complete your registration </p>
+      <p> {email} has not yet been verified. </p>
+      <p> Check your email for a validation link </p>
 
       {state === 'success' ? (
         <p className="success"> Follow further instructions sent to {email} </p>
       ): (
         <button 
-          className={'button large'} 
+          className={''} 
           disabled={state === 'pending'}
           onClick={onSubmit}
         > 
-          Send email to {email}
+          Request a new link 
         </button>
       )}
+      <br />
       <br />
 
       <p>{statusIcon(state)}</p>
