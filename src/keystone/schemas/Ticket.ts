@@ -7,7 +7,6 @@ import { permissions, rules } from "../access";
 import { Event } from "@ks/types";
 import { datePrettyLocalDay } from "../../lib/dateFormatter";
 
-
 export const Ticket:Lists.Ticket = list({
 
   // todo only employees of event are allowed to update
@@ -106,13 +105,23 @@ export const Ticket:Lists.Ticket = list({
 
   hooks: {
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
-      // if(operation === 'create'){
+      if(operation === 'create'){
+        // if event has started, don't allow purchase of ticket
 
-      // }
+        if(!resolvedData.event?.connect?.id) return
+        
+        const event = await context.db.Event.findOne({
+          where: { id: resolvedData.event.connect.id }
+        })
+        if(!event) throw new Error('!!! Event not found for Ticket')
+
+        const now = new Date()
+        const eventStart = new Date(event.start)
+        if(now > eventStart) throw new Error('!!! Ticket: Event has already started')
+        
+      }
     
       if(operation === 'update'){
-
-        console.log('### TICKET UPDATE: ', item.status);
 
         if(item.status === 'ATTENDED') {
           // console.log(`!!!!!!!! This ticket has already been redeemed: ${item.id}`);

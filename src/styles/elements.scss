@@ -92,9 +92,21 @@ button {
     background-color: var(--c-txt-rev);
     border: solid 1px var(--c-accent);
   }
+}
 
-  &:disabled {
+.button:disabled {
+  background-color: var(--c-disabled);
+  border-color: var(--c-disabled);
+
+  &:hover, &:focus{
+    text-decoration: line-through;
+    // background-color: var(--c-primary);
+    // color: var(--c-txt-rev);
+  }
+
+  &:active{
+    color: var(--c-txt-rev);
     background-color: var(--c-disabled);
-    border-color: var(--c-disabled);
+    border: solid 1px var(--c-disabled);
   }
 }

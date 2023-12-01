@@ -204,7 +204,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
         </label>
 
         <label htmlFor="email" className="required">
-          <span> Email </span>
+          <span title="required"> Email </span>
           <input 
             name={'email'}
             id={'email'}
