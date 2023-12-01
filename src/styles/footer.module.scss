@@ -1,11 +1,35 @@
 .footer{
   margin-top: 2rem;
-  background-color: rgb(25, 28, 33);
+  background-color: rgb(47, 47, 47);
   // min-height: 4rem;
-  padding: 2rem 1rem;
+  // padding: 2rem 0;
   position: sticky;
   top: 100%;
   color: grey;
-  text-align: center;
+  // text-align: center;
   font-size: .7rem;
+
+  // display: grid;
+  // grid-template-columns: minmax(0, 1fr) minmax(0, calc(var(--w-sitemax))) minmax(0, 1fr);
+  // align-content: flex-start;
+}
+
+.terms_privacy_list {
+
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li::after{
+    content: "•";
+    color: var(--c-dark);
+    margin-inline: 0.5rem;
+  }
+  li:last-child::after{
+    content: "";
+
+  }
 }

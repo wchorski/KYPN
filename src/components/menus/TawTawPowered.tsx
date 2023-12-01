@@ -4,7 +4,11 @@ type Props = {
 
 export function TawTawPowered ({ prop }:Props) {
   return (
-    <div>
+    <div 
+      style={{
+        textAlign: 'center',
+      }}
+    >
       <a
         href="https://www.tawtaw.site"
         target="_blank"

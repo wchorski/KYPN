@@ -10,6 +10,7 @@ type Props = {
   layout:GridLayout,
   children:ReactNode|ReactNode[],
   id?:string,
+  styles?:CSSProperties,
 }
 
 export function Section({
@@ -20,6 +21,7 @@ export function Section({
   layout = '1_1',
   children,
   id,
+  styles,
 }:Props
 ) {
   //                                  gotta put a '_' in front because css no like numbers as class names
@@ -28,7 +30,7 @@ export function Section({
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
   const inlineStyles = {
-    
+    ...styles
   } as CSSProperties
 
   if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})
