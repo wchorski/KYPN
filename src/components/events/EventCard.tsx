@@ -48,7 +48,7 @@ export function EventCard({image, start, summary, location, id}:Event) {
           )}
         </div>
 
-        <a href={`/events/e/${id}`} className="view button medium"> view </a>
+        <a href={`/events/${id}`} className="view button medium"> view </a>
       </div>
 
     </article>

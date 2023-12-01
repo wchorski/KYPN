@@ -194,7 +194,7 @@ export function RegsiterForm({id}:Props) {
               name={'password'}
               id={'password'}
               placeholder=""
-              // type={'password'}
+              type={'password'}
               pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}|:<>?~-]).{8,32}'
               required={true}
               defaultValue={formState.fieldValues.password}

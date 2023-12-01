@@ -1,3 +1,4 @@
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import moneyFormatter from "@lib/moneyFormatter"
 import Link from "next/link"
 
@@ -10,7 +11,6 @@ const now = new Date()
 
 export function AddTicketButton ({ price, date }:Props) {
   const startDate = new Date(String(date))
-
 
   if(now > startDate) return (
     <button 

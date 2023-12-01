@@ -19,6 +19,8 @@ import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
 import {AddToCalendarButton} from'add-to-calendar-button-react';
 import styles from '@styles/events/event.module.scss'
+import { AddToCalendar } from "@components/widgets/AddToCalendar"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 
 export async function generateMetadata(
   { params }: Props,
@@ -135,15 +137,11 @@ function Main(
             ))}
           </ul>
 
-          {/* <AddToCalendarButton
-            name={summary}
-            startDate={new Date(start || '').toLocaleDateString('en-Ca')}
-            startTime={new Date(start || '').toLocaleTimeString('en-CA', {hour12:false })}
-            endDate={new Date(end || '').toLocaleDateString('en-Ca')}
-            endTime={new Date(end || '').toLocaleTimeString('en-CA', {hour12:false })}
-            timeZone={Intl.DateTimeFormat().resolvedOptions().timeZone}
-            options={['Apple','Google','Yahoo','iCal']}
-          /> */}
+          <AddToCalendar 
+            summary={summary}
+            start={start}
+            end={end}
+          />
 
         </div>
       </header>
@@ -164,7 +162,6 @@ function Main(
           </li>
         </ul>
 
-        {/* //TODO why does this not show anything? */}
         <AddToCalendarButton
           name={summary}
           startDate={new Date(start || '').toLocaleDateString('en-Ca')}
@@ -193,11 +190,15 @@ function Main(
             {/* <small>sub text</small>  */}
           </div>
 
-          <AddTicketButton 
-            // setIsPopup={setIsPopup}
-            price={price} 
-            date={start} 
-          />
+          {!session.data.role ? (
+            <VerifyEmailCard email={""} />
+          ) : (
+            <AddTicketButton 
+              price={price} 
+              date={start} 
+            />
+          )}
+
 
         </Card>
         
