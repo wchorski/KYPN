@@ -11,7 +11,7 @@ import { MediaText } from '@components/blocks/MediaText';
 import { BreadCrumbs } from '@components/elements/BreadCrumbs';
 import { ImageDynamic } from '@components/elements/ImageDynamic';
 import Head  from 'next/head';
-import { Category, Post, Tag, User } from '@ks/types';
+import { Category, Page, Post, Tag, User } from '@ks/types';
 import { envs } from '@/envs';
 import { BlockRender } from '@components/blocks/BlockRender'
 import { fetchPost } from '@lib/fetchdata/fetchPost';
@@ -21,6 +21,8 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { fetchProducts } from '@lib/fetchdata/fetchProducts';
 import { Card } from '@components/layouts/Card';
 import styles from '@styles/blog/blogpost.module.scss'
+import { PageTHeaderMain } from '@components/layouts/PageTemplates';
+import { PostTHeaderContentFooter } from '@components/layouts/PostTemplates';
 
 export const revalidate = 5;
 
@@ -95,226 +97,100 @@ export default async function BlogPageBySlug({ params }:Props) {
     content,
   } = post
 
-  if (status === 'DRAFT') return <p>This blog post is still a draft</p>
-  if (status === 'PRIVATE') return <p>This blog post is private</p>
-
   return (
-    <>
-    <main>
-        
-    <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
-      <BreadCrumbs />
-    </div>
-      
-    <article className={styles.article} >
-
-      <header
-        style={{
-          backgroundImage: `url(${featured_image})`
-        }}
-      >
-        <ImageDynamic 
-          photoIn={featured_image}
-        />
-
-        <div className="overlay siteWrapper">
-          <div className={styles.title_wrap}>
-            <h1>{title}</h1>
-            
-            <ul className='meta'>
-              {author && (
-                <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
-              )}
-              <li> 
-                <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
-                  {datePrettyLocalDay(String(dateCreated))}
-                </time>
-              </li>
-
-            </ul>
-          </div>
-        </div>
-
-      </header>
-
-      {featured_video && (
-        <div className="featured_video">
-
-          <YouTubeVideo
-            url={featured_video}
-            altText='featured video'
-          />
-        </div>
-      )}
-
-      <div className="content">
-        <BlockRender document={content.document} />
-      </div>
-
-      <footer>
-        <Card>
-          <h4 className='categories'>Categories: </h4>
-          <CategoriesPool />
-        </Card>
-
-        <Card>
-          <h4 className='tags'>Tags:</h4>
-          <TagsPool />
-        </Card>
-
-      </footer>
-
-    </article>
-    
-    </main>
-    </>
+    <PostTHeaderContentFooter 
+      headerBgImg={featured_image}
+      header={Header({title, featured_image, author, dateCreated})}
+      content={Content(post)}
+      footer={Footer()}
+    />
   )
 }
 
-// const query = gql`
-//   query Post($where: PostWhereUniqueInput!) {
-//     post(where: $where) {
-//       id
-//       title
-//       pinned
-//       status
-//       featured_image
-//       featured_video
-//       excerpt
-//       dateModified
-//       dateCreated
-//       template
-//       allow_comments
-//       author {
-//         id
-//         name
-//       }
-//       categories {
-//         name
-//       }
-//       tags {
-//         name
-//         productsCount
-//         postsCount
-//       }
-//       content {
-//         document
-//       }
-//     }
-//   }
-// `
+type Header = {
+  title?:string,
+  featured_image?:string,
+  author?:User,
+  dateCreated?:string,
+}
 
-// const StyledBlogSingle = styled.article`
+function Header({ title, featured_image, author, dateCreated}:Header){
 
-//   margin-inline: auto;
+  return<>
+    {/* <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
+      <BreadCrumbs />
+    </div> */}
+    <ImageDynamic 
+      photoIn={featured_image}
+    />
+    <div className="overlay siteWrapper">
+      <div className={styles.title_wrap}>
+        <h1>{title}</h1>
+        <ul className='meta'>
+          {author && (
+            <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
+          )}
+          <li> 
+            <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
+              {datePrettyLocalDay(String(dateCreated))}
+            </time>
+          </li>
 
-//   .breadcrumbs-cont{
-//     /* height: 2rem; */
-//     padding: 1rem 1rem;
-//   }
+        </ul>
+      </div>
 
-//   header{
-//     /* background: var(--c-accent); */
-//     position: relative;
-//     height: 70vh;
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//     background-position: 50% 50%;
-//     /* outline: dotted aqua 1px; */
-//     /* display: flex; */
-//     /* background-blend-mode: overlay; */
+    </div>
+  </>
+}
 
-//     img{
-//       object-fit: cover;
-//       /* outline: dotted lavender 2px; */
-//       width: 100%;
-//       position: absolute;
-//       z-index: -1;
-//       width: 1px;
-//       height: 1px;
-//     }
+function Content(post:Post){
 
-//     .title-cont{
-//       padding: 3rem;
-//       margin: 1rem;
-//       position: relative;
-//       border-radius: var(--br-dull);
-//       bottom: 0;
-//       position: absolute;
-//       z-index: 1;
-//       /* backdrop-filter: blur(10px); */
+  const {
+    id,
+    title,
+    pinned,
+    status,
+    featured_image,
+    featured_video,
+    excerpt,
+    dateModified,
+    dateCreated,
+    template,
+    allow_comments,
+    author,
+    categories,
+    tags,
+    content,
+  } = post
 
-//       &::after{
-//         background-color: var(--c-glass);
-//         content: '';
-//         backdrop-filter: blur(10px);
-//         /* filter: blur(10px); */
-//         position: absolute;
-//         inset: 0%;
-//         z-index: -1;
-//       }
-//     }
+  return<>
+    {featured_video && (
+      <div className="featured_video">
 
-//     .overlay{
-//       /* background-color: rgb(155 255 0 / 52%); */
-//       /* background: rgba(242, 242, 242, 0.82); */
-//       padding: 1rem;
-//       overflow: hidden;
-//       height: 100%;
-//       z-index: 2;
-//       background-color: var(--c-primary);
-//     }
+        <YouTubeVideo
+          url={featured_video}
+          altText='featured video'
+        />
+      </div>
+    )}
 
-//     .content-cont{
-//       article > *:nth-child(odd){
-//         min-height: 50%;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         border-bottom: solid 3px var(--c-txt);
-//       }
-//       article > *:nth-child(even){
-//         background-color: transparent;
-//       }
-//     }
+    <div className="content">
+      <BlockRender document={content.document} />
+    </div>
+  </>
+}
 
-//     h1{
-//       margin-bottom: 0;
-//     }
+function Footer(){
+  
+  return<>
+    <Card>
+      <h4 className='categories'>Categories: </h4>
+      <CategoriesPool />
+    </Card>
 
-//     ul.meta{
-//       padding: 0;
-//       font-size: 1rem;
-//       list-style: none;
-//     }
-
-//     time.date{
-//       position: relative;
-//     }
-
-//     /* figure{
-
-//       height: 30rem;
-//       margin: 0;
-
-//       img{
-//         width: 1px;
-//       }
-//     } */
-//   }
-
-//   > .video-cont{
-//     margin: .2rem;
-//     background-color: var(--c-dark);
-//   }
-
-
-//   > footer{
-//     margin-top: 4rem;
-//     padding: 1rem;
-
-//     h2.categories, h2.tags{
-//       display: none;
-//     }
-//   }
-// `
+    <Card>
+      <h4 className='tags'>Tags:</h4>
+      <TagsPool />
+    </Card>
+  </>
+}

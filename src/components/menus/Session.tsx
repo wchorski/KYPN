@@ -34,11 +34,14 @@ export async function SessionBadge({ label, }: Props) {
         <li className="name">{session?.user?.name}</li>
         <li className="email">{session?.user?.email}</li>
         <li> <NavLink className="button" href={`/account`}> My Account </NavLink> </li>
-        {session?.data.role && (
+        {session?.data.role && session?.data.role.name === 'admin' && <>
           <li>
             <NavLink href={envs.BACKEND_URL} className="button"> Admin Panel </NavLink>
           </li>
-        )}
+          <li>
+            <Link href={`/admin`} className="button"> Admin Tools </Link>
+          </li>
+        </>}
         <li><SignOutButton /></li>
       </ul>
     </div>

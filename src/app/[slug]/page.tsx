@@ -11,6 +11,7 @@ import { BlockRender } from '@components/blocks/BlockRender'
 import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
 import { Section } from "@components/layouts/Section"
+import NotPublicPage from "./NotPublicPage"
 export const revalidate = 5;
  
 export async function generateMetadata(
@@ -66,8 +67,8 @@ export default async function PageBySlug ({
   // console.log(data);
   
 
-  if (status === 'DRAFT') return <p>This blog post is still a draft</p>
-  if (status === 'PRIVATE') return <p>This blog post is private</p>
+  if (status === 'DRAFT') return <NotPublicPage status={status}> <p>This blog post is still a draft</p> </NotPublicPage>
+  if (status === 'PRIVATE') return <NotPublicPage status={status}> <p>This blog post is private</p> </NotPublicPage>
   
 
   if(template === 'FULLWIDTH' || template === 'FULLWIDTH_WITHHEADER') return (

@@ -22,7 +22,6 @@ export function MainNavList () {
       <li> <NavLink href={`/blog`}> Blog </NavLink> </li>
       <li> <NavLink href={`/events`}> Events </NavLink> </li>
       <li> <NavLink href={`/bookings`}> Bookings </NavLink> </li>
-      <li> <NavLink href={`/users`}> Users </NavLink> </li>
     </ul>
   )
 }
