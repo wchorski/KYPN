@@ -29,6 +29,7 @@ const BACKEND_URL = String(process.env.NEXT_PUBLIC_BACKEND_URL) || "no_backend_U
 const BACKEND_PORT = process.env.BACKEND_PORT || 'no_backend_port'
 const SEED_ME = process.env.SEED_ME
 const BASIC_USER_ROLE_NAME = process.env.BASIC_USER_ROLE_NAME!
+const NEXT_PUBLIC_COPYWRITE = process.env.NEXT_PUBLIC_COPYWRITE
 
 const WORK_FACTOR = Number(process.env.WORK_FACTOR) || 13
 
@@ -54,6 +55,7 @@ const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO
 
 
 export const envs = {
+  NEXT_PUBLIC_COPYWRITE,
   BASIC_USER_ROLE_NAME,
   GITHUB_AUTH_ID,
   GITHUB_AUTH_SECRET,

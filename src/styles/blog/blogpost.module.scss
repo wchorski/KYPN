@@ -1,7 +1,8 @@
+
+
 article.article :global {
 
   margin-inline: auto;
-
 
   header{
     /* background: var(--c-accent); */
@@ -33,10 +34,11 @@ article.article :global {
       // padding: 1rem;
       overflow: hidden;
       height: 100%;
+      width: 100%;
       z-index: 2;
       // background-color: var(--c-primary);
       display: flex;
-      width: var(--w-sitemax);
+      max-width: var(--w-sitemax);
     }
 
 
@@ -69,7 +71,8 @@ article.article :global {
 
   footer{
     margin-top: 4rem;
-    padding: 1rem;
+    max-width: 110ch;
+    // padding: 1rem;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -92,7 +95,7 @@ article.article :global {
   background: var(--c-glass);
   // max-width: var(--w-sitemax);
   
-  backdrop-filter: blur(30px);
+  backdrop-filter: blur(10px);
 
 }
 

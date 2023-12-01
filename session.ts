@@ -338,7 +338,7 @@ export const nextAuthSessionStrategy = {
       } 
     }
 
-    if (!role) console.log('!!!!!! user has no role assigned for auth');
+    // if (!role) console.log('!!!!!! user has no role assigned for auth');
     if(role) Object.assign(sessionObj, {data: {role: role} } )
     
     return sessionObj
