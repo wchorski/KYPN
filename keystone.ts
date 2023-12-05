@@ -42,6 +42,7 @@ export default config({
 
     provider: 'postgresql',
     url: DB_ENDPOINT,
+    useMigrations: true,
     onConnect: async (context: Context) => {
       // TODO why argv doesn't work?
     if (process.env.SEED_ME === 'true') {
