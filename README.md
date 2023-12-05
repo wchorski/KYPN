@@ -36,6 +36,16 @@ following along with Wes Bos Tutorial
   - `/backend/seed/seed_data.init.ts` -> `/backend/seed/seed_data.ts`
   - `/frontend/public/favicon.ico`
 
+## Authentication
+### Github OAuth
+- https://github.com/settings/developers
+
+### Google OAuth
+- https://console.cloud.google.com/apis/dashboard
+
+### Google Email SMTP
+- https://myaccount.google.com/security
+
 ## Production
 
 - Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments

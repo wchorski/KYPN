@@ -5,10 +5,21 @@ node_modules
 keystone.db
 *.log
 .env
+<<<<<<< HEAD
 /db/**
 !/db/compose.example.yml
 .DS_Store
 .next
+=======
+.env.dev
+.env.prod
+.env.*
+!.env.example
+/db/**
+!/db/compose.example.yml
+!/db/up.sh
+.DS_Store
+>>>>>>> f7bcd14631595fc516b713a4ce3352224fa31b39
 compose.yml
 seed_data.ts
 schema.graphql
