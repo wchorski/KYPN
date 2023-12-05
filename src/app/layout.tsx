@@ -2,7 +2,7 @@ import '@styles/globals.scss'
 import type { Metadata } from 'next'
 import { Inter, Barlow } from 'next/font/google'
 import layoutStyles from '@styles/layout.module.scss'
-
+import Script from 'next/script'
 import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
@@ -36,6 +36,15 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+
+      <Script
+        id="umami-next"
+        strategy="afterInteractive"
+        async
+        data-website-id={envs.UMAMI_ID}
+        src={`/stts/${envs.UMAMI_SCRIPT}`}
+      />
+
       <body className={[
         header.variable, 
         paragraph.variable, 
