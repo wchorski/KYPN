@@ -20,3 +20,11 @@ schema.prisma
 .vscode
 private/**
 !private/README.md
+.next
+compose.yml
+seed_data.ts
+schema.graphql
+schema.prisma
+.vscode
+private/**
+!private/README.md
