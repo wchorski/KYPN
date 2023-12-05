@@ -1,6 +1,6 @@
 // cred - https://github.com/monsterlessonsacademy/monsterlessonsacademy/blob/278-advanced-react-slider/src/ImageSlider.js
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styles from '@styles/blocs/slidercustom.module.scss'
 
 const slideStyles = {
   width: "100%",
@@ -92,13 +92,13 @@ export function Slider({ slides, parentWidth }:Props){
   }, [goToNext]);
 
   return (
-    <StyledSlider >
+    <div className={styles.slider}  >
       <div>
 
-        <button onClick={goToPrevious} className="arrow left">
+        <button onClick={goToPrevious} className={[styles.arrow, styles.left].join(' ')}>
           ❰
         </button>
-        <button onClick={goToNext} className="arrow right">
+        <button onClick={goToNext} className={[styles.arrow, styles.right].join(' ')}>
           ❱
         </button>
       </div>
@@ -128,35 +128,6 @@ export function Slider({ slides, parentWidth }:Props){
           </button>
         ))}
       </div>
-    </StyledSlider>
+    </div>
   );
 }
-
-const StyledSlider = styled.div`
-  position: relative;
-  height: 100%;
-  /* background-color: blue; */
-
-  & .arrow.left{
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-    left: 32px;
-    font-size: 45px;
-    color: #fff;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-  & .arrow.right{
-    position: absolute;
-    top: 50%;
-    transform: translate(0, -50%);
-    right: 32px;
-    font-size: 45px;
-    color: #fff;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-`

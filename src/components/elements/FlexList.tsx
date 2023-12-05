@@ -1,20 +1,19 @@
-import React, { ReactNode } from 'react'
-import styled from 'styled-components'
+import React, { CSSProperties, ReactNode } from 'react'
 
 export function FlexList({children}:{children:ReactNode|ReactNode[]}) {
+
+  const styles = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    margin: '0',
+    padding: '0',
+    justifyContent: 'center',
+  } as CSSProperties
+
   return (
-    <StyledFlexList>
+    <ul>
       {children}
-    </StyledFlexList>
+    </ul>
   )
 }
-
-
-const StyledFlexList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  justify-content: center;
-`

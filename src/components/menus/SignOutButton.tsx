@@ -1,7 +1,3 @@
-// import { useGlobalContext } from "../lib/useSessionContext"
-import { gql, useMutation } from "@apollo/client"
-// import { useRouter } from "next/navigation"
-import { QUERY_USER_CURRENT } from "./Session"
 import styles from '@styles/elements/button.module.scss'
 import { wait } from "@lib/waitTimeout"
 
@@ -61,7 +57,7 @@ export default function SignOutButton() {
 }
 
 
-const MUTATION_SIGN_OUT = gql`
+const MUTATION_SIGN_OUT = `
   mutation Mutation {
     endSession
   }

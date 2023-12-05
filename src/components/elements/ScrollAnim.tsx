@@ -1,5 +1,6 @@
-import { ReactNode, useEffect, useRef } from "react";
-import styled from "styled-components";
+'use client'
+import { CSSProperties, ReactNode, useEffect, useRef } from "react";
+import styles from '@styles/blocs/scrollreveal.module.scss'
 
 type Props = {
   delay?: number,
@@ -37,27 +38,14 @@ export function ScrollAnim({ delay = 0, children}:Props) {
   }, []);
 
   return (
-    <StyledScrollAnim 
+    <div 
       ref={animateBoxRef} 
-      className="scroll-anim" 
+      className={styles.wrapper} 
       style={{
         transitionDelay: String(delay) + 'ms'
       }}
     >
       {children}
-    </StyledScrollAnim>
+    </div>
   );
 }
-
-const StyledScrollAnim = styled.div`
-
-  transform: translateX(-3%);
-  opacity: 0;
-  transition: all 1s;
-  
-
-  &.reveal {
-    opacity: 1;
-    transform: translateX(0);
-  }
-`

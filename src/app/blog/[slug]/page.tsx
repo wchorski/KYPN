@@ -31,7 +31,6 @@ type Props = {
     slug:string | string[] | undefined,
   },
   searchParams: { [key: string]: string | string[] | undefined }
-  template:string,
 }
 
 export async function generateMetadata(

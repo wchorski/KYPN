@@ -3,7 +3,9 @@ import styles from '@styles/categories.module.scss'
 import fetchCategories from "@lib/fetchdata/fetchCats"
 import { Category } from "@ks/types"
 
-export async function CategoriesPool() {
+// any is a bug workaround
+// @ts-ignore
+export async function CategoriesPool():any {
 
   const {categories, error} = await fetchCategories()
 

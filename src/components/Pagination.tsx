@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { envs } from "@/envs";
 import styles from "@styles/menus/pagination.module.scss";
+import { ReactElement } from 'react';
 
 const perPage = envs.PERPAGE
 
@@ -14,7 +15,9 @@ type PagProps = {
   count:number|undefined,
 }
 
-export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProps){
+// any type is a bug workaround
+// @ts-ignore
+export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProps):ReactElement<any, any>{
 
   // old way when i was fetching from client
   // const client = getClient()
@@ -73,7 +76,7 @@ export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProp
   const pageCount = Math.ceil(count / perPage)
 
   
-  if(count <= perPage) return null
+  if(count <= perPage) return <></>
 
   return (<>
     {/* <Head>

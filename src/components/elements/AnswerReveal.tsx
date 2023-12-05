@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react"
-import styled from "styled-components"
+import { useRef, useState } from "react"
+import styles from '@styles/blocs/answerreveal.module.scss'
 
 type iProps = {
   question: string,
@@ -19,7 +19,7 @@ export function AnswerReveal({question = 'I have a question!', answer = 'Here is
 
   
   return (
-    <StyledAnswer scrollHeight={ scrollContRef.current ? scrollContRef.current.scrollHeight + 100 : 100}>
+    <div className={styles.answer_reveal} >
 
       <h4>Question: </h4>
 
@@ -35,49 +35,12 @@ export function AnswerReveal({question = 'I have a question!', answer = 'Here is
         {isShown ? 'hide' : 'reveal'}
       </button>
 
-      <div ref={scrollContRef} className={isShown ? 'expanded answer' : 'collapsed answer'}>
+      <div ref={scrollContRef} className={[styles.answer, isShown ? styles.expanded : styles.collapsed ].join(' ')}>
         {handleTextFormat(answer).map((line:string, i:number) => (
           <p key={i}>{line}</p>
         ))}
       </div>
 
-    </StyledAnswer>
+    </div>
   )
 }
-
-const StyledAnswer = styled.div<{scrollHeight:number}>`
-
-  border: solid black 1px;
-  padding: 1em;
-  margin: 1em 0;
-
-  h4{
-    margin-bottom: 0;
-  }
-
-  div.quetion{
-
-  }
-
-  div.answer{
-    border: solid 1px black;
-    border-radius: 5px;
-
-    font-size: 16px;
-    line-height: 38px;
-    padding: 0.3em;
-    overflow-y: hidden;
-    transition: all 1s ease-in-out;
-  }
-
-  .collapsed{
-    max-height: 0;
-    background-color: #05052d;
-  }
-
-  .expanded{
-    background-color: white;
-    max-height: ${props => props.scrollHeight || 30}px;
-  }
-
-`

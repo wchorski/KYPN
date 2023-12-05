@@ -1,15 +1,12 @@
 
-import React from 'react'
+import React, { ReactElement } from 'react'
 import Link from 'next/link';
 import styles from '@styles/ecommerce/product.module.scss'
-import { ProductDelete } from '@components/ecommerce/ProductDelete';
 import AddToCart from '@components/ecommerce/AddToCart';
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { Product, Session } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
-import fetchSession from '@lib/fetchdata/fetchSession';
-import { nextAuthOptions } from '@/session';
 import { envs } from '@/envs';
 
 type Props = {
@@ -17,7 +14,8 @@ type Props = {
   session:any,
 }
 
-export async function ProductThumbnail({product, session}: Props) {
+// @ts-ignore
+export async function ProductThumbnail({product, session}: Props):ReactElement<any, any> {
 
   // const sesh:Session = {}
 

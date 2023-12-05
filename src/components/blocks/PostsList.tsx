@@ -1,4 +1,9 @@
+import { nextAuthOptions } from "@/session"
 import { BlogList } from "@components/blog/BlogList"
+import { Section } from "@components/layouts/Section"
+import { fetchPosts } from "@lib/fetchdata/fetchPosts"
+import { getServerSession } from "next-auth"
+import { ReactElement } from "react"
 
 type Props = {
   header:string,
@@ -9,28 +14,36 @@ type Props = {
   style?: any,
 }
 
-export function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props) {
+// any type is a bug workaround
+// @ts-ignore
+export async function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props):ReactElement<any, any> {
   
+  const session = await getServerSession(nextAuthOptions)
+  const { posts, error} = await fetchPosts(1, categories.flatMap(cat => cat.id), session)
+
   return (
-    <section style={{
-      backgroundColor: color,
-      backgroundImage: `url(${imageSrc})`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-    }}>
+    <Section 
+      layout={'1'} 
+      styles={{
+        backgroundColor: color,
+        backgroundImage: `url(${imageSrc})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+      }}
+    >
       <div className="overlay" style={{backgroundColor: colorOverlay, padding: '1em 0 10em 0',}}>
         <div 
           className="wrapper" 
-          style={{maxWidth: 'var(--maxWidth)', marginInline: 'auto'}}
+          style={{maxWidth: 'var(--w-sitemax)', marginInline: 'auto'}}
         >
           <h2 style={{textAlign: 'center', margin: '4rem'}}> 
             {header}
           </h2>
 
-          <BlogList page={1} categories={categories}/>
+          <BlogList posts={posts} />
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
 

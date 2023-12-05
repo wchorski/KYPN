@@ -24,7 +24,9 @@ type Props = {
   }[]
 }
 
-export async function PriceTable({items = []}:Props) {
+// any type is a bug workaround
+// @ts-ignore
+export async function PriceTable({items = []}:Props):ReactElement<any, any> {
   // console.log(JSON.stringify(items, null, 2))
 
   const { services, addons, error} = await fetchServicesAndAddons()

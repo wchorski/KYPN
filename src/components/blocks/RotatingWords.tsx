@@ -1,5 +1,5 @@
 // cred - Jose Flores - https://codepen.io/joseflores8082/details/bNqGgx
-import styled from "styled-components"
+import styles from '@styles/blocs/rotatingwords.module.scss'
 
 type Props = {
   words:{
@@ -25,8 +25,8 @@ const defaultWords = [
 
 export function RotatingWords({words = defaultWords}:Props) {
   return (
-    <StyledRotatingWords>
-      <div className="words-cont">
+    <div className={styles.rotating}> 
+      <div className={styles.words_wrap}>
         {words.map((w, i) => (
           <span
             key={i} 
@@ -42,60 +42,6 @@ export function RotatingWords({words = defaultWords}:Props) {
 
 
       </div>
-    </StyledRotatingWords>
+    </div>
   )
 }
-
-const StyledRotatingWords = styled.div`
-  position:relative;
-  margin:0 auto;
-  width:100%;
-  height: 60px;
-  transform: translateX(-1%);
-  /* top: 100px; */
-  
-  .words-cont{
-    display: inline;
-    text-indent: 10px;
-
-
-    span{
-      position: absolute;
-      right:0;
-      left:0;
-      top: 0;
-      opacity: 0;
-      color: white;
-      font-weight: bolder;
-      line-height: 2rem;
-      /* opacity: 0; */
-      /* overflow: hidden; */
-      /* border: solid yellow 2px; */
-      /* background-color: purple; */
-      animation: rotate 15s cubic-bezier(0.39, -0.46, 0.38, 1.73) infinite 0s;
-    }
-  }
-
-  @keyframes rotate {
-    0% {
-      opacity: 0; 
-      transform: translateY(-100%); 
-    }
-    3% { 
-      opacity: 1; 
-      transform: translateY(0px);
-    }
-    17% { 
-      opacity: 1; 
-      transform: translateY(0px); 
-    }
-    20% {
-      opacity: 0; 
-      transform: translateY(100%); 
-    }
-
-    100% { 
-      opacity: 0; 
-    }
-  }
-`

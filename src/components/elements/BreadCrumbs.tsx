@@ -9,21 +9,21 @@ export function BreadCrumbs() {
 
   function generateBreadcrumbs() {
     // Remove any query parameters, as those aren't included in breadcrumbs
-    const asPathWithoutQuery = path.split("?")[0];
+    const asPathWithoutQuery = path?.split("?")[0];
 
     // Break down the path between "/"s, removing empty entities
     // Ex:"/my/nested/path" --> ["my", "nested", "path"]
     
-    const asPathNestedRoutes = asPathWithoutQuery.split("/")
+    const asPathNestedRoutes = asPathWithoutQuery?.split("/")
                                 .filter(v => v.length > 0);
     // console.log('asPathNestedRoutes, ', asPathNestedRoutes);
     
     // Iterate over the list of nested route parts and build
     // a "crumb" object for each one.
-    const crumblist = asPathNestedRoutes.map((subpath, idx) => {
+    const crumblist = asPathNestedRoutes?.map((subpath, idx) => {
       // We can get the partial nested route for the crumb
       // by joining together the path parts up to this point.
-      const href = "/" + asPathNestedRoutes.slice(0, idx + 1).join("/");
+      const href = "/" + asPathNestedRoutes?.slice(0, idx + 1).join("/");
       // const label = href.split('/').filter(Boolean).pop(); // Split the string and remove empty elements
       const label = subpath; // Split the string and remove empty elements
       // The title will just be the route string for now
@@ -40,7 +40,7 @@ export function BreadCrumbs() {
 
   return (
     <ul aria-label="breadcrumb" className={styles.list} >
-      {breadcrumbs.map((crumb, idx) => (
+      {breadcrumbs?.map((crumb, idx) => (
         <li key={idx}>
           <Crumb {...crumb} last={idx === breadcrumbs.length - 1} />
         </li>

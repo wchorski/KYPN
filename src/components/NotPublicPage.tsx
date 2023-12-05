@@ -7,7 +7,7 @@ type Props = {
   status:string,
 }
 
-export default async function NotPublicPage ({ status, children}:Props) {
+export function NotPublicPage ({ status, children}:Props) {
   return (
     <PageTHeaderMain
       header={Header(status)}

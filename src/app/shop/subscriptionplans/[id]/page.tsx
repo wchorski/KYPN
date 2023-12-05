@@ -29,7 +29,6 @@ type Props = {
     id:string | string[] | undefined,
   },
   searchParams: { [key: string]: string | string[] | undefined }
-  template:string,
 }
 
 export async function generateMetadata(

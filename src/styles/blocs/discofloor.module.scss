@@ -1,0 +1,42 @@
+.disco {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+
+  @keyframes pulse {
+    0%{
+      opacity: 0;
+      filter: blur(20px);
+    }
+    60%{
+      opacity: 0;
+      filter: blur(20px);
+    }
+    90%{
+      opacity: 0;
+      filter: blur(10px);
+    }
+    95%{
+      opacity: .5;
+      filter: blur(10px);
+    }
+    100%{
+      opacity: 0;
+      filter: blur(50px);
+    }
+  }
+}
+
+.grid_item {
+  aspect-ratio: 1/ 1;
+  display: flex;
+  align-items: center;
+  padding: 5%;
+  background-color: #1E1E1E;
+  color: #fff;
+  animation-duration: 10.3s;
+  animation-name: pulse;
+  animation-iteration-count: infinite;
+  opacity: 0;
+  
+}
