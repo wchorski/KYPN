@@ -11,16 +11,8 @@ keystone.db
 !.env.example
 /db/**
 !/db/compose.example.yml
+!/db/up.sh
 .DS_Store
-.next
-compose.yml
-seed_data.ts
-schema.graphql
-schema.prisma
-.vscode
-private/**
-!private/README.md
-.next
 compose.yml
 seed_data.ts
 schema.graphql
