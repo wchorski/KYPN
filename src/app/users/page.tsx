@@ -16,13 +16,16 @@ export const metadata: Metadata = {
 }
   
 type Props = {
-  children:ReactNode
+  params:{
+    id:string | string[] | undefined,
+  },
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
 const page = 1
 const perPage = envs.PERPAGE
 
-export default async function UsersPage ({ children }:Props) {
+export default async function UsersPage ({ params, searchParams }:Props) {
 
   const session = await getServerSession(nextAuthOptions);
   const { users, error } = await fetchUsers( page, perPage, session)

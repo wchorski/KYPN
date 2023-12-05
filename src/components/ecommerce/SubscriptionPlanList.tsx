@@ -5,6 +5,7 @@ import { List } from "@components/elements/List";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { SubscriptionPlanThumbnail } from "./SubscriptionPlanThumbnail";
+import { ReactElement } from "react";
 
 
 type ProdProps = {
@@ -12,8 +13,9 @@ type ProdProps = {
   categoryNames:string[],
   plans:SubscriptionPlan[],
 }
-
-export async function SubscriptionPlanList({ plans = [] }: ProdProps) {
+// any type is a bug workaround
+// @ts-ignore
+export async function SubscriptionPlanList({ plans = [] }: ProdProps):ReactElement<any, any> {
 
   const session = await getServerSession(nextAuthOptions);
 

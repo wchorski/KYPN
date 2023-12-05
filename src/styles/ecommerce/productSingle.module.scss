@@ -4,7 +4,7 @@ article.product :global {
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
   min-height: 800px;
-  max-width: var(--maxWidth);
+  max-width: var(--w-sitemax);
   align-items: start;
   gap: 1em;
 

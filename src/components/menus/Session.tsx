@@ -1,22 +1,20 @@
-// import { useGlobalContext } from "../lib/useSessionContext";
 import Link from "next/link";
 import { MdAccountCircle } from "react-icons/md";
 import styles from '@styles/menus/session.module.scss'
 import SignOutButton from "./SignOutButton";
 import { NavLink } from "./NavLink";
-import { LoadingAnim } from "@components/elements/LoadingAnim";
-import ErrorMessage from "@components/ErrorMessage";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { envs } from "@/envs";
-// import { getClient } from "@lib/gqlClient";
+import { ReactElement } from "react";
 
 
 type Props = {
   label:string,
 }
 
-export async function SessionBadge({ label, }: Props) {
+// @ts-ignore
+export async function SessionBadge({ label, }: Props):ReactElement<any, any>  {
 
   const session = await getServerSession(nextAuthOptions)
 

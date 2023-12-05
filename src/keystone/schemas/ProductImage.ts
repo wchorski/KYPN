@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
-import { cloudinaryImage } from '@keystone-6/cloudinary';
+// import { cloudinaryImage } from '@keystone-6/cloudinary';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text } from "@keystone-6/core/fields";
 import { permissions } from "../access";
@@ -14,7 +14,7 @@ export const cloudinary = {
   folder: process.env.CLOUDINARY_API_FOLDER + '/product_images' || 'NO_CLOUD_FOLDER',
 }
 
-
+// @ts-ignore
 export const ProductImage:Lists.ProductImage = list({
   // access: allowAll,
   access: {
@@ -33,10 +33,11 @@ export const ProductImage:Lists.ProductImage = list({
   fields: {
     // ? below is for locally saved images
     // image: image({ storage: 'my_local_images' }),
-    image: cloudinaryImage({
-      cloudinary,
-      label: 'Source',
-    }),
+    image: text(),
+    // image: cloudinaryImage({
+    //   cloudinary,
+    //   label: 'Source',
+    // }),
     // todo update this instead so there is a unified truth
     url: text(),
     altText: text({ validation: { isRequired: true }, defaultValue: 'Product Featured Image' }),

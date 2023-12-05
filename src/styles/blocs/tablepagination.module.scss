@@ -1,0 +1,31 @@
+.pagination {
+  margin: 1em 0;
+  display: flex;
+  justify-content: space-between;
+
+  button{
+    margin: 0 3px 3px 0;
+    background: transparent;
+    border: none;
+    border-bottom: solid 1px var(--c-primary);
+    opacity: .3;
+    transition: all .3s;
+
+    &:hover{
+      border-bottom: solid 1px var(--c-secondary);
+      opacity: 1;
+    }
+  }
+}
+
+.active{
+  border-bottom: solid 1px var(--c-accent);
+  opacity: 1;
+  color: var(--c-primary);
+  /* background-color: var(--c-accent); */
+}
+
+.buttons_wrap{
+  display: flex;
+  flex-wrap: wrap;
+}

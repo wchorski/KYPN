@@ -1,13 +1,12 @@
 import { list } from "@keystone-6/core";
-// @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, } from "@keystone-6/core/fields";
+import stripeConfig from "../../lib/stripe";
 import { permissions, rules } from "../access";
-import stripe from "../../lib/stripe";
 
 
-
+// TODO figoure out coupons
 export const Coupon:Lists.Coupon = list({
   
   access: allowAll,
@@ -83,7 +82,8 @@ export const Coupon:Lists.Coupon = list({
         console.log('+ + + + + start stripe thingy ');
         
         try {
-          const resStripe = await stripe.coupons.create({
+          const resStripe = await stripeConfig.coupons.create({
+            // @ts-ignore
             name: resolvedData.name,
             percent_off: resolvedData.percent_off,
             duration: resolvedData.duration,

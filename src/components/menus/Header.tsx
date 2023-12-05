@@ -66,7 +66,7 @@ export default function Header({options = default_options}:Props) {
 // `
 
 // const StyledHeader = styled.header`
-//   max-width: var(--maxWidth);
+//   max-width: var(--w-sitemax);
 //   display: flex;
 
 

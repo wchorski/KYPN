@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import styled from "styled-components";
+import styles from '@styles/blocs/tablepagination.module.scss'
 
 type Props = {
   currPage:number,
@@ -22,14 +22,14 @@ export const TablePagination = ({currPage, setPage, dataCount, perPage, setPerPa
   // }
 
   return (
-    <StyledPagination className='pagination'>
-      <div className="buttons-cont">
+    <div className={styles.pagination}>
+      <div className={styles.buttons_wrap}>
         {pages.map(page => {
           return (
             <button
                 key={page}
                 onClick={() => setPage(page)}
-                className={page == currPage ? "active" : ""}
+                className={page == currPage ? styles.active : ""}
               >
                 {page}
             </button>
@@ -48,38 +48,6 @@ export const TablePagination = ({currPage, setPage, dataCount, perPage, setPerPa
           <option value="100"> 100 </option>
           <option value="99999" > *All </option>
         </select>
-    </StyledPagination>
+    </div>
   );
-};
-
-const StyledPagination = styled.div`
-
-  margin: 1em 0;
-  display: flex;
-  justify-content: space-between;
-
-  .buttons-cont{
-    display: flex;
-    flex-wrap: wrap;
-  }
-  button{
-    margin: 0 3px 3px 0;
-    background: transparent;
-    border: none;
-    border-bottom: solid 1px var(--c-primary);
-    opacity: .3;
-    transition: all .3s;
-
-    &:hover{
-      border-bottom: solid 1px var(--c-secondary);
-      opacity: 1;
-    }
-  }
-  .active{
-    border-bottom: solid 1px var(--c-accent);
-    opacity: 1;
-    color: var(--c-primary);
-    /* background-color: var(--c-accent); */
-  }
-
-`
+}

@@ -4,6 +4,7 @@ import { Product } from "@ks/types";
 import { List } from "@components/elements/List";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
+import { ReactElement } from "react";
 
 
 type ProdProps = {
@@ -12,7 +13,9 @@ type ProdProps = {
   products:Product[],
 }
 
-export async function ProductsList({ products = [] }: ProdProps) {
+// any type is a bug workaround
+// @ts-ignore
+export async function ProductsList({ products = [] }: ProdProps):ReactElement<any, any> {
 
   
   const session = await getServerSession(nextAuthOptions);

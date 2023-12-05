@@ -1,0 +1,23 @@
+.slider {
+  position: relative;
+  height: 100%;
+  /* background-color: blue; */
+}
+
+.arrow{
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 45px;
+  color: #fff;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.left {
+  left: 32px;
+}
+
+.right{
+  right: 32px;
+}

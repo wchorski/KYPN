@@ -23,7 +23,7 @@ export function ProductListBlock({header, color, colorOverlay, imageSrc, categor
       <div className="overlay" style={{backgroundColor: colorOverlay, padding: '1em 0 10em 0',}}>
         <div 
           className="wrapper" 
-          style={{maxWidth: 'var(--maxWidth)', marginInline: 'auto'}}
+          style={{maxWidth: 'var(--w-sitemax)', marginInline: 'auto'}}
         >
           <h2 style={{textAlign: 'center', margin: '4rem'}}> 
             {header}

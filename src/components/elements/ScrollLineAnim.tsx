@@ -1,34 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import styles from '@styles/blocs/scrollLine.module.scss'
 
 export default function ScrollLineAnim() {
   return (
-    <StyledScrollLine> </StyledScrollLine>
+    <div className={styles.scroll_line} > </div>
   )
 }
-
-const StyledScrollLine = styled.div`
-  background: linear-gradient(90deg, var(--c-accent) 50%, transparent 50%);
-  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
-  background-position: 0px 0px, 200px 100px, 0px 100px, 200px 0px;
-  background-position: 100px 20px;
-  padding: 1px;
-  height: 1px;
-  width: 100%;
-  transition: background-position 1s;
-  animation: borderAnim 10s infinite linear;
-
-  &::hover{
-    background-position: 212px 0px, 0px 116px, 0px 0px, 216px 116px;
-  }
-
-  @keyframes borderAnim {
-  0% {
-    background-position: 0px 0px, 300px 116px, 0px 150px, 216px 0px;
-  }
-  100% {
-    background-position: 300px 0px, 0px 116px, 0px 0px, 216px 150px;
-  }
-}
-`

@@ -12,7 +12,7 @@ type Props = {
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-export async function EventsCalendar ({ date, events }:Props) {
+export function EventsCalendar ({ date, events }:Props) {
 
   function nextMonth(date:string,){
     const curDate = new Date(date)

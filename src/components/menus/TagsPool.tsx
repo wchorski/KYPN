@@ -3,8 +3,9 @@ import styles from '@styles/tags.module.scss'
 import fetchTags from "@lib/fetchdata/fetchTags"
 import { Tag } from "@ks/types"
 
-
-export async function TagsPool() {
+// any is a bug workaround
+// @ts-ignore
+export async function TagsPool():any {
 
   const {tags} = await fetchTags()
 

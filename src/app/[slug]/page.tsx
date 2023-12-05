@@ -11,13 +11,18 @@ import { BlockRender } from '@components/blocks/BlockRender'
 import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
 import { Section } from "@components/layouts/Section"
-import NotPublicPage from "./NotPublicPage"
+import {NotPublicPage} from "@components/NotPublicPage"
 export const revalidate = 5;
+
+type Props = {
+  params:{
+    slug:string,
+  },
+}
  
-export async function generateMetadata(
-  { params }:Props,
+export async function generateMetadata({ params }:Props,
   parent: ResolvingMetadata,
-): Promise<Metadata>  {
+){
 
   const { slug } = params
   const { page , error} = await fetchPage(slug)
@@ -28,16 +33,7 @@ export async function generateMetadata(
   }
 }
 
-type Props = {
-  params:{
-    slug:string,
-  },
-  template:string,
-}
-
-export default async function PageBySlug ({
-  params,
-}:Props) {
+export default async function PageBySlug ({params,}:Props) {
 
 
   const { page , error} = await fetchPage(params.slug)
@@ -67,9 +63,17 @@ export default async function PageBySlug ({
   // console.log(data);
   
 
-  if (status === 'DRAFT') return <NotPublicPage status={status}> <p>This blog post is still a draft</p> </NotPublicPage>
-  if (status === 'PRIVATE') return <NotPublicPage status={status}> <p>This blog post is private</p> </NotPublicPage>
-  
+  if (status === 'DRAFT') return (
+    <NotPublicPage status={status}> 
+      <p>This blog post is still a draft</p> 
+    </NotPublicPage>
+  )
+
+  if (status === 'PRIVATE') return (
+    <NotPublicPage status={status}> 
+      <p>This blog post is private</p> 
+    </NotPublicPage>
+  )
 
   if(template === 'FULLWIDTH' || template === 'FULLWIDTH_WITHHEADER') return (
     <PageTHeaderMain
