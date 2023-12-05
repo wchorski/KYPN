@@ -5,6 +5,8 @@ node_modules
 keystone.db
 *.log
 .env
+.env.dev
+.env.prod
 /db/**
 !/db/compose.example.yml
 .DS_Store
