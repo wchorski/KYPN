@@ -24,6 +24,7 @@ const MAIL_USER = process.env.MAIL_USER
 const MAIL_PASS = process.env.MAIL_PASS
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || 'no_frontend_url'
 const SESSION_SECRET = process.env.SESSION_SECRET!
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET!
 const NEXTAUTH_URL = process.env.NEXTAUTH_URL
 const BACKEND_URL = String(process.env.NEXT_PUBLIC_BACKEND_URL) || "no_backend_URL_set"
 const BACKEND_PORT = process.env.BACKEND_PORT || 'no_backend_port'
@@ -91,6 +92,7 @@ export const envs = {
   MAIL_PASS,
   FRONTEND_URL,
   SESSION_SECRET,
+  NEXTAUTH_SECRET,
   NEXTAUTH_URL,
   BACKEND_URL,
   BACKEND_PORT,

@@ -16,10 +16,11 @@ import { envs } from './envs';
 // console.log(process.env.NEXTAUTH_URL);
 const NODE_ENV = process.env.NODE_ENV
 const NEXTAUTH_URL = envs.NEXTAUTH_URL!
-const sessionSecret = envs.SESSION_SECRET;
+const sessionSecret = envs.NEXTAUTH_SECRET;
 const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(NEXTAUTH_URL).hostname
+const baseHostName = hostName.split('.').slice(-2).join('.')
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext;
 
@@ -176,7 +177,7 @@ export const nextAuthOptions = {
         sameSite: "lax",
         path: "/",
         secure: useSecureCookies,
-        domain: (hostName === "localhost") ? hostName : "." + hostName,
+        domain: (hostName === "localhost") ? hostName : "." + baseHostName,
       },
     },
   },

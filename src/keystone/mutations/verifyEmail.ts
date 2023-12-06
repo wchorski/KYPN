@@ -42,7 +42,7 @@ export const verifyEmail = (base: BaseSchemaMeta) => graphql.field({
       
       if(foundUser.role?.name) throw new Error('!!! user already registered: ' + JSON.stringify(foundUser.role, null, 2))
 
-      const secret = envs.SESSION_SECRET + foundUser.id
+      const secret = envs.NEXTAUTH_SECRET + foundUser.id
 
       // verify token
       const payload = await jwt.verify(token, secret) as Payload 

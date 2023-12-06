@@ -37,6 +37,8 @@ following along with Wes Bos Tutorial
   - `/frontend/public/favicon.ico`
 
 ## Authentication
+
+set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 ### Github OAuth
 - https://github.com/settings/developers
 

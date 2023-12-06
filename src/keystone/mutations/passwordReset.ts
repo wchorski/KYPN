@@ -42,7 +42,7 @@ export const passwordReset = (base: BaseSchemaMeta) => graphql.field({
       })
       if(!foundUser) throw new Error('!!! passwordReset: no foundUser found in database')
 
-      const secret = envs.SESSION_SECRET + foundUser.password
+      const secret = envs.NEXTAUTH_SECRET + foundUser.password
 
       // verify token
       const payload = await jwt.verify(token, secret) as Payload   
