@@ -2,11 +2,7 @@ import '@styles/globals.scss'
 import type { Metadata } from 'next'
 import { Inter, Barlow } from 'next/font/google'
 import layoutStyles from '@styles/layout.module.scss'
-<<<<<<< HEAD
-
-=======
 import Script from 'next/script'
->>>>>>> f7bcd14631595fc516b713a4ce3352224fa31b39
 import { Nav } from '@components/menus/Nav'
 import {Footer} from '@components/menus/Footer'
 import { envs } from '@/envs'
@@ -40,8 +36,6 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-<<<<<<< HEAD
-=======
 
       <Script
         id="umami-next"
@@ -51,7 +45,6 @@ export default async function RootLayout({
         src={`/stts/${envs.UMAMI_SCRIPT}`}
       />
 
->>>>>>> f7bcd14631595fc516b713a4ce3352224fa31b39
       <body className={[
         header.variable, 
         paragraph.variable, 

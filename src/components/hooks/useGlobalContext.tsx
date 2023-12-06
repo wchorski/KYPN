@@ -25,8 +25,9 @@ export const GlobalContextProvider = ({ children }: { children: React.ReactNode 
   function closeSearch() { setisSearchOpen(false) }
   function openSearch() { setisSearchOpen(true) }
 
-  function toggleNav() { console.log('toggle nav');
-   setisNavOpen(!isNavOpen) }
+  function toggleNav() {
+   setisNavOpen(!isNavOpen) 
+  }
 
 
   return (

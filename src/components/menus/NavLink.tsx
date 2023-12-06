@@ -14,7 +14,7 @@ type Props = {
 
 export function NavLink ({ target = '_self',href, children, className = '' }:Props) {
 
-  const { toggleNav } = useNavControl()
+  const { setisNavOpen } = useNavControl()
   let segment = useSelectedLayoutSegment()
   // console.log(segment)
   
@@ -26,7 +26,7 @@ export function NavLink ({ target = '_self',href, children, className = '' }:Pro
     <Link 
       href={href}
       target={target}
-      onClick={toggleNav}
+      onClick={() => setisNavOpen(false)}
       className={isActive ? [...styleArr, styles.active,].join(' ') : styleArr.join(' ')}
     >
       {children}

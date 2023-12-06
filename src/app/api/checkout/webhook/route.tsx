@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // The payment failed or the customer does not have a valid payment method.
         // The subscription becomes past_due. Notify your customer and send them to the
         // customer portal to update their payment information.
-        console.log(JSON.stringify(event.data.object, null, 2))
+        // console.log(JSON.stringify(event.data.object, null, 2))
         // @ts-ignore
         afterFailure(event.data.object as Charge, event.data.object.metadata?.type)
         break;
