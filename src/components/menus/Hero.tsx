@@ -8,7 +8,7 @@ type Props = {
   description:string,
   logoSrc:string,
   bgImg?:string,
-  children:ReactNode
+  children?:ReactNode
 }
 
 export function Hero ({ children, title, description, logoSrc, bgImg = '' }:Props) {

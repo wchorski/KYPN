@@ -26,15 +26,14 @@ following along with Wes Bos Tutorial
 ## Init
 
 - create site unique assets for your brand
-  - `/frontend/public/assets/private/logo.svg`
-  - `/frontend/public/assets/private/logo.png`
-  - `/frontend/public/assets/private/placeholder.png`
-  - `/frontend/public/favicon.ico`
-- copy these files
-  - `/frontend/components/elements/Layouts.init.tsx` -> `/frontend/components/elements/Layouts.tsx`
-  - `/frontend/styles/GlobalThemeStyle.styled.init.js` -> `/frontend/styles/GlobalThemeStyle.styled.js`
-  - `/backend/seed/seed_data.init.ts` -> `/backend/seed/seed_data.ts`
-  - `/frontend/public/favicon.ico`
+  - `public/assets/logo.svg`
+  - `public/assets/logo.png`
+  - `public/assets/placeholder.png`
+  - `public/favicon.ico`
+- copy these files & folders
+  - `cp src/layout.init.tsx src/layout.init.tsx`
+  - `cp src/styles-init src/styles`
+  - `cp src/keystone/seed/seed_data.init.ts src/keystone/seed/seed_data.ts`. Use `src/keystone/seed/seed_data.empty.ts` if you want to start from scratch
 
 ## Authentication
 
@@ -70,23 +69,59 @@ set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 ### Stripe
 
 using stripe CLI have it listen to this webhook
-
 ```sh
 stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 ```
 
-- don't forget to run and save these queries to the `seed_data.ts` 
-  - `Query.Pages`
-  - `Query.Services`
-  - `Query.Roles`
-  - `Query.Products`
-- ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
+During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts` 
+
+> [!info] Document
+> any field using the `document` type will query with an extra nested `document` key. You can remove this
+
+example query from apollo playground
+```json
+{
+  content: { 
+    document: [
+      {
+        type: "paragraph",
+        children: [
+          {
+            text: "Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries."
+          }
+        ]
+      }
+    ],
+  }
+}
+```
+
+take out the `document` field
+```json
+{
+  content: [
+      {
+        type: "paragraph",
+        children: [
+          {
+            text: "Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries."
+          }
+        ]
+      }
+    ],
+}
+```
+
+
+ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
+
+## Gotchas
+- the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies 
 
 ## TODO
 
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
-- [ ] switch all *Single.tsx to *Artcile.tsx to better reflect the HTML symatics
-- [ ] transition as much Styled Components to CSS Modules
+- [x] transition as much Styled Components to CSS Modules
 - [ ] screen shots / recordings
   - [ ] 16 / 10 (1200 x 750) - laptop
   - [ ] ? / ? - phone
@@ -94,6 +129,10 @@ stripe listen --forward-to http://localhost:3000/api/checkout/webhook
   - [ ] Bookings
   - [ ] Products (checkout)
 - [ ] use grid-template-areas to make a better PricingTable component
+- [ ] which components are site specific, add them to .ignore
+  - [ ] `Hero.tsx`
+  - [ ] `Nav.tsx`
+  - [ ] `layout.tsx`
 
 ## Color pallet?
 

@@ -10,7 +10,7 @@ COPY . .
 RUN yarn install
 RUN yarn generate
 RUN yarn build
-
+RUN yarn next telemetry disable
 
 EXPOSE 3000
 ENV NODE_ENV production
