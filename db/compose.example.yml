@@ -1,10 +1,10 @@
 version: '3'
 
-## "authtest-kypn" === unique app name
+## "myappname-kypn" === unique app name
 
 services:
-  db:
-    container_name: authtest-kypn-db
+  myappname-kypn-db:
+    container_name: myappname-kypn-db
     image: postgres:15
     restart: unless-stopped
     environment:
@@ -21,5 +21,5 @@ services:
 
 networks:    
   this:
-    name: authtest-kypn-network
+    name: myappname-kypn-network
     driver: bridge  
