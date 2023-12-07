@@ -2,6 +2,7 @@ node_modules
 .keystone
 .next
 .react-email
+.vscode
 keystone.db
 *.log
 .env
