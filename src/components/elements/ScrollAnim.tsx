@@ -1,5 +1,5 @@
 'use client'
-import { CSSProperties, ReactNode, useEffect, useRef } from "react";
+import { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
 import styles from '@styles/blocs/scrollreveal.module.scss'
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
 
 export function ScrollAnim({ delay = 0, children}:Props) {
   const animateBoxRef = useRef(null);
+  const [stylesState, setStylesState] = useState<string>([styles.wrapper].join(' '))
 
   useEffect(() => {
     const options = {
@@ -20,7 +21,9 @@ export function ScrollAnim({ delay = 0, children}:Props) {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           // @ts-ignore
-          animateBoxRef.current.classList.add('reveal');
+          // animateBoxRef.current.classList.add('reveal');
+          setStylesState([styles.wrapper, styles.reveal].join(' '))
+
           observer.unobserve(entry.target);
         }
       });
@@ -40,7 +43,7 @@ export function ScrollAnim({ delay = 0, children}:Props) {
   return (
     <div 
       ref={animateBoxRef} 
-      className={styles.wrapper} 
+      className={stylesState} 
       style={{
         transitionDelay: String(delay) + 'ms'
       }}

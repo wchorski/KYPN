@@ -1,4 +1,5 @@
 // @ts-nocheck
+'use client'
 import React, { Component } from 'react';
 
 class VectorGPT extends Component {

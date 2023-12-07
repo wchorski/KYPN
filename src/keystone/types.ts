@@ -23,7 +23,7 @@ export type Session = {
   expires: string,
 }
 
-export type GridLayout = '1'|'1_1'|'1_2'|'2_1'|'1_4'|'1_1_1'|'1_2_1'
+export type GridLayout = '1'|'1_1'|'1_2'|'2_1'|'1_4'|'1_1_1'|'1_2_1'|'1_1_1_1'
 
 export type SelectOption  = {
   value:string,

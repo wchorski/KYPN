@@ -27,3 +27,8 @@ h1, h2, h3, h4, h5, h6 {
   transition-duration: .3s;
   transition-timing-function: ease-in;
 }
+
+.glass {
+  background-color: var(--c-glass);
+  backdrop-filter: blur(1px);
+}

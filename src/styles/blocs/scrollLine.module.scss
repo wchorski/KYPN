@@ -9,6 +9,7 @@
   width: 100%;
   transition: background-position 1s;
   animation: borderAnim 10s infinite linear;
+  position: sticky;
 
   &::hover{
     background-position: 212px 0px, 0px 116px, 0px 0px, 216px 116px;

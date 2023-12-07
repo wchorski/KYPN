@@ -1,10 +1,12 @@
+# developer files
 node_modules
 .keystone
 .next
 .react-email
 .vscode
+
+# Variables
 keystone.db
-*.log
 .env
 .env.dev
 .env.prod
@@ -13,9 +15,21 @@ keystone.db
 /db/**
 !/db/compose.example.yml
 !/db/up.sh
-.DS_Store
 compose.yml
 seed_data.ts
-.vscode
+
+# pages, components, styles
+src/styles/vars.scss
+src/app/layout.tsx
+src/app/home
+src/components/menus/Footer.tsx
+public/assets/logo.png
+public/assets/logo.svg
+public/assets/placeholder.png
+public/assets/private/*
 private/**
 !private/README.md
+
+# Garbage
+.DS_Store
+*.log

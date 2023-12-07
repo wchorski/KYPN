@@ -6,6 +6,7 @@ type Props = {
   layout?:'flex'|'grid',
   id?:string,
   bgColor?:string,
+  className?:string,
   // layout?: 'default'|'center',
 }
 
@@ -14,6 +15,7 @@ export function Card ({
   children,
   id,
   bgColor,
+  className,
 }:Props) {
 
   const allStyles = [
@@ -25,7 +27,7 @@ export function Card ({
   return (
     <div 
       id={id}
-      className={allStyles} 
+      className={allStyles + ' ' + className} 
       style={{backgroundColor: bgColor}}
     >
       {children}

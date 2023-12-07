@@ -17,7 +17,6 @@ export function Footer() {
         <div>
           <h4> Contact </h4>
           <List>
-            <Link href={`tel:1233451234`}> (123) 456-7890 </Link>
             <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`}> {envs.ADMIN_EMAIL_ADDRESS}</Link>
             <SocialLinkNav 
               color={envs.COLOR_PRIMARY}
@@ -29,11 +28,12 @@ export function Footer() {
         </div>
 
         <div>
-          <h4> Service </h4>
+          <h4> Plans </h4>
           <List>
-            <Link href={`/pricing`}> Fruit Basket Service </Link>
-            <Link href={`/pricing`}> Open Smoothie Bar </Link>
-            <Link href={`/pricing`}> Cantaloupe Consultation </Link>
+            <Link href={`/pricing`}> Buisness Website  </Link>
+            <Link href={`/pricing`}> DIY Website  </Link>
+            <Link href={`/pricing`}> Done For You </Link>
+            <Link href={`/pricing`}> Cloud Storage </Link>
           </List>
         </div>
 
