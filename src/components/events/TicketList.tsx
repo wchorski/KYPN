@@ -10,8 +10,6 @@ type Props = {
 }
 
 export function TicketList ({ tickets = [], children }:Props) {
-
-  if(tickets.length === 0) return <NoData />
   
   return (
     <ul className={styles.tickets} >

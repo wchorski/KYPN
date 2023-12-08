@@ -90,20 +90,28 @@ export function ImageGallery(props:Props) {
 
   if(items.length > 0) return (
     <div 
-      className={
-        [
-          styles[`col_${columns}`],
-          styles[`gap_${gap}`],
-          styles.gallery
-        ].join(' ')
-      }
+      // className={
+      //   [
+      //     styles[`col_${columns}`],
+      //     styles[`gap_${gap}`],
+      //     styles[layout],
+      //     styles.gallery
+      //   ].join(' ')
+      // }
     >
 
       <LightGallery
         onInit={onInit}
         speed={500}
         plugins={[lgThumbnail, lgZoom]}
-        elementClassNames={'gallery-wrap ' + layout}
+        elementClassNames={
+          [
+            styles[`col_${columns}`],
+            styles[`gap_${gap}`],
+            styles[layout],
+            styles.gallery
+          ].join(' ')
+        }
       >
         {items.map((img, i) => (
           <ImageFrame src={img.src} alt={img.alt} objFit={objFit} caption={img.caption} key={i}/>

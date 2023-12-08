@@ -24,7 +24,7 @@ export async function SubscriptionPlanThumbnail({SubscriptionPlan, session}: Pro
 
 
   return (
-    <article className={styles.SubscriptionPlan} >
+    <article className={styles.product} >
       
       {status === 'DRAFT' && <p> DRAFT SubscriptionPlan </p> }
 
@@ -46,7 +46,7 @@ export async function SubscriptionPlanThumbnail({SubscriptionPlan, session}: Pro
           <PriceTag price={price} subtext={`/${billing_interval}`}/>
 
           {status !== 'OUT_OF_STOCK' 
-            ? <Link href={`/shop/subscriptionplans/${SubscriptionPlan.id}`} className='button'> view </Link>
+            ? <Link href={`/shop/subscriptionplans/${SubscriptionPlan.id}`} className='button medium'> view </Link>
             : <button disabled={true}> out of stock </button>
           }
             

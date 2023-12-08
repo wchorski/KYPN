@@ -80,19 +80,24 @@ function Main({page, categoryNames = [], products = [], countProducts, subscript
   if(!subscriptionPlans) <p> no subscriptionPlans found </p>
 
   return<>
+  {subscriptionPlans?.length > 0 && (
     <Section layout={'1'}>
       <h2> Subscription Plans </h2>
       <Pagination route='/shop' page={(page) || 1} count={countSubPlans}/>
         <SubscriptionPlanList page={page} categoryNames={categoryNames} plans={subscriptionPlans}/>
       <Pagination route='/shop' page={(page) || 1} count={countSubPlans}/>
     </Section>
+  )}
 
     <hr />
-    <Section layout={'1'}>
-      <h2> Products </h2>
-      <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
-        <ProductsList page={page} categoryNames={categoryNames} products={products}/>
-      <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
-    </Section>
+
+    {products?.length > 0 && (
+      <Section layout={'1'}>
+        <h2> Products </h2>
+        <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
+          <ProductsList page={page} categoryNames={categoryNames} products={products}/>
+        <Pagination route='/shop' page={(page) || 1} count={countProducts}/>
+      </Section>
+    )}
   </>
 }

@@ -1,8 +1,5 @@
-
-import { NoData } from "@components/elements/NoData"
 import { Table } from "@components/elements/Table"
 import { TicketList } from "@components/events/TicketList"
-import { Section } from "@components/layouts/Section"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
@@ -63,16 +60,16 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
 
       </Card>
 
-      <hr /> 
+      
 
-      <Card id="orders">
+      <Card id="services">
 
-        <h3 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}>
-          Orders / Services
+        <h3 className={dashState === 'services' ? styles.linkactive : styles.dashlink}>
+          Services
         </h3>
 
         <Table 
-          caption="Services"
+          caption=""
           headers={[
             'service',
             'date',
@@ -83,8 +80,16 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
           route={`/bookings`}
         />
 
+      </Card>
+
+      <Card id="orders">
+
+        <h3 className={dashState === 'orders' ? styles.linkactive : styles.dashlink}>
+          Orders
+        </h3>
+
         <Table 
-          caption="Orders"
+          caption=""
           headers={[
             'date',
             'time',
@@ -97,7 +102,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
         />
       </Card>
 
-      <hr /> 
+      
 
       <Card id="subscriptions">
         
@@ -119,7 +124,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
 
       </Card>
 
-      <hr /> 
+      
 
       <Card id="downloads">
         
@@ -129,7 +134,7 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
 
       </Card>
 
-      <hr /> 
+      
 
       <Card id="tickets">
         
@@ -137,11 +142,9 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
           Tickets
         </h3>
 
-        
-        {user.tickets.length === 0 && <NoData /> }
 
         {tickets.length === 0 && (
-          <p> No tickets found. Check out all <Link href={`/events`}> upcoming events</Link> </p>
+          <p> No upcoming event tickets. Check out all <Link href={`/events`}> upcoming events</Link> </p>
         )}
         <TicketList tickets={tickets}/>
       </Card>

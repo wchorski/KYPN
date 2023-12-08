@@ -56,7 +56,7 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
         </div>
       </div>
 
-      {session?.data?.role?.canManageSubscriptionPlans && (
+      {session?.data?.role?.canManageProducts && (
         <div className="menu admin">
           <Link href={envs.BACKEND_URL + `/products/${id}`} target={'_blank'}> Edit ✏️ </Link>
           {/* <ProductDelete id={id}> Delete </ProductDelete> */}

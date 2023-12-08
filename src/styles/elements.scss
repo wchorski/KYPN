@@ -78,6 +78,11 @@ button {
   justify-content: space-evenly;
   align-content: center;
 
+  &.medium {
+    padding: .5rem 1rem;
+    font-size: 1.3rem;
+  }
+
   &.large {
     padding: 1rem;
     font-size: 1.3rem;

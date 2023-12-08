@@ -1,3 +1,4 @@
+
 import { Pagination } from "@components/Pagination";
 import { BlogList } from "@components/blog/BlogList";
 import ErrorMessage from "@components/ErrorMessage";
@@ -13,6 +14,7 @@ import { fetchPosts } from "@lib/fetchdata/fetchPosts";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { Section } from "@components/layouts/Section";
+import { NoData } from "@components/elements/NoData";
 
 type Props = {
   params:{
@@ -81,6 +83,7 @@ function Main({posts, page, count}:Main) {
     <Pagination route='/blog' page={(page) || 1} count={count}/>
 
     <BlogList posts={posts}/>
+    {posts?.length === 0 && <NoData name="posts" />}
 
     <Pagination route='/blog' page={(page) || 1} count={count}/>
   </Section>

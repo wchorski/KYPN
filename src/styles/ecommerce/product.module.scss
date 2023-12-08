@@ -48,6 +48,10 @@ article.product :global{
   p.desc{
     flex-grow: 1;
     word-wrap: break-word;
+    overflow: hidden;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
   }
 
   a.featured_image{

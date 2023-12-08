@@ -62,6 +62,9 @@ nav.dashnav {
 }
 
 .dashboard {
+  display: grid;
+  gap: 1.5rem;
+
   .card {
     scroll-behavior: smooth;
   }

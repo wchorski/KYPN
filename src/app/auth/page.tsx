@@ -23,12 +23,13 @@ type Props = {
   searchParams:{
     reset:string,
     error:string,
+    callbackUrl?:string,
   }
 }
 
 export default async function LoginPage ({ searchParams }:Props) {
 
-  const { error } = searchParams
+  const { error, callbackUrl } = searchParams
 
   const session = await getServerSession(nextAuthOptions)
 
@@ -36,17 +37,20 @@ export default async function LoginPage ({ searchParams }:Props) {
 
   return (
     <PageTHeaderMain
-      header={Header()}
+      header={Header(callbackUrl)}
       main={Main(providers, session?.user?.email, error)}
     />
   )
 }
 
-function Header(){
+function Header(callbackUrl?:string){
 
   return<>
     <Section layout={'1'}>
       <h1> Login or Register Account </h1>
+      {callbackUrl && (
+        <p className='error'> You must login first to access the page </p>
+      )}
     </Section>
   </>
 }
