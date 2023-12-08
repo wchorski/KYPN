@@ -17,8 +17,8 @@ jwtClient.authorize(function (err, tokens) {
 
   // todo how to skip this if we are not using google client?
   if (err) {
-    console.log('!!! GOOGLE CLIENT ERROR')
-    console.log(err);
+    console.log('!!! GOOGLE Cal not connected')
+    // console.log(err);
     return
 
   } else {

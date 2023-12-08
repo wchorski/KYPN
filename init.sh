@@ -10,4 +10,5 @@ cp ./src/components/menus/Footer.init.tsx ./src/components/menus/Footer.tsx
 cp ./src/components/menus/MainNavList.init.tsx ./src/components/menus/MainNavList.tsx
 cp ./src/components/menus/Nav.init.tsx ./src/components/menus/Nav.tsx
 cp ./src/app/layout.init.tsx ./src/app/layout.tsx
+cp ./.env.example ./.env
 

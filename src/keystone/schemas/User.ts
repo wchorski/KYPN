@@ -1,5 +1,4 @@
 import { list } from "@keystone-6/core";
-// @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
@@ -11,7 +10,6 @@ import bcrypt from 'bcryptjs'
 import { envs } from "../../../envs";
 import { User as TypeUser } from "../types";
 import { mailVerifyUser } from "../../lib/mail";
-import { generateRandomString } from "../../lib/generate";
 import { tokenEmailVerify } from "../../lib/tokenEmailVerify";
 
 
@@ -153,27 +151,33 @@ export const User: Lists.User = list({
     beforeOperation: async ({ operation, resolvedData, item }: { operation: any, resolvedData: any, item:any }) => {
 
       if (operation === 'create') {
-        const customer = await stripeConfig.customers.create({
-          email: resolvedData.email,
-          name: resolvedData.name + ' ' + resolvedData.nameLast,
-          metadata: {
-            isActive: resolvedData.isActive,
-          }
-        })
-          .then(async (customer) => {
 
-            if (resolvedData && !resolvedData.user) {
-              resolvedData.stripeCustomerId = customer.id
-            } 
+        if(stripeConfig){
+          const customer = await stripeConfig.customers.create({
+            email: resolvedData.email,
+            name: resolvedData.name + ' ' + resolvedData.nameLast,
+            metadata: {
+              isActive: resolvedData.isActive,
+            }
           })
-          .catch(err => { console.log(err) })
+            .then(async (customer) => {
+  
+              if (resolvedData && !resolvedData.user) {
+                resolvedData.stripeCustomerId = customer.id
+              } 
+            })
+            .catch(err => { console.log(err) })
+        }
+
       }
 
       if(operation === 'delete'){
-        // todo - delete all stripe data too
-        // https://stripe.com/docs/financial-connections/disconnections
-        const deleted = await stripeCustomerDelete(item.stripeCustomerId)
-          .catch(error => console.log('!!! stripe customer delete error: ', error))
+        if(stripeConfig){
+          // todo - delete all stripe data too
+          // https://stripe.com/docs/financial-connections/disconnections
+          const deleted = await stripeCustomerDelete(item.stripeCustomerId)
+            .catch(error => console.log('!!! stripe customer delete error: ', error))
+        }
       }
     },
 
@@ -181,17 +185,21 @@ export const User: Lists.User = list({
 
       if(operation === 'create'){
 
-        const token = await tokenEmailVerify({email: item.email, id: item.id})
-
-        const mail = await mailVerifyUser({
-          to: [item.email, envs.ADMIN_EMAIL_ADDRESS],
-          token,
-          user: {
-            email: item.email,
-            name: item.name,
-            id: item.id,
-          },
-        })
+        if(envs.MAIL_PASS){
+          const token = await tokenEmailVerify({email: item.email, id: item.id})
+  
+          const mail = await mailVerifyUser({
+            to: [item.email, envs.ADMIN_EMAIL_ADDRESS],
+            token,
+            user: {
+              email: item.email,
+              name: item.name,
+              id: item.id,
+            },
+          })
+        } else {
+          console.log('!!! User.ts. Email SMTP not setup')
+        }
 
       }
 
