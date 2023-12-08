@@ -41,7 +41,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
     query: USER_DASH_QUERY,
   }) as User
 
-  const {tickets, error } = await fetchTicketsByUser(user.id)
+  const {tickets, error } = await fetchTicketsByUser(user?.id)
   
   return <main>
     <header >
