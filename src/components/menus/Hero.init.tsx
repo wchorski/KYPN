@@ -25,7 +25,7 @@ export function Hero ({ children, title, description, logoSrc, bgImg = '' }:Prop
           <Image 
             src={logoSrc}
             alt='site Logo'
-            width={150}
+            width={300}
             height={200}
             className='site-logo'
           />
@@ -36,7 +36,7 @@ export function Hero ({ children, title, description, logoSrc, bgImg = '' }:Prop
             <h1>{title}</h1>
           </Link>
 
-          <p>{description}</p>
+          <p> {description} </p>
         </div>
 
 

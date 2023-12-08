@@ -22,9 +22,14 @@ seed_data.ts
 src/styles/vars.scss
 src/app/layout.tsx
 src/app/home
+src/components/menus/Header.tsx
+src/components/menus/Hero.tsx
+src/components/menus/Nav.tsx
+src/components/menus/MainNavList.tsx
 src/components/menus/Footer.tsx
 public/assets/logo.png
 public/assets/logo.svg
+public/favicon.ico
 public/assets/placeholder.png
 public/assets/private/*
 private/**

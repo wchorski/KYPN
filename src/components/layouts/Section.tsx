@@ -11,6 +11,7 @@ type Props = {
   children:ReactNode|ReactNode[],
   id?:string,
   styles?:CSSProperties,
+  className?:string
 }
 
 export function Section({
@@ -22,10 +23,11 @@ export function Section({
   children,
   id,
   styles,
+  className,
 }:Props
 ) {
   //                                  gotta put a '_' in front because css no like numbers as class names
-  const stylesArr = ['section', `grid`, [`_${layout}`] ]
+  const stylesArr = ['section', `grid`, [`_${layout}`], className ]
   // todo trying global instead of module
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 

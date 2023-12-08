@@ -76,6 +76,7 @@ button {
   // text-align: center;
   display: flex;
   justify-content: space-evenly;
+  align-content: center;
 
   &.large {
     padding: 1rem;
@@ -109,4 +110,8 @@ button {
     background-color: var(--c-disabled);
     border: solid 1px var(--c-disabled);
   }
+}
+
+.mtauto {
+  margin-top: auto;
 }

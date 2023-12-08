@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { NavLink } from './NavLink'
 import styles from '@styles/nav.module.scss'
 import { useNavControl } from '@components/hooks/useGlobalContext'
-
+import Image from 'next/image'
 
 export function MainNavList () {
 

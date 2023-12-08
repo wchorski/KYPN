@@ -22,9 +22,9 @@ export function Nav() {
         <MainNavList />
 
         <ul className='links utility'>
-          <li>
+          {/* <li>
             <CartButton />
-          </li>
+          </li> */}
           <li>
             <SessionBadge label='account'/>
           </li>

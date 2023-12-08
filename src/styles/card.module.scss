@@ -3,6 +3,9 @@
   padding: 1rem;
   margin-inline: 3px;
   border-radius: var(--br-dull);
+  // height: 100%;
+  display: flex;
+  flex-direction: column;
   // width: fit-content;
 
 }
