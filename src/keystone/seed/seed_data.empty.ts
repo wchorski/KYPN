@@ -13,9 +13,75 @@ export const subscriptionPlans_seedjson = []
 
 export const events_seeddata = []
 
-export const user_seeddata = []
+export const user_seeddata = [
+  {
+    name: 'Admin',
+    email: 'admin@m.lan',
+    authId: 'admin@m.lan',
+    password: 'admin@m.lan',
+    isAdmin: true,
+    isVerified: true,
+  },
+]
 
-export const roles_seedjson = []
+export const roles_seedjson = [
+  {
+    name: 'admin',
+    label: 'Admin',
+    canManageProducts: true,
+    canManagePosts: true,
+    canManageEvents: true,
+    canManageTickets: true,
+    canSeeOtherUsers: true,
+    canManageUsers: true,
+    canManageRoles: true,
+    canManageCart: true,
+    canManageOrders: true,
+    canManageAddons: true,
+    canManageServices: true,
+    canManageBookings: true,
+    canManageAvailability: true,
+    canManagePages: true,
+    canManageLocations: true,
+    canManageAnnouncements: true,
+    // TODO why this no work?
+    // canOrder: true,
+    // canManageOrderItems: true,
+    canReadProducts: true,
+    canManageCategories: true,
+    canManageTags: true,
+    canManageSubscriptionPlans: true,
+    canManageCoupons: true,
+    canManageSubscriptionItems: true,
+    assignedTo: {
+      connect: {
+        email: 'admin@m.lan'
+      }
+    }
+  },
+  {
+    name: 'editor',
+    label: 'Editor',
+    canManageProducts: true,
+    canManageEvents: true,
+    canSeeOtherUsers: true,
+    canManageUsers: false,
+    canManageRoles: false,
+    canManageCart: true,
+    canManageOrders: true,
+  },
+  {
+    name: 'ticket taker',
+    label: 'ticket taker',
+    canManageTickets: true,
+  },
+  {
+    name: 'client',
+    label: 'Client',
+    canSeeOtherUsers: false,
+    canManageCart: false,
+  }
+]
 
 export const posts_seed = []
 

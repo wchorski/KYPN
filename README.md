@@ -25,19 +25,20 @@ following along with Wes Bos Tutorial
 
 ## Init
 
+
 - create site unique assets for your brand
   - `public/assets/logo.svg`
   - `public/assets/logo.png`
   - `public/assets/placeholder.png`
   - `public/favicon.ico`
-- copy these files & folders
-  - `cp src/layout.init.tsx src/layout.init.tsx`
+- copy these files & folders (or use `init.sh` to automate)
+  - `cp src/layout.init.tsx src/layout.tsx`
   - `cp src/components/menus/Footer.init.tsx src/components/menus/Footer.tsx`
   - `cp src/components/menus/Header.init.tsx src/components/menus/Header.tsx`
   - `cp src/components/menus/Nav.init.tsx src/components/menus/Nav.tsx`
   <!-- - `cp src/styles-init src/styles` -->
   - `cp src/styles/vars.init.scss src/styles/vars.scss`
-  - `cp src/keystone/seed/seed_data.init.ts src/keystone/seed/seed_data.ts`. Use `src/keystone/seed/seed_data.empty.ts` if you want to start from scratch
+  - `cp src/keystone/seed/seed_data.empty.ts src/keystone/seed/seed_data.ts`.
 
 ## Authentication
 
