@@ -23,6 +23,7 @@ services:
 
   backend:
     container_name: authtest-kypn-backend
+    # must match .env "IMAGE_BACKEND_NAME"
     image: authtest-kypn-backend:latest # rename ALL 'authtest-kypn' to a unique name 
     restart: unless-stopped
     build: 
@@ -36,6 +37,7 @@ services:
 
   frontend:
     container_name: authtest-kypn-frontend
+    # must match .env "IMAGE_FRONTEND_NAME"
     image: authtest-kypn-frontend:latest # rename ALL 'authtest-kypn' to a unique name 
     restart: unless-stopped
     build: 

@@ -6,6 +6,7 @@ npm-debug.log
 README.md
 .keystone
 .next
+.react-email
 .git
 .env.prod
 .env.dev

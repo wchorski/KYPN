@@ -35,6 +35,10 @@ public/assets/private/*
 private/**
 !private/README.md
 
+# images
+images/**
+!images/README.md
+
 # Garbage
 .DS_Store
 *.log
