@@ -83,7 +83,7 @@ export const roles_seedjson = [
   }
 ]
 
-export const posts_seed = []
+export const posts_seedjson = []
 
 export const categories_seedjson = []
 
@@ -92,8 +92,6 @@ export const tags_seedjson = []
 export const products_seed = []
 
 export const productImage_seedjson = []
-
-export const posts_seedjson = []
 
 export const subscriptions_seedjson = []
 
