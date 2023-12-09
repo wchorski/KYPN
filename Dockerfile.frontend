@@ -1,4 +1,4 @@
-FROM node:18-alpine as builder
+FROM --platform=linux/amd64 node:18-alpine as builder
 # FROM node:18-alpine
 WORKDIR /app
 
@@ -10,7 +10,7 @@ RUN yarn build
 RUN yarn next telemetry disable
 # RUN find ./
 
-FROM node:18-alpine as runner
+FROM --platform=linux/amd64 node:18-alpine as runner
 WORKDIR /app
 
 COPY --from=builder /app/package.json .
