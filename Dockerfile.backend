@@ -1,16 +1,25 @@
-FROM --platform=linux/amd64 node:18-alpine
+FROM --platform=linux/amd64 node:18-alpine as builder
 WORKDIR /app
 
-# # Install dependencies based on the preferred package manager
-# COPY package.json yarn.lock* ./
-# # KEYSTONE file required for post install scripts
-# COPY keystone.ts schema.* auth.ts ./
+COPY package.json yarn.lock ./
 COPY . .
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn generate
 RUN yarn ks:build
 RUN yarn next telemetry disable
+
+FROM --platform=linux/amd64 node:18-alpine as runner
+WORKDIR /app
+
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/yarn.lock .
+COPY --from=builder /app/.env .
+
+COPY --from=builder /app/.keystone ./.keystone
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3001
 ENV NODE_ENV production
