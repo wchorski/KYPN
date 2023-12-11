@@ -33,7 +33,7 @@ export const Ticket:Lists.Ticket = list({
     // isHidden: true,
     listView: {
       initialColumns: ['eventStart', 'eventSummary', 'email', 'status',],
-      initialSort: { field: 'eventStart', direction: 'ASC'}
+      // initialSort: { field: 'eventStart', direction: 'ASC'}
     },
   },
 

@@ -33,7 +33,7 @@ export const Product:Lists.Product = list({
 
     listView: {
       initialColumns: ['name', 'price', 'stockCount', 'status', 'dateModified', 'author', 'categories' ],
-      initialSort: { field: 'start', direction: 'DESC'}
+      initialSort: { field: 'dateModified', direction: 'DESC'}
     },
   },
 

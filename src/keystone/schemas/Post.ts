@@ -32,7 +32,7 @@ export const Post:Lists.Post = list({
     // isHidden: true,
     listView: {
       initialColumns: ['title', 'status', 'dateModified', 'author', 'categories' ],
-      initialSort: { field: 'start', direction: 'DESC'}
+      initialSort: { field: 'dateModified', direction: 'DESC'}
     },
   },
 
