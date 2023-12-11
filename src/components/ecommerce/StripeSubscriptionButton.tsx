@@ -70,7 +70,7 @@ export default function StripeSubscriptionButton({id}:Props) {
         {(isPending) ? (
           <LoadingAnim />
         ) : (
-          <span> Start Subscription with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
+          <span> Pay with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
         )}
       </button>
     </>

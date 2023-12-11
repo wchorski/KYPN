@@ -5,7 +5,7 @@ import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { isLoggedIn, permissions, rules } from "../access";
-import stripeConfig from "../../lib/stripe";
+import stripeConfig, { stripeProductCreate } from "../../lib/stripe";
 import 'dotenv/config'
 import { componentBlocks } from "../blocks";
 import { slugFormat } from "../../lib/slugFormat";
@@ -175,67 +175,34 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         try {
           if (resolvedData && !resolvedData.author) {
             const currentUserId = await context.session.itemId;
-            // console.log({ currentUserId });
             resolvedData.author = { connect: { id: currentUserId } };
           }
         } catch (err) { console.warn(err) }
-        // console.log('resolvedData.photo.connect.id', resolvedData.photo.connect.id);
+        
 
-        let photo_url = IMG_PLACEHOLDER
-        // if (resolvedData?.photo?.connect) {
-        //   const photo = await context.db.ProductImage.findOne({
-        //     where: {
-        //       id: resolvedData.photo.connect.id
-        //     }
-        //   })
-        //   console.log({ photo });
-        //   // @ts-ignore
-        //   photo_url = photo.image._meta.secure_url
-        // }
-
-        const res = await stripeConfig.products.create({
-          // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
-          name: resolvedData.name || '',
-          active: true,
-          description: resolvedData.excerpt ||'no_description',
-          metadata: {
-            // @ts-ignore //todo might cause problems
-            category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-            status: resolvedData.status || '',
-            // @ts-ignore //todo might cause problems
-            author: resolvedData.author?.email,
-            type: 'subscription'
-          },
-          images: [
-            resolvedData.image || ''
-          ],
-          // @ts-ignore
-          attributes: [
-            'Subscriptionattr1',
-            'Subscriptionattr2'
-          ],
-          shippable: false,
-          unit_label: 'units',
-          default_price_data: {
-            currency: 'usd',
-            // @ts-ignore //todo might cause problems
-            unit_amount: resolvedData.price,
-            // @ts-ignore //todo might cause problems
-            recurring: { interval: resolvedData.billing_interval},
-          },
-          url: process.env.FRONTEND_URL + '/shop/subscriptionplan/' + resolvedData.id
-
+        const res = await stripeProductCreate({
+          id: resolvedData.id,
+          name: resolvedData.name,
+          description: resolvedData.excerpt,
+          category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
+          status: resolvedData.status,
+          type: 'subscription',
+          image: resolvedData.image,
+          price: resolvedData.price,
+          billing_interval: resolvedData.billing_interval,
+          url: process.env.FRONTEND_URL + '/shop/subscriptionplans/' + resolvedData.id,
+          authorEmail: resolvedData.author?.email,
         })
           .then(async (res) => {
             // @ts-ignore //todo might cause problems
-            if (resolvedData && !resolvedData.product) {
+            if (res && resolvedData && !resolvedData.product) {
               resolvedData.stripeProductId = res.id
               // @ts-ignore //todo might cause problems
               resolvedData.stripePriceId = res.default_price
             }
           })
           .catch(err => { 
-            console.warn(err) 
+            console.log(err) 
             throw new Error("subplan create err: " + 'haha uh oh::' + err.message);
             
           })

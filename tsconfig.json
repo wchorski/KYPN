@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
@@ -21,17 +25,32 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@styles/*": ["src/styles/*"],
-      "@components/*": ["src/components/*"],
-      "@lib/*": ["src/lib/*"],
-      "@public/*": ["public/*"],
-      "@ks/*": ["src/keystone/*"],
-      "@/*": ["./*"]
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ],
+      "@ks/*": [
+        "src/keystone/*"
+      ],
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
-    "**/*.ts", 
-    "**/*.tsx", 
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
