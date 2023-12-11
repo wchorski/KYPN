@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import styles from '@styles/elements/list.module.scss'
   
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
   isAnimated?:boolean,
   children:ReactNode[]|ReactNode,
   className?:string,
+  style?:CSSProperties,
 }
 
 export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, gap, children }:Props) {

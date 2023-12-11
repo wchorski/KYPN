@@ -42,8 +42,9 @@ article.thumbnail :global{
   // margin-inline: auto;
 
 
-  .featured_image{
+  figure{
     transition: transform, contrast, .3s;
+    margin: 0;
     
     &:hover, &:focus{
       transform: scale(1.01);

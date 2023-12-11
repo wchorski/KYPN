@@ -16,7 +16,7 @@ export function BlogList({ posts }: ProdProps):ReactElement<any, any> {
   if(!posts) return <></>
 
   return (
-    <List className={styles.blog} isAnimated={true}>
+    <List className={styles.blog} isAnimated={true} >
       {posts.map((item: any, i:number) => (
         <BlogListItem {...item} key={i} />
       ))}

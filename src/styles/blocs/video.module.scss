@@ -3,13 +3,14 @@
   grid-template-columns: minmax(auto, 960px);
   align-items: center;
   justify-content: center;
-  margin-bottom: 2rem;
+  // margin-bottom: 2rem;
 }
 
 .iframePosition {
   overflow: hidden;
   // padding-bottom: 56.25%;
   position: relative;
+  line-height: 0;
 
   > iframe {
     border: none;
