@@ -45,12 +45,12 @@ const NODE_ENV = process.env.NODE_ENV
 
 // FRONTEND
 const STRIPE_PUBLIC_KEY   = process.env.NEXT_PUBLIC_STRIPE_KEY         
-const SITE_TITLE          = process.env.NEXT_PUBLIC_SITE_TITLE          || 'no_site_title'
-const SITE_DESC          = process.env.NEXT_PUBLIC_SITE_DESC          || 'no_site_desc'
-const ADMIN_EMAIL_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_EMAIL_ADDRESS || 'no_admin_email_address'
-const UMAMI_ID            = process.env.NEXT_PUBLIC_UMAMI_ID            || 'no_analytics_id'
-const UMAMI_URL           = process.env.NEXT_PUBLIC_UMAMI_URL           || 'no_analytics_url'
-const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT        || 'no_analytics_script'
+const SITE_TITLE          = process.env.NEXT_PUBLIC_SITE_TITLE! 
+const SITE_DESC          = process.env.NEXT_PUBLIC_SITE_DESC! 
+const ADMIN_EMAIL_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_EMAIL_ADDRESS 
+const UMAMI_ID            = process.env.NEXT_PUBLIC_UMAMI_ID  
+const UMAMI_URL           = process.env.NEXT_PUBLIC_UMAMI_URL     
+const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT  
 const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO 
 
 

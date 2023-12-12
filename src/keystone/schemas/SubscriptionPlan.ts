@@ -5,7 +5,7 @@ import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { isLoggedIn, permissions, rules } from "../access";
-import stripeConfig, { stripeProductCreate } from "../../lib/stripe";
+import stripeConfig, { stripePriceUpdate, stripeProductCreate, stripeProductUpdate } from "../../lib/stripe";
 import 'dotenv/config'
 import { componentBlocks } from "../blocks";
 import { slugFormat } from "../../lib/slugFormat";
@@ -211,78 +211,23 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
       if (operation === 'update') {
 
-        let photo_url = IMG_PLACEHOLDER
-        // if (resolvedData?.photo?.connect) {
-        //   const photo = await context.db.ProductImage.findOne({
-        //     where: {
-        //       id: resolvedData.photo.connect.id
-        //     }
-        //   })
-        //   console.log({ photo });
-        //   // @ts-ignore
-        //   photo_url = photo.image._meta.secure_url
-        // }
+        const product = await stripeProductUpdate({
+          currency: 'usd',
+          name: resolvedData.name || item.name,
+          productId: item.id,
+          stripeProductId: item.stripeProductId,
+          stripePriceId: item.stripePriceId,
+          price: resolvedData.price || item.price,
+          image: resolvedData.image || item.image,
+          status: resolvedData.status || item.status,
+          category: resolvedData.categories ? (resolvedData.categories[0] ? resolvedData.categories[0].name : 'uncategorized') : item.categories ? (item.categories[0] ? item.categories[0].name : 'uncategorized'): 'No categories',
+          excerpt: resolvedData.excerpt || item.excerpt,
+          authorEmail: item.author ? item.author.email : 'no_author',
+          billing_interval: resolvedData.billing_interval || item.billing_interval,
 
-        const currPrice = await stripeConfig.prices.retrieve(
-          // @ts-ignore //todo might cause problems
-          resolvedData.stripePriceId ? resolvedData.stripePriceId : item.stripePriceId
-        )
-
-        // todo this is ugly, but Stripe API does not support deletion or updating of a price object
-        if (resolvedData.price && currPrice.unit_amount !== resolvedData.price) {
-
-          const newPrice = await stripeConfig.prices.create({
-            // @ts-ignore //todo might cause problems
-            unit_amount: resolvedData.price,
-            currency: 'usd',
-            // @ts-ignore //todo might cause problems
-            product: resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-            // @ts-ignore //todo might cause problems
-            recurring: { interval: resolvedData.billing_interval ? resolvedData.billing_interval : item.billing_interval },
-          })
-
-          resolvedData.stripePriceId = newPrice.id
-
-          const product = await stripeConfig.products.update(
-            // @ts-ignore //todo might cause problems
-            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-            {
-              name: resolvedData.name ? resolvedData.name : item.name,
-              description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt || 'no_description',
-              default_price: newPrice.id,
-              images: [
-                resolvedData.image
-              ],
-              metadata: {
-                // @ts-ignore //todo might cause problems
-                category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-                status: resolvedData.status,
-                // @ts-ignore //todo might cause problems
-                author: resolvedData.author?.email,
-              }
-            }
-          )
-        } else if (currPrice.unit_amount === item.price) {
-
-          const product = await stripeConfig.products.update(
-            // @ts-ignore //todo might cause problems
-            resolvedData.stripeProductId ? resolvedData.stripeProductId : item.stripeProductId,
-            {
-              name: resolvedData.name ? resolvedData.name : item.name,
-              // description: resolvedData.description ? resolvedData.description : item.description,
-              images: [
-                photo_url
-              ],
-              metadata: {
-                // @ts-ignore //todo might cause problems
-                category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-                status: resolvedData.status,
-                // @ts-ignore //todo might cause problems
-                author: resolvedData.author?.email,
-              }
-            }
-          )
-        }
+        }).then( async (product) => {
+          if(product?.default_price) resolvedData.default_price = product?.default_price
+        }). catch(err => { console.log(err)})
       }
 
     },

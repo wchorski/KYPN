@@ -37,13 +37,16 @@ export default async function RootLayout({
   return (
     <html lang="en">
 
-      <Script
-        id="umami-next"
-        strategy="afterInteractive"
-        async
-        data-website-id={envs.UMAMI_ID}
-        src={`/stts/${envs.UMAMI_SCRIPT}`}
-      />
+
+      {envs.UMAMI_ID && (
+        <Script
+          id="umami-next"
+          strategy="afterInteractive"
+          async
+          data-website-id={envs.UMAMI_ID}
+          src={`/stts/${envs.UMAMI_SCRIPT}`}
+        />
+      )}
 
       <body className={[
         header.variable, 

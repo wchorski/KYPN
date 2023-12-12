@@ -98,4 +98,72 @@ export async function stripeCustomerDelete(id:string){
   return deleted
 }
 
+type Price = {
+  currency:'usd'|string,
+  productId:string,
+  stripeProductId:string,
+  stripePriceId:string,
+  price:number,
+  image:string,
+  name:string,
+  status:string,
+  category:string,
+  excerpt:string,
+  authorEmail:string,
+  billing_interval:'day'|'week'|'month'|'year',
+}
+
+export async function stripeProductUpdate({currency, productId, image, status, authorEmail, category, name, excerpt, price, stripeProductId, stripePriceId, billing_interval}:Price){
+
+  if(!envs.STRIPE_SECRET) return
+
+  const currPrice = await stripeConfig.prices.retrieve(stripePriceId)
+
+  let stripeUpdateParams: Stripe.ProductUpdateParams = {
+    name,
+    description: excerpt,
+    // default_price: newPrice.id,
+    images: [
+      image
+    ],
+    metadata: {
+      category,
+      status,
+      author: authorEmail,
+      productId
+    }
+  }
+
+  // todo this is ugly, but Stripe API does not support deletion or updating of a price object
+  if (price && currPrice.unit_amount !== price) {
+
+    const newPrice = await stripeConfig.prices.create({
+      unit_amount: price,
+      currency,
+      product: stripeProductId,
+      recurring: { 
+        interval: billing_interval 
+      },
+    })
+
+    // resolvedData.stripePriceId = newPrice.id
+    stripeUpdateParams = { ...stripeUpdateParams, default_price: newPrice.id }
+
+    const product = await stripeConfig.products.update(
+      stripeProductId,
+      stripeUpdateParams,
+    )
+
+    return product
+
+  } else if (currPrice.unit_amount === price) {
+    const product = await stripeConfig.products.update(
+      stripeProductId,
+      stripeUpdateParams,
+    )
+
+    return product
+  }
+}
+
 export default stripeConfig;
