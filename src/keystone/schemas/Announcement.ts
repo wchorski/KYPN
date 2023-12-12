@@ -41,6 +41,7 @@ export const Announcement:Lists.Announcement = list({
     link: text(),
     start: timestamp(),
     end: timestamp(),
+    color: text({defaultValue: '#00000094'}),
     type: select({
       options: [
         { label: 'Site Maitenance', value: 'MAINTENANCE' },

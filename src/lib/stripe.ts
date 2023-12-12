@@ -62,6 +62,34 @@ export async function stripeProductCreate({id, name, description, category, stat
 
 }
 
+type Customer = {
+  email:string,
+  name:string,
+  nameLast?:string,
+  isActive:boolean,
+}
+
+export async function stripeCustomerCreate({email, name, nameLast, isActive}:Customer){
+
+  if(!envs.STRIPE_SECRET) return
+    
+
+  const customer = await stripeConfig.customers.create({
+    email: email,
+    name: name + ' ' + nameLast,
+    metadata: {
+      isActive: String(isActive),
+    }
+  })
+
+  if (!customer) return Promise.reject(new Error('Customer creation failed'));
+  
+
+  return customer
+
+  
+}
+
 export async function stripeCustomerDelete(id:string){
   const deleted = await stripeConfig.customers.del(
     id

@@ -84,6 +84,7 @@ model Announcement {
   link    String    @default("")
   start   DateTime?
   end     DateTime?
+  color   String    @default("#00000094")
   type    String?   @default("NORMAL")
   content Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
 }

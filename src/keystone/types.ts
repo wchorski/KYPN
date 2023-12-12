@@ -333,6 +333,7 @@ export type Announcement = {
   link:string,
   start:string,
   end:string,
+  color:string,
   type:'MAINTENANCE'|'NORMAL'|'CRITICAL'|'SALE',
   content: {
     document: any,

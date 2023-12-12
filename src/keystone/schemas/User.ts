@@ -3,7 +3,7 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
-import stripeConfig, { stripeCustomerDelete } from "../../lib/stripe";
+import stripeConfig, { stripeCustomerCreate, stripeCustomerDelete } from "../../lib/stripe";
 import { timesArray } from "../../lib/timeArrayCreator";
 // @ts-ignore
 import bcrypt from 'bcryptjs'
@@ -153,16 +153,15 @@ export const User: Lists.User = list({
       if (operation === 'create') {
 
         if(stripeConfig){
-          const customer = await stripeConfig.customers.create({
+          const customer = await stripeCustomerCreate({
             email: resolvedData.email,
             name: resolvedData.name + ' ' + resolvedData.nameLast,
-            metadata: {
-              isActive: resolvedData.isActive,
-            }
+            isActive: resolvedData.isActive,
+            
           })
             .then(async (customer) => {
   
-              if (resolvedData && !resolvedData.user) {
+              if (resolvedData && !resolvedData.user && customer) {
                 resolvedData.stripeCustomerId = customer.id
               } 
             })

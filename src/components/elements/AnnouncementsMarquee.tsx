@@ -29,12 +29,15 @@ export function AnnouncementsMarquee({ announcement, children }: Props) {
     setisClosed(true)
   }
   
-  const {start, end, link} = announcement
+  const {link, color} = announcement
 
   return (
     <div
       onMouseOver={() => setIsFocused(true)}
       onMouseOut={() => setIsFocused(false)}
+      style={{
+        backgroundColor: color,
+      }}
       className={isClosed ? [styles.closed, 'banner_wrap', styles.announcement].join(' ') : [styles.announcement, 'banner_wrap'].join(' ')}
     >
       <div className="content-cont">
