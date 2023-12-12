@@ -10,9 +10,10 @@ type Props = {
   children:ReactNode[]|ReactNode,
   className?:string,
   style?:CSSProperties,
+  lineHight?:string,
 }
 
-export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, gap, children }:Props) {
+export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, gap, lineHight, children }:Props) {
 
   if(!children) return null
 
@@ -21,7 +22,7 @@ export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, classN
   const allStyles = stylesArr.join(' ');
 
   return (
-    <ul className={allStyles} style={{gap: gap}}>
+    <ul className={allStyles} style={{gap: gap, lineHeight: lineHight}}>
       {Array.isArray(children) ? children.map((child, i) => (
         <li
           key={i}

@@ -45,12 +45,14 @@ export function AnnouncementsMarquee({ announcement, children }: Props) {
         {children}
 
       </div>
-
-      <Link href={link} onClick={e => setisClosed(true)}
-        className={isFocused ? 'focused btnlink' : 'btnlink'}
-      >
-        <FiExternalLink />
-      </Link>
+      
+      {link && (
+        <Link href={link} onClick={e => setisClosed(true)}
+          className={isFocused ? 'focused btnlink' : 'btnlink'}
+        >
+          <FiExternalLink />
+        </Link>
+      )}
 
       <button
         onClick={e => setisClosed(true)}

@@ -10,6 +10,7 @@ export default async function fetchAnnouncements(){
       query: `
         start
         end
+        color
         id
         link
         content {

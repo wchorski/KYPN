@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { relationship, select, text, timestamp, integer,} from "@keystone-6/core/fields";
+import { select, text, timestamp, integer,} from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
 import { permissions, rules } from "../access";

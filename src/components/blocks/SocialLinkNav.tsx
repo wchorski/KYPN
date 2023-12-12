@@ -75,8 +75,8 @@ export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, tw
       style={{
         display: 'flex',
         gap: '1em',
-        // padding: '1em',
-        fontSize: '1.2rem'
+        padding: '.5em 0',
+        fontSize: '1.2rem',
       }}
     >
 
