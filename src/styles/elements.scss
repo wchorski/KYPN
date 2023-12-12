@@ -43,8 +43,13 @@ img {
 }
 
 ul.unstyled{
-  padding-inline: 0;
   list-style: none;
+}
+
+ul {
+  padding-left: 1rem;
+  display: grid;
+  gap: .5rem;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -57,6 +62,8 @@ button {
   cursor: pointer;
   transition-property: color, background-color, filter;
   transition-duration: .3s;
+  background-color: var(--c-body);
+  color: var(--c-txt);
   
   > span {
     display: flex;
@@ -74,9 +81,15 @@ button {
   // display: grid;
   // align-content: center;
   // text-align: center;
-  display: flex;
+  display: grid;
   justify-content: space-evenly;
   align-content: center;
+
+  span {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-around;
+  }
 
   &.medium {
     padding: .5rem 1rem;

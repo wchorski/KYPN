@@ -212,11 +212,14 @@ export function LoginForm({providers}:Props) {
             <button 
               key={provider.name}
               type='button'
-              className={'button large'}
+              className={'button'}
               disabled={(state === 'pending')}
               onClick={() => socialSignin(provider.id)}
             >
-              Login with {provider.name} {getIcon(provider.id)}
+              <span>
+                Login with {provider.name} {getIcon(provider.id)}
+              </span>
+
             </button>
         ))}
       </fieldset>

@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode } from "react"
 import { GridLayout } from "@ks/types";
-// import styles from "@styles/elements/section.module.scss";
+import styles from "@styles/grid.module.scss";
 
 type Props = {
   pad?:number,
@@ -10,39 +10,36 @@ type Props = {
   layout:GridLayout,
   children:ReactNode|ReactNode[],
   id?:string,
-  styles?:CSSProperties,
+  style?:CSSProperties,
   className?:string
-  height?:string,
 }
 
-export function Section({
+export function Grid({
   pad = 1, 
-  height,
   imageSrc, 
   color, 
   col,
   layout = '1_1',
   children,
   id,
-  styles,
+  style,
   className,
 }:Props
 ) {
   //                                  gotta put a '_' in front because css no like numbers as class names
-  const stylesArr = ['section', `grid`, [`_${layout}`], className ]
+  const stylesArr = [styles.grid, styles[`_${layout}`], className ]
   // todo trying global instead of module
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
   const inlineStyles = {
-    ...styles,
-    minheight: height,
+    ...styles
   } as CSSProperties
 
   if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})
   if(color) Object.assign(inlineStyles, {backgroundColor: color,}) 
 
   return (
-    <section 
+    <div 
       id={id}
       className={stylesArr.join(' ')}
       style={inlineStyles}
@@ -58,6 +55,6 @@ export function Section({
         </div>
       ) }
     
-    </section>
+    </div>
   )
 }
