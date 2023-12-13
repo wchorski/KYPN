@@ -37,11 +37,10 @@ export default async function BlogFeedPage({ params, searchParams }:Props) {
   const session = await getServerSession(nextAuthOptions);
   const { page, categories } = searchParams
   const currPage = Number(page) || 1
-  const categoryNames = categories?.split(',') || []
+  const categoryIds = categories?.split(',') || []
   
-  const { posts, count, error } = await fetchPosts(currPage, categoryNames, session )
+  const { posts, count, error } = await fetchPosts(currPage, categoryIds, session )
   
-
   if(error) return <ErrorMessage error={error}/>
 
   return (

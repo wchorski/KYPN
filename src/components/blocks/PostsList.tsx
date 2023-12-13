@@ -30,19 +30,15 @@ export async function PostsList({header, color, colorOverlay, imageSrc, categori
         backgroundPosition: 'center',
         backgroundSize: 'cover',
       }}
+      overlay={colorOverlay}
     >
-      <div className="overlay" style={{backgroundColor: colorOverlay, padding: '1em 0 10em 0',}}>
-        <div 
-          className="wrapper" 
-          style={{maxWidth: 'var(--w-sitemax)', marginInline: 'auto'}}
-        >
-          <h2 style={{textAlign: 'center', margin: '4rem'}}> 
-            {header}
-          </h2>
 
-          <BlogList posts={posts} />
-        </div>
-      </div>
+      <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
+        {header}
+      </h2>
+
+      <BlogList posts={posts} />
+
     </Section>
   )
 }

@@ -4,13 +4,40 @@ import { Post } from "@ks/types"
 
 const perPage = envs.PERPAGE
 
-export async function fetchPosts(page:number, categoryNames:string[], session:any){
-
-  const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
-
+export async function fetchPosts(page:number, categoryIds:string[], session:any){
+  
   try {
 
-    const count = await keystoneContext.withSession(session).query.Post.count({
+    const context = keystoneContext.withSession(session)
+
+    let where:any = {
+      NOT: [
+        {
+          OR: [
+            {
+              status: {
+                equals: "DRAFT"
+              }
+            },
+            {
+              status: {
+                equals: "PRIVATE"
+              }
+            },
+          ]
+        }
+      ]
+    }
+    
+    
+    if(categoryIds.length > 0){
+      where = {
+        ...where,
+        OR: {categories: { some: { id: { in: categoryIds }}}},
+      }
+    }
+
+    const count = await context.query.Post.count({
       where: { 
         NOT: [
           {
@@ -27,7 +54,7 @@ export async function fetchPosts(page:number, categoryNames:string[], session:an
       },
     }) as number
 
-    const posts = await keystoneContext.withSession(session).query.Post.findMany({
+    const posts = await context.query.Post.findMany({
       skip: page * perPage - perPage,
       take: perPage,
       orderBy: [
@@ -35,25 +62,7 @@ export async function fetchPosts(page:number, categoryNames:string[], session:an
           dateModified: "desc"
         }
       ],
-      where: {
-        OR: catConnects,
-        NOT: [
-          {
-            OR: [
-              {
-                status: {
-                  equals: "DRAFT"
-                }
-              },
-              {
-                status: {
-                  equals: "PRIVATE"
-                }
-              },
-            ]
-          }
-        ]
-      },
+      where,
       query: query,
     }) as Post[]
     

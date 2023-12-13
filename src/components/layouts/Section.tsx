@@ -6,6 +6,7 @@ type Props = {
   pad?:number,
   imageSrc?:string,
   color?:string,
+  overlay?:string,
   col?:number,
   layout:GridLayout,
   children:ReactNode|ReactNode[],
@@ -20,6 +21,7 @@ export function Section({
   height,
   imageSrc, 
   color, 
+  overlay,
   col,
   layout = '1_1',
   children,
@@ -29,13 +31,20 @@ export function Section({
 }:Props
 ) {
   //                                  gotta put a '_' in front because css no like numbers as class names
-  const stylesArr = ['section', `grid`, [`_${layout}`], className ]
+  const stylesArr = [
+    'section', 
+    `grid`, 
+    `overlay`,
+    [`_${layout}`], 
+    className,
+  ]
   // todo trying global instead of module
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
   const inlineStyles = {
     ...styles,
     minheight: height,
+    "--c-overlay": overlay, 
   } as CSSProperties
 
   if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})

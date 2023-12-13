@@ -27,7 +27,7 @@ export const postslist = component({
     categories: fields.relationship({
       label: 'Categories',
       listKey: 'Category',
-      selection: 'id name',
+      selection: 'name',
       many: true,
     })
    
