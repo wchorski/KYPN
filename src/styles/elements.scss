@@ -46,8 +46,8 @@ ul.unstyled{
   list-style: none;
 }
 
-ul {
-  padding-left: 1rem;
+ul, ol {
+  // padding-left: 1rem;
   display: grid;
   gap: .5rem;
 }
