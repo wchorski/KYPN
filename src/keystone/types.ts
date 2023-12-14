@@ -398,6 +398,8 @@ export type Location = {
   bookings:Booking[],
 }
 
+export type Billing_Interval = 'day'|'week'|'month'|'year'
+
 export type SubscriptionPlan = {
   id: string,
   image: string,
@@ -412,7 +414,7 @@ export type SubscriptionPlan = {
   price: number,
   stripeProductId: string,
   stripePriceId: string,
-  billing_interval: string,
+  billing_interval: Billing_Interval,
   items: SubscriptionItem[]
   stockMax: number,
   tags: Tag[],
@@ -423,7 +425,7 @@ export type SubscriptionItem = {
   id: string,
   status:'ACTIVE'|'TRIAL'|'EXPIRED'|'CANCELED'|'SUSPENDED'|'PAUSED'|'DELINQUENT',
   custom_price: number,
-  billing_interval: 'day'|'week'|'month'|'year',
+  billing_interval: Billing_Interval,
   subscriptionPlan: SubscriptionPlan,
   isActive: boolean,
   isDelinquent: boolean,

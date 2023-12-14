@@ -25,6 +25,7 @@ import { imagegallery } from './imagegallery';
 import { buttonlink } from './buttonlink';
 import { productslist } from './productslist';
 import { image } from './image';
+import { subscriptionplan_pricetable } from './subscriptionplan_pricetable';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -44,6 +45,7 @@ export const componentBlocks = {
   sociallinknav,
   iframe,
   pricetable,
+  subscriptionplan_pricetable,
   hero,
   carousel,
   quote,

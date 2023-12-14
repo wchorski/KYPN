@@ -1382,7 +1382,7 @@ input SubscriptionPlanWhereInput {
   slug: StringFilter
   excerpt: StringFilter
   status: StringNullableFilter
-  price: IntNullableFilter
+  price: IntFilter
   stripeProductId: StringFilter
   stripePriceId: StringFilter
   billing_interval: StringNullableFilter

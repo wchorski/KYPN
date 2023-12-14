@@ -4,11 +4,13 @@ import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { image, integer, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
-import { isLoggedIn, permissions, rules } from "../access";
-import stripeConfig, { stripePriceUpdate, stripeProductCreate, stripeProductUpdate } from "../../lib/stripe";
+import { permissions, rules } from "../access";
+import { stripeProductCreate, stripeProductUpdate } from "../../lib/stripe";
 import 'dotenv/config'
 import { componentBlocks } from "../blocks";
 import { slugFormat } from "../../lib/slugFormat";
+import { Billing_Interval } from "@ks/types";
+import { envs } from "../../../envs";
 
 const SITE_TITLE = process.env.SITE_TITLE || 'Ecommerce '
 const IMG_PLACEHOLDER = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
@@ -130,7 +132,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       }
     }),
 
-    price: integer(),
+    price: integer({validation: {isRequired: true}}),
     stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
     stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
     billing_interval: select({
@@ -181,17 +183,19 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
         
 
         const res = await stripeProductCreate({
-          id: resolvedData.id,
-          name: resolvedData.name,
-          description: resolvedData.excerpt,
-          category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-          status: resolvedData.status,
+          id: resolvedData.id || '',
+          name: resolvedData.name || '',
+          description: resolvedData.excerpt || '',
+          // category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
+          category: 'uncategorized',
+          status: resolvedData.status || '',
           type: 'subscription',
-          image: resolvedData.image,
-          price: resolvedData.price,
-          billing_interval: resolvedData.billing_interval,
-          url: process.env.FRONTEND_URL + '/shop/subscriptionplans/' + resolvedData.id,
-          authorEmail: resolvedData.author?.email,
+          image: resolvedData.image || '',
+          price: Number(resolvedData.price),
+          billing_interval: resolvedData.billing_interval as Billing_Interval,
+          url: envs.FRONTEND_URL + '/shop/subscriptionplans/' + resolvedData.id,
+          // authorEmail: resolvedData.author || 'no_author',
+          authorEmail: 'no_author',
         })
           .then(async (res) => {
             // @ts-ignore //todo might cause problems
@@ -211,23 +215,32 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
       if (operation === 'update') {
 
+        console.log('### subplan update debug');
+
         const product = await stripeProductUpdate({
           currency: 'usd',
-          name: resolvedData.name || item.name,
           productId: item.id,
-          stripeProductId: item.stripeProductId,
+          stripeProductId: String(resolvedData.stripePriceId) || item.stripeProductId,
           stripePriceId: item.stripePriceId,
-          price: resolvedData.price || item.price,
-          image: resolvedData.image || item.image,
-          status: resolvedData.status || item.status,
-          category: resolvedData.categories ? (resolvedData.categories[0] ? resolvedData.categories[0].name : 'uncategorized') : item.categories ? (item.categories[0] ? item.categories[0].name : 'uncategorized'): 'No categories',
-          excerpt: resolvedData.excerpt || item.excerpt,
-          authorEmail: item.author ? item.author.email : 'no_author',
-          billing_interval: resolvedData.billing_interval || item.billing_interval,
+          price: Number(resolvedData.price) || Number(item.price),
+          image: String(resolvedData.image) || item.image || '',
+          name: String(resolvedData.name) || item.name,
+          status: String(resolvedData.status) || item.name,
+          category: '',
+          excerpt: String(resolvedData.excerpt) || item.excerpt || '',
+          authorEmail: '',
+          billing_interval: resolvedData.billing_interval as Billing_Interval || item.billing_interval,
 
         }).then( async (product) => {
-          if(product?.default_price) resolvedData.default_price = product?.default_price
-        }). catch(err => { console.log(err)})
+          
+          if(!product) return 
+          // @ts-ignore
+          resolvedData.stripePriceId = product.default_price || '' 
+        }).catch(err => {
+          console.log(err)
+          throw new Error(err)
+        })
+      
       }
 
     },

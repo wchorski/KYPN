@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import 'dotenv/config'
 import { envs } from '../../envs';
+import { Billing_Interval } from '../keystone/types';
 
 const stripeConfig = new Stripe(envs.STRIPE_SECRET as string, {
   apiVersion: '2023-10-16',
@@ -16,7 +17,7 @@ type StripeProduct = {
   type:'subscription'|'product',
   image:string,
   price:number,
-  billing_interval:'day'|'month'|'year',
+  billing_interval:Billing_Interval,
   url:string,
 }
 
@@ -29,6 +30,7 @@ export async function stripeProductCreate({id, name, description, category, stat
       active: true,
       description: description ||'no_description',
       metadata: {
+        productId: id,
         category: category,
         status: status || '',
         author: authorEmail,
@@ -110,12 +112,12 @@ type Price = {
   category:string,
   excerpt:string,
   authorEmail:string,
-  billing_interval:'day'|'week'|'month'|'year',
+  billing_interval:Billing_Interval,
 }
 
 export async function stripeProductUpdate({currency, productId, image, status, authorEmail, category, name, excerpt, price, stripeProductId, stripePriceId, billing_interval}:Price){
 
-  if(!envs.STRIPE_SECRET) return
+  if(!envs.STRIPE_SECRET || !stripeProductId || stripeProductId !== undefined) return 
 
   const currPrice = await stripeConfig.prices.retrieve(stripePriceId)
 
@@ -134,7 +136,6 @@ export async function stripeProductUpdate({currency, productId, image, status, a
     }
   }
 
-  // todo this is ugly, but Stripe API does not support deletion or updating of a price object
   if (price && currPrice.unit_amount !== price) {
 
     const newPrice = await stripeConfig.prices.create({
@@ -148,22 +149,14 @@ export async function stripeProductUpdate({currency, productId, image, status, a
 
     // resolvedData.stripePriceId = newPrice.id
     stripeUpdateParams = { ...stripeUpdateParams, default_price: newPrice.id }
+  } 
 
-    const product = await stripeConfig.products.update(
-      stripeProductId,
-      stripeUpdateParams,
-    )
+  const product = await stripeConfig.products.update(
+    stripeProductId,
+    stripeUpdateParams,
+  )
 
-    return product
-
-  } else if (currPrice.unit_amount === price) {
-    const product = await stripeConfig.products.update(
-      stripeProductId,
-      stripeUpdateParams,
-    )
-
-    return product
-  }
+  return product
 }
 
 export default stripeConfig;

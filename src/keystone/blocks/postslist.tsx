@@ -17,7 +17,7 @@ export const postslist = component({
     }),
     colorOverlay: fields.text({
       label: 'Overlay Color',
-      defaultValue: '#6e6e6ed6'
+      defaultValue: 'rgba(56, 56, 56, 0.63)'
     }),
     color: fields.text({
       label: 'Fallback background color',
