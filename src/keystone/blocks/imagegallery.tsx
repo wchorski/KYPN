@@ -16,7 +16,7 @@ export const imagegallery = component({
       defaultValue: 'grid'
     }),
     columns: fields.integer({ label: 'Columns', defaultValue: 3}),
-    gap: fields.integer({label: 'Grid Gap', defaultValue: 1}),
+    gap: fields.integer({label: 'Grid Gap', defaultValue: 3}),
     items: fields.array(
       fields.object({
         caption: fields.text({ label: 'caption' }),

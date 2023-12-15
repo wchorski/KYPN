@@ -23,44 +23,42 @@ type StripeProduct = {
 
 export async function stripeProductCreate({id, name, description, category, status, authorEmail, type, image, price, billing_interval, url}:StripeProduct) {
 
-  if(envs.STRIPE_SECRET){
-    const res = await stripeConfig.products.create({
-      // id: resolvedData.id, // todo idk if it gets an id 'beforeoperaiton'
-      name: name || '',
-      active: true,
-      description: description ||'no_description',
-      metadata: {
-        productId: id,
-        category: category,
-        status: status || '',
-        author: authorEmail,
-        type: 'subscription'
-      },
-      images: [
-        image || ''
-      ],
-      // @ts-ignore
-      attributes: [
-        'Subscriptionattr1',
-        'Subscriptionattr2'
-      ],
-      shippable: false,
-      unit_label: 'units',
-      default_price_data: {
-        currency: 'usd',
-        unit_amount: price,
-        recurring: { interval: billing_interval},
-      },
-      url: url
-  
-    })
+  if(!envs.STRIPE_SECRET) return 
 
-    return res
-
-  } else {
-    console.log('💳 stripe not configured')
-    return null
+  let stripeCreateParams: Stripe.ProductCreateParams = {
+    name: name || '',
+    active: true,
+    description: description ||'no_description',
+    metadata: {
+      productId: id,
+      category: category,
+      status: status || '',
+      author: authorEmail,
+      type: 'subscription'
+    },
+    // attributes: [
+    //   'Subscriptionattr1',
+    //   'Subscriptionattr2'
+    // ],
+    shippable: false,
+    unit_label: 'units',
+    default_price_data: {
+      currency: 'usd',
+      unit_amount: price,
+      recurring: { interval: billing_interval},
+    },
+    url: url
   }
+
+  if(image){
+    stripeCreateParams = {...stripeCreateParams, images: [
+      image 
+    ],}
+  }
+
+  const res = await stripeConfig.products.create(stripeCreateParams)
+
+  return res
 
 }
 

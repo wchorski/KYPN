@@ -215,8 +215,6 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
       if (operation === 'update') {
 
-        console.log('### subplan update debug');
-
         const product = await stripeProductUpdate({
           currency: 'usd',
           productId: item.id,

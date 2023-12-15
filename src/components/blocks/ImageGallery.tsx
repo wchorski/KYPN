@@ -73,7 +73,7 @@ const myimages:Image[] = [
 
 export function ImageGallery(props:Props) {
 
-  let {gap = 1, items = myimages, columns = 3, objFit = 'cover',layout = 'grid', } = props
+  let {gap = 3, items = myimages, columns = 3, objFit = 'cover',layout = 'grid', } = props
 
   const lightGallery = useRef<any>(null);
 
