@@ -2,27 +2,27 @@ import { list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, } from "@keystone-6/core/fields";
-import stripeConfig from "../../lib/stripe";
+import stripeConfig, { stripeCouponCreate } from "../../lib/stripe";
 import { permissions, rules } from "../access";
 
 
 // TODO figoure out coupons
 export const Coupon:Lists.Coupon = list({
   
-  access: allowAll,
-  // access: {
-  //   filter: {
-  //     query: () => true,
-  //     update: rules.canManagecoupons,
-  //     delete: rules.canManagecoupons,
-  //   },
-  //   operation: {
-  //     create: () => true,
-  //     query: () => true,
-  //     update: permissions.isLoggedIn,
-  //     delete: permissions.isLoggedIn,
-  //   }
-  // },
+  // access: allowAll,
+  access: {
+    filter: {
+      query: () => true,
+      update: rules.canManageCoupons,
+      delete: rules.canManageCoupons,
+    },
+    operation: {
+      create: permissions.canManageCoupons,
+      query: () => true,
+      update: permissions.canManageCoupons,
+      delete: permissions.canManageCoupons,
+    }
+  },
 
   // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
   // todo hide these again
@@ -38,19 +38,9 @@ export const Coupon:Lists.Coupon = list({
       validation: {
         min: 1,
         max: 100,
-      }
+      },
     }),
-    // percent_off: decimal({
-    //   // defaultValue: '23.9',
-    //   precision: 5,
-    //   scale: 2,
-    //   validation: {
-    //     // isRequired: true,
-    //     max: '100',
-    //     min: '.01',
-    //   },
-    // }),
-    duration_in_months: integer(),
+    duration_in_months: integer({}),
     duration: select({
       options: [
         { label: 'once', value: 'once' },
@@ -62,7 +52,7 @@ export const Coupon:Lists.Coupon = list({
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
       },
-      validation: {isRequired:true}
+      validation: {isRequired:true},
     }),
     // this can be helpful to find out all the Posts associated with a Tag
 
@@ -79,22 +69,22 @@ export const Coupon:Lists.Coupon = list({
   hooks: {
     beforeOperation: async ({ operation,resolvedData, item, context, }) => {
       if(operation === 'create'){
-        console.log('+ + + + + start stripe thingy ');
-        
-        try {
-          const resStripe = await stripeConfig.coupons.create({
-            // @ts-ignore
-            name: resolvedData.name,
-            percent_off: resolvedData.percent_off,
-            duration: resolvedData.duration,
-            duration_in_months: resolvedData.duration_in_months,
-          })
-          resolvedData.stripeId = resStripe.id
-          console.log({resStripe});
+
+        if(resolvedData.amount_off && resolvedData.percent_off) throw new Error("Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank")
           
-        } catch (error) {
-          console.log('!!! coupon create err: ', error); 
-        }
+        if(resolvedData?.duration === 'repeating' && !resolvedData.duration_in_months) 
+          throw new Error("if Duration is 'repeating', Duration in Months must be above 0 months")
+        
+        const coupon = await stripeCouponCreate({
+          name: String(resolvedData.name),
+          percent_off: resolvedData.percent_off || 0,
+          // @ts-ignore
+          duration: resolvedData.duration as Duration,
+          duration_in_months: Number(resolvedData.duration_in_months),
+
+        }).then(async (coupon) => {
+          if(coupon) resolvedData.stripeId = coupon.id
+        }).catch(err => console.log(err))
       }
     }
   }

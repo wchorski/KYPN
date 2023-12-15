@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import 'dotenv/config'
 import { envs } from '../../envs';
-import { Billing_Interval } from '../keystone/types';
+import { Billing_Interval, Duration } from '../keystone/types';
 
 const stripeConfig = new Stripe(envs.STRIPE_SECRET as string, {
   apiVersion: '2023-10-16',
@@ -155,6 +155,36 @@ export async function stripeProductUpdate({currency, productId, image, status, a
   )
 
   return product
+}
+
+type Coupon = {
+  name:string,
+  couponId:string,
+  percent_off?:number,
+  amount_off?:number,
+  duration:Duration,
+  duration_in_months:number,
+}
+
+export async function stripeCouponCreate({name, amount_off, percent_off, duration, duration_in_months, couponId}:Coupon){
+
+  let couponParams: Stripe.CouponCreateParams = {
+    name,
+    duration,
+    metadata: {
+      couponId
+    }
+  }
+
+  if(duration === 'repeating') {
+    couponParams = {...couponParams, duration_in_months }
+  }
+  if(amount_off) couponParams = {...couponParams, amount_off }
+  if(percent_off) couponParams = {...couponParams, percent_off }
+  
+
+  const coupon = await stripeConfig.coupons.create(couponParams)
+  return coupon
 }
 
 export default stripeConfig;

@@ -399,6 +399,7 @@ export type Location = {
 }
 
 export type Billing_Interval = 'day'|'week'|'month'|'year'
+export type Duration = 'forever'|'once'|'repeating'
 
 export type SubscriptionPlan = {
   id: string,
