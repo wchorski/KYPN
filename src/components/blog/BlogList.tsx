@@ -1,5 +1,5 @@
 import { BlogListItem } from './BlogListItem';
-import styles from "@styles/blog/Blog.module.scss";
+import styles from "@styles/blog/blog.module.scss";
 import { List } from '@components/elements/List';
 import { Post } from '@ks/types'
 import { ReactElement } from 'react';

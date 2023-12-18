@@ -150,8 +150,8 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         
       let employeeNames = ''
       bookedEmployees.map(emp => {
-      console.log('---------')
-      console.log(emp.name)
+      // console.log('---------')
+      // console.log(emp.name)
 
       if(dateCheckAvail(String(start), String(end), emp.availability))
         console.log(`+++ Open Day no vaction set for ${emp.name}`)
@@ -197,6 +197,8 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         // timeZone: 'America/Chicago',
       },
     })
+    // console.log({calRes});
+    
     
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({

@@ -17,12 +17,12 @@ jwtClient.authorize(function (err, tokens) {
 
   // todo how to skip this if we are not using google client?
   if (err) {
-    console.log('!!! GOOGLE Cal not connected')
+    console.log('!!! 🚫 GOOGLE Cal not connected')
     // console.log(err);
     return
 
   } else {
-    console.log("Successfully connected to googleapi via JWT!")
+    console.log("📅 Google Calendar connected")
   }
 })
 
@@ -138,6 +138,8 @@ export async function createCalendarEvent(event:GEvent){
       calendarId: GOOGLE_CAL_ID,
       requestBody: event,
     })
+    console.log({response});
+    
 
 
     console.log('📅 googleapi cal create success, ');

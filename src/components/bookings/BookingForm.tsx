@@ -618,6 +618,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
               // readOnly={formState.fieldValues.date}
               required={true}
               onChange={(e) => dispatchRed({type: 'SET_DATE', payload: e.target.value}) }
+              style={{display: 'none'}}
             />
             <span className="error"> {formState.errors?.date} </span>
           </label>
@@ -642,6 +643,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
                 handleBlackoutTimes(e.target.value)
               }}
               // readOnly={formState.fieldValues.timeStart}
+              style={{display: 'none'}}
               required={true}
             />
             <span className="error"> {formState.errors?.timeStart} </span>
