@@ -618,7 +618,8 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
               // readOnly={formState.fieldValues.date}
               required={true}
               onChange={(e) => dispatchRed({type: 'SET_DATE', payload: e.target.value}) }
-              style={{display: 'none'}}
+              // style={{pointerEvents: 'none'}}
+              // disabled={true}
             />
             <span className="error"> {formState.errors?.date} </span>
           </label>
@@ -643,7 +644,8 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
                 handleBlackoutTimes(e.target.value)
               }}
               // readOnly={formState.fieldValues.timeStart}
-              style={{display: 'none'}}
+              // style={{pointerEvents: 'none'}}
+              // disabled={true}
               required={true}
             />
             <span className="error"> {formState.errors?.timeStart} </span>
@@ -767,7 +769,7 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
           <tr>
             <td> Start Date: </td>
             <td> 
-              {stateRed.date ? datePrettyLocal(stateRed.date, 'day') : <span className="subtext" > n/a </span>} 
+              {stateRed.date ? datePrettyLocal(stateRed.date + 'T00:00-0800', 'day') : <span className="subtext" > n/a </span>} 
               {stateRed.time ? ' @ ' + timePrettyTo12HourFormat(stateRed.time) : ''} 
             </td>
           </tr>

@@ -1,11 +1,11 @@
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-two-servers/keystone-server/src/seed/index.ts
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-pages-directory/src/pages/index.tsx
 
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, json, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
+import { decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { mailBooking } from "../../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
@@ -46,7 +46,7 @@ export const Booking:Lists.Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'end', 'summary', 'status', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'end', 'email', 'status', 'service', 'customer', 'employees'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -55,7 +55,21 @@ export const Booking:Lists.Booking = list({
   fields: {
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({}),
-    summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
+    // summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
+    summary: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item:any, args, context) {
+          const service = await context.query.Service.findOne({
+            where: {id: item.serviceId || '' },
+            query: `
+              name
+            `
+          }) as Service
+          return item.name + ' | ' + service.name;
+        },
+      })
+    }),
     durationInHours: decimal({
       defaultValue: '23',
       precision: 5,
@@ -111,19 +125,21 @@ export const Booking:Lists.Booking = list({
   hooks: {
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
 
-      if (operation === 'create') {
+      // if (operation === 'create') {
 
-      }
+      // }
 
       if (operation === 'update') {
 
+        // console.log({item})
+        // console.log({resolvedData})
+        // let newSummary = (resolvedData.name || item.name) + ' | '
+        // if(resolvedData.service) newSummary + resolvedData.service
+        // // resolvedData.summary = (resolvedData.name || item.name) + ' | '
+        
       }
 
       if(operation === 'delete'){
-        // @ts-ignore
-        if(!item.google.id) return console.log('no google cal id');
-        // @ts-ignore
-        const calResponse = await deleteCalendarEvent(item.google.id)
 
         const employees = await context.sudo().query.User.findMany({
           where: {
@@ -149,7 +165,15 @@ export const Booking:Lists.Booking = list({
           // @ts-ignore
           booking: item,
         })
+        
+        
+
+        // @ts-ignore
+        if(!item?.google?.id) return console.log('!!! no google cal id');
+        // @ts-ignore
+        const calResponse = await deleteCalendarEvent(item.google.id)
       }
+
 
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
@@ -195,97 +219,16 @@ export const Booking:Lists.Booking = list({
         })
       }
 
-      if (operation === 'create') {
-        // let customer = {
-        //   id: 'non registered user',
-        //   name: 'non registered user',
-        //   email: 'non registered user',
-        //   phone: 'non registered user',
-        // }
-        // console.log('===========');
+      // if (operation === 'create') {
         
-        // console.log(resolvedData.employees?.connect);
-        // // @ts-ignore
-        // const employeesIds = resolvedData.employees?.connect.flatMap(emp => emp.id)
-        // const employeesObjs = await context.db.User.findMany({ where: { id: {in: employeesIds.map((userId:string) => userId)} } })
-        // const employeesEmails = employeesObjs.flatMap(emp => emp.email) as string[]
-
-        // const serviceObj = await context.db.Service.findOne({ where: { id: item.serviceId as string } })
-        
-        
-        // // todo email employees and customer too. right now it just emails admin_email
-        // if (item?.customerId) {
-        //   // @ts-ignore //todo might cause problems
-        //   customer = await context.db.User.findOne({ where: { id: item?.customerId } })
-        //   mailBookingCreated(
-        //     item.id as string,
-        //     [EMAIL_ADDRESS, item?.email as string, ...employeesEmails],
-        //     {
-        //       id: customer.id,
-        //       name: customer.name,
-        //       email: customer.email,
-        //       phone: customer.phone,
-        //     },
-        //     {
-        //       id: employeesObjs[0].id as string,
-        //       name: employeesObjs[0].name as string,
-        //     },
-        //     customer.name,
-        //     customer.email,
-        //     {
-        //       email: item?.email as string,
-        //       name: item?.name as string,
-        //       phone: item?.phone as string,
-        //       // @ts-ignore
-        //       start: datePrettyLocal(item?.start.toISOString() , 'full'),
-        //       service: {
-        //         id: serviceObj?.id as string,
-        //         name: serviceObj?.name as string,
-        //       }
-        //     },
-        //     item.notes as string,
-        //   )
-        // } else if(item){
-        //   mailBookingCreated(
-        //     item.id as string,
-        //     // @ts-ignore
-        //     [EMAIL_ADDRESS, item?.email, ...employeesEmails],
-        //     {
-        //       id: customer.id,
-        //       name: customer.name,
-        //       email: customer.email,
-        //       phone: customer.phone,
-        //     },
-        //     {
-        //       id: employeesObjs[0].id,
-        //       name: employeesObjs[0].name,
-        //     },
-        //     customer.name,
-        //     customer.email,
-        //     {
-        //       email: item?.email,
-        //       name: item?.name,
-        //       phone: item?.phone,
-        //       // @ts-ignore
-        //       start: datePrettyLocal(item?.start.toISOString(), 'full'),
-        //       service: {
-        //         id: serviceObj?.id || '',
-        //         name: serviceObj?.name || '',
-        //       }
-        //     },
-        //     item.notes,
-        //   )
-        // }
-
-        // const calResponse = await handleCalendarEvent(item, context)
-  
-      }
+      // }
 
       if(operation === 'update'){
-
-        // TODO calendar integrations
-        // const calResponse = await handleCalendarEvent(item, context)
-        // resolvedData.google = calResponse
+        if(!item?.google) return
+        const calResponse = await handleCalendarUpdate(item, context)
+        
+        if(!calResponse) return
+        resolvedData.google = calResponse
       }
 
     },
@@ -293,7 +236,7 @@ export const Booking:Lists.Booking = list({
 })
 
 
-async function handleCalendarEvent(item:any, context:any) {
+async function handleCalendarUpdate(item:any, context:any) {
   // console.log('+++++++++ after booking update');
 
   const selectedBooking = await context.query.Booking.findOne({
@@ -323,8 +266,6 @@ async function handleCalendarEvent(item:any, context:any) {
   // console.log({selectedBooking});
   
   let calDescription = '' 
-
-  console.log({selectedBooking});
   
 
   calDescription += 'CLIENT: '      + selectedBooking.name + ' | ' + selectedBooking?.email + ' | ' + selectedBooking?.phone + '\n'

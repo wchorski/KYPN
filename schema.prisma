@@ -93,7 +93,6 @@ model Booking {
   id              String    @id @default(cuid())
   start           DateTime
   end             DateTime?
-  summary         String    @default("[NEW BOOKING]")
   durationInHours Decimal   @default("23") @postgresql.Decimal(5, 2)
   service         Service?  @relation("Booking_service", fields: [serviceId], references: [id])
   serviceId       String?   @map("service")

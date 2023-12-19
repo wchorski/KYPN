@@ -138,7 +138,7 @@ export async function createCalendarEvent(event:GEvent){
       calendarId: GOOGLE_CAL_ID,
       requestBody: event,
     })
-    console.log({response});
+    // console.log({response});
     
 
 

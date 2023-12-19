@@ -122,7 +122,7 @@ export function datePrettyLocal(date:string, option:'day'|'time'|'full') {
   const newDate = new Date(date);
 
   // @ts-ignore
-  return newDate.toLocaleString("en-US", options);
+  return newDate.toLocaleString("en-CA", options);
 }
 
 export function dateLocaleFileName(dateString:string){

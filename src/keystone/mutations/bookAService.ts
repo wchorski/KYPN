@@ -203,7 +203,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({
       data: {
-        summary: `${customerName || customerEmail} | ${service?.name}`,
+        // summary: `${customerName || customerEmail} | ${service?.name}`,
         service: { connect: { id: serviceId } },
         location: (locationId) ? { connect: { id: locationId } } : null,
         employees: (employeeId) ? { connect: [{ id: employeeId }] } : null,
@@ -224,16 +224,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     })    
     
 
-    // todo SEND EMAIL
-    // mailCheckoutReceipt(
-    //   order.id, 
-    //   [user.email, ADMIN_EMAIL_ADDRESS],
-    //   user.name,
-    //   ADMIN_EMAIL_ADDRESS,
-    //   ticketItems,
-    //   now.toISOString(),
-    //   totalOrder,
-    // )
+    // email sent via Schema file
 
     return { 
       status: 'success', 
