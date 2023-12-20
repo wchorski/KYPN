@@ -74,6 +74,7 @@ set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 ### Stripe
 
 using stripe CLI have it listen to this webhook
+https://stripe.com/docs/webhooks/quickstart
 ```sh
 stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 ```

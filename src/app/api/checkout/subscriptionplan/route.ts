@@ -2,7 +2,7 @@
 
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
-import {CartItem, Order, Session} from '@ks/types';
+import {CartItem, Coupon, Order, Session} from '@ks/types';
 import stripe from "@lib/get-stripejs";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
@@ -13,9 +13,11 @@ import { SubscriptionPlan } from "@ks/types";
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const headersList = headers();
-    const { id } = await req.json();
+    const { id, couponName } = await req.json();
+
+    const contextSudo = keystoneContext.sudo()
     
-    const subscriptionPlan = await keystoneContext.sudo().query.SubscriptionPlan.findOne({
+    const subscriptionPlan = await contextSudo.query.SubscriptionPlan.findOne({
       where: { id },
       query: `
         id
@@ -32,28 +34,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       `
     }) as SubscriptionPlan
 
-    // const subplanDetailsArray: SubscriptionPlan[] = Object.values([subscriptionPlan]) as [];
-    // console.log({subplanDetailsArray})
-
-    // const lineItems = subplanDetailsArray.map((item) => {
-    //     return {
-    //       price_data: {
-    //         // TODO make this part of CartItem schema item.currency, not hard coded
-    //         currency: 'usd',
-    //         product_data: {
-    //           name: item.name,
-    //           images: [item.image],
-    //           metadata: {
-    //             type: 'checkout.subscriptionplan',
-    //             subscriptionPlanId: item.id,
-    //           }
-    //         },
-    //         unit_amount: item.price,
-    //       },
-    //       quantity: 1,
-    //     };
-    // });
-
     try {
       
       const userSession = await getServerSession(nextAuthOptions)
@@ -64,22 +44,33 @@ export async function POST(req: NextRequest, res: NextResponse) {
         console.log('/api/checkout/subscriptionplan isStockavail check ERROR: ', message)
       }
 
+      const coupon = await contextSudo.query.Coupon.findOne({
+        where: { name: couponName },
+        query: `
+          stripeId
+          amount_off
+          percent_off
+        `
+      }) as Coupon|undefined
+
+      // const priceDiscount = (coupon?.percent_off) ? subscriptionPlan.price * (coupon.percent_off/100) : subscriptionPlan.price - coupon?.amount_off 
+
       const session = await stripe.checkout.sessions.create({
         // customer_email: userSession?.user?.email || '',
         customer: userSession.stripeCustomerId || null,
         payment_method_types: ["card", ],
         line_items: [
           {
-            price: subscriptionPlan.stripePriceId,
             quantity: 1,
-            // price_data: {
-            //   product_data: {
-            //     name: 'hey',
-            //     metadata: {
-            //       id: 'hey'
-            //     }
-            //   }
-            // }
+            price_data: {
+              currency: 'usd',
+              product: subscriptionPlan.stripeProductId,
+              recurring: {
+                interval: subscriptionPlan.billing_interval,
+    
+              },
+              unit_amount: calcPrice(coupon, subscriptionPlan.price),
+            }
           }
         ],
         mode: 'subscription',
@@ -87,6 +78,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         cancel_url: `${headersList.get("origin")}/shop/subscriptionplans/${id}`,
         metadata: {
           type: 'checkout.subscriptionplan',
+          couponName,
           subscriptionplanId: id,
         }
       })
@@ -113,3 +105,21 @@ async function checkStockCount(subplan:SubscriptionPlan){
     message: `All items are in stock`
   } 
 }
+
+function calcPrice(coupon:Coupon|undefined, planPrice:number){
+
+  if(!coupon) return planPrice
+
+  switch (true) {
+
+    case coupon.percent_off !== undefined:
+      return planPrice * (coupon.percent_off/100)
+
+    case coupon.amount_off !== undefined:
+      return planPrice - coupon.amount_off
+  
+    default:
+      return planPrice
+  }
+}
+

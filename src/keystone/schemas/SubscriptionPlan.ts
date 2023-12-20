@@ -133,8 +133,8 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
     }),
 
     price: integer({validation: {isRequired: true}}),
-    stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
-    stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
+    stripeProductId: text(),
+    stripePriceId: text(),
     billing_interval: select({
       options: [
         { label: 'Daily', value: 'day' },

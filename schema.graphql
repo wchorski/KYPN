@@ -2715,7 +2715,7 @@ type Mutation {
   addToCart(id: ID!, productId: ID): CartItem
   checkout(chargeId: String!, customerEmail: String!): CartItem
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, start: String!, customerName: String, customerEmail: String!, customerPhone: String, notes: String, amount_total: Int): Booking
-  checkoutSubscription(custom_price: Int!, amount_total: Int!, planId: String!, chargeId: String!, stripeSubscriptionId: String!, customerEmail: String!): SubscriptionItem
+  checkoutSubscription(custom_price: Int!, amount_total: Int!, planId: String!, chargeId: String!, stripeSubscriptionId: String!, customerEmail: String!, couponNames: [String]): SubscriptionItem
   checkoutTickets(chargeId: String!, eventId: String!, customerEmail: String!, quantity: Int!, amount_total: Int!): Ticket
   contact(name: String!, customerId: String, email: String!, phone: String!, start: String!, notes: String!): Booking
   passwordRequestLink(email: String!): User

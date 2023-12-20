@@ -8,6 +8,8 @@ import { BsStripe } from "react-icons/bs";
 import { useState } from "react";
 import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
+import formStyles from '@styles/menus/form.module.scss'
+import Link from "next/link";
 
 type Props = {
   id:string,
@@ -17,6 +19,7 @@ export default function StripeSubscriptionButton({id}:Props) {
     const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
     const [messageState, setMessageState] = useState<string|undefined>()
+    const [couponName, setCouponName] = useState('')
 
     const redirectToCheckout = async () => {
       
@@ -32,7 +35,10 @@ export default function StripeSubscriptionButton({id}:Props) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({id}),
+            body: JSON.stringify({
+              id,
+              couponName,
+            }),
         });
 
         const data = await response.json();
@@ -59,20 +65,34 @@ export default function StripeSubscriptionButton({id}:Props) {
       }
     };
 
+    if(!envs.STRIPE_PUBLIC_KEY) return <p> <Link href={'/contact'} className="button"> contact us </Link> to set up this subscription </p>
+
     return <>
-      {errorObj && <ErrorMessage error={errorObj}/>}
+      {errorObj && <ErrorMessage error={errorObj} />}
+
       {messageState && <p className="error"> {messageState} </p>}
-      <button
-        onClick={() => redirectToCheckout()}
-        disabled={isPending}
-        className="button large">
-        
-        {(isPending) ? (
-          <LoadingAnim />
-        ) : (
-          <span> Pay with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
-        )}
-      </button>
+
+      <div className={formStyles.button_coupon} >
+        <button
+          onClick={() => redirectToCheckout()}
+          disabled={isPending}
+          className="button large">
+          
+          {(isPending) ? (
+            <LoadingAnim />
+          ) : (
+            <span> Pay with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
+          )}
+        </button>
+        <label className={formStyles.coupon}>
+          <span> coupon </span>
+          <input 
+            name="coupon"
+            type="text"
+            onChange={e => setCouponName(e.target.value)}
+          />
+        </label>
+      </div>
     </>
   
 }

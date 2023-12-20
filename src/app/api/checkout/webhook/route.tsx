@@ -29,6 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // console.log(event.data.object.payment_status);
         // console.log(event.data.object.status);
         
+        // @ts-ignore
         afterSuccessfulCheckout(event.data.object as Charge, event.data.object.metadata?.type)
 
       case 'payment_intent.canceled':
@@ -101,6 +102,7 @@ type Charge = {
     eventId?:string,
     subscriptionplanId?:string,
     quantity?:number,
+    couponName:string,
   }
   subscription?:string,
 }
@@ -204,7 +206,9 @@ async function checkoutSubscriptionFail(charge:Charge){
   
 }
 
-async function checkoutSubscription(charge:Charge, customerEmail:string|null|undefined){
+async function checkoutSubscription(charge:Charge, customerEmail:string|null|undefined, ){
+  
+  console.log('### charge.metadata.couponName, ', charge.metadata.couponName);
   
   const vars = {
     customPrice: charge.amount_total,
@@ -212,7 +216,8 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
     planId: charge.metadata.subscriptionplanId,
     chargeId: charge.id,
     customerEmail: customerEmail,
-    stripeSubscriptionId: charge.subscription
+    stripeSubscriptionId: charge.subscription,
+    couponNames: charge.metadata.couponName ? [charge.metadata.couponName] : null,
   }
 
   try {
@@ -230,8 +235,8 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
 }
 
 const querycheckoutSubscription = `
-  mutation CheckoutSubscription($stripeSubscriptionId: String!, $customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $customerEmail: String!) {
-    checkoutSubscription(stripeSubscriptionId: $stripeSubscriptionId, custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, customerEmail: $customerEmail) {
+  mutation CheckoutSubscription($customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $stripeSubscriptionId: String!, $customerEmail: String!, $couponNames: [String]) {
+    checkoutSubscription(custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, stripeSubscriptionId: $stripeSubscriptionId, customerEmail: $customerEmail, couponNames: $couponNames) {
       status
     }
   }

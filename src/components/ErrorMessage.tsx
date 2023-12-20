@@ -6,7 +6,7 @@ import { Section } from './layouts/Section';
 import styles from '@styles/error.module.scss'
 
 type Props = {
-  error:any,
+  error:object | null | undefined | unknown,
   children?:ReactNode
 }
 

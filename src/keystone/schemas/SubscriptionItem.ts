@@ -5,9 +5,9 @@ import { allowAll } from "@keystone-6/core/access";
 import { checkbox, image, integer, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 import { validate } from "graphql";
-import stripeConfig from "../../lib/stripe";
+import stripeConfig, { stripeSubscriptionCreate, stripeSubscriptionUpdate } from "../../lib/stripe";
 import 'dotenv/config'
-import { SubscriptionItem as TypeSubsItem, User } from "../types";
+import { SubscriptionPlan, SubscriptionItem as TypeSubsItem, User } from "../types";
 import { mailSubscription } from "../../lib/mail";
 import { envs } from "../../../envs";
 // import { SubscriptionItem, SubscriptionItem } from "../types";
@@ -126,13 +126,11 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
 
       // if (operation === 'create') {
-        
+        //? checkout is handles w /app/api/checkout/subscriptionplan & /app/keystone/mutations/checkoutSubscripiton
       // }
+      
 
       if (operation === 'update') {
-
-        // todo if thePlan.stockCount > 0
-        // set thePlan.status = ACTIVE
 
         const now = new Date()
         resolvedData.dateModified = now
@@ -141,10 +139,12 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
           console.log('!!!!!!!! sub item is canceled and cannot be re-activated');
           throw new Error('!!!!!!!! sub item is canceled and cannot be re-activated')
         }
-        
-        // TODO handle stripe payment if user pauses, is delinquent, or cancels subscriptionItem
-
-        if(resolvedData.status) handleStatusChange( item.id, item.stripeSubscriptionId, resolvedData.status as TypeSubsItem['status'])
+      
+        if(resolvedData.status) stripeSubscriptionUpdate({
+          subItemId: item.id, 
+          stripeSubscriptionId: item.stripeSubscriptionId, 
+          status: resolvedData.status as TypeSubsItem['status']
+        })
           
       }
     },
@@ -189,60 +189,3 @@ export const SubscriptionItem:Lists.SubscriptionItem = list({
     },
   },
 })
-
-
-
-async function handleStatusChange(subItemId:string, stripeSubscriptionId:string, status:TypeSubsItem['status'],){
-  
-  // console.log(' **** status update *****'); 
-  // console.log(status);
-
-  // const thePlan = await context.db.SubscriptionPlan.findOne({
-  //   where: { id: item.subscriptionPlanId },
-  //   query: `
-  //     stockMax
-  //   `,
-  // })
-
-  try {
-
-    switch (status) {
-      case 'PAUSED':
-        const resPause = await stripeConfig.subscriptions.update(
-          stripeSubscriptionId,
-          {
-            pause_collection: {
-              behavior: 'void'
-            },
-            metadata: {
-              subscriptionItemId: subItemId
-            }
-          }
-        )
-        break;
-
-      case 'ACTIVE':
-        const resActive = await stripeConfig.subscriptions.update(
-          stripeSubscriptionId,
-          {
-            pause_collection: '',
-          }
-        )
-        break;
-      
-      case 'CANCELED':
-        const resCancle = await stripeConfig.subscriptions.cancel(stripeSubscriptionId);
-    
-      default:
-        console.log('### SubscriptionItem Schema. status not supported')
-        break;
-    }
-    
-    
-  } catch (error) {
-    console.log("sub item update error: ", error);
-    // @ts-ignore
-    throw new Error("Sub Item Status Change Error: ", error.message);
-    
-  }
-}

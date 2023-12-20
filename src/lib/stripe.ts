@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import 'dotenv/config'
 import { envs } from '../../envs';
-import { Billing_Interval, Duration } from '../keystone/types';
+import { Billing_Interval, Duration, SubscriptionItem } from '../keystone/types';
 
 const stripeConfig = new Stripe(envs.STRIPE_SECRET as string, {
   apiVersion: '2023-10-16',
@@ -185,6 +185,90 @@ export async function stripeCouponCreate({name, amount_off, percent_off, duratio
 
   const coupon = await stripeConfig.coupons.create(couponParams)
   return coupon
+}
+
+//? handeled by /api/checkout/subscriptionplan/route.ts
+// type SubscriptionCreate = {
+//   stripeCustomerId:string,
+//   stripeProductId:string,
+//   billing_interval:Billing_Interval,
+//   // stripePriceId:string,
+// }
+
+// export async function stripeSubscriptionCreate({stripeCustomerId, stripeProductId, billing_interval}:SubscriptionCreate){
+
+//   if(!envs.STRIPE_SECRET) return 
+
+//   const subscription = await stripeConfig.subscriptions.create({
+//     customer: 'cus_Na6dX7aXxi11N4',
+//     items: [
+//       {
+//         // price: 'price_1MowQULkdIwHu7ixraBm864M',
+//         price_data: {
+//           currency: 'usd',
+//           product: stripeProductId,
+//           recurring: {
+//             interval: billing_interval,
+
+//           },
+//           unit_amount: price,
+//         }
+//       },
+//     ],
+//     metadata: {
+//       subscriptionId: id,
+//     }
+//   });
+// }
+
+type SubscriptionUpdate = {
+  status: SubscriptionItem['status'],
+  stripeSubscriptionId:string,
+  subItemId:string,
+}
+
+export async function stripeSubscriptionUpdate({status, stripeSubscriptionId, subItemId}:SubscriptionUpdate){
+
+  if(!envs.STRIPE_SECRET) return 
+
+  try {
+    switch (status) {
+      case 'PAUSED':
+        const resPause = await stripeConfig.subscriptions.update(
+          stripeSubscriptionId,
+          {
+            pause_collection: {
+              behavior: 'void'
+            },
+            metadata: {
+              subscriptionItemId: subItemId
+            }
+          }
+        )
+        break;
+  
+      case 'ACTIVE':
+        const resActive = await stripeConfig.subscriptions.update(
+          stripeSubscriptionId,
+          {
+            pause_collection: '',
+          }
+        )
+        break;
+      
+      case 'CANCELED':
+        const resCancle = await stripeConfig.subscriptions.cancel(stripeSubscriptionId);
+    
+      default:
+        console.log('### SubscriptionItem Schema. status not supported')
+        break;
+    }  
+  } catch (error) {
+    console.log("sub item update error: ", error);
+    // @ts-ignore
+    throw new Error("Sub Item Status Change Error: ", error.message);
+  }
+  
 }
 
 export default stripeConfig;

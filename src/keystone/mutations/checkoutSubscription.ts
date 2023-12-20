@@ -24,9 +24,10 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
     chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
     stripeSubscriptionId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
     customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
+    couponNames: graphql.arg({ type: graphql.list(graphql.String) }), 
   },
 
-  async resolve(source, { planId, chargeId, amount_total, custom_price, customerEmail, stripeSubscriptionId }, context: Context) {
+  async resolve(source, { planId, chargeId, amount_total, custom_price, couponNames, customerEmail, stripeSubscriptionId }, context: Context) {
     const contextSudo = context.sudo()
 
     try {
@@ -115,6 +116,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
           stripeChargeId: chargeId,
           stripeSubscriptionId: stripeSubscriptionId,
           status: "ACTIVE",
+          coupons: couponNames ? {connect: couponNames?.map(coup => ({ name: coup }))} : null,
           dateCreated: now.toISOString(),
           dateModified: now.toISOString(),
         },
