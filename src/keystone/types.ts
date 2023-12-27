@@ -420,6 +420,7 @@ export type SubscriptionPlan = {
   stockMax: number,
   tags: Tag[],
   categories: Category[],
+  addons: Addon[],
 }
 
 export type SubscriptionItem = {
@@ -449,6 +450,14 @@ export type Addon = {
   categories: Category[],
   tags: Tag[],
   excerpt:string,
+}
+
+export type AddonCheckboxOptions = {
+  name:string,
+  label:string,
+  id:string,
+  isChecked:boolean,
+  price:number,
 }
 
 export type IDObj = {

@@ -1,7 +1,7 @@
 'use client'
 // cred - https://www.sumologic.com/blog/react-hook-typescript/
 // cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
-import { Addon, Availability, Booking, BookingPrevious, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
+import { Addon, AddonCheckboxOptions, Availability, Booking, BookingPrevious, DayTimes, Location, SelectOption, Service, Session, User } from "@ks/types"
 import { generateTimesArray } from "@lib/generateTimesArray"
 import { ReducerAction, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { 
@@ -94,13 +94,7 @@ type FormAsideAction =
     phone?:string,
   }}
 
-type AddonCheckboxOptions = {
-  name:string,
-  label:string,
-  id:string,
-  isChecked:boolean,
-  price:number,
-}
+
 const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm ({ services, addons, session, prevBooking }:Props) {

@@ -55,4 +55,11 @@ const query = `
     id
     name
   }
+  addons{
+    id
+    name
+    image
+    excerpt
+    price
+  }
 `

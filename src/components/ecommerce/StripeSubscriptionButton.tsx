@@ -10,16 +10,26 @@ import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
 import formStyles from '@styles/menus/form.module.scss'
 import Link from "next/link";
+import { Addon, AddonCheckboxOptions } from "@ks/types";
+import moneyFormatter from "@lib/moneyFormatter";
 
 type Props = {
   id:string,
+  addons?:Addon[],
 }
 
-export default function StripeSubscriptionButton({id}:Props) {
+export default function StripeSubscriptionButton({id, addons}:Props) {
     const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
     const [messageState, setMessageState] = useState<string|undefined>()
     const [couponName, setCouponName] = useState('')
+    const addonOptions = addons?.map(ad => ({
+      name: ad.name,
+      label: ad.name,
+      id: ad.id,
+      isChecked:false,
+      price: ad.price,
+    })) as AddonCheckboxOptions[]
 
     const redirectToCheckout = async () => {
       
@@ -84,6 +94,9 @@ export default function StripeSubscriptionButton({id}:Props) {
             <span> Pay with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
           )}
         </button>
+
+        <div>
+          
         <label className={formStyles.coupon}>
           <span> coupon </span>
           <input 
@@ -92,6 +105,40 @@ export default function StripeSubscriptionButton({id}:Props) {
             onChange={e => setCouponName(e.target.value)}
           />
         </label>
+
+      {addons && addons.length > 0 && <>
+
+        <h5> Add-Ons</h5>
+        {addons?.length === 0 && <p className="subtext"> no addons available </p>}
+        <div className={formStyles.addons_wrap} >
+          {addonOptions.map(addon => (
+              <label 
+                key={addon.name}
+                htmlFor={addon.name}
+                className={'checkbox'}
+              >
+                <input 
+                  name={addon.name}
+                  value={addon.id} 
+                  type={'checkbox'}
+                  readOnly={false}
+                  defaultChecked={addon.isChecked}
+                  // onChange={(e) => {
+                  //   dispatchRed({type: 'ADDON_CHECKBOX', payload: {
+                  //     value: e.target.value,
+                  //     isChecked: e.target.checked
+                  //   }})
+                  // }}
+                />
+                <span> 
+                  <strong> {moneyFormatter(addon.price)} </strong>  
+                  {addon.name}
+                </span>
+              </label>
+            ))}
+        </div>
+      </>}
+        </div>
       </div>
     </>
   

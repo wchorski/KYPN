@@ -21,6 +21,7 @@ import { PriceTag } from '@components/ecommerce/PriceTag';
 import StripeSubscriptionButton from '@components/ecommerce/StripeSubscriptionButton';
 import Link from 'next/link';
 import styles from '@styles/ecommerce/productSingle.module.scss'
+import { List } from '@components/elements/List';
 
 export const revalidate = 5;
 
@@ -75,7 +76,7 @@ export default async function SubscriptionPlanPageById({ params }:Props) {
 
   if (error) return <ErrorMessage error={error} />
 
-  if(!subscriptionPlan) return <p> post not found </p>
+  if(!subscriptionPlan) return <p> subscription plan not found </p>
 
   return (
     <>
@@ -109,7 +110,7 @@ type Main = {
 
 function Main({ subscriptionPlan, session }:Main) {
 
-  const { id, name, image, price, description, excerpt, status, categories, tags, author, billing_interval} = subscriptionPlan
+  const { id, name, image, price, description, excerpt, status, categories, tags, author, billing_interval, addons} = subscriptionPlan
 
   return <>
 
@@ -137,13 +138,26 @@ function Main({ subscriptionPlan, session }:Main) {
   
             {/* <AddToCart SubscriptionPlanId={id} sessionId={session.itemId}/> */}
             {session ? (
-              <StripeSubscriptionButton id={id} />
+              <Link href={`/checkout/subscriptionplan/${id}`} className='button large'> Start Subscription </Link>
             ): (
               <p> <Link href={`/api/auth/signin`} > Login </Link> or <Link href={`/auth/register`}> Create an Account </Link></p>
             )}
 
             <div className={styles.description_wrap}>
               <BlockRender document={description.document} />
+            </div>
+
+            <div>
+              <h2> Add-Ons</h2>
+              <p> Available add-ons that can be selected during checkout </p>
+              <hr  style={{margin: '1rem 0'}}/>
+              <ul>
+                {addons.map(ad => <li key={ad.id}>
+                  <h5>{ad.name} <PriceTag price={ad.price}/> </h5>
+                  <p>{ad.excerpt}</p>
+                  <hr  style={{margin: '1rem 0'}}/>
+                </li>)}
+              </ul>
             </div>
           </div>
 
