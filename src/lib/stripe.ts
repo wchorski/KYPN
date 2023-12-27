@@ -14,10 +14,10 @@ type StripeProduct = {
   category:string,
   status:string,
   authorEmail:string,
-  type:'subscription'|'product',
+  type:'subscription'|'product'|'addon',
   image:string,
   price:number,
-  billing_interval:Billing_Interval,
+  billing_interval?:Billing_Interval,
   url:string,
 }
 
@@ -34,7 +34,7 @@ export async function stripeProductCreate({id, name, description, category, stat
       category: category,
       status: status || '',
       author: authorEmail,
-      type: 'subscription'
+      type,
     },
     // attributes: [
     //   'Subscriptionattr1',
@@ -45,7 +45,6 @@ export async function stripeProductCreate({id, name, description, category, stat
     default_price_data: {
       currency: 'usd',
       unit_amount: price,
-      recurring: { interval: billing_interval},
     },
     url: url
   }
@@ -54,6 +53,14 @@ export async function stripeProductCreate({id, name, description, category, stat
     stripeCreateParams = {...stripeCreateParams, images: [
       image 
     ],}
+  }
+  if(billing_interval){
+    const default_price_data = {
+      currency: 'usd',
+      unit_amount: price,
+      recurring: { interval: billing_interval},
+    }
+    stripeCreateParams = {...stripeCreateParams, default_price_data }
   }
 
   const res = await stripeConfig.products.create(stripeCreateParams)

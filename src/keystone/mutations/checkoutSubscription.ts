@@ -22,6 +22,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
     amount_total: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
     planId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
+    addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
     stripeSubscriptionId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
     customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
     couponNames: graphql.arg({ type: graphql.list(graphql.String) }), 

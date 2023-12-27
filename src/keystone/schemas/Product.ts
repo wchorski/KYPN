@@ -129,6 +129,7 @@ export const Product:Lists.Product = list({
       ref: 'User.products',
     }),
     orderItems: relationship({ref: 'OrderItem.product', many: true}),
+    addons: relationship({ref: 'Addon.products', many: true}),
     tags: relationship({
       // we could have used 'Tag', but then the relationship would only be 1-way
       ref: 'Tag.products',

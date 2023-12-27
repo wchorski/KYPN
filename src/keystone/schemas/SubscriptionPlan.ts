@@ -149,10 +149,11 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       }
     }),
 
-    items: relationship({ ref: 'SubscriptionItem.subscriptionPlan', many: true }),
-
+    
     stockMax: integer({ validation: { isRequired: true }, defaultValue: 0 }),
-
+    
+    addons: relationship({ref: 'Addon.subscriptionPlans', many: true}),
+    items: relationship({ ref: 'SubscriptionItem.subscriptionPlan', many: true }),
     tags: relationship({
       ref: 'Tag.subscriptions',
       many: true,

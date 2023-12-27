@@ -14,24 +14,28 @@ export function CustomNavigation({ authenticatedItem, lists }: NavigationProps) 
         <hr style={{border: 'solid 1px #9999991f'}} />
         <NavItem href="/">Dashboard</NavItem>
         <NavItem href="/users">Users</NavItem>
+        <NavItem href="/roles">Roles</NavItem>
         <NavItem href="/availabilities"> Availabilities</NavItem>
 
         <hr style={{border: 'solid 1px #9999991f'}} />
         <NavItem href="/services"> Services </NavItem>
         <NavItem href="/bookings"> Bookings </NavItem>
 
+        <hr style={{border: 'solid 1px #9999991f'}} />
+        <NavItem href="/subscription-plans"> Subscription Plans </NavItem>
         <NavItem href="/subscription-items"> Subscription Items </NavItem>
+
+        <hr style={{border: 'solid 1px #9999991f'}} />
         <NavItem href="/events"> Events </NavItem>
         <NavItem href="/tickets"> Tickets </NavItem>
 
         <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/products"> Products </NavItem>
-        <NavItem href="/subscription-plans"> Subscription Plans </NavItem>
         <NavItem href="/locations"> Locations </NavItem>
         <NavItem href="/addons"> Addons </NavItem>
         <NavItem href="/coupons"> Coupons </NavItem>
 
         <hr style={{border: 'solid 1px #9999991f'}} />
+        <NavItem href="/products"> Products </NavItem>
         <NavItem href="/orders"> Orders </NavItem>
         <NavItem href="/cart-items"> Cart Items </NavItem>
         <NavItem href="/order-items"> Order Items </NavItem>

@@ -1,0 +1,17 @@
+-- CreateTable
+CREATE TABLE "_Addon_subscriptionPlans" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_Addon_subscriptionPlans_AB_unique" ON "_Addon_subscriptionPlans"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_Addon_subscriptionPlans_B_index" ON "_Addon_subscriptionPlans"("B");
+
+-- AddForeignKey
+ALTER TABLE "_Addon_subscriptionPlans" ADD CONSTRAINT "_Addon_subscriptionPlans_A_fkey" FOREIGN KEY ("A") REFERENCES "Addon"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_Addon_subscriptionPlans" ADD CONSTRAINT "_Addon_subscriptionPlans_B_fkey" FOREIGN KEY ("B") REFERENCES "SubscriptionPlan"("id") ON DELETE CASCADE ON UPDATE CASCADE;
