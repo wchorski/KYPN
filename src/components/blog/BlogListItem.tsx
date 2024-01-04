@@ -70,10 +70,10 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, feature
 
         <p className='excerpt'>
           {excerpt}
+          <Link className='readmore' href={`/blog/${slug}`}>{buttonText}</Link>
         </p>
 
 
-        <Link className='readmore button' href={`/blog/${slug}`}>{buttonText}</Link>
         {/* <div className="menu admin">
           <Link href={{ pathname: '/shop/products/update', query: { id: id }, }}> Edit ✏️ </Link>
           <AddToCart id={id} />

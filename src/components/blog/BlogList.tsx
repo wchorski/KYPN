@@ -16,11 +16,15 @@ export function BlogList({ posts }: ProdProps):ReactElement<any, any> {
   if(!posts) return <></>
 
   return (
-    <List className={styles.blog} isAnimated={true} >
+    <ul 
+      className={styles.blog + ' unstyled'} 
+      // isAnimated={true} 
+      // style={{gridTemplateColumns: 'repeat(auto-fill, minmax(calc(var(--w-sitemax)/2), 1fr))'}}
+    >
       {posts.map((item: any, i:number) => (
         <BlogListItem {...item} key={i} />
       ))}
-    </List>
+    </ul>
   )
 
 }

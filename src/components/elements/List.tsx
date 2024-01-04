@@ -13,7 +13,7 @@ type Props = {
   lineHight?:string,
 }
 
-export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, gap, lineHight, children }:Props) {
+export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, className, gap, lineHight, style, children }:Props) {
 
   if(!children) return null
 
@@ -22,7 +22,7 @@ export function List ({ isAnimated = false, delay = 0.2,  duration = 0.2, classN
   const allStyles = stylesArr.join(' ');
 
   return (
-    <ul className={allStyles} style={{gap: gap, lineHeight: lineHight}}>
+    <ul className={allStyles} style={{gap: gap, lineHeight: lineHight, ...style}}>
       {Array.isArray(children) ? children.map((child, i) => (
         <li
           key={i}
