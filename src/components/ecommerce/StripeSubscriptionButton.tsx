@@ -95,50 +95,6 @@ export default function StripeSubscriptionButton({id, addons}:Props) {
           )}
         </button>
 
-        <div>
-          
-        <label className={formStyles.coupon}>
-          <span> coupon </span>
-          <input 
-            name="coupon"
-            type="text"
-            onChange={e => setCouponName(e.target.value)}
-          />
-        </label>
-
-      {addons && addons.length > 0 && <>
-
-        <h5> Add-Ons</h5>
-        {addons?.length === 0 && <p className="subtext"> no addons available </p>}
-        <div className={formStyles.addons_wrap} >
-          {addonOptions.map(addon => (
-              <label 
-                key={addon.name}
-                htmlFor={addon.name}
-                className={'checkbox'}
-              >
-                <input 
-                  name={addon.name}
-                  value={addon.id} 
-                  type={'checkbox'}
-                  readOnly={false}
-                  defaultChecked={addon.isChecked}
-                  // onChange={(e) => {
-                  //   dispatchRed({type: 'ADDON_CHECKBOX', payload: {
-                  //     value: e.target.value,
-                  //     isChecked: e.target.checked
-                  //   }})
-                  // }}
-                />
-                <span> 
-                  <strong> {moneyFormatter(addon.price)} </strong>  
-                  {addon.name}
-                </span>
-              </label>
-            ))}
-        </div>
-      </>}
-        </div>
       </div>
     </>
   

@@ -40,7 +40,7 @@ export default async function CheckoutSubscriptionPlan ({ params, searchParams }
   return (
     <PageTHeaderMain 
       header={Header()}
-      main={Main(subscriptionPlan)}
+      main={Main(subscriptionPlan, session?.itemId)}
 
     />
   )
@@ -55,9 +55,9 @@ function Header(){
   </>
 }
 
-async function Main(subscriptionPlan:SubscriptionPlan){
+async function Main(subscriptionPlan:SubscriptionPlan, customerId:string){
 
-  const {id, name, image, addons, description, excerpt, price} = subscriptionPlan
+  const {id, name, image, addons, description, excerpt, price, coupons } = subscriptionPlan
 
   return <>
     <Section layout={'1_1'}>
@@ -71,21 +71,19 @@ async function Main(subscriptionPlan:SubscriptionPlan){
           {/* {description?.document && (
             <DocumentRenderer document={description.document}/>
           )} */}
+          <hr style={{margin: '1rem 0'}}/>
 
-          <PriceTag price={price}/>
-
-          <CheckoutSubscriptionPlanForm />
+          <CheckoutSubscriptionPlanForm 
+            subscriptionPlan={subscriptionPlan} 
+            addons={addons} 
+            customerId={customerId}
+            coupons={coupons}
+          />
 
           
           <footer
             className={styles.footer} 
           >
-            <hr />
-
-            <p className="total"> 
-              <span>Total: ???</span> 
-              {/* <CartTotal /> */}
-            </p>
             
             <StripeSubscriptionButton id={id} />
           </footer>

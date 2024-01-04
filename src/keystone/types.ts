@@ -421,6 +421,7 @@ export type SubscriptionPlan = {
   tags: Tag[],
   categories: Category[],
   addons: Addon[],
+  coupons: Coupon[],
 }
 
 export type SubscriptionItem = {

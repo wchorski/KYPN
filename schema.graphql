@@ -1370,6 +1370,8 @@ type SubscriptionPlan {
   stockMax: Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
+  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
+  couponsCount(where: CouponWhereInput! = {}): Int
   items(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
   itemsCount(where: SubscriptionItemWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -1406,11 +1408,18 @@ input SubscriptionPlanWhereInput {
   billing_interval: StringNullableFilter
   stockMax: IntFilter
   addons: AddonManyRelationFilter
+  coupons: CouponManyRelationFilter
   items: SubscriptionItemManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+}
+
+input CouponManyRelationFilter {
+  every: CouponWhereInput
+  some: CouponWhereInput
+  none: CouponWhereInput
 }
 
 input SubscriptionPlanOrderByInput {
@@ -1443,11 +1452,19 @@ input SubscriptionPlanUpdateInput {
   billing_interval: String
   stockMax: Int
   addons: AddonRelateToManyForUpdateInput
+  coupons: CouponRelateToManyForUpdateInput
   items: SubscriptionItemRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input CouponRelateToManyForUpdateInput {
+  disconnect: [CouponWhereUniqueInput!]
+  set: [CouponWhereUniqueInput!]
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
 }
 
 input SubscriptionPlanUpdateArgs {
@@ -1469,11 +1486,17 @@ input SubscriptionPlanCreateInput {
   billing_interval: String
   stockMax: Int
   addons: AddonRelateToManyForCreateInput
+  coupons: CouponRelateToManyForCreateInput
   items: SubscriptionItemRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input CouponRelateToManyForCreateInput {
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
 }
 
 type SubscriptionItem {
@@ -1521,12 +1544,6 @@ input SubscriptionItemWhereInput {
   dateModified: DateTimeNullableFilter
 }
 
-input CouponManyRelationFilter {
-  every: CouponWhereInput
-  some: CouponWhereInput
-  none: CouponWhereInput
-}
-
 input SubscriptionItemOrderByInput {
   id: OrderDirection
   custom_price: OrderDirection
@@ -1564,13 +1581,6 @@ input SubscriptionPlanRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input CouponRelateToManyForUpdateInput {
-  disconnect: [CouponWhereUniqueInput!]
-  set: [CouponWhereUniqueInput!]
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
-}
-
 input SubscriptionItemUpdateArgs {
   where: SubscriptionItemWhereUniqueInput!
   data: SubscriptionItemUpdateInput!
@@ -1596,11 +1606,6 @@ input SubscriptionItemCreateInput {
 input SubscriptionPlanRelateToOneForCreateInput {
   create: SubscriptionPlanCreateInput
   connect: SubscriptionPlanWhereUniqueInput
-}
-
-input CouponRelateToManyForCreateInput {
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
 }
 
 type Product {
@@ -1976,6 +1981,8 @@ type Coupon {
   duration: String
   subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
   subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
 }
 
 input CouponWhereUniqueInput {
@@ -1995,6 +2002,7 @@ input CouponWhereInput {
   duration_in_months: IntNullableFilter
   duration: StringFilter
   subscriptionItems: SubscriptionItemManyRelationFilter
+  subscriptionPlans: SubscriptionPlanManyRelationFilter
 }
 
 input CouponOrderByInput {
@@ -2015,6 +2023,7 @@ input CouponUpdateInput {
   duration_in_months: Int
   duration: String
   subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
 }
 
 input CouponUpdateArgs {
@@ -2030,6 +2039,7 @@ input CouponCreateInput {
   duration_in_months: Int
   duration: String
   subscriptionItems: SubscriptionItemRelateToManyForCreateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
 }
 
 type Page {

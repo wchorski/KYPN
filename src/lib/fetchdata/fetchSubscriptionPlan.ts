@@ -62,4 +62,13 @@ const query = `
     excerpt
     price
   }
+  coupons {
+    id
+    name
+    stripeId
+    amount_off
+    percent_off
+    duration_in_months
+    duration
+  }
 `

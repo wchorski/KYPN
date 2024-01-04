@@ -196,6 +196,7 @@ model SubscriptionPlan {
   billing_interval String?            @default("month")
   stockMax         Int                @default(0)
   addons           Addon[]            @relation("Addon_subscriptionPlans")
+  coupons          Coupon[]           @relation("Coupon_subscriptionPlans")
   items            SubscriptionItem[] @relation("SubscriptionItem_subscriptionPlan")
   tags             Tag[]              @relation("SubscriptionPlan_tags")
   categories       Category[]         @relation("Category_subscriptions")
@@ -311,6 +312,7 @@ model Coupon {
   duration_in_months Int?
   duration           String
   subscriptionItems  SubscriptionItem[] @relation("Coupon_subscriptionItems")
+  subscriptionPlans  SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
 }
 
 model Page {
