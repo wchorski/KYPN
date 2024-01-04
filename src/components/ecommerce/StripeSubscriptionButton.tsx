@@ -15,21 +15,14 @@ import moneyFormatter from "@lib/moneyFormatter";
 
 type Props = {
   id:string,
-  addons?:Addon[],
+  addonIds?:String[],
+  couponName?:string,
 }
 
-export default function StripeSubscriptionButton({id, addons}:Props) {
+export default function StripeSubscriptionButton({id, addonIds, couponName}:Props) {
     const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
     const [messageState, setMessageState] = useState<string|undefined>()
-    const [couponName, setCouponName] = useState('')
-    const addonOptions = addons?.map(ad => ({
-      name: ad.name,
-      label: ad.name,
-      id: ad.id,
-      isChecked:false,
-      price: ad.price,
-    })) as AddonCheckboxOptions[]
 
     const redirectToCheckout = async () => {
       
@@ -47,6 +40,7 @@ export default function StripeSubscriptionButton({id, addons}:Props) {
             },
             body: JSON.stringify({
               id,
+              addonIds,
               couponName,
             }),
         });
@@ -86,7 +80,9 @@ export default function StripeSubscriptionButton({id, addons}:Props) {
         <button
           onClick={() => redirectToCheckout()}
           disabled={isPending}
-          className="button large">
+          className="button large"
+          type="button"
+        >
           
           {(isPending) ? (
             <LoadingAnim />

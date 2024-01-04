@@ -18,7 +18,6 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('SubscriptionItem'),
 
   args: { 
-    custom_price: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
     amount_total: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
     planId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
     chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
@@ -28,7 +27,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
     couponNames: graphql.arg({ type: graphql.list(graphql.String) }), 
   },
 
-  async resolve(source, { planId, chargeId, amount_total, custom_price, couponNames, customerEmail, stripeSubscriptionId }, context: Context) {
+  async resolve(source, { planId, chargeId, amount_total, addonIds, couponNames, customerEmail, stripeSubscriptionId }, context: Context) {
     const contextSudo = context.sudo()
 
     try {
@@ -118,6 +117,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
           stripeSubscriptionId: stripeSubscriptionId,
           status: "ACTIVE",
           coupons: couponNames ? {connect: couponNames?.map(coup => ({ name: coup }))} : null,
+          addons: addonIds ? {connect: addonIds.map(addId => ({ id: addId}))} : null,
           dateCreated: now.toISOString(),
           dateModified: now.toISOString(),
         },
@@ -130,6 +130,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
         where: { id: thePlan.id },
         data: newPlanData,
       })
+      
 
       return {
         subscriptionItem,

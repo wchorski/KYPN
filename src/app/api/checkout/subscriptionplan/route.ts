@@ -2,18 +2,19 @@
 
 import {NextRequest, NextResponse} from "next/server";
 import {headers} from "next/headers";
-import {CartItem, Coupon, Order, Session} from '@ks/types';
+import {Addon, CartItem, Coupon, Order, Session} from '@ks/types';
 import stripe from "@lib/get-stripejs";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { fetchGqlProtected } from "@lib/fetchdata/fetchGqlProtected";
 import { keystoneContext } from "@ks/context";
 import { SubscriptionPlan } from "@ks/types";
+import Stripe from "stripe";
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const headersList = headers();
-    const { id, couponName } = await req.json();
+    const { id, addonIds, couponName } = await req.json();
 
     const contextSudo = keystoneContext.sudo()
     
@@ -53,26 +54,50 @@ export async function POST(req: NextRequest, res: NextResponse) {
         `
       }) as Coupon|undefined
 
+      const addons = await contextSudo.query.Addon.findMany({
+        where: { id: { in: addonIds } },
+        query: `
+          id
+          price
+          stripeProductId
+        `
+      }) as Addon[]
+
       // const priceDiscount = (coupon?.percent_off) ? subscriptionPlan.price * (coupon.percent_off/100) : subscriptionPlan.price - coupon?.amount_off 
+
+      const addonItems = addons.map(add =>({
+        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          product: add.stripeProductId,
+          recurring: {
+            interval: subscriptionPlan.billing_interval,
+          },
+          unit_amount: add.price,
+        }
+      }))
+
+      const line_items = [
+        ...addonItems,
+        {
+          quantity: 1,
+          price_data: {
+            currency: 'usd',
+            product: subscriptionPlan.stripeProductId,
+            recurring: {
+              interval: subscriptionPlan.billing_interval,
+  
+            },
+            unit_amount: calcPrice(coupon, subscriptionPlan.price),
+          }
+        }
+      ]
 
       const session = await stripe.checkout.sessions.create({
         // customer_email: userSession?.user?.email || '',
         customer: userSession.stripeCustomerId || null,
         payment_method_types: ["card", ],
-        line_items: [
-          {
-            quantity: 1,
-            price_data: {
-              currency: 'usd',
-              product: subscriptionPlan.stripeProductId,
-              recurring: {
-                interval: subscriptionPlan.billing_interval,
-    
-              },
-              unit_amount: calcPrice(coupon, subscriptionPlan.price),
-            }
-          }
-        ],
+        line_items,
         mode: 'subscription',
         success_url: `${headersList.get("origin")}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${headersList.get("origin")}/shop/subscriptionplans/${id}`,
@@ -80,6 +105,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           type: 'checkout.subscriptionplan',
           couponName,
           subscriptionplanId: id,
+          addonIds: addonIds.join(',')
         }
       })
 

@@ -10,6 +10,7 @@ import { useReducer } from "react"
 import formStyles from '@styles/menus/form.module.scss'
 import moneyFormatter from "@lib/moneyFormatter"
 import { PriceTag } from "./PriceTag"
+import StripeSubscriptionButton from "./StripeSubscriptionButton"
 
 type Props = {
   subscriptionPlan:SubscriptionPlan,
@@ -163,6 +164,17 @@ export function CheckoutSubscriptionPlanForm ({ subscriptionPlan, addons, custom
         <p> 
           Total: <PriceTag price={state.total}/>
         </p>
+
+        <footer
+          // className={styles.footer} 
+        >
+          
+          <StripeSubscriptionButton 
+            id={subscriptionPlan.id} 
+            addonIds={state.addonOptions.filter(add => add.isChecked).flatMap(add => add.id)}
+            couponName={state.couponName}
+          />
+        </footer>
     </form>
   )
 }

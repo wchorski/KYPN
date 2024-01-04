@@ -446,6 +446,7 @@ export type Addon = {
   image:string,
   description: string,
   price: number,
+  stripeProductId:string,
   services: Service[],
   bookings: Booking[],
   categories: Category[],

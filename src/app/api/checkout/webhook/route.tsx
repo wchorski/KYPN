@@ -102,6 +102,7 @@ type Charge = {
     eventId?:string,
     subscriptionplanId?:string,
     quantity?:number,
+    addonIds?:string,
     couponName:string,
   }
   subscription?:string,
@@ -208,8 +209,6 @@ async function checkoutSubscriptionFail(charge:Charge){
 
 async function checkoutSubscription(charge:Charge, customerEmail:string|null|undefined, ){
   
-  console.log('### charge.metadata.couponName, ', charge.metadata.couponName);
-  
   const vars = {
     customPrice: charge.amount_total,
     amountTotal: charge.amount_total,
@@ -217,13 +216,21 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
     chargeId: charge.id,
     customerEmail: customerEmail,
     stripeSubscriptionId: charge.subscription,
+    addonIds: charge.metadata.addonIds ? charge.metadata.addonIds.split(',') : [],
     couponNames: charge.metadata.couponName ? [charge.metadata.couponName] : null,
   }
+  
 
   try {
 
     const data = await keystoneContext.sudo().graphql.run({
-      query: querycheckoutSubscription,
+      query: `
+        mutation CheckoutSubscription($amountTotal: Int!, $planId: String!, $chargeId: String!, $stripeSubscriptionId: String!, $customerEmail: String!, $addonIds: [String], $couponNames: [String]) {
+          checkoutSubscription(amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, stripeSubscriptionId: $stripeSubscriptionId, customerEmail: $customerEmail, addonIds: $addonIds, couponNames: $couponNames) {
+            status
+          }
+        }
+      `,
       variables: vars,
     })
     
@@ -233,14 +240,6 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
     
   }
 }
-
-const querycheckoutSubscription = `
-  mutation CheckoutSubscription($customPrice: Int!, $amountTotal: Int!, $planId: String!, $chargeId: String!, $stripeSubscriptionId: String!, $customerEmail: String!, $couponNames: [String]) {
-    checkoutSubscription(custom_price: $customPrice, amount_total: $amountTotal, planId: $planId, chargeId: $chargeId, stripeSubscriptionId: $stripeSubscriptionId, customerEmail: $customerEmail, couponNames: $couponNames) {
-      status
-    }
-  }
-`
 
 async function checkoutCart(id:string, customerEmail:string|null|undefined){
 

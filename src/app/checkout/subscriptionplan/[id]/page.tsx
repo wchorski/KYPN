@@ -81,12 +81,12 @@ async function Main(subscriptionPlan:SubscriptionPlan, customerId:string){
           />
 
           
-          <footer
+          {/* <footer
             className={styles.footer} 
           >
             
             <StripeSubscriptionButton id={id} />
-          </footer>
+          </footer> */}
         </div>
 
         <div></div>
