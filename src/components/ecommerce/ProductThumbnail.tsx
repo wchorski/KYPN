@@ -21,7 +21,7 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
 
   if(!product) return  <p> no prod </p>
 
-  const { id, name, excerpt, price, photo, image, status } = product
+  const { id, name, excerpt, price, rental_price, photo, image, status, isForSale, isForRent } = product
 
 
   return (
@@ -46,13 +46,20 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
           
           {session 
             ? status !== 'OUT_OF_STOCK' 
-              ? <AddToCart productId={product.id} sessionId={session.itemId}/>
+              ? <>
+                {isForSale && <div className='addtocart_wrap'>
+                  <AddToCart productId={id} sessionId={session.itemId} type={'SALE'}/>
+                  <PriceTag price={price} />
+                </div>}
+                {isForRent && <div className='addtocart_wrap'>
+                  <AddToCart productId={id} sessionId={session.itemId} type={'RENTAL'}/>
+                  <PriceTag price={rental_price} subtext={'/hour'}/>
+                </div>}
+              </>
               : <button disabled={true}> out of stock </button>
               
             : <Link href={`/api/auth/signin`}> Login to shop </Link>
           }
-          
-          <PriceTag price={price} />
         </div>
       </div>
 

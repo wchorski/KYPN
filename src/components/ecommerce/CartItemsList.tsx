@@ -30,11 +30,11 @@ export function CartItemsList () {
   }, [session])
   
   return <>
-    {isPending && <LoadingAnim /> }
-    {!isPending && cartItems?.length <= 0 && <p> Cart is empty. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>}
     <ul 
       style={{padding: '0'}}
     >
+      {isPending && <LoadingAnim /> }
+      {!isPending && cartItems?.length <= 0 && <p> Cart is empty. <Link href={`/shop`} onClick={closeCart}> Go to shop </Link> </p>}
       {cartItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={session?.itemId}/>)}
     </ul>
   </>

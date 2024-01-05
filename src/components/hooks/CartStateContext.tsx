@@ -32,9 +32,6 @@ function CartStateProvider ({children}:{children: ReactNode}){
   const [cartItems, setCartItems] = useState<CartItem[]>([])
 
   function addToCart(cartItem:CartItem){
-    console.log('add to cart');
-    
-    console.log({cartItem});
     setCartItems(prev => [...prev, cartItem])
   }
 
@@ -131,10 +128,12 @@ const query = `
     user(where: $where) {
       cart {
         id
+        type
         quantity
         product {
           id
           price
+          rental_price
           name
           image
         }

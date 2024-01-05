@@ -8,6 +8,9 @@ import { Section } from "@components/layouts/Section"
 import styles from '@styles/ecommerce/cart.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
+import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
+import { CartItem } from "@ks/types"
+import { RentalCheckoutForm } from "@components/ecommerce/RentalCheckoutForm"
 
 export const metadata: Metadata = {
   title: 'Checkout | ' +  envs.SITE_TITLE,
@@ -22,11 +25,17 @@ type Props = {
 export default async function CheckoutPage ({ params, searchParams }:Props) {
 
   const session = await getServerSession(nextAuthOptions)
+  const {saleItems, rentalItems, error} = await fetchSessionCartItems(session?.itemId)
+  
 
   return (
     <PageTHeaderMain 
       header={Header()}
-      main={Main(session?.itemId)}
+      main={Main({
+        sessionId: session?.itemId,
+        saleItems,
+        rentalItems,
+      })}
 
     />
   )
@@ -41,7 +50,13 @@ function Header(){
   </>
 }
 
-async function Main(sessionId:string){
+type Main = {
+  sessionId:string,
+  saleItems:CartItem[]|undefined,
+  rentalItems:CartItem[]|undefined,
+}
+
+async function Main({saleItems, rentalItems, sessionId}:Main){
 
   return <>
     <Section layout={'1_1'}>
@@ -63,7 +78,11 @@ async function Main(sessionId:string){
           </footer>
         </div>
 
-        <div></div>
+        <div>
+          <h2> Rental Items </h2>
+
+          <RentalCheckoutForm sessionId={sessionId} rentalItems={rentalItems || []}/>
+        </div>
      
       
     </Section>

@@ -81,8 +81,12 @@ article.product :global{
     }
   }
   
+  .menu {
+    display: grid;
+    gap: 1rem;
+  }
 
-  .menu{
+  .addtocart_wrap{
     display: flex;
     justify-content: space-between;
     margin-top: auto;

@@ -19,9 +19,10 @@ type State = 'loading'|'pending'|'error'|'out_of_stock'|'success'|undefined
 type Props = {
   productId:string,
   sessionId:string,
+  type:'SALE'|'RENTAL'
 }
 
-export default function AddToCart({ productId, sessionId }: { productId:string, sessionId:string }) {  
+export default function AddToCart({ productId, sessionId, type }: Props) {  
 
   const [state, setstate] = useState<State>(undefined)
   const { getUserCart, } = useCart()
@@ -35,7 +36,8 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
 
       const variables = {
         addToCartId: productId,
-        productId: productId
+        productId: productId,
+        type,
       }
       
       // ? gql-request (yoga) request
@@ -87,7 +89,8 @@ export default function AddToCart({ productId, sessionId }: { productId:string, 
       className={styles.addtocart + ' button'}
     >
       <span>
-        Add To Cart 
+        {type === 'SALE' ? 'Buy' : 'Rent' }
+        {/* Add To Cart  */}
         <span style={{marginRight: 'auto'}} className='state'>{renderIcon(state)}</span> 
       </span>
       

@@ -67,6 +67,7 @@ export const Addon:Lists.Addon = list({
     }),
     services: relationship({ ref: 'Service.addons', many: true }),
     products: relationship({ ref: 'Product.addons', many: true }),
+    rentals: relationship({ ref: 'Rental.addons', many: true }),
     subscriptionPlans: relationship({ ref: 'SubscriptionPlan.addons', many: true }),
     bookings: relationship({ ref: 'Booking.addons', many: true }),
     subscriptionItems: relationship({ ref: 'SubscriptionItem.addons', many: true }),

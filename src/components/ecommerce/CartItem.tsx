@@ -31,7 +31,7 @@ export default function CartItem({ item, sessionId }:Props) {
     </li>
   )
   
-  const { product: { id, description, name, price, photo, image}, quantity, id: cartItemId }:CartItemType = item
+  const { product: { id, description, name, price, rental_price, photo, image}, quantity, id: cartItemId, type }:CartItemType = item
 
   const [quantityState, setQuantityState] = useState(quantity)
 
@@ -94,9 +94,17 @@ export default function CartItem({ item, sessionId }:Props) {
       </div>
 
       <div className="perItemTotal">
-        <p>{moneyFormatter(price * quantity)}</p>
 
-        <em> {moneyFormatter(price)} each </em>
+        {type === 'RENTAL' 
+          ? <>
+            <p>{moneyFormatter(rental_price * quantity)} <small>/hour</small> </p>
+            <em> {moneyFormatter(rental_price)} /hour each </em>
+          </>
+          : <>
+            <p>{moneyFormatter(price * quantity)}</p>
+            <em> {moneyFormatter(price)} each </em>
+          </>
+        }
       </div>
 
       <CartRemoveItem id={item.id} />

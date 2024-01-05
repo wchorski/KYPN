@@ -36,6 +36,7 @@ export function CustomNavigation({ authenticatedItem, lists }: NavigationProps) 
 
         <hr style={{border: 'solid 1px #9999991f'}} />
         <NavItem href="/products"> Products </NavItem>
+        <NavItem href="/rentals"> Rentals </NavItem>
         <NavItem href="/orders"> Orders </NavItem>
         <NavItem href="/cart-items"> Cart Items </NavItem>
         <NavItem href="/order-items"> Order Items </NavItem>

@@ -53,8 +53,11 @@ export async function fetchProducts(page:number, categoryNames:string[], session
         id
         name
         price
+        rental_price
         status
         image
+        isForSale
+        isForRent
       `
     }) as Product[]
 

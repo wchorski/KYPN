@@ -41,6 +41,8 @@ type User {
   cartCount(where: CartItemWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
+  rentalsCount(where: RentalWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   subscriptions(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
@@ -92,6 +94,7 @@ input UserWhereInput {
   availability: AvailabilityManyRelationFilter
   cart: CartItemManyRelationFilter
   products: ProductManyRelationFilter
+  rentals: RentalManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   subscriptions: SubscriptionItemManyRelationFilter
   orders: OrderManyRelationFilter
@@ -222,6 +225,12 @@ input ProductManyRelationFilter {
   none: ProductWhereInput
 }
 
+input RentalManyRelationFilter {
+  every: RentalWhereInput
+  some: RentalWhereInput
+  none: RentalWhereInput
+}
+
 input SubscriptionPlanManyRelationFilter {
   every: SubscriptionPlanWhereInput
   some: SubscriptionPlanWhereInput
@@ -301,6 +310,7 @@ input UserUpdateInput {
   availability: AvailabilityRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  rentals: RentalRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   subscriptions: SubscriptionItemRelateToManyForUpdateInput
   orders: OrderRelateToManyForUpdateInput
@@ -369,6 +379,13 @@ input ProductRelateToManyForUpdateInput {
   connect: [ProductWhereUniqueInput!]
 }
 
+input RentalRelateToManyForUpdateInput {
+  disconnect: [RentalWhereUniqueInput!]
+  set: [RentalWhereUniqueInput!]
+  create: [RentalCreateInput!]
+  connect: [RentalWhereUniqueInput!]
+}
+
 input SubscriptionPlanRelateToManyForUpdateInput {
   disconnect: [SubscriptionPlanWhereUniqueInput!]
   set: [SubscriptionPlanWhereUniqueInput!]
@@ -431,6 +448,7 @@ input UserCreateInput {
   availability: AvailabilityRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  rentals: RentalRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   subscriptions: SubscriptionItemRelateToManyForCreateInput
   orders: OrderRelateToManyForCreateInput
@@ -480,6 +498,11 @@ input CartItemRelateToManyForCreateInput {
 input ProductRelateToManyForCreateInput {
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input RentalRelateToManyForCreateInput {
+  create: [RentalCreateInput!]
+  connect: [RentalWhereUniqueInput!]
 }
 
 input SubscriptionPlanRelateToManyForCreateInput {
@@ -1185,6 +1208,8 @@ type Addon {
   servicesCount(where: ServiceWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
+  rentalsCount(where: RentalWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
@@ -1217,6 +1242,7 @@ input AddonWhereInput {
   status: StringNullableFilter
   services: ServiceManyRelationFilter
   products: ProductManyRelationFilter
+  rentals: RentalManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   bookings: BookingManyRelationFilter
   subscriptionItems: SubscriptionItemManyRelationFilter
@@ -1245,6 +1271,7 @@ input AddonUpdateInput {
   status: String
   services: ServiceRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  rentals: RentalRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
@@ -1267,6 +1294,7 @@ input AddonCreateInput {
   status: String
   services: ServiceRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  rentals: RentalRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   subscriptionItems: SubscriptionItemRelateToManyForCreateInput
@@ -1617,14 +1645,19 @@ type Product {
   slug: String
   excerpt: String
   description: Product_description_Document
+  isForSale: Boolean
+  isForRent: Boolean
   status: String
   price: Int
+  rental_price: Int
   stockCount: Int
   author: User
   orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
+  rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
+  rentalsCount(where: RentalWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -1653,12 +1686,16 @@ input ProductWhereInput {
   stripePriceId: StringFilter
   slug: StringFilter
   excerpt: StringFilter
+  isForSale: BooleanFilter
+  isForRent: BooleanFilter
   status: StringNullableFilter
   price: IntNullableFilter
+  rental_price: IntNullableFilter
   stockCount: IntFilter
   author: UserWhereInput
   orderItems: OrderItemManyRelationFilter
   addons: AddonManyRelationFilter
+  rentals: RentalManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
   dateCreated: DateTimeNullableFilter
@@ -1679,8 +1716,11 @@ input ProductOrderByInput {
   stripePriceId: OrderDirection
   slug: OrderDirection
   excerpt: OrderDirection
+  isForSale: OrderDirection
+  isForRent: OrderDirection
   status: OrderDirection
   price: OrderDirection
+  rental_price: OrderDirection
   stockCount: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -1694,12 +1734,16 @@ input ProductUpdateInput {
   slug: String
   excerpt: String
   description: JSON
+  isForSale: Boolean
+  isForRent: Boolean
   status: String
   price: Int
+  rental_price: Int
   stockCount: Int
   author: UserRelateToOneForUpdateInput
   orderItems: OrderItemRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
+  rentals: RentalRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -1726,12 +1770,16 @@ input ProductCreateInput {
   slug: String
   excerpt: String
   description: JSON
+  isForSale: Boolean
+  isForRent: Boolean
   status: String
   price: Int
+  rental_price: Int
   stockCount: Int
   author: UserRelateToOneForCreateInput
   orderItems: OrderItemRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
+  rentals: RentalRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
@@ -1743,9 +1791,118 @@ input OrderItemRelateToManyForCreateInput {
   connect: [OrderItemWhereUniqueInput!]
 }
 
+type Rental {
+  id: ID!
+  start: DateTime
+  end: DateTime
+  summary: String
+  durationInHours: Decimal
+  location: String
+  price: Int
+  email: String
+  phone: String
+  name: String
+  notes: String
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
+  customer: User
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  google: JSON
+}
+
+input RentalWhereUniqueInput {
+  id: ID
+}
+
+input RentalWhereInput {
+  AND: [RentalWhereInput!]
+  OR: [RentalWhereInput!]
+  NOT: [RentalWhereInput!]
+  id: IDFilter
+  start: DateTimeFilter
+  end: DateTimeNullableFilter
+  durationInHours: DecimalFilter
+  location: StringFilter
+  price: IntFilter
+  email: StringFilter
+  phone: StringFilter
+  name: StringFilter
+  notes: StringFilter
+  products: ProductManyRelationFilter
+  addons: AddonManyRelationFilter
+  customer: UserWhereInput
+  status: StringNullableFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
+}
+
+input RentalOrderByInput {
+  id: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
+  durationInHours: OrderDirection
+  location: OrderDirection
+  price: OrderDirection
+  email: OrderDirection
+  phone: OrderDirection
+  name: OrderDirection
+  notes: OrderDirection
+  status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+}
+
+input RentalUpdateInput {
+  start: DateTime
+  end: DateTime
+  durationInHours: Decimal
+  location: String
+  price: Int
+  email: String
+  phone: String
+  name: String
+  notes: String
+  products: ProductRelateToManyForUpdateInput
+  addons: AddonRelateToManyForUpdateInput
+  customer: UserRelateToOneForUpdateInput
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  google: JSON
+}
+
+input RentalUpdateArgs {
+  where: RentalWhereUniqueInput!
+  data: RentalUpdateInput!
+}
+
+input RentalCreateInput {
+  start: DateTime
+  end: DateTime
+  durationInHours: Decimal
+  location: String
+  price: Int
+  email: String
+  phone: String
+  name: String
+  notes: String
+  products: ProductRelateToManyForCreateInput
+  addons: AddonRelateToManyForCreateInput
+  customer: UserRelateToOneForCreateInput
+  status: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  google: JSON
+}
+
 type CartItem {
   id: ID!
   quantity: Int
+  type: String
   product: Product
   user: User
 }
@@ -1760,6 +1917,7 @@ input CartItemWhereInput {
   NOT: [CartItemWhereInput!]
   id: IDFilter
   quantity: IntFilter
+  type: StringNullableFilter
   product: ProductWhereInput
   user: UserWhereInput
 }
@@ -1767,10 +1925,12 @@ input CartItemWhereInput {
 input CartItemOrderByInput {
   id: OrderDirection
   quantity: OrderDirection
+  type: OrderDirection
 }
 
 input CartItemUpdateInput {
   quantity: Int
+  type: String
   product: ProductRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
@@ -1788,6 +1948,7 @@ input CartItemUpdateArgs {
 
 input CartItemCreateInput {
   quantity: Int
+  type: String
   product: ProductRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
@@ -2691,6 +2852,12 @@ type Mutation {
   updateProducts(data: [ProductUpdateArgs!]!): [Product]
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
+  createRental(data: RentalCreateInput!): Rental
+  createRentals(data: [RentalCreateInput!]!): [Rental]
+  updateRental(where: RentalWhereUniqueInput!, data: RentalUpdateInput!): Rental
+  updateRentals(data: [RentalUpdateArgs!]!): [Rental]
+  deleteRental(where: RentalWhereUniqueInput!): Rental
+  deleteRentals(where: [RentalWhereUniqueInput!]!): [Rental]
   createCartItem(data: CartItemCreateInput!): CartItem
   createCartItems(data: [CartItemCreateInput!]!): [CartItem]
   updateCartItem(where: CartItemWhereUniqueInput!, data: CartItemUpdateInput!): CartItem
@@ -2752,7 +2919,7 @@ type Mutation {
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   endSession: Boolean!
-  addToCart(id: ID!, productId: ID): CartItem
+  addToCart(id: ID!, type: ID!, productId: ID): CartItem
   checkout(chargeId: String!, customerEmail: String!): CartItem
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, start: String!, customerName: String, customerEmail: String!, customerPhone: String, notes: String, amount_total: Int): Booking
   checkoutSubscription(amount_total: Int!, planId: String!, chargeId: String!, addonIds: [String], stripeSubscriptionId: String!, customerEmail: String!, couponNames: [String]): SubscriptionItem
@@ -2798,6 +2965,9 @@ type Query {
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   product(where: ProductWhereUniqueInput!): Product
   productsCount(where: ProductWhereInput! = {}): Int
+  rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
+  rental(where: RentalWhereUniqueInput!): Rental
+  rentalsCount(where: RentalWhereInput! = {}): Int
   cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartItem(where: CartItemWhereUniqueInput!): CartItem
   cartItemsCount(where: CartItemWhereInput! = {}): Int

@@ -77,6 +77,7 @@ export type ListAccessArgs = {
 
 export type CartItem = {
   id: string,
+  type:'SALE'|'RENTAL',
   quantity: number,
   product: Product
 
@@ -126,6 +127,7 @@ export type Ticket = {
 export type Product = {
   id: string,
   price: number,
+  rental_price: number,
   name: string,
   slug: string,
   status: string,
@@ -143,6 +145,37 @@ export type Product = {
   dateCreated: string,
   dateModified: string,
   author:User,
+  rentals:Rental,
+  isForSale:boolean,
+  isForRent:boolean,
+}
+
+export type Rental = {
+  id: string,
+  start: string,
+  end: string,
+  summary: string,
+  durationInHours: string,
+  products?: Product[],
+  price: number,
+  // employees: User[],
+  addons:Addon[],
+  customer: User,
+  location:string,
+  email:string,
+  phone:string,
+  name:string,
+  notes: string,
+  status: 'ACTIVE'|'POSTPONED'|'CANCELED'|'LEAD'|'PAID'|'DOWNPAYMENT'|'HOLD',
+  dateCreated: string,
+  dateModified: string,
+  google?:{
+    id?:string,
+    kind?:string,
+    status?:string,
+    message?:string,
+    htmlLink?:string,
+  }
 }
 
 export type ProductImage = {

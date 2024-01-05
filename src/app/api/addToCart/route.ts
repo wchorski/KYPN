@@ -35,8 +35,8 @@ export async function POST(req:NextRequest) {
 
 // ? complains when i query anything other than quantity.... idk why
 const query = `
-  mutation addToCart($addToCartId: ID!, $productId: ID) {
-    addToCart(id: $addToCartId, productId: $productId) {
+  mutation addToCart($addToCartId: ID!, $type: ID!, $productId: ID) {
+    addToCart(id: $addToCartId, type: $type, productId: $productId) {
       quantity
     }
   }

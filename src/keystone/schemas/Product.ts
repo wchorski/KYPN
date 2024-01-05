@@ -3,14 +3,13 @@ import { list } from "@keystone-6/core";
 import { Lists } from '.keystone/types';
 
 import { allowAll } from "@keystone-6/core/access";
-import { image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
+import { checkbox, image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
 import { isLoggedIn, permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
 import { slugFormat } from "../../lib/slugFormat";
-
-const FRONTEND_URL = process.env.FRONTEND_URL
+import { envs } from "../../../envs";
 
 export const Product:Lists.Product = list({
   // access: allowAll,
@@ -48,7 +47,7 @@ export const Product:Lists.Product = list({
     //     inlineEdit: { fields: ['image', 'altText', 'filename'] }
     //   }
     // }),
-    image: text({defaultValue: FRONTEND_URL + '/assets/private/placeholder.png'}),
+    image: text(),
     name: text({ validation: { isRequired: true } }),
     stripeProductId: text({ defaultValue: 'NO_PROD_ID' }),
     stripePriceId: text({ defaultValue: 'NO_PRICE_ID' }),
@@ -108,6 +107,8 @@ export const Product:Lists.Product = list({
       links: true,
       dividers: true,
     }),
+    isForSale: checkbox({defaultValue: true}),
+    isForRent: checkbox(),
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
@@ -122,6 +123,7 @@ export const Product:Lists.Product = list({
     }),
 
     price: integer(),
+    rental_price: integer(),
 
     stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
     // todo make this 'author' instead for clarity
@@ -130,6 +132,7 @@ export const Product:Lists.Product = list({
     }),
     orderItems: relationship({ref: 'OrderItem.product', many: true}),
     addons: relationship({ref: 'Addon.products', many: true}),
+    rentals: relationship({ref: 'Rental.products', many: true}),
     tags: relationship({
       // we could have used 'Tag', but then the relationship would only be 1-way
       ref: 'Tag.products',
@@ -180,7 +183,7 @@ export const Product:Lists.Product = list({
           active: true,
           description: resolvedData.excerpt || 'no_description',
           images: [
-            resolvedData.image || FRONTEND_URL + '/assets/private/placeholder.png',
+            resolvedData.image || envs.FRONTEND_URL + '/assets/private/placeholder.png',
           ],
           metadata: {
             // @ts-ignore //todo might cause problems
@@ -263,9 +266,7 @@ export const Product:Lists.Product = list({
               description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt,
               default_price: newPrice.id,
               images: [
-                // @ts-ignore
-                // photo.image._meta.secure_url
-                photo
+                photo || envs.FRONTEND_URL+'/assets/placeholder.png'
               ],
               metadata: {
                 // @ts-ignore //todo might cause problems
@@ -284,9 +285,7 @@ export const Product:Lists.Product = list({
               name: resolvedData.name ? resolvedData.name : item.name,
               description: resolvedData.excerpt ? resolvedData.excerpt : item.excerpt,
               images: [
-                // @ts-ignore
-                // photo.image._meta.secure_url
-                photo
+                photo || envs.FRONTEND_URL+'/assets/placeholder.png'
               ],
               metadata: {
                 // @ts-ignore //todo might cause problems

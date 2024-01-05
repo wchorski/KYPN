@@ -30,6 +30,9 @@ const query = `
   price
   status
   excerpt
+  rental_price
+  isForSale
+  isForRental
   description {
     document
   }

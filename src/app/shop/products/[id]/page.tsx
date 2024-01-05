@@ -107,7 +107,7 @@ type Main = {
 
 function Main({ product, session }:Main) {
 
-  const { id, name, image, price, description, excerpt, status, categories, tags, author} = product
+  const { id, name, image, price, description, excerpt, status, categories, tags, author, isForSale, isForRent,} = product
 
   return <>
 
@@ -133,9 +133,10 @@ function Main({ product, session }:Main) {
 
             <p> <PriceTag price={price} /></p>
   
-            {session ? (
-              <AddToCart productId={id} sessionId={session.itemId}/>
-            ) : (
+            {session ? <>
+              {isForSale && <AddToCart productId={id} sessionId={session.itemId} type={'SALE'}/>}
+              {isForRent && <AddToCart productId={id} sessionId={session.itemId} type={'RENTAL'}/>}
+            </> : (
               <Link href={`/api/auth/signin`}> login to shop </Link>
             )}
 

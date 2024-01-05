@@ -42,6 +42,7 @@ model User {
   availability       Availability[]     @relation("Availability_employee")
   cart               CartItem[]         @relation("CartItem_user")
   products           Product[]          @relation("Product_author")
+  rentals            Rental[]           @relation("Rental_customer")
   subscriptionPlans  SubscriptionPlan[] @relation("SubscriptionPlan_author")
   subscriptions      SubscriptionItem[] @relation("SubscriptionItem_user")
   orders             Order[]            @relation("Order_user")
@@ -158,6 +159,7 @@ model Addon {
   status            String?            @default("DRAFT")
   services          Service[]          @relation("Addon_services")
   products          Product[]          @relation("Addon_products")
+  rentals           Rental[]           @relation("Addon_rentals")
   subscriptionPlans SubscriptionPlan[] @relation("Addon_subscriptionPlans")
   bookings          Booking[]          @relation("Addon_bookings")
   subscriptionItems SubscriptionItem[] @relation("Addon_subscriptionItems")
@@ -231,20 +233,24 @@ model SubscriptionItem {
 
 model Product {
   id                    String      @id @default(cuid())
-  image                 String      @default("undefined/assets/private/placeholder.png")
+  image                 String      @default("")
   name                  String      @default("")
   stripeProductId       String      @default("NO_PROD_ID")
   stripePriceId         String      @default("NO_PRICE_ID")
   slug                  String      @unique @default("")
   excerpt               String      @default("")
   description           Json        @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  isForSale             Boolean     @default(true)
+  isForRent             Boolean     @default(false)
   status                String?     @default("DRAFT")
   price                 Int?
+  rental_price          Int?
   stockCount            Int         @default(0)
   author                User?       @relation("Product_author", fields: [authorId], references: [id])
   authorId              String?     @map("author")
   orderItems            OrderItem[] @relation("OrderItem_product")
   addons                Addon[]     @relation("Addon_products")
+  rentals               Rental[]    @relation("Product_rentals")
   tags                  Tag[]       @relation("Product_tags")
   categories            Category[]  @relation("Category_products")
   dateCreated           DateTime?   @default(now())
@@ -254,9 +260,33 @@ model Product {
   @@index([authorId])
 }
 
+model Rental {
+  id              String    @id @default(cuid())
+  start           DateTime
+  end             DateTime?
+  durationInHours Decimal   @default("23") @postgresql.Decimal(5, 2)
+  location        String    @default("")
+  price           Int       @default(0)
+  email           String    @default("")
+  phone           String    @default("")
+  name            String    @default("")
+  notes           String    @default("")
+  products        Product[] @relation("Product_rentals")
+  addons          Addon[]   @relation("Addon_rentals")
+  customer        User?     @relation("Rental_customer", fields: [customerId], references: [id])
+  customerId      String?   @map("customer")
+  status          String?   @default("LEAD")
+  dateCreated     DateTime? @default(now())
+  dateModified    DateTime? @default(now())
+  google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
+
+  @@index([customerId])
+}
+
 model CartItem {
   id        String   @id @default(cuid())
   quantity  Int      @default(1)
+  type      String?  @default("SALE")
   product   Product? @relation("CartItem_product", fields: [productId], references: [id])
   productId String?  @map("product")
   user      User?    @relation("CartItem_user", fields: [userId], references: [id])

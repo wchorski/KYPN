@@ -429,7 +429,9 @@ section.grid {
   gap: 1rem;
 }
 
-
+section {
+  min-height: 30vh;
+}
 
 
 // section.grid._1_2_1{
