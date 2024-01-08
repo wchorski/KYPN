@@ -23,8 +23,12 @@ export function PriceTag({price, subtext}:Props) {
         return (<>
           <div > 
             <sup className="currency">{currency}</sup> 
-            <span className="amount"> {dollars} </span> 
-            {/* <span className="cents">.{cents}</span>  */}
+            <span className="amount"> 
+              {dollars} 
+              {Number(cents) > 0 && `.${cents}` }
+            </span> 
+            
+            
             <small className="subtext">{subtext}</small> 
           </div>
         </>)

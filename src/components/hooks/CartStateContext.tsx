@@ -1,6 +1,6 @@
 'use client'
 import { CartItem, User } from "@ks/types";
-import { calcTotalPrice } from "@lib/calcTotalPrice";
+import { calcTotalPrice, calcCartRentalTotal } from "@lib/calcTotalPrice";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 type CartContext = {
@@ -15,7 +15,7 @@ const defaultCtx= {
   closeCart: () => {},
   openCart: () => {},
 
-  cartItems: [],
+  cartItems: [] as CartItem[],
   setCartItems: (cartItems:CartItem[]) => [],
   addToCart: (cartItem:CartItem) => {},
   removeFromCart: (id:string) => {},
@@ -41,21 +41,35 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
     if(!sessionId) return console.log('no sessionId for getUserCart context');
     
-    const variables = {
-      where: {
-        id: sessionId
-      }
-    }
-
     try {
       // const { user } = await client.request(query, variables) as { user:User }
       const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
-        body: JSON.stringify({query, variables})
+        body: JSON.stringify({
+          variables: { where: {id: sessionId} },
+          query: `
+            query getUserCart($where: UserWhereUniqueInput!) {
+              user(where: $where) {
+                cart {
+                  id
+                  type
+                  quantity
+                  product {
+                    id
+                    price
+                    rental_price
+                    name
+                    image
+                  }
+                }
+              }
+            }
+          `, 
+        })
       }) 
       const data = await res.json()
       
-      const { user } = data 
+      const { user }:{user:User} = data 
 
       if(!user?.cart) return console.log('!!! user or cart not found');
       
@@ -102,7 +116,6 @@ function CartStateProvider ({children}:{children: ReactNode}){
         toggleCart, 
         closeCart, 
         openCart,
-        // @ts-ignore
         cartItems,
         // @ts-ignore
         setCartItems,
@@ -122,22 +135,3 @@ function useCart(){
   return all
 }
 export {CartStateProvider, useCart}
-
-const query = `
-  query getUserCart($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      cart {
-        id
-        type
-        quantity
-        product {
-          id
-          price
-          rental_price
-          name
-          image
-        }
-      }
-    }
-  }
-`

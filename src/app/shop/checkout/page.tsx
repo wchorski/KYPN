@@ -9,8 +9,9 @@ import styles from '@styles/ecommerce/cart.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
-import { CartItem } from "@ks/types"
+import { CartItem as CartItemType } from "@ks/types"
 import { RentalCheckoutForm } from "@components/ecommerce/RentalCheckoutForm"
+import CartItem from "@components/ecommerce/CartItem"
 
 export const metadata: Metadata = {
   title: 'Checkout | ' +  envs.SITE_TITLE,
@@ -52,41 +53,47 @@ function Header(){
 
 type Main = {
   sessionId:string,
-  saleItems:CartItem[]|undefined,
-  rentalItems:CartItem[]|undefined,
+  saleItems:CartItemType[]|undefined,
+  rentalItems:CartItemType[]|undefined,
 }
 
 async function Main({saleItems, rentalItems, sessionId}:Main){
 
   return <>
-    <Section layout={'1_1'}>
+    <Section layout={'1'}>
 
-        <div>
-          <CartItemsList />
-          
-          <footer
-            className={styles.footer} 
-          >
-            <hr />
+      {/* <div>
+        <CartItemsList />
+      </div> */}
 
-            <p className="total"> 
-              <span>Total: </span> 
-              <CartTotal />
-            </p>
-            {/* <CheckoutForm /> */}
-            <StripeCheckoutButton />
-          </footer>
-        </div>
+      <div>
+        {/* <h4> Cart Items </h4>
+        {saleItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
 
-        <div>
-          <h2> Rental Items </h2>
-
-          <RentalCheckoutForm sessionId={sessionId} rentalItems={rentalItems || []}/>
-        </div>
+        <h4> Rental Items </h4>
+        {rentalItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)} */}
+        
+        <RentalCheckoutForm 
+          sessionId={sessionId} 
+          rentalItems={rentalItems || []}
+          saleItems={saleItems || []}
+        />
+      </div>
      
       
     </Section>
+    
+    {/* <hr />
+    <footer
+      className={styles.footer} 
+    >
 
-   
+      <p className="total"> 
+        <span>Total: </span> 
+        <CartTotal />
+      </p>
+      
+      <StripeCheckoutButton />
+    </footer> */}
   </>
 }

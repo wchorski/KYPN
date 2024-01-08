@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { CSSProperties, ReactNode } from "react"
 import styles from '@styles/card.module.scss'
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
   id?:string,
   bgColor?:string,
   className?:string,
+  style?:CSSProperties,
   // layout?: 'default'|'center',
 }
 
@@ -16,6 +17,7 @@ export function Card ({
   id,
   bgColor,
   className,
+  style,
 }:Props) {
 
   const allStyles = [
@@ -28,7 +30,7 @@ export function Card ({
     <div 
       id={id}
       className={allStyles + ' ' + className} 
-      style={{backgroundColor: bgColor}}
+      style={{backgroundColor: bgColor, ...style}}
     >
       {children}
     </div>

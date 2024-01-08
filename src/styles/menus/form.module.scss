@@ -242,6 +242,73 @@
   }
 }
 
+.input_label :global {
+
+  display: grid;
+  gap: .2rem;
+
+  span.label{
+    font-weight: lighter;
+    font-size: .8rem;
+  }
+
+  legend{
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: var(--c-txt-sub);
+  }
+
+  legend::after {
+    height: 5px;
+    content: '';
+    display: block;
+    border-bottom: solid 1px var(--c-txt-sub);
+    // background-image: linear-gradient(
+    //   to right,
+    //   var(--c-primary) 0%,
+    //   var(--c-desaturated) 70%,
+    //   var(--c-primary) 100%
+    // );
+    margin-bottom: 1em;
+  }
+
+  input,
+  textarea,
+  select {
+    
+    padding: 0.5rem;
+    font-size: .7rem;
+    border: 1px solid black;
+    &:focus {
+      outline: 0;
+      border-color: var(--c-accent);
+    }
+
+    border-radius: var(--br-sharp);
+    // border: solid var(--c-primary) 1px;
+  }
+
+}
+.input_label.checkbox{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input_label.required {
+  span:first-child::after {
+    content: " *";
+    padding-inline: 3px;
+    // color: red;
+  }
+}
+.input_label:has(input:required) {
+  span:first-child::after {
+    content: " *";
+    // color: red;
+  }
+}
+
 @keyframes animBookmark {
   100% {
     top: -8%;
@@ -279,4 +346,8 @@ label.coupon {
     border-radius: 0;
   }
 
+}
+
+.footer {
+  margin-top: auto;
 }
