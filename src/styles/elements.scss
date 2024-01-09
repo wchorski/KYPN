@@ -133,3 +133,56 @@ button {
 .mtauto {
   margin-top: auto;
 }
+
+
+// * FORMS
+
+input[type='checkbox'] {
+  appearance: none;
+  position: relative;
+  display: inline-block;
+  border: solid 3px var(--c-primary);
+  height: 1.5rem;
+  width: 1.5rem;
+  vertical-align: middle;
+  border-radius: 2rem;
+  box-shadow: 0px 1px 3px #0003 inset;
+  transition: 0.1s linear background;
+}
+input::before {
+  content: "";
+  display: block;
+  width: 1.02rem;
+  height: 1.02rem;
+  background: #fff;
+  border-radius: 1.2rem;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0px 1px 3px #0003;
+  transition: 0.1s linear transform;
+  transform: scale(0);
+}
+
+input:checked {
+  border-color: var(--c-accent);
+
+  &::before{
+    background: var(--c-accent);
+  }
+}
+input:checked::before {
+  transform: scale(.8);
+}
+
+textarea {
+  min-height: 6rem;
+  max-width: 75ch;
+}
+
+// TODO why are checkbox input types auto made to be 'readonly'?
+// input:read-only {
+//   cursor: not-allowed;
+//   border-color: var(--c-disabled);
+//   color: var(--c-disabled);
+// }

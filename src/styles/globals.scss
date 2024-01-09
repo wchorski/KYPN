@@ -76,9 +76,3 @@ input, button, a {
     border-color: var(--c-disabled) !important;
   }
 }
-
-input:read-only {
-  cursor: not-allowed;
-  border-color: var(--c-disabled) !important;
-  color: var(--c-disabled);
-}

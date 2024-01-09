@@ -32,6 +32,8 @@ type Fields = {
   start:string,
   end:string,
   total:number,
+  location:string,
+  delivery:boolean,
   notes:string,
 }
 
@@ -46,6 +48,7 @@ type State = {
   saleItems:CartItemType[],
   customerId:string,
   couponName:string,
+  isDelivery:boolean,
   start:string,
   end:string,
   hours:number,
@@ -62,7 +65,8 @@ type FormAsideAction =
   | { type: 'SET_START'; payload:string }
   | { type: 'SET_END'; payload:string }
   | { type: 'APPLY_COUPON'; payload:string }
-  // | { type: 'ADDON_CHECKBOX'; payload:{value:string, isChecked:boolean} }
+  | { type: 'APPLY_COUPON'; payload:string }
+  | { type: 'DELIVERY_CHECKBOX'; payload:{value:string, isChecked:boolean} }
   | { type: 'SET_CUSTOMER'; payload:{
     name?:string,
     email:string,
@@ -84,6 +88,7 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
     start: '',
     end: '',
     hours: 1,
+    isDelivery: false,
     rental_subtotal: rentalItems.reduce((accumulator, item) => {
       return (accumulator + item.product.rental_price) * item.quantity;
     }, 0),
@@ -113,6 +118,11 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
           rental_subtotal: calcRentalTotal(timeCalcHours(state.start, action.payload)),
         }
         return { ...state, end: action.payload}
+      
+      case 'DELIVERY_CHECKBOX':
+        console.log(action.payload);
+        
+        return { ...state, isDelivery: action.payload.isChecked }
 
       // case 'SET_COUPON':
       //   return { ...state, couponName: action.payload}
@@ -159,6 +169,8 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
       start: '',
       end: '',
       total: 0,
+      location: '',
+      delivery: false,
       notes: '',
     }
   } 
@@ -184,22 +196,41 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
 
       // }
 
-      // const res = await fetch(`/api/gql/noauth`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     query: `
-      //       mutation BookAService($serviceId: String!, $start: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerName: String, $customerEmail: String!, $customerPhone: String, $notes: String, $amountTotal: Int) {
-      //         bookAService(serviceId: $serviceId, start: $start, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerName: $customerName, customerEmail: $customerEmail, customerPhone: $customerPhone, notes: $notes, amount_total: $amountTotal) {
-      //           id
-      //         }
-      //       }
-      //     `,
-      //     variables:{ ...data },
-      //   }),
-      // })
+      // todo create a rental if hours > 0. MUST CREATE ORDER FIRST THEN RENTAL. so prob need a custom mutation
+
+      const res = await fetch(`/api/gql/noauth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `
+            mutation CreateRental($data: RentalCreateInput!) {
+              createRental(data: $data) {
+                status
+              }
+            }
+          `,
+          variables:{ 
+            status: 'LEAD',
+            start: state.start,
+            // order: {
+            //   connect: [
+            //     cartItems.filter(item => item.type === 'RENTAL').map(item => ({id: item.id}))
+            //   ]
+            // },
+            price: null,
+            location: null,
+            end: null,
+            durationInHours: null,
+            customer: {
+              connect: {
+                id: null
+              }
+            }
+          },
+        }),
+      })
 
       // const { checkout, error } = await res.json()
       // if(error) throw new Error(error.message)
@@ -225,6 +256,8 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
           start: '',
           end: '',
           total: '',
+          location: '',
+          delivery: '',
           notes: '',
         },
         fieldValues: inputValues
@@ -263,6 +296,8 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
     <Section layout={'1_1'}>
 
       <fieldset className={'grid'} >
+        <legend> <h3 style={{margin: '0'}}> Cart </h3> </legend>
+
         <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
           {cartItems.filter(item => item.type === 'SALE')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
         </ul>
@@ -278,14 +313,55 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
       </fieldset>
 
       <fieldset>
+        <legend> <h3 style={{margin: '0'}}>Rental Booking Info </h3> </legend>
+
         <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
         {cartItems.filter(item => item.type === 'RENTAL')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
         </ul>
-        <legend> <h3 style={{margin: '0'}}>Rental Booking Info </h3> </legend>
 
         <div 
           // className={'flex gap-1'}
         >
+          <label htmlFor="location" className={styles.input_label}>
+            <span> Location </span>
+            <input 
+              name={'location'}
+              id={'location'}
+              type={'text'}
+              defaultValue={formState.fieldValues.location}
+              required={true}
+              // onChange={(e) => dispatch({type: 'SET_START', payload: e.target.value}) }
+            />
+            <span className="error"> {formState.errors?.location} </span>
+          </label>
+
+          <label 
+            key={'delivery'}
+            htmlFor={'delivery'}
+            className={'checkbox'}
+            style={{margin: '1rem 0', display: 'inline-block'}}
+          >
+            <input 
+              name={'delivery'}
+              value={'mydeliverycheckbox'}
+              type={'checkbox'}
+              readOnly={false}
+              // defaultChecked={false}
+              onChange={(e) => {
+                dispatch({type: 'DELIVERY_CHECKBOX', payload: {
+                  value: e.target.value,
+                  isChecked: e.target.checked
+                }})
+              }}
+            />
+            
+            <span> 
+              Delivery:
+            </span>
+            <small> Deliver this rental to the above location </small>
+          </label>
+
+
           <label htmlFor="start" className={styles.input_label}>
             <span> Start Time </span>
             <input 
@@ -337,6 +413,19 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
 
     <hr />
     <footer>
+
+      <label htmlFor="notes" className={styles.input_label}>
+        <span> Notes </span>
+        <textarea 
+          name={'email'}
+          id={'email'}
+          placeholder="..."
+          defaultValue={formState.fieldValues.notes}
+          // readOnly={formState.fieldValues.notes}
+          required={false}
+        />
+        <span className="error"> {formState.errors?.notes} </span>
+      </label>
 
       <p className="total"> 
         {/* <label className={styles.coupon}>

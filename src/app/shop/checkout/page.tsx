@@ -45,7 +45,7 @@ export default async function CheckoutPage ({ params, searchParams }:Props) {
 function Header(){
 
   return <>
-    <Section layout={'1'}>
+    <Section layout={'1'} styles={{display: 'none'}}>
       <h1> Checkout </h1>
     </Section>
   </>

@@ -86,7 +86,8 @@ export const Rental:Lists.Rental = list({
         displayMode: 'textarea'
       }
     }),
-    products: relationship({ ref: 'Product.rentals', many: true }),
+    cartItems: relationship({ ref: 'CartItem.rentals', many: true }),
+    order: relationship({ ref: 'Order.rental', many: false }),
     addons: relationship({ ref: 'Addon.rentals', many: true }),
     // employees: relationship({ ref: 'User.gigs', many: true }),
     customer: relationship({ ref: 'User.rentals', many: false }),
