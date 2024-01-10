@@ -5,7 +5,7 @@ import {
   // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
-import { CartItem as CartItemType } from "@ks/types"
+import {  CartItem as CartItemType, Order, OrderItem, Rental } from "@ks/types"
 import CartItem from "./CartItem"
 import { useEffect, useReducer, useRef, useState } from "react"
 import { PriceTag } from "./PriceTag"
@@ -13,11 +13,13 @@ import { Card } from "@components/layouts/Card"
 import styles from '@styles/menus/form.module.scss'
 import { List } from "@components/elements/List"
 import { Section } from "@components/layouts/Section"
-import { timeCalcHours } from "@lib/timeUtils"
+import { isTimeCheckStartEnd, timeCalcHours } from "@lib/timeUtils"
 import { useCart } from "@components/hooks/CartStateContext"
-import { calcCartRentalTotal, calcCartSaleTotal } from "@lib/calcTotalPrice"
+import { calcCartRentalTotal, calcCartSaleTotal, calcTotalPrice } from "@lib/calcTotalPrice"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { useSession } from "next-auth/react"
+import Link from "next/link"
+import { datePrettyLocal } from "@lib/dateFormatter"
 
 type Props = {
   sessionId:string,
@@ -55,12 +57,18 @@ type State = {
   rental_subtotal:number,
   sale_subtotal:number,
   total:number,
+  order?:any,
+  rental?:any,
+  // order?:Order,
+  // rental?:Rental,
 }
 
 type FormAsideAction =
   | { type: 'RESET' }
   // | { type: 'SET_ADDON_OPTIONS'; payload:AddonCheckboxOptions[] }
   | { type: 'SET_TOTAL'; payload:number }
+  | { type: 'SET_RENTAL'; payload:Rental }
+  | { type: 'SET_ORDER'; payload:Order }
   | { type: 'SET_COUPON'; payload:string }
   | { type: 'SET_START'; payload:string }
   | { type: 'SET_END'; payload:string }
@@ -73,12 +81,14 @@ type FormAsideAction =
     phone?:string,
   }}
 
+const today = new Date()
+
 export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
   const { data: session, status }  = useSession()
   const [isPending, setIsPending] = useState(true)
-  const { cartItems, getUserCart } = useCart()  
+  const { cartItems, getUserCart, setCartItems } = useCart()  
 
   const defaultState:State = {
     rentalItems,
@@ -87,7 +97,7 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
     couponName: '',
     start: '',
     end: '',
-    hours: 1,
+    hours: 6,
     isDelivery: false,
     rental_subtotal: rentalItems.reduce((accumulator, item) => {
       return (accumulator + item.product.rental_price) * item.quantity;
@@ -95,7 +105,7 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
     sale_subtotal: saleItems.reduce((accumulator, item) => {
       return (accumulator + item.product.price) * item.quantity;
     }, 0),
-    total: 0
+    total: 0,
   }
   const reducer = (state:State, action:FormAsideAction):State => {
     
@@ -120,9 +130,13 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
         return { ...state, end: action.payload}
       
       case 'DELIVERY_CHECKBOX':
-        console.log(action.payload);
-        
         return { ...state, isDelivery: action.payload.isChecked }
+
+      case 'SET_ORDER':
+        return { ...state, order: action.payload }
+
+      case 'SET_RENTAL':
+        return { ...state, rental: action.payload }
 
       // case 'SET_COUPON':
       //   return { ...state, couponName: action.payload}
@@ -137,7 +151,7 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
         return defaultState
 
       default:
-        throw new Error();
+        throw new Error('something bad happened, and i am not sure what');
     }
   }
   const [state, dispatch] = useReducer(reducer, defaultState)
@@ -177,26 +191,25 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
 
   const [formState, formAction] = useFormState<Form>(onSubmit, defaultForm)
   async function onSubmit(prevState: Form, formdata: FormData): Promise<Form> {
-
-    console.log(formdata);
     
     const start   = formdata.get('start') as string
+    const end   = formdata.get('end') as string
+    const location   = formdata.get('location') as string
+    const delivery   = formdata.get('delivery') as string
+    const notes   = formdata.get('notes') as string
     
     //@ts-ignore
     const inputValues:Fields = {
-      start
+      start,
+      end,
+      location,
     } 
     
 
     try {
 
       // if(typeof start !== 'string') throw new Error('start is not string')
-
-      // const data = {
-
-      // }
-
-      // todo create a rental if hours > 0. MUST CREATE ORDER FIRST THEN RENTAL. so prob need a custom mutation
+      if(isTimeCheckStartEnd(start, end)) throw new Error('End time is set to happen before the start time')
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -205,35 +218,49 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
         },
         body: JSON.stringify({
           query: `
-            mutation CreateRental($data: RentalCreateInput!) {
-              createRental(data: $data) {
-                status
+            mutation Checkout($customerEmail: String!, $chargeId: String, $start: String, $end: String, $durationInHours: String, $location: String, $delivery: Boolean) {
+              checkout(customerEmail: $customerEmail, chargeId: $chargeId, start: $start, end: $end, durationInHours: $durationInHours, location: $location, delivery: $delivery) {
+                id
               }
             }
           `,
           variables:{ 
-            status: 'LEAD',
-            start: state.start,
-            // order: {
-            //   connect: [
-            //     cartItems.filter(item => item.type === 'RENTAL').map(item => ({id: item.id}))
-            //   ]
-            // },
-            price: null,
-            location: null,
-            end: null,
-            durationInHours: null,
-            customer: {
-              connect: {
-                id: null
-              }
-            }
-          },
+            customerEmail: session?.user.email || '',
+            start: new Date(start).toISOString(),
+            end: new Date(end).toISOString(),
+            durationInHours: String(timeCalcHours(state.start, state.end)),
+            location,
+            delivery: delivery ? true : false,
+            notes,
+          }
         }),
       })
 
-      // const { checkout, error } = await res.json()
-      // if(error) throw new Error(error.message)
+      const { checkout, error } = await res.json()
+      if(error) throw new Error(error.message)
+      console.log({checkout});
+
+      dispatch({type: 'SET_TOTAL', payload: calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours)})
+
+      const newOrder = {
+        id: checkout.id,
+        items: cartItems as OrderItem[],
+        total: calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours),
+        status: 'COMPLETE'
+      }
+
+      dispatch({type: 'SET_ORDER', payload: newOrder as Order})
+      dispatch({type: 'SET_RENTAL', payload: {
+        id: checkout.id,
+        start: state.start,
+        end: state.end,
+        location,
+        notes,
+        status: 'HOLD',
+        order: newOrder as Order,
+      }})
+
+      if(checkout.id) setCartItems([])
       // console.log(bookAService);
       // dispatch({type: 'SET_BOOKING_ID', payload: bookAService.id})
       // dispatch({type: 'SET_CUSTOMER', payload: {name, email, phone}})
@@ -287,168 +314,265 @@ export function RentalCheckoutForm ({ sessionId, rentalItems, saleItems }:Props)
   }, [session])
   
 
-  if(isPending || !cartItems || cartItems.length <= 0) return <LoadingAnim /> 
-  return <form
-    ref={formRef}
-    // className={styles.form} 
-    action={formAction}
-  >
-    <Section layout={'1_1'}>
+  if(state.order || state.rental) return <Section layout={'1'}>
+    <p> Your order is complete. </p>
 
-      <fieldset className={'grid'} >
-        <legend> <h3 style={{margin: '0'}}> Cart </h3> </legend>
+    {state.order && <>
+      <h4> Items: </h4>
+      <table>
+        <tbody>
+          <tr>
+            <td>Status: </td>
+            <td>{state.order.status}</td>
+          </tr>
+          <tr>
+            <td>Items: </td>
+            <td> 
+              <ul>
+                {state.order.items.map((i:CartItemType) => <li>{i.product.name} x{i.quantity}</li>)}
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </>}
 
-        <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
-          {cartItems.filter(item => item.type === 'SALE')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
-        </ul>
+    {state.rental && <>
+      <h4> Rental Items: </h4>
+      <table>
+        <tbody>
+          <tr>
+            <td> Status: </td>
+            <td>{state.rental.status}</td>
+          </tr>
+          <tr>
+            <td> Start: </td>
+            <td>{datePrettyLocal(state.rental.start, 'full')}</td>
+          </tr>
+          <tr>
+            <td> End: </td>
+            <td>{datePrettyLocal(state.rental.end, 'full')}</td>
+          </tr>
+          <tr>
+            <td> Total Hours: </td>
+            <td>{state.hours}</td>
+          </tr>
+          <tr>
+            <td>Items: </td>
+            <td> 
+              <ul>
+                {state.rental.order.items.map((i:CartItemType) => <li>{i.product.name} x{i.quantity}</li>)}
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </>}
 
-        <hr style={{width: '100%', height: '1px', margin: '1rem 0'}} />
-        <footer className={styles.footer} >
-          <p className="subtotal">
-            <span> Cart subtotal: </span>
-            <PriceTag price={calcCartSaleTotal(cartItems)}/>
+    <p className="total"> 
+      <span>Total: </span> 
+      <PriceTag price={state.total}/>
+    </p>
 
-          </p>
-        </footer>
-      </fieldset>
+    <p className={(formState.message === 'success') ? 'success' : 'error'}> 
+      {formState.message} 
+    </p>
 
-      <fieldset>
-        <legend> <h3 style={{margin: '0'}}>Rental Booking Info </h3> </legend>
+    <p>
+      <Link href={`/account?dashState=orders#orders`}> Account Orders ⇢ </Link> <br /> 
+    </p>
+    
+  </Section>
 
-        <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
-        {cartItems.filter(item => item.type === 'RENTAL')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
-        </ul>
+  if(isPending || !cartItems) return <LoadingAnim /> 
+  if(cartItems.length <= 0) return <p> No items in your cart. Go to <Link href={`/shop`}> shop </Link> </p>
+  return <>
+    <form
+      ref={formRef}
+      // className={styles.form} 
+      action={formAction}
+    >
+      <Section layout={'1_1'}>
 
-        <div 
-          // className={'flex gap-1'}
-        >
-          <label htmlFor="location" className={styles.input_label}>
-            <span> Location </span>
-            <input 
-              name={'location'}
-              id={'location'}
-              type={'text'}
-              defaultValue={formState.fieldValues.location}
-              required={true}
-              // onChange={(e) => dispatch({type: 'SET_START', payload: e.target.value}) }
-            />
-            <span className="error"> {formState.errors?.location} </span>
-          </label>
+        <fieldset className={'grid'} >
+          <legend> <h3 style={{margin: '0'}}> Cart </h3> </legend>
 
-          <label 
-            key={'delivery'}
-            htmlFor={'delivery'}
-            className={'checkbox'}
-            style={{margin: '1rem 0', display: 'inline-block'}}
-          >
-            <input 
-              name={'delivery'}
-              value={'mydeliverycheckbox'}
-              type={'checkbox'}
-              readOnly={false}
-              // defaultChecked={false}
-              onChange={(e) => {
-                dispatch({type: 'DELIVERY_CHECKBOX', payload: {
-                  value: e.target.value,
-                  isChecked: e.target.checked
-                }})
-              }}
-            />
-            
-            <span> 
-              Delivery:
-            </span>
-            <small> Deliver this rental to the above location </small>
-          </label>
+          <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
+            {cartItems.filter(item => item.type === 'SALE')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
+          </ul>
 
+          <hr style={{width: '100%', height: '1px', margin: '1rem 0'}} />
+          <footer className={styles.footer} >
+            <p className="subtotal">
+              <span> Cart subtotal: </span>
+              <PriceTag price={calcCartSaleTotal(cartItems)}/>
 
-          <label htmlFor="start" className={styles.input_label}>
-            <span> Start Time </span>
-            <input 
-              name={'start'}
-              id={'start'}
-              type={'datetime-local'}
-              defaultValue={formState.fieldValues.start}
-              required={true}
-              onChange={(e) => dispatch({type: 'SET_START', payload: e.target.value}) }
-            />
-            <span className="error"> {formState.errors?.start} </span>
-          </label>
+            </p>
+          </footer>
+        </fieldset>
 
-          <label htmlFor="end" className={styles.input_label}>
-            <span> End Time </span>
-            <input 
-              name={'end'}
-              id={'end'}
-              type={'datetime-local'}
-              defaultValue={formState.fieldValues.end}
-              required={true}
-              onChange={(e) => dispatch({type: 'SET_END', payload: e.target.value}) }
-            />
-            <span className="error"> {formState.errors?.end} </span>
-          </label>
+        {cartItems.filter(i => i.type === 'RENTAL').length > 0 && (
+          <fieldset>
+            <legend> <h3 style={{margin: '0'}}>Rental Booking Info </h3> </legend>
 
-        </div>
+            <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>
+            {cartItems.filter(item => item.type === 'RENTAL')?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
+            </ul>
 
-        <hr style={{width: '100%', height: '1px', margin: '1rem 0'}} />
-        <footer className={styles.footer}>
-          <table>
-            <tbody>
-              <tr>
-                <td>Rental hours: </td>
-                <td>{state.hours} <small>hours</small></td>
-              </tr>
-              <tr>
-                <td>Rental subtotal: </td>
-                <td><PriceTag price={calcCartRentalTotal(cartItems) * state.hours}/></td>
-              </tr>
-            </tbody>
-          </table>
-        </footer>
+            <div 
+              // className={'flex gap-1'}
+            >
+              <label htmlFor="location" className={styles.input_label}>
+                <span> Location </span>
+                <input 
+                  name={'location'}
+                  id={'location'}
+                  type={'text'}
+                  defaultValue={formState.fieldValues.location}
+                  required={cartItems.filter(i => i.type === 'RENTAL').length > 0}
+                  // onChange={(e) => dispatch({type: 'SET_START', payload: e.target.value}) }
+                />
+                <span className="error"> {formState.errors?.location} </span>
+              </label>
 
-      </fieldset>
-
-    </Section>
+              <label 
+                key={'delivery'}
+                htmlFor={'delivery'}
+                className={'checkbox'}
+                style={{margin: '1rem 0'}}
+              >
+                <input 
+                  name={'delivery'}
+                  value={'mydeliverycheckbox'}
+                  type={'checkbox'}
+                  readOnly={false}
+                  // defaultChecked={false}
+                  onChange={(e) => {
+                    dispatch({type: 'DELIVERY_CHECKBOX', payload: {
+                      value: e.target.value,
+                      isChecked: e.target.checked
+                    }})
+                  }}
+                />
+                
+                <span> 
+                  Delivery:
+                </span>
+                <small> Deliver this rental to the above location </small>
+              </label>
 
 
-    <hr />
-    <footer>
+              <label htmlFor="start" className={styles.input_label}>
+                <span> Start Time </span>
+                <input 
+                  name={'start'}
+                  id={'start'}
+                  type={'datetime-local'}
+                  defaultValue={formState.fieldValues.start}
+                  required={cartItems.filter(i => i.type === 'RENTAL').length > 0}
+                  // TODO why isn't this working?
+                  min={today.toISOString().split('T')[0] + 'T00:00:00'}
+                  onChange={(e) => dispatch({type: 'SET_START', payload: e.target.value}) }
+                />
+                <span className="error"> {formState.errors?.start} </span>
+              </label>
 
-      <label htmlFor="notes" className={styles.input_label}>
-        <span> Notes </span>
-        <textarea 
-          name={'email'}
-          id={'email'}
-          placeholder="..."
-          defaultValue={formState.fieldValues.notes}
-          // readOnly={formState.fieldValues.notes}
-          required={false}
-        />
-        <span className="error"> {formState.errors?.notes} </span>
-      </label>
+              <label htmlFor="end" className={styles.input_label}>
+                <span> End Time </span>
+                <input 
+                  name={'end'}
+                  id={'end'}
+                  type={'datetime-local'}
+                  defaultValue={formState.fieldValues.end}
+                  required={cartItems.filter(i => i.type === 'RENTAL').length > 0}
+                  min={state.start}
+                  onChange={(e) => dispatch({type: 'SET_END', payload: e.target.value}) }
+                />
+                <span className="error"> {formState.errors?.end} </span>
+              </label>
 
-      <p className="total"> 
-        {/* <label className={styles.coupon}>
-          <input 
-            name="coupon"
-            type="text"
-            onChange={e => dispatch({type: 'SET_COUPON', payload: e.target.value})}
+            </div>
+
+            <hr style={{width: '100%', height: '1px', margin: '1rem 0'}} />
+            <footer className={styles.footer}>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Rental hours: </td>
+                    <td>{state.hours} <small>hours</small></td>
+                  </tr>
+                  <tr>
+                    <td>Rental subtotal: </td>
+                    <td><PriceTag price={calcCartRentalTotal(cartItems) * state.hours}/></td>
+                  </tr>
+                </tbody>
+              </table>
+            </footer>
+
+          </fieldset>
+        )}
+
+      </Section>
+
+
+      <hr />
+      <footer>
+
+        <label htmlFor="notes" className={styles.input_label}>
+          <span> Notes </span>
+          <textarea 
+            name={'email'}
+            id={'email'}
+            placeholder="..."
+            defaultValue={formState.fieldValues.notes}
+            // readOnly={formState.fieldValues.notes}
+            required={false}
           />
-          <button 
-            type="button" 
-            className="button"
-            onClick={() => dispatch({type: 'APPLY_COUPON', payload: state.couponName})} 
-          > Apply Coupon </button>
-        </label> */}
+          <span className="error"> {formState.errors?.notes} </span>
+        </label>
 
-        <span>Total: </span> 
-        <PriceTag price={calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours)}/>
-      </p>
+        <p className="total"> 
+          {/* <label className={styles.coupon}>
+            <input 
+              name="coupon"
+              type="text"
+              onChange={e => dispatch({type: 'SET_COUPON', payload: e.target.value})}
+            />
+            <button 
+              type="button" 
+              className="button"
+              onClick={() => dispatch({type: 'APPLY_COUPON', payload: state.couponName})} 
+            > Apply Coupon </button>
+          </label> */}
+
+          <span>Total: </span> 
+          <PriceTag price={calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours)}/>
+        </p>
+
+        <p className={(formState.message === 'success') ? 'success' : 'error'}> 
+          {formState.message} 
+        </p>
+    
+        <SubmitButton />
+        
+        {/* <StripeCheckoutButton /> */}
+      </footer>
+    </form>
+  </>
   
-      <button  className="button medium" type={'submit'}> SUBMITTOTME </button>
-      
-      {/* <StripeCheckoutButton /> */}
-    </footer>
-  </form>
-  
+}
+
+function SubmitButton(){
+
+  const { pending, } = useFormStatus()
+
+  return(
+    <button
+      disabled={pending}
+      type={'submit'}
+      className="button large"
+    >
+      {pending ? <LoadingAnim /> : 'Checkout'}
+    </button>
+  )
 }

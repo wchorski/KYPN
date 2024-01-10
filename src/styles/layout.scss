@@ -149,6 +149,12 @@
       top: 0;
       z-index: 999;
     }
+
+    > main {
+      > section {
+        min-height: 30vh;
+      }
+    }
   
     > footer {
       grid-area: footer;
@@ -433,9 +439,7 @@ section.grid {
   gap: 1rem;
 }
 
-section {
-  min-height: 30vh;
-}
+
 
 
 // section.grid._1_2_1{

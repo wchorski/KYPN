@@ -6,7 +6,7 @@ import { Context } from '.keystone/types';
 // import { relationship } from '@keystone-6/core/fields';
 import stripeConfig from '../../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { CartItem, Product } from '../types';
+import { CartItem, OrderItem, Product } from '../types';
 import { calcTotalPrice } from '../../lib/calcTotalPrice';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '../../../session';
@@ -18,15 +18,22 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('CartItem'),
 
   args: { 
-    chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
+    chargeId: graphql.arg({ type: graphql.String }), 
     customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+    start: graphql.arg({ type: graphql.String }),
+    end: graphql.arg({ type: graphql.String }),
+    durationInHours: graphql.arg({ type: graphql.String }),
+    location: graphql.arg({ type: graphql.String }),
+    notes: graphql.arg({ type: graphql.String }),
+    delivery: graphql.arg({ type: graphql.Boolean }),
   },
 
   // 1. Make sure they are signed in
-  async resolve(source, { chargeId, customerEmail }, context: Context) {
+  async resolve(source, { chargeId, customerEmail, start, end, durationInHours, location, delivery, notes }, context: Context) {
 
+    const contextSudo = context.sudo()
     //Query the current user
-    const user = await context.query.User.findOne({
+    const user = await contextSudo.query.User.findOne({
       where: { email: customerEmail },
       query:
         `
@@ -38,6 +45,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
           }
           cart {
             id
+            type
             quantity
             product {
               id
@@ -62,6 +70,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         name: cartItem.product.name,
         description: cartItem.product.description,
         price: cartItem.product.price,
+        type: cartItem.type,
         quantity: cartItem.quantity,
         image: cartItem.product.image,
         product: { connect: { id: cartItem.product.id }}
@@ -69,35 +78,61 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         // photo: { connect: { id: cartItem.product.photo.id } },
       }
 
-    })
+    }) as OrderItem[]  
     
     const now = new Date
-    const order = await context.db.Order.createOne({
+    const order = await contextSudo.db.Order.createOne({
       data: {
         total: calcTotalPrice(user.cart),
         items: { create: orderItems },
+        email: customerEmail,
         user: { connect: { id: user.id } },
-        charge: chargeId,
+        charge: chargeId ? chargeId : '',
         dateCreated: now.toISOString(),
         // todo make logic that handles open, expired, unpaid, no_payment states
         status: 'COMPLETE',
-        payment_status: 'PAID',
+        payment_status: chargeId ? 'PAID' : 'UNPAID',
+        notes,
       },
     })
-    // console.log({order});
-    
 
-    //Clean up! Delete all cart items
+    // Clean up! Delete all cart items
     await context.db.CartItem.deleteMany({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
 
+    // // TODO create RENTAL
 
-    // return order
+    const rentalItems = orderItems.filter(item => item.type === 'RENTAL')
+    
+
+    if(rentalItems.length <= 0) return { 
+      status: 'success', 
+      message: 'checkout cart successful', 
+      order,
+      id: order.id,
+    }
+    // const saleItems = orderItems.filter(item => item.type === 'SALE')
+
+    const rental = await contextSudo.db.Rental.createOne({
+      data: {
+        status: chargeId ? 'PAID' : 'HOLD',
+        start,
+        end,
+        durationInHours,
+        location,
+        delivery,
+        notes,
+        order: order ? { connect: { id: order.id} } : null
+      }
+    })
+
+    // return order w rental
     return { 
       status: 'success', 
       message: 'checkout cart successful', 
       order,
+      rental,
       id: order.id,
     }
   }

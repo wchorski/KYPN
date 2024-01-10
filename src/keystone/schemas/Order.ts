@@ -43,12 +43,17 @@ export const Order:Lists.Order = list({
       })
     }),
     email: text(),
+    notes: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
     total: integer(),
     items: relationship({ ref: 'OrderItem.order', many: true }),
     rental: relationship({ ref: 'Rental.order', many: false }),
     ticketItems: relationship({ ref: 'Ticket.order', many: true }),
     user: relationship({ ref: 'User.orders' }),
-    charge: text(),
+    charge: text({validation: { isRequired: false }}),
     stripeSessionId: text(),
     status: select({
       options: [

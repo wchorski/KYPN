@@ -5,7 +5,7 @@ import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
+import { checkbox, decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { mailBooking } from "../../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
@@ -77,6 +77,7 @@ export const Rental:Lists.Rental = list({
       },
     }),
     location: text({validation: { isRequired: true }}),
+    delivery: checkbox(),
     price: integer({ defaultValue: 0, validation: { isRequired: true } }),
     email: text(),
     phone: text(),
@@ -86,7 +87,7 @@ export const Rental:Lists.Rental = list({
         displayMode: 'textarea'
       }
     }),
-    cartItems: relationship({ ref: 'CartItem.rentals', many: true }),
+    // cartItems: relationship({ ref: 'CartItem.rentals', many: true }),
     order: relationship({ ref: 'Order.rental', many: false }),
     addons: relationship({ ref: 'Addon.rentals', many: true }),
     // employees: relationship({ ref: 'User.gigs', many: true }),

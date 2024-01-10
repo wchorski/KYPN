@@ -20,7 +20,7 @@ export const CartItem:Lists.CartItem = list({
         { label: 'Sale', value: 'SALE' },
         { label: 'Rental', value: 'RENTAL' },
       ],
-      defaultValue: 'SALE',
+      validation: { isRequired: true },
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

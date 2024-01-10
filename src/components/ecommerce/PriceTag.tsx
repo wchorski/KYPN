@@ -21,7 +21,7 @@ export function PriceTag({price, subtext}:Props) {
         currency = '$'
 
         return (<>
-          <div > 
+          <span> 
             <sup className="currency">{currency}</sup> 
             <span className="amount"> 
               {dollars} 
@@ -30,7 +30,7 @@ export function PriceTag({price, subtext}:Props) {
             
             
             <small className="subtext">{subtext}</small> 
-          </div>
+          </span>
         </>)
 
       case money.includes('¥'):

@@ -250,7 +250,6 @@ model Product {
   authorId              String?     @map("author")
   orderItems            OrderItem[] @relation("OrderItem_product")
   addons                Addon[]     @relation("Addon_products")
-  rentals               Rental[]    @relation("Product_rentals")
   tags                  Tag[]       @relation("Product_tags")
   categories            Category[]  @relation("Category_products")
   dateCreated           DateTime?   @default(now())
@@ -266,12 +265,13 @@ model Rental {
   end             DateTime?
   durationInHours Decimal   @default("23") @postgresql.Decimal(5, 2)
   location        String    @default("")
+  delivery        Boolean   @default(false)
   price           Int       @default(0)
   email           String    @default("")
   phone           String    @default("")
   name            String    @default("")
   notes           String    @default("")
-  products        Product[] @relation("Product_rentals")
+  order           Order?    @relation("Order_rental")
   addons          Addon[]   @relation("Addon_rentals")
   customer        User?     @relation("Rental_customer", fields: [customerId], references: [id])
   customerId      String?   @map("customer")
@@ -286,7 +286,7 @@ model Rental {
 model CartItem {
   id        String   @id @default(cuid())
   quantity  Int      @default(1)
-  type      String?  @default("SALE")
+  type      String
   product   Product? @relation("CartItem_product", fields: [productId], references: [id])
   productId String?  @map("product")
   user      User?    @relation("CartItem_user", fields: [userId], references: [id])
@@ -301,6 +301,7 @@ model OrderItem {
   name         String    @default("")
   description  String    @default("")
   image        String    @default("")
+  type         String
   price        Int?
   quantity     Int?
   order        Order?    @relation("OrderItem_order", fields: [orderId], references: [id])
@@ -317,8 +318,11 @@ model OrderItem {
 model Order {
   id               String      @id @default(cuid())
   email            String      @default("")
+  notes            String      @default("")
   total            Int?
   items            OrderItem[] @relation("OrderItem_order")
+  rental           Rental?     @relation("Order_rental", fields: [rentalId], references: [id])
+  rentalId         String?     @unique @map("rental")
   ticketItems      Ticket[]    @relation("Ticket_order")
   user             User?       @relation("Order_user", fields: [userId], references: [id])
   userId           String?     @map("user")

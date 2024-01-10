@@ -12,6 +12,7 @@ import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
 import { CartItem as CartItemType } from "@ks/types"
 import { RentalCheckoutForm } from "@components/ecommerce/RentalCheckoutForm"
 import CartItem from "@components/ecommerce/CartItem"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: 'Checkout | ' +  envs.SITE_TITLE,
@@ -58,6 +59,10 @@ type Main = {
 }
 
 async function Main({saleItems, rentalItems, sessionId}:Main){
+
+  if(!sessionId) return  <Section layout={'1'}>
+      <p> <Link href={`/auth`}> Login </Link> to view your cart </p>
+  </Section>
 
   return <>
     <Section layout={'1'}>

@@ -73,6 +73,7 @@ export default function ShoppingCart() {
         <p> 
           <span>Total: </span> 
           <CartTotal />
+          {cartItems.filter(i => i.type === 'RENTAL').length > 0 && <em> + rental </em>}
         </p>
         <Link
           href={'/shop/checkout'}

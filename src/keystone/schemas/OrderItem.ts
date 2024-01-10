@@ -28,15 +28,17 @@ export const OrderItem:Lists.OrderItem = list({
       }
     }),
     image: text(),
-    // photo: relationship({
-    //   ref: 'ProductImage',
-    //   ui: {
-    //     displayMode: 'cards',
-    //     cardFields: ['image', 'altText'],
-    //     inlineCreate: { fields: ['image', 'altText'] },
-    //     inlineEdit: { fields: ['image', 'altText'] }
-    //   }
-    // }),
+    type: select({
+      options: [
+        { label: 'Sale', value: 'SALE' },
+        { label: 'Rental', value: 'RENTAL' },
+      ],
+      validation: { isRequired: true },
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
     price: integer(),
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),
@@ -49,13 +51,16 @@ export const OrderItem:Lists.OrderItem = list({
 
   hooks:{
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
+
+      const contextSudo = context.sudo()
+
       if(operation === 'create'){
 
         try {
           // console.log({resolvedData});
           // console.log(resolvedData.product?.connect?.id);
   
-          const currProduct = await context.db.Product.findOne({
+          const currProduct = await contextSudo.db.Product.findOne({
             where: {id: resolvedData.product?.connect?.id}
           })
           
@@ -67,7 +72,7 @@ export const OrderItem:Lists.OrderItem = list({
   
           if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
   
-          const updatedProduct = await context.db.Product.updateOne({
+          const updatedProduct = await contextSudo.db.Product.updateOne({
             where: {id: resolvedData.product?.connect?.id},
             // @ts-ignore
             data: currData

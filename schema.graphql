@@ -1656,8 +1656,6 @@ type Product {
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
-  rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
-  rentalsCount(where: RentalWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -1695,7 +1693,6 @@ input ProductWhereInput {
   author: UserWhereInput
   orderItems: OrderItemManyRelationFilter
   addons: AddonManyRelationFilter
-  rentals: RentalManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
   dateCreated: DateTimeNullableFilter
@@ -1743,7 +1740,6 @@ input ProductUpdateInput {
   author: UserRelateToOneForUpdateInput
   orderItems: OrderItemRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
-  rentals: RentalRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -1779,7 +1775,6 @@ input ProductCreateInput {
   author: UserRelateToOneForCreateInput
   orderItems: OrderItemRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
-  rentals: RentalRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
@@ -1798,13 +1793,13 @@ type Rental {
   summary: String
   durationInHours: Decimal
   location: String
+  delivery: Boolean
   price: Int
   email: String
   phone: String
   name: String
   notes: String
-  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
-  productsCount(where: ProductWhereInput! = {}): Int
+  order: Order
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   customer: User
@@ -1827,12 +1822,13 @@ input RentalWhereInput {
   end: DateTimeNullableFilter
   durationInHours: DecimalFilter
   location: StringFilter
+  delivery: BooleanFilter
   price: IntFilter
   email: StringFilter
   phone: StringFilter
   name: StringFilter
   notes: StringFilter
-  products: ProductManyRelationFilter
+  order: OrderWhereInput
   addons: AddonManyRelationFilter
   customer: UserWhereInput
   status: StringNullableFilter
@@ -1846,6 +1842,7 @@ input RentalOrderByInput {
   end: OrderDirection
   durationInHours: OrderDirection
   location: OrderDirection
+  delivery: OrderDirection
   price: OrderDirection
   email: OrderDirection
   phone: OrderDirection
@@ -1861,18 +1858,25 @@ input RentalUpdateInput {
   end: DateTime
   durationInHours: Decimal
   location: String
+  delivery: Boolean
   price: Int
   email: String
   phone: String
   name: String
   notes: String
-  products: ProductRelateToManyForUpdateInput
+  order: OrderRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
   status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
+}
+
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
 }
 
 input RentalUpdateArgs {
@@ -1885,18 +1889,24 @@ input RentalCreateInput {
   end: DateTime
   durationInHours: Decimal
   location: String
+  delivery: Boolean
   price: Int
   email: String
   phone: String
   name: String
   notes: String
-  products: ProductRelateToManyForCreateInput
+  order: OrderRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
   status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
 }
 
 type CartItem {
@@ -1917,7 +1927,7 @@ input CartItemWhereInput {
   NOT: [CartItemWhereInput!]
   id: IDFilter
   quantity: IntFilter
-  type: StringNullableFilter
+  type: StringFilter
   product: ProductWhereInput
   user: UserWhereInput
 }
@@ -1963,6 +1973,7 @@ type OrderItem {
   name: String
   description: String
   image: String
+  type: String
   price: Int
   quantity: Int
   order: Order
@@ -1983,6 +1994,7 @@ input OrderItemWhereInput {
   name: StringFilter
   description: StringFilter
   image: StringFilter
+  type: StringFilter
   price: IntNullableFilter
   quantity: IntNullableFilter
   order: OrderWhereInput
@@ -1996,6 +2008,7 @@ input OrderItemOrderByInput {
   name: OrderDirection
   description: OrderDirection
   image: OrderDirection
+  type: OrderDirection
   price: OrderDirection
   quantity: OrderDirection
   dateCreated: OrderDirection
@@ -2006,18 +2019,13 @@ input OrderItemUpdateInput {
   name: String
   description: String
   image: String
+  type: String
   price: Int
   quantity: Int
   order: OrderRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input OrderRelateToOneForUpdateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
-  disconnect: Boolean
 }
 
 input OrderItemUpdateArgs {
@@ -2029,6 +2037,7 @@ input OrderItemCreateInput {
   name: String
   description: String
   image: String
+  type: String
   price: Int
   quantity: Int
   order: OrderRelateToOneForCreateInput
@@ -2037,18 +2046,15 @@ input OrderItemCreateInput {
   dateModified: DateTime
 }
 
-input OrderRelateToOneForCreateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
-}
-
 type Order {
   id: ID!
   label: String
   email: String
+  notes: String
   total: Int
   items(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   itemsCount(where: OrderItemWhereInput! = {}): Int
+  rental: Rental
   ticketItems(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketItemsCount(where: TicketWhereInput! = {}): Int
   user: User
@@ -2071,8 +2077,10 @@ input OrderWhereInput {
   NOT: [OrderWhereInput!]
   id: IDFilter
   email: StringFilter
+  notes: StringFilter
   total: IntNullableFilter
   items: OrderItemManyRelationFilter
+  rental: RentalWhereInput
   ticketItems: TicketManyRelationFilter
   user: UserWhereInput
   charge: StringFilter
@@ -2087,6 +2095,7 @@ input OrderWhereInput {
 input OrderOrderByInput {
   id: OrderDirection
   email: OrderDirection
+  notes: OrderDirection
   total: OrderDirection
   charge: OrderDirection
   stripeSessionId: OrderDirection
@@ -2099,8 +2108,10 @@ input OrderOrderByInput {
 
 input OrderUpdateInput {
   email: String
+  notes: String
   total: Int
   items: OrderItemRelateToManyForUpdateInput
+  rental: RentalRelateToOneForUpdateInput
   ticketItems: TicketRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   charge: String
@@ -2112,6 +2123,12 @@ input OrderUpdateInput {
   dateModified: DateTime
 }
 
+input RentalRelateToOneForUpdateInput {
+  create: RentalCreateInput
+  connect: RentalWhereUniqueInput
+  disconnect: Boolean
+}
+
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
@@ -2119,8 +2136,10 @@ input OrderUpdateArgs {
 
 input OrderCreateInput {
   email: String
+  notes: String
   total: Int
   items: OrderItemRelateToManyForCreateInput
+  rental: RentalRelateToOneForCreateInput
   ticketItems: TicketRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   charge: String
@@ -2130,6 +2149,11 @@ input OrderCreateInput {
   shipping_address: String
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input RentalRelateToOneForCreateInput {
+  create: RentalCreateInput
+  connect: RentalWhereUniqueInput
 }
 
 type Coupon {
@@ -2920,7 +2944,7 @@ type Mutation {
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   endSession: Boolean!
   addToCart(id: ID!, type: ID!, productId: ID): CartItem
-  checkout(chargeId: String!, customerEmail: String!): CartItem
+  checkout(chargeId: String, customerEmail: String!, start: String, end: String, durationInHours: String, location: String, notes: String, delivery: Boolean): CartItem
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, start: String!, customerName: String, customerEmail: String!, customerPhone: String, notes: String, amount_total: Int): Booking
   checkoutSubscription(amount_total: Int!, planId: String!, chargeId: String!, addonIds: [String], stripeSubscriptionId: String!, customerEmail: String!, couponNames: [String]): SubscriptionItem
   checkoutTickets(chargeId: String!, eventId: String!, customerEmail: String!, quantity: Int!, amount_total: Int!): Ticket

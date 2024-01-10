@@ -500,7 +500,6 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
               ref={serviceRef}
               name={'service'}
               id={'service'}
-              placeholder="-- select service --"
               defaultValue={formState.fieldValues.service}
               required={true}
               onChange={(e) => {
@@ -524,7 +523,6 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
             <select
               name={'location'}
               id={'location'}
-              placeholder="-- select location --"
               defaultValue={formState.fieldValues.location}
               required={false}
               onChange={(e) => dispatchRed({type: 'SET_LOCATION', payload: e.target.value }) }
@@ -543,7 +541,6 @@ export function BookingForm ({ services, addons, session, prevBooking }:Props) {
             <select
               name={'staff'}
               id={'staff'}
-              placeholder="-- select staff member --"
               defaultValue={formState.fieldValues.staff}
               required={false}
               onChange={(e) => {

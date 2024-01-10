@@ -13,3 +13,11 @@ export function timeCalcHours(start:string, end:string){
   return Math.abs(Math.round(diffInHrs));
   // return diffInHrs;
 }
+
+export function isTimeCheckStartEnd(start:string, end:string){
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+
+  // if startDate is after endDate = return true
+  return (startDate > endDate) 
+}

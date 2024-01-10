@@ -31,6 +31,7 @@ ul.radio {
 
 fieldset {
   margin: 1rem 0;
+  border-color: var(--c-glass);
 }
 
 a {
@@ -137,6 +138,12 @@ button {
 
 // * FORMS
 
+label:has(input[type='checkbox'] ){
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+
 input[type='checkbox'] {
   appearance: none;
   position: relative;
@@ -148,6 +155,9 @@ input[type='checkbox'] {
   border-radius: 2rem;
   box-shadow: 0px 1px 3px #0003 inset;
   transition: 0.1s linear background;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 input::before {
   content: "";

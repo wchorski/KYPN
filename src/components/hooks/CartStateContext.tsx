@@ -1,6 +1,6 @@
 'use client'
 import { CartItem, User } from "@ks/types";
-import { calcTotalPrice, calcCartRentalTotal } from "@lib/calcTotalPrice";
+import { calcTotalPrice, calcCartRentalTotal, calcCartSaleTotal } from "@lib/calcTotalPrice";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 type CartContext = {
@@ -29,10 +29,12 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [cartTotal, setCartTotal] = useState<number>(0)
+  const [cartCount, setCartCount] = useState<number>(0)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
 
   function addToCart(cartItem:CartItem){
     setCartItems(prev => [...prev, cartItem])
+    calcCartCount
   }
 
   // TODO add an updateUserCart that acts like a cache, instead of always requesting the sever the whole new cart
@@ -79,7 +81,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
       });
 
       setCartItems(user.cart)
-      const total = calcTotalPrice(user.cart)
+      const total = calcCartSaleTotal(user.cart)
       setCartTotal(total)
 
       return { success: true }
@@ -89,6 +91,13 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
       return { success: false, error }
     }
+  }
+
+  function calcCartCount(items:CartItem[]){
+    const accum = items.reduce((accumulator, item) => {
+      return 1 * item.quantity;
+    }, 0)
+    setCartCount(accum)
   }
 
   function removeFromCart(id:string){
@@ -120,6 +129,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
         // @ts-ignore
         setCartItems,
         cartTotal,
+        cartCount,
         addToCart,
         getUserCart,
         removeFromCart,
