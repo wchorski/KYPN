@@ -8,9 +8,21 @@ import { BsStripe } from "react-icons/bs";
 import { useState } from "react";
 import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
+import { CartItem } from "@ks/types";
 
-export default function StripeCheckoutButton() {
-    const { cartItems } = useCart()
+type Props = {
+  cartItems: CartItem[],
+  rental?: {
+    hours:number,
+    start:string,
+    end:string,
+    location:string,
+    delivery:boolean,
+  }
+}
+
+export default function StripeCheckoutButton({cartItems, rental}:Props) {
+    // const { cartItems } = useCart()
     const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
     const [messageState, setMessageState] = useState<string|undefined>()
@@ -29,7 +41,10 @@ export default function StripeCheckoutButton() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({cartItems}),
+            body: JSON.stringify({
+              cartItems, 
+              rental,
+            }),
         });
 
         const data = await response.json();
@@ -56,10 +71,13 @@ export default function StripeCheckoutButton() {
       }
     };
 
+    if(!envs.STRIPE_PUBLIC_KEY) return null
+
     return <>
       {errorObj && <ErrorMessage error={errorObj}/>}
       {messageState && <p className="error"> {messageState} </p>}
       <button
+        type="button"
         onClick={() => cartItems.length > 0 && redirectToCheckout()}
         disabled={isPending || cartItems.length === 0}
         className="button large">

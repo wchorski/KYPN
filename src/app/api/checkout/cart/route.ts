@@ -7,32 +7,63 @@ import stripe from "@lib/get-stripejs";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
+import { envs } from "@/envs";
+import { datePrettyLocal } from "@lib/dateFormatter";
 
+type Request = {
+  cartItems:CartItem[],
+  rental?:{
+    hours:number,
+    start:string,
+    end:string,
+    location:string,
+    delivery:boolean,
+  },
+}
 
 export async function POST(req: NextRequest, res: NextResponse) {
     const headersList = headers();
-    const { cartItems } = await req.json();
+    const { cartItems, rental }:Request = await req.json();
     const cartDetailsArray: CartItem[] = Object.values(cartItems) as CartItem[];
 
     const lineItems = cartDetailsArray.map((item: CartItem) => {
-        return {
-          price_data: {
-            // TODO make this part of CartItem schema item.currency, not hard coded
-            currency: 'usd',
-            product_data: {
-              name: item.product.name,
-              images: [item.product.image],
-              metadata: {
-                type: 'checkout.cart',
-                cartItemId: item.id,
-                productId: item.product.id,
-              }
-            },
-            unit_amount: item.product.price,
+
+      if(item.type === 'RENTAL') return {
+        price_data: {
+          // TODO make this part of CartItem schema item.currency, not hard coded
+          currency: 'usd',
+          product_data: {
+            name: `${item.product.name} x${rental?.hours} hours`,
+            images: item.product.image ? [item.product.image] : [envs.FRONTEND_URL + '/assets/placeholder.png'],
+            metadata: {
+              type: 'checkout.cart',
+              cartItemId: item.id,
+              productId: item.product.id,
+            }
           },
-          quantity: item.quantity,
-        };
-    });
+          unit_amount: item.product.rental_price * (rental?.hours ? rental.hours : 1),
+        },
+        quantity: item.quantity,
+      }
+
+      return {
+        price_data: {
+          // TODO make this part of CartItem schema item.currency, not hard coded
+          currency: 'usd',
+          product_data: {
+            name: item.product.name,
+            images: item.product.image ? [item.product.image] : [envs.FRONTEND_URL + '/assets/placeholder.png'],
+            metadata: {
+              type: 'checkout.cart',
+              cartItemId: item.id,
+              productId: item.product.id,
+            }
+          },
+          unit_amount: item.product.price,
+        },
+        quantity: item.quantity,
+      }
+    })
 
     try {
       
@@ -55,6 +86,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
         cancel_url: `${headersList.get("origin")}/shop/checkout`,
         metadata: {
           type: 'checkout.cart',
+          start: rental?.start,
+          end: rental?.end,
+          location: rental?.location,
+          delivery: rental?.delivery ? 'true' : 'false',
+        },
+        custom_text: {
+          submit:  { message: cartDetailsArray.filter(i => i.type === 'RENTAL').length > 0 
+            ? `RENTAL: 
+              \nstart: ${datePrettyLocal(rental?.start || '', 'full')}, 
+              \nend: ${datePrettyLocal(rental?.end || '', 'full')},
+              \nlocation: ${rental?.location},
+              \n${rental?.delivery ? 'DELIVERY' : 'PICKUP'},
+            ` 
+            : ''
+          }
         }
       })
 

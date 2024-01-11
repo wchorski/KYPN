@@ -2,7 +2,7 @@ import { Table } from "@components/elements/Table"
 import { TicketList } from "@components/events/TicketList"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
-import { Booking, Order, SubscriptionItem, Ticket, User } from "@ks/types"
+import { Booking, Order, Rental, SubscriptionItem, Ticket, User } from "@ks/types"
 import { Card } from "@components/layouts/Card"
 import Link from "next/link"
 import styles from '@styles/menus/dashboard.module.scss'
@@ -10,10 +10,12 @@ import styles from '@styles/menus/dashboard.module.scss'
 type Props = {
   dashState:string,
   user:User,
+  orders:Order[],
+  rentals:Rental[],
   tickets:Ticket[]|undefined
 }
 
-export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
+export default function AccountDash ({ user, tickets = [], dashState, orders, rentals}:Props) {
 
 
 
@@ -24,10 +26,8 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
     // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
     details: book.id,
   }))
-  
-  // const orderCells = [] as any
-  // @ts-ignore
-  const orderCells = user.orders.map((order:Order) => ({
+
+  const orderCells = orders.map((order:Order) => ({
     date: datePrettyLocalDay(order.dateCreated || ''),
     time: datePrettyLocalTime(order.dateCreated || '') ,
     total: moneyFormatter(order.total),
@@ -42,6 +42,16 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
     plan: sub.subscriptionPlan.name,
     status: sub.status,
     details: sub.id,
+  }))
+
+  const rentalCells = rentals?.map((item) => ({
+    start: datePrettyLocalDay(item.start || ''),
+    end: datePrettyLocalDay(item.end || ''),
+    hours: item.durationInHours,
+    status: item.status,
+    location: item.location,
+    delivery: item.delivery ? 'Delivery' : 'Pickup',
+    details: item.id,
   }))
 
   return (
@@ -99,6 +109,28 @@ export default function AccountDash ({ user, tickets = [], dashState, }:Props) {
           ]}
           cells={orderCells}
           route={`/orders`}
+        />
+      </Card>
+
+      <Card id="rentals">
+
+        <h3 className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}>
+          Rentals
+        </h3>
+
+        <Table 
+          caption=""
+          headers={[
+            'start',
+            'end',
+            'hours',
+            'status',
+            'location',
+            'delivery',
+            'details',
+          ]}
+          cells={rentalCells}
+          route={`/rentals`}
         />
       </Card>
 

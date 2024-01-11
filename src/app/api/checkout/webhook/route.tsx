@@ -243,16 +243,24 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
 
 async function checkoutCart(id:string, customerEmail:string|null|undefined){
 
-  const variables = {
-    chargeId: id,
-    customerEmail: customerEmail || 'ANONYMOUS_USER',
-  }
-
   try {
 
     const data = await keystoneContext.sudo().graphql.run({
-      query: queryCart,
-      variables: variables,
+      query: `
+        mutation Checkout($customerEmail: String!, $chargeId: String, $start: String, $end: String, $durationInHours: String, $location: String, $delivery: Boolean) {
+          checkout(customerEmail: $customerEmail, chargeId: $chargeId, start: $start, end: $end, durationInHours: $durationInHours, location: $location, delivery: $delivery) {
+            id
+          }
+        }
+      `,
+      variables:{ 
+        chargeId: id,
+        customerEmail: customerEmail || 'ANONYMOUS_USER',
+        start: new Date(start).toISOString(),
+        end: new Date(end).toISOString(),
+        // durationInHours: String(timeCalcHours(state.start, state.end)),
+        location,
+        delivery: delivery ? true : false,
     })
     
 
@@ -261,11 +269,3 @@ async function checkoutCart(id:string, customerEmail:string|null|undefined){
     
   }
 }
-
-const queryCart = `
-  mutation Checkout($chargeId: String!, $customerEmail: String!) {
-    checkout(chargeId: $chargeId, customerEmail: $customerEmail) {
-      quantity
-    }
-  }
-`

@@ -169,6 +169,7 @@ export type Rental = {
   status: 'ACTIVE'|'POSTPONED'|'CANCELED'|'LEAD'|'PAID'|'DOWNPAYMENT'|'HOLD',
   dateCreated?: string,
   dateModified?: string,
+  delivery: boolean,
   google?:{
     id?:string,
     kind?:string,

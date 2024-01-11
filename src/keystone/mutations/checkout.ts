@@ -123,6 +123,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         location,
         delivery,
         notes,
+        customer: customerEmail ? { connect: { email: customerEmail } } : null,
         order: order ? { connect: { id: order.id} } : null
       }
     })

@@ -6,13 +6,14 @@ import AccountDash from "@components/menus/AccountDash"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
-import { User } from "@ks/types"
+import { Order, Rental, User } from "@ks/types"
 import { LoginToView } from "@components/menus/LoginToView"
 import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 import styles from '@styles/menus/dashboard.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { BsSignpost } from "react-icons/bs"
 
 export const metadata: Metadata = {
   title: 'Account | ' + envs.SITE_TITLE,
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 
 type Props = {
   searchParams:{
-    dashState:'main'|'orders'|'subscriptions'|'downloads'|'tickets',
+    dashState:'main'|'orders'|'rentals'|'subscriptions'|'downloads'|'tickets',
   }
   params:{id:string}
 }
@@ -34,12 +35,55 @@ export default async function AccountPage ({ params, searchParams }:Props) {
   if(!session) return <LoginToView />
 
   const user = await keystoneContext.withSession(session).query.User.findOne({
-    // TODO have pagination in mind (or maybe by date filtering?)
+    // TODO have pagination in mind (or maybe by date filtering?), split this into diff queries
     where: {
       id: session.itemId,
     },
     query: USER_DASH_QUERY,
   }) as User
+
+  const orders = await keystoneContext.withSession(session).query.Order.findMany({
+    where: {
+      user: {
+        id: { equals: session.itemId },
+      }
+    },
+    orderBy: [
+      {
+        dateCreated: "desc"
+      }
+    ],
+    query: `
+      id
+      total
+      dateCreated
+      items{
+        quantity
+      }
+    `,
+  }) as Order[]
+
+  const rentals = await keystoneContext.withSession(session).query.Rental.findMany({
+    where: {
+      customer: {
+        id: { equals: session.itemId },
+      }
+    },
+    orderBy: [
+      {
+        start: "desc"
+      }
+    ],
+    query: `
+      id
+      start
+      end
+      durationInHours
+      location
+      delivery
+      status
+    `,
+  }) as Rental[]
 
   const {tickets, error } = await fetchTicketsByUser(user?.id)
   
@@ -82,6 +126,15 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             </li>
             <li>
               <Link 
+                // href={'/account#orders'}
+                href={'/account?dashState=rentals#rentals'}
+                className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}
+              >
+                Rentals <BsSignpost />
+              </Link>
+            </li>
+            <li>
+              <Link 
                 // href={'/account#subscriptions'}
                 href={'/account?dashState=subscriptions#subscriptions'}
                 className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
@@ -111,7 +164,13 @@ export default async function AccountPage ({ params, searchParams }:Props) {
         </nav>
 
     
-      <AccountDash dashState={dashState} user={user} tickets={tickets} />
+      <AccountDash 
+        dashState={dashState} 
+        user={user} 
+        orders={orders}
+        rentals={rentals}
+        tickets={tickets} 
+      />
     </Section>
   </main>
 }
@@ -140,14 +199,7 @@ const USER_DASH_QUERY = `
     dateModified
     dateCreated
   }
-  orders{
-    id
-    total
-    items{
-      quantity
-    }
-    dateCreated
-  }
+
   tickets {
     id
     orderCount

@@ -11,6 +11,11 @@ type Props = {
 export function CartButton ({ prop }:Props) {
 
   const { isOpen, openCart, cartItems } = useCart()
+
+  const count = cartItems?.reduce(
+    (tally: any, cartItem: any) => tally + cartItem.quantity,
+    0
+  )
   
   return (
     <button 
@@ -19,7 +24,7 @@ export function CartButton ({ prop }:Props) {
       data-tooltip="cart"
       title='shopping cart'
     >
-      <span className="count">{cartItems.length}</span>
+      <span className="count">{count}</span>
       <MdShoppingBag className="cart"/>
     </button>
   )

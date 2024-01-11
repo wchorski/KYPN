@@ -64,6 +64,7 @@ export const OrderItem:Lists.OrderItem = list({
             where: {id: resolvedData.product?.connect?.id}
           })
           
+          // TODO stock - don't remove stock if item is a RENTAL
           // @ts-ignore
           const currData:Product = {
             // @ts-ignore

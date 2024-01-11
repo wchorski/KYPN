@@ -10,7 +10,7 @@ import { Metadata } from "next"
 import { envs } from "@/envs"
 import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
 import { CartItem as CartItemType } from "@ks/types"
-import { RentalCheckoutForm } from "@components/ecommerce/RentalCheckoutForm"
+import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
 import CartItem from "@components/ecommerce/CartItem"
 import Link from "next/link"
 
@@ -78,7 +78,7 @@ async function Main({saleItems, rentalItems, sessionId}:Main){
         <h4> Rental Items </h4>
         {rentalItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)} */}
         
-        <RentalCheckoutForm 
+        <CheckoutForm 
           sessionId={sessionId} 
           rentalItems={rentalItems || []}
           saleItems={saleItems || []}
