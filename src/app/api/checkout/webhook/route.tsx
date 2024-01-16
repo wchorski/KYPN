@@ -6,6 +6,7 @@ import stripe from "@lib/get-stripejs";
 import { keystoneContext } from "@ks/context";
 import { envs } from "@/envs";
 import { Stripe } from "stripe";
+import { Rental } from "@ks/types";
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -104,18 +105,33 @@ type Charge = {
     quantity?:number,
     addonIds?:string,
     couponName:string,
+    start?:string,
+    end?:string,
+    location?:string,
+    delivery?:string,
   }
   subscription?:string,
 }
 
 type ChargeType = 'checkout.tickets'|'checkout.cart'|string|undefined
+type ChargeRental = {
+  start:string,
+  end:string,
+  location:string,
+  delivery:boolean,
+}
 
 async function afterSuccessfulCheckout(charge:Charge, type:ChargeType){
 
 
   switch (type) {
     case 'checkout.cart':
-      checkoutCart(charge.id, charge.customer_details.email)
+      checkoutCart(charge.id, charge.customer_details.email, {
+        start: charge.metadata.start || '', 
+        end: charge.metadata.end || '', 
+        location: charge.metadata.location || '', 
+        delivery: Boolean(charge.metadata.delivery),
+      })
       break;
     
     case 'checkout.tickets':
@@ -241,11 +257,11 @@ async function checkoutSubscription(charge:Charge, customerEmail:string|null|und
   }
 }
 
-async function checkoutCart(id:string, customerEmail:string|null|undefined){
+async function checkoutCart(id:string, customerEmail:string|null|undefined, rental?:ChargeRental){
 
   try {
 
-    const data = await keystoneContext.sudo().graphql.run({
+    const checkout = await keystoneContext.sudo().graphql.run({
       query: `
         mutation Checkout($customerEmail: String!, $chargeId: String, $start: String, $end: String, $durationInHours: String, $location: String, $delivery: Boolean) {
           checkout(customerEmail: $customerEmail, chargeId: $chargeId, start: $start, end: $end, durationInHours: $durationInHours, location: $location, delivery: $delivery) {
@@ -256,12 +272,14 @@ async function checkoutCart(id:string, customerEmail:string|null|undefined){
       variables:{ 
         chargeId: id,
         customerEmail: customerEmail || 'ANONYMOUS_USER',
-        start: new Date(start).toISOString(),
-        end: new Date(end).toISOString(),
-        // durationInHours: String(timeCalcHours(state.start, state.end)),
-        location,
-        delivery: delivery ? true : false,
+        start: rental?.start ? new Date(rental.start).toISOString(): '',
+        end: rental?.start ? new Date(rental.end).toISOString(): '',
+        location: rental?.location || '', 
+        delivery: rental?.delivery ? true : false,
+      }
     })
+
+
     
 
   } catch (error) {

@@ -174,6 +174,9 @@ export const Product:Lists.Product = list({
             // console.log({ currentUserId });
             resolvedData.author = { connect: { id: currentUserId } };
           }
+
+          if(resolvedData.isForRent && !resolvedData.rental_price) throw new Error('isForRent === true, but no rental_price set')
+          
         } catch (err) { console.warn(err) }
 
 

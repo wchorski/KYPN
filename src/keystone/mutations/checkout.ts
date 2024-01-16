@@ -11,6 +11,8 @@ import { calcTotalPrice } from '../../lib/calcTotalPrice';
 import { getServerSession } from 'next-auth';
 import { nextAuthOptions } from '../../../session';
 
+type PartialProduct = Partial<Product>
+
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
 
@@ -101,11 +103,32 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
       where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
     })
 
-    // // TODO create RENTAL
+    // remove saleItems from stock 
+    const updatedSaleItems = user.cart.map(async (cartItem:CartItem) => {
+      
+      // if it's a RENTAL ignore stock update
+      if(cartItem.type === 'RENTAL') return 
+
+      const currProduct = await contextSudo.db.Product.findOne({
+        where: {id: cartItem.product.id}
+      })
+      if(!currProduct) return 
+
+      // @ts-ignore
+      const currData:Product = {
+        stockCount: currProduct.stockCount - cartItem.quantity,
+      }
+      
+      if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
+      
+      const updatedProduct = await contextSudo.db.Product.updateOne({
+        where: {id: cartItem.product.id},
+        // @ts-ignore
+        data: currData
+      })
+    })
 
     const rentalItems = orderItems.filter(item => item.type === 'RENTAL')
-    
-
     if(rentalItems.length <= 0) return { 
       status: 'success', 
       message: 'checkout cart successful', 

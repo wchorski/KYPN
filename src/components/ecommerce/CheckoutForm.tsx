@@ -575,8 +575,8 @@ export function CheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
     
         <SubmitButton cartItems={cartItems} rental={{
           hours: state.hours,
-          start: new Date(state.start).toISOString(),
-          end: new Date(state.end).toISOString(),
+          start: state.start ? new Date(state.start).toISOString() : '',
+          end: state.end ? new Date(state.end).toISOString() : '',
           location: state.location,
           delivery: state.isDelivery,
         }} />

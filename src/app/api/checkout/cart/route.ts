@@ -9,6 +9,7 @@ import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
 import { envs } from "@/envs";
 import { datePrettyLocal } from "@lib/dateFormatter";
+import Stripe from "stripe";
 
 type Request = {
   cartItems:CartItem[],
@@ -75,23 +76,28 @@ export async function POST(req: NextRequest, res: NextResponse) {
         console.log('/api/checkout/cart isStockavail check ERROR: ', message)
       }
 
-      const session = await stripe.checkout.sessions.create({
+      let checkoutSession:Stripe.Checkout.Session = {
         customer_email: userSession?.user?.email || '',
         // todo try connect existing stripe customer first
         // customer: userSession.stripeCustomerId || null,
         payment_method_types: ["card", ],
+        // @ts-ignore
         line_items: lineItems,
         mode: "payment",
         success_url: `${headersList.get("origin")}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${headersList.get("origin")}/shop/checkout`,
         metadata: {
           type: 'checkout.cart',
-          start: rental?.start,
-          end: rental?.end,
-          location: rental?.location,
+          start: rental?.start || '',
+          end: rental?.end || '',
+          location: rental?.location || '',
           delivery: rental?.delivery ? 'true' : 'false',
         },
-        custom_text: {
+      }
+      
+      if(rental?.end) {
+        // @ts-ignore
+        checkoutSession.custom_text = {
           submit:  { message: cartDetailsArray.filter(i => i.type === 'RENTAL').length > 0 
             ? `RENTAL: 
               \nstart: ${datePrettyLocal(rental?.start || '', 'full')}, 
@@ -102,7 +108,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
             : ''
           }
         }
-      })
+      }
+      // @ts-ignore
+      const session = await stripe.checkout.sessions.create(checkoutSession)
 
       return NextResponse.json({sessionId: session.id, isStockAvailable, message});
 

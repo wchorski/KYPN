@@ -52,39 +52,39 @@ export const OrderItem:Lists.OrderItem = list({
   hooks:{
     beforeOperation: async ({ operation, resolvedData, context, item }) => {
 
-      const contextSudo = context.sudo()
+      // const contextSudo = context.sudo()
 
       if(operation === 'create'){
 
-        try {
-          // console.log({resolvedData});
-          // console.log(resolvedData.product?.connect?.id);
+        // try {
+        //   // console.log({resolvedData});
+        //   // console.log(resolvedData.product?.connect?.id);
   
-          const currProduct = await contextSudo.db.Product.findOne({
-            where: {id: resolvedData.product?.connect?.id}
-          })
+        //   const currProduct = await contextSudo.db.Product.findOne({
+        //     where: {id: resolvedData.product?.connect?.id}
+        //   })
           
-          // TODO stock - don't remove stock if item is a RENTAL
-          // @ts-ignore
-          const currData:Product = {
-            // @ts-ignore
-            stockCount: currProduct.stockCount - resolvedData.quantity,
-          }
+        //   // TODO stock - don't remove stock if item is a RENTAL
+        //   // @ts-ignore
+        //   const currData:Product = {
+        //     // @ts-ignore
+        //     stockCount: currProduct.stockCount - resolvedData.quantity,
+        //   }
   
-          if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
+        //   if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
   
-          const updatedProduct = await contextSudo.db.Product.updateOne({
-            where: {id: resolvedData.product?.connect?.id},
-            // @ts-ignore
-            data: currData
-          })
-          // console.log({updatedProduct});
+        //   const updatedProduct = await contextSudo.db.Product.updateOne({
+        //     where: {id: resolvedData.product?.connect?.id},
+        //     // @ts-ignore
+        //     data: currData
+        //   })
+        //   // console.log({updatedProduct});
           
-        } catch (error: any) {
-          console.log('!!! Order Item Create Error: ', error);
-          throw new Error('Order Item Create Error: ' + error.message);
+        // } catch (error: any) {
+        //   console.log('!!! Order Item Create Error: ', error);
+        //   throw new Error('Order Item Create Error: ' + error.message);
           
-        }
+        // }
         
       }
     }
