@@ -1,4 +1,6 @@
 import { envs } from "@/envs";
+import { Button } from "@components/elements/Button";
+import { ButtonText } from "@components/elements/ButtonText";
 import { PageTHeaderMain } from "@components/layouts/PageTemplates";
 import { Section } from "@components/layouts/Section";
 import stripe from "@lib/get-stripejs";
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams:{ session_id:string}
+  searchParams:{ session_id?:string}
   params:{id:string}
 }
 
@@ -33,8 +35,16 @@ type StripeSession = {
 export default async function OrderSuccessPage ({ params, searchParams }:Props) {
 
   const { session_id } = searchParams
+  if(!session_id) return (
+    <PageTHeaderMain 
+      header={Header('')}
+      main={MainNoDetails()}
+    />
+  )
 
   const session = await stripe.checkout.sessions.retrieve(session_id) as StripeSession
+
+  
   const { customer_details, amount_total, payment_status, status } = session
   
   // const customer = await stripe.customers.retrieve(session.customer_details);
@@ -87,6 +97,22 @@ function Main(customer_details:Customer, amount_total:number, status:'complete'|
 
       <Link href={`/account`}> view orders ⇢ </Link>
 
+      <Button />
+
+    </Section>
+  </>
+}
+
+function MainNoDetails( ){
+
+
+  return <>
+    <Section layout={'1'}>
+      <p> Order failed </p>
+
+      <Link href={`/shop/checkout`}> return to checkout </Link>
+
+      <Button />
     </Section>
   </>
 }

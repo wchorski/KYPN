@@ -1,3 +1,10 @@
+.text_wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
 .signout{
   // background-color: var(--c-dark);
   // color: var(--c-desaturated);
@@ -8,4 +15,8 @@
   &:hover, &:focus{
     color: red !important;
   }
+}
+
+.opacity_0 {
+  opacity: 0;
 }
