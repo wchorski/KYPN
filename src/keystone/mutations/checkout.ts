@@ -86,6 +86,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
     const order = await contextSudo.db.Order.createOne({
       data: {
         total: calcTotalPrice(user.cart),
+        // @ts-ignore
         items: { create: orderItems },
         email: customerEmail,
         user: { connect: { id: user.id } },

@@ -124,6 +124,44 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     // Employee Availability
     if(employeeId){
       
+      // todo querying all 'gigs' for an employee could be expensive down the line. how to filter gigs that 'end' after NOW?
+      // maybe query gigs seperately?
+
+      // todo just run a graphql query?
+      // const data = await contextSudo.graphql.run({
+      //   query: `
+      //     query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!) {
+      //       users(where: $where) {
+      //         name
+      //         gigs(where: $gigsWhere) {
+      //           summary
+      //           start
+      //           end
+      //         }
+      //       }
+      //     }
+      //   `,
+      //   variables: {
+      //     "where": {
+      //       "id": {
+      //         "in": ["clrgrhupn0000mgwnylcvbrko"]
+      //       }
+      //     },
+      //     "gigsWhere": {
+      //       "end": {
+      //         "gt": "2024-01-18T22:38:32.638Z"
+      //       },
+      //       "status": {
+      //         "in": [
+      //           "ACTIVE",
+      //           "DOWNPAYMENT",
+      //           "HOLD"
+      //         ]
+      //       },
+      //     }
+      //   }
+      // }) as object
+
       const bookedEmployees = await contextSudo.query.User.findMany({ 
         where: { id: { in: [employeeId] }, },
         query: `

@@ -179,11 +179,13 @@ export const Booking:Lists.Booking = list({
     afterOperation: async ({ operation, resolvedData, item, context }) => {
 
       // console.log('## Booking', {item})
-      
+      // todo error "An error occurred while running "afterOperation" - Booking.hooks.afterOperation: Input error: Only a string can be passed to id filters"
       if(operation === 'create' || operation === 'update'){
 
+        if(!item.serviceId) throw new Error('Booking: no service selected')
+        
         const service = await context.sudo().query.Service.findOne({
-          where: { id: item.serviceId || 'no_serviceId'},
+          where: { id: item.serviceId },
           query: `
             id
             name
