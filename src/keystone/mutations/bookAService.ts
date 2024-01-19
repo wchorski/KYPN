@@ -14,6 +14,8 @@ import { createCalendarEvent } from '../../lib/googleapi/calCreate';
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
 
+const now  = new Date().toISOString()
+
 export const bookAService = (base: BaseSchemaMeta) => graphql.field({
   type: base.object('Booking'),
 
@@ -128,62 +130,83 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
       // maybe query gigs seperately?
 
       // todo just run a graphql query?
-      // const data = await contextSudo.graphql.run({
-      //   query: `
-      //     query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!) {
-      //       users(where: $where) {
-      //         name
-      //         gigs(where: $gigsWhere) {
-      //           summary
-      //           start
-      //           end
-      //         }
-      //       }
-      //     }
-      //   `,
-      //   variables: {
-      //     "where": {
-      //       "id": {
-      //         "in": ["clrgrhupn0000mgwnylcvbrko"]
-      //       }
-      //     },
-      //     "gigsWhere": {
-      //       "end": {
-      //         "gt": "2024-01-18T22:38:32.638Z"
-      //       },
-      //       "status": {
-      //         "in": [
-      //           "ACTIVE",
-      //           "DOWNPAYMENT",
-      //           "HOLD"
-      //         ]
-      //       },
-      //     }
-      //   }
-      // }) as object
-
-      const bookedEmployees = await contextSudo.query.User.findMany({ 
-        where: { id: { in: [employeeId] }, },
+      const usersData = await contextSudo.graphql.run({
         query: `
-        id 
-        name
-        email
-        availability{
-          id
-          start
-          end
-          type
-          status
-          durationInHours
+          query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
+            users(where: $where) {
+              id 
+              name
+              email
+              availability(where: $availWhere) {
+                id
+                start
+                end
+                type
+                status
+                durationInHours
+              }
+              gigs(where: $gigsWhere) {
+                id
+                start
+                end
+                durationInHours
+              }
+            }
+          }
+        `,
+        variables: {
+          where: {
+            id: {
+              in: [employeeId]
+            }
+          },
+          gigsWhere: {
+            end: {
+              gt: now
+            },
+            status: {
+              in: [
+                "ACTIVE",
+                "DOWNPAYMENT",
+                "HOLD"
+              ]
+            },
+          },
+          availWhere: {
+            end: {
+              gt: now
+            },
+          }
         }
-        gigs {
-          id
-          start
-          end
-          durationInHours
-        }
-        `
-      }) as User[]
+      }) as {users:User[]}
+
+      
+      const bookedEmployees = usersData.users
+      console.log(JSON.stringify(bookedEmployees, null , 2 ));
+      
+      // ? old way, but using .graphql because of better filtering
+      // const bookedEmployees = await contextSudo.query.User.findMany({ 
+      //   where: { id: { in: [employeeId] }, },
+      //   query: `
+      //   id 
+      //   name
+      //   email
+      //   availability{
+      //     id
+      //     start
+      //     end
+      //     type
+      //     status
+      //     durationInHours
+      //   }
+      //   gigs {
+      //     id
+      //     start
+      //     end
+      //     durationInHours
+      //   }
+      //   `
+      // }) as User[]
         
         
       let employeeNames = ''

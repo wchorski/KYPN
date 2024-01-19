@@ -74,5 +74,6 @@ input, button, a {
   &:disabled{
     cursor: not-allowed;
     border-color: var(--c-disabled) !important;
+    background-color: var(--c-disabled);
   }
 }

@@ -76,6 +76,7 @@ export const Service:Lists.Service = list({
       ],
       defaultValue: [0, 1, 2, 3, 4, 5, 6]
     }),
+    // todo create a status like AVAILABILE, PRIVATE, MEMBERSONLY, etc
     addons: relationship({ref: 'Addon.services', many: true}),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     locations: relationship({ ref: 'Location.services', many: true }),
