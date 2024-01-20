@@ -77,6 +77,17 @@ export const Service:Lists.Service = list({
       defaultValue: [0, 1, 2, 3, 4, 5, 6]
     }),
     // todo create a status like AVAILABILE, PRIVATE, MEMBERSONLY, etc
+    status: select({
+      options: [
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Available', value: 'AVAILABLE' },
+      ],
+      defaultValue: 'AVAILABLE',
+      ui: {
+        displayMode: 'segmented-control',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
     addons: relationship({ref: 'Addon.services', many: true}),
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     locations: relationship({ ref: 'Location.services', many: true }),

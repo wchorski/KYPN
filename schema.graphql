@@ -969,6 +969,7 @@ type Service {
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
+  status: String
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
@@ -1000,6 +1001,7 @@ input ServiceWhereInput {
   durationInHours: DecimalFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
+  status: StringNullableFilter
   addons: AddonManyRelationFilter
   employees: UserManyRelationFilter
   locations: LocationManyRelationFilter
@@ -1046,6 +1048,7 @@ input ServiceOrderByInput {
   durationInHours: OrderDirection
   buisnessHourOpen: OrderDirection
   buisnessHourClosed: OrderDirection
+  status: OrderDirection
 }
 
 input ServiceUpdateInput {
@@ -1057,6 +1060,7 @@ input ServiceUpdateInput {
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
+  status: String
   addons: AddonRelateToManyForUpdateInput
   employees: UserRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
@@ -1100,6 +1104,7 @@ input ServiceCreateInput {
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
+  status: String
   addons: AddonRelateToManyForCreateInput
   employees: UserRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput

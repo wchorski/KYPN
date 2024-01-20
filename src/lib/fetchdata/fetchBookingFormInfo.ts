@@ -3,7 +3,7 @@ import { keystoneContext } from '@ks/context';
 
 const now = new Date().toISOString()
 
-export default async function fetchServicesAndAddons(){
+export default async function fetchBookingFormData(){
 
   const contextSudo = keystoneContext.sudo()
 
@@ -11,7 +11,12 @@ export default async function fetchServicesAndAddons(){
 
     const services = await contextSudo.query.Service.findMany({
       where: {
-        // filter upon status. Once that's put in of course
+        // @ts-ignore this will be auto updated later by keystone
+        status: {
+          in: [
+            "AVAILABLE",
+          ]
+        },
       },
       query: `
         id
@@ -40,6 +45,9 @@ export default async function fetchServicesAndAddons(){
         name
         address
         rooms
+        services {
+          id
+        }
         bookings {
           id
           start
@@ -89,6 +97,9 @@ export default async function fetchServicesAndAddons(){
         name
         buisnessHourOpen
         buisnessHourClosed
+        servicesProvided {
+          id
+        }
       `
     }) as User[]
     
@@ -135,6 +146,9 @@ export default async function fetchServicesAndAddons(){
         id
         start
         end
+        employees {
+          id
+        }
       `
     })
 
