@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Addon" ALTER COLUMN "status" SET DEFAULT 'AVAILABLE';

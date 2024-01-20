@@ -59,7 +59,7 @@ export const Addon:Lists.Addon = list({
         { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
         { label: 'Private', value: 'PRIVATE' },
       ],
-      defaultValue: 'DRAFT',
+      defaultValue: 'AVAILABLE',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

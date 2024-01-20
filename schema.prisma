@@ -157,7 +157,7 @@ model Addon {
   excerpt           String             @default("")
   price             Int?               @default(0)
   stripeProductId   String             @default("")
-  status            String?            @default("DRAFT")
+  status            String?            @default("AVAILABLE")
   services          Service[]          @relation("Addon_services")
   products          Product[]          @relation("Addon_products")
   rentals           Rental[]           @relation("Addon_rentals")

@@ -152,6 +152,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
         const foundStaff = employees.filter(emp => emp.servicesProvided.flatMap(serv => serv.id).includes(pickedServiceId) )
         const staffOpts = foundStaff.map((empl:any) => { return {value: empl.id, label: empl.name} } )
         const serviceAddons = addons.filter(addon => addon.services.flatMap(serv => serv.id).includes(pickedServiceId))
+        
         onTimeCallback('')
         const addonOptions:AddonCheckboxOptions[] = serviceAddons.map(ad => ({
           name: ad.name,
@@ -169,6 +170,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
           staff: undefined,
           time: '',
           date: '',
+          location: '',
           locationOptions: locationOpts, 
           staffOptions: staffOpts, 
           addonOptions: addonOptions,
@@ -176,8 +178,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
         }
 
       case 'SET_LOCATION':
-        const locationLabel = state.locationOptions.find(opt => opt.value === action.payload )?.label || ''
-        return { ...state, location: locationLabel }
+        return { ...state, location: action.payload }
 
       case 'SET_LOCATION_OPTIONS':
         return { ...state, locationOptions: action.payload}
@@ -316,9 +317,6 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
         notes: notes,
         amountTotal: calcTotalPrice(addonIds, service),
       }
-      console.log(data);
-      
-      
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -339,7 +337,6 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
 
       const { bookAService, error } = await res.json()
       if(error) throw new Error(error.message)
-      // console.log(bookAService);
       dispatchRed({type: 'SET_BOOKING_ID', payload: bookAService.id})
       dispatchRed({type: 'SET_CUSTOMER', payload: {name, email, phone}})
       // // return check to see if employee is avail
@@ -409,7 +406,6 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
         return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
       })
 
-      // console.log({openTimes})
       partialDays.push({
         day,
         times: openTimes
@@ -430,19 +426,17 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
   }
 
   function handleBlackoutTimes(date:string|undefined){
-    // console.log('----- handleBlackoutTimes ----');
-    // console.log({date})
     let currentTimes:string[] = generateTimesArray().map(t => t.value)
     if(!date) return currentTimes
-
-    if(!stateRed.staff?.id || !stateRed.service?.id) return currentTimes
     
     const pickedService = services.find(serv => serv.id === stateRed.service?.id)
-    const pickedStaff = services[0].employees.find(emp => emp.id === stateRed.staff?.id)
-    // console.log({date});
+    const pickedStaff = employees.find(emp => emp.id === stateRed.staff?.id)
+
+    if(!pickedService || !pickedStaff) return currentTimes
     
     // * gigs / bookings
-    const staffGigsLocal = pickedStaff?.gigs?.flatMap((gig:Booking) => {
+    const employeeGigs = gigs.filter(gig => gig.employees.flatMap(emp => emp.id).includes(pickedStaff.id))
+    const staffGigsLocal = employeeGigs.flatMap((gig:Booking) => {
       
       const start = new Date(gig.start).toLocaleDateString('en-CA')
       const end   = new Date(gig.end).toLocaleDateString('en-CA')
@@ -451,19 +445,19 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
     
     
     if(staffGigsLocal?.includes(date)){
-      const gigs = pickedStaff?.gigs?.filter((obj:Booking) => {
-        return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
+      const staffGigs = employeeGigs.filter((gig:Booking) => {
+        return new Date(gig.start).toLocaleDateString('en-CA') == date || new Date(gig.end).toLocaleDateString('en-CA') == date
       })
       
-      gigs?.map(gig => {
+      staffGigs?.map(gig => {
         const filteredTimeStarts = findOverlapTimes({start: gig.start, end: gig.end}, currentTimes, date, Number(pickedService?.durationInHours))
         currentTimes = filteredTimeStarts || [] 
       })
     }
     
-    
+    const employeeAvail = availabilities.filter(avail => avail.employee.id === pickedStaff.id)
     // * availability
-    const staffAvailLocal = pickedStaff?.availability?.flatMap((avail:Availability) => {
+    const staffAvailLocal = employeeAvail.flatMap((avail:Availability) => {
       const start = new Date(avail.start).toLocaleDateString('en-CA')
       const end   = new Date(avail.end).toLocaleDateString('en-CA')
       
@@ -473,7 +467,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
 
     if(staffAvailLocal?.includes(date)){
        // find the gig
-       const avails = pickedStaff?.availability?.filter((obj:Availability) => {
+       const avails = employeeAvail.filter((obj:Availability) => {
         return new Date(obj.start).toLocaleDateString('en-CA') == date || new Date(obj.end).toLocaleDateString('en-CA') == date
       })
       
@@ -488,7 +482,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
       const defaultTimes = generateTimesArray().map(t => t.value)
       return defaultTimes
     }
-
+    
     return currentTimes
 
   }
@@ -536,7 +530,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
             <select
               name={'location'}
               id={'location'}
-              defaultValue={formState.fieldValues.location}
+              value={stateRed.location}
               required={false}
               onChange={(e) => dispatchRed({type: 'SET_LOCATION', payload: e.target.value }) }
             >
@@ -554,7 +548,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
             <select
               name={'staff'}
               id={'staff'}
-              defaultValue={formState.fieldValues.staff}
+              value={stateRed.staff?.id || ''}
               required={false}
               onChange={(e) => {
                 dispatchRed({type: 'SET_STAFF', payload: e.target.value })
@@ -628,8 +622,8 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
             <span className="error"> {formState.errors?.date} </span>
           </label>
           <CalendarDatePicker 
-            // blackoutDays={blackoutDates}
-            blackoutDays={[]}
+            blackoutDays={stateRed.blackoutDates}
+            // blackoutDays={[]}
             buisnessDays={stateRed.service?.buisnessDays || []}
             onDateCallback={onDateCallback}
           />
@@ -658,7 +652,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
           <TimePicker 
             key={dateRef.current?.value}
             onTimeCallback={onTimeCallback}
-            times={handleBlackoutTimes(dateRef.current?.value)} 
+            times={handleBlackoutTimes(stateRed.date)} 
             pickedTime={stateRed.time}            
             // todo setting 'service' to empty string causes error here
             buisnessHours={{
@@ -767,7 +761,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
           </tr>
           <tr>
             <td> Location: </td>
-            <td> {stateRed.location || <span className="subtext" > n/a </span>} </td>
+            <td> {locations.find(loc => stateRed.location)?.name || <span className="subtext" > n/a </span>} </td>
           </tr>
           <tr>
             <td> Staff: </td>

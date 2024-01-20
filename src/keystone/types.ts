@@ -478,6 +478,7 @@ export type SubscriptionItem = {
 export type Addon = {
   id: string,
   name: string,
+  slug: string,
   image:string,
   description: string,
   price: number,
@@ -487,6 +488,7 @@ export type Addon = {
   categories: Category[],
   tags: Tag[],
   excerpt:string,
+  status:'DRAFT'|'AVAILABLE'|'OUT_OF_STOCK'|'PRIVATE'
 }
 
 export type AddonCheckboxOptions = {
