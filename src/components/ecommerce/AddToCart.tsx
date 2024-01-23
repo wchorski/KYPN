@@ -54,7 +54,6 @@ export default function AddToCart({ productId, sessionId, type }: Props) {
       await delay(500)
       setstate(undefined)
 
-      console.log('+++ update user cart');
       getUserCart(sessionId)
       
     } catch (error) {

@@ -11,7 +11,6 @@ import { useEffect, useReducer, useRef, useState } from "react"
 import { PriceTag } from "./PriceTag"
 import { Card } from "@components/layouts/Card"
 import styles from '@styles/menus/form.module.scss'
-import { List } from "@components/elements/List"
 import { Section } from "@components/layouts/Section"
 import { isTimeCheckStartEnd, timeCalcHours } from "@lib/timeUtils"
 import { useCart } from "@components/hooks/CartStateContext"
@@ -21,10 +20,12 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import StripeCheckoutButton from "./StripeCheckoutButton"
+import { checkProductRentalAvail } from "@lib/checkProductRentalAvail"
 
 type Props = {
   sessionId:string,
   rentalItems:CartItemType[],
+  rentals:Rental[],
   saleItems:CartItemType[],
 }
 
@@ -86,7 +87,7 @@ type FormAsideAction =
 
 const today = new Date()
 
-export function CheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
+export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
   const { data: session, status }  = useSession()
@@ -227,6 +228,10 @@ export function CheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
       // if(typeof start !== 'string') throw new Error('start is not string')
       if(isTimeCheckStartEnd(start, end)) throw new Error('End time is set to happen before the start time')
 
+      // todo check to see if stock is avail on that date for rentals
+      const { isProductRentalAvail, message } = checkProductRentalAvail({rentalRange: {start, end}, rentals, rentalItems})
+      throw Error(message)
+
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
         headers: {
@@ -254,7 +259,7 @@ export function CheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
 
       const { checkout, error } = await res.json()
       if(error) throw new Error(error.message)
-      console.log({checkout});
+      // console.log({checkout});
 
       const newOrder = {
         id: checkout.id,
@@ -351,7 +356,9 @@ export function CheckoutForm ({ sessionId, rentalItems, saleItems }:Props) {
             <td>Items: </td>
             <td> 
               <ul>
-                {state.order.items.map((i:CartItemType) => <li>{i.product.name} x{i.quantity}</li>)}
+                {state.order.items.map((item:CartItemType, i:number) => (
+                  <li key={i}>{item.product.name} x{item.quantity}</li>
+                ))}
               </ul>
             </td>
           </tr>

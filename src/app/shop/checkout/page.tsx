@@ -9,7 +9,7 @@ import styles from '@styles/ecommerce/cart.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
-import { CartItem as CartItemType } from "@ks/types"
+import { CartItem as CartItemType, Rental } from "@ks/types"
 import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
 import CartItem from "@components/ecommerce/CartItem"
 import Link from "next/link"
@@ -27,7 +27,7 @@ type Props = {
 export default async function CheckoutPage ({ params, searchParams }:Props) {
 
   const session = await getServerSession(nextAuthOptions)
-  const {saleItems, rentalItems, error} = await fetchSessionCartItems(session?.itemId)
+  const {saleItems, rentalItems, rentals, error} = await fetchSessionCartItems(session?.itemId)
   
 
   return (
@@ -37,6 +37,7 @@ export default async function CheckoutPage ({ params, searchParams }:Props) {
         sessionId: session?.itemId,
         saleItems,
         rentalItems,
+        rentals,
       })}
 
     />
@@ -56,9 +57,10 @@ type Main = {
   sessionId:string,
   saleItems:CartItemType[]|undefined,
   rentalItems:CartItemType[]|undefined,
+  rentals:Rental[]|undefined,
 }
 
-async function Main({saleItems, rentalItems, sessionId}:Main){
+async function Main({saleItems, rentalItems, rentals, sessionId}:Main){
 
   if(!sessionId) return  <Section layout={'1'}>
       <p> <Link href={`/auth`}> Login </Link> to view your cart </p>
@@ -81,6 +83,7 @@ async function Main({saleItems, rentalItems, sessionId}:Main){
         <CheckoutForm 
           sessionId={sessionId} 
           rentalItems={rentalItems || []}
+          rentals={rentals || []}
           saleItems={saleItems || []}
         />
       </div>

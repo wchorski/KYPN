@@ -26,7 +26,7 @@ export function dateOverlapCount(gig:Range, busyRanges:BusyRange[]){
   return count
 }
 
-function isRangesOverlap(gig:Range, busy:Range) {
+export function isRangesOverlap(gig:Range, busy:Range) {
   const gigStart = new Date(gig.start).getTime();
   const gigEnd = new Date(gig.end).getTime();
   const busyStart = new Date(busy.start).getTime();
