@@ -58,9 +58,22 @@ export default async function fetchSessionCartItems(userId:string){
           }
         }
       },
+      // todo i'm sure there is a more optimal way to filter
+      // this data to cut down on the double fetching
       query: `
+        id
         start
         end
+        order {
+          items {
+            quantity
+            product {
+              id
+              name
+              stockCount
+            }
+          }
+        }
       `
     }) as Rental[]
 

@@ -1,4 +1,4 @@
-import { CartItem, DateRange, StringRange } from "@ks/types";
+import { CartItem, DateRange, Rental, StringRange } from "@ks/types";
 import { dateCheckAvail, isRangesOverlap } from "./dateCheck";
 
 // dateCheckAvail()
@@ -8,23 +8,51 @@ import { dateCheckAvail, isRangesOverlap } from "./dateCheck";
 
 type RentalAvail = {
   rentalRange:StringRange,
-  rentals:StringRange[],
+  rentals:Rental[],
   rentalItems:CartItem[],
 }
 export function checkProductRentalAvail({rentalRange, rentals, rentalItems}:RentalAvail){
-  console.log({rentals});
-  
-  // loop through rentals, check against rentalRange
-  const overlapRentals = rentals.filter(rental => isRangesOverlap(rentalRange, rental))
-  console.log({overlapRentals});
 
+  // console.log({rentalRange});
+  // console.log({rentals});
+  // console.log({rentalItems});
   
-    // if date overlaps, check products
-      // products.stockCount > (cartQuantity + rental.order.orderItem.quantity)?
-      // if false - not enough stock
-  const isProductRentalAvail = true
-  const message = 'check is good'
-  console.log({isProductRentalAvail});
+  const overlapRentals = rentals.filter(rental => isRangesOverlap(rentalRange, rental))  
   
-  return { isProductRentalAvail, message }
+  let message = ''
+
+  const isRentalConflict = overlapRentals.some(overlapRent => {
+
+    const orderItems = overlapRent.order.items
+
+    const isStockOverlapPerProduct = orderItems.some(bookedOrderItem => {
+
+      const cartItem = rentalItems.find(item => item.product.id === bookedOrderItem.product.id)
+      if(!cartItem) return false
+      
+      // console.table({
+      //   product: bookedOrderItem.product.name,
+      //   stock: bookedOrderItem.product.stockCount,
+      //   cartQuant: cartItem.quantity,
+      //   bookedQuant: bookedOrderItem.quantity,
+      // })
+      if(bookedOrderItem.product.stockCount < (cartItem.quantity + bookedOrderItem.quantity)){
+        
+        message = `
+          Not enough stock available for ${cartItem.quantity} 
+          "${bookedOrderItem.product.name}"(s). 
+          Only ${bookedOrderItem.product.stockCount - bookedOrderItem.quantity} 
+          available for the selected time range.
+        `
+
+        return true
+      }
+
+
+    })
+
+    return isStockOverlapPerProduct
+  })
+  
+  return { isRentalConflict, message }
 }

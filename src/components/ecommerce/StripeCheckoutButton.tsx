@@ -8,7 +8,8 @@ import { BsStripe } from "react-icons/bs";
 import { useState } from "react";
 import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
-import { CartItem } from "@ks/types";
+import { CartItem, Rental } from "@ks/types";
+import { checkProductRentalAvail } from "@lib/checkProductRentalAvail";
 
 type Props = {
   cartItems: CartItem[],
@@ -18,10 +19,11 @@ type Props = {
     end:string,
     location:string,
     delivery:boolean,
-  }
+  },
+  currentRentals: Rental[],
 }
 
-export default function StripeCheckoutButton({cartItems, rental}:Props) {
+export default function StripeCheckoutButton({cartItems, rental, currentRentals}:Props) {
     // const { cartItems } = useCart()
     const [isPending, setIsPending] = useState(false)
     const [errorObj, setErrorObj] = useState<unknown>()
@@ -31,6 +33,17 @@ export default function StripeCheckoutButton({cartItems, rental}:Props) {
       
       try {
         setIsPending(true)
+        setErrorObj(undefined)
+        
+        if(rental){
+          const { isRentalConflict, message } = checkProductRentalAvail({
+            rentalRange: {start: rental.start, end: rental.end}, 
+            rentals: currentRentals, 
+            rentalItems: cartItems.filter(item => item.type === 'RENTAL')
+          })
+          
+          if(isRentalConflict) throw Error(message)
+        }
 
         if(!envs.STRIPE_PUBLIC_KEY) return console.log('!!! NO STRIPE PUBLIC KEY');
         const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);

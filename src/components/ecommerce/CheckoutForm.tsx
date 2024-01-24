@@ -226,11 +226,14 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
     try {
 
       // if(typeof start !== 'string') throw new Error('start is not string')
-      if(isTimeCheckStartEnd(start, end)) throw new Error('End time is set to happen before the start time')
+      if(isTimeCheckStartEnd(start, end)) throw new Error('Date/Time Range Error: End time is set to happen before the start time')
 
-      // todo check to see if stock is avail on that date for rentals
-      const { isProductRentalAvail, message } = checkProductRentalAvail({rentalRange: {start, end}, rentals, rentalItems})
-      throw Error(message)
+      const { isRentalConflict, message } = checkProductRentalAvail({
+        rentalRange: {start, end}, 
+        rentals, 
+        rentalItems: cartItems.filter(item => item.type === 'RENTAL')
+      })
+      if(isRentalConflict) throw Error(message)
 
       const res = await fetch(`/api/gql/noauth`, {
         method: 'POST',
@@ -580,13 +583,17 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
           {formState.message} 
         </p>
     
-        <SubmitButton cartItems={cartItems} rental={{
-          hours: state.hours,
-          start: state.start ? new Date(state.start).toISOString() : '',
-          end: state.end ? new Date(state.end).toISOString() : '',
-          location: state.location,
-          delivery: state.isDelivery,
-        }} />
+        <SubmitButton
+          cartItems={cartItems} 
+          currentRentals={rentals}
+          rental={{
+            hours: state.hours,
+            start: state.start ? new Date(state.start).toISOString() : '',
+            end: state.end ? new Date(state.end).toISOString() : '',
+            location: state.location,
+            delivery: state.isDelivery,
+          }} 
+        />
         
         {/* <StripeCheckoutButton /> */}
       </footer>
@@ -603,15 +610,16 @@ type SubmitButton = {
     end:string,
     location:string,
     delivery:boolean,
-  }
+  },
+  currentRentals:Rental[],
 }
 
-function SubmitButton({cartItems, rental}:SubmitButton){
+function SubmitButton({cartItems, rental, currentRentals}:SubmitButton){
 
   const { pending, } = useFormStatus()
 
-  return<div style={{display: 'flex', gap: '1rem'}}>
-    <StripeCheckoutButton cartItems={cartItems} rental={rental}/>
+  return<div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
+    <StripeCheckoutButton cartItems={cartItems} rental={rental} currentRentals={currentRentals}/>
     
     <button
       disabled={pending}
