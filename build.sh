@@ -2,6 +2,10 @@
 
 source .env
 
-docker compose build --no-cache
-docker save -o "./images/$IMAGE_FRONTEND_NAME.tar" $IMAGE_FRONTEND_NAME
-docker save -o "./images/$IMAGE_BACKEND_NAME.tar" $IMAGE_BACKEND_NAME
+# if you're having stale configuration/environment issues, 
+# add the --no-cache argument
+# docker compose build --no-cache
+docker compose build 
+
+docker save -o "./images/$IMAGE_BASE_NAME-frontend.tar" $IMAGE_BASE_NAME-frontend
+docker save -o "./images/$IMAGE_BASE_NAME-backend.tar" $IMAGE_BACKEND_NAME-backend
