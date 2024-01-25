@@ -82,7 +82,6 @@ export const Availability:Lists.Availability = list({
       // try {
       //   if (resolvedData && !resolvedData.user) {
       //     const currentUserId = await context.session.itemId;
-      //     // console.log({ currentUserId });
       //     resolvedData.user = { connect: { id: currentUserId } };
       //   }
       // } catch (err) { console.warn(err) }
@@ -91,8 +90,6 @@ export const Availability:Lists.Availability = list({
 
         if(!resolvedData.end){
           resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
-          console.log('avail schema , ', {resolvedData});
-          
         }
 
         if(resolvedData.start && resolvedData.end < resolvedData.start ){

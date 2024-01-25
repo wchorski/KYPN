@@ -124,7 +124,6 @@ export const Ticket:Lists.Ticket = list({
       if(operation === 'update'){
 
         if(item.status === 'ATTENDED') {
-          // console.log(`!!!!!!!! This ticket has already been redeemed: ${item.id}`);
           throw new Error(`!!! This ticket has already been redeemed: ${item.id}`)
         }
       }

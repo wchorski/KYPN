@@ -68,8 +68,6 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
           ]
         }
       })
-      // console.log(' ==== subitem count on this plan ');
-      // console.log(thePlan.items);
 
       const newPlanData:SubPlan = {}
 
@@ -122,7 +120,6 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
           dateModified: now.toISOString(),
         },
       }).catch((error:any) => {
-        console.log('+++++++ catch checkout error');
         console.log('!!! MUTATION checkoutSubscription ERROR', error);
       }) as SubscriptionItem|undefined
 
@@ -141,9 +138,8 @@ export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
       // return null
       
     } catch (error:any) {
-      // console.log({error});
-      console.log('MUTATION checkoutsubscription Error: ', error);
 
+      console.log('MUTATION checkoutsubscription Error: ', error);
       // if(error.code === 'resource_missing') return error
 
       return {

@@ -20,7 +20,6 @@ const year = now.getFullYear();
 const month = now.getMonth() + 1; // add 1 because getMonth() returns zero-based index
 const day = now.getDate();
 const today = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
-// console.log(`${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`);
 const EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_email_set'
 const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 // const EMAIL_ADDRESS = 'y@m'
@@ -131,8 +130,6 @@ export const Booking:Lists.Booking = list({
 
       if (operation === 'update') {
 
-        // console.log({item})
-        // console.log({resolvedData})
         // let newSummary = (resolvedData.name || item.name) + ' | '
         // if(resolvedData.service) newSummary + resolvedData.service
         // // resolvedData.summary = (resolvedData.name || item.name) + ' | '
@@ -178,7 +175,6 @@ export const Booking:Lists.Booking = list({
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
 
-      // console.log('## Booking', {item})
       // todo error "An error occurred while running "afterOperation" - Booking.hooks.afterOperation: Input error: Only a string can be passed to id filters"
       if(operation === 'create' || operation === 'update'){
 
@@ -239,7 +235,6 @@ export const Booking:Lists.Booking = list({
 
 
 async function handleCalendarUpdate(item:any, context:any) {
-  // console.log('+++++++++ after booking update');
 
   const selectedBooking = await context.query.Booking.findOne({
     where: { id: item.id  },
@@ -264,8 +259,6 @@ async function handleCalendarUpdate(item:any, context:any) {
       }
     `
   }) 
-
-  // console.log({selectedBooking});
   
   let calDescription = '' 
   
@@ -294,9 +287,6 @@ async function handleCalendarUpdate(item:any, context:any) {
       },
     }
   )
-  // console.log({calRes})
-  // @ts-ignore //todo might cause problems
 
   return calRes
-  // resolvedData.google = calRes
 }

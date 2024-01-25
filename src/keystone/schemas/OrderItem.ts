@@ -57,8 +57,6 @@ export const OrderItem:Lists.OrderItem = list({
       if(operation === 'create'){
 
         // try {
-        //   // console.log({resolvedData});
-        //   // console.log(resolvedData.product?.connect?.id);
   
         //   const currProduct = await contextSudo.db.Product.findOne({
         //     where: {id: resolvedData.product?.connect?.id}
@@ -78,7 +76,6 @@ export const OrderItem:Lists.OrderItem = list({
         //     // @ts-ignore
         //     data: currData
         //   })
-        //   // console.log({updatedProduct});
           
         // } catch (error: any) {
         //   console.log('!!! Order Item Create Error: ', error);

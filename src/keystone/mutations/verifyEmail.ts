@@ -60,8 +60,6 @@ export const verifyEmail = (base: BaseSchemaMeta) => graphql.field({
       
       
     } catch (error:any) {
-      // console.log('!!! verifyEmail mutation: ', error);
-      // return {error}
       throw new Error(error)
     }
 

@@ -33,7 +33,6 @@ export const addToCart = (base: BaseSchemaMeta) => graphql.field({
     const [exisitingItem] = allCartItems
 
     if(exisitingItem){
-      // console.log(`****** ${exisitingItem.quantity} exists in cart`);
       const cartItemUpdate = await context.db.CartItem.updateOne({
         where: {id: exisitingItem.id},
         data: {

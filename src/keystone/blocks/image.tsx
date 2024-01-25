@@ -36,9 +36,6 @@ export const image = component({
       ? props.fields.width.value+'px'
       : '100%'
 
-      console.log('currWidth, ', currWidth);
-      
-
     return (
 
         <figure style={{

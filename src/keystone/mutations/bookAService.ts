@@ -47,21 +47,6 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     amount_total,
   }, context: Context) {
 
-    // console.log({ 
-    //   serviceId, 
-    //   locationId,
-    //   addonIds, 
-    //   employeeId, 
-    //   customerEmail, 
-    //   customerName, 
-    //   customerPhone, 
-    //   notes,
-    //   start,
-    //   amount_total,
-    // });
-    
-
-
     const contextSudo = context.sudo()
     let description = ''
     
@@ -105,8 +90,6 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         `
       }) as Location
       if(selectedLocation) {
-        // console.log({selectedLocation})
-        
         // check to see if this booking's start/end lands on any of the gig's start/end
         const gig = {
           start: start,
@@ -182,7 +165,6 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
 
       
       const bookedEmployees = usersData.users
-      console.log(JSON.stringify(bookedEmployees, null , 2 ));
       
       // ? old way, but using .graphql because of better filtering
       // const bookedEmployees = await contextSudo.query.User.findMany({ 
@@ -211,8 +193,6 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         
       let employeeNames = ''
       bookedEmployees.map(emp => {
-      // console.log('---------')
-      // console.log(emp.name)
 
       if(dateCheckAvail(String(start), String(end), emp.availability))
         console.log(`+++ Open Day no vaction set for ${emp.name}`)
@@ -257,9 +237,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         dateTime: end,
         // timeZone: 'America/Chicago',
       },
-    })
-    // console.log({calRes});
-    
+    })    
     
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({

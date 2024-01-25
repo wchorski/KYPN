@@ -87,8 +87,6 @@ export const Order:Lists.Order = list({
   hooks: {
     afterOperation: async ({ operation, resolvedData, item, context }) => {
 
-      // // console.log('## Booking', {item})
-      
       if(operation === 'create' || operation === 'update'){
 
         const order = await context.sudo().query.Order.findOne({

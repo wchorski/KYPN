@@ -46,8 +46,7 @@ export const checkoutRental = (base: BaseSchemaMeta) => graphql.field({
           }
         `,
     })
-    // console.log('===== FOUND USER')
-    // console.log({ user })
+
     if(!user) throw new Error(`!!! checkout, No user Found with email: ${customerEmail}`)
 
 
@@ -81,8 +80,6 @@ export const checkoutRental = (base: BaseSchemaMeta) => graphql.field({
         payment_status: 'PAID',
       },
     })
-    // console.log({order});
-    
 
     //Clean up! Delete all cart items
     await context.db.CartItem.deleteMany({

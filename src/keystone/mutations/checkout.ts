@@ -59,10 +59,8 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
           }
         `,
     })
-    // console.log('===== FOUND USER')
-    // console.log({ user })
-    if(!user) throw new Error(`!!! checkout, No user Found with email: ${customerEmail}`)
 
+    if(!user) throw new Error(`!!! checkout, No user Found with email: ${customerEmail}`)
 
     if(user.cart.length <= 0) throw new Error('!!! No cart items found')
     //Create an order based on the cart item

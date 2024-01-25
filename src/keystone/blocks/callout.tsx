@@ -109,8 +109,6 @@ export const callout = component({
                 <ToolbarButton
                   isSelected={props.fields.intent.value === opt.value}
                   onMouseDown={() => {
-                    console.log('====== icon changeeeee');
-
                     props.fields.intent.onChange(opt.value);
                   }}
                   {...attrs}

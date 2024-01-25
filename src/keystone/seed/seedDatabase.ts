@@ -330,8 +330,6 @@ const seedPages = async (context: Context) => {
 //     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
 //   );
 
-//   console.log({ objsToCreate });
-
 
 //   await db.ProductImage.createMany({
 //     data: objsToCreate.map(obj => {

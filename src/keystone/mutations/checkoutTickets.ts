@@ -51,8 +51,6 @@ export const checkoutTickets = (base: BaseSchemaMeta) => graphql.field({
       email: customerEmail,
       orderCount: `${index+1} of ${quantity}`
     }));
-    // console.log({ ticketItems });
-
 
     const now = new Date
     const order = await context.db.Order.createOne({

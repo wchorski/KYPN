@@ -106,16 +106,14 @@ export const Addon:Lists.Addon = list({
           authorEmail: 'no_author',
         })
           .then(async (res) => {
-            // console.log({res});
-            
 
             if (res && resolvedData) {
               resolvedData.stripeProductId = res.id
             }
           })
           .catch(err => { 
-            console.log(err) 
-            throw new Error("subplan create err: " + 'haha uh oh::' + err.message);
+            console.log("Addon create err: " + err) 
+            throw new Error("Addon create err: " + 'haha uh oh::' + err.message);
             
           })
       }

@@ -51,25 +51,9 @@ export const ProductImage:Lists.ProductImage = list({
     }
   },
   hooks: {
-    afterOperation: async ({ operation, resolvedData, item, context }) => {
+    // afterOperation: async ({ operation, resolvedData, item, context }) => {
 
-      // if (operation === 'create') {
-      //   try {
-      //     console.log({ item });
-
-      //   } catch (err) { console.warn(err) }
-
-      // }
-
-      // if (operation === 'update') {
-      //   console.log('&&&&&& prod image update ');
-
-      //   // try {
-      //   //   console.log({ item });
-
-      //   // } catch (err) { console.warn(err) }
-
-      // }
-    }
+     
+    // }
   }
 })

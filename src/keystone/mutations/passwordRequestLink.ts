@@ -33,8 +33,7 @@ export const passwordRequestLink = (base: BaseSchemaMeta) => graphql.field({
           password
         `,
     }) as User
-    // console.log('===== FOUND USER')
-    // console.log({ user })
+
     if(!user) throw new Error(`!!! passwordResetLink, No user Found with email: ${email}`)
 
     const secret = envs.NEXTAUTH_SECRET + user.password
