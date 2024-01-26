@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 COPY . .
 RUN yarn install --frozen-lockfile
+RUN yarn sharp
 RUN yarn generate
 RUN yarn build
 RUN yarn next telemetry disable
