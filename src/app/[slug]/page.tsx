@@ -28,7 +28,7 @@ export async function generateMetadata({ params }:Props,
   const { page , error} = await fetchPage(slug)
 
   return {
-    title: page?.title + ' | ' + envs.SITE_TITLE,
+    title: page?.title || '404' + ' | ' + envs.SITE_TITLE,
     description: envs.SITE_DESC,
   }
 }

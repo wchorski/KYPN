@@ -1,0 +1,88 @@
+header.hero {
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: rgb(138,93,192);
+  background: linear-gradient(180deg, rgba(138,93,192,1) 0%, rgba(77,0,142,1) 100%);
+  
+  h6 {
+    width: 100%;
+    max-width: none;
+  }
+
+  > div {
+    text-align: center;
+    position: sticky;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    z-index: 2;
+    // width: 100%;
+    // background: black;
+    
+    
+    > img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      width: fit-content;
+    }
+    
+    > div {
+      
+      > * {
+        text-shadow: #00000030 3px 3px 4px;
+      }
+      > h1 {
+        margin-bottom: 0;
+      }
+  
+      > p {
+        margin-top: 0;
+      }
+    }
+
+  }
+}
+
+.logo_wrap {
+  position: relative;
+  border: solid white 1px;
+  border-radius: var(--br-soft);
+  background-color: #0000006e;
+  padding: 1em;
+  margin: 1rem auto;
+}
+
+.eyecand {
+  position: absolute;
+  top: 1rem;
+  z-index: -1;
+  width: 100%;
+  transform-style: preserve-3d;
+  transform: 
+    perspective(5000px) 
+    rotateY(30deg) 
+    rotateX(60deg)
+    translateY(49px)
+    translateX(-35px)
+    scale(.9);
+  /* transform: scale(.7) translateY(35px); */
+}
+
+// overlay 
+// .hero::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   z-index: 1;
+//   background-color: rgba(0, 0, 0, 0.254); /* Adjust the last value (0.5) for the desired transparency */
+// }

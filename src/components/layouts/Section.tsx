@@ -41,10 +41,12 @@ export function Section({
   // todo trying global instead of module
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
-  const inlineStyles = {
+  const inlineStyles:CSSProperties = {
     ...styles,
     minheight: height,
     "--c-overlay": overlay, 
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
   } as CSSProperties
 
   if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})

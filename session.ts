@@ -21,11 +21,6 @@ const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(NEXTAUTH_URL).hostname
 const baseHostName = hostName.split('.').slice(-2).join('.')
-console.log('### NextAuth ###');
-
-console.log({hostName});
-console.log({baseHostName});
-
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext;
 
