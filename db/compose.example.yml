@@ -1,10 +1,8 @@
 version: '3'
 
-## "myappname-kypn" === unique app name
-
 services:
-  myappname-kypn-db:
-    container_name: myappname-kypn-db
+  db:
+    container_name: ${IMAGE_BASE_NAME}-db
     image: postgres:15
     restart: unless-stopped
     environment:
@@ -21,5 +19,5 @@ services:
 
 networks:    
   this:
-    name: myappname-kypn-network
+    name: ${IMAGE_BASE_NAME}-network
     driver: bridge  

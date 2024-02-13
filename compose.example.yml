@@ -2,9 +2,10 @@ version: '3'
 
 services:
 
-  ## db container build seperately in ./db/compose.yml
+  ##? db container build seperately in ./db/compose.yml
+
   # db:
-  #   container_name: cutefruit-kypn-db
+  #   container_name: ${IMAGE_BASE_NAME}-db
   #   image: postgres:15
   #   restart: unless-stopped
   #   environment:
@@ -57,7 +58,7 @@ networks:
   this:
     name: ${IMAGE_BASE_NAME}-network
     driver: bridge  
-    external: true 
+    external: true # external because the db container will first create the network
   proxy:  # comment out if not using proxy
     name: nginx-prox-mgmt-3_default # your unique named proxy network
     driver: bridge
