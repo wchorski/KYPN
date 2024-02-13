@@ -56,7 +56,7 @@ export const pricetable = component({
             scrollSnapType: 'y mandatory',
           }}
         >
-          {props.fields.items.elements.map(item => (
+          {props.fields.items?.elements.map(item => (
               <Box
                 key={item.key}
                 margin="xsmall"
@@ -95,11 +95,11 @@ export const pricetable = component({
             
                   }}
                   >
-                  {item.fields.title.value || item.fields.service.value?.data.name}
+                  {item?.fields.title.value || item?.fields.service.value?.data.name}
                 </h3>
 
                 <div >
-                  <h6 > {moneyFormatter(item.fields.service.value?.data.price)} </h6> <span>{item.fields.service.value?.data.durationInHours} <small>hours</small></span>
+                  <h6 > {moneyFormatter(item?.fields.service.value?.data?.price || 0)} </h6> <span>{item.fields.service.value?.data?.durationInHours} <small>hours</small></span>
                 </div>
                 </NotEditable>
 

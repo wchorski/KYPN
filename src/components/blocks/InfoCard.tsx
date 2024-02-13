@@ -69,7 +69,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
 
       {header && <h4> {header} </h4>}
 
-      <div className="container">
+      <div className={styles.content_wrap} >
         {content && <>{content}</>}
         {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}

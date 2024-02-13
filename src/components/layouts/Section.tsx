@@ -42,15 +42,17 @@ export function Section({
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
   const inlineStyles:CSSProperties = {
-    ...styles,
     minheight: height,
     "--c-overlay": overlay, 
+    backgroundColor: color,
+    backgroundImage: `url(${imageSrc})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+    ...styles,
   } as CSSProperties
 
-  if(imageSrc) Object.assign(inlineStyles, {background: `url(${imageSrc})`})
-  if(color) Object.assign(inlineStyles, {backgroundColor: color,}) 
+  // if(imageSrc) Object.assign(inlineStyles, {backgroundImage: `url(${imageSrc})`})
+  // if(color) Object.assign(inlineStyles, {backgroundColor: color,}) 
 
   return (
     <section 

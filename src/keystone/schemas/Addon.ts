@@ -39,12 +39,15 @@ export const Addon:Lists.Addon = list({
     name: text({ isIndexed: 'unique', validation: { isRequired: true }}),
     slug: text({ isIndexed: 'unique', validation: { isRequired: true },
       hooks: {
-        beforeOperation({resolvedData,}) {
-          if(!resolvedData?.slug) return console.log('Addon: no slug set')
-          resolvedData.slug = slugFormat(String(resolvedData.slug))
+        beforeOperation({resolvedData,}) {          
+          if(!resolvedData) return
+          (resolvedData.slug)
+            ? resolvedData.slug = slugFormat(String(resolvedData.slug))
+            : resolvedData.slug = slugFormat(String(resolvedData.name))
         },
     }}),
     image: text(),
+    test: text(),
     excerpt: text({
       ui: {
         displayMode: 'textarea'

@@ -20,6 +20,7 @@ seed_data.ts
 
 # pages, components, styles
 src/styles/vars.scss
+src/styles/fonts.ts
 src/app/layout.tsx
 src/app/home
 src/components/menus/Header.tsx
@@ -30,6 +31,7 @@ src/components/menus/Footer.tsx
 public/assets/logo.png
 public/assets/logo.svg
 public/favicon.ico
+public/marker.svg
 public/assets/placeholder.png
 public/assets/private/*
 private/**

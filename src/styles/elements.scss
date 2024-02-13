@@ -13,8 +13,10 @@ table {
 }
 
 hr {
-  margin: 4rem auto;
+  // margin: 4rem auto;
   max-width: var(--w-sitemax);
+  border-bottom: solid var(--c-disabled) 1px;
+  width: 100%;
 }
 
 // form

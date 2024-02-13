@@ -1,9 +1,6 @@
 # KeystoneJS CMS, NextJS
 
-following along with Wes Bos Tutorial
-
-> [!warn] upgrading is not strait forward
-> I wanted to use Keystone 6 & NextJS 13 so I hobble together code from an [official example](https://github.com/keystonejs/keystone/tree/main/examples/nextjs-keystone-two-servers) with this code
+A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
 
 ## Roles
 
@@ -39,19 +36,29 @@ following along with Wes Bos Tutorial
   - `cp src/components/menus/MainNavList.init.tsxsrc/components/menus/MainNavList.tsx`
   <!-- - `cp src/styles-init src/styles` -->
   - `cp src/styles/vars.init.scss src/styles/vars.scss`
+  - `cp src/styles/fonts.init.ts src/styles/fonts.ts`
   - `cp src/keystone/seed/seed_data.empty.ts src/keystone/seed/seed_data.ts`.
 
 ## Authentication
 
+uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration
+
 set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
-### Github OAuth
-- https://github.com/settings/developers
 
-### Google OAuth
-- https://console.cloud.google.com/apis/dashboard
+| Provider | setup url | 
+| --- | --- |
+| Github | https://github.com/settings/developers |
+| Google | https://console.cloud.google.com/apis/dashboard |
 
-### Google Email SMTP
-- https://myaccount.google.com/security
+## Email
+
+Right now, I'm just using gmail's SMTP. Should be good for low traffic order confirmation & password reset. Once I integrate running mail campaigns I'll need a better solution.
+
+https://myaccount.google.com/security
+
+### Mail Templating
+
+[React Email](https://react.email/)
 
 ## Production
 
@@ -144,3 +151,7 @@ ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *
 ## Color pallet?
 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874
+
+## Credits
+
+following along with Wes Bos Tutorial

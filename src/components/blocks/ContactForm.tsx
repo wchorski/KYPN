@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useRef, useState } from "react"
+import { CSSProperties, FormEvent, useRef, useState } from "react"
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
@@ -20,6 +20,7 @@ type Props = {
   isPhone?: boolean,
   isDate?: boolean,
   isNotes?: boolean,
+  style?:CSSProperties,
 }
 
 type Fields = {
@@ -38,7 +39,7 @@ type FormState = {
   fieldValues: Fields,
 }
 
-export function ContactForm({header, color, buttonLabel = 'submit', isName=true, isPhone=true, isDate=true, isNotes=true,}:Props) {
+export function ContactForm({header, color, buttonLabel = 'submit', isName=true, isPhone=true, isDate=true, isNotes=true, style}:Props) {
 
   const {data: session, status} = useSession()
   const formRef = useRef<HTMLFormElement>(null)
@@ -140,7 +141,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
     <form
       className={styles.form}  
       action={formAction}
-      style={{ background: color,}}
+      style={{ background: color, ...style}}
       ref={formRef}
     >
 

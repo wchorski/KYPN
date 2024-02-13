@@ -490,7 +490,6 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
 
   return <div className={formStyles.grid_wrap} >
     <div>
-    <p> BookingForm3 </p>
 
     {!stateRed.bookingId ? (
       <form

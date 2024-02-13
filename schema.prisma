@@ -154,6 +154,7 @@ model Addon {
   name              String             @unique @default("")
   slug              String             @unique @default("")
   image             String             @default("")
+  test              String             @default("")
   excerpt           String             @default("")
   price             Int?               @default(0)
   stripeProductId   String             @default("")

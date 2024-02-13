@@ -87,7 +87,8 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  height: calc(100% - 75px);
+  // this made cal super duper tall lol
+  // height: calc(100% - 75px);
   // grid-template-rows: repeat(3, 1fr);
 
   &.calendar-body{

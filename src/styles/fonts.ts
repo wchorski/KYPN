@@ -2,7 +2,7 @@ import localFont from 'next/font/local'
 import { Exo } from "next/font/google";
 
 export const fontHeader = localFont({
-  src: '../public/assets/fonts/Boogaloo-Regular.ttf',
+  src: '../public/assets/fonts/LuloCleanFour.otf',
   // display: 'swap',
   variable: '--font-header',
 })
@@ -15,7 +15,7 @@ export const fontSub = localFont({
 
 
 export const fontParagraph = localFont({
-  src: '../public/assets/fonts/NunitoSans-VariableFont_YTLC.ttf',
+  src: '../public/assets/fonts/ProximaNova-Regular.otf',
   // display: 'swap',
   variable: '--font-paragraph',
 })

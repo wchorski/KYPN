@@ -4,7 +4,7 @@ import styles from '@styles/blocs/infocard.module.scss'
 
 type InfoCard = {
   header:string,
-  content?:string,
+  content?:string|ReactNode,
   children?:ReactNode,
   buttonLink:string,
   buttonLabel:string,
@@ -38,12 +38,12 @@ export function InfoCardItem({item, children}:{item:InfoCard, children?:ReactNod
         <h3>{item.header}</h3>
       </header>
 
-      <div className="content">
+      <div className={styles.content_wrap} >
         {item.content}
         {children}
+        <Link href={item.buttonLink} className="button medium">{item.buttonLabel}</Link>
       </div>
 
-      <Link href={item.buttonLink} className="button">{item.buttonLabel}</Link>
     </article>
   )
 }

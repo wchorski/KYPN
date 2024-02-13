@@ -1205,6 +1205,7 @@ type Addon {
   name: String
   slug: String
   image: String
+  test: String
   excerpt: String
   price: Int
   stripeProductId: String
@@ -1241,6 +1242,7 @@ input AddonWhereInput {
   name: StringFilter
   slug: StringFilter
   image: StringFilter
+  test: StringFilter
   excerpt: StringFilter
   price: IntNullableFilter
   stripeProductId: StringFilter
@@ -1260,6 +1262,7 @@ input AddonOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   image: OrderDirection
+  test: OrderDirection
   excerpt: OrderDirection
   price: OrderDirection
   stripeProductId: OrderDirection
@@ -1270,6 +1273,7 @@ input AddonUpdateInput {
   name: String
   slug: String
   image: String
+  test: String
   excerpt: String
   price: Int
   stripeProductId: String
@@ -1293,6 +1297,7 @@ input AddonCreateInput {
   name: String
   slug: String
   image: String
+  test: String
   excerpt: String
   price: Int
   stripeProductId: String
