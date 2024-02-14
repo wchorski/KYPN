@@ -21,6 +21,10 @@ const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(NEXTAUTH_URL).hostname
 const baseHostName = hostName.split('.').slice(-2).join('.')
+console.log('### NextAuth ###');
+console.log({hostName});
+console.log({baseHostName});
+
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext;
 
@@ -162,7 +166,11 @@ export const nextAuthOptions = {
       return sessionObj
     },
 
-    redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {      
+    redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {    
+      console.log('### new URL(url)', new URL(url));
+      console.log('### baseUrl, ', baseUrl);
+      
+        
       if (new URL(url).hostname === hostName) return Promise.resolve(url);
       return Promise.resolve(baseUrl);
     },
@@ -178,7 +186,8 @@ export const nextAuthOptions = {
         path: "/",
         secure: useSecureCookies,
         // todo was told to remove this. conflicts with subdomains - https://stackoverflow.com/a/76542770/15579591
-        // domain: (hostName === "localhost") ? hostName : "." + baseHostName,
+        // added this back in and it made pvo webiste work again??? idk wtf is going on. auth is the most frustrating part about webdev
+        domain: (hostName === "localhost") ? hostName : "." + baseHostName,
       },
     },
     
