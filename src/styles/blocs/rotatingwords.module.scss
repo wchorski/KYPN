@@ -5,27 +5,25 @@
   height: 60px;
   // todo fix lopsided text 
   // transform: translateX(-1%);
-  /* top: 100px; */
-
 }
 
 .words_wrap {
   display: inline;
   text-indent: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 
   span{
-    position: absolute;
     right:0;
     left:0;
     top: 0;
-    opacity: 0;
     color: white;
     font-weight: bolder;
     line-height: 2rem;
-    /* opacity: 0; */
-    /* overflow: hidden; */
-    /* border: solid yellow 2px; */
-    /* background-color: purple; */
+    font-size: 1.5rem;
+    position: absolute;
+    opacity: 0;
     animation: rotate 15s cubic-bezier(0.39, -0.46, 0.38, 1.73) infinite 0s;
   }
   

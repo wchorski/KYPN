@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { FaFacebook, FaInstagram, FaBandcamp, FaTwitch, FaTwitter, FaYoutube, FaGithub, FaLinkedin, FaLink } from "react-icons/fa";
 import { SiBandlab } from "react-icons/si";
 
@@ -16,10 +16,10 @@ type Props = {
   github?:string,
   linkedin?:string,
   custom1?:string,
-  
+  style?:CSSProperties,
 }
 
-export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, twitch, twitter, youtube, github, linkedin, custom1}:Props) {
+export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, twitch, twitter, youtube, github, linkedin, custom1, style}:Props) {
 
   
   function handleRender(type:string = ''){
@@ -77,6 +77,7 @@ export function SocialLinkNav({color, facebook, instagram, bandcamp, bandlab, tw
         gap: '1em',
         padding: '.5em 0',
         fontSize: '1.2rem',
+        ...style,
       }}
     >
 

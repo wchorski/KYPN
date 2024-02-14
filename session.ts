@@ -21,9 +21,6 @@ const useSecureCookies = NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(NEXTAUTH_URL).hostname
 const baseHostName = hostName.split('.').slice(-2).join('.')
-console.log('### NextAuth ###');
-console.log({hostName});
-console.log({baseHostName});
 
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext;
@@ -167,9 +164,6 @@ export const nextAuthOptions = {
     },
 
     redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {    
-      console.log('### new URL(url)', new URL(url));
-      console.log('### baseUrl, ', baseUrl);
-      
         
       if (new URL(url).hostname === hostName) return Promise.resolve(url);
       return Promise.resolve(baseUrl);

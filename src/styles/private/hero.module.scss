@@ -66,12 +66,9 @@ header.hero {
   width: 100%;
   transform-style: preserve-3d;
   transform: 
-    perspective(5000px) 
-    rotateY(30deg) 
-    rotateX(60deg)
-    translateY(49px)
-    translateX(-35px)
-    scale(.9);
+    translate(-20px,30px) 
+    skewX(50deg) 
+    scale(.8, .4);
   /* transform: scale(.7) translateY(35px); */
 }
 
