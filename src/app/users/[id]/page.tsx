@@ -62,6 +62,8 @@ function Main(user?:User){
       <ImageDynamic photoIn={user.image} alt={`profile thumbnail of user ${user.name}`}/>
 
       <ul className='unstyled' style={{lineHeight: '2rem', display: 'grid', gap: '1rem',}}>
+        <li> {user.email} </li>
+        <li> <Link href={`/blog?userId=${user.id}`}> {user.name}'s Posts </Link></li>
         <li>
           <Link 
             href={envs.BACKEND_URL + `/users/${user.id}`}

@@ -1,20 +1,28 @@
-import { Booking, } from "@ks/types";
+import { Booking } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
 export default async function fetchBooking(id:string){
 
+  console.log('### fetchbook id: ', id);
+  
+
   try {
 
-    const variables = {
-      where: {
-        id: id,
-      }
-    }
-    // todo only allow if customer id matches
+
+    // todo only allow if customer id matches. Use session and filter on keystone backend
+    // const booking = await keystoneContext.query.Booking.findOne({
+    //   query: query,
+    //   where: {
+    //     id: "clsnoi17p0000svs8at1pzpad",
+    //   },
+    // }) as TBooking
     const booking = await keystoneContext.sudo().query.Booking.findOne({
-      query: query,
-      ...variables,
+      where: { id: id },
+      query: query
     }) as Booking
+
+    console.log({booking});
+    
     
     return { booking }
     
@@ -26,15 +34,26 @@ export default async function fetchBooking(id:string){
 
 
 const query = `
+  id
+  email
+  phone
+  name
+  dateCreated
+  dateModified
+  addonsCount
+  end
+  google
+  start
+  status
+  summary
+  notes
+  price
   addons {
     id
     excerpt
     name
     price
   }
-  email
-  phone
-  name
   customer {
     id
     email
@@ -48,24 +67,13 @@ const query = `
     email
     image
   }
-  dateCreated
-  dateModified
-  addonsCount
-  end
-  google
-  id
   location {
     id
     name
     address
   }
-  notes
-  price
   service {
     id
     name
   }
-  start
-  status
-  summary
 `

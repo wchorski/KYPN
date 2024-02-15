@@ -106,12 +106,13 @@ button {
 
   &:hover, &:focus{
     background-color: var(--c-primary);
-    color: var(--c-txt-rev);
+    border: solid 1px var(--c-accent);
+    color: var(--c-txt-light);
   }
 
   &:active{
     color: var(--c-accent);
-    background-color: var(--c-txt-rev);
+    background-color: var(--c-txt);
     border: solid 1px var(--c-accent);
   }
 }

@@ -19,7 +19,7 @@ article.event :global{
   img{
     width: 6em;
     height: 100%;
-    aspect-ratio: auto;
+    object-fit: cover;
     padding: -1rem;
   }
 

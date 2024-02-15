@@ -780,6 +780,7 @@ type Booking {
   phone: String
   name: String
   notes: String
+  secretNotes: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -810,6 +811,7 @@ input BookingWhereInput {
   phone: StringFilter
   name: StringFilter
   notes: StringFilter
+  secretNotes: StringFilter
   status: StringNullableFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
@@ -864,6 +866,7 @@ input BookingOrderByInput {
   phone: OrderDirection
   name: OrderDirection
   notes: OrderDirection
+  secretNotes: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -883,6 +886,7 @@ input BookingUpdateInput {
   phone: String
   name: String
   notes: String
+  secretNotes: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -933,6 +937,7 @@ input BookingCreateInput {
   phone: String
   name: String
   notes: String
+  secretNotes: String
   status: String
   dateCreated: DateTime
   dateModified: DateTime

@@ -23,14 +23,15 @@ export const contact = (base: BaseSchemaMeta) => graphql.field({
   async resolve(source, { name, email, phone, notes, start, customerId }, context:Context) {
 
     // const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
-    const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
+    // const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
 
     const now = new Date().toISOString()
 
     const { db } = context.sudo();
     const booking = await db.Booking.createOne({
       data: { 
-        summary: `${summary}`, 
+        // summary: `${summary}`, //? is now a virtual input
+        service: null,
         start, 
         status: 'LEAD',
         email,
@@ -41,9 +42,10 @@ export const contact = (base: BaseSchemaMeta) => graphql.field({
       },
     }) 
 
-    const user = await db.User.findOne({
-      where: { id: customerId },
-    })
+    // todo mail moved to booking afterOpt
+    // const user = await db.User.findOne({
+    //   where: { id: customerId },
+    // })
 
     // mailBooking({
     //   id: booking.id,

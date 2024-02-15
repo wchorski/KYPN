@@ -225,19 +225,23 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     const addonsCombinedPrice = pickedAddons.reduce((accumulator:number, currentValue:Addon) => accumulator + currentValue.price, 0);
     const priceTotal = service.price + addonsCombinedPrice
 
-    // Calendar
-    const calRes = await createCalendarEvent({
-      summary: `${customerName || customerEmail} | ${service?.name}`,
-      description: description,
-      start: {
-        dateTime: new Date(start || '').toISOString(),
-        // timeZone: 'America/Chicago',
-      },
-      end: {
-        dateTime: end,
-        // timeZone: 'America/Chicago',
-      },
-    })    
+    // todo moved to Booking.ts afterOpt hook
+    // // Calendar
+    // const calRes = await createCalendarEvent({
+    //   summary: `${customerName || customerEmail} | ${service?.name}`,
+    //   description: description,
+    //   start: {
+    //     dateTime: new Date(start || '').toISOString(),
+    //     // timeZone: 'America/Chicago',
+    //   },
+    //   end: {
+    //     dateTime: end,
+    //     // timeZone: 'America/Chicago',
+    //   },
+    // })    
+
+    console.log('### Booking NOTES HERE: ', notes);
+    
     
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({
@@ -257,8 +261,8 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         notes: notes || '',
         price: priceTotal,
         status: (serviceId && employeeId) ? 'HOLD' : 'LEAD',
-        // @ts-ignore
-        google: calRes,
+        
+        // google: calRes,
       },
     })    
     

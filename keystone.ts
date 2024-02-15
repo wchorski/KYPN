@@ -77,7 +77,7 @@ export default config({
 
     // adding page middleware ensures that users are redirected to the signin page if they are not signed in.
     pageMiddleware: async ({ wasAccessAllowed }) => {
-      console.log(wasAccessAllowed);
+
       if (wasAccessAllowed) return;
       
       return {

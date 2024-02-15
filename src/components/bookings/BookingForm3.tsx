@@ -331,7 +331,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
               }
             }
           `,
-          variables:{ ...data },
+          variables: data,
         }),
       })
 

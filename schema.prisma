@@ -108,6 +108,7 @@ model Booking {
   phone           String    @default("")
   name            String    @default("")
   notes           String    @default("")
+  secretNotes     String    @default("")
   status          String?   @default("LEAD")
   dateCreated     DateTime? @default(now())
   dateModified    DateTime? @default(now())

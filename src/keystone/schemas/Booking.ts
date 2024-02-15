@@ -45,7 +45,7 @@ export const Booking:Lists.Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'end', 'email', 'status', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'end', 'name', 'email', 'status', 'service', 'customer', 'employees'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -53,19 +53,32 @@ export const Booking:Lists.Booking = list({
 
   fields: {
     start: timestamp({ validation: { isRequired: true } }),
-    end: timestamp({}),
+    end: timestamp({
+      hooks: {
+        beforeOperation({resolvedData}) {
+          // todo could also calc dervice duration right here for end time
+          if(!resolvedData) return
+
+          if(!resolvedData.end){
+            resolvedData.end = resolvedData?.start
+          } 
+        },
+      }
+    }),
+    
     // summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
     summary: virtual({
       field: graphql.field({
         type: graphql.String,
         async resolve(item:any, args, context) {
+          // if(!item.serviceId) return item.name
           const service = await context.query.Service.findOne({
-            where: {id: item.serviceId || '' },
+            where: {id: item.serviceId || 'null' },
             query: `
               name
             `
           }) as Service
-          return item.name + ' | ' + service.name;
+          return item?.name || 'Anonymous' + ' | ' + service?.name || 'No Service Selected';
         },
       })
     }),
@@ -89,6 +102,11 @@ export const Booking:Lists.Booking = list({
     phone: text(),
     name: text(),
     notes: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
+    secretNotes: text({
       ui: {
         displayMode: 'textarea'
       }
@@ -175,19 +193,50 @@ export const Booking:Lists.Booking = list({
     },
     afterOperation: async ({ operation, resolvedData, item, context }) => {
 
-      // todo error "An error occurred while running "afterOperation" - Booking.hooks.afterOperation: Input error: Only a string can be passed to id filters"
+      if (operation === 'create') {
+        const { calSummary, calDescription, calStart, calEnd } = await handleCalendarDetails(item, context)
+        
+        // Calendar
+        const calRes = await createCalendarEvent({
+          summary: calSummary,
+          description: calDescription,
+          start: {
+            dateTime: calStart,
+            // timeZone: 'America/Chicago',
+          },
+          end: {
+            dateTime: calEnd,
+            // timeZone: 'America/Chicago',
+          },
+        })
+        if(!calRes) return
+        console.log('### booking afteropt create calRes, ', calRes);
+        const updateBooking = await context.sudo().query.Booking.updateOne({
+          where: { id: item.id},
+          data: {
+            secretNotes: '### SUPER SECRET NOTE DEFAULT',
+            //@ts-ignore
+            google: calRes
+          }
+        })
+        // resolvedData.secretNotes = '### SUPER SECRET NOTE DEFAULT'
+        // if(!calRes) return
+        // resolvedData.google = calRes
+      }
+
       if(operation === 'create' || operation === 'update'){
 
-        if(!item.serviceId) throw new Error('Booking: no service selected')
+        // todo does not checking this cause problems down the line?
+        // if(!item.serviceId) throw new Error('!!! Booking: no service selected')
         
         const service = await context.sudo().query.Service.findOne({
-          where: { id: item.serviceId },
+          where: { id: item?.serviceId || 'null' },
           query: `
             id
             name
           `
         }) as Service|undefined
-
+        
         const employees = await context.sudo().query.User.findMany({
           where: {
             gigs: {
@@ -215,27 +264,49 @@ export const Booking:Lists.Booking = list({
             service,
           },
         })
+
+        
       }
 
-      // if (operation === 'create') {
-        
-      // }
-
       if(operation === 'update'){
-        if(!item?.google) return
+        // @ts-ignore
+        if(!item?.google?.id) return
         const calResponse = await handleCalendarUpdate(item, context)
         
         if(!calResponse) return
         resolvedData.google = calResponse
+        console.log("## booking afteropt resolvedData: ", resolvedData);
+        
       }
 
     },
   }
 })
 
-
 async function handleCalendarUpdate(item:any, context:any) {
 
+  const { calDescription, calSummary, calStart, calEnd} = await handleCalendarDetails(item, context)
+  
+  const calRes = await updateCalendarEvent(
+    item.google.id,
+    {
+      summary: calSummary,
+      description: calDescription,
+      start: {
+        dateTime: calStart,
+        // timeZone: 'America/Chicago',
+      },
+      end: {
+        dateTime: calEnd,
+        // timeZone: 'America/Chicago',
+      },
+    }
+  )
+
+  return calRes
+}
+
+async function handleCalendarDetails(item:any, context:any){
   const selectedBooking = await context.query.Booking.findOne({
     where: { id: item.id  },
     query: `
@@ -249,6 +320,7 @@ async function handleCalendarUpdate(item:any, context:any) {
       phone
       service {
         name
+        durationInHours
       }
       employees{
         name
@@ -263,30 +335,21 @@ async function handleCalendarUpdate(item:any, context:any) {
   let calDescription = '' 
   
 
-  calDescription += 'CLIENT: '      + selectedBooking.name + ' | ' + selectedBooking?.email + ' | ' + selectedBooking?.phone + '\n'
+  calDescription += 'CLIENT: '      + selectedBooking?.name + ' | ' + selectedBooking?.email + ' | ' + selectedBooking?.phone + '\n'
   calDescription += 'STATUS: '      + selectedBooking.status + ' \n'
-  calDescription += 'SERVICE: '     + selectedBooking.service.name + ' \n' 
+  calDescription += 'SERVICE: '     + selectedBooking.service?.name || 'No Service Selected' + ' \n' 
   calDescription += 'ADDONS: \n'    + selectedBooking?.addons?.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n' 
   calDescription += 'EMPLOYEES: \n' + selectedBooking?.employees?.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
   calDescription += 'NOTES: '       + selectedBooking.notes + '\n'
   calDescription += 'URL: '         + FRONTEND_URL + `/bookings/${item.id}`
 
-  const calSummary = selectedBooking.name + ' | ' + selectedBooking.service.name
-  const calRes = await updateCalendarEvent(
-    item.google.id,
-    {
-      summary: calSummary,
-      description: calDescription,
-      start: {
-        dateTime: selectedBooking.start,
-        // timeZone: 'America/Chicago',
-      },
-      end: {
-        dateTime: selectedBooking.end,
-        // timeZone: 'America/Chicago',
-      },
-    }
-  )
+  const calSummary = selectedBooking.name || 'anonymous' + ' | ' + selectedBooking.service?.name || 'No Service Selected'
 
-  return calRes
+  const calcEnd = calcEndTime(selectedBooking.start, selectedBooking.service?.durationInHours)
+  return {
+    calSummary,
+    calDescription,
+    calStart: selectedBooking.start,
+    calEnd: selectedBooking.end || calcEnd,
+  }
 }

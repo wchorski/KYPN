@@ -112,8 +112,9 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
 //   return true; // no vacation day overlaps with selected date
 // }
 
-export function calcEndTime(start:string, duration:string){
+export function calcEndTime(start:string, duration:string|undefined){
   const date = new Date(start);
+  if(!duration) return date.toISOString()
   date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000);
   // console.log('calcendtime, ', date.toISOString());
   
