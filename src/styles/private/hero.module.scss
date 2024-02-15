@@ -25,14 +25,6 @@ header.hero {
     // width: 100%;
     // background: black;
     
-    
-    > img {
-      width: 100%;
-      height: auto;
-      object-fit: contain;
-      width: fit-content;
-    }
-    
     > div {
       
       > * {
@@ -56,19 +48,27 @@ header.hero {
   border-radius: var(--br-soft);
   background-color: #0000006e;
   padding: 1em;
-  margin: 1rem auto;
+  margin: 1rem;
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    // width: fit-content;
+  }
 }
 
 .eyecand {
   position: absolute;
-  top: 1rem;
+  top: 50%;
   z-index: -1;
   width: 100%;
   transform-style: preserve-3d;
   transform: 
-    translate(-20px,30px) 
-    skewX(50deg) 
-    scale(.8, .4);
+    translate(-20px, -40%) 
+    skewX(40deg) 
+    scale(.8, .4)
+  ;
   /* transform: scale(.7) translateY(35px); */
 }
 
