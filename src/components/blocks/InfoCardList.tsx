@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { ReactNode } from "react"
 import styles from '@styles/blocs/infocard.module.scss'
+import { ImageDynamic } from "@components/elements/ImageDynamic"
 
-type InfoCard = {
+export type InfoCard = {
   header:string,
   content?:string|ReactNode,
   children?:ReactNode,
@@ -34,7 +35,8 @@ export function InfoCardItem({item, children}:{item:InfoCard, children?:ReactNod
   return (
     <article className={styles.carditem} >
       <header>
-        <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure>
+        {/* <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure> */}
+        <ImageDynamic photoIn={item.imageSrc}/>
         <h3>{item.header}</h3>
       </header>
 

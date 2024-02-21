@@ -1,19 +1,42 @@
 import { Addon, Service } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchServicesAndAddons(){
+export default async function fetchServicesAndAddons(serviceIds?:string[], addonIds?:string[]){
 
   try {
 
     const variables = {}
     const services = await keystoneContext.sudo().query.Service.findMany({
+      where: {
+        status: {
+          notIn: ["DRAFT"]
+        },
+        // include ids filtering if array is present
+        ...(serviceIds && serviceIds.length > 0 ? { id : { in: serviceIds } } : {})
+      },
+      orderBy: [
+        {
+          dateCreated: "desc"
+        }
+      ],
       query: queryServices,
-      ...variables,
+      
     }) as Service[]
 
     const addons = await keystoneContext.sudo().query.Addon.findMany({
+      where: {
+        status: {
+          notIn: ["DRAFT", "PRIVATE"]
+        },
+        // include ids filtering if array is present
+        ...(addonIds && addonIds.length > 0 ? { id : { in: addonIds } } : {})
+      },
+      orderBy: [
+        {
+          dateCreated: "desc"
+        }
+      ],
       query: queryAddons,
-      ...variables,
     }) as Addon[]
     
     return { services, addons }
@@ -28,6 +51,7 @@ export default async function fetchServicesAndAddons(){
 const queryAddons = `
   id
   name
+  image
   excerpt
   price
   services {
@@ -39,6 +63,7 @@ const queryServices = `
   id
   name
   excerpt
+  image
   price
   buisnessHourOpen
   buisnessHourClosed

@@ -422,6 +422,8 @@ export type Service = {
   tags: Tag[],
   locations: Location[],
   addons:Addon[],
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type Location = {
@@ -491,7 +493,9 @@ export type Addon = {
   categories: Category[],
   tags: Tag[],
   excerpt:string,
-  status:'DRAFT'|'AVAILABLE'|'OUT_OF_STOCK'|'PRIVATE'
+  status:'DRAFT'|'AVAILABLE'|'OUT_OF_STOCK'|'PRIVATE',
+  dateCreated: string,
+  dateModified: string,
 }
 
 export type AddonCheckboxOptions = {

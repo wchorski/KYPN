@@ -137,6 +137,8 @@ model Service {
   bookings           Booking[]  @relation("Booking_service")
   categories         Category[] @relation("Category_services")
   tags               Tag[]      @relation("Service_tags")
+  dateCreated        DateTime?  @default(now())
+  dateModified       DateTime?  @default(now())
 }
 
 model Location {
@@ -169,6 +171,8 @@ model Addon {
   subscriptionItems SubscriptionItem[] @relation("Addon_subscriptionItems")
   categories        Category[]         @relation("Addon_categories")
   tags              Tag[]              @relation("Addon_tags")
+  dateCreated       DateTime?          @default(now())
+  dateModified      DateTime?          @default(now())
 }
 
 model Availability {

@@ -988,6 +988,8 @@ type Service {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type Service_description_Document {
@@ -1018,6 +1020,8 @@ input ServiceWhereInput {
   bookings: BookingManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input IntNullableFilter {
@@ -1059,6 +1063,8 @@ input ServiceOrderByInput {
   buisnessHourOpen: OrderDirection
   buisnessHourClosed: OrderDirection
   status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input ServiceUpdateInput {
@@ -1078,6 +1084,8 @@ input ServiceUpdateInput {
   bookings: BookingRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input LocationRelateToManyForUpdateInput {
@@ -1123,6 +1131,8 @@ input ServiceCreateInput {
   bookings: BookingRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input LocationRelateToManyForCreateInput {
@@ -1238,6 +1248,8 @@ type Addon {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input AddonWhereUniqueInput {
@@ -1267,6 +1279,8 @@ input AddonWhereInput {
   subscriptionItems: SubscriptionItemManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input AddonOrderByInput {
@@ -1279,6 +1293,8 @@ input AddonOrderByInput {
   price: OrderDirection
   stripeProductId: OrderDirection
   status: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input AddonUpdateInput {
@@ -1298,6 +1314,8 @@ input AddonUpdateInput {
   subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input AddonUpdateArgs {
@@ -1322,6 +1340,8 @@ input AddonCreateInput {
   subscriptionItems: SubscriptionItemRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type Availability {

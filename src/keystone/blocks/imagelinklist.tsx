@@ -1,4 +1,3 @@
-'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
@@ -51,6 +50,7 @@ export const imagelinklist = component({
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
+            maxWidth: '40rem',
           }}
         >
           {props.fields.items.elements.map(item => {

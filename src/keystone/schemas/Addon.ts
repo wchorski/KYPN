@@ -2,7 +2,7 @@ import { list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { integer, relationship, select, text, } from "@keystone-6/core/fields";
+import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
 import { permissions, rules } from "../access";
 import { slugFormat } from "../../lib/slugFormat";
 import { stripeProductCreate } from "../../lib/stripe";
@@ -12,6 +12,7 @@ export const Addon:Lists.Addon = list({
 
   access: {
     filter: {
+      // todo filter out any status = 'DRAFT'
       query: () => true,
       update: rules.canManageAddons,
       delete: rules.canManageAddons,
@@ -25,14 +26,13 @@ export const Addon:Lists.Addon = list({
   },
 
   // todo hide these again
-  // ui: {
-  //   // hide backend from non admins
-  // isHidden: true,
-  //   listView: {
-  //     initialColumns: ['dateTime', 'service', 'customer', 'employees'],
-  //     initialSort: { field: 'dateTime', direction: 'DESC'}
-  //   },
-  // },
+  ui: {
+    isHidden: args => !permissions.canManageAddons(args),
+    listView: {
+      initialColumns: ['name', 'price', 'status', 'services',],
+      initialSort: { field: 'dateCreated', direction: 'DESC'}
+    },
+  },
 
 
   fields: {
@@ -85,6 +85,8 @@ export const Addon:Lists.Addon = list({
       ref: 'Tag.addons',
       many: true,
     }),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
   hooks: {
 

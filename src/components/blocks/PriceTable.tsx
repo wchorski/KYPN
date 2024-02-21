@@ -27,15 +27,23 @@ type Props = {
 // any type is a bug workaround
 // @ts-ignore
 export async function PriceTable({items = []}:Props):ReactElement<any, any> {
-  // console.log(JSON.stringify(items, null, 2))
 
-  const { services, addons, error} = await fetchServicesAndAddons()
-
+  const serviceIds = items?.flatMap(item => item.service?.id) || []
+  const { services, addons, error} = await fetchServicesAndAddons(serviceIds, ['no_addons'])
+  
   function getService(id:string){
-    return services?.find(serv => serv.id === id) as Service
+    const service = services?.find(serv => serv.id === id) as Service
+
+    if(service) return service
+
+    return {
+      name: 'service not found',
+      price: 0,
+      durationInHours: '0',
+      image: '',
+    }
   }
   
-  // return <p> price table debug </p>
   return<>
     <table className={styles.pricetable} >
       <thead>
@@ -43,7 +51,7 @@ export async function PriceTable({items = []}:Props):ReactElement<any, any> {
           {items.map((item, i) => (
             <th key={i}>
               <header className={styles.header} >
-                <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure>
+                <figure style={{backgroundImage: `url(${item.imageSrc || getService(item.service?.id).image})`}}></figure>
                 <h3>{ item.title || getService(item.service?.id).name}</h3>
               </header>
             </th>
@@ -61,7 +69,7 @@ export async function PriceTable({items = []}:Props):ReactElement<any, any> {
               data-button={item.buttonLabel}
             > 
               <header className={['mobile-only', styles.header].join(' ')}>
-                <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure>
+                <figure style={{backgroundImage: `url(${item.imageSrc || getService(item.service?.id).image})`}}></figure>
                 <h3>{item.title || getService(item.service?.id).name}</h3>
                 <div className="meta">
                   <h6 className="price"> {moneyFormatter(getService(item.service?.id).price)} </h6> 

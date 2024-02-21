@@ -65,13 +65,17 @@ function Main(addon?:Addon){
         <p> {excerpt} </p>
       </Card>
 
+      <p>
+        <Link href={`/services#addons`}> Other Addons </Link>
+      </p>
+
       <h2> Related Services </h2>
       <List>
 
         {services?.map(serv => (
           <div key={serv.id}>
             <Link href={`/services/${serv.id}`}>
-              <h4>{serv.name}</h4>
+              {serv.name}
             </Link>
           </div>
         ))}

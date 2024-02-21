@@ -117,7 +117,8 @@ function Main(service?:Service){
 
       <Link href={`/bookings?serviceId=${id}`} className='button large'> Book this Service </Link>
 
-      <h2 id='addons'> Addons Available </h2>
+      <h2 id='addons'> Add-Ons </h2>
+      <p> A list of add-ons available for this package </p>
       <List>
         {addons?.map(ad => (
           <Link key={ad.id} href={`/addons/${ad.id}`}> {ad.name}</Link>

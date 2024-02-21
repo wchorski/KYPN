@@ -36,6 +36,7 @@ export const imagegallery = component({
             overflowY: 'scroll',
             display: 'flex',
             scrollSnapType: 'y mandatory',
+            width: '17rem',
           }}
         >
           {props.fields.items.elements.map(item => {

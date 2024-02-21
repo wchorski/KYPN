@@ -2,7 +2,7 @@ import { list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, multiselect, relationship, select, text,  } from "@keystone-6/core/fields";
+import { decimal, integer, multiselect, relationship, select, text, timestamp,  } from "@keystone-6/core/fields";
 import { document } from '@keystone-6/fields-document';
 import { timesArray } from "../../lib/timeArrayCreator";
 import { permissions, rules } from "../access";
@@ -13,6 +13,7 @@ export const Service:Lists.Service = list({
 
   access: {
     filter: {
+      // todo put filter here for services that may be in 'DRAFT'
       query: () => true,
       update: rules.canManageServices,
       delete: rules.canManageServices,
@@ -25,10 +26,13 @@ export const Service:Lists.Service = list({
     }
   },
 
-  // todo hide these again
-  // ui: {
-  //   isHidden: true,
-  // },
+  ui: {
+    isHidden: args => !permissions.canManageServices(args),
+    listView: {
+      initialColumns: ['name', 'price', 'durationInHours', 'status', 'dateCreated'],
+      initialSort: { field: 'dateCreated', direction: 'DESC'}
+    },
+  },
 
 
   fields: {
@@ -145,5 +149,7 @@ export const Service:Lists.Service = list({
       ref: 'Tag.services',
       many: true,
     }),
+    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
+    dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
 })

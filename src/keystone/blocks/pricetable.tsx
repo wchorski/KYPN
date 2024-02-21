@@ -15,7 +15,7 @@ export const pricetable = component({
       fields.object({
         imageSrc: fields.url({
           label: 'Image URL',
-          defaultValue: FRONTEND_URL + '/assets/placeholder.png',
+          // defaultValue: FRONTEND_URL + '/assets/placeholder.png',
         }),
         title: fields.text({
           label: 'Custom Title',
