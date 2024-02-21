@@ -38,7 +38,7 @@ const queryAddons = `
 const queryServices = `
   id
   name
-  description
+  excerpt
   price
   buisnessHourOpen
   buisnessHourClosed

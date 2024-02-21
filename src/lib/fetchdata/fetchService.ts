@@ -10,7 +10,9 @@ export default async function fetchService(id:string){
       query: `
         id
         name
-        description 
+        description {
+          document
+        } 
         price
         image
         durationInHours

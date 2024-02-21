@@ -30,7 +30,7 @@ export async function generateMetadata(
     description: envs.SITE_DESC,
   }
 
-  const { id, name, description, image, categories, tags} = service
+  const { id, name, excerpt, image, categories, tags} = service
   
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -38,11 +38,11 @@ export async function generateMetadata(
   return {
     metadataBase: new URL(envs.FRONTEND_URL),
     title: name,
-    description: description,
+    description: excerpt,
     openGraph: {
       images: [String(image), ...previousImages],
       title: name,
-      description: description,
+      description: excerpt,
       url: envs.FRONTEND_URL + '/bookings?serviceId=' + id,
       type: 'article'
     },
@@ -112,7 +112,7 @@ function Main(service?:Service){
       </table>
       
       <Card>
-        {description}
+        <BlockRender document={description.document} />
       </Card>
 
       <Link href={`/bookings?serviceId=${id}`} className='button large'> Book this Service </Link>

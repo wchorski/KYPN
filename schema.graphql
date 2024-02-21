@@ -968,7 +968,8 @@ type Service {
   id: ID!
   name: String
   image: String
-  description: String
+  excerpt: String
+  description: Service_description_Document
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String
@@ -989,6 +990,10 @@ type Service {
   tagsCount(where: TagWhereInput! = {}): Int
 }
 
+type Service_description_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
 input ServiceWhereUniqueInput {
   id: ID
   name: String
@@ -1001,7 +1006,7 @@ input ServiceWhereInput {
   id: IDFilter
   name: StringFilter
   image: StringFilter
-  description: StringFilter
+  excerpt: StringFilter
   price: IntNullableFilter
   durationInHours: DecimalFilter
   buisnessHourOpen: StringNullableFilter
@@ -1048,7 +1053,7 @@ input ServiceOrderByInput {
   id: OrderDirection
   name: OrderDirection
   image: OrderDirection
-  description: OrderDirection
+  excerpt: OrderDirection
   price: OrderDirection
   durationInHours: OrderDirection
   buisnessHourOpen: OrderDirection
@@ -1059,7 +1064,8 @@ input ServiceOrderByInput {
 input ServiceUpdateInput {
   name: String
   image: String
-  description: String
+  excerpt: String
+  description: JSON
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String
@@ -1103,7 +1109,8 @@ input ServiceUpdateArgs {
 input ServiceCreateInput {
   name: String
   image: String
-  description: String
+  excerpt: String
+  description: JSON
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String

@@ -2,9 +2,11 @@ import { list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, integer, multiselect, relationship, select, text } from "@keystone-6/core/fields";
+import { decimal, integer, multiselect, relationship, select, text,  } from "@keystone-6/core/fields";
+import { document } from '@keystone-6/fields-document';
 import { timesArray } from "../../lib/timeArrayCreator";
 import { permissions, rules } from "../access";
+import { componentBlocks } from "../../keystone/blocks";
 
 
 export const Service:Lists.Service = list({
@@ -32,10 +34,51 @@ export const Service:Lists.Service = list({
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
     image: text(),
-    description: text({
+    excerpt: text({
       ui: {
         displayMode: 'textarea'
       }
+    }),
+    description: document({
+      componentBlocks,
+      ui: {
+        views: './src/keystone/blocks',
+      },
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true,
+          code: true,
+          superscript: true,
+          subscript: true,
+          keyboard: true,
+        },
+        listTypes: {
+          ordered: true,
+          unordered: true,
+        },
+        alignment: {
+          center: true,
+          end: true,
+        },
+        headingLevels: [2, 3, 4, 5, 6],
+        blockTypes: {
+          blockquote: true,
+          code: true
+        },
+        softBreaks: true,
+      },
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1],
+      ],
+      links: true,
+      dividers: true,
     }),
     price: integer({ defaultValue: 0 }),
     durationInHours: decimal({

@@ -21,7 +21,7 @@ export default async function fetchBookingFormData(){
       query: `
         id
         name
-        description
+        excerpt
         price
         buisnessHourOpen
         buisnessHourClosed

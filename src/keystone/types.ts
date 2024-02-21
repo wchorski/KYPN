@@ -407,7 +407,10 @@ export type Service = {
   id: string,
   name: string,
   image:string,
-  description: string,
+  excerpt: string,
+  description: {
+    document: any
+  },
   price: number,
   durationInHours: string,
   buisnessHourOpen: string,
