@@ -35,6 +35,7 @@ const query = `
     url
   }
   dateModified
+  dateCreated
   excerpt
   pinned
   slug

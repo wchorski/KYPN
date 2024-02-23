@@ -1,0 +1,196 @@
+/*generated with Input range slider CSS style generator (version 20201223)
+https://toughengineer.github.io/demo/slider-styler*/
+
+$thumb-active-color: var(--c-secondary);
+$thumb-hover-color: var(--c-accent);
+$value-hover: var(--c-secondary);
+$value-active-color: var(--c-accent);
+$value-color: var(--c-primary);
+$color-upper: #2e2e2e;
+$track-active-color: #363636;
+$border-color: transparent;
+$background: transparent;
+
+input[type=range].slider {
+  height: 2.2em;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/*progress support*/
+input[type=range].slider {
+  --range: calc(var(--max) - var(--min));
+  --ratio: calc((var(--value) - var(--min)) / var(--range));
+  --sx: calc(0.5 * 2em + var(--ratio) * (100% - 2em));
+}
+
+input[type=range].slider:focus {
+  outline: none;
+}
+
+/*webkit*/
+input[type=range].slider::-webkit-slider-thumb {
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  background: $value-color;
+  border: none;
+  box-shadow: 0 0 2px black;
+  margin-top: calc(max((1em - 1px - 1px) * 0.5,0px) - 2em * 0.5);
+  -webkit-appearance: none;
+}
+
+input[type=range].slider::-webkit-slider-runnable-track {
+  height: 1em;
+  border-radius: 0.5em;
+  background: $color-upper;
+  border: 1px solid $border-color;
+  box-shadow: none;
+}
+input[type=range].slider::-webkit-slider-thumb:hover {
+  background: $thumb-hover-color;
+
+}
+
+input[type=range].slider:hover::-webkit-slider-runnable-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-webkit-slider-thumb:active {
+  background: $thumb-active-color;
+}
+
+input[type=range].slider:active::-webkit-slider-runnable-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-webkit-slider-runnable-track {
+  background: linear-gradient($value-color,$value-color) 0/var(--sx) 100% no-repeat, $color-upper;
+}
+
+input[type=range].slider:hover::-webkit-slider-runnable-track {
+  background: linear-gradient($value-color,$value-color) 0/var(--sx) 100% no-repeat, $track-active-color;
+}
+
+input[type=range].slider:active::-webkit-slider-runnable-track {
+  background: linear-gradient($value-hover,$value-hover) 0/var(--sx) 100% no-repeat, $track-active-color;
+}
+
+/*mozilla*/
+input[type=range].slider::-moz-range-thumb {
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  background: $value-color;
+  border: none;
+  box-shadow: 0 0 2px black;
+}
+
+input[type=range].slider::-moz-range-track {
+  height: max(calc(1em - 1px - 1px),0px);
+  border-radius: 0.5em;
+  background: $color-upper;
+  border: 1px solid $border-color;
+  box-shadow: none;
+}
+
+input[type=range].slider::-moz-range-thumb:hover {
+  background: $thumb-hover-color;
+}
+
+input[type=range].slider:hover::-moz-range-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-moz-range-thumb:active {
+  background: $thumb-active-color;
+}
+
+input[type=range].slider:active::-moz-range-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-moz-range-track {
+  background: linear-gradient($value-color,$value-color) 0/var(--sx) 100% no-repeat, $color-upper;
+}
+
+input[type=range].slider:hover::-moz-range-track {
+  background: linear-gradient($value-color,$value-color) 0/var(--sx) 100% no-repeat, $track-active-color;
+}
+
+input[type=range].slider:active::-moz-range-track {
+  background: linear-gradient($value-hover,$value-hover) 0/var(--sx) 100% no-repeat, $track-active-color;
+}
+
+/*ms*/
+input[type=range].slider::-ms-fill-upper {
+  background: transparent;
+  border-color: transparent;
+}
+
+input[type=range].slider::-ms-fill-lower {
+  background: transparent;
+  border-color: transparent;
+}
+
+input[type=range].slider::-ms-thumb {
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  background: $value-color;
+  border: none;
+  box-shadow: 0 0 2px black;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+
+input[type=range].slider::-ms-track {
+  height: 1em;
+  border-radius: 0.5em;
+  background: $color-upper;
+  border: 1px solid $border-color;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+input[type=range].slider::-ms-thumb:hover {
+  background: $thumb-hover-color;
+}
+
+input[type=range].slider:hover::-ms-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-ms-thumb:active {
+  background: $thumb-active-color;
+}
+
+input[type=range].slider:active::-ms-track {
+  background: $track-active-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider::-ms-fill-lower {
+  height: max(calc(1em - 1px - 1px),0px);
+  border-radius: 0.5em 0 0 0.5em;
+  margin: -1px 0 -1px -1px;
+  background: $value-color;
+  border: 1px solid $border-color;
+  border-right-width: 0;
+}
+
+input[type=range].slider:hover::-ms-fill-lower {
+  background: $value-color;
+  border-color: $border-color;
+}
+
+input[type=range].slider:active::-ms-fill-lower {
+  background: $value-hover;
+  border-color: $border-color;
+}

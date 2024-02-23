@@ -23,6 +23,7 @@ import { Card } from '@components/layouts/Card';
 import styles from '@styles/blog/blogpost.module.scss'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates';
 import { PostTHeaderContentFooter } from '@components/layouts/PostTemplates';
+import { Video } from '@components/blocks/Video';
 
 export const revalidate = 5;
 
@@ -114,6 +115,9 @@ type Header = {
 }
 
 function Header({ title, featured_image, author, dateCreated}:Header){
+
+  console.log({dateCreated});
+  
 
   return<>
     {/* <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>

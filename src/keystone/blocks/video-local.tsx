@@ -18,6 +18,10 @@ export const videoLocal = component({
       label: 'Alt text',
       defaultValue: 'Embedded video',
     }),
+    autoPlay: fields.checkbox({
+      label: 'Autoplay Video',
+      defaultValue: false,
+    }),
   },
   // todo remove this youtube formating
   preview: function YouTubeVideo(props) {
