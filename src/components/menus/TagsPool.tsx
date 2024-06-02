@@ -13,7 +13,7 @@ export async function TagsPool():any {
     <ul className={styles.tags}>
       {tags?.map((t:Tag, i:number) => (
         <li key={i}>
-          <Link key={t.name} className='tag' href={`/tags/${t.name}`} >{t.name}</Link>
+          <Link key={t.name} className='tag' href={`/tags?tags=${t.id}`} >{t.name}</Link>
         </li>
       ))}
     </ul>

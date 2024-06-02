@@ -21,7 +21,7 @@ import { Section } from '@components/blocks/Section';
 import SliderSlick from '@components/blocks/SliderSlick';
 import { Carousel } from '@components/blocks/Carousel';
 import { Quote } from '@components/blocks/Quote';
-import { Hero } from '@components/menus/Hero';
+import { Hero } from '@components/blocks/Hero';
 import { InfoCard } from '@components/blocks/InfoCard';
 import { BlockLayout } from '@components/blocks/BlockLayout';
 import { Paragraph } from '@components/blocks/ParagraphBlock';

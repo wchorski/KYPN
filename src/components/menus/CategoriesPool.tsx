@@ -13,7 +13,7 @@ export async function CategoriesPool():any {
     <ul className={styles.categories}>
       {categories?.map((c:Category, i:number) => (
         <li key={i}>
-          <Link key={c.name} className='cat' href={`/categories/${c.name}`} >{c.name}</Link>
+          <Link key={c.name} className='cat' href={`/categories?categories=${c.id}`} >{c.name}</Link>
         </li>
       ))}
     </ul>

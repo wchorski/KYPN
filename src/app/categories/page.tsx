@@ -6,23 +6,43 @@ import { Metadata } from "next";
 import { Section } from "@components/layouts/Section";
 import Link from "next/link";
 import fetchCategories from "@lib/fetchdata/fetchCats";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/session";
+import { fetchPosts } from "@lib/fetchdata/fetchPosts";
+import { CategoriesPool } from "@components/menus/CategoriesPool";
+import { PostsList } from "@components/blocks/PostsList";
+import { BlogList } from "@components/blog/BlogList";
 
+type Props = {
+  params:{
+    page:string | string[] | undefined,
+  },
+  searchParams: { 
+    [key: string]: string | string[] | undefined, 
+    categories: string | undefined, 
+    page: string | undefined, 
+  }
+}
 
 export const metadata: Metadata = {
   title: `Categoires | ` + envs.SITE_TITLE,
   description: envs.SITE_DESC,
 }
 
-export default async function CategoriesPage() {
+export default async function CategoriesPage({ params, searchParams }:Props) {
 
-  const { categories, error } = await fetchCategories()
+  const session = await getServerSession(nextAuthOptions);
+  const { page, categories } = searchParams
+  const currPage = Number(page) || 1
+  const categoryIds = categories?.split(',') || []
+  const { posts, count, error } = await fetchPosts(currPage, categoryIds, session )
 
   if(error) return <ErrorMessage error={error}/>
 
   return <>
     <PageTHeaderMain 
       header={Header()}
-      main={Main({categories})}
+      main={Main({posts})}
     />
 
   </>
@@ -38,22 +58,15 @@ function Header(){
 }
 
 type Main = {
-  categories:Category[]|undefined,
+  posts:Post[]|undefined,
 }
 
-function Main({categories}:Main) {
-
-  if(!categories) <p> no categories found </p>
+function Main({posts}:Main) {
   
   return<>
     <Section layout='1'>
-      <ul>
-        {categories?.map(cat => (
-          <li key={cat.id}>
-            <Link href={`/categories/${cat.name}`}> {cat.name} </Link>
-          </li>
-        ))}
-      </ul>
+      <CategoriesPool />
+      {posts && <BlogList posts={posts} />}
     </Section>
   </>
 }
