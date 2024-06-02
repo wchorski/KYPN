@@ -30,7 +30,7 @@ const baseUrl = envs.FRONTEND_URL
 export default function UserVerifyEmail({
   user = {email: 'z@m.lan', name: 'Zenon', id: '123'},
   updatedDate = new Date('June 23, 2022 4:06:00 pm UTC'),
-  verifyLink = envs.FRONTEND_URL + `/auth/verify?userEmail${user.email}`
+  verifyLink = envs.FRONTEND_URL + `/verify?userEmail${user.email}`
 }: TwitchResetPasswordEmailProps){
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
@@ -90,8 +90,8 @@ export default function UserVerifyEmail({
         </Container>
 
         <Section style={footer}>
-          <Row>
-          </Row>
+          {/* <Row>
+          </Row> */}
           <Text style={{ textAlign: 'center', color: '#706a7b' }}>
             <Button href={envs.FRONTEND_URL}> {envs.SITE_TITLE}</Button> <br />
             {/* 350 Bush Street, 2nd Floor, San Francisco, CA, 94104 - USA */}

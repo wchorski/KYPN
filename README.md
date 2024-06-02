@@ -6,35 +6,33 @@ A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [e
 
 > These can be edited from the Keystone UI, but here is the initial permission layout
 
-- Admin
+- Admin 
   - everything
   - CRUD any Product
   - CRUD any Role
   - CRUD any Order / OrderItem
-- Editor
+- Editor 
   - 'author' of products
   - CRUD any product
-- Client
+- Client 
   - buy products
   - view their own orders
-- Anyone
+- Anyone 
   - view store items
 
 ## Init
 
-
-- create site unique assets for your brand
+- create site unique assets for your brand 
   - `public/assets/logo.svg`
   - `public/assets/logo.png`
   - `public/assets/placeholder.png`
   - `public/favicon.ico`
-- copy these files & folders (or use `init.sh` to automate)
+- copy these files & folders (or use `init.sh` to automate) 
   - `cp src/layout.init.tsx src/layout.tsx`
   - `cp src/components/menus/Footer.init.tsx src/components/menus/Footer.tsx`
   - `cp src/components/menus/Hero.init.tsx src/components/menus/Hero.tsx`
   - `cp src/components/menus/Nav.init.tsx src/components/menus/Nav.tsx`
-  - `cp src/components/menus/MainNavList.init.tsxsrc/components/menus/MainNavList.tsx`
-  <!-- - `cp src/styles-init src/styles` -->
+  - `cp src/components/menus/MainNavList.init.tsxsrc/components/menus/MainNavList.tsx` <!-- - `cp src/styles-init src/styles` -->
   - `cp src/styles/vars.init.scss src/styles/vars.scss`
   - `cp src/styles/fonts.init.ts src/styles/fonts.ts`
   - `cp src/keystone/seed/seed_data.empty.ts src/keystone/seed/seed_data.ts`.
@@ -45,8 +43,8 @@ uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check Keyst
 
 set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 
-| Provider | setup url | 
-| --- | --- |
+| Provider | setup url |
+|----------|-----------|
 | Github | https://github.com/settings/developers |
 | Google | https://console.cloud.google.com/apis/dashboard |
 
@@ -83,16 +81,18 @@ https://myaccount.google.com/security
 
 using stripe CLI have it listen to this webhook
 https://stripe.com/docs/webhooks/quickstart
+
 ```sh
 stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 ```
 
-During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts` 
+During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`
 
 > [!info] Document
 > any field using the `document` type will query with an extra nested `document` key. You can remove this
 
 example query from apollo playground
+
 ```json
 {
   content: { 
@@ -111,6 +111,7 @@ example query from apollo playground
 ```
 
 take out the `document` field
+
 ```json
 {
   content: [
@@ -126,11 +127,11 @@ take out the `document` field
 }
 ```
 
-
 ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
 
 ## Gotchas
-- the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies 
+
+- the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies
 
 ## TODO
 

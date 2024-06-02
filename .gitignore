@@ -34,7 +34,7 @@ public/favicon.ico
 public/marker.svg
 public/assets/placeholder.png
 public/assets/private/*
-private/**
+**/private/**
 !private/README.md
 
 # images

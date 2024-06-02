@@ -127,7 +127,7 @@ type UserVerify = {
 export async function mailVerifyUser({to, user, token}:UserVerify): Promise<void> {
   // email the user a token
 
-  const verifyLink = envs.FRONTEND_URL + `/auth/verify?email=${user.email}&token=${token}`
+  const verifyLink = envs.FRONTEND_URL + `/verify?email=${user.email}&token=${token}`
 
   const html = render(UserVerifyEmail({user, updatedDate: new Date(), verifyLink }))
   const info = (await transport.sendMail({

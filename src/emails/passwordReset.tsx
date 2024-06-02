@@ -32,7 +32,7 @@ export default function PasswordRestEmail({
   user = {email: 'z@m.lan', name: 'Zenon', id: '123'},
   updatedDate = new Date('June 23, 2022 4:06:00 pm UTC'),
   resetToken = '123',
-  resetLink = envs.FRONTEND_URL + `/auth/password-reset?email=${user.email}&token=${resetToken}`
+  resetLink = envs.FRONTEND_URL + `/password-reset?email=${user.email}&token=${resetToken}`
 }: TwitchResetPasswordEmailProps){
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
@@ -61,7 +61,7 @@ export default function PasswordRestEmail({
               You requested a password reset on {' '}
               {formattedDate}. If you did not request to reset your password, 
               ignore this request and consider changing your password to a more secure option by
-              <Link href={envs.FRONTEND_URL + `/auth`}> Logging into your Account </Link>
+              <Link href={envs.FRONTEND_URL + `/login`}> Logging into your Account </Link>
             </Text>
             <Text style={paragraph}>
 
@@ -92,14 +92,14 @@ export default function PasswordRestEmail({
         </Container>
 
         <Section style={footer}>
-          <Row>
-            {/* <Column align="right" style={{ width: '50%', paddingRight: '8px' }}>
+          {/* <Row>
+            <Column align="right" style={{ width: '50%', paddingRight: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-twitter.png`} />
             </Column>
             <Column align="left" style={{ width: '50%', paddingLeft: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-facebook.png`} />
-            </Column> */}
-          </Row>
+            </Column>
+          </Row> */}
           <Text style={{ textAlign: 'center', color: '#706a7b' }}>
             <Button href={envs.FRONTEND_URL}> {envs.SITE_TITLE}</Button> <br />
             {/* 350 Bush Street, 2nd Floor, San Francisco, CA, 94104 - USA */}

@@ -47,7 +47,7 @@ function Header(callbackUrl?:string){
 
   return<>
     <Section layout={'1'}>
-      <h1> Login or Register Account </h1>
+      <h1> Login </h1>
       {callbackUrl && (
         <p className='error'> You must login first to access the page </p>
       )}
@@ -63,7 +63,7 @@ function Main(providers:any, sessionEmail?:string|null, error?:'CredentialsSigni
       <PasswordRequestForm /> 
     </DialogPopup>
 
-    <Section layout={'1_1'}>
+    <Section layout={'1'}>
 
       <div style={styleForms}>
         {sessionEmail && <Callout intent={'info'}>
@@ -78,7 +78,8 @@ function Main(providers:any, sessionEmail?:string|null, error?:'CredentialsSigni
       
       <div>
 
-        <RegsiterForm />
+        <h4> Create a New Account </h4>
+        <Link href={`/register`}> Register Now </Link>
 
       </div>
     </Section>

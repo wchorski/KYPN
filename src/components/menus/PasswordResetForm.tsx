@@ -179,7 +179,7 @@ export function PasswordResetForm({token, email}:Props) {
           {formState.status !== 'success' ? (
             <SubmitButton />
           ) : (
-            <Link href={`/auth`}> Login </Link>
+            <Link href={`/login`}> Login </Link>
           )}
 
         </fieldset>
