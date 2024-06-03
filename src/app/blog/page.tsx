@@ -15,6 +15,7 @@ import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { Section } from "@components/layouts/Section";
 import { NoData } from "@components/elements/NoData";
+import { CSSProperties } from "react";
 
 type Props = {
   params:{
@@ -48,7 +49,7 @@ export default async function BlogFeedPage({ params, searchParams }:Props) {
     <PageTHeaderMainAside 
       header={Header()}
       main={Main({page: currPage, posts, count})}
-      aside={Aside()}
+      aside={Aside(categoryIds)}
     />
 
   )
@@ -89,17 +90,21 @@ function Main({posts, page, count}:Main) {
   </>
 }
 
-function Aside() {
+function Aside(categoryIds?:string[]) {
+
+  const styleHeader:CSSProperties = {
+    fontSize: '1.3rem'
+  }
   
   return<>
     <Card>
-      <h2> Categories </h2>
-      <CategoriesPool />
+      <h2 style={styleHeader}> Categories </h2>
+      <CategoriesPool activeIds={categoryIds}/>
 
     </Card>
 
     <Card>
-      <h2> Tags </h2>
+      <h2 style={styleHeader}> Tags </h2>
       <TagsPool />
     </Card>
   </>

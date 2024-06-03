@@ -3,9 +3,11 @@ import styles from '@styles/categories.module.scss'
 import fetchCategories from "@lib/fetchdata/fetchCats"
 import { Category } from "@ks/types"
 
-// any is a bug workaround
-// @ts-ignore
-export async function CategoriesPool():any {
+type Props = {
+  activeIds?:string[]
+}
+
+export async function CategoriesPool({activeIds}:Props) {
 
   const {categories, error} = await fetchCategories()
 
@@ -13,7 +15,13 @@ export async function CategoriesPool():any {
     <ul className={styles.categories}>
       {categories?.map((c:Category, i:number) => (
         <li key={i}>
-          <Link key={c.name} className='cat' href={`/categories?ids=${c.id}`} >{c.name}</Link>
+          <Link 
+            key={c.name} 
+            className={styles.link + ' ' + (activeIds?.includes(c.id) ? styles.active : '')} 
+            href={`/categories?ids=${c.id}`} 
+          >
+            {c.name}
+          </Link>
         </li>
       ))}
     </ul>
