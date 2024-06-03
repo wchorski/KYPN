@@ -4,7 +4,15 @@ import { Post } from "@ks/types"
 
 const perPage = envs.PERPAGE
 
-export async function fetchPosts(page:number, categoryIds:string[], session:any){
+type Props = {
+  page?:number,
+  categoryIds?:string[],
+  tagIds?:string[],
+  session:any,
+}
+
+// export async function fetchPosts(page:number, categoryIds:string[], session:any){
+export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props){
   
   try {
 
@@ -30,10 +38,16 @@ export async function fetchPosts(page:number, categoryIds:string[], session:any)
     }
     
     
-    if(categoryIds.length > 0){
+    if(categoryIds && categoryIds.length > 0){
       where = {
         ...where,
-        OR: {categories: { some: { id: { in: categoryIds }}}},
+        categories: { some: { id: { in: categoryIds }}},
+      }
+    }
+    if(tagIds && tagIds.length > 0){
+      where = {
+        ...where,
+        tags: { some: { id: { in: tagIds }}},
       }
     }
 

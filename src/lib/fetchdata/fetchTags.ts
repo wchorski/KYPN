@@ -6,11 +6,17 @@ import { Tag } from '@ks/types';
 import { keystoneContext } from '@ks/context';
 
 
-export default async function fetchTags(){
+export default async function fetchTags(tagIds?:string[]){
 
   try {
 
-    const variables = {}
+    const filterByIds = tagIds ? { 
+      where: {
+        id: {
+          in: tagIds
+        } 
+      }
+      } : {}
 
     // ? doesn't work when requesting from server side (i.e. this API route)
     // const data  = await client.request(query, variables)
@@ -19,7 +25,7 @@ export default async function fetchTags(){
     
     const tags = await keystoneContext.query.Tag.findMany({
       query: query,
-      ...variables,
+      ...filterByIds,
     }) as Tag[]
     // console.log({tags});
 
@@ -31,16 +37,10 @@ export default async function fetchTags(){
     // const { tags } = data
     // // console.log({tags});
     
-
-    
-    
-
-    // if(error) return error
-    
     return { tags }
     
   } catch (error) {
-    console.log('!!! !!! !!! fetch Tags: ', error)
+    console.log('!!! fetch Tags: ', error)
     return { error }
     
   }

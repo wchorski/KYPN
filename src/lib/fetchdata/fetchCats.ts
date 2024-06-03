@@ -1,14 +1,22 @@
 import { Category } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchCategories(){
+export default async function fetchCategories(categoryIds?:string[]){
+
+  const filterByIds = categoryIds ? { 
+    where: {
+      id: {
+        in: categoryIds
+      } 
+    }
+    } : {}
 
   try {
 
     const variables = {}
     const categories = await keystoneContext.query.Category.findMany({
       query: query,
-      ...variables,
+      ...filterByIds,
     }) as Category[]
     
     return { categories }

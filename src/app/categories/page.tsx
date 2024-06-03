@@ -12,6 +12,7 @@ import { fetchPosts } from "@lib/fetchdata/fetchPosts";
 import { CategoriesPool } from "@components/menus/CategoriesPool";
 import { PostsList } from "@components/blocks/PostsList";
 import { BlogList } from "@components/blog/BlogList";
+import { Card } from "@components/layouts/Card";
 
 type Props = {
   params:{
@@ -19,7 +20,7 @@ type Props = {
   },
   searchParams: { 
     [key: string]: string | string[] | undefined, 
-    categories: string | undefined, 
+    ids: string | undefined, 
     page: string | undefined, 
   }
 }
@@ -32,41 +33,48 @@ export const metadata: Metadata = {
 export default async function CategoriesPage({ params, searchParams }:Props) {
 
   const session = await getServerSession(nextAuthOptions);
-  const { page, categories } = searchParams
+  const { page, ids } = searchParams
   const currPage = Number(page) || 1
-  const categoryIds = categories?.split(',') || []
-  const { posts, count, error } = await fetchPosts(currPage, categoryIds, session )
+  const categoryIds = ids?.split(',') || []
+  const { posts, count, error: postsError } = await fetchPosts({page: currPage, categoryIds, session} )
+  const {categories, error: catsError } = await fetchCategories(categoryIds)
 
-  if(error) return <ErrorMessage error={error}/>
+  if(postsError || catsError) return <ErrorMessage error={postsError || catsError}/>
 
   return <>
     <PageTHeaderMain 
-      header={Header()}
-      main={Main({posts})}
+      header={Header(categories)}
+      main={Main({posts, categories})}
     />
 
   </>
 }
 
-function Header(){
+function Header(categories?:Category[]){
 
   return <>
     <Section layout={'1'}>
-      <h1> Categories </h1>
+      <h1 style={{marginBottom: 0,}}> Categories {categories ? ':' : null }</h1>
+      <p style={{marginTop: 0, color: 'var(--c-primary)'}}>{categories?.map(c => c.name).join(', ')}</p>
     </Section>
   </>
 }
 
 type Main = {
-  posts:Post[]|undefined,
+  posts?:Post[],
+  categories?:Category[],
 }
 
-function Main({posts}:Main) {
+function Main({posts, categories}:Main) {
   
   return<>
     <Section layout='1'>
-      <CategoriesPool />
+      <h4>Posts: </h4>
       {posts && <BlogList posts={posts} />}
+      <Card>
+        <h4> All Categories</h4>
+        <CategoriesPool />
+      </Card>
     </Section>
   </>
 }
