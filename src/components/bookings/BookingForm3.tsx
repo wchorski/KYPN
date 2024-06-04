@@ -46,14 +46,16 @@ type FormState = {
 }
 
 type Props = {
-  services:Service[], 
-  locations:Location[], 
-  addons:Addon[],
-  employees:User[],
-  availabilities:Availability[],
-  gigs:Booking[],
-  session:Session,
-  prevBooking?:BookingPrevious,
+  data: {
+    services?:Service[] | undefined, 
+    locations?:Location[] | undefined, 
+    addons?:Addon[] | undefined,
+    employees?:User[] | undefined,
+    availabilities?:Availability[] | undefined,
+    gigs?:Booking[] | undefined,
+    prevBooking?:BookingPrevious | undefined,
+  }
+  session?:Session,
 }
 
 type StateRed = {
@@ -105,7 +107,9 @@ type FormAsideAction =
 
 const genTimeStrings = generateTimesArray().map((t) => t.value)
 
-export function BookingForm3 ({ services, locations, addons, employees, availabilities, gigs, session, prevBooking }:Props) {
+export function BookingForm3 ({ data, session }:Props) {
+
+  const {services = [], locations = [], addons = [], employees = [], availabilities = [], gigs = [], prevBooking} = data
 
   const serviceRef = useRef<HTMLSelectElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -486,6 +490,7 @@ export function BookingForm3 ({ services, locations, addons, employees, availabi
     return currentTimes
 
   }
+  
   
 
   return <div className={formStyles.grid_wrap} >

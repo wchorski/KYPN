@@ -1,4 +1,4 @@
-import { Addon, Service, User } from "@ks/types";
+import { Addon, Availability, Booking, Location, Service, User } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
 const now = new Date().toISOString()
@@ -54,7 +54,7 @@ export default async function fetchBookingFormData(){
           end
         }
       `
-    })
+    }) as Location[]
 
     const addons = await contextSudo.query.Addon.findMany({
       where: {
@@ -120,7 +120,7 @@ export default async function fetchBookingFormData(){
         end
         type
       `
-    })
+    }) as Availability[]
     
     const gigs = await contextSudo.sudo().query.Booking.findMany({
       where: {
@@ -150,101 +150,15 @@ export default async function fetchBookingFormData(){
           id
         }
       `
-    })
-
-    // const data = await contextSudo.graphql.run({
-    //   query: `
-    //     query Query($servicesWhere: ServiceWhereInput!, $addonsWhere: AddonWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
-    //       services(where: $servicesWhere) {
-    //         id
-    //         name
-    //         description
-    //         price
-    //         buisnessHourOpen
-    //         buisnessHourClosed
-    //         buisnessDays
-    //         durationInHours
-    //         locations {
-    //           id
-    //           name
-    //           address
-    //           rooms
-    //           bookings {
-    //             start
-    //             end
-    //           }
-    //         }
-    //         addons {
-    //           id
-    //           name
-    //           price
-    //         }
-    //         employees {
-    //           id
-    //           name
-    //           buisnessHourOpen
-    //           buisnessHourClosed
-    //           gigs(where: $gigsWhere) {
-    //             start
-    //             end
-    //           }
-    //           availability(where: $availWhere) {
-    //             start
-    //             end
-    //             type
-    //           }
-    //         }
-    //       }
-    //       addons(where: $addonsWhere){
-    //         id
-    //         name
-    //         excerpt
-    //         price
-    //         services {
-    //           id
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   variables: {
-    //     servicesWhere: {
-    //       // filter upon status. Once that's put in of course
-    //     },
-    //     addonsWhere: {
-          // status: {
-          //   in: [
-          //     "AVAILABLE",
-          //   ]
-          // },
-    //     },
-    //     gigsWhere: {
-    //       end: {
-    //         gt: now
-    //       },
-    //       status: {
-    //         in: [
-    //           "ACTIVE",
-    //           "DOWNPAYMENT",
-    //           "HOLD"
-    //         ]
-    //       },
-    //     },
-    //     availWhere: {
-    //       end: {
-    //         gt: now
-    //       },
-    //     }
-    //   }
-    // }) as {services:Service[], addons:Addon[]}
-
-    // console.log(JSON.stringify(data, null, 2));
-    // const {services, addons} = data
+    }) as Booking[]
+    
     
     // todo actually i think i want to as a users part as I don't want to be querying 1 user multple times. also I'm already querying addons multiple times too
-    return { services, locations, addons, employees, availabilities, gigs }
+    const data = { services, locations, addons, employees, availabilities, gigs }
+    return {data}
     
   } catch (error) {
-    console.log('fetch Booking Form Data: ', error)
+    console.log('!!! fetch Booking Form Data: ', error)
     return { error }
   }
 }

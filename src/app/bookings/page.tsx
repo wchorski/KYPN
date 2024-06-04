@@ -11,6 +11,7 @@ import fetchBookingFormData from "@lib/fetchdata/fetchBookingFormInfo"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
+import {BookFormDebug} from '@components/bookings/BookFormDebug'
 
 export const metadata: Metadata = {
   title: 'Bookings | ' + envs.SITE_TITLE,
@@ -45,17 +46,19 @@ export default async function BookingsPage ({ searchParams }:Props) {
   
 
   // const { services, addons, error } = await fetchServicesAndAddons()
-  const { services, locations, addons, employees, availabilities, gigs, error } = await fetchBookingFormData()
+  // const { services, locations, addons, employees, availabilities, gigs, error } = await fetchBookingFormData()
+  const {data, error} = await fetchBookingFormData()
   const session = await getServerSession(nextAuthOptions)
   
 
-  if(error) return <ErrorMessage error={error} />
+  if(error || !data) return <ErrorMessage error={error} />
+
+  // const data = {services, locations, addons, employees, availabilities, gigs, session, prevBooking}
 
   return(
     <PageTHeaderMain 
       header={Header()}
-      // @ts-ignore
-      main={Main({services, locations, addons, employees, availabilities, gigs, session, prevBooking })}
+      main={Main({data, session})}
     />
   )
 }
@@ -70,48 +73,28 @@ function Header(){
 }
 
 type Main = {
-  services:Service[]|undefined, 
-  locations:Location[]|undefined, 
-  addons:Addon[]|undefined,
-  employees:User[]|undefined,
-  availabilities:Availability[]|undefined,
-  gigs:Booking[]|undefined,
-  session:Session,
-  prevBooking?:BookingPrevious,
+  data: {
+    services?:Service[] | undefined, 
+    locations?:Location[] | undefined, 
+    addons?:Addon[] | undefined,
+    employees?:User[] | undefined,
+    availabilities?:Availability[] | undefined,
+    gigs?:Booking[] | undefined,
+    prevBooking?:BookingPrevious | undefined,
+  }
+  session:any,
 }
 
-function Main({
-  services = [], 
-  locations = [], 
-  addons = [],
-  employees = [],
-  availabilities = [],
-  gigs = [],
-  session,
-  prevBooking,
-  
+async function Main({
+  data
 }: Main){
 
+  //? hack fix to stop typescript server to client warnings for "complex" objects (even tho they weren't)
+  const plainObject = JSON.parse(JSON.stringify(data))
 
   return<>
   <Section layout={'1'}>
-
-    <BookingForm3 
-      services={services}
-      locations={locations}
-      addons={addons}
-      employees={employees}
-      availabilities={availabilities}
-      gigs={gigs}
-      session={session}
-      prevBooking={prevBooking}
-    />
-    {/* <BookingForm 
-      services={services}
-      addons={addons}
-      session={session}
-      prevBooking={prevBooking}
-    /> */}
+    <BookingForm3 data={plainObject}/>
   </Section>
   </>
 }

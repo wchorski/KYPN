@@ -210,11 +210,10 @@ export const Booking:Lists.Booking = list({
           },
         })
         if(!calRes) return
-        console.log('### booking afteropt create calRes, ', calRes);
+        // console.log('### booking afteropt create calRes, ', calRes);
         const updateBooking = await context.sudo().query.Booking.updateOne({
           where: { id: item.id},
           data: {
-            secretNotes: '### SUPER SECRET NOTE DEFAULT',
             //@ts-ignore
             google: calRes
           }
@@ -275,7 +274,7 @@ export const Booking:Lists.Booking = list({
         
         if(!calResponse) return
         resolvedData.google = calResponse
-        console.log("## booking afteropt resolvedData: ", resolvedData);
+        // console.log("## booking afteropt resolvedData: ", resolvedData);
         
       }
 
