@@ -94,7 +94,7 @@ type PasswordRequest = {
 export async function mailPasswordRequest({to, resetToken, user}:PasswordRequest): Promise<void> {
   // email the user a token
 
-  const resetLink = envs.FRONTEND_URL + `/auth/password-reset?email=${user.email}&token=${resetToken}`
+  const resetLink = envs.FRONTEND_URL + `/password-reset?email=${user.email}&token=${resetToken}`
 
   const html = render(PasswordResetEmail({user, updatedDate: new Date(), resetToken, resetLink }))
   const info = (await transport.sendMail({

@@ -453,7 +453,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
             </ul>
 
             <div 
-              // className={'flex gap-1'}
+              // className={'flex gap_1'}
             >
               <label htmlFor="location" className={styles.input_label}>
                 <span> Location </span>

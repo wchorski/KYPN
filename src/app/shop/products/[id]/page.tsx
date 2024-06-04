@@ -137,7 +137,7 @@ function Main({ product, session }:Main) {
               {isForSale && <AddToCart productId={id} sessionId={session.itemId} type={'SALE'}/>}
               {isForRent && <AddToCart productId={id} sessionId={session.itemId} type={'RENTAL'}/>}
             </> : (
-              <Link href={`/api/auth/signin`}> login to shop </Link>
+              <Link href={`/login`}> login to shop </Link>
             )}
 
             <div className={styles.description_wrap}>

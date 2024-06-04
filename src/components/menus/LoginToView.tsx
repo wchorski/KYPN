@@ -19,7 +19,7 @@ export function LoginToView ({ children }:Props) {
       </p>
       
       <p> 
-        <Link href={`/api/auth/signin`}> Login </Link> to view account 
+        <Link href={`/login`}> Login </Link> to view account 
       </p>
       {children}
     </Section>

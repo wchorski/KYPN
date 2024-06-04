@@ -111,7 +111,7 @@ function Main(
         <TicketForm event={event} user={session?.user}/>
       ) : (
         <p> must have an account to order tickets and redeem tickets.
-          <Link href={`/api/auth/signin`}> Login </Link> or <Link href={`/auth/register`}> Create an Account </Link>
+          <Link href={`/login`}> Login </Link> or <Link href={`/register`}> Create an Account </Link>
         </p>
       )}
     </DialogPopup>

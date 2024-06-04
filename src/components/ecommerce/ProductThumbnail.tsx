@@ -58,7 +58,7 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
               </>
               : <button disabled={true}> out of stock </button>
               
-            : <Link href={`/api/auth/signin`}> Login to shop </Link>
+            : <Link href={`/login`}> Login to shop </Link>
           }
         </div>
       </div>

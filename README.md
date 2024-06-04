@@ -148,6 +148,7 @@ ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *
   - [ ] `Hero.tsx`
   - [ ] `Nav.tsx`
   - [ ] `layout.tsx`
+- [ ] add option for multi email brokers (other than gmail)
 
 ## Color pallet?
 

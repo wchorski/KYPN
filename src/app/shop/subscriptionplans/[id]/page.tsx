@@ -140,7 +140,7 @@ function Main({ subscriptionPlan, session }:Main) {
             {session ? (
               <Link href={`/checkout/subscriptionplan/${id}`} className='button large'> Start Subscription </Link>
             ): (
-              <p> <Link href={`/api/auth/signin`} > Login </Link> or <Link href={`/auth/register`}> Create an Account </Link></p>
+              <p> <Link href={`/login`} > Login </Link> or <Link href={`/register`}> Create an Account </Link> to start subscription </p>
             )}
 
             <div className={styles.description_wrap}>

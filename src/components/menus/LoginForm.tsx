@@ -189,7 +189,7 @@ export function LoginForm({providers}:Props) {
           {formState.message} 
         </p>
 
-        <div className='flex gap-1'>
+        <div className='flex gap_1'>
           <SubmitButton />
 
           <Link 

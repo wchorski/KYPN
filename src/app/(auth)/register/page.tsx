@@ -1,6 +1,7 @@
 import { envs } from '@/envs'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
 import { Section } from '@components/layouts/Section'
+import { RegsiterForm } from '@components/menus/RegisterForm'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -35,10 +36,11 @@ function Main(){
 
   return<>
     <Section layout={'1'}>
-      <p> 
+      {/* <p> 
         Accounts must be registered by an admin. 
         Contact <strong>{envs.ADMIN_EMAIL_ADDRESS}</strong> have an account created.
-      </p>
+      </p> */}
+      <RegsiterForm />
     </Section>
   </>
 }
