@@ -76,7 +76,7 @@ export default async function SubscriptionPlanPageById({ params }:Props) {
 
   if (error) return <ErrorMessage error={error} />
 
-  if(!subscriptionPlan) return <p> subscription plan not found </p>
+  if(!subscriptionPlan) return <ErrorMessage error={{message:  'subscription plan not found'}} />
 
   return (
     <>
