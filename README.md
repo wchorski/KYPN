@@ -2,6 +2,18 @@
 
 A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
 
+## Features
+<details>
+  <summary>view</summary>
+
+  ### Analytics
+  Site analytics are set up to use an externally hosted [Umami](https://umami.is/) app. There are plans to add in admin dashboard analytics that insite user count, sales, and engagement data.
+
+  ### Calendar
+  Events and Bookings can auto populate a connected Google Calendar. 
+
+</details>
+
 ## Roles
 
 > These can be edited from the Keystone UI, but here is the initial permission layout
@@ -54,19 +66,19 @@ Right now, I'm just using gmail's SMTP. Should be good for low traffic order con
 
 https://myaccount.google.com/security
 
-### Mail Templating
-
-[React Email](https://react.email/)
-
 ## Production
-
+<details>
+<summary> config </summary>
 - Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments
 - **self hosting** isn't strait forward. Here is my work around 
   - create a seperate `docker container` that runs `postgres`
   - run your dev environment to create the tables and edit the schemas
   - now you can `build` and `run` your app within a `docker container`
+</details>
 
 ## Development
+<details>
+<summary> config </summary>
 
 > [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
 
@@ -76,6 +88,10 @@ https://myaccount.google.com/security
 
 > 1. keystone `ks:dev`
 > 2. next `n:dev`
+
+### Mail Templating
+
+[React Email](https://react.email/)
 
 ### Stripe
 
@@ -129,12 +145,21 @@ take out the `document` field
 
 ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
 
+### Database Migrations
+When returning to development you may add new fields to the database schema. This will trigger a migration. Properly name and save the migration. This file will be written inside the `./migrations` folder
+
+When returning to the production environment, you will have to apply these new changes so **Postgres** is aware of these changes.
+
+> [!warning] For Now
+> To apply migrations I connect to my prod database within my dev environment and run `yarn ks:dev`. This is not ideal. Later I will add `keystone start --with-migrations` to the `Dockerfile.backend` so that this is all automated
+</details>
+
 ## Gotchas
 
 - the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies
 
 ## TODO
-
+- [ ] built in calendar for admin dash
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
 - [x] transition as much Styled Components to CSS Modules
 - [ ] screen shots / recordings
