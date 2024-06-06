@@ -142,23 +142,25 @@ function Main({ subscriptionPlan, session }:Main) {
             ): (
               <p> <Link href={`/login`} > Login </Link> or <Link href={`/register`}> Create an Account </Link> to start subscription </p>
             )}
-
-            <div className={styles.description_wrap}>
-              <BlockRender document={description.document} />
-            </div>
-
-            <div>
-              <h2> Add-Ons</h2>
-              <p> Available add-ons that can be selected during checkout </p>
-              <hr  style={{margin: '1rem 0'}}/>
-              <ul>
-                {addons.map(ad => <li key={ad.id}>
-                  <h5>{ad.name} <PriceTag price={ad.price}/> </h5>
-                  <p>{ad.excerpt}</p>
-                  <hr  style={{margin: '1rem 0'}}/>
-                </li>)}
-              </ul>
-            </div>
+            {description.document && (
+              <div className={styles.description_wrap}>
+                <BlockRender document={description.document} />
+              </div>
+            )}
+            {addons.length > 0 && (
+              <div>
+                <h2> Add-Ons</h2>
+                <p> Available add-ons that can be selected during checkout </p>
+                <hr  style={{margin: '1rem 0'}}/>
+                <ul>
+                  {addons.map(ad => <li key={ad.id}>
+                    <h5>{ad.name} <PriceTag price={ad.price}/> </h5>
+                    <p>{ad.excerpt}</p>
+                    <hr  style={{margin: '1rem 0'}}/>
+                  </li>)}
+                </ul>
+              </div>
+            )}
           </div>
 
           <footer>

@@ -159,22 +159,20 @@ function Main(booking:Booking|undefined){
             </tr>
           </tbody>
         </table>
-
-        <h2>Add-Ons</h2>
-        <ul className="addons">
-          {addons.map(ad => (
-            <li key={ad.id} title={ad.excerpt}>
-              {ad.name}
-              <Link href={`/addons/${ad.id}`} target={'_blank'}> <CgExternal /> </Link>
-            </li>
-          ))}
-          {addons.length <= 0 && (
-            <p> No addons. </p>
-          )}
-        </ul>
-        <p className="align-right"> 
-          <Link href={`/addons`} > View more addons</Link>
-        </p>
+        {addons.length > 0 && <>
+          <h2>Add-Ons</h2>
+          <ul className="addons">
+            {addons.map(ad => (
+              <li key={ad.id} title={ad.excerpt}>
+                {ad.name}
+                <Link href={`/addons/${ad.id}`} target={'_blank'}> <CgExternal /> </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="align-right"> 
+            <Link href={`/addons`} > View more addons</Link>
+          </p>
+        </>}
 
         <h2> Employees Assigned </h2>
         <ul className="employees">

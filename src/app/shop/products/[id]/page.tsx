@@ -139,10 +139,12 @@ function Main({ product, session }:Main) {
             </> : (
               <Link href={`/login`}> login to shop </Link>
             )}
-
-            <div className={styles.description_wrap}>
-              <BlockRender document={description.document} />
-            </div>
+            
+            {description && (
+              <div className={styles.description_wrap}>
+                <BlockRender document={description.document} />
+              </div>
+            )}
           </div>
 
           <footer>
