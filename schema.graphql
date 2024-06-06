@@ -764,6 +764,7 @@ input AnnouncementCreateInput {
 
 type Booking {
   id: ID!
+  typeof: String
   start: DateTime
   end: DateTime
   summary: String
@@ -2480,6 +2481,7 @@ input PostCreateInput {
 
 type Event {
   id: ID!
+  typeof: String
   summary: String
   location: Location
   start: DateTime

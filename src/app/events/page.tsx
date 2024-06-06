@@ -8,6 +8,7 @@ import { EventCard } from "@components/events/EventCard"
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md"
 import { EventsCalendar } from "@components/events/EventsCalendar"
 import styles from '@styles/events/events.module.scss'
+import ErrorMessage from "@components/ErrorMessage"
 
 export const metadata: Metadata = {
   title: 'Events | ' + envs.SITE_TITLE,
@@ -25,13 +26,14 @@ type Props = {
 }
 
 const today = new Date()
-const thisMonth = new Date(today.getFullYear(), today.getMonth())
 
 export default async function EventsPage ({ params, searchParams }:Props) {
   
   const dateParam  = searchParams?.date || today.toDateString()
   const date = new Date(dateParam).toDateString()
   const { events, count, error } = await fetchEvents(date)
+
+  if(error) return <ErrorMessage error={error}/>
 
   return (
     <PageTHeaderMain 

@@ -17,6 +17,7 @@ import styles from "@styles/booking/booking.module.scss";
 import { Metadata, ResolvingMetadata } from 'next'
 import { envs } from '@/envs'
 import { keystoneContext } from '@ks/context'
+import { NoDataOrPermissionPage } from '@components/elements/NoDataOrPermissionPage'
 
 // export async function generateMetadata(
 //   { params }:Props,
@@ -46,35 +47,14 @@ type Props = {
 export default async function BookingSinglePage ({ params, searchParams }:Props) {
 
   const {id} = params
-  // const id = "clsnoi17p0000svs8at1pzpad"
-  // console.log('## book id params, ', params);
-  
 
   const { booking, error } = await fetchBooking(id)
 
-  // const booking = await keystoneContext.sudo().query.Booking.findOne({
-  //   where: { id: id},
-    // query: `
-    //   email
-    //   phone
-    //   name
-    //   notes
-    // `
-  // }) as Booking
-
-  // console.log({booking});
-  
 
   if(error) return <ErrorMessage error={error}/>
-  if(!booking) <p> booking not found </p>
+  if(!booking) return <NoDataOrPermissionPage />
 
-  // return (
-  //   <ul>
-  //     <li> {booking?.name}</li>
-  //     <li> {booking?.email}</li>
-  //     <li> {booking?.notes}</li>
-  //   </ul>
-  // )
+
   return (
     <PageTHeaderMain
       header={Header(booking?.status)}

@@ -20,10 +20,8 @@ export default async function fetchBooking(id:string){
       where: { id: id },
       query: query
     }) as Booking
+    
 
-    console.log({booking});
-    
-    
     return { booking }
     
   } catch (error) {

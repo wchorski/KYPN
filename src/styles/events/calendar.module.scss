@@ -136,34 +136,59 @@
 }
 
 .cell_active {
-  background-color: var(--c-primary); 
-  color: var(--c-txt-primary) !important; 
-  border: solid 1px var(--c-txt-rev);
+  // background-color: var(--c-primary); 
+  // color: var(--c-txt-primary) !important; 
+  border: solid 1px var(--c-primary);
 }
 
 .event_chip {
   display: grid;
+  text-align: right;
 
-  > a.event-button{
-    text-align: left;
+  > a {
+    display: flex;
+    text-align: right;
     margin-bottom: 5px;
-    background-color: var(--c-primary);
+    margin-left: auto;
+    background-color: var(--c-txt-bg);
+    // color: var(--c-txt-primary);
     text-decoration: none;
-    color: var(--c-txt);
     padding: 5px;
     border-radius: var(--br-sharp);
-    border: solid 1px var(--c-primary);
+    border-left: solid .3rem var(--c-primary);
+    color: var(--c-txt);
     font-size: small;
+    transition-duration: .3s;
+    transition-property: opacity;
 
     &:hover, &:focus{
-      border: solid 1px var(--c-secondary);
-      background-color: var(--c-txt-cont);
-      color: var(--c-secondary);
+      // border: solid 1px var(--c-secondary);
+      // background-color: var(--c-txt-cont);
+      // color: var(--c-secondary);
+      opacity: .8;
     }
 
     &:active{
       border: solid 1px var(--c-accent);
       color: var(--c-accent);
+    }
+
+    > svg {
+      font-size: 1.2rem;
+      color: var(--c-primary);
+    }
+  }
+}
+
+.booking {
+  > a {
+    // background-color: var(--c-secondary);
+    // color: var(--c-txt-primary);
+    border-left-color: var(--c-secondary);
+
+    > svg {
+      color: var(--c-secondary);
+      margin-right: auto;
     }
   }
 }

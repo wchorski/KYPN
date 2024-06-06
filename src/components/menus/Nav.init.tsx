@@ -3,7 +3,7 @@ import { NavLink } from '@components/menus/NavLink'
 import { CartButton } from '@components/ecommerce/CartButton'
 import { NavWichButton } from './NavWichButton'
 import { SessionBadge } from './Session'
-import { MainNavList } from './MainNavList'
+import { MainNavList } from '../private/MainNavList'
 
 export function Nav() {
 

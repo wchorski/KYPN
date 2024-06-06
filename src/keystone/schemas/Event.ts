@@ -1,8 +1,8 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { integer, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
+import { integer, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { isLoggedIn, rules } from "../access";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
@@ -47,6 +47,17 @@ export const Event:Lists.Event = list({
 
 
   fields: {
+    typeof: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve() {
+          return "event";
+        },
+      }),
+      ui: {
+        itemView: { fieldMode: 'hidden'}
+      }
+    }),
     summary: text({validation: { isRequired: true }, defaultValue: '[NEW]'}),
     location: relationship({ ref: 'Location.events', many: false }),
     start: timestamp({ validation: { isRequired: true } }),

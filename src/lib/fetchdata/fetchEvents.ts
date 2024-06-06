@@ -87,6 +87,7 @@ export default async function fetchEvents(dateSelectedString:string){
 
 
 const query = `
+  typeof
   id
   summary
   image

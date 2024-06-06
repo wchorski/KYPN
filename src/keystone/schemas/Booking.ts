@@ -52,6 +52,17 @@ export const Booking:Lists.Booking = list({
 
 
   fields: {
+    typeof: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve() {
+          return "booking";
+        },
+      }),
+      ui: {
+        itemView: { fieldMode: 'hidden'}
+      }
+    }),
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({
       hooks: {
@@ -175,7 +186,7 @@ export const Booking:Lists.Booking = list({
         const employeeEmails = employees.flatMap( emp => emp.email)
 
         const mail = await mailBooking({
-          to: [envs.ADMIN_EMAIL_ADDRESS, item?.email || '', ...employeeEmails],
+          to: [envs.ADMIN_EMAIL_ADDRESS, item?.email, ...employeeEmails].filter(email => email) as string[],
           operation,
           // @ts-ignore
           booking: item,
