@@ -199,6 +199,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
     }
   } 
 
+  // todo pay later checkout makes status
   const [formState, formAction] = useFormState<Form>(onSubmit, defaultForm)
   async function onSubmit(prevState: Form, formdata: FormData): Promise<Form> {
     
@@ -268,7 +269,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
         id: checkout.id,
         items: cartItems as OrderItem[],
         total: calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours),
-        status: 'COMPLETE'
+        status: checkout.order.status,
       }
 
       if(cartItems.filter(i => i.type === 'SALE').length > 0)
@@ -294,7 +295,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
 
       return {
         ...formState,
-        message: 'success',
+        message: 'Order Complete',
       }
       
     } catch (error:any) {
@@ -341,11 +342,10 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
   
 
   if(state.order || state.rental) return <Section layout={'1'}>
-    <p className={(formState.message === 'success') ? 'success' : 'error'}> 
+    {/* <p className={(formState.message === 'success') ? 'success' : 'error'}> 
       {formState.message} 
-    </p>
-
-    <p> Your order is complete. </p>
+    </p> */}
+    <p>{formState.message}</p>
 
     {state.order && <>
       <h4> Items: </h4>
@@ -426,7 +426,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
       >
 
       {cartItems.filter(i => i.type === 'SALE').length > 0 && (
-        <fieldset className={'grid'} >
+        <fieldset  >
           <legend> <h3 style={{margin: '0'}}> Cart </h3> </legend>
 
           <ul className="unstyled" style={{display: 'grid', gap: '1rem', padding: '0'}}>

@@ -17,5 +17,6 @@ export function slugFormat(name:string) {
 }
 
 export function stringCapFirstLetter(string:string){
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  const removeUnderscores = string.replace(/_/g, ' ')
+  return removeUnderscores.charAt(0).toUpperCase() + removeUnderscores.slice(1).toLowerCase();
 }

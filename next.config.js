@@ -24,6 +24,12 @@ const nextConfig = {
       },
     ];
   },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      frameSrc: ["https://soup.tawtaw.site"],
+    },
+  },  
   images: {
     remotePatterns: [
       {

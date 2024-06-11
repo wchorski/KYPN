@@ -57,6 +57,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
       id
       total
       dateCreated
+      status
       items{
         quantity
       }
@@ -108,58 +109,64 @@ export default async function AccountPage ({ params, searchParams }:Props) {
           <ul>
             <li>
               <Link 
-                // href={'/account#main'}
                 href={'/account?dashState=main#main'}
                 className={dashState === 'main' ? styles.linkactive : styles.dashlink}
               >
                 Dashboard <MdOutlineAccountBox />
               </Link>
             </li>
-            <li>
-              <Link 
-                // href={'/account#orders'}
-                href={'/account?dashState=orders#orders'}
-                className={dashState === 'orders' ? styles.linkactive : styles.dashlink}
-              >
-                Orders <MdShop />
-              </Link>
-            </li>
-            <li>
-              <Link 
-                // href={'/account#orders'}
-                href={'/account?dashState=rentals#rentals'}
-                className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}
-              >
-                Rentals <BsSignpost />
-              </Link>
-            </li>
-            <li>
-              <Link 
-                // href={'/account#subscriptions'}
-                href={'/account?dashState=subscriptions#subscriptions'}
-                className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
-              >
-                Subscriptions <MdAutorenew />
-              </Link>
-            </li>
-            <li>
-              <Link 
-                // href={'/account#downloads'}
-                href={'/account?dashState=downloads#downloads'}
-                className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}
-              >
-                Downloads <MdOutlineDownload />
-              </Link>
-            </li>
-            <li>
-              <Link 
-                // href={'/account#tickets'}
-                href={'/account?dashState=tickets#tickets'}
-                className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}
-              >
-                Tickets <HiOutlineTicket />
-              </Link>
-            </li>
+            {orders.length > 0 && (
+              <li>
+                <Link 
+                  href={'/account?dashState=orders#orders'}
+                  className={dashState === 'orders' ? styles.linkactive : styles.dashlink}
+                >
+                  Orders <MdShop />
+                </Link>
+              </li>
+
+            )}
+            {rentals.length > 0 && (
+              <li>
+                <Link 
+                  href={'/account?dashState=rentals#rentals'}
+                  className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}
+                >
+                  Rentals <BsSignpost />
+                </Link>
+              </li>
+            )}
+            {user.subscriptions.length > 0 && (
+              <li>
+                <Link 
+                  href={'/account?dashState=subscriptions#subscriptions'}
+                  className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
+                >
+                  Subscriptions <MdAutorenew />
+                </Link>
+              </li>
+            )}
+            {/* //todo when downloads are added */}
+            {false && (
+              <li>
+                <Link 
+                  href={'/account?dashState=downloads#downloads'}
+                  className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}
+                >
+                  Downloads <MdOutlineDownload />
+                </Link>
+              </li>
+            )}
+            {tickets && tickets?.length > 0 && (
+              <li>
+                <Link 
+                  href={'/account?dashState=tickets#tickets'}
+                  className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}
+                >
+                  Tickets <HiOutlineTicket />
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
 

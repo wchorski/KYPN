@@ -100,7 +100,7 @@ export type Coupon = {
 };
 
 export type Event = {
-  typeof: 'event',
+  typeof: "event";
   id: string;
   summary: string;
   location: Location;
@@ -223,7 +223,19 @@ export type Order = {
   user?: User;
   items: OrderItem[];
   ticketItems?: Ticket[];
-  status: "OPEN" | "COMPLETE" | "EXPIRED";
+  status:
+    | "OPEN"
+    | "CANCELLED"
+    | "FULFILLED"
+    | "REFUNDED"
+    | "RETURNED"
+    | "EXPIRED"
+    | "STARTED"
+    | "PAYMENT_PENDING"
+    | "PAYMENT_RECIEVED"
+    | "PROCESSING"
+    | "SHIPPED"
+    | "DELIVERED";
 };
 
 export type OrderItem = {

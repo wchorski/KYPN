@@ -61,6 +61,7 @@ function Main(date: string, events?: Event[], bookings?: Booking[]) {
         <List>
           <Link href={`/users`}> Users </Link>
           <Link href={`/locations`}> Locations </Link>
+          <Link href={envs.NEXT_PUBLIC__ANALYTICS_LINK} target={'_blank'}> Analytics </Link>
         </List>
       </Section>
       <Section layout={"1"}>

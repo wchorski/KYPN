@@ -51,10 +51,12 @@ const ADMIN_EMAIL_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_EMAIL_ADDRESS!
 const UMAMI_ID            = process.env.NEXT_PUBLIC_UMAMI_ID  
 const UMAMI_URL           = process.env.NEXT_PUBLIC_UMAMI_URL     
 const UMAMI_SCRIPT        = process.env.NEXT_PUBLIC_UMAMI_SCRIPT  
+const NEXT_PUBLIC__ANALYTICS_LINK        = process.env.NEXT_PUBLIC__ANALYTICS_LINK || 'no_link'
 const ASSET_REPO          = process.env.NEXT_PUBLIC_ASSET_REPO 
 
 
 export const envs = {
+  NEXT_PUBLIC__ANALYTICS_LINK,
   NEXT_PUBLIC_COPYWRITE,
   BASIC_USER_ROLE_NAME,
   GITHUB_AUTH_ID,

@@ -2104,7 +2104,6 @@ type Order {
   charge: String
   stripeSessionId: String
   status: String
-  payment_status: String
   shipping_address: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2129,7 +2128,6 @@ input OrderWhereInput {
   charge: StringFilter
   stripeSessionId: StringFilter
   status: StringNullableFilter
-  payment_status: StringNullableFilter
   shipping_address: StringFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
@@ -2143,7 +2141,6 @@ input OrderOrderByInput {
   charge: OrderDirection
   stripeSessionId: OrderDirection
   status: OrderDirection
-  payment_status: OrderDirection
   shipping_address: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -2160,7 +2157,6 @@ input OrderUpdateInput {
   charge: String
   stripeSessionId: String
   status: String
-  payment_status: String
   shipping_address: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2188,7 +2184,6 @@ input OrderCreateInput {
   charge: String
   stripeSessionId: String
   status: String
-  payment_status: String
   shipping_address: String
   dateCreated: DateTime
   dateModified: DateTime

@@ -13,6 +13,7 @@ import styles from '@styles/ecommerce/cart.module.scss'
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
+import { StatusBadge } from "@components/StatusBadge"
 
 export const metadata: Metadata = {
   title: 'Order Receipt | ' + envs.SITE_TITLE,
@@ -66,8 +67,12 @@ function Main(order:Order){
       <table>
         <tbody>
           <tr>
+            <td>Status:</td>
+            <td> <StatusBadge type={'order'} status={order.status} /></td>
+          </tr>
+          <tr>
             <td>Customer:</td>
-            <td> <Link href={`/users/${order.user.id}`}> {order.user.email}</Link></td>
+            <td> <Link href={`/users/${order.user?.id}`}> {order.user?.email}</Link></td>
           </tr>
           <tr>
             <td>Charge:</td>
@@ -76,12 +81,12 @@ function Main(order:Order){
           <tr>
             <td>Item Count:</td>
             <td>
-              {order.items.reduce((total, item) => total + item.quantity, 0) + order.ticketItems.length}
+              {order.items.reduce((total, item) => total + item.quantity, 0) + (order.ticketItems ? order.ticketItems.length : 0)}
             </td>
           </tr>
           <tr>
             <td>Date:</td>
-            <td>{datePrettyLocal(order.dateCreated, 'full')}</td>
+            <td>{datePrettyLocal(order.dateCreated || '', 'full')}</td>
           </tr>
           <tr>
             <td> Total: </td>
@@ -113,7 +118,7 @@ function Main(order:Order){
         ))}
       </ul>
 
-      <TicketList tickets={order?.ticketItems}/>
+      <TicketList tickets={order?.ticketItems || []}/>
 
   </Section>
     
@@ -132,6 +137,7 @@ function orderTotalCount(countArray:number[]){
 
 const query = `
   charge
+  status
   dateCreated
   id
   items {

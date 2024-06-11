@@ -29,7 +29,7 @@ export const Order:Lists.Order = list({
 
   ui: {
     listView: {
-      initialColumns: ['label', 'dateCreated', 'user', ]
+      initialColumns: ['label', 'dateCreated', 'user', 'status', 'payment_status' ]
     }
   },
 
@@ -57,28 +57,37 @@ export const Order:Lists.Order = list({
     stripeSessionId: text(),
     status: select({
       options: [
-        { label: 'open', value: 'OPEN' },
-        { label: 'complete', value: 'COMPLETE' },
+        { label: 'started', value: 'STARTED' },
+        { label: 'payment pending', value: 'PAYMENT_PENDING' },
+        { label: 'payment recieved', value: 'PAYMENT_RECIEVED' },
+        { label: 'processing', value: 'PROCESSING' },
+        { label: 'shipped', value: 'SHIPPED' },
+        { label: 'delivered', value: 'DELIVERED' },
+        { label: 'cancelled', value: 'CANCELLED' },
+        { label: 'fulfilled', value: 'FULFILLED' },
         { label: 'expired', value: 'EXPIRED' },
+        { label: 'refunded', value: 'REFUNDED' },
+        { label: 'returned', value: 'RETURNED' },
       ],
-      defaultValue: 'COMPLETE',
+      defaultValue: 'STARTED',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
       }
     }),
-    payment_status: select({
-      options: [
-        { label: 'paid', value: 'PAID' },
-        { label: 'no_payment_required', value: 'NO_PAYMENT_REQUIRED' },
-        { label: 'unpaid', value: 'UNPAID' },
-      ],
-      defaultValue: 'PAID',
-      ui: {
-        displayMode: 'segmented-control',
-        createView: { fieldMode: 'edit' }
-      }
-    }),
+    // todo move this all under 'status'
+    // payment_status: select({
+    //   options: [
+    //     { label: 'paid', value: 'PAID' },
+    //     { label: 'no_payment_required', value: 'NO_PAYMENT_REQUIRED' },
+    //     { label: 'unpaid', value: 'UNPAID' },
+    //   ],
+    //   defaultValue: 'PAID',
+    //   ui: {
+    //     displayMode: 'segmented-control',
+    //     createView: { fieldMode: 'edit' }
+    //   }
+    // }),
     shipping_address: text(),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),

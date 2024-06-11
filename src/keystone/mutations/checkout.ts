@@ -91,8 +91,8 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
         charge: chargeId ? chargeId : '',
         dateCreated: now.toISOString(),
         // todo make logic that handles open, expired, unpaid, no_payment states
-        status: 'COMPLETE',
-        payment_status: chargeId ? 'PAID' : 'UNPAID',
+        status: chargeId ? 'PAYMENT_RECIEVED' : 'PAYMENT_PENDING',
+        // payment_status: chargeId ? 'PAID' : 'UNPAID',
         notes,
       },
     })

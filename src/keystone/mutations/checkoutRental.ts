@@ -75,9 +75,8 @@ export const checkoutRental = (base: BaseSchemaMeta) => graphql.field({
         user: { connect: { id: user.id } },
         charge: chargeId,
         dateCreated: now.toISOString(),
-        // todo make logic that handles open, expired, unpaid, no_payment states
-        status: 'COMPLETE',
-        payment_status: 'PAID',
+        status: chargeId ? 'PAYMENT_RECIEVED' : 'PAYMENT_PENDING',
+        // payment_status: 'PAID',
       },
     })
 
