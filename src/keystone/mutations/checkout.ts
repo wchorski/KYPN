@@ -138,7 +138,7 @@ export const checkout = (base: BaseSchemaMeta) => graphql.field({
 
     const rental = await contextSudo.db.Rental.createOne({
       data: {
-        status: chargeId ? 'PAID' : 'HOLD',
+        status: chargeId ? 'PAYMENT_RECIEVED' : 'HOLD',
         start,
         end,
         durationInHours,

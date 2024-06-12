@@ -122,8 +122,10 @@ type ChargeRental = {
 }
 
 async function afterSuccessfulCheckout(charge:Charge, type:ChargeType){
-
-
+  // console.log('### afterSuccessfulCheckout');
+  // console.log({charge});
+  // console.log({type});
+  
   switch (type) {
     case 'checkout.cart':
       checkoutCart(charge.id, charge.customer_details.email, {

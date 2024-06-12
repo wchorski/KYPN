@@ -392,7 +392,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
             <td>Items: </td>
             <td> 
               <ul>
-                {state.rental.order.items.map((i:CartItemType) => <li>{i.product.name} x{i.quantity}</li>)}
+                {state.rental.order.items.map((i:CartItemType) => <li key={i.id}>{i.product.name} x{i.quantity}</li>)}
               </ul>
             </td>
           </tr>
@@ -455,7 +455,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
               // className={'flex gap_1'}
             >
               <label htmlFor="location" className={styles.input_label}>
-                <span> Location </span>
+                <span> Event Location </span>
                 <input 
                   name={'location'}
                   id={'location'}
@@ -582,7 +582,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
           {formState.message} 
         </p>
     
-        <SubmitButton
+        <SubmitButtons
           cartItems={cartItems} 
           currentRentals={rentals}
           rental={{
@@ -601,7 +601,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
   
 }
 
-type SubmitButton = {
+type SubmitButtons = {
   cartItems:CartItemType[],
   rental?: {
     hours:number,
@@ -613,7 +613,7 @@ type SubmitButton = {
   currentRentals:Rental[],
 }
 
-function SubmitButton({cartItems, rental, currentRentals}:SubmitButton){
+function SubmitButtons({cartItems, rental, currentRentals}:SubmitButtons){
 
   const { pending, } = useFormStatus()
 
