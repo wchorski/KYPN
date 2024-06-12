@@ -75,7 +75,7 @@ export const checkoutRental = (base: BaseSchemaMeta) => graphql.field({
         user: { connect: { id: user.id } },
         charge: chargeId,
         dateCreated: now.toISOString(),
-        status: chargeId ? 'PAYMENT_RECIEVED' : 'PAYMENT_PENDING',
+        status: calcTotalPrice(user.cart) <= 0 ? 'PROCESSING' : chargeId ? 'PAYMENT_RECIEVED' : 'PAYMENT_PENDING',
         // payment_status: 'PAID',
       },
     })

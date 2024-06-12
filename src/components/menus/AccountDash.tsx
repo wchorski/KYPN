@@ -13,6 +13,7 @@ import {
 import { Card } from "@components/layouts/Card";
 import Link from "next/link";
 import styles from "@styles/menus/dashboard.module.scss";
+import { StatusBadge } from "@components/StatusBadge";
 
 type Props = {
   dashState: string;
@@ -35,7 +36,7 @@ export default function AccountDash({
       " " +
       datePrettyLocalTime(book.start || ""),
     service: book.service?.name || "-- service not selected --",
-    status: book.status,
+    status: <StatusBadge type={'booking'} status={book.status}/>,
     // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
     details: book.id,
   }));
@@ -47,7 +48,7 @@ export default function AccountDash({
     count: order.items.reduce((accumulator, it) => {
       return accumulator + it.quantity;
     }, 0),
-    status: order.status,
+    status: <StatusBadge type={'order'} status={order.status}/>,
     details: order.id,
   }));
 
@@ -55,7 +56,7 @@ export default function AccountDash({
     (sub: SubscriptionItem) => ({
       started: datePrettyLocalDay(sub.dateCreated || ""),
       plan: sub.subscriptionPlan.name,
-      status: sub.status,
+      status: <StatusBadge type={'subscriptionItem'} status={sub.status}/>,
       details: sub.id,
     })
   );
@@ -64,7 +65,7 @@ export default function AccountDash({
     start: datePrettyLocalDay(item.start || ""),
     end: datePrettyLocalDay(item.end || ""),
     hours: item.durationInHours,
-    status: item.status,
+    status: <StatusBadge type={'rental'} status={item.status}/>,
     location: item.location,
     delivery: item.delivery ? "Delivery" : "Pickup",
     details: item.id,

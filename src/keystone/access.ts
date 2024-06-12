@@ -236,6 +236,11 @@ export const rules = {
     // 2. If not, do they own this item?
     return { user: { id: {equals: session?.itemId} } };
   },
+  canManageOrders({session}: ListAccessArgs){
+    if (!isLoggedIn({ session })) return false;
+    if (permissions.canManageOrders({ session })) return true;
+    return false
+  },
   canManageOrderItems({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
     

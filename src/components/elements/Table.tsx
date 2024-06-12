@@ -14,7 +14,7 @@ interface TableProps {
 export function Table({ caption, cells, headers, route }: TableProps) {
 
   const keys = headers || []
-  const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account', 'details']
+  const linkterms = ['link', 'url', 'uri', 'a', 'anchor', 'account', 'details', 'info']
   
 
   // ? if u want to automatically grab keys from object

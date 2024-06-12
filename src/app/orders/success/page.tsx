@@ -42,10 +42,10 @@ export default async function OrderSuccessPage ({ params, searchParams }:Props) 
     />
   )
 
-  const session = await stripe.checkout.sessions.retrieve(session_id) as StripeSession
+  const stripeSession = await stripe.checkout.sessions.retrieve(session_id) as StripeSession
 
   
-  const { customer_details, amount_total, payment_status, status } = session
+  const { customer_details, amount_total, payment_status, status } = stripeSession
   
   // const customer = await stripe.customers.retrieve(session.customer_details);
 
@@ -68,7 +68,7 @@ function Header(status:'complete'|string,){
     <Section layout={'1'}>
       <h1> Order Details </h1>
       {status !== 'complete' && <span className="error"> error </span>}
-      {status === 'complete' && <span className="success"> success </span>}
+      {status === 'complete' && <span className="success"> Order Complete </span>}
     </Section>
   </>
 }
@@ -81,7 +81,7 @@ function Main(customer_details:Customer, amount_total:number, status:'complete'|
     <Section layout={'1'}>
       <p> Order failed </p>
 
-      <Link href={`/shop/checkout`}> return to checkout </Link>
+      <Link href={`/checkout`}> return to checkout </Link>
     </Section>
   </>
 
@@ -90,14 +90,16 @@ function Main(customer_details:Customer, amount_total:number, status:'complete'|
       <ul>
         <li>{name}</li>
         <li>{email}</li>
-        <li>{phone}</li>
+        {phone && (
+          <li>{phone}</li>
+        )}
       </ul>
 
       <p>total: {moneyFormatter(amount_total)}</p>
 
       <Link href={`/account`}> view orders ⇢ </Link>
 
-      <Button />
+      {/* <Button /> */}
 
     </Section>
   </>
@@ -112,7 +114,7 @@ function MainNoDetails( ){
 
       <Link href={`/shop/checkout`}> return to checkout </Link>
 
-      <Button />
+      {/* <Button /> */}
     </Section>
   </>
 }

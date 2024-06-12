@@ -10,6 +10,8 @@ import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
 import { CartItem, Rental } from "@ks/types";
 import { checkProductRentalAvail } from "@lib/checkProductRentalAvail";
+import styles from '@styles/elements/button.module.scss'
+import { Button } from "@components/elements/Button";
 
 type Props = {
   cartItems: CartItem[],
@@ -89,7 +91,7 @@ export default function StripeCheckoutButton({cartItems, rental, currentRentals}
     return <>
       {errorObj && <ErrorMessage error={errorObj}/>}
       {messageState && <p className="error"> {messageState} </p>}
-      <button
+      {/* <button
         type="button"
         onClick={() => cartItems.length > 0 && redirectToCheckout()}
         disabled={isPending || cartItems.length === 0}
@@ -98,9 +100,18 @@ export default function StripeCheckoutButton({cartItems, rental, currentRentals}
         {(isPending || cartItems.length === 0) ? (
           <LoadingAnim />
         ) : (
-          <span> Checkout with Stripe <BsStripe style={{marginLeft: '1rem'}}/> </span>
+          <span> Checkout with Stripe <BsStripe /> </span>
         )}
-      </button>
+      </button> */}
+
+      <Button 
+        type={'button'}
+        size={'large'}
+        onClick={() => cartItems.length > 0 && redirectToCheckout()}
+        disabled={isPending || cartItems.length === 0}
+      >
+        Checkout with Stripe <BsStripe />
+      </Button>
     </>
   
 }

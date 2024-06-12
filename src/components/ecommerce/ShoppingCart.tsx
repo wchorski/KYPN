@@ -76,7 +76,7 @@ export default function ShoppingCart() {
           {cartItems.filter(i => i.type === 'RENTAL').length > 0 && <em> + rental </em>}
         </p>
         <Link
-          href={'/shop/checkout'}
+          href={'/checkout'}
           onClick={() => closeCart()}
           className='button medium'
         >

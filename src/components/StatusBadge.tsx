@@ -1,4 +1,4 @@
-import { Booking, Order, SubscriptionItem, Ticket } from "@ks/types"
+import { Booking, Order, Rental, SubscriptionItem, Ticket } from "@ks/types"
 import { stringCapFirstLetter } from "@lib/slugFormat"
 import styles from '@styles/blocs/status.module.scss'
 
@@ -7,6 +7,7 @@ type Props =
 | { type: 'ticket', status?:Ticket['status']|undefined  }
 | { type: 'booking', status?:Booking['status']  }
 | { type: 'order', status?:Order['status']  }
+| { type: 'rental', status?:Rental['status']  }
 
 export function StatusBadge ({ type, status }:Props) {
 

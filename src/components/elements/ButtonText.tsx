@@ -6,18 +6,18 @@ import { LoadingAnim } from "./LoadingAnim";
 
 type Props = {
   children:ReactNode
-  isPending:boolean,
+  isAnim:boolean,
 }
 
-export function ButtonText ({ children, isPending }:Props) {
+export function ButtonText ({ children, isAnim }:Props) {
   return (
     <div className={styles.text_wrap} >
 
-      <span className={isPending ? styles.opacity_0 : ''}>
+      <span className={isAnim ? styles.opacity_0 : ''}>
         {children}
       </span>
 
-      {isPending && <span style={{position: 'absolute'}}>
+      {isAnim && <span style={{position: 'absolute'}}>
           <LoadingAnim />
         </span>
       }

@@ -85,7 +85,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         line_items: lineItems,
         mode: "payment",
         success_url: `${headersList.get("origin")}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${headersList.get("origin")}/shop/checkout`,
+        cancel_url: `${headersList.get("origin")}/checkout`,
         metadata: {
           type: 'checkout.cart',
           start: rental?.start || '',

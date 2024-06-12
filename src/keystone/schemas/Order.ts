@@ -15,14 +15,14 @@ export const Order:Lists.Order = list({
   access: {
     filter: {
       query: rules.canOrder,
-      update: () => false,
+      update: rules.canManageOrders,
       delete: () => false,
     },
     operation: {
       query: permissions.isLoggedIn,
       // query: () => false,
       create: permissions.isLoggedIn,
-      update: () => false,
+      update: permissions.canManageOrders,
       delete: () => false,
     },
   },

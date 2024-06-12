@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import styles from "@styles/elements/button.module.scss";
 import { LoadingAnim } from "./LoadingAnim";
@@ -7,31 +7,24 @@ import { ButtonText } from "./ButtonText";
 import { wait } from "@lib/waitTimeout";
 
 type Props = {
-  size?:'small'|'medium'|'large',
-}
+  size?: "small" | "medium" | "large";
+  type?: "button" | "reset" | "submit";
+  children: ReactNode | ReactNode[];
+  onClick?: (e:any) => any;
+  disabled?: boolean;
+};
 
-export function Button ({  size = 'medium',  }:Props) {
+export function Button({ size = "medium", type = "button", children, onClick, disabled = false }: Props) {
 
-  const [isPen, setisPend] = useState(false)
-
-  useEffect( () => {
-
-    const id = setTimeout(() => {
-      if(isPen) setisPend(false)
-      console.log('USE EFFECT: set timeout');
-    }, 1000);
-
-    // return () => 
-  }, [isPen])
-  
-
+  const styleIsPend = [styles.button]
   return (
-    <button 
-      onClick={(e) => {console.log('click'); setisPend(!isPen)}}
-      disabled={isPen}
-      className={[styles.button, size, 'button'].join(' ')} 
-    > 
-      <ButtonText isPending={isPen}> click on MEEEE </ButtonText>
+    <button
+    className={[styles.button, size, "button"].join(" ")}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <ButtonText isAnim={disabled}> {children} </ButtonText>
     </button>
-  )
+  );
 }

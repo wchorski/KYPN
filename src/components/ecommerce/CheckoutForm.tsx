@@ -21,12 +21,15 @@ import Link from "next/link"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import StripeCheckoutButton from "./StripeCheckoutButton"
 import { checkProductRentalAvail } from "@lib/checkProductRentalAvail"
+import { Button } from "@components/elements/Button"
 
 type Props = {
   sessionId:string,
-  rentalItems:CartItemType[],
-  rentals:Rental[],
-  saleItems:CartItemType[],
+  data: {
+    rentalItems:CartItemType[],
+    rentals:Rental[],
+    saleItems:CartItemType[],
+  }
 }
 
 type Fields = {
@@ -87,7 +90,7 @@ type FormAsideAction =
 
 const today = new Date()
 
-export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Props) {
+export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems} }:Props) {
 
   const formRef = useRef<HTMLFormElement>(null)
   const { data: session, status }  = useSession()
@@ -269,7 +272,7 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
         id: checkout.id,
         items: cartItems as OrderItem[],
         total: calcCartSaleTotal(cartItems) + (calcCartRentalTotal(cartItems) * state.hours),
-        status: checkout.order.status,
+        status: 'success',
       }
 
       if(cartItems.filter(i => i.type === 'SALE').length > 0)
@@ -351,10 +354,6 @@ export function CheckoutForm ({ sessionId, rentalItems, rentals, saleItems }:Pro
       <h4> Items: </h4>
       <table>
         <tbody>
-          <tr>
-            <td>Status: </td>
-            <td>{state.order.status}</td>
-          </tr>
           <tr>
             <td>Items: </td>
             <td> 
@@ -621,13 +620,20 @@ function SubmitButton({cartItems, rental, currentRentals}:SubmitButton){
   return<div style={{display: 'flex', gap: '1rem', flexWrap: 'wrap'}}>
     <StripeCheckoutButton cartItems={cartItems} rental={rental} currentRentals={currentRentals}/>
     
-    <button
+    {/* <button
       disabled={pending}
       type={'submit'}
       className="button large"
     >
       {pending ? <LoadingAnim /> : 'Pay Later'}
-    </button>
+    </button> */}
+    <Button
+      disabled={pending}
+      type={'submit'}
+      size={'large'}
+    >
+      Pay Later
+    </Button>
   </div>
   
 }
