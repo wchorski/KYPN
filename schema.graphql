@@ -31,6 +31,8 @@ type User {
   bookingsCount(where: BookingWhereInput! = {}): Int
   gigs(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   gigsCount(where: BookingWhereInput! = {}): Int
+  gig_requests(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  gig_requestsCount(where: BookingWhereInput! = {}): Int
   eventsHost(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
   eventsHostCount(where: EventWhereInput! = {}): Int
   eventsCohost(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
@@ -89,6 +91,7 @@ input UserWhereInput {
   servicesProvided: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
+  gig_requests: BookingManyRelationFilter
   eventsHost: EventManyRelationFilter
   eventsCohost: EventManyRelationFilter
   availability: AvailabilityManyRelationFilter
@@ -305,6 +308,7 @@ input UserUpdateInput {
   servicesProvided: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
+  gig_requests: BookingRelateToManyForUpdateInput
   eventsHost: EventRelateToManyForUpdateInput
   eventsCohost: EventRelateToManyForUpdateInput
   availability: AvailabilityRelateToManyForUpdateInput
@@ -443,6 +447,7 @@ input UserCreateInput {
   servicesProvided: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
+  gig_requests: BookingRelateToManyForCreateInput
   eventsHost: EventRelateToManyForCreateInput
   eventsCohost: EventRelateToManyForCreateInput
   availability: AvailabilityRelateToManyForCreateInput
@@ -776,6 +781,8 @@ type Booking {
   price: Int
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employeesCount(where: UserWhereInput! = {}): Int
+  employee_requests(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  employee_requestsCount(where: UserWhereInput! = {}): Int
   customer: User
   email: String
   phone: String
@@ -807,6 +814,7 @@ input BookingWhereInput {
   addons: AddonManyRelationFilter
   price: IntFilter
   employees: UserManyRelationFilter
+  employee_requests: UserManyRelationFilter
   customer: UserWhereInput
   email: StringFilter
   phone: StringFilter
@@ -882,6 +890,7 @@ input BookingUpdateInput {
   addons: AddonRelateToManyForUpdateInput
   price: Int
   employees: UserRelateToManyForUpdateInput
+  employee_requests: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
   email: String
   phone: String
@@ -933,6 +942,7 @@ input BookingCreateInput {
   addons: AddonRelateToManyForCreateInput
   price: Int
   employees: UserRelateToManyForCreateInput
+  employee_requests: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
   email: String
   phone: String

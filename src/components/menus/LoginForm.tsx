@@ -15,6 +15,7 @@ import { envs } from '@/envs';
 import { useRouter } from 'next/navigation';
 import { TbCheck, TbExclamationCircle, TbLoader } from 'react-icons/tb';
 import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
+import { Button } from '@components/elements/Button';
 
 type State = 'pending'|'error'|'success'|undefined
 
@@ -233,11 +234,12 @@ function SubmitButton(){
   const { pending, } = useFormStatus()
 
   return(
-    <button
-      disabled={pending}
-      type={'submit'}
-    >
-      {pending ? <LoadingAnim /> : 'Login'}
-    </button>
+    // <button
+    //   disabled={pending}
+    //   type={'submit'}
+    // >
+    //   {pending ? <LoadingAnim /> : 'Login'}
+    // </button>
+    <Button size={'medium'} disabled={pending} type={'submit'}> Login </Button>
   )
 }

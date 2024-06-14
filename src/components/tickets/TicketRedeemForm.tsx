@@ -9,6 +9,7 @@ import {
 } from "react-dom"
 import { Ticket } from "@ks/types"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { Button } from "@components/elements/Button"
 
 type Props = {
   ticketId:string
@@ -153,13 +154,14 @@ function SubmitButton(){
   const { pending, } = useFormStatus()
 
   return(
-    <button
-      disabled={pending}
-      type={'submit'}
-      className="button large"
-    >
-      {pending ? <LoadingAnim /> : 'Update'}
-    </button>
+    // <button
+    //   disabled={pending}
+    //   type={'submit'}
+    //   className="button large"
+    // >
+    //   {pending ? <LoadingAnim /> : 'Update'}
+    // </button>
+    <Button size={'small'} type={'submit'} disabled={pending}> Update </Button>
   )
 }
 

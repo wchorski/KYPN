@@ -107,7 +107,7 @@ button {
   }
 
   &:hover, &:focus{
-    background-color: var(--c-primary);
+    // background-color: var(--c-primary);
     border: solid 1px var(--c-accent);
     color: var(--c-txt-light);
   }

@@ -1,6 +1,6 @@
 {
   "name": "kypn",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "email": "email dev --dir src/emails -p 3002",

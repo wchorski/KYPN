@@ -14,6 +14,9 @@ import { Card } from "@components/layouts/Card";
 import Link from "next/link";
 import styles from "@styles/menus/dashboard.module.scss";
 import { StatusBadge } from "@components/StatusBadge";
+import {
+  EmployeeGigActionForm,
+} from "@components/bookings/EmployeeGigActionForm";
 
 type Props = {
   dashState: string;
@@ -21,6 +24,10 @@ type Props = {
   orders: Order[];
   rentals: Rental[];
   tickets: Ticket[] | undefined;
+  employeeGigs: {
+    gig_requests: Booking[];
+    gigs: Booking[];
+  };
 };
 
 export default function AccountDash({
@@ -29,6 +36,7 @@ export default function AccountDash({
   dashState,
   orders,
   rentals,
+  employeeGigs: { gigs, gig_requests },
 }: Props) {
   const bookingCells = user?.bookings?.map((book: Booking) => ({
     date:
@@ -36,7 +44,7 @@ export default function AccountDash({
       " " +
       datePrettyLocalTime(book.start || ""),
     service: book.service?.name || "-- service not selected --",
-    status: <StatusBadge type={'booking'} status={book.status}/>,
+    status: <StatusBadge type={"booking"} status={book.status} />,
     // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
     details: book.id,
   }));
@@ -48,7 +56,7 @@ export default function AccountDash({
     count: order.items.reduce((accumulator, it) => {
       return accumulator + it.quantity;
     }, 0),
-    status: <StatusBadge type={'order'} status={order.status}/>,
+    status: <StatusBadge type={"order"} status={order.status} />,
     details: order.id,
   }));
 
@@ -56,7 +64,7 @@ export default function AccountDash({
     (sub: SubscriptionItem) => ({
       started: datePrettyLocalDay(sub.dateCreated || ""),
       plan: sub.subscriptionPlan.name,
-      status: <StatusBadge type={'subscriptionItem'} status={sub.status}/>,
+      status: <StatusBadge type={"subscriptionItem"} status={sub.status} />,
       details: sub.id,
     })
   );
@@ -65,10 +73,34 @@ export default function AccountDash({
     start: datePrettyLocalDay(item.start || ""),
     end: datePrettyLocalDay(item.end || ""),
     hours: item.durationInHours,
-    status: <StatusBadge type={'rental'} status={item.status}/>,
+    status: <StatusBadge type={"rental"} status={item.status} />,
     location: item.location,
     delivery: item.delivery ? "Delivery" : "Pickup",
     details: item.id,
+  }));
+
+  // todo add employee gig to table. try to make both gigs and requests into one table, but may just split to make it easiuer
+  const gigCells = gigs.map((gig) => ({
+    date:
+      datePrettyLocalDay(gig.start || "") +
+      " " +
+      datePrettyLocalTime(gig.start || ""),
+    service: gig.service?.name || "-- service not selected --",
+    status: <StatusBadge type={"booking"} status={gig.status} />,
+    // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
+    details: gig.id,
+  }));
+
+  const gigRequestCells = gig_requests.map((gig) => ({
+    date:
+      datePrettyLocalDay(gig.start || "") +
+      " " +
+      datePrettyLocalTime(gig.start || ""),
+    service: gig.service?.name || "-- service not selected --",
+    status: <StatusBadge type={"booking"} status={gig.status} />,
+    // end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
+    details: gig.id,
+    actions: <EmployeeGigActionForm userId={user.id} bookingId={gig.id} action={""} />,
   }));
 
   return (
@@ -100,6 +132,43 @@ export default function AccountDash({
             caption=""
             headers={["service", "date", "status", "details"]}
             cells={bookingCells}
+            route={`/bookings`}
+          />
+        </Card>
+      )}
+      {gigs.length > 0 && (
+        <Card id="gigs">
+          <h3
+            className={
+              dashState === "gigs" ? styles.linkactive : styles.dashlink
+            }
+          >
+            Gigs
+          </h3>
+
+          <Table
+            caption=""
+            headers={["service", "date", "status", "details"]}
+            cells={gigCells}
+            route={`/bookings`}
+          />
+        </Card>
+      )}
+
+      {gig_requests.length > 0 && (
+        <Card id="gig_requests">
+          <h3
+            className={
+              dashState === "gig_requests" ? styles.linkactive : styles.dashlink
+            }
+          >
+            Gig Requests
+          </h3>
+
+          <Table
+            caption=""
+            headers={["service", "date", "status", "actions", "details"]}
+            cells={gigRequestCells}
             route={`/bookings`}
           />
         </Card>

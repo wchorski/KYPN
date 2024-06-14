@@ -45,7 +45,7 @@ export const Booking:Lists.Booking = list({
   ui: {
     // hide backend from non admins
     listView: {
-      initialColumns: ['start', 'end', 'name', 'email', 'status', 'service', 'customer', 'employees'],
+      initialColumns: ['start', 'end', 'name', 'email', 'status', 'service', 'customer', 'employees', 'employee_requests'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -108,6 +108,7 @@ export const Booking:Lists.Booking = list({
     addons: relationship({ ref: 'Addon.bookings', many: true }),
     price: integer({ defaultValue: 0, validation: { isRequired: true } }),
     employees: relationship({ ref: 'User.gigs', many: true }),
+    employee_requests: relationship({ ref: 'User.gig_requests', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
     email: text(),
     phone: text(),

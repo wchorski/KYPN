@@ -113,7 +113,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
       // maybe query gigs seperately?
 
       // todo just run a graphql query?
-      const usersData = await contextSudo.graphql.run({
+      const employeesThatHaveCurrentGigs = await contextSudo.graphql.run({
         query: `
           query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
             users(where: $where) {
@@ -164,7 +164,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
       }) as {users:User[]}
 
       
-      const bookedEmployees = usersData.users
+      const bookedEmployees = employeesThatHaveCurrentGigs.users
       
       // ? old way, but using .graphql because of better filtering
       // const bookedEmployees = await contextSudo.query.User.findMany({ 
@@ -249,7 +249,8 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         // summary: `${customerName || customerEmail} | ${service?.name}`,
         service: { connect: { id: serviceId } },
         location: (locationId) ? { connect: { id: locationId } } : null,
-        employees: (employeeId) ? { connect: [{ id: employeeId }] } : null,
+        // employees: (employeeId) ? { connect: [{ id: employeeId }] } : null,
+        employee_requests: (employeeId) ? { connect: [{ id: employeeId }] } : null,
         addons: { connect: addonIds?.map(id => ({id: id}))},
         start: start,
         end: end,

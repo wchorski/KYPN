@@ -23,6 +23,7 @@ import { TimePicker } from "./TimePicker"
 import { findOverlapTimes } from "@lib/dateCheckCal"
 import Link from "next/link"
 import { BsFillBookmarkFill } from "react-icons/bs"
+import { Button } from "@components/elements/Button"
 
 type Fields = {
   // event: string,
@@ -806,11 +807,17 @@ function SubmitButton(){
   const { pending, } = useFormStatus()
 
   return(
-    <button
-      disabled={pending}
+    // <button
+    //   disabled={pending}
+    //   type={'submit'}
+    // >
+    //   {pending ? <LoadingAnim /> : 'Submit Booking'}
+    // </button>
+    <Button
       type={'submit'}
+      disabled={pending}
     >
-      {pending ? <LoadingAnim /> : 'Submit Booking'}
-    </button>
+      Submit Booking
+    </Button>
   )
 }

@@ -1,7 +1,7 @@
 import { Section } from "@components/layouts/Section"
 import Link from "next/link"
 import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop, } from "react-icons/md"
-import { HiOutlineTicket } from "react-icons/hi"
+import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import AccountDash from "@components/menus/AccountDash"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
@@ -22,10 +22,12 @@ export const metadata: Metadata = {
 
 type Props = {
   searchParams:{
-    dashState:'main'|'orders'|'rentals'|'subscriptions'|'downloads'|'tickets',
+    dashState:'main'|'orders'|'rentals'|'subscriptions'|'downloads'|'tickets'|'gigs'|'gig_requests',
   }
   params:{id:string}
 }
+
+const now  = new Date().toISOString()
 
 export default async function AccountPage ({ params, searchParams }:Props) {
 
@@ -86,6 +88,57 @@ export default async function AccountPage ({ params, searchParams }:Props) {
     `,
   }) as Rental[]
 
+
+
+  const employeeGigData = await keystoneContext.withSession(session).graphql.run({
+    variables: {
+      where: {
+        id: session.itemId
+      },
+      gigsWhere: {
+        end: {
+          gt: now
+        }
+      },
+      gigRequestsWhere: {
+        end: {
+          gt: now
+        }
+      },
+      orderBy: [
+        {
+          start: "desc"
+        }
+      ],
+    },
+    query: `
+      query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
+        user(where: $where){
+          id
+          gig_requests(where: $gigRequestsWhere) {
+            id
+            start
+            end
+            summary
+            service {
+              name
+            }
+          }
+          gigs(where: $gigsWhere) {
+            id
+            start
+            end
+            summary
+            service {
+              name
+            }
+          }
+        }
+      }
+    `
+  }) as {user:User}
+  const {gig_requests, gigs} = employeeGigData.user
+
   const {tickets, error } = await fetchTicketsByUser(user?.id)
   
   return <main>
@@ -115,6 +168,26 @@ export default async function AccountPage ({ params, searchParams }:Props) {
                 Dashboard <MdOutlineAccountBox />
               </Link>
             </li>
+            {(gigs.length > 0) && (
+              <li>
+                <Link 
+                  href={'/account?dashState=gigs#gigs'}
+                  className={dashState === 'gigs' ? styles.linkactive : styles.dashlink}
+                >
+                  Gigs <HiCalendar />
+                </Link>
+              </li>
+            )}
+            {(gig_requests.length > 0) && (
+              <li>
+                <Link 
+                  href={'/account?dashState=gig_requests#gig_requests'}
+                  className={dashState === 'gig_requests' ? styles.linkactive : styles.dashlink}
+                >
+                  Gig Requests <HiOutlineCalendar />
+                </Link>
+              </li>
+            )}
             {orders.length > 0 && (
               <li>
                 <Link 
@@ -177,6 +250,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
         orders={orders}
         rentals={rentals}
         tickets={tickets} 
+        employeeGigs={{gigs, gig_requests}}
       />
     </Section>
   </main>

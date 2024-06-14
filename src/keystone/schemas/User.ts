@@ -123,6 +123,7 @@ export const User: Lists.User = list({
     servicesProvided: relationship({ ref: 'Service.employees', many: true }),
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
+    gig_requests: relationship({ ref: 'Booking.employee_requests', many: true }),
     eventsHost: relationship({ ref: 'Event.hosts', many: true }),
     eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
     availability: relationship({ ref: 'Availability.employee', many: true }),

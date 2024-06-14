@@ -265,18 +265,19 @@ export type User = {
   isAdmin: boolean;
   isActive: boolean;
   stripeCustomerId: string;
-  posts: any[];
-  pages: any[];
+  posts: Post[];
+  pages: Page[];
   servicesProvided: Service[];
-  bookings: any[];
-  gigs: any[];
+  bookings: Booking[];
+  gigs: Booking[];
+  gig_requests: Booking[];
   availability: Availability[];
   cart: CartItem[];
   dateCreated: string;
   dateModified: string;
   products: Product[];
-  subscriptionPlans: any[];
-  subscriptions: any[];
+  subscriptionPlans: SubscriptionPlan[];
+  subscriptions: SubscriptionItem[];
   orders: OrderItem[];
   role: Role;
   tickets: Ticket[];
@@ -304,6 +305,7 @@ export type Booking = {
   service?: Service;
   price: number;
   employees: User[];
+  employee_requests: User[];
   addons: Addon[];
   customer: User;
   location: Location;
@@ -344,7 +346,7 @@ export type Category = {
   pages: Page[];
   posts: Post[];
   products: Product[];
-  subscriptions: any[];
+  subscriptions: SubscriptionPlan[];
   services: Service[];
 };
 
@@ -354,7 +356,7 @@ export type Tag = {
   pages: Page[];
   posts: Post[];
   products: Product[];
-  subscriptions: any[];
+  subscriptions: SubscriptionPlan[];
   services: Service[];
 };
 
@@ -370,7 +372,9 @@ export type Page = {
   excerpt: string;
   featured_image: string;
   featured_video: string;
-  content: any;
+  content: {
+    document: any
+  };
   author: User;
   categories: Category[];
   tags: Tag[];

@@ -5,7 +5,7 @@ import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
-import { CartItem, CartItem as CartItemType } from "@ks/types"
+import { CartItem as TCartItem, CartItem as CartItemType } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
 import { useCart } from "@components/hooks/CartStateContext"
 import Link from "next/link"
@@ -16,7 +16,7 @@ type UpdateCartItem = {
 }
 
 type Props = {
-  item:CartItem,
+  item:TCartItem,
   sessionId:string|undefined,
 }
 
