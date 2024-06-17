@@ -25,6 +25,7 @@ import { AddToCalendarButton } from "add-to-calendar-button-react";
 import styles from "@styles/events/event.module.scss";
 import { AddToCalendar } from "@components/widgets/AddToCalendar";
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard";
+import { plainObj } from "@lib/utils";
 
 export async function generateMetadata(
   { params }: Props,
@@ -124,7 +125,8 @@ function Main(
       >
         <p>{datePrettyLocal(start, "full")}</p>
         {session ? (
-          <TicketForm event={event} user={session?.user} />
+          <TicketForm event={plainObj(event)} user={session?.user} />
+          // <p>debug form</p>
         ) : (
           <p>
             {" "}
