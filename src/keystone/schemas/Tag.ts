@@ -16,10 +16,10 @@ export const Tag:Lists.Tag = list({
       delete: rules.canManageTags,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageTags,
       query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      update: permissions.canManageTags,
+      delete: permissions.canManageTags,
     }
   },
 

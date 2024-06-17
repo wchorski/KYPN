@@ -1,6 +1,4 @@
-export function slugFormat(name:string) {
-  console.log('### slugFormat input name: ', name);
-  
+export function slugFormat(name:string) {  
   // Convert the string to lowercase
   var lowercaseName = name.toLowerCase();
 

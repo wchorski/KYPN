@@ -4,9 +4,10 @@ import { datePretty } from '@lib/dateFormatter';
 import { FiCalendar } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 import { ImageDynamic } from '../elements/ImageDynamic';
-import { User } from '@ks/types';
+import { Post, User } from '@ks/types';
 import styles from "@styles/blog/blog.module.scss";
 import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
+import { StatusBadge } from '@components/StatusBadge';
 
 type Props = {
   id:string,
@@ -17,12 +18,13 @@ type Props = {
   featured_video:string,
   dateModified:string,
   author:User,
+  status:Post['status'],
 
 
   buttonText?:string,
 }
 
-export const BlogListItem = ({ id, slug, title, excerpt, featured_image, featured_video, dateModified, author, buttonText = 'read more' }: Props) => {
+export const BlogListItem = ({ id, slug, title, excerpt, featured_image, featured_video, dateModified, author, buttonText = 'read more', status }: Props) => {
 
   return (
     <article className={styles.thumbnail}>
@@ -49,7 +51,10 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, feature
 
      
       <div className='wrapper'>
-        <header>
+        <header style={{position: 'relative'}}>
+          {status !== 'PUBLIC' && <div style={{position: 'absolute', top: '1rem', right: '1rem'}}>
+            <StatusBadge type={'post'} status={status} />
+          </div>}
           <Link href={`/blog/${slug}`} className='title'>
             <h3> {title} </h3>
           </Link>
@@ -64,6 +69,7 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, feature
                 <FiCalendar />
                 {datePretty(dateModified)}
               </time>
+              
           </div>
         </header>
         

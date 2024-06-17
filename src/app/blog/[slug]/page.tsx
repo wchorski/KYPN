@@ -1,59 +1,65 @@
-
-import Link from 'next/link';
-import { QueryLoading } from '@components/menus/QueryLoading';
-import ErrorMessage from '@components/ErrorMessage';
+import Link from "next/link";
+import { QueryLoading } from "@components/menus/QueryLoading";
+import ErrorMessage from "@components/ErrorMessage";
 // import { gql } from "graphql-request";
-import { YouTubeVideo } from '@components/blocks/YouTubeVideo';
-import { datePretty, datePrettyLocal, datePrettyLocalDay, datePrettyLocalTime } from '@lib/dateFormatter';
-import { TagsPool } from '@components/menus/TagsPool';
-import { CategoriesPool } from '@components/menus/CategoriesPool';
-import { MediaText } from '@components/blocks/MediaText';
-import { BreadCrumbs } from '@components/elements/BreadCrumbs';
-import { ImageDynamic } from '@components/elements/ImageDynamic';
-import Head  from 'next/head';
-import { Category, Page, Post, Tag, User } from '@ks/types';
-import { envs } from '@/envs';
-import { BlockRender } from '@components/blocks/BlockRender'
-import { fetchPost } from '@lib/fetchdata/fetchPost';
-import { getServerSession } from 'next-auth';
-import { nextAuthOptions } from '@/session';
-import { Metadata, ResolvingMetadata } from 'next';
-import { fetchProducts } from '@lib/fetchdata/fetchProducts';
-import { Card } from '@components/layouts/Card';
-import styles from '@styles/blog/blogpost.module.scss'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates';
-import { PostTHeaderContentFooter } from '@components/layouts/PostTemplates';
-import { Video } from '@components/blocks/Video';
+import { YouTubeVideo } from "@components/blocks/YouTubeVideo";
+import {
+  datePretty,
+  datePrettyLocal,
+  datePrettyLocalDay,
+  datePrettyLocalTime,
+} from "@lib/dateFormatter";
+import { TagsPool } from "@components/menus/TagsPool";
+import { CategoriesPool } from "@components/menus/CategoriesPool";
+import { MediaText } from "@components/blocks/MediaText";
+import { BreadCrumbs } from "@components/elements/BreadCrumbs";
+import { ImageDynamic } from "@components/elements/ImageDynamic";
+import Head from "next/head";
+import { Category, Page, Post, Tag, User } from "@ks/types";
+import { envs } from "@/envs";
+import { BlockRender } from "@components/blocks/BlockRender";
+import { fetchPost } from "@lib/fetchdata/fetchPost";
+import { getServerSession } from "next-auth";
+import { nextAuthOptions } from "@/session";
+import { Metadata, ResolvingMetadata } from "next";
+import { fetchProducts } from "@lib/fetchdata/fetchProducts";
+import { Card } from "@components/layouts/Card";
+import styles from "@styles/blog/blogpost.module.scss";
+import { PageTHeaderMain } from "@components/layouts/PageTemplates";
+import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates";
+import { Video } from "@components/blocks/Video";
+import { StatusBadge } from "@components/StatusBadge";
 
 export const revalidate = 5;
 
 type Props = {
-  params:{
-    slug:string | string[] | undefined,
-  },
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+  params: {
+    slug: string | string[] | undefined;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
- 
+
   // fetch data
-  const session = await getServerSession(nextAuthOptions)
-  const { post } = await fetchPost(String(params?.slug), session)
+  const session = await getServerSession(nextAuthOptions);
+  const { post } = await fetchPost(String(params?.slug), session);
 
-  if(!post) return {
-    title: envs.SITE_TITLE,
-    description: envs.SITE_DESC,
-  }
+  if (!post)
+    return {
+      title: envs.SITE_TITLE,
+      description: envs.SITE_DESC,
+    };
 
-  const { title, excerpt, featured_image, tags, author } = post
-  
+  const { title, excerpt, featured_image, tags, author } = post;
+
   // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || []
- 
+  const previousImages = (await parent).openGraph?.images || [];
+
   return {
     title: title,
     description: String(excerpt),
@@ -61,23 +67,21 @@ export async function generateMetadata(
       images: [String(featured_image), ...previousImages],
       title: title,
       description: excerpt,
-      url: envs.FRONTEND_URL + '/blog/' + params.slug,
-      type: 'article'
+      url: envs.FRONTEND_URL + "/blog/" + params.slug,
+      type: "article",
     },
-    keywords: tags?.map(tag => tag.name).join(', '),
-    authors: [{name: author?.name, url: author?.url}]
-  }
+    keywords: tags?.map((tag) => tag.name).join(", "),
+    authors: [{ name: author?.name, url: author?.url }],
+  };
 }
 
+export default async function BlogPageBySlug({ params }: Props) {
+  const session = await getServerSession(nextAuthOptions);
+  const { post, error } = await fetchPost(String(params.slug), session);
 
-export default async function BlogPageBySlug({ params }:Props) {
-  
-  const session = await getServerSession(nextAuthOptions)
-  const { post, error } = await fetchPost(String(params.slug), session)
+  if (error) return <ErrorMessage error={error} />;
 
-  if (error) return <ErrorMessage error={error} />
-
-  if(!post) return <p> post not found </p>
+  if (!post) return <p> post not found </p>;
 
   const {
     id,
@@ -95,59 +99,72 @@ export default async function BlogPageBySlug({ params }:Props) {
     categories,
     tags,
     content,
-  } = post
+  } = post;
 
   return (
-    <PostTHeaderContentFooter 
+    <PostTHeaderContentFooter
       headerBgImg={featured_image}
-      header={Header({title, featured_image, author, dateCreated})}
+      header={Header({ title, featured_image, author, dateCreated, status })}
       content={Content(post)}
       footer={Footer()}
     />
-  )
+  );
 }
 
 type Header = {
-  title?:string,
-  featured_image?:string,
-  author?:User,
-  dateCreated?:string,
-}
+  title?: string;
+  featured_image?: string;
+  author?: User;
+  dateCreated?: string;
+  status: Post["status"];
+};
 
-function Header({ title, featured_image, author, dateCreated}:Header){
-
-  console.log({dateCreated});
-  
-
-  return<>
-    {/* <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
+function Header({
+  title,
+  featured_image,
+  author,
+  dateCreated,
+  status,
+}: Header) {
+  return (
+    <>
+      {/* <div className={[styles.breadcrumbs_wrap, 'siteWrapper'].join(' ')}>
       <BreadCrumbs />
     </div> */}
-    <ImageDynamic 
-      photoIn={featured_image}
-    />
-    <div className="overlay siteWrapper">
-      <div className={styles.title_wrap}>
-        <h1>{title}</h1>
-        <ul className='meta'>
-          {author && (
-            <li>post by <Link href={`/users/${author.id}`}> {author.name} </Link></li>
+
+      <ImageDynamic photoIn={featured_image} />
+      <div className="overlay siteWrapper">
+        <div className={styles.title_wrap}>
+          <h1>{title}</h1>
+          {status !== "PUBLIC" && (
+            <div>
+              <StatusBadge type={"post"} status={status} />
+            </div>
           )}
-          <li> 
-            <time dateTime={dateCreated} className='date' data-tooltip={datePrettyLocalTime(dateCreated)}>
-              {datePrettyLocalDay(String(dateCreated))}
-            </time>
-          </li>
-
-        </ul>
+          <ul className="meta">
+            {author && (
+              <li>
+                post by{" "}
+                <Link href={`/users/${author.id}`}> {author.name} </Link>
+              </li>
+            )}
+            <li>
+              <time
+                dateTime={dateCreated}
+                className="date"
+                data-tooltip={datePrettyLocalTime(dateCreated)}
+              >
+                {datePrettyLocalDay(String(dateCreated))}
+              </time>
+            </li>
+          </ul>
+        </div>
       </div>
-
-    </div>
-  </>
+    </>
+  );
 }
 
-function Content(post:Post){
-
+function Content(post: Post) {
   const {
     id,
     title,
@@ -164,36 +181,35 @@ function Content(post:Post){
     categories,
     tags,
     content,
-  } = post
+  } = post;
 
-  return<>
-    {featured_video && (
-      <div className="featured_video">
+  return (
+    <>
+      {featured_video && (
+        <div className="featured_video">
+          <YouTubeVideo url={featured_video} altText="featured video" />
+        </div>
+      )}
 
-        <YouTubeVideo
-          url={featured_video}
-          altText='featured video'
-        />
+      <div className="content">
+        <BlockRender document={content.document} />
       </div>
-    )}
-
-    <div className="content">
-      <BlockRender document={content.document} />
-    </div>
-  </>
+    </>
+  );
 }
 
-function Footer(){
-  
-  return<>
-    <Card>
-      <h4 className='categories'>Categories: </h4>
-      <CategoriesPool />
-    </Card>
+function Footer() {
+  return (
+    <>
+      <Card>
+        <h4 className="categories">Categories: </h4>
+        <CategoriesPool />
+      </Card>
 
-    <Card>
-      <h4 className='tags'>Tags:</h4>
-      <TagsPool />
-    </Card>
-  </>
+      <Card>
+        <h4 className="tags">Tags:</h4>
+        <TagsPool />
+      </Card>
+    </>
+  );
 }

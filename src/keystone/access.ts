@@ -89,7 +89,7 @@ export const rules = {
           employees: {
             some: {
               id: {
-                in: [session?.itemId || ''],
+                in: [session?.itemId || ""],
               },
             },
           },
@@ -98,7 +98,7 @@ export const rules = {
           employee_requests: {
             some: {
               id: {
-                in: [session?.itemId || ''],
+                in: [session?.itemId || ""],
               },
             },
           },
@@ -106,7 +106,7 @@ export const rules = {
         {
           customer: {
             id: {
-              equals: session?.itemId || '',
+              equals: session?.itemId || "",
             },
           },
         },
@@ -139,31 +139,40 @@ export const rules = {
 
     // 2. If not, do they own this item?
     return { author: { id: { equals: session?.itemId } } };
-    // todo make a seperate "View Posts" filter
-    // return {
-    //   OR: [
-    //     { author: { id: { equals: session?.itemId }} },
-    //     {
-    //       NOT: [
-    //         {
-    //           OR: [
-    //             {
-    //               status: {
-    //                 equals: "DRAFT"
-    //               }
-    //             },
-    //             // todo if added a new state
-    //             {
-    //               status: {
-    //                 equals: "PRIVATE"
-    //               }
-    //             },
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }
+  },
+  canViewPosts({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission
+    if (permissions.canManagePosts({ session })) return true;
+
+    // 2. If not, do they own this item?
+    return {
+      OR: [
+        {
+          status: { equals: "PUBLIC" }
+        },
+        { author: { id: { equals: session?.itemId } } },
+        // {
+        //   NOT: [
+        //     {
+        //       OR: [
+        //         {
+        //           status: {
+        //             equals: "DRAFT",
+        //           },
+        //         },
+        //         {
+        //           status: {
+        //             equals: "PRIVATE",
+        //           },
+        //         },
+        //       ],
+        //     },
+        //   ],
+        // },
+      ],
+    };
   },
   canManageLocations({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;

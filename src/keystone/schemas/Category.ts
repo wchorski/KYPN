@@ -17,10 +17,10 @@ export const Category:Lists.Category = list({
       delete: rules.canManageCategories,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageCategories,
       query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      update: permissions.canManageCategories,
+      delete: permissions.canManageCategories,
     }
   },
 

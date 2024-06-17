@@ -13,7 +13,8 @@ export const Post:Lists.Post = list({
   
   access: {
     filter: {
-      query: () => true,
+      // query: () => true,
+      query: rules.canViewPosts,
       // todo make intricate view rule to hide Draft or private posts
       // query: rules.canManagePosts,
       update: rules.canManagePosts,
@@ -21,9 +22,9 @@ export const Post:Lists.Post = list({
     },
     operation: {
       create: () => true,
-      query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      query: permissions.canViewPosts,
+      update: permissions.canManagePosts,
+      delete: permissions.canManagePosts,
     }
   },
   ui: {
@@ -51,7 +52,7 @@ export const Post:Lists.Post = list({
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
-        { label: 'Published', value: 'PUBLISHED' },
+        { label: 'Public', value: 'PUBLIC' },
         { label: 'Private', value: 'PRIVATE' },
       ],
       defaultValue: 'DRAFT',
@@ -170,4 +171,16 @@ export const Post:Lists.Post = list({
       // },
     }),
   },
+  hooks:{
+    beforeOperation: async ({operation, resolvedData, context, item}) => {
+      
+      if(operation === 'create'){
+        const currUserId = await context.session.itemId
+        
+        if(currUserId && !resolvedData.author){
+          resolvedData.author= {connect: { id:  currUserId} }
+        }
+      }
+    }
+  }
 })

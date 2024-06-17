@@ -13,15 +13,16 @@ export const Page:Lists.Page = list({
 
   access: {
     filter: {
+      // todo fitler pages that are not drafts (to non managers)
       query: () => true,
       update: rules.canManagePages,
       delete: rules.canManagePages,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManagePages,
       query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      update: permissions.canManagePages,
+      delete: permissions.canManagePages,
     }
   },
 
@@ -40,7 +41,7 @@ export const Page:Lists.Page = list({
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
-        { label: 'Published', value: 'PUBLISHED' },
+        { label: 'Public', value: 'PUBLIC' },
         { label: 'Private', value: 'PRIVATE' },
       ],
       defaultValue: 'DRAFT',

@@ -18,24 +18,26 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
 
     const context = keystoneContext.withSession(session)
 
-    let where:any = {
-      NOT: [
-        {
-          OR: [
-            {
-              status: {
-                equals: "DRAFT"
-              }
-            },
-            {
-              status: {
-                equals: "PRIVATE"
-              }
-            },
-          ]
-        }
-      ]
-    }
+    // todo do i need / want this filtering if it's done on the backend too?
+    let where:any = {}
+    // let where:any = {
+    //   NOT: [
+    //     {
+    //       OR: [
+    //         {
+    //           status: {
+    //             equals: "DRAFT"
+    //           }
+    //         },
+    //         {
+    //           status: {
+    //             equals: "PRIVATE"
+    //           }
+    //         },
+    //       ]
+    //     }
+    //   ]
+    // }
     
     
     if(categoryIds && categoryIds.length > 0){
@@ -53,18 +55,18 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
 
     const count = await context.query.Post.count({
       where: { 
-        NOT: [
-          {
-            status: {
-              equals: "DRAFT"
-            }
-          },
-          {
-            status: {
-              equals: "PRIVATE"
-            }
-          }
-        ]
+        // NOT: [
+        //   {
+        //     status: {
+        //       equals: "DRAFT"
+        //     }
+        //   },
+        //   {
+        //     status: {
+        //       equals: "PRIVATE"
+        //     }
+        //   }
+        // ]
       },
     }) as number
 
