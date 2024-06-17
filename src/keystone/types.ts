@@ -314,7 +314,7 @@ export type Booking = {
   name: string;
   notes: string;
   status:
-    | "ACTIVE"
+    | "CONFIRMED"
     | "POSTPONED"
     | "CANCELED"
     | "LEAD"

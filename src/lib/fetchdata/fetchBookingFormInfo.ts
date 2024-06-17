@@ -129,7 +129,7 @@ export default async function fetchBookingFormData(){
         },
         status: {
           in: [
-            "ACTIVE",
+            "CONFIRMED",
             "DOWNPAYMENT",
             "HOLD"
           ]

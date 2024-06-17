@@ -17,7 +17,7 @@ type UpdateBookingResponse = {
   error?: any;
 };
 
-type EmployeeGigAction = "" | "ACCEPTED" | "DECLINED";
+type EmployeeGigAction = "" | "CONFIRMED" | "DECLINED";
 
 type Props = {
   userId: string;
@@ -30,7 +30,7 @@ type Fields = {
 };
 
 const actionOptions = [
-  { value: "ACCEPTED", label: "Accept" },
+  { value: "CONFIRMED", label: "Confirm" },
   { value: "DECLINED", label: "Decline" },
 ];
 
@@ -83,8 +83,9 @@ export function EmployeeGigActionForm({ userId, bookingId, action }: Props) {
           variables: {
             where: { id: bookingId },
             data:
-              action === "ACCEPTED"
+              action === "CONFIRMED"
                 ? {
+                    status: "CONFIRMED",
                     employee_requests: {
                       disconnect: [
                         {

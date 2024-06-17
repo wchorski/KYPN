@@ -13,6 +13,7 @@ import { Event, User } from "@ks/types"
 import { envs } from "@/envs"
 import { loadStripe } from "@stripe/stripe-js"
 import moneyFormatter from "@lib/moneyFormatter"
+import { Button } from "@components/elements/Button"
 
 type Fields = {
   // event: string,
@@ -233,11 +234,18 @@ function SubmitButton(){
   const { pending, } = useFormStatus()
 
   return(
-    <button
-      disabled={pending}
+    // <button
+    //   disabled={pending}
+    //   type={'submit'}
+    // >
+    //   {pending ? <LoadingAnim /> : 'Submit'}
+    // </button>
+    <Button
       type={'submit'}
+      size={'medium'}
+      disabled={pending}
     >
-      {pending ? <LoadingAnim /> : 'Submit'}
-    </button>
+      Submit
+    </Button>
   )
 }

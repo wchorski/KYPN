@@ -24,15 +24,17 @@ const { main, container, heading, subheading, button, footer, hr, link, paragrap
 type BookingEmailProps =  {
   operation: 'create'|'update'|'delete',
   booking: Booking,
+  employeeNames:string[],
   imgUrl?:string,
 }
 
 export default function BookingEmail({
   operation,
   booking,
+  employeeNames,
   imgUrl =  envs.FRONTEND_URL + `/assets/logo.png`,
 }: BookingEmailProps){
-
+  
   const previewText = `Booking: ${operation}`;
 
   return (
@@ -83,6 +85,16 @@ export default function BookingEmail({
                       <tr>
                         <td> Event Start: </td>
                         <td>{datePrettyLocal(booking?.start, 'full')}</td>
+                      </tr>
+                      <tr>
+                        <td> Staff: </td>
+                        <td>
+                          {employeeNames ? (
+                            <ul style={{padding: '0'}}>
+                              {employeeNames.map((name,i) => <li key={i}> {name}</li> )}
+                            </ul>
+                          ) : '-- awaiting response --'}
+                        </td>
                       </tr>
                     </tbody>
                   </table>

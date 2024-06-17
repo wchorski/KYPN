@@ -30,15 +30,15 @@ export const Booking:Lists.Booking = list({
 
   access: {
     filter: {
-      query: () => true,
+      query: rules.canManageBookings,
       update: rules.canManageBookings,
-      delete: rules.canManageBookings,
+      delete: () => false,
     },
     operation: {
       create: () => true,
-      query: () => true,
-      update: isLoggedIn,
-      delete: isLoggedIn,
+      query: permissions.isLoggedIn,
+      update: permissions.isLoggedIn,
+      delete: () => false,
     }
   },
 
@@ -89,7 +89,8 @@ export const Booking:Lists.Booking = list({
               name
             `
           }) as Service
-          return item?.name || 'Anonymous' + ' | ' + service?.name || 'No Service Selected';
+
+          return `${item?.name || 'Anonymous'} | ${service?.name || 'No Service Selected'}` 
         },
       })
     }),
@@ -107,7 +108,11 @@ export const Booking:Lists.Booking = list({
     location: relationship({ ref: 'Location.bookings', many: false }),
     addons: relationship({ ref: 'Addon.bookings', many: true }),
     price: integer({ defaultValue: 0, validation: { isRequired: true } }),
-    employees: relationship({ ref: 'User.gigs', many: true }),
+    employees: 
+      relationship({ 
+        ref: 'User.gigs', 
+        many: true,
+      }),
     employee_requests: relationship({ ref: 'User.gig_requests', many: true }),
     customer: relationship({ ref: 'User.bookings', many: false }),
     email: text(),
@@ -125,7 +130,7 @@ export const Booking:Lists.Booking = list({
     }),
     status: select({
       options: [
-        { label: 'Active', value: 'ACTIVE' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
         { label: 'Postponed', value: 'POSTPONED' },
         { label: 'Canceled', value: 'CANCELED' },
         { label: 'Lead', value: 'LEAD' },
@@ -137,8 +142,35 @@ export const Booking:Lists.Booking = list({
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
-      }
-    }),
+      },
+      // todo set status = 'HOLD' if there are no employees
+      // hooks: {
+      //   resolveInput: async ({ context, operation, resolvedData, item }) => {
+      //     if (operation === 'update') {
+      //       // console.log('### booking status resolveInput ###')
+      //       // console.log(JSON.stringify(item,null,2));
+      //       // console.log(JSON.stringify(resolvedData,null,2));
+      //       const employees = await context.sudo().query.User.findMany({
+      //         where: {
+      //           gigs: {
+      //             some: {
+      //               id: {
+      //                 equals: item.id
+      //               }
+      //             }
+      //           }
+      //         },
+      //         query: `
+      //           id
+      //         `
+      //       }) as User[]
+            
+      //       if(item.status !== 'CANCELED' && employees.length <= 0) return 'HOLD'
+      //     }
+      //     return resolvedData.status
+      //   },
+      // },
+    },),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
     google: json({
@@ -158,13 +190,9 @@ export const Booking:Lists.Booking = list({
 
       // }
 
-      if (operation === 'update') {
+      // if (operation === 'update') {
 
-        // let newSummary = (resolvedData.name || item.name) + ' | '
-        // if(resolvedData.service) newSummary + resolvedData.service
-        // // resolvedData.summary = (resolvedData.name || item.name) + ' | '
-        
-      }
+      // }
 
       if(operation === 'delete'){
 
@@ -180,15 +208,18 @@ export const Booking:Lists.Booking = list({
           },
           query: `
             id
+            name
             email
           `
         }) as User[]
 
         const employeeEmails = employees.flatMap( emp => emp.email)
+        const employeeNames = employees.flatMap( emp => emp.name)
 
         const mail = await mailBooking({
           to: [envs.ADMIN_EMAIL_ADDRESS, item?.email, ...employeeEmails].filter(email => email) as string[],
           operation,
+          employeeNames,
           // @ts-ignore
           booking: item,
         })
@@ -237,17 +268,6 @@ export const Booking:Lists.Booking = list({
 
       if(operation === 'create' || operation === 'update'){
 
-        // todo does not checking this cause problems down the line?
-        // if(!item.serviceId) throw new Error('!!! Booking: no service selected')
-        
-        const service = await context.sudo().query.Service.findOne({
-          where: { id: item?.serviceId || 'null' },
-          query: `
-            id
-            name
-          `
-        }) as Service|undefined
-        
         const employees = await context.sudo().query.User.findMany({
           where: {
             gigs: {
@@ -260,15 +280,39 @@ export const Booking:Lists.Booking = list({
           },
           query: `
             id
+            name
             email
           `
         }) as User[]
 
+        // console.log('### booking schema afterOpt: ')
+        // console.log(JSON.stringify(item, null, 2));
+        // if(item.status !== 'CANCELED' && employees.length <= 0){
+        //   resolvedData.status = 'HOLD'
+        //   // const statusUpdate =await context.sudo().query.Booking.updateOne({
+        //   //   where: {id: item.id},
+        //   //   data:{
+        //   //     status: 'HOLD'
+        //   //   }
+        //   // })
+        //   console.log(JSON.stringify(resolvedData, null, 2));
+        // }
+        
+        const service = await context.sudo().query.Service.findOne({
+          where: { id: item?.serviceId || 'null' },
+          query: `
+            id
+            name
+          `
+        }) as Service|undefined
+
         const employeeEmails = employees.flatMap( emp => emp.email)
+        const employeeNames = employees.flatMap( emp => emp.name).filter(name => name)
 
         const mail = await mailBooking({
           to: [envs.ADMIN_EMAIL_ADDRESS, item?.email || '', ...employeeEmails],
           operation,
+          employeeNames,
           // @ts-ignore
           booking: {
             ...item,
@@ -350,7 +394,7 @@ async function handleCalendarDetails(item:any, context:any){
   calDescription += 'STATUS: '      + selectedBooking.status + ' \n'
   calDescription += 'SERVICE: '     + selectedBooking.service?.name || 'No Service Selected' + ' \n' 
   calDescription += 'ADDONS: \n'    + selectedBooking?.addons?.map((addon:Addon) => '  - ' + addon.name).join(', \n') + ' \n' 
-  calDescription += 'EMPLOYEES: \n' + selectedBooking?.employees?.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
+  calDescription += 'STAFF: \n' + selectedBooking?.employees?.map((emp:User) => '  - ' + emp.email).join(', \n') + ' \n\n' 
   calDescription += 'NOTES: '       + selectedBooking.notes + '\n'
   calDescription += 'URL: '         + FRONTEND_URL + `/bookings/${item.id}`
 

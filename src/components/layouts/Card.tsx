@@ -4,6 +4,7 @@ import styles from '@styles/card.module.scss'
 type Props = {
   children:ReactNode,
   layout?:'flex'|'grid',
+  direction?:'row'|'column',
   id?:string,
   bgColor?:string,
   className?:string,
@@ -13,6 +14,7 @@ type Props = {
 
 export function Card ({ 
   layout, 
+  direction = 'column',
   children,
   id,
   bgColor,
@@ -30,7 +32,7 @@ export function Card ({
     <div 
       id={id}
       className={allStyles + ' ' + className} 
-      style={{backgroundColor: bgColor, ...style}}
+      style={{backgroundColor: bgColor, flexDirection: direction,...style}}
     >
       {children}
     </div>

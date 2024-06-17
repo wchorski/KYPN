@@ -182,6 +182,7 @@ type MailBooking= {
   to: string[], 
   operation:'create'|'update'|'delete',
   booking:Booking, 
+  employeeNames:string[]
 }
 
 
@@ -191,10 +192,11 @@ export async function mailBooking({
   to, 
   operation,
   booking, 
+  employeeNames,
 }:MailBooking
 ): Promise<void> {
 
-  const bookingHtml = render(BookingEmail({booking, operation}))
+  const bookingHtml = render(BookingEmail({booking, operation, employeeNames}))
 
   const info = (await transport.sendMail({
     to,

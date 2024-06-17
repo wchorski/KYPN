@@ -149,7 +149,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
             },
             status: {
               in: [
-                "ACTIVE",
+                "CONFIRMED",
                 "DOWNPAYMENT",
                 "HOLD"
               ]

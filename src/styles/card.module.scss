@@ -5,9 +5,15 @@
   border-radius: var(--br-dull);
   // height: 100%;
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   // width: fit-content;
 
+}
+.row{
+  flex-direction: row;
+}
+.column {
+  flex-direction: column;
 }
 .card > *:first-child {
   margin-top: 0;
