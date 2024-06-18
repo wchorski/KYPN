@@ -21,6 +21,7 @@ export const Post:Lists.Post = list({
       delete: rules.canManagePosts,
     },
     operation: {
+      // todo, not everyone should be able to create
       create: () => true,
       query: permissions.canViewPosts,
       update: permissions.canManagePosts,

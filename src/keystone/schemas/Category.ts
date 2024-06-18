@@ -42,6 +42,7 @@ export const Category:Lists.Category = list({
         },
       }
     }),
+    // todo make status 'DRAFT' 'PUBLIC' etc
     // todo make name = slug
     // add "label" to replace name
     excerpt: text({

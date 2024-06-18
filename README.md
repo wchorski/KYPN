@@ -174,6 +174,7 @@ When returning to the production environment, you will have to apply these new c
   - [ ] `Nav.tsx`
   - [ ] `layout.tsx`
 - [ ] add option for multi email brokers (other than gmail)
+- [ ] global toast notifcations with Context Provider
 
 ## Color pallet?
 

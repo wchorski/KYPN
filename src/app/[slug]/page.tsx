@@ -12,6 +12,8 @@ import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
 import { Section } from "@components/layouts/Section"
 import {NotPublicPage} from "@components/NotPublicPage"
+import { StatusBadge } from "@components/StatusBadge"
+import Link from "next/link"
 export const revalidate = 5;
 
 type Props = {
@@ -41,7 +43,7 @@ export default async function PageBySlug ({params,}:Props) {
 
   // if (loading) return <QueryLoading />
   if (error) return <ErrorMessage error={error} />
-  if (!page) return <Error404 />
+  if (!page) return <Error404> <p> This page could not be found, or you do not have permission to view. </p></Error404>
 
   const {
     id,
@@ -60,25 +62,18 @@ export default async function PageBySlug ({params,}:Props) {
     content,
   }:Page = page
 
-  // console.log(data);
-  
+  // console.log(data)
 
-  if (status === 'DRAFT') return (
-    <NotPublicPage status={status}> 
-      <p>This blog post is still a draft</p> 
-    </NotPublicPage>
-  )
-
-  if (status === 'PRIVATE') return (
-    <NotPublicPage status={status}> 
-      <p>This blog post is private</p> 
-    </NotPublicPage>
-  )
+  // if (status === 'PRIVATE') return (
+  //   <NotPublicPage status={status}> 
+  //     <p>This blog post is private</p> 
+  //   </NotPublicPage>
+  // )
 
   if(template === 'FULLWIDTH' || template === 'FULLWIDTH_WITHHEADER') return (
     <PageTHeaderMain
       header={Header({dateCreated, dateModified, title, author, featured_image, template})} 
-      main={Main(content)}
+      main={Main(content, status,id)}
       headerStyles={{
         backgroundImage: `url(${featured_image})`,
         backgroundPosition: 'center',
@@ -92,7 +87,7 @@ export default async function PageBySlug ({params,}:Props) {
   return (
     <PageTHeaderMainAside 
       header={Header({dateCreated, dateModified, title, author, featured_image, template})}
-      main={Main(content)}
+      main={Main(content, status,id)}
       aside={Aside()}
     />
   )
@@ -103,7 +98,7 @@ type Header = {
   dateCreated:string,
   dateModified:string,
   featured_image:string,
-  template:'FULLWIDTH'|'FULLWIDTH_WITHHEADER'|'WITHSIDEBAR'|'BLANK'|string
+  template:'FULLWIDTH'|'FULLWIDTH_WITHHEADER'|'WITHSIDEBAR'|'BLANK'|string,
   author?:{
     name?:string,
   }
@@ -141,9 +136,15 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
 }
 
 
-function Main(content:any){
+function Main(content:any, status:Page['status'],id:string){
 
   return <>
+    {status !== "PUBLIC" && (
+        <Card className={'siteWrapper'} style={{marginInline: 'auto', marginBlock: '1rem'}} direction={'row'}>
+          <StatusBadge type={"post"} status={status} />
+          <Link href={envs.BACKEND_URL + `/pages/${id}`} className={'button'} target={'_blank'}> edit page </Link>
+        </Card>
+      )}
     <BlockRender document={content.document} />
   </>
 }

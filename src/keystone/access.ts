@@ -131,6 +131,24 @@ export const rules = {
     // 2. If not, do they own this item?
     return { author: { id: { equals: session?.itemId } } };
   },
+  canViewPages({ session }: ListAccessArgs) {
+
+    // 1. Do they have the permission
+    if (permissions.canManagePages({ session })) return true;    
+
+    // 2. If not, do they own this item?
+    if(session) return { author: { id: { equals: session?.itemId } } }
+    return {  status: { equals: "PUBLIC" } }
+    //? `OR` is not working the way i thought it would
+    // return {
+    //   OR: [
+        // {
+        //   status: { equals: "PUBLIC" }
+        // },
+    //     { author: { id: { equals: session?.itemId } } },
+    //   ],
+    // };
+  },
   canManagePosts({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
 
@@ -147,32 +165,8 @@ export const rules = {
     if (permissions.canManagePosts({ session })) return true;
 
     // 2. If not, do they own this item?
-    return {
-      OR: [
-        {
-          status: { equals: "PUBLIC" }
-        },
-        { author: { id: { equals: session?.itemId } } },
-        // {
-        //   NOT: [
-        //     {
-        //       OR: [
-        //         {
-        //           status: {
-        //             equals: "DRAFT",
-        //           },
-        //         },
-        //         {
-        //           status: {
-        //             equals: "PRIVATE",
-        //           },
-        //         },
-        //       ],
-        //     },
-        //   ],
-        // },
-      ],
-    };
+    if(session) return { author: { id: { equals: session?.itemId } } }
+    return {  status: { equals: "PUBLIC" } }
   },
   canManageLocations({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;

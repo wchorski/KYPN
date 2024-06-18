@@ -54,9 +54,10 @@ const renderers: DocumentRendererProps['renderers'] = {
     paragraph(props) {
       return  <Paragraph {...props}/>;
     },
-    // list(props) {
-    //   return <ListBlock {...props}/>
-    // },
+    list(props) {      
+      if(props.type === 'unordered') return <ul className="element-wrap">{props.children.map((child,i) => <li key={i}>{child}</li>)}</ul>
+      return <ol className="element-wrap">{props.children.map((child,i) => <li key={i}>{child}</li>)}</ol>
+    },
     heading(props) {
       return <HeadingBlock {...props} />
     }

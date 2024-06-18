@@ -29,6 +29,7 @@ import { PageTHeaderMain } from "@components/layouts/PageTemplates";
 import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates";
 import { Video } from "@components/blocks/Video";
 import { StatusBadge } from "@components/StatusBadge";
+import Error404 from "../../not-found";
 
 export const revalidate = 5;
 
@@ -81,7 +82,7 @@ export default async function BlogPageBySlug({ params }: Props) {
 
   if (error) return <ErrorMessage error={error} />;
 
-  if (!post) return <p> post not found </p>;
+  if (!post) return <Error404 > <p> The post could not be found, or you do not have permission to view. </p></Error404>;
 
   const {
     id,

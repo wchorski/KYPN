@@ -13,14 +13,14 @@ export const Page:Lists.Page = list({
 
   access: {
     filter: {
-      // todo fitler pages that are not drafts (to non managers)
-      query: () => true,
+      // todo fitler pages. view only those that are PUBLIC to everyone
+      query: rules.canViewPages,
       update: rules.canManagePages,
       delete: rules.canManagePages,
     },
     operation: {
       create: permissions.canManagePages,
-      query: () => true,
+      query: permissions.canViewPages,
       update: permissions.canManagePages,
       delete: permissions.canManagePages,
     }
@@ -138,4 +138,16 @@ export const Page:Lists.Page = list({
     }),
 
   },
+  hooks:{
+    beforeOperation: async ({operation, resolvedData, context, item}) => {
+      
+      if(operation === 'create'){
+        const currUserId = await context.session.itemId
+        
+        if(currUserId && !resolvedData.author){
+          resolvedData.author= {connect: { id:  currUserId} }
+        }
+      }
+    }
+  }
 })

@@ -9,6 +9,7 @@ type Props = {
   bgColor?:string,
   className?:string,
   style?:CSSProperties,
+  gap?:string
   // layout?: 'default'|'center',
 }
 
@@ -20,6 +21,7 @@ export function Card ({
   bgColor,
   className,
   style,
+  gap = '1rem',
 }:Props) {
 
   const allStyles = [
@@ -32,7 +34,7 @@ export function Card ({
     <div 
       id={id}
       className={allStyles + ' ' + className} 
-      style={{backgroundColor: bgColor, flexDirection: direction,...style}}
+      style={{backgroundColor: bgColor, flexDirection: direction, gap: gap, ...style}}
     >
       {children}
     </div>

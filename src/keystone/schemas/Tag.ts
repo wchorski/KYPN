@@ -32,6 +32,7 @@ export const Tag:Lists.Tag = list({
   // this is the fields for our Tag list
   fields: {
     name: text({ isIndexed: 'unique', validation: { isRequired: true } }),
+    // todo make status 'DRAFT' 'PUBLIC' etc
     // this can be helpful to find out all the Posts associated with a Tag
     posts: relationship({ ref: 'Post.tags', many: true }),
     pages: relationship({ ref: 'Page.tags', many: true }),

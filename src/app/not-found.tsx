@@ -6,18 +6,23 @@ import { envs } from '@/envs';
 import { useRouter } from "next/navigation";
 import { Section } from '@components/layouts/Section'
 import styles from '../styles/elements/404.module.scss'
+import { ReactNode } from 'react';
+
+type Props = {
+  children?:ReactNode
+}
 
 export const metadata: Metadata = {
   title: `404 | ` + envs.SITE_TITLE,
   description: envs.SITE_DESC,
 }
 
-export default function Error404() {
+export default function NoDataFoundError404({children}:Props) {
   return (<>
 
     <PageTHeaderMain 
       header={Header()}
-      main={Main()}
+      main={Main(children)}
     />
   </>)
 }
@@ -44,7 +49,7 @@ function Header() {
   </>
 }
 
-function Main(){
+function Main(children:ReactNode){
 
   const router = useRouter()
 
@@ -60,15 +65,17 @@ function Main(){
         <span>0</span>
         <span>4</span>
       </p>
+      
+      {children}
+      {!children && <p> This page does not exist.  </p>}
 
-      <p> This page does not exist.  <br /> <br />
-        <Link 
-          href={`/`} 
-          // onClick={handleLink}
-        > 
-          ⇠ Return to previous Page 
-        </Link> 
-      </p>
+      <Link 
+        href={`/`} 
+        // onClick={handleLink}
+      > 
+        ⇠ Return to previous Page 
+      </Link> 
+
     </center>
   </>
 }
