@@ -43,6 +43,8 @@ type User {
   cartCount(where: CartItemWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
+  addonsCount(where: AddonWhereInput! = {}): Int
   rentals(where: RentalWhereInput! = {}, orderBy: [RentalOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RentalWhereUniqueInput): [Rental!]
   rentalsCount(where: RentalWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
@@ -97,6 +99,7 @@ input UserWhereInput {
   availability: AvailabilityManyRelationFilter
   cart: CartItemManyRelationFilter
   products: ProductManyRelationFilter
+  addons: AddonManyRelationFilter
   rentals: RentalManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   subscriptions: SubscriptionItemManyRelationFilter
@@ -228,6 +231,12 @@ input ProductManyRelationFilter {
   none: ProductWhereInput
 }
 
+input AddonManyRelationFilter {
+  every: AddonWhereInput
+  some: AddonWhereInput
+  none: AddonWhereInput
+}
+
 input RentalManyRelationFilter {
   every: RentalWhereInput
   some: RentalWhereInput
@@ -314,6 +323,7 @@ input UserUpdateInput {
   availability: AvailabilityRelateToManyForUpdateInput
   cart: CartItemRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  addons: AddonRelateToManyForUpdateInput
   rentals: RentalRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   subscriptions: SubscriptionItemRelateToManyForUpdateInput
@@ -381,6 +391,13 @@ input ProductRelateToManyForUpdateInput {
   set: [ProductWhereUniqueInput!]
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input AddonRelateToManyForUpdateInput {
+  disconnect: [AddonWhereUniqueInput!]
+  set: [AddonWhereUniqueInput!]
+  create: [AddonCreateInput!]
+  connect: [AddonWhereUniqueInput!]
 }
 
 input RentalRelateToManyForUpdateInput {
@@ -453,6 +470,7 @@ input UserCreateInput {
   availability: AvailabilityRelateToManyForCreateInput
   cart: CartItemRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
+  addons: AddonRelateToManyForCreateInput
   rentals: RentalRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   subscriptions: SubscriptionItemRelateToManyForCreateInput
@@ -503,6 +521,11 @@ input CartItemRelateToManyForCreateInput {
 input ProductRelateToManyForCreateInput {
   create: [ProductCreateInput!]
   connect: [ProductWhereUniqueInput!]
+}
+
+input AddonRelateToManyForCreateInput {
+  create: [AddonCreateInput!]
+  connect: [AddonWhereUniqueInput!]
 }
 
 input RentalRelateToManyForCreateInput {
@@ -848,12 +871,6 @@ input DecimalFilter {
   not: DecimalFilter
 }
 
-input AddonManyRelationFilter {
-  every: AddonWhereInput
-  some: AddonWhereInput
-  none: AddonWhereInput
-}
-
 input IntFilter {
   equals: Int
   in: [Int!]
@@ -915,13 +932,6 @@ input LocationRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input AddonRelateToManyForUpdateInput {
-  disconnect: [AddonWhereUniqueInput!]
-  set: [AddonWhereUniqueInput!]
-  create: [AddonCreateInput!]
-  connect: [AddonWhereUniqueInput!]
-}
-
 input UserRelateToOneForUpdateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -963,11 +973,6 @@ input ServiceRelateToOneForCreateInput {
 input LocationRelateToOneForCreateInput {
   create: LocationCreateInput
   connect: LocationWhereUniqueInput
-}
-
-input AddonRelateToManyForCreateInput {
-  create: [AddonCreateInput!]
-  connect: [AddonWhereUniqueInput!]
 }
 
 input UserRelateToOneForCreateInput {
@@ -1243,6 +1248,7 @@ type Addon {
   price: Int
   stripeProductId: String
   status: String
+  author: User
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
@@ -1282,6 +1288,7 @@ input AddonWhereInput {
   price: IntNullableFilter
   stripeProductId: StringFilter
   status: StringNullableFilter
+  author: UserWhereInput
   services: ServiceManyRelationFilter
   products: ProductManyRelationFilter
   rentals: RentalManyRelationFilter
@@ -1317,6 +1324,7 @@ input AddonUpdateInput {
   price: Int
   stripeProductId: String
   status: String
+  author: UserRelateToOneForUpdateInput
   services: ServiceRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
   rentals: RentalRelateToManyForUpdateInput
@@ -1343,6 +1351,7 @@ input AddonCreateInput {
   price: Int
   stripeProductId: String
   status: String
+  author: UserRelateToOneForCreateInput
   services: ServiceRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
   rentals: RentalRelateToManyForCreateInput

@@ -1,17 +1,15 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
-import { BookingForm } from "@components/bookings/BookingForm"
 import { BookingForm3 } from "@components/bookings/BookingForm3"
-import { Button } from "@components/elements/Button"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 import { Addon, Availability, Booking, BookingPrevious, Service, Session, User, Location } from "@ks/types"
 import fetchBookingFormData from "@lib/fetchdata/fetchBookingFormInfo"
-import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
-import {BookFormDebug} from '@components/bookings/BookFormDebug'
+import NoDataFoundError404 from "../not-found"
+import { plainObj } from "@lib/utils"
 
 export const metadata: Metadata = {
   title: 'Bookings | ' + envs.SITE_TITLE,
@@ -47,11 +45,12 @@ export default async function BookingsPage ({ searchParams }:Props) {
 
   // const { services, addons, error } = await fetchServicesAndAddons()
   // const { services, locations, addons, employees, availabilities, gigs, error } = await fetchBookingFormData()
-  const {data, error} = await fetchBookingFormData()
   const session = await getServerSession(nextAuthOptions)
+  const {data, error} = await fetchBookingFormData()
   
 
-  if(error || !data) return <ErrorMessage error={error} />
+  if(error) return <ErrorMessage error={error} />
+  if(!data) return <NoDataFoundError404><p>No data found for booking</p></NoDataFoundError404>
 
   // const data = {services, locations, addons, employees, availabilities, gigs, session, prevBooking}
 
@@ -89,12 +88,9 @@ async function Main({
   data
 }: Main){
 
-  //? hack fix to stop typescript server to client warnings for "complex" objects (even tho they weren't)
-  const plainObject = JSON.parse(JSON.stringify(data))
-
   return<>
   <Section layout={'1'}>
-    <BookingForm3 data={plainObject}/>
+    <BookingForm3 data={plainObj(data)}/>
   </Section>
   </>
 }

@@ -17,7 +17,7 @@ export const Announcement:Lists.Announcement = list({
       delete: rules.canManageAnnouncements,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageAnnouncements,
       query: () => true,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,

@@ -11,9 +11,7 @@ export async function fetchProducts(page:number, categoryNames:string[], session
   
   try {
     
-    const count = await keystoneContext.withSession(session).query.Product.count({
-    
-    })
+    const count = await keystoneContext.withSession(session).query.Product.count()
     
 
     const products = await keystoneContext.withSession(session).query.Product.findMany({
@@ -27,25 +25,26 @@ export async function fetchProducts(page:number, categoryNames:string[], session
       where: {
         OR: [
           ...catConnects,
-          {
-            NOT: [
-              {
-                OR: [
-                  {
-                    status: {
-                      equals: "DRAFT"
-                    }
-                  },
-                  // todo if added a new state
-                  {
-                    status: {
-                      equals: "PRIVATE"
-                    }
-                  },
-                ]
-              }
-            ]
-          },
+          //? moved to backend
+          // {
+          //   NOT: [
+          //     {
+          //       OR: [
+          //         {
+          //           status: {
+          //             equals: "DRAFT"
+          //           }
+          //         },
+          //         // todo if added a new state
+          //         {
+          //           status: {
+          //             equals: "PRIVATE"
+          //           }
+          //         },
+          //       ]
+          //     }
+          //   ]
+          // },
         ],
       },
       query: `
@@ -62,6 +61,8 @@ export async function fetchProducts(page:number, categoryNames:string[], session
     }) as Product[]
 
     
+    // console.log(JSON.stringify({products},null,2));
+    // console.log('### prod length: ', products.length);
     
     return { products, count }
     

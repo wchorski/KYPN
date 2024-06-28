@@ -17,12 +17,7 @@ type ProdProps = {
 // @ts-ignore
 export async function ProductsList({ products = [] }: ProdProps):ReactElement<any, any> {
 
-  
   const session = await getServerSession(nextAuthOptions);
-  // console.log('@@@@@@ SESSION???????????');
-  // console.log(JSON.stringify(session, null, 2));
-  
-  // console.log({ data });
 
   return (
     <List isAnimated={true} className={styles.product}>

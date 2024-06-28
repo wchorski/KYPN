@@ -43,6 +43,7 @@ model User {
   availability       Availability[]     @relation("Availability_employee")
   cart               CartItem[]         @relation("CartItem_user")
   products           Product[]          @relation("Product_author")
+  addons             Addon[]            @relation("Addon_author")
   rentals            Rental[]           @relation("Rental_customer")
   subscriptionPlans  SubscriptionPlan[] @relation("SubscriptionPlan_author")
   subscriptions      SubscriptionItem[] @relation("SubscriptionItem_user")
@@ -132,7 +133,7 @@ model Service {
   buisnessHourOpen   String?    @default("09:00:00")
   buisnessHourClosed String?    @default("18:00:00")
   buisnessDays       Json       @default("[0,1,2,3,4,5,6]")
-  status             String?    @default("AVAILABLE")
+  status             String?    @default("DRAFT")
   addons             Addon[]    @relation("Addon_services")
   employees          User[]     @relation("Service_employees")
   locations          Location[] @relation("Location_services")
@@ -165,6 +166,8 @@ model Addon {
   price             Int?               @default(0)
   stripeProductId   String             @default("")
   status            String?            @default("AVAILABLE")
+  author            User?              @relation("Addon_author", fields: [authorId], references: [id])
+  authorId          String?            @map("author")
   services          Service[]          @relation("Addon_services")
   products          Product[]          @relation("Addon_products")
   rentals           Rental[]           @relation("Addon_rentals")
@@ -175,6 +178,8 @@ model Addon {
   tags              Tag[]              @relation("Addon_tags")
   dateCreated       DateTime?          @default(now())
   dateModified      DateTime?          @default(now())
+
+  @@index([authorId])
 }
 
 model Availability {

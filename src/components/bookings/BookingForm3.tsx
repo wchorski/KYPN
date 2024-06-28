@@ -460,7 +460,7 @@ export function BookingForm3 ({ data, session }:Props) {
       })
     }
     
-    const employeeAvail = availabilities.filter(avail => avail.employee.id === pickedStaff.id)
+    const employeeAvail = availabilities.filter(avail => avail.employee?.id === pickedStaff.id)
     // * availability
     const staffAvailLocal = employeeAvail.flatMap((avail:Availability) => {
       const start = new Date(avail.start).toLocaleDateString('en-CA')

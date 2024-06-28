@@ -43,10 +43,30 @@ export const rules = {
     if (permissions.canManageProducts({ session })) return true;
 
     // 2. If not, do they own this item?
-    // todo query item.author and match session.user
+    if (session) return { author: { id: { equals: session.itemId } } };
+    return false;
+  },
+  canViewProducts({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
 
-    // return false
-    return { author: { id: { equals: session?.itemId } } };
+    if (permissions.canManageProducts({ session })) return true; // They can read everything!
+
+    // if(session) return {
+    //   OR: [
+    //     { author: { id: { equals: session.itemId } } },
+    //     { status: { equals: "AVAILABLE" } },
+    //     { status: { equals: "PUBLIC" } },
+    //     { status: { equals: "OUT_OF_STOCK" } },
+    //   ],
+    // };
+    // ? if anonymous user
+    return {
+      OR: [
+        { author: { id: { equals: session?.itemId || "no_session.itemId" } } },
+        { status: { equals: "PUBLIC" } },
+        { status: { equals: "OUT_OF_STOCK" } },
+      ],
+    };
   },
 
   canManageAddons({ session }: ListAccessArgs) {
@@ -62,17 +82,38 @@ export const rules = {
     return false;
   },
 
+  canViewAddons({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
+
+    if (permissions.canManageAddons({ session })) return true; // They can read everything!
+
+    return {
+      OR: [
+        { author: { id: { equals: session?.itemId || "no_session.itemId" } } },
+        { status: { equals: "PUBLIC" } },
+        { status: { equals: "OUT_OF_STOCK" } },
+      ],
+    };
+  },
+
   canManageServices({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
 
-    // 1. Do they have the permission
     if (permissions.canManageServices({ session })) return true;
 
-    // 2. If not, do they own this item?
-    // nobody owns
-
-    // return false
     return false;
+  },
+  canViewServices({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
+
+    if (permissions.canManageServices({ session })) return true; // They can read everything!
+    
+    return {
+      OR: [
+        { employees: { some: { id: { in: [session?.itemId || "no_session.itemId"] } } } },
+        { status: { equals: "PUBLIC" } },
+      ],
+    };
   },
 
   canManageBookings({ session }: ListAccessArgs) {
@@ -89,7 +130,7 @@ export const rules = {
           employees: {
             some: {
               id: {
-                in: [session?.itemId || ""],
+                in: [session?.itemId || "no_session.itemId"],
               },
             },
           },
@@ -98,7 +139,7 @@ export const rules = {
           employee_requests: {
             some: {
               id: {
-                in: [session?.itemId || ""],
+                in: [session?.itemId || "no_session.itemId"],
               },
             },
           },
@@ -106,7 +147,7 @@ export const rules = {
         {
           customer: {
             id: {
-              equals: session?.itemId || "",
+              equals: session?.itemId || "no_session.itemId",
             },
           },
         },
@@ -120,7 +161,20 @@ export const rules = {
     if (permissions.canManageAvailability({ session })) return true;
 
     // 2. If not, do they own this item?
-    return { employee: { id: { equals: session?.itemId } } };
+    return {
+      employee: { id: { equals: session?.itemId || "no_session.itemId" } },
+    };
+  },
+  canViewAvailability({ session }: ListAccessArgs) {
+    // if (!isLoggedIn({ session })) return false;
+
+    // 1. Do they have the permission
+    if (permissions.canManageAvailability({ session })) return true;
+
+    // 2. If not, do they own this item?
+    return {
+      employee: { id: { equals: session?.itemId || "no_session.itemId" } },
+    };
   },
   canManagePages({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
@@ -129,22 +183,26 @@ export const rules = {
     if (permissions.canManagePages({ session })) return true;
 
     // 2. If not, do they own this item?
-    return { author: { id: { equals: session?.itemId } } };
+    return {
+      author: { id: { equals: session?.itemId || "no_session.itemId" } },
+    };
   },
   canViewPages({ session }: ListAccessArgs) {
-
     // 1. Do they have the permission
-    if (permissions.canManagePages({ session })) return true;    
+    if (permissions.canManagePages({ session })) return true;
 
     // 2. If not, do they own this item?
-    if(session) return { author: { id: { equals: session?.itemId } } }
-    return {  status: { equals: "PUBLIC" } }
+    if (session)
+      return {
+        author: { id: { equals: session?.itemId || "no_session.itemId" } },
+      };
+    return { status: { equals: "PUBLIC" } };
     //? `OR` is not working the way i thought it would
     // return {
     //   OR: [
-        // {
-        //   status: { equals: "PUBLIC" }
-        // },
+    // {
+    //   status: { equals: "PUBLIC" }
+    // },
     //     { author: { id: { equals: session?.itemId } } },
     //   ],
     // };
@@ -156,7 +214,9 @@ export const rules = {
     if (permissions.canManagePosts({ session })) return true;
 
     // 2. If not, do they own this item?
-    return { author: { id: { equals: session?.itemId } } };
+    return {
+      author: { id: { equals: session?.itemId || "no_session.itemId" } },
+    };
   },
   canViewPosts({ session }: ListAccessArgs) {
     // if (!isLoggedIn({ session })) return false;
@@ -165,8 +225,11 @@ export const rules = {
     if (permissions.canManagePosts({ session })) return true;
 
     // 2. If not, do they own this item?
-    if(session) return { author: { id: { equals: session?.itemId } } }
-    return {  status: { equals: "PUBLIC" } }
+    if (session)
+      return {
+        author: { id: { equals: session?.itemId || "no_session.itemId" } },
+      };
+    return { status: { equals: "PUBLIC" } };
   },
   canManageLocations({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
@@ -203,11 +266,7 @@ export const rules = {
   canManageAnnouncements({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
 
-    // 1. Do they have the permission?
     if (permissions.canManageAnnouncements({ session })) return true;
-
-    // 2. If not, do they own this item?
-    // nobody owns an addon
 
     // return false
     return false;
@@ -239,7 +298,7 @@ export const rules = {
         {
           holder: {
             id: {
-              equals: session.itemId,
+              equals: session.itemId || "no_session.itemId",
             },
           },
         },
@@ -255,7 +314,7 @@ export const rules = {
     if (permissions.canManageCart({ session })) return true;
 
     // 2. If not, do they own this item?
-    return { user: { id: { equals: session?.itemId } } };
+    return { user: { id: { equals: session?.itemId || "no_session.itemId" } } };
   },
   canManageOrders({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
@@ -269,34 +328,10 @@ export const rules = {
     if (permissions.canManageCart({ session })) return true;
 
     // 2. If not, do they own this item?
-    return { order: { user: { id: { equals: session?.itemId } } } };
-  },
-
-  // AVAILABLE products can be viewed by all
-  canReadProducts({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
-
-    if (permissions.canManageProducts({ session })) return true; // They can read everything!
-
-    // They should only see available products (based on the status field)
     return {
-      NOT: [
-        {
-          OR: [
-            {
-              status: {
-                equals: "DRAFT",
-              },
-            },
-            // todo if added a new state
-            // {
-            //   status: {
-            //     equals: "PRIVATE"
-            //   }
-            // },
-          ],
-        },
-      ],
+      order: {
+        user: { id: { equals: session?.itemId || "no_session.itemId" } },
+      },
     };
   },
 
@@ -358,6 +393,6 @@ export const rules = {
     if (permissions.canManageSubscriptionPlans({ session })) return true;
 
     // do they own?
-    return { user: { id: { equals: session?.itemId } } };
+    return { user: { id: { equals: session?.itemId || "no_session.itemId" } } };
   },
 };

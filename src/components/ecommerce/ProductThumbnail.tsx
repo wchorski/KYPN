@@ -8,6 +8,7 @@ import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { Product, Session } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import { envs } from '@/envs';
+import { StatusBadge } from '@components/StatusBadge';
 
 type Props = {
   product:Product,
@@ -27,7 +28,8 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
   return (
     <article className={styles.product} >
       
-      {status === 'DRAFT' && <p> DRAFT PRODUCT </p> }
+      {(status === 'DRAFT' || status === 'PRIVATE') && <StatusBadge type={'product'} status={status} />}
+      {/* <StatusBadge type={'product'} status={status} /> */}
 
       {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
       <Link href={`/shop/products/${id}`} className='featured_image'>

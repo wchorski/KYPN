@@ -13,13 +13,13 @@ export const Addon:Lists.Addon = list({
   access: {
     filter: {
       // todo filter out any status = 'DRAFT'
-      query: () => true,
+      query: rules.canViewAddons,
       update: rules.canManageAddons,
       delete: rules.canManageAddons,
     },
     operation: {
-      create: () => true,
-      query: () => true,
+      create: permissions.canManageAddons,
+      query: permissions.canViewAddons,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,
     }
@@ -58,7 +58,7 @@ export const Addon:Lists.Addon = list({
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
-        { label: 'Available', value: 'AVAILABLE' },
+        { label: 'Public', value: 'PUBLIC' },
         { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
         { label: 'Private', value: 'PRIVATE' },
       ],
@@ -67,6 +67,9 @@ export const Addon:Lists.Addon = list({
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }
       }
+    }),
+    author: relationship({
+      ref: 'User.addons',
     }),
     services: relationship({ ref: 'Service.addons', many: true }),
     products: relationship({ ref: 'Product.addons', many: true }),

@@ -195,12 +195,14 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
       bookedEmployees.map(emp => {
 
       if(dateCheckAvail(String(start), String(end), emp.availability))
-        console.log(`+++ Open Day no vaction set for ${emp.name}`)
+        // console.log(`+++ Open Day no vaction set for ${emp.name}`)
+        console.log('');
        else 
         throw new Error(`CONFLICT: vacation day for ${emp.name}`)
 
       if(dateCheckAvail(String(start), String(end), emp.gigs))
-        console.log(`+++ No Gigs yet set for ${emp.name}`)
+        // console.log(`+++ No Gigs yet set for ${emp.name}`)
+        console.log('');
        else 
         throw new Error(`CONFLICT: double booking ${emp.name} `)
 
@@ -238,10 +240,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     //     dateTime: end,
     //     // timeZone: 'America/Chicago',
     //   },
-    // })    
-
-    console.log('### Booking NOTES HERE: ', notes);
-    
+    // })        
     
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({

@@ -3,10 +3,10 @@ import { keystoneContext } from '@ks/context';
 
 const now = new Date()
 
-export default async function fetchAnnouncements(){
+export default async function fetchAnnouncements(session:any){
 
   try {
-    const announcements = await keystoneContext.query.Announcement.findMany({
+    const announcements = await keystoneContext.withSession(session).query.Announcement.findMany({
       query: `
         start
         end

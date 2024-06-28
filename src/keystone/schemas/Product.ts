@@ -4,7 +4,7 @@ import { Lists } from '.keystone/types';
 
 import { allowAll } from "@keystone-6/core/access";
 import { checkbox, image, integer, relationship, select, text, timestamp } from "@keystone-6/core/fields";
-import { isLoggedIn, permissions, rules } from "../access";
+import { permissions, rules } from "../access";
 import stripeConfig from "../../lib/stripe";
 import { document } from '@keystone-6/fields-document';
 import { componentBlocks } from "../blocks";
@@ -15,16 +15,17 @@ export const Product:Lists.Product = list({
   // access: allowAll,
   access: {
     filter: {
-      // query: rules.canReadProducts,
-      query: () => true,
+      // query: () => true,
+      query: rules.canViewProducts,
       delete: rules.canManageProducts,
       update: rules.canManageProducts,
     },
     operation: {
+      // query: permissions.canViewProducts,
       query: () => true,
-      create: isLoggedIn,
-      update: isLoggedIn,
-      delete: isLoggedIn,
+      create: permissions.canManageProducts,
+      update: permissions.canManageProducts,
+      delete: permissions.canManageProducts,
     }
   },
 
@@ -112,7 +113,8 @@ export const Product:Lists.Product = list({
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
-        { label: 'Available', value: 'AVAILABLE' },
+        { label: 'Private', value: 'PRIVATE' },
+        { label: 'Public', value: 'PUBLIC' },
         { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
       ],
       defaultValue: 'DRAFT',

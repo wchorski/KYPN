@@ -9,7 +9,7 @@ export async function fetchProduct(id:string, session:any){
   try {
 
     // const product = await keystoneContext.withSession(session).query.Product.findOne({
-    const product = await keystoneContext.query.Product.findOne({
+    const product = await keystoneContext.withSession(session).query.Product.findOne({
       where: {
         id: id,
       },

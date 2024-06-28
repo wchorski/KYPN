@@ -77,3 +77,7 @@ input, button, a {
     background-color: var(--c-disabled);
   }
 }
+
+input:hover, select:hover {
+  cursor: pointer;
+}

@@ -84,9 +84,9 @@ https://myaccount.google.com/security
 
 > [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
 
-- any changes to **access** **filters** or **operations**
+## Rules & Permissions
+any changes to **access** **filters** **operations** or **permissions** will not take effect in the NextJs app until the server is reloaded. Luckily the **Keystone** app will hot reload with these changes
 
-> 1. keystone `ks:dev`
 > 2. next `n:dev`
 
 ### Mail Templating
@@ -175,7 +175,15 @@ When returning to the production environment, you will have to apply these new c
   - [ ] `layout.tsx`
 - [ ] add option for multi email brokers (other than gmail)
 - [ ] global toast notifcations with Context Provider
+- [ ] Error404 on all page route types
+  - [x] posts
+  - [x] pages
+  - [ ] bookings
+  - [ ] bookings
+- Announcements
+  - create dynamic announcements that are private, members only, etc. 
 
+ 
 ## Color pallet?
 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

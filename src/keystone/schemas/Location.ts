@@ -16,10 +16,10 @@ export const Location:Lists.Location = list({
       delete: rules.canManageLocations,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageLocations,
       query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      update: permissions.canManageLocations,
+      delete: permissions.canManageLocations,
     }
   },
 

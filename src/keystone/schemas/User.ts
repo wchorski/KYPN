@@ -137,6 +137,7 @@ export const User: Lists.User = list({
     }),
 
     products: relationship({ ref: 'Product.author', many: true }),
+    addons: relationship({ ref: 'Addon.author', many: true }),
     rentals: relationship({ ref: 'Rental.customer', many: true }),
     subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
     subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),

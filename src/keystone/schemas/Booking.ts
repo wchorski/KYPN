@@ -30,6 +30,7 @@ export const Booking:Lists.Booking = list({
 
   access: {
     filter: {
+      // query: () => true,
       query: rules.canManageBookings,
       update: rules.canManageBookings,
       delete: () => false,
@@ -37,7 +38,7 @@ export const Booking:Lists.Booking = list({
     operation: {
       create: () => true,
       query: permissions.isLoggedIn,
-      update: permissions.isLoggedIn,
+      update: permissions.canManageBookings,
       delete: () => false,
     }
   },

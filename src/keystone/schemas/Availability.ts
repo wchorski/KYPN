@@ -12,13 +12,13 @@ export const Availability:Lists.Availability = list({
 
   access: {
     filter: {
-      query: () => true,
+      query: rules.canViewAvailability,
       update: rules.canManageAvailability,
       delete: rules.canManageAvailability,
     },
     operation: {
-      create: () => true,
-      query: () => true,
+      create: permissions.isLoggedIn,
+      query: permissions.canViewAvailability,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,
     }
@@ -87,6 +87,8 @@ export const Availability:Lists.Availability = list({
       // } catch (err) { console.warn(err) }
 
       if (operation === 'create') {
+
+        if(!resolvedData.employee) throw new Error('!!! No employee set for this Availability creation')
 
         if(!resolvedData.end){
           resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))

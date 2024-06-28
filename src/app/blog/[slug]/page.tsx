@@ -1,33 +1,23 @@
 import Link from "next/link";
-import { QueryLoading } from "@components/menus/QueryLoading";
 import ErrorMessage from "@components/ErrorMessage";
-// import { gql } from "graphql-request";
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo";
 import {
-  datePretty,
-  datePrettyLocal,
   datePrettyLocalDay,
   datePrettyLocalTime,
 } from "@lib/dateFormatter";
 import { TagsPool } from "@components/menus/TagsPool";
 import { CategoriesPool } from "@components/menus/CategoriesPool";
-import { MediaText } from "@components/blocks/MediaText";
-import { BreadCrumbs } from "@components/elements/BreadCrumbs";
 import { ImageDynamic } from "@components/elements/ImageDynamic";
-import Head from "next/head";
-import { Category, Page, Post, Tag, User } from "@ks/types";
+import {Post,User } from "@ks/types";
 import { envs } from "@/envs";
 import { BlockRender } from "@components/blocks/BlockRender";
 import { fetchPost } from "@lib/fetchdata/fetchPost";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "@/session";
 import { Metadata, ResolvingMetadata } from "next";
-import { fetchProducts } from "@lib/fetchdata/fetchProducts";
 import { Card } from "@components/layouts/Card";
 import styles from "@styles/blog/blogpost.module.scss";
-import { PageTHeaderMain } from "@components/layouts/PageTemplates";
 import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates";
-import { Video } from "@components/blocks/Video";
 import { StatusBadge } from "@components/StatusBadge";
 import Error404 from "../../not-found";
 

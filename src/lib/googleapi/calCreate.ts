@@ -66,7 +66,7 @@ export async function deleteCalendarEvent(eventId:string){
     })
 
 
-    console.log('📅 googleapi cal delete success, ');
+    // console.log('📅 googleapi cal delete success, ');
     // console.log({response});
 
     return { 
@@ -101,7 +101,7 @@ export async function updateCalendarEvent(eventId:string, event:GEvent) {
     })
 
 
-    console.log('📅 googleapi cal update success, ');
+    // console.log('📅 googleapi cal update success, ');
     // console.log({response});
 
     return { 
@@ -143,7 +143,7 @@ export async function createCalendarEvent(event:GEvent){
     
 
 
-    console.log('📅 googleapi cal create success, ');
+    // console.log('📅 googleapi cal create success, ');
     
 
     return { 

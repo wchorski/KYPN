@@ -141,7 +141,7 @@ function Main(content:any, status:Page['status'],id:string){
   return <>
     {status !== "PUBLIC" && (
         <Card className={'siteWrapper'} style={{marginInline: 'auto', marginBlock: '1rem'}} direction={'row'}>
-          <StatusBadge type={"post"} status={status} />
+          <StatusBadge type={"page"} status={status} />
           <Link href={envs.BACKEND_URL + `/pages/${id}`} className={'button'} target={'_blank'}> edit page </Link>
         </Card>
       )}

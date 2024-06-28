@@ -4,8 +4,6 @@ import { keystoneContext } from '@ks/context';
 export default async function fetchServicesAndAddons(serviceIds?:string[], addonIds?:string[]){
 
   try {
-
-    const variables = {}
     const services = await keystoneContext.sudo().query.Service.findMany({
       where: {
         status: {
@@ -25,9 +23,9 @@ export default async function fetchServicesAndAddons(serviceIds?:string[], addon
 
     const addons = await keystoneContext.sudo().query.Addon.findMany({
       where: {
-        status: {
-          notIn: ["DRAFT", "PRIVATE"]
-        },
+        // status: {
+        //   notIn: ["DRAFT", "PRIVATE"]
+        // },
         // include ids filtering if array is present
         ...(addonIds && addonIds.length > 0 ? { id : { in: addonIds } } : {})
       },
@@ -42,7 +40,7 @@ export default async function fetchServicesAndAddons(serviceIds?:string[], addon
     return { services, addons }
     
   } catch (error) {
-    console.log('fetch Cats: ', error)
+    console.log('!!! fetchServicesAndAddons: ', error)
     return { error }
   }
 }

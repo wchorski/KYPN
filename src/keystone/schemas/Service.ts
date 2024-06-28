@@ -13,16 +13,15 @@ export const Service:Lists.Service = list({
 
   access: {
     filter: {
-      // todo put filter here for services that may be in 'DRAFT'
-      query: () => true,
+      query: rules.canViewServices,
       update: rules.canManageServices,
       delete: rules.canManageServices,
     },
     operation: {
-      create: () => true,
-      query: () => true,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      create: permissions.canManageServices,
+      query: permissions.canViewServices,
+      update: permissions.canManageServices,
+      delete: permissions.canManageServices,
     }
   },
 
@@ -127,9 +126,10 @@ export const Service:Lists.Service = list({
     status: select({
       options: [
         { label: 'Draft', value: 'DRAFT' },
-        { label: 'Available', value: 'AVAILABLE' },
+        { label: 'Private', value: 'PRIVATE' },
+        { label: 'Public', value: 'PUBLIC' },
       ],
-      defaultValue: 'AVAILABLE',
+      defaultValue: 'DRAFT',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

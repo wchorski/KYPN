@@ -5,19 +5,20 @@ const now = new Date().toISOString()
 
 export default async function fetchBookingFormData(){
 
+  // bypass all access & permissions 
   const contextSudo = keystoneContext.sudo()
+  const context = keystoneContext
 
   try {
 
-    const services = await contextSudo.query.Service.findMany({
-      where: {
-        // @ts-ignore this will be auto updated later by keystone
-        status: {
-          in: [
-            "AVAILABLE",
-          ]
-        },
-      },
+    const services = await context.query.Service.findMany({
+      // where: {
+      //   status: {
+      //     in: [
+      //       "AVAILABLE",
+      //     ]
+      //   },
+      // },
       query: `
         id
         name
@@ -65,11 +66,11 @@ export default async function fetchBookingFormData(){
             }
           }
         },
-        status: {
-          in: [
-            "AVAILABLE",
-          ]
-        },
+        // status: {
+        //   in: [
+        //     "AVAILABLE",
+        //   ]
+        // },
       },
       query: `
         id
@@ -82,7 +83,7 @@ export default async function fetchBookingFormData(){
       `,
     }) as Addon[]
 
-    const employees = await contextSudo.sudo().query.User.findMany({
+    const employees = await contextSudo.query.User.findMany({
       where: {
         servicesProvided: {
           some: {
@@ -103,7 +104,7 @@ export default async function fetchBookingFormData(){
       `
     }) as User[]
     
-    const availabilities = await contextSudo.sudo().query.Availability.findMany({
+    const availabilities = await contextSudo.query.Availability.findMany({
       where: {
         end: {
           gt: now
@@ -122,7 +123,7 @@ export default async function fetchBookingFormData(){
       `
     }) as Availability[]
     
-    const gigs = await contextSudo.sudo().query.Booking.findMany({
+    const gigs = await contextSudo.query.Booking.findMany({
       where: {
         end: {
           gt: now
@@ -151,10 +152,14 @@ export default async function fetchBookingFormData(){
         }
       `
     }) as Booking[]
+    // console.log({gigs});
+    
     
     
     // todo actually i think i want to as a users part as I don't want to be querying 1 user multple times. also I'm already querying addons multiple times too
+    
     const data = { services, locations, addons, employees, availabilities, gigs }
+    // console.log({data});
     return {data}
     
   } catch (error) {
