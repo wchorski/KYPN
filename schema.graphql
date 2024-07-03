@@ -830,8 +830,7 @@ input BookingWhereInput {
   NOT: [BookingWhereInput!]
   id: IDFilter
   start: DateTimeFilter
-  end: DateTimeNullableFilter
-  durationInHours: DecimalFilter
+  end: DateTimeFilter
   service: ServiceWhereInput
   location: LocationWhereInput
   addons: AddonManyRelationFilter
@@ -860,17 +859,6 @@ input DateTimeFilter {
   not: DateTimeFilter
 }
 
-input DecimalFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalFilter
-}
-
 input IntFilter {
   equals: Int
   in: [Int!]
@@ -886,7 +874,6 @@ input BookingOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
-  durationInHours: OrderDirection
   price: OrderDirection
   email: OrderDirection
   phone: OrderDirection
@@ -901,7 +888,6 @@ input BookingOrderByInput {
 input BookingUpdateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   service: ServiceRelateToOneForUpdateInput
   location: LocationRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
@@ -946,7 +932,6 @@ input BookingUpdateArgs {
 input BookingCreateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   service: ServiceRelateToOneForCreateInput
   location: LocationRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
@@ -1049,6 +1034,17 @@ input IntNullableFilter {
   gt: Int
   gte: Int
   not: IntNullableFilter
+}
+
+input DecimalFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalFilter
 }
 
 input LocationManyRelationFilter {
@@ -1386,8 +1382,7 @@ input AvailabilityWhereInput {
   NOT: [AvailabilityWhereInput!]
   id: IDFilter
   start: DateTimeFilter
-  end: DateTimeNullableFilter
-  durationInHours: DecimalNullableFilter
+  end: DateTimeFilter
   employee: UserWhereInput
   type: StringNullableFilter
   status: StringNullableFilter
@@ -1395,22 +1390,10 @@ input AvailabilityWhereInput {
   dateModified: DateTimeNullableFilter
 }
 
-input DecimalNullableFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalNullableFilter
-}
-
 input AvailabilityOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
-  durationInHours: OrderDirection
   type: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
@@ -1420,7 +1403,6 @@ input AvailabilityOrderByInput {
 input AvailabilityUpdateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   employee: UserRelateToOneForUpdateInput
   type: String
   status: String
@@ -1436,7 +1418,6 @@ input AvailabilityUpdateArgs {
 input AvailabilityCreateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   employee: UserRelateToOneForCreateInput
   type: String
   status: String
@@ -1881,8 +1862,7 @@ input RentalWhereInput {
   NOT: [RentalWhereInput!]
   id: IDFilter
   start: DateTimeFilter
-  end: DateTimeNullableFilter
-  durationInHours: DecimalFilter
+  end: DateTimeFilter
   location: StringFilter
   delivery: BooleanFilter
   price: IntFilter
@@ -1902,7 +1882,6 @@ input RentalOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
-  durationInHours: OrderDirection
   location: OrderDirection
   delivery: OrderDirection
   price: OrderDirection
@@ -1918,7 +1897,6 @@ input RentalOrderByInput {
 input RentalUpdateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   location: String
   delivery: Boolean
   price: Int
@@ -1949,7 +1927,6 @@ input RentalUpdateArgs {
 input RentalCreateInput {
   start: DateTime
   end: DateTime
-  durationInHours: Decimal
   location: String
   delivery: Boolean
   price: Int

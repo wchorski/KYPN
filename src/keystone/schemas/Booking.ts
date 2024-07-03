@@ -2,25 +2,16 @@
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-pages-directory/src/pages/index.tsx
 
 import { graphql, list } from "@keystone-6/core";
-// @ts-ignore
 import type { Lists } from '.keystone/types';
-import { allowAll } from "@keystone-6/core/access";
 import { decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { mailBooking } from "../../lib/mail";
-import { User, Addon, Service, Location, } from '../types'
-import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
+import { User, Addon, Service, } from '../types'
+import { calcDurationInHours, calcEndTime } from '../../lib/dateCheck';
 import { createCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from "../../lib/googleapi/calCreate";
-import { datePrettyLocal } from "../../lib/dateFormatter";
-import { isLoggedIn, permissions, rules } from "../access";
+import { permissions, rules } from "../access";
 import { envs } from "../../../envs";
+import { Decimal } from "@keystone-6/core/types";
 
-
-const now = new Date();
-const year = now.getFullYear();
-const month = now.getMonth() + 1; // add 1 because getMonth() returns zero-based index
-const day = now.getDate();
-const today = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
-const EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_email_set'
 const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 // const EMAIL_ADDRESS = 'y@m'
 
@@ -30,7 +21,6 @@ export const Booking:Lists.Booking = list({
 
   access: {
     filter: {
-      // query: () => true,
       query: rules.canManageBookings,
       update: rules.canManageBookings,
       delete: () => false,
@@ -38,7 +28,7 @@ export const Booking:Lists.Booking = list({
     operation: {
       create: () => true,
       query: permissions.isLoggedIn,
-      update: permissions.canManageBookings,
+      update: permissions.isLoggedIn,
       delete: () => false,
     }
   },
@@ -65,18 +55,7 @@ export const Booking:Lists.Booking = list({
       }
     }),
     start: timestamp({ validation: { isRequired: true } }),
-    end: timestamp({
-      hooks: {
-        beforeOperation({resolvedData}) {
-          // todo could also calc dervice duration right here for end time
-          if(!resolvedData) return
-
-          if(!resolvedData.end){
-            resolvedData.end = resolvedData?.start
-          } 
-        },
-      }
-    }),
+    end: timestamp({ validation: { isRequired: true } }),
     
     // summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
     summary: virtual({
@@ -95,16 +74,24 @@ export const Booking:Lists.Booking = list({
         },
       })
     }),
-    durationInHours: decimal({
-      defaultValue: '23',
-      precision: 5,
-      scale: 2,
-      validation: {
-        isRequired: true,
-        max: '24',
-        min: '.25',
-      },
+    durationInHours: virtual({
+      field: graphql.field({
+        type: graphql.Decimal,
+        async resolve(item:any, args, context) {
+          return new Decimal(calcDurationInHours(item.start, item.end))
+        },
+      })
     }),
+    // durationInHours: decimal({
+    //   defaultValue: '23',
+    //   precision: 5,
+    //   scale: 2,
+    //   validation: {
+    //     isRequired: true,
+    //     max: '24',
+    //     min: '.25',
+    //   },
+    // }),
     service: relationship({ ref: 'Service.bookings', many: false }),
     location: relationship({ ref: 'Location.bookings', many: false }),
     addons: relationship({ ref: 'Addon.bookings', many: true }),

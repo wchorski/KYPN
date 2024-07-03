@@ -47,13 +47,8 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
 
   const selectedStart = new Date(start)
   const selectedEnd = new Date(end)
-  // const durationMs = Number(durationInHours) * 60 * 60 * 1000
-  // const selectedEnd = new Date(selectedStart.getTime() + durationMs)
 
   for (let i = 0; i < busyRanges.length; i++) {
-
-    // console.log('busyRanges[i].start, ', busyRanges[i].start);
-    // console.log('busyRanges[i].end, ', busyRanges[i].end);
     
     const busyStart = new Date(busyRanges[i].start);
     const busyEnd = new Date(busyRanges[i].end)
@@ -62,12 +57,7 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
       // console.log('the selected date time and the vacation day do not overlap')
       continue;
     } else {
-      // console.log({
-      //   selectedStart: selectedStart,
-      //   selectedEnd: selectedEnd,
-      //   busyStart: busyStart,
-      //   busyEnd: busyEnd,
-      // })
+
       console.log('the selected date time and the vacation day overlap')
       console.log('gig / vacation id: ', busyRanges[i].id);
       
@@ -79,39 +69,6 @@ export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[])
   return true; // no vacation day overlaps with selected date
 }
 
-//! with duration
-// export function dateCheckAvail(selectedDateTime:string, durationInHours:string, busyRanges:BusyRange[]) {
-
-//   const selectedStart = new Date(selectedDateTime)
-//   const durationMs = Number(durationInHours) * 60 * 60 * 1000
-//   const selectedEnd = new Date(selectedStart.getTime() + durationMs)
-
-//   for (let i = 0; i < busyRanges.length; i++) {
-
-//     const busyStart = new Date(busyRanges[i].start);
-//     const busyEnd = new Date(busyStart.getTime() + Number(busyRanges[i].durationInHours) * 60 * 60 * 1000)
-
-//     if (selectedEnd <= busyStart || selectedStart >= busyEnd) {
-//       // console.log('the selected date time and the vacation day do not overlap')
-//       continue;
-//     } else {
-//       console.log({
-//         selectedStart: selectedStart,
-//         selectedEnd: selectedEnd,
-//         busyStart: busyStart,
-//         busyEnd: busyEnd,
-//       })
-//       console.log('the selected date time and the vacation day overlap')
-//       console.log('gig / vacation id: ', busyRanges[i].id);
-      
-//       return false;
-//     }
-//   }
-
-//   console.log('no vacation day overlaps with selected date')
-//   return true; // no vacation day overlaps with selected date
-// }
-
 export function calcEndTime(start:string, duration:string|undefined){
   const date = new Date(start);
   if(!duration) return date.toISOString()
@@ -120,6 +77,16 @@ export function calcEndTime(start:string, duration:string|undefined){
   
   return date.toISOString();
 
+}
+
+export function calcDurationInHours(dateString1: string, dateString2: string) {
+  const date1 = new Date(dateString1)
+  const date2 = new Date(dateString2)
+  
+  const durationInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
+  const durationInHours = durationInMilliseconds / (1000 * 60 * 60)
+  
+  return durationInHours
 }
 
 export function dayOfWeek(num:number){

@@ -1371,7 +1371,7 @@ export const addons_seedjson  = [
 export const avail_seedjson = [
   {
     start: '2023-12-01T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-12-02T00:00:00+00:00',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1380,7 +1380,7 @@ export const avail_seedjson = [
   },
   {
     start: '2023-12-02T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-12-03T00:00:00+00:00',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1389,7 +1389,7 @@ export const avail_seedjson = [
   },
   {
     start: '2023-12-03T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-12-04T00:00:00+00:00',
     employee: {
       connect: { email: 'adam@m.lan'},   
     },
@@ -1398,7 +1398,7 @@ export const avail_seedjson = [
   },
   {
     start: '2023-05-01T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-05-02T00:00:00+00:00',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },
@@ -1407,7 +1407,7 @@ export const avail_seedjson = [
   },
   {
     start: '2023-05-02T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-05-03T00:00:00+00:00',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },
@@ -1416,7 +1416,7 @@ export const avail_seedjson = [
   },
   {
     start: '2023-05-03T00:00:00+00:00',
-    durationInHours: '23.9',
+    end: '2023-05-04T00:00:00+00:00',
     employee: {
       connect: { email: 'eddy@m.lan'},   
     },

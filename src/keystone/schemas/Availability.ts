@@ -1,10 +1,11 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { decimal, relationship, select, text, timestamp, } from "@keystone-6/core/fields";
-import { calcEndTime } from "../../lib/dateCheck";
+import { decimal, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
+import { calcDurationInHours, calcEndTime } from "../../lib/dateCheck";
 import { permissions, rules } from "../access";
+import { Decimal } from "@keystone-6/core/types";
 
 
 
@@ -29,7 +30,7 @@ export const Availability:Lists.Availability = list({
     // todo hide these again
     // isHidden: true,
     listView: {
-      initialColumns: ['start', 'end', 'employee', 'type', 'status'],
+      initialColumns: ['start', 'end', 'durationInHours', 'employee', 'type', 'status'],
       initialSort: { field: 'start', direction: 'DESC'}
     },
   },
@@ -37,16 +38,14 @@ export const Availability:Lists.Availability = list({
 
   fields: {
     start: timestamp({ validation: { isRequired: true } }),
-    end: timestamp({}),
-    durationInHours: decimal({
-      // defaultValue: '23.9',
-      precision: 5,
-      scale: 2,
-      validation: {
-        // isRequired: true,
-        // max: '24',
-        min: '.25',
-      },
+    end: timestamp({validation: { isRequired: true } }),
+    durationInHours: virtual({
+      field: graphql.field({
+        type: graphql.Decimal,
+        async resolve(item:any, args, context) {
+          return new Decimal(calcDurationInHours(item.start, item.end))
+        },
+      })
     }),
     employee: relationship({ ref: 'User.availability', many: false }),
     type: select({
@@ -90,12 +89,8 @@ export const Availability:Lists.Availability = list({
 
         if(!resolvedData.employee) throw new Error('!!! No employee set for this Availability creation')
 
-        if(!resolvedData.end){
-          resolvedData.end = calcEndTime(String(resolvedData.start), String(resolvedData.durationInHours))
-        }
-
-        if(resolvedData.start && resolvedData.end < resolvedData.start ){
-          throw new Error('End time is set before Start time')
+        if(resolvedData.start && resolvedData.end && resolvedData.end < resolvedData.start ){
+          throw new Error('!!! Availability: End time is set before Start time')
         }
       }
     }

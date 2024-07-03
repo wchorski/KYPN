@@ -8,11 +8,12 @@ import { allowAll } from "@keystone-6/core/access";
 import { checkbox, decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
 import { mailBooking } from "../../lib/mail";
 import { User, Addon, Service, Location, } from '../types'
-import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
+import { calcDurationInHours, calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
 import { createCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from "../../lib/googleapi/calCreate";
 import { datePrettyLocal } from "../../lib/dateFormatter";
 import { isLoggedIn, permissions, rules } from "../access";
 import { envs } from "../../../envs";
+import { Decimal } from "@keystone-6/core/types";
 
 
 const now = new Date();
@@ -50,7 +51,7 @@ export const Rental:Lists.Rental = list({
 
   fields: {
     start: timestamp({ validation: { isRequired: true } }),
-    end: timestamp({}),
+    end: timestamp({ validation: { isRequired: true } }),
     // summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),
     summary: virtual({
       field: graphql.field({
@@ -66,16 +67,24 @@ export const Rental:Lists.Rental = list({
         },
       })
     }),
-    durationInHours: decimal({
-      defaultValue: '23',
-      precision: 5,
-      scale: 2,
-      validation: {
-        isRequired: true,
-        max: '200',
-        min: '.25',
-      },
+    durationInHours: virtual({
+      field: graphql.field({
+        type: graphql.Decimal,
+        async resolve(item:any, args, context) {
+          return new Decimal(calcDurationInHours(item.start, item.end))
+        },
+      })
     }),
+    // durationInHours: decimal({
+    //   defaultValue: '23',
+    //   precision: 5,
+    //   scale: 2,
+    //   validation: {
+    //     isRequired: true,
+    //     max: '200',
+    //     min: '.25',
+    //   },
+    // }),
     location: text({validation: { isRequired: true }}),
     delivery: checkbox(),
     price: integer({ defaultValue: 0, validation: { isRequired: true } }),

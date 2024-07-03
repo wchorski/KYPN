@@ -164,32 +164,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
       }) as {users:User[]}
 
       
-      const bookedEmployees = employeesThatHaveCurrentGigs.users
-      
-      // ? old way, but using .graphql because of better filtering
-      // const bookedEmployees = await contextSudo.query.User.findMany({ 
-      //   where: { id: { in: [employeeId] }, },
-      //   query: `
-      //   id 
-      //   name
-      //   email
-      //   availability{
-      //     id
-      //     start
-      //     end
-      //     type
-      //     status
-      //     durationInHours
-      //   }
-      //   gigs {
-      //     id
-      //     start
-      //     end
-      //     durationInHours
-      //   }
-      //   `
-      // }) as User[]
-        
+      const bookedEmployees = employeesThatHaveCurrentGigs.users        
         
       let employeeNames = ''
       bookedEmployees.map(emp => {
@@ -253,7 +228,8 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         addons: { connect: addonIds?.map(id => ({id: id}))},
         start: start,
         end: end,
-        durationInHours: service.durationInHours,
+        //? virtual field now
+        // durationInHours: service.durationInHours,
         customer: (hasAccount) ? { connect: { email: customerEmail }} : null,
         name: customerName || '',
         email: customerEmail || '',

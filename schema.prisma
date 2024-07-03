@@ -95,8 +95,7 @@ model Announcement {
 model Booking {
   id                String    @id @default(cuid())
   start             DateTime
-  end               DateTime?
-  durationInHours   Decimal   @default("23") @postgresql.Decimal(5, 2)
+  end               DateTime
   service           Service?  @relation("Booking_service", fields: [serviceId], references: [id])
   serviceId         String?   @map("service")
   location          Location? @relation("Booking_location", fields: [locationId], references: [id])
@@ -183,16 +182,15 @@ model Addon {
 }
 
 model Availability {
-  id              String    @id @default(cuid())
-  start           DateTime
-  end             DateTime?
-  durationInHours Decimal?  @postgresql.Decimal(5, 2)
-  employee        User?     @relation("Availability_employee", fields: [employeeId], references: [id])
-  employeeId      String?   @map("employee")
-  type            String?   @default("VACATION")
-  status          String?   @default("APPROVED")
-  dateCreated     DateTime? @default(now())
-  dateModified    DateTime? @default(now())
+  id           String    @id @default(cuid())
+  start        DateTime
+  end          DateTime
+  employee     User?     @relation("Availability_employee", fields: [employeeId], references: [id])
+  employeeId   String?   @map("employee")
+  type         String?   @default("VACATION")
+  status       String?   @default("APPROVED")
+  dateCreated  DateTime? @default(now())
+  dateModified DateTime? @default(now())
 
   @@index([employeeId])
 }
@@ -275,25 +273,24 @@ model Product {
 }
 
 model Rental {
-  id              String    @id @default(cuid())
-  start           DateTime
-  end             DateTime?
-  durationInHours Decimal   @default("23") @postgresql.Decimal(5, 2)
-  location        String    @default("")
-  delivery        Boolean   @default(false)
-  price           Int       @default(0)
-  email           String    @default("")
-  phone           String    @default("")
-  name            String    @default("")
-  notes           String    @default("")
-  order           Order?    @relation("Order_rental")
-  addons          Addon[]   @relation("Addon_rentals")
-  customer        User?     @relation("Rental_customer", fields: [customerId], references: [id])
-  customerId      String?   @map("customer")
-  status          String?   @default("LEAD")
-  dateCreated     DateTime? @default(now())
-  dateModified    DateTime? @default(now())
-  google          Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
+  id           String    @id @default(cuid())
+  start        DateTime
+  end          DateTime
+  location     String    @default("")
+  delivery     Boolean   @default(false)
+  price        Int       @default(0)
+  email        String    @default("")
+  phone        String    @default("")
+  name         String    @default("")
+  notes        String    @default("")
+  order        Order?    @relation("Order_rental")
+  addons       Addon[]   @relation("Addon_rentals")
+  customer     User?     @relation("Rental_customer", fields: [customerId], references: [id])
+  customerId   String?   @map("customer")
+  status       String?   @default("LEAD")
+  dateCreated  DateTime? @default(now())
+  dateModified DateTime? @default(now())
+  google       Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
 
   @@index([customerId])
 }

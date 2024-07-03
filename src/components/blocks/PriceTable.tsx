@@ -15,12 +15,6 @@ type Props = {
     content:ReactNode,
     price:number,
     service: { id: string},
-    // service: { data:{
-    //   id:string,
-    //   name:string,
-    //   price:number,
-    //   durationInHours:string,
-    // }}
   }[]
 }
 

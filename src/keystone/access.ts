@@ -122,9 +122,9 @@ export const rules = {
 
     // 1. Do they have the permission
     if (permissions.canManageBookings({ session })) return true;
-
+    
     // 2. If not, are they the customer or employee?
-    return {
+    if(session) return {
       OR: [
         {
           employees: {
@@ -153,6 +153,8 @@ export const rules = {
         },
       ],
     };
+
+    return false
   },
   canManageAvailability({ session }: ListAccessArgs) {
     if (!isLoggedIn({ session })) return false;
