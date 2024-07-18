@@ -143,9 +143,9 @@ function Main(booking:Booking|undefined){
                   <span> {name} (Unregistered User) </span>
                 )}
                 <br />
-                <span>{customer?.email}, {email}</span>
+                <span>{customer?.email} {customer?.email ? ',' : ''}  {email}</span>
                 <br />
-                <span>{customer?.phone}, {phone}</span>
+                <span>{customer?.phone} {customer?.phone ? ',' : ''} {phone}</span>
               </td>
             </tr>
             <tr>
@@ -181,15 +181,17 @@ function Main(booking:Booking|undefined){
             <Link href={`/addons`} > View more addons</Link>
           </p>
         </>}
-
-        <h2> Employees Assigned </h2>
-        <ul className="employees">
-          {employees.map(emp => (
-            <li key={emp.id}>
-              <UserBadge user={emp}/>
-            </li>
-          ))}
-        </ul>
+        
+        {employees.length > 0 && <>
+          <h2> Employees Assigned </h2>
+          <ul className="employees">
+            {employees.map(emp => (
+              <li key={emp.id}>
+                <UserBadge user={emp}/>
+              </li>
+            ))}
+          </ul>
+        </>}
 
         {details && (
           <div className={styles.description_wrap}>

@@ -116,6 +116,45 @@ export const rules = {
     };
   },
 
+  canViewBookings({ session }: ListAccessArgs){
+      // 1. Do they have the permission
+      if (!isLoggedIn({ session })) return false;
+      if (permissions.canManageBookings({ session })) return true;
+  
+      // 2. If not, do they own this item?
+      if(session) return {
+        OR: [
+          {
+            employees: {
+              some: {
+                id: {
+                  in: [session?.itemId || "no_session.itemId"],
+                },
+              },
+            },
+          },
+          {
+            employee_requests: {
+              some: {
+                id: {
+                  in: [session?.itemId || "no_session.itemId"],
+                },
+              },
+            },
+          },
+          {
+            customer: {
+              id: {
+                equals: session?.itemId || "no_session.itemId",
+              },
+            },
+          },
+        ],
+      };
+  
+      return false
+  },
+
   canManageBookings({ session }: ListAccessArgs) {
     // anonymous users can create bookings
     // if (!isLoggedIn({ session })) return false;
@@ -144,13 +183,14 @@ export const rules = {
             },
           },
         },
-        {
-          customer: {
-            id: {
-              equals: session?.itemId || "no_session.itemId",
-            },
-          },
-        },
+        // customer can only view
+        // {
+        //   customer: {
+        //     id: {
+        //       equals: session?.itemId || "no_session.itemId",
+        //     },
+        //   },
+        // },
       ],
     };
 

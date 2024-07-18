@@ -13,6 +13,7 @@ import { createCalendarEvent, deleteCalendarEvent, updateCalendarEvent } from ".
 import { permissions, rules } from "../access";
 import { envs } from "../../../envs";
 import { Decimal } from "@keystone-6/core/types";
+import { allowAll } from "@keystone-6/core/access";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || 'no_frontend_url'
 // const EMAIL_ADDRESS = 'y@m'
@@ -23,12 +24,12 @@ export const Booking:Lists.Booking = list({
 
   access: {
     filter: {
-      query: rules.canManageBookings,
+      query: rules.canViewBookings,      
       update: rules.canManageBookings,
       delete: () => false,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageBookings,
       query: permissions.isLoggedIn,
       update: permissions.isLoggedIn,
       delete: () => false,
@@ -108,16 +109,6 @@ export const Booking:Lists.Booking = list({
     email: text(),
     phone: text(),
     name: text(),
-    notes: text({
-      ui: {
-        displayMode: 'textarea'
-      }
-    }),
-    secretNotes: text({
-      ui: {
-        displayMode: 'textarea'
-      }
-    }),
     status: select({
       options: [
         { label: 'Confirmed', value: 'CONFIRMED' },
@@ -201,6 +192,24 @@ export const Booking:Lists.Booking = list({
       ],
       links: true,
       dividers: true,
+    }),
+    notes: text({
+      ui: {
+        displayMode: 'textarea'
+      }
+    }),
+    secretNotes: text({
+      ui: {
+        description: 'notes only visible between management and employees. NOT the customer',
+        displayMode: 'textarea',
+        
+        itemView: {
+          fieldMode: ({ session, context, item }) => permissions.canManageBookings({session}) ? 'edit': 'hidden',
+        },
+      },
+      access: {
+        read: ({ session, context, listKey, fieldKey, operation, item }) => permissions.canManageBookings({session})
+      }
     }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
