@@ -330,6 +330,9 @@ export type Booking = {
     message?: string;
     htmlLink?: string;
   };
+  details: {
+    document: any;
+  };
 };
 
 export type BookingPrevious = {
@@ -541,7 +544,7 @@ export type Addon = {
   categories: Category[];
   tags: Tag[];
   excerpt: string;
-  status: "DRAFT" | "AVAILABLE" | "OUT_OF_STOCK" | "PRIVATE";
+  status: "DRAFT" | "PUBLIC" | "OUT_OF_STOCK" | "PRIVATE";
   dateCreated: string;
   dateModified: string;
 };

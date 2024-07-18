@@ -4,6 +4,8 @@
 import { graphql, list } from "@keystone-6/core";
 import type { Lists } from '.keystone/types';
 import { decimal, integer, json, relationship, select, text, timestamp, virtual, } from "@keystone-6/core/fields";
+import { document } from '@keystone-6/fields-document';
+import { componentBlocks } from "../blocks";
 import { mailBooking } from "../../lib/mail";
 import { User, Addon, Service, } from '../types'
 import { calcDurationInHours, calcEndTime } from '../../lib/dateCheck';
@@ -159,6 +161,47 @@ export const Booking:Lists.Booking = list({
       //   },
       // },
     },),
+    details: document({
+      componentBlocks,
+      ui: {
+        views: './src/keystone/blocks',
+      },
+      formatting: {
+        inlineMarks: {
+          bold: true,
+          italic: true,
+          underline: true,
+          strikethrough: true,
+          code: true,
+          superscript: true,
+          subscript: true,
+          keyboard: true,
+        },
+        listTypes: {
+          ordered: true,
+          unordered: true,
+        },
+        alignment: {
+          center: true,
+          end: true,
+        },
+        headingLevels: [2, 3, 4, 5, 6],
+        blockTypes: {
+          blockquote: true,
+          code: true
+        },
+        softBreaks: true,
+      },
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+        [2, 1],
+        [1, 2],
+        [1, 2, 1],
+      ],
+      links: true,
+      dividers: true,
+    }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
     google: json({

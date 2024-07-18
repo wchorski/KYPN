@@ -1,0 +1,14 @@
+User-Agent: *
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /users/
+Disallow: /checkout/
+Disallow: /orders/
+Disallow: /tickets/
+Disallow: /subscriptions/*
+Allow: /bookings/
+Disallow: /bookings/*
+
+Sitemap: https://acme.com/sitemap.xml

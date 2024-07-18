@@ -120,6 +120,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             start
             end
             summary
+            status
             service {
               name
             }
@@ -129,6 +130,7 @@ export default async function AccountPage ({ params, searchParams }:Props) {
             start
             end
             summary
+            status
             service {
               name
             }

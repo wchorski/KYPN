@@ -178,7 +178,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
 
         try {
           if (resolvedData && !resolvedData.author) {
-            const currentUserId = await context.session.itemId;
+            const currentUserId = await context.session?.itemId;
             resolvedData.author = { connect: { id: currentUserId } };
           }
         } catch (err) { console.warn(err) }

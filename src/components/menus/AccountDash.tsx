@@ -125,7 +125,7 @@ export default function AccountDash({
               dashState === "services" ? styles.linkactive : styles.dashlink
             }
           >
-            Services
+            Bookings
           </h3>
 
           <Table

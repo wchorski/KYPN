@@ -18,24 +18,32 @@ import { Metadata, ResolvingMetadata } from 'next'
 import { envs } from '@/envs'
 import { keystoneContext } from '@ks/context'
 import { NoDataOrPermissionPage } from '@components/elements/NoDataOrPermissionPage'
+import { getServerSession } from 'next-auth'
+import { nextAuthOptions } from '@/session'
+import { BlockRender } from '@components/blocks/BlockRender'
 
-// export async function generateMetadata(
-//   { params }:Props,
-//   parent: ResolvingMetadata,
-// ): Promise<Metadata>  {
-
-//   const { id } = params
-//   const { booking , error} = await fetchBooking(id)
-
-//   return {
-//     title: 'Booking Status | ' + envs.SITE_TITLE,
-//     description: envs.SITE_DESC,
-//   }
+// export const metadata: Metadata = {
+//   title: 'Booking | ' + envs.SITE_TITLE,
+//   description: envs.SITE_DESC,
 // }
 
-export const metadata: Metadata = {
-  title: 'Booking Status | ' + envs.SITE_TITLE,
-  description: envs.SITE_DESC,
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  
+  const session = await getServerSession(nextAuthOptions)
+  const { booking, error } = await fetchBooking(String(params?.id))
+
+  if(!booking) return {
+    title: 'Booking | ' + envs.SITE_TITLE,
+    description: envs.SITE_DESC,
+  }
+
+  return {
+    title: booking.summary,
+  }
+
 }
 
 
@@ -57,25 +65,24 @@ export default async function BookingSinglePage ({ params, searchParams }:Props)
 
   return (
     <PageTHeaderMain
-      header={Header(booking?.status)}
+      header={Header()}
       main={Main(booking)}
     />
   )
 }
 
-function Header(status?:Booking['status']){
+function Header(){
 
   return<>
     <Section layout={'1'}>
-      <h1> Booking Status </h1>
-      <StatusBadge type={'booking'} status={status}/>
+      <h1 style={{visibility: 'hidden'}}> Booking </h1>
     </Section>
   </>
 }
 
 function Main(booking:Booking|undefined){
 
-  const { id, email, phone, name, location, service, price, notes, addons, employees, customer, dateModified, start, end } = booking as Booking
+  const { id, summary, details, status, email, phone, name, location, service, price, notes, addons, employees, customer, dateModified, start, end } = booking as Booking
   
   return<>
     <DialogPopup 
@@ -119,9 +126,9 @@ function Main(booking:Booking|undefined){
 
         <header>
           <h2> { service?.name } </h2>
+          <StatusBadge type={'booking'} status={status}/>
           <small>last updated: {datePrettyLocal(dateModified, 'full')}</small>
         </header>
-
 
         <table>
           <tbody>
@@ -159,6 +166,7 @@ function Main(booking:Booking|undefined){
             </tr>
           </tbody>
         </table>
+
         {addons.length > 0 && <>
           <h2>Add-Ons</h2>
           <ul className="addons">
@@ -182,6 +190,12 @@ function Main(booking:Booking|undefined){
             </li>
           ))}
         </ul>
+
+        {details && (
+          <div className={styles.description_wrap}>
+            <BlockRender document={details.document} />
+          </div>
+        )}
 
         <h2> Notes </h2>
         <p>{notes}</p>

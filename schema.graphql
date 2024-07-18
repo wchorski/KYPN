@@ -813,12 +813,17 @@ type Booking {
   notes: String
   secretNotes: String
   status: String
+  details: Booking_details_Document
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
 }
 
 scalar Decimal
+
+type Booking_details_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
 
 input BookingWhereUniqueInput {
   id: ID
@@ -901,6 +906,7 @@ input BookingUpdateInput {
   notes: String
   secretNotes: String
   status: String
+  details: JSON
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -945,6 +951,7 @@ input BookingCreateInput {
   notes: String
   secretNotes: String
   status: String
+  details: JSON
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON

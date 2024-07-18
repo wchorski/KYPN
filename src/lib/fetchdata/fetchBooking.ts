@@ -1,27 +1,15 @@
 import { Booking } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchBooking(id:string){
-
-  console.log('### fetchbook id: ', id);
-  
+export default async function fetchBooking(id:string){ 
 
   try {
 
-
-    // todo only allow if customer id matches. Use session and filter on keystone backend
-    // const booking = await keystoneContext.query.Booking.findOne({
-    //   query: query,
-    //   where: {
-    //     id: "clsnoi17p0000svs8at1pzpad",
-    //   },
-    // }) as TBooking
     const booking = await keystoneContext.sudo().query.Booking.findOne({
       where: { id: id },
       query: query
     }) as Booking
     
-
     return { booking }
     
   } catch (error) {
@@ -46,6 +34,9 @@ const query = `
   summary
   notes
   price
+  details {
+    document
+  }
   addons {
     id
     excerpt

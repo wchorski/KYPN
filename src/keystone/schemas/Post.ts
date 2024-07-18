@@ -176,7 +176,7 @@ export const Post:Lists.Post = list({
     beforeOperation: async ({operation, resolvedData, context, item}) => {
       
       if(operation === 'create'){
-        const currUserId = await context.session.itemId
+        const currUserId = await context.session?.itemId
         
         if(currUserId && !resolvedData.author){
           resolvedData.author= {connect: { id:  currUserId} }

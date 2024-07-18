@@ -169,7 +169,7 @@ export const Product:Lists.Product = list({
         try {
           if (resolvedData && !resolvedData.author) {
             
-            const currentUserId = await context.session.itemId;
+            const currentUserId = await context.session?.itemId;
     
             resolvedData.author = { connect: { id: currentUserId } };
           }
