@@ -1,10 +1,18 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from '@keystone-6/core';
+// @ts-ignore
 import { Context } from '.keystone/types';
+// import { relationship } from '@keystone-6/core/fields';
+import stripeConfig from '../../lib/stripe';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
+import { GraphQLList } from 'graphql';
 import { calcEndTime, dateCheckAvail, dateOverlapCount, dayOfWeek } from '../../lib/dateCheck';
-import { Location, User, Addon } from '../types'
+import { Location, Service, Booking, User, Addon } from '../types'
+import { createCalendarEvent } from '../../lib/googleapi/calCreate';
+
+const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
+const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
 
 const now  = new Date().toISOString()
 
@@ -48,7 +56,6 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     }) as number
 
     const hasAccount = (userCount === 1) ? true : false
-    console.log('### bookAService');
     
     // SERVICE 
     const service = await context.query.Service.findOne({
@@ -61,9 +68,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         buisnessDays
       `
     })
-    if(!service) throw Error('!!! bookAService: No service found')
-    
-    description += 'SERVICE: ' + service?.name + ' \n'
+    description += 'SERVICE: ' + service.name + ' \n'
 
     const end = calcEndTime(start, service.durationInHours)
 
@@ -158,6 +163,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         }
       }) as {users:User[]}
 
+      
       const bookedEmployees = employeesThatHaveCurrentGigs.users        
         
       let employeeNames = ''
@@ -195,6 +201,21 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
     // @ts-ignore
     const addonsCombinedPrice = pickedAddons.reduce((accumulator:number, currentValue:Addon) => accumulator + currentValue.price, 0);
     const priceTotal = service.price + addonsCombinedPrice
+
+    // todo moved to Booking.ts afterOpt hook
+    // // Calendar
+    // const calRes = await createCalendarEvent({
+    //   summary: `${customerName || customerEmail} | ${service?.name}`,
+    //   description: description,
+    //   start: {
+    //     dateTime: new Date(start || '').toISOString(),
+    //     // timeZone: 'America/Chicago',
+    //   },
+    //   end: {
+    //     dateTime: end,
+    //     // timeZone: 'America/Chicago',
+    //   },
+    // })        
     
     // BOOKING
     const booking = await contextSudo.db.Booking.createOne({
@@ -204,7 +225,7 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         location: (locationId) ? { connect: { id: locationId } } : null,
         // employees: (employeeId) ? { connect: [{ id: employeeId }] } : null,
         employee_requests: (employeeId) ? { connect: [{ id: employeeId }] } : null,
-        addons: (addonIds && addonIds.length > 0) ? { connect: addonIds?.map(id => ({id: id}))} : null,
+        addons: addonIds ? { connect: addonIds?.map(id => ({id: id}))} : null,
         start: start,
         end: end,
         //? virtual field now
@@ -216,11 +237,12 @@ export const bookAService = (base: BaseSchemaMeta) => graphql.field({
         notes: notes || '',
         price: priceTotal,
         status: (serviceId && employeeId) ? 'HOLD' : 'LEAD',
-        
+        details: [],
         // google: calRes,
       },
     })    
     
+
     // email sent via Schema file
 
     return { 

@@ -10,6 +10,9 @@ export const ProductDelete = ({id, children}: any) => {
 
       const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           query, 
           variables: {where: {id: id}}

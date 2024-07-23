@@ -20,10 +20,10 @@ export const Ticket:Lists.Ticket = list({
     },
     operation: {
       // query: () => true,
-      query: permissions.isLoggedIn,
-      create: permissions.isLoggedIn,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      query: () => true,
+      create: () => true,
+      update: () => true,
+      delete: permissions.canManageTickets,
     }
   },
 

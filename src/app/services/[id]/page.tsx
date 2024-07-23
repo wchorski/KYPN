@@ -43,7 +43,7 @@ export async function generateMetadata(
       images: [String(image), ...previousImages],
       title: name,
       description: excerpt,
-      url: envs.FRONTEND_URL + '/bookings?serviceId=' + id,
+      url: envs.FRONTEND_URL + '/book-a-service?serviceId=' + id,
       type: 'article'
     },
     keywords: tags?.map(tag => tag.name).join(', ') + ' ' + categories?.map(cat => cat.name).join(', '),
@@ -115,7 +115,7 @@ function Main(service?:Service){
         <BlockRender document={description.document} />
       </Card>
 
-      <Link href={`/bookings?serviceId=${id}`} className='button large'> Book this Service </Link>
+      <Link href={`/book-a-service?serviceId=${id}`} className='button large'> Book this Service </Link>
 
       <h2 id='addons'> Add-Ons </h2>
       <p> A list of add-ons available for this package </p>

@@ -40,7 +40,7 @@ export function Footer() {
         <div>
           <h4> Pages </h4>
           <List>
-            <Link href={`/bookings`}> Book a Service</Link>
+            <Link href={`/book-a-service`}> Book a Service</Link>
             <Link href={`/blog`}> Blog Posts </Link>
             <Link href={`/shop`}> Shop </Link>
             <Link href={`/shop`}> Subscription Plans </Link>

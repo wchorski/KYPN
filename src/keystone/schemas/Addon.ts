@@ -19,7 +19,7 @@ export const Addon:Lists.Addon = list({
     },
     operation: {
       create: permissions.canManageAddons,
-      query: permissions.canViewAddons,
+      query: () => true,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,
     }

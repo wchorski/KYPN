@@ -4,10 +4,8 @@ import { StatusBadge } from "@components/StatusBadge";
 import { Button } from "@components/elements/Button";
 import { useRef, useState } from "react";
 import {
-  // @ts-ignore
-  experimental_useFormState as useFormState,
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus,
+  useFormState,
+  useFormStatus,
 } from "react-dom";
 
 type UpdateBookingResponse = {

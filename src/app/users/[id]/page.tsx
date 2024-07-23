@@ -82,7 +82,7 @@ function Main(user?:User){
         </li>
         <li>
           <Link 
-            href={envs.BACKEND_URL + `/bookings?!customer_matches="${user.id}"`}
+            href={envs.BACKEND_URL + `/book-a-service?!customer_matches="${user.id}"`}
             className={'button medium'} 
           >
             Bookings 

@@ -23,7 +23,7 @@ export async function POST(req:NextRequest) {
     
   } catch (error) {
 
-    console.log('/api/addToCart route: ', error);
+    console.log('!!! /api/addToCart route: ', error);
     return NextResponse.json({
       error
     }, {

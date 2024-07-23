@@ -5,10 +5,8 @@ import { Addon, AddonCheckboxOptions, Availability, Booking, BookingPrevious, Da
 import { generateTimesArray } from "@lib/generateTimesArray"
 import { ReducerAction, useCallback, useEffect, useReducer, useRef, useState } from "react"
 import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
+  useFormState, 
+  useFormStatus 
 } from "react-dom"
 import formStyles from '@styles/menus/form.module.scss'
 import { LoadingAnim } from "@components/elements/LoadingAnim"
@@ -748,7 +746,7 @@ export function BookingForm3 ({ data, session }:Props) {
           ))}
         </ul>
         <Link href={`/account?dashState=orders#orders`}> Account bookings ⇢ </Link> <br /> 
-        <Link href={`/bookings/${stateRed.bookingId}`}> Booking Status </Link>
+        <Link href={`/book-a-service/${stateRed.bookingId}`}> Booking Status </Link>
       </div>
     )}
     

@@ -91,7 +91,7 @@ export async function PriceTable({items = []}:Props):ReactElement<any, any> {
                 </div>
    
                 {/* <Link href={item.buttonLink || '/booking'} className="button"> {item.buttonLabel} </Link> */}
-                <Link href={`/bookings?serviceId=${item.service.id}`} className="button"> {item.buttonLabel}  </Link>
+                <Link href={`/book-a-service?serviceId=${item.service.id}`} className="button"> {item.buttonLabel}  </Link>
               </footer>
             </td>
           ))}

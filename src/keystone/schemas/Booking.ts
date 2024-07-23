@@ -29,8 +29,10 @@ export const Booking:Lists.Booking = list({
       delete: () => false,
     },
     operation: {
-      create: permissions.canManageBookings,
-      query: permissions.isLoggedIn,
+      create: () => true,
+      // create: permissions.canManageBookings,
+      // query: permissions.isLoggedIn,
+      query: () => true,
       update: permissions.isLoggedIn,
       delete: () => false,
     }
@@ -277,6 +279,7 @@ export const Booking:Lists.Booking = list({
     afterOperation: async ({ operation, resolvedData, item, context }) => {
 
       if (operation === 'create') {
+        
         const { calSummary, calDescription, calStart, calEnd } = await handleCalendarDetails(item, context)
         
         // Calendar

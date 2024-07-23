@@ -92,7 +92,7 @@ function Main(booking:Booking|undefined){
       buttonLabel="Ok"
     >
       <p> Updating a booking is almost ready. For now, create a new booking and we will cancel the previous booking</p>
-      <Link href={`/bookings`}> Create new booking </Link>
+      <Link href={`/book-a-service`}> Create new booking </Link>
       {/* <BookingFormUpdate /> */}
     </DialogPopup>
     
@@ -103,7 +103,7 @@ function Main(booking:Booking|undefined){
           {/* //TODO add a way to update form */}
           {/* <Link 
             className="edit button" 
-            href={`/bookings?${
+            href={`/book-a-service?${
               new URLSearchParams({
                 bookingId: id,
                 serviceId: service.id,

@@ -2,10 +2,8 @@
 import styles from '@styles/menus/form.module.scss'
 
 import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
+  useFormState, 
+  useFormStatus 
 } from "react-dom"
 import { useRef } from 'react';
 import { LoadingAnim } from '@components/elements/LoadingAnim';

@@ -8,7 +8,6 @@ Disallow: /checkout/
 Disallow: /orders/
 Disallow: /tickets/
 Disallow: /subscriptions/*
-Allow: /bookings/
-Disallow: /bookings/*
+Disallow: /bookings/
 
 Sitemap: https://acme.com/sitemap.xml

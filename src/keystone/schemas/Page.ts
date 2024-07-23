@@ -20,7 +20,8 @@ export const Page:Lists.Page = list({
     },
     operation: {
       create: permissions.canManagePages,
-      query: permissions.canViewPages,
+      query: () => true,
+      // query: permissions.canViewPages,
       update: permissions.canManagePages,
       delete: permissions.canManagePages,
     }

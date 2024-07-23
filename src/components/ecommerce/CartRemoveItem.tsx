@@ -27,6 +27,9 @@ export default function CartRemoveItem({id}:{id:string}) {
       // console.log({res})
       const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({query, variables})
       }) 
       const data = await res.json()

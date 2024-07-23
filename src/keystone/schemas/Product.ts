@@ -170,8 +170,10 @@ export const Product:Lists.Product = list({
           if (resolvedData && !resolvedData.author) {
             
             const currentUserId = await context.session?.itemId;
+            console.log({currentUserId});
+            
     
-            resolvedData.author = { connect: { id: currentUserId } };
+            resolvedData.author = currentUserId ? { connect: { id: currentUserId } } : undefined
           }
 
           if(resolvedData.isForRent && !resolvedData.rental_price) throw new Error('isForRent === true, but no rental_price set')
@@ -320,7 +322,7 @@ export const Product:Lists.Product = list({
               ],
             }
           )
-        } catch (err) { console.warn(err) }
+        } catch (err) { console.log('!!! Product afterOperation create:', err) }
 
       }
 

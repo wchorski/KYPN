@@ -19,7 +19,7 @@ export const Availability:Lists.Availability = list({
     },
     operation: {
       create: permissions.isLoggedIn,
-      query: permissions.canViewAvailability,
+      query: () => true,
       update: permissions.isLoggedIn,
       delete: permissions.isLoggedIn,
     }

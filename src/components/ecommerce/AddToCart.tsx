@@ -29,7 +29,6 @@ export default function AddToCart({ productId, sessionId, type }: Props) {
 
 
   async function handleButton() {
-    // if (!session) return router.push(`/auth`)
 
     try {
       setstate('pending')
@@ -44,6 +43,9 @@ export default function AddToCart({ productId, sessionId, type }: Props) {
       // const res = await client.request(mutation, variables)
       const res = await fetch(`/api/addToCart`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({variables})
       })
       const data = await res.json()

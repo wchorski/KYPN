@@ -47,7 +47,7 @@ async function getKeystoneContext() {
 export const nextAuthOptions = {
   secret: sessionSecret,
   pages: {
-    signIn: envs.FRONTEND_URL + '/auth',
+    signIn: envs.FRONTEND_URL + '/login',
     
   },
   callbacks: {

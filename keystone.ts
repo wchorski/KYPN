@@ -5,14 +5,14 @@
 // Keystone imports the default export of this file, expecting a Keystone configuration object
 //   you can find out more at https://keystonejs.com/docs/apis/config
 require('dotenv').config()
-
 import { config } from '@keystone-6/core';
 
 import { extendGraphqlSchema, lists } from './src/keystone/schema';
 import { nextAuthSessionStrategy } from './session';
 // @ts-ignore
-import type { Context } from '.keystone/types';
+import type { Context, TypeInfo } from '.keystone/types';
 import { seedDatabase } from './src/keystone/seed/seedDatabase';
+import { envs } from './envs';
 
 
 const DB_PROTOCOL = process.env.DB_PROTOCOL
@@ -37,12 +37,11 @@ const DB_ENDPOINT = DB_PROTOCOL
 // console.log({DB_ENDPOINT});
 
 
-export default config({
+export default config<TypeInfo>({
   db: {
 
     provider: 'postgresql',
     url: DB_ENDPOINT,
-    useMigrations: true,
     onConnect: async (context: Context) => {
       // TODO why argv doesn't work?
     if (process.env.SEED_ME === 'true') {
@@ -55,7 +54,7 @@ export default config({
   },
   server: {
     port: Number(process.env.BACKEND_PORT) || 3001,
-    cors: { origin: [process.env.NEXT_PUBLIC_FRONTEND_URL], credentials: true },
+    cors: { origin: [envs.FRONTEND_URL], credentials: true },
   },
   ui: {
     // the following api routes are required for nextauth.js
@@ -87,7 +86,9 @@ export default config({
     },
   },
   lists,
-  extendGraphqlSchema,
+  graphql: {
+    extendGraphqlSchema,
+  },
   session: nextAuthSessionStrategy,
 })
 

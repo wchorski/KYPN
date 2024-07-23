@@ -19,7 +19,8 @@ export const Service:Lists.Service = list({
     },
     operation: {
       create: permissions.canManageServices,
-      query: permissions.canViewServices,
+      // query: permissions.canViewServices,
+      query: () => true,
       update: permissions.canManageServices,
       delete: permissions.canManageServices,
     }

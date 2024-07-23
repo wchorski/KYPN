@@ -64,7 +64,7 @@ type Main = {
 async function Main({saleItems, rentalItems, rentals, sessionId}:Main){
 
   if(!sessionId) return  <Section layout={'1'}>
-      <p> <Link href={`/auth`}> Login </Link> to view your cart </p>
+      <p> <Link href={`/login`}> Login </Link> to view your cart </p>
   </Section>
   const data = {saleItems, rentalItems, rentals}
 

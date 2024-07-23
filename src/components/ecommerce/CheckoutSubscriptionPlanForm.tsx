@@ -1,10 +1,4 @@
 'use client'
-import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
-} from "react-dom"
 import { Addon, AddonCheckboxOptions, Coupon, SubscriptionPlan } from "@ks/types"
 import { useReducer } from "react"
 import formStyles from '@styles/menus/form.module.scss'

@@ -1,10 +1,8 @@
 'use client'
 import { CSSProperties, FormEvent, useRef, useState } from "react"
 import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
+  useFormState, 
+  useFormStatus 
 } from "react-dom"
 
 import { LoadingAnim } from "@components/elements/LoadingAnim"

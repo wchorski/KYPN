@@ -23,7 +23,8 @@ export const Post:Lists.Post = list({
     operation: {
       // todo, not everyone should be able to create
       create: () => true,
-      query: permissions.canViewPosts,
+      // query: permissions.canViewPosts,
+      query: () => true,
       update: permissions.canManagePosts,
       delete: permissions.canManagePosts,
     }

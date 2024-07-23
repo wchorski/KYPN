@@ -82,7 +82,7 @@ function Main(addon?:Addon){
 
       </List>
 
-      <Link href={`/bookings`} className='button large'> Book a Service </Link>
+      <Link href={`/book-a-service`} className='button large'> Book a Service </Link>
       
     </Section>
   </>
