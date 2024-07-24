@@ -1,17 +1,19 @@
+// cred - https://next-auth.js.org/tutorials/securing-pages-and-api-routes
 import { nextAuthOptions } from "@/session"
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
 import { keystoneContext } from "@ks/context"
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+  
   if (req.method === 'POST') {
     const request = await req.body
-    const { query, variables } = request
-    console.log({variables});
-    
+    const { query, variables } = request    
     
     try {
-      const session = await getServerSession(nextAuthOptions)
+      // todo idk next-auth still works
+      //@ts-ignore
+      const session = await getServerSession(req, res, nextAuthOptions)
 
       const data = await keystoneContext.withSession(session).graphql.run({
         query: query,

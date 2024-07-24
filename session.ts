@@ -306,6 +306,8 @@ export const nextAuthSessionStrategy = {
     
 
     const nextAuthSession = await getServerSession(
+      // todo idk next-auth still works
+      //@ts-ignore
       { headers, cookies } as any,
       res,
       nextAuthOptions

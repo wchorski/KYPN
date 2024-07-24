@@ -47,6 +47,9 @@ function CartStateProvider ({children}:{children: ReactNode}){
       // const { user } = await client.request(query, variables) as { user:User }
       const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           variables: { where: {id: sessionId} },
           query: `
@@ -69,8 +72,10 @@ function CartStateProvider ({children}:{children: ReactNode}){
           `, 
         })
       }) 
+
       const data = await res.json()
-      
+      // const data:any = {}
+
       const { user }:{user:User} = data 
 
       if(!user?.cart) return console.log('!!! user or cart not found');

@@ -55,7 +55,7 @@ function Header(){
 }
 
 type Main = {
-  sessionId:string,
+  sessionId?:string,
   saleItems:CartItemType[]|undefined,
   rentalItems:CartItemType[]|undefined,
   rentals:Rental[]|undefined,
