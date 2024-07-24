@@ -44,7 +44,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
   // const [error, setError] = useState({message: ''})
   // const [loading, setLoading] = useState(false)
 
-  const defaultFormData = {
+  const defaultFormData:FormState = {
     message: '',
     status: '',
     errors: undefined,

@@ -141,7 +141,7 @@ export function TicketForm ({ event, user }:Props) {
           
           return {
             ...formState,
-            message: stripeError
+            message: String(stripeError)
           }
         }
 
@@ -196,7 +196,7 @@ export function TicketForm ({ event, user }:Props) {
             placeholder="yanny@mail.lan"
             type={'text'}
             defaultValue={formState.fieldValues.email}
-            readOnly={formState.fieldValues.email}
+            readOnly={formState.fieldValues.email ? true : false}
           />
           <span className="error"> {formState.errors?.email} </span>
         </label>

@@ -8,7 +8,8 @@ const now = new Date().toISOString()
 export default async function fetchSessionCartItems(userId:string){
 
   try {
-
+    // todo idk next-auth still works
+    // @ts-ignore
     const session = await getServerSession(nextAuthOptions)
 
     const rentalItems = await keystoneContext.withSession(session).query.CartItem.findMany({

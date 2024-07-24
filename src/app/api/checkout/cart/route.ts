@@ -67,7 +67,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     })
 
     try {
-      
+      // todo idk next-auth still works
+      // @ts-ignore
       const userSession = await getServerSession(nextAuthOptions)
       if(!userSession) throw new Error('!!! /api/checkout/cart Must loggin to check out')
       const { isStockAvailable, message } = await checkStockCount(userSession)

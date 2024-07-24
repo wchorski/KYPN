@@ -24,7 +24,7 @@ type Fields = {
 
 type FormState = {
   message: string,
-  status: 'success'|'error',
+  status: 'success'|'error'|'',
   errors: Record<keyof Fields, string> | undefined,
   fieldValues: Fields,
 }
@@ -39,8 +39,9 @@ export function LoginForm({providers}:Props) {
 
   const router = useRouter()
   // const { session, setSession } = useGlobalContext()
-  const defaultFormData = {
+  const defaultFormData:FormState = {
     message: '',
+    status: '',
     errors: undefined,
     fieldValues: {
       email: '',

@@ -14,6 +14,7 @@ import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
 import CartItem from "@components/ecommerce/CartItem"
 import Link from "next/link"
 import ErrorMessage from "@components/ErrorMessage"
+import { NoDataFoundError404 } from "@components/layouts/NoDataFound404"
 
 export const metadata: Metadata = {
   title: 'Checkout | ' +  envs.SITE_TITLE,
@@ -27,7 +28,10 @@ type Props = {
 
 export default async function CheckoutPage ({ params, searchParams }:Props) {
 
+  // todo idk next-auth still works
+  // @ts-ignore
   const session = await getServerSession(nextAuthOptions)
+  if(!session?.itemId) return <NoDataFoundError404><p>no session found</p></NoDataFoundError404>
   const {saleItems, rentalItems, rentals, error} = await fetchSessionCartItems(session?.itemId)
   
   if(error) return <ErrorMessage error={error} />

@@ -33,7 +33,7 @@ const actionOptions = [
 ];
 
 type FormState = {
-  message: string;
+  message: EmployeeGigAction;
   errors: Record<keyof Fields, string> | undefined;
   fieldValues: Fields;
 };
@@ -42,11 +42,10 @@ export function EmployeeGigActionForm({ userId, bookingId, action }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const [empActionState, setEmpActionState] = useState<EmployeeGigAction>("");
 
-  const defaultFormData = {
+  const defaultFormData:FormState = {
     message: "",
     errors: undefined,
     fieldValues: {
-      userId,
       action,
     },
   };

@@ -262,7 +262,7 @@ export function BookingForm3 ({ data, session }:Props) {
     }
   } 
 
-  const [formState, formAction] = useFormState<FormState>(onSubmit, defaultFormState)
+  const [formState, formAction] = useFormState(onSubmit, defaultFormState)
 
   function calcTotalPrice(addonIds:string[], serviceId:string|undefined,){
     if(!serviceId) return 0

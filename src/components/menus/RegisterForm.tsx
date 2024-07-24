@@ -22,7 +22,7 @@ type Fields = {
 
 type FormState = {
   message: string,
-  status: 'success'|'error',
+  status: 'success'|'error'|'',
   errors: Record<keyof Fields, string> | undefined,
   fieldValues: Fields,
 }
@@ -34,8 +34,9 @@ type Props = {
 export function RegsiterForm({id}:Props) {
 
 
-  const defaultFormData = {
+  const defaultFormData:FormState = {
     message: '',
+    status: '',
     errors: undefined,
     fieldValues: {
       name: '',

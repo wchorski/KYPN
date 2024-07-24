@@ -41,7 +41,7 @@ export function Footer() {
           <h4> Pages </h4>
           <List>
             <Link href={`/book-a-service`}> Book a Service</Link>
-            <Link href={`/blog`}> Blog Posts </Link>
+            <Link href={`/blog`}> Blog </Link>
             <Link href={`/shop`}> Shop </Link>
             <Link href={`/shop`}> Subscription Plans </Link>
           </List>

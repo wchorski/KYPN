@@ -201,7 +201,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
   } 
 
   // todo pay later checkout makes status
-  const [formState, formAction] = useFormState<Form>(onSubmit, defaultForm)
+  const [formState, formAction] = useFormState(onSubmit, defaultForm)
   async function onSubmit(prevState: Form, formdata: FormData): Promise<Form> {
     
     const start   = formdata.get('start') as string
