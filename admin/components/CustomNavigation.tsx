@@ -1,6 +1,7 @@
+import { envs } from '../../envs';
 import { NavigationContainer, NavItem, ListNavItems } from '@keystone-6/core/admin-ui/components';
 import type { NavigationProps } from '@keystone-6/core/admin-ui/components';
-import { SessionProvider, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 export function CustomNavigation({ authenticatedItem, lists }: NavigationProps) {
 
@@ -9,7 +10,14 @@ export function CustomNavigation({ authenticatedItem, lists }: NavigationProps) 
   return (
       <NavigationContainer authenticatedItem={authenticatedItem}>
 
-        <p style={{padding: '1rem'}}> logged in as {session?.user.email} </p>
+        <p style={{paddingInline: '1rem'}}> logged in as </p>
+        <ul style={{paddingInline: '1rem', display: 'flex', gap: '1rem', flexDirection: 'column'}}>
+          <li><strong>{session?.user.name}</strong></li>
+          <li>{session?.user.email}</li>
+          <li>
+            <a href={envs.FRONTEND_URL + `/api/auth/signout`} className='button'> Sign Out </a>
+          </li>
+        </ul>
 
         <hr style={{border: 'solid 1px #9999991f'}} />
         <NavItem href="/">Dashboard</NavItem>
