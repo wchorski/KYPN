@@ -248,12 +248,12 @@ export const nextAuthOptions = {
         
         // unauthorized
         if(!foundUser) {
-          console.log('Credentials: no foundUser found in db')
+          console.log('!!! Credentials: no foundUser found in db')
           return null
         }
 
         if(!foundUser.password) {
-          console.log('no password set for User')
+          console.log('!!! no password set for User')
           return null
         }
         // const match = (credentials?.password === foundUser.password)
@@ -261,7 +261,7 @@ export const nextAuthOptions = {
         // if(!match) return {status: 401, message: 'incorrect password'} 
 
         if (credentials?.email === foundUser.email && match) {
-          console.log('user is authenticated, ', foundUser.email);
+          console.log('### user is authenticated, ', foundUser.email);
           return {
             _type: 'credentials',
             id: foundUser.id,

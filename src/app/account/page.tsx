@@ -32,7 +32,8 @@ const now  = new Date().toISOString()
 export default async function AccountPage ({ params, searchParams }:Props) {
 
   const { dashState = 'main' } = searchParams
-  
+  // todo next-auth is find i guess
+  // @ts-ignore
   const session = await getServerSession(nextAuthOptions)
   if(!session) return <LoginToView />
 

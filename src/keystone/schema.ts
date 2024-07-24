@@ -51,6 +51,7 @@ import { passwordReset } from './mutations/passwordReset';
 import { verifyEmail } from './mutations/verifyEmail';
 import { verifyEmailRequest } from './mutations/verifyEmailRequest';
 import { Rental } from './schemas/Rental';
+import { registerAnAccount } from './mutations/registerAnAccount';
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -94,6 +95,7 @@ export const extendGraphqlSchema = graphql.extend(base => {
       passwordReset: passwordReset(base),
       verifyEmailRequest: verifyEmailRequest(base),
       verifyEmail: verifyEmail(base),
+      registerAnAccount: registerAnAccount(base)
     },
   }
 })

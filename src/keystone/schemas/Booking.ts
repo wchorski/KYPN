@@ -29,11 +29,13 @@ export const Booking:Lists.Booking = list({
       delete: () => false,
     },
     operation: {
-      create: () => true,
+      create: permissions.canManageBookings,
       // create: permissions.canManageBookings,
       // query: permissions.isLoggedIn,
       query: () => true,
-      update: permissions.isLoggedIn,
+      // update: () => permissions.isLoggedIn,
+      // update: ({session}) => permissions.isLoggedIn({session}),
+      update: () => true,
       delete: () => false,
     }
   },

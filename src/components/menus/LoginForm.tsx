@@ -80,8 +80,10 @@ export function LoginForm({providers}:Props) {
       }
 
 
-      router.refresh()
-      router.push(`/account`)
+      // todo but with next 14 not getting session on sudo page load
+      // router.refresh()
+      // router.push(`/account`)
+      window.location.replace('/account')
 
       return {
         ...formState,

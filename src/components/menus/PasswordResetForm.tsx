@@ -8,6 +8,7 @@ import {
 import { useRef } from 'react';
 import { LoadingAnim } from '@components/elements/LoadingAnim';
 import Link from 'next/link';
+import { Button } from '@components/elements/Button';
 
 type Fields = {
   password: string,
@@ -192,12 +193,12 @@ function SubmitButton(){
   const { pending, } = useFormStatus()
 
   return(
-    <button
+    <Button
       disabled={pending}
       type={'submit'}
     >
-      {pending ? <LoadingAnim /> : 'Submit'}
-    </button>
+      Submit
+    </Button>
   )
 }
 

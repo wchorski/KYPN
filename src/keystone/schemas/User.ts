@@ -27,7 +27,7 @@ export const User: Lists.User = list({
       // todo might switch back idk
       // query: permissions.isLoggedIn,
       query: () => true,
-      create: () => true,
+      create: permissions.canManageUsers,
       // todo NEED TO FIX THIS
       update: permissions.canManageUsers,
       delete: permissions.canManageUsers,

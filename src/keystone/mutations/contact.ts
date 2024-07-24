@@ -2,11 +2,6 @@
 import { graphql } from '@keystone-6/core';
 import { Context } from '.keystone/types';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { mailBooking } from '../../lib/mail';
-import { envs } from '../../../envs';
-import { Booking } from '../types';
-import { datePrettyLocal } from '../../lib/dateFormatter';
-
 
 export const contact = (base: BaseSchemaMeta) => graphql.field({
 

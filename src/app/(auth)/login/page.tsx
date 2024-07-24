@@ -67,7 +67,9 @@ function Main(providers:any, sessionEmail?:string|null, error?:'CredentialsSigni
 
       <div style={styleForms}>
         {sessionEmail && <Callout intent={'info'}>
-          <p> currently logged in with email <strong> {sessionEmail} </strong> </p>  
+          <p> currently logged in with email <strong> {sessionEmail} </strong>. 
+            Go to your <Link href={`/account`}> Account </Link>
+          </p>  
         </Callout>}
 
         {error && <Callout intent={'error'}> <p> Login failed. Please try again </p></Callout>}

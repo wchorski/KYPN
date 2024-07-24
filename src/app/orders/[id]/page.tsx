@@ -14,6 +14,7 @@ import { Metadata } from "next"
 import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
 import { StatusBadge } from "@components/StatusBadge"
+import NoDataFoundError404 from "../../not-found"
 
 export const metadata: Metadata = {
   title: 'Order Receipt | ' + envs.SITE_TITLE,
@@ -28,7 +29,8 @@ type Props = {
 export default async function OrderByIdPage ({ params, searchParams }:Props) {
 
   const { id } = params
-
+  // todo id next-auth is find
+  //@ts-ignore
   const session = await getServerSession(nextAuthOptions)
 
   const order = await keystoneContext.withSession(session).query.Order.findOne({
@@ -38,7 +40,7 @@ export default async function OrderByIdPage ({ params, searchParams }:Props) {
     query: query,
   }) as Order
 
-  if(!order) return <p> no order found </p>
+  if(!order) return <NoDataFoundError404> <p> no order found </p></NoDataFoundError404>
 
   return ( 
     <PageTHeaderMainAside 

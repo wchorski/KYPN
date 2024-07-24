@@ -2995,6 +2995,7 @@ type Mutation {
   passwordReset(password: String!, token: String!, email: String!): User
   verifyEmailRequest(email: String!): User
   verifyEmail(token: String!, email: String!): User
+  registerAnAccount(name: String!, email: String!, password: String!, passwordConfirm: String!): User
 }
 
 type Query {
