@@ -1,23 +1,12 @@
-import type { Context, UserCreateInput } from ".keystone/types"
+import type { Lists, Context, UserCreateInput, RoleCreateInput, PageCreateInput, PostCreateInput, CategoryCreateInput, TagCreateInput} from ".keystone/types"
 import {
 	user_seeddata,
 	roles_seedjson,
-	addons_seedjson,
-	avail_seedjson,
 	categories_seedjson,
-	events_seeddata,
-	locations_seeddata,
 	pages_seeddata,
 	posts_seedjson,
-	products_seed,
-	services_seedjson,
-	subscriptionPlans_seedjson,
 	tags_seedjson,
 } from "./seed_data"
-//@ts-ignore
-import { prepareToUpload } from "../prepareToUpload.js"
-import { Addon, Category, Post, Product, Service, Tag, User } from "../types"
-import { slugFormat } from "../../lib/slugFormat"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
@@ -92,72 +81,73 @@ const seedRoles = async (context: Context) => {
 }
 
 // seed posts and connect with users
-// const seedPosts = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedPosts: any[] = posts_seedjson;
-//   const postsAlreadyInDatabase = await db.Post.findMany({
-//     where: {
-//       slug: { in: seedPosts.map(post => post.slug) },
-//     },
-//   });
+const seedPosts = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedPosts = posts_seedjson;
+  const postsAlreadyInDatabase = await db.Post.findMany({
+    where: {
+      slug: { in: seedPosts.map(post => post.slug) as string[] },
+    },
+  });
 
-//   const postsToCreate = seedPosts.filter(
-//     // @ts-ignore
-//     seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
-//   );
+  const postsToCreate = seedPosts.filter(
 
-//   postsToCreate.map(obj => {
-//     console.log(" + Post: " + obj.slug)
-//   })
+    seedPost => !postsAlreadyInDatabase.some((p) => (p.slug === seedPost.slug))
+  );
 
-//   await db.Post.createMany({
-//     data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
-//   });
-// };
+  postsToCreate.map(obj => {
+    console.log(" + Post: " + obj.slug)
+  })
 
-// const seedTags = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = tags_seedjson;
-//   const objectsAlreadyInDatabase = await db.Tag.findMany({
-//     where: {
-//       name: { in: seedObjects.map(obj => obj.name) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     //@ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
-//   );
+  await db.Post.createMany({
+    // @ts-ignore
+    data: postsToCreate.map((p:PostCreateInput) => ({ ...p, content: p?.content?.document  })),
+  });
+};
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Tag: " + obj.name)
-//   })
+const seedTags = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = tags_seedjson;
+  const objectsAlreadyInDatabase = await db.Tag.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    //@ts-ignore
+    seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
+  );
 
-//   await db.Tag.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+  objsToCreate.map(obj => {
+    console.log(" + Tag: " + obj.name)
+  })
 
-// const seedCategories = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = categories_seedjson;
-//   const objectsAlreadyInDatabase = await db.Category.findMany({
-//     where: {
-//       name: { in: seedObjects.map(obj => obj.name) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     //@ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
-//   );
+  await db.Tag.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Category: " + obj.name)
-//   })
+const seedCategories = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = categories_seedjson;
+  const objectsAlreadyInDatabase = await db.Category.findMany({
+    where: {
+      name: { in: seedObjects.map(obj => obj.name) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    //@ts-ignore
+    seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
+  );
 
-//   await db.Category.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+  objsToCreate.map(obj => {
+    console.log(" + Category: " + obj.name)
+  })
+
+  await db.Category.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
 
 // const seedProducts = async (context: Context) => {
 //   const { db } = context.sudo();
@@ -294,26 +284,26 @@ const seedRoles = async (context: Context) => {
 //   });
 // };
 
-// const seedPages = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = pages_seeddata;
-//   const objectsAlreadyInDatabase = await db.Page.findMany({
-//     where: {
-//       slug: { in: seedObjects.map(obj => obj.slug) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
-//   );
+const seedPages = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: any[] = pages_seeddata;
+  const objectsAlreadyInDatabase = await db.Page.findMany({
+    where: {
+      slug: { in: seedObjects.map(obj => obj.slug) },
+    },
+  });
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
+  );
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Page: " + obj.slug)
-//   })
+  objsToCreate.map(obj => {
+    console.log(" + Page: " + obj.slug)
+  })
 
-//   await db.Page.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+  await db.Page.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
 
 // const seedProductImages = async (context: Context) => {
 //   const { db } = context.sudo();
@@ -352,18 +342,11 @@ export const seedDatabase = async (context: Context) => {
 	console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`)
 	await seedUsers(context)
 	await seedRoles(context)
-	// await seedCategories(context)
-	// await seedTags(context)
-	// // // await seedAvail(context)
-	// await seedPosts(context)
-	// await seedLocations(context)
 
-	// await seedServices(context)
-	// // // await seedProductImages(context)
-	// await seedProducts(context)
-	// await seedSubscriptions(context)
-	// await seedEventData(context)
-	// await seedAddons(context)
-	// await seedPages(context)
+	await seedCategories(context)
+	await seedTags(context)
+  
+	await seedPages(context)
+	await seedPosts(context)
 	console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`)
 }

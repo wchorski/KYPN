@@ -1,0 +1,238 @@
+.youtubeVideo {
+  display: grid;
+  grid-template-columns: minmax(auto, 960px);
+  align-items: center;
+  justify-content: center;
+  // margin-bottom: 2rem;
+}
+
+.iframePosition {
+  overflow: hidden;
+  // padding-bottom: 56.25%;
+  position: relative;
+  line-height: 0;
+
+  > iframe {
+    border: none;
+  }
+}
+
+.iframePosition video {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.video_wrap {
+  margin-inline: auto;
+  max-width: 50em;
+  position: relative;
+
+  video {
+    width: 100%;
+  }
+}
+
+.video_wrap::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.786);
+	z-index: 6;
+	border-radius: 6px;
+	pointer-events: none;
+}
+
+.video {
+  position: relative;
+}
+
+.progress_wrap {
+  width: 100%;
+  position: relative;
+  display: grid;
+  align-content: center;
+
+
+  // input[type=range] {
+  //   width: 100%;
+  //   z-index: 1;
+  //   accent-color: var(--c-primary);
+  //   cursor: pointer;
+  //   background-color: #dedede;
+  //   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff1100), color-stop(100%, #ff1100));
+  //   background-size: 50% 100%;
+  //   appearance: none;
+  // }
+
+  // input[type=range]::-webkit-slider-runnable-track {
+  //   box-shadow: none;
+  //   border: none;
+  //   background: transparent;
+  //   -webkit-appearance: none;
+  // }
+
+  // input[type=range]::-webkit-slider-thumb {
+  //   height: 18px;
+  //   width: 28px;
+  //   border: 0;
+  //   background: #fff;
+  //   border: 1px solid #777;
+  //   border-radius: 8px;
+  //   box-shadow: 0 0 1px 0px rgba(0,0,0,0.1);
+  //   -webkit-appearance: none;
+  // }
+
+
+
+  // progress {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 20px;
+  //   appearance: none;
+  //   border: none;
+  //   background-color: var(--c-desaturated); // TRACK BACKGROUND
+  //   box-shadow: 0 2px 3px rgba(0,0,0,.5);
+  //   color: pink;
+  // }
+  // progress:-webkit-progress-bar {
+  //   background-color: #eee;
+  //   border-radius: 2px;
+  //   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+  //   border-radius: 50px;
+  // }
+
+  // progress:-webkit-progress-value {
+  //   position: relative;
+  //   background-color: aquamarine;
+
+  //   // background-image:
+	//   //  linear-gradient(
+  //   //   -45deg, 
+  //   //   transparent 33%, rgba(0, 0, 0, .1) 33%, 
+  //   //   rgba(0,0, 0, .1) 66%, transparent 66%),
+	//   //  linear-gradient(
+  //   //   top, 
+  //   //   rgba(255, 255, 255, .25), 
+  //   //   rgba(0, 0, 0, .25)),
+	//   //  linear-gradient(left, rgb(0, 204, 27), #f44);
+
+  //   border-radius: 2px; 
+  //   // background-size: 35px 20px, 100% 100%, 100% 100%;
+  //   // animation: animate-stripes 5s linear infinite;
+  // }
+
+  // progress[value]::-moz-progress-bar {
+  //   /* Gradient background with Stripes */
+  //   background-image:
+  //     -moz-linear-gradient( left, var(--c-primary), var(--c-accent));
+    
+  //   // background-size: 35px 20px, 100% 100%, 100% 100%;
+  //   border-radius:3px;
+    
+  //   /* Firefox doesn't support CSS3 keyframe animations on progress element. Hence, we did not include animate-stripes in this code block */
+  // }
+  
+}
+
+@keyframes animate-stripes {
+  100% { background-position: -100px 0px; }
+}
+
+.transport {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: .2rem;
+
+  button {
+    font-size: 2rem;
+    border: solid 1px transparent;
+    transition-property: color, filter, background;
+    transition-duration: .5s;
+    background-color: transparent;
+    display: grid;
+    align-content: center;
+  }
+
+  button:hover {
+    background-color: #00000096;
+    svg {
+      filter: drop-shadow(1px 2px 5px #ffffff4a);
+      color: var(--c-accent);
+      fill: var(--c-accent);
+    }
+  }
+}
+
+.controls {
+  width: 95%;
+  // position: absolute;
+  // bottom: 1rem;
+  // left: 50%;
+  // transform: translateX(-50%);
+  // transform: translateX(-50%, -1rem);
+  margin-inline: auto;
+  // opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: .3s;
+}
+
+// todo get this to work
+// .video:hover :global {
+  
+//   .controls {
+//     opacity: 1;
+//     transform: translateX(-50%, 0);
+
+//   }
+// }
+
+// .controls {
+//   position: absolute;
+//   bottom: 40px;
+//   width: 100%;
+//   display: flex;
+//   justify-content: space-around;
+//   opacity: 0.2;
+//   transition: opacity 0.4s;
+
+//   button {
+//     background: transparent;
+//     color: #fff;
+//     font-weight: bolder;
+//     text-shadow: 2px 1px 2px #000;
+//     border: none;
+//     cursor: pointer;
+//   }
+// }
+// // .container:hover .controls {
+// //   opacity: 1;
+// // }
+
+// .timeline {
+//   flex: 1;
+//   display: flex;
+//   align-items: center;
+//   border: none;
+//   border-right: 3px solid #ccc;
+//   border-left: 3px solid #ccc;
+// }
+// .bar{
+//   background: rgb(1, 1, 65);
+//   height: 4px;
+//   flex: 1;
+// }
+// .inner{
+//   background: #ccc;
+//   width: 0%;
+//   height: 100%;
+// }

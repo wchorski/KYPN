@@ -29,6 +29,8 @@ model User {
   isVerified       Boolean   @default(false)
   role             Role?     @relation("User_role", fields: [roleId], references: [id])
   roleId           String?   @map("role")
+  posts            Post[]    @relation("Post_author")
+  pages            Page[]    @relation("Page_author")
 
   @@index([stripeCustomerId])
   @@index([roleId])
@@ -44,4 +46,61 @@ model Role {
   canManagePages   Boolean @default(false)
   canManagePosts   Boolean @default(false)
   assignedTo       User[]  @relation("User_role")
+}
+
+model Post {
+  id             String     @id @default(cuid())
+  title          String     @default("")
+  slug           String     @unique @default("")
+  dateCreated    DateTime?  @default(now())
+  dateModified   DateTime?  @default(now())
+  status         String?    @default("DRAFT")
+  template       String?    @default("FULLWIDTH")
+  pinned         Int?       @default(0)
+  excerpt        String     @default("")
+  featured_image String     @default("")
+  featured_video String     @default("")
+  content        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author         User?      @relation("Post_author", fields: [authorId], references: [id])
+  authorId       String?    @map("author")
+  categories     Category[] @relation("Category_posts")
+  tags           Tag[]      @relation("Post_tags")
+
+  @@index([authorId])
+}
+
+model Page {
+  id             String     @id @default(cuid())
+  title          String     @default("")
+  slug           String     @unique @default("")
+  dateCreated    DateTime?  @default(now())
+  dateModified   DateTime?  @default(now())
+  status         String?    @default("DRAFT")
+  template       String?    @default("FULLWIDTH")
+  pinned         Int?       @default(0)
+  excerpt        String     @default("")
+  featured_image String     @default("")
+  featured_video String     @default("")
+  content        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author         User?      @relation("Page_author", fields: [authorId], references: [id])
+  authorId       String?    @map("author")
+  categories     Category[] @relation("Category_pages")
+  tags           Tag[]      @relation("Page_tags")
+
+  @@index([authorId])
+}
+
+model Category {
+  id      String @id @default(cuid())
+  name    String @unique @default("")
+  excerpt String @default("")
+  posts   Post[] @relation("Category_posts")
+  pages   Page[] @relation("Category_pages")
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique @default("")
+  posts Post[] @relation("Post_tags")
+  pages Page[] @relation("Page_tags")
 }

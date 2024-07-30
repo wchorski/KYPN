@@ -45,22 +45,24 @@ export function CustomNavigation({
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
 			<NavItem href="/">Dashboard</NavItem>
-			<NavItem href="/users">Users</NavItem>
-			<NavItem href="/roles">Roles</NavItem>
+      <ListNavItems lists={lists} include={['User', 'Role']}/>
+			{/* <NavItem href="/users">Users</NavItem>
+			<NavItem href="/roles">Roles</NavItem> */}
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-			<NavItem href="/pages"> Pages </NavItem>
-			<NavItem href="/posts"> Posts </NavItem>
+      <ListNavItems lists={lists} include={['Page', 'Post']}/>
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
+      <ListNavItems lists={lists} include={['Category', 'Tag']}/>
 
+			{/* //? from ks schema: single item*/}
+			{/* <ListNavItems lists={lists}/> */}
+			{/* //? from ks schema: multi items*/}
+			{/* <ListNavItems lists={lists} include={["User"]}/> */}
+      {/* //? external link */}
 			{/* <NavItem href="https://keystonejs.com/">
           Keystone Docs
         </NavItem> */}
-			{/* //? auto gen from schema list */}
-			{/* <ListNavItems lists={lists}/> */}
-			{/* //? only allow certain list types */}
-			{/* <ListNavItems lists={lists} include={["User"]}/> */}
 		</NavigationContainer>
 	)
 }

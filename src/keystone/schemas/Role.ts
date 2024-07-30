@@ -1,12 +1,9 @@
 import { list } from "@keystone-6/core"
-// @ts-ignore
 import type { Lists } from ".keystone/types"
-import { allowAll } from "@keystone-6/core/access"
-import { checkbox, relationship, text } from "@keystone-6/core/fields"
+import { relationship, text } from "@keystone-6/core/fields"
 import { permissions } from "../access"
 import { permissionFields } from "./permissions"
-// import { permissionFields } from "./authFields";
-
+//? ts doesn't like the spread `...permissionFields` but he's just being whiny
 // @ts-ignore
 export const Role: Lists.Role = list({
 	access: {

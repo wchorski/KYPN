@@ -18,6 +18,10 @@ type User {
   dateModified: DateTime
   isVerified: Boolean
   role: Role
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
+  postsCount(where: PostWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
 }
 
 scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
@@ -48,6 +52,8 @@ input UserWhereInput {
   dateModified: DateTimeNullableFilter
   isVerified: BooleanFilter
   role: RoleWhereInput
+  posts: PostManyRelationFilter
+  pages: PageManyRelationFilter
 }
 
 input IDFilter {
@@ -111,6 +117,18 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
+input PostManyRelationFilter {
+  every: PostWhereInput
+  some: PostWhereInput
+  none: PostWhereInput
+}
+
+input PageManyRelationFilter {
+  every: PageWhereInput
+  some: PageWhereInput
+  none: PageWhereInput
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -150,12 +168,28 @@ input UserUpdateInput {
   dateModified: DateTime
   isVerified: Boolean
   role: RoleRelateToOneForUpdateInput
+  posts: PostRelateToManyForUpdateInput
+  pages: PageRelateToManyForUpdateInput
 }
 
 input RoleRelateToOneForUpdateInput {
   create: RoleCreateInput
   connect: RoleWhereUniqueInput
   disconnect: Boolean
+}
+
+input PostRelateToManyForUpdateInput {
+  disconnect: [PostWhereUniqueInput!]
+  set: [PostWhereUniqueInput!]
+  create: [PostCreateInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PageRelateToManyForUpdateInput {
+  disconnect: [PageWhereUniqueInput!]
+  set: [PageWhereUniqueInput!]
+  create: [PageCreateInput!]
+  connect: [PageWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -179,11 +213,23 @@ input UserCreateInput {
   dateModified: DateTime
   isVerified: Boolean
   role: RoleRelateToOneForCreateInput
+  posts: PostRelateToManyForCreateInput
+  pages: PageRelateToManyForCreateInput
 }
 
 input RoleRelateToOneForCreateInput {
   create: RoleCreateInput
   connect: RoleWhereUniqueInput
+}
+
+input PostRelateToManyForCreateInput {
+  create: [PostCreateInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PageRelateToManyForCreateInput {
+  create: [PageCreateInput!]
+  connect: [PageWhereUniqueInput!]
 }
 
 type Role {
@@ -276,6 +322,380 @@ input UserRelateToManyForCreateInput {
   connect: [UserWhereUniqueInput!]
 }
 
+type Post {
+  id: ID!
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: Post_content_Document
+  author: User
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+type Post_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input PostWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input PostWhereInput {
+  AND: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
+  status: StringNullableFilter
+  template: StringNullableFilter
+  pinned: IntNullableFilter
+  excerpt: StringFilter
+  featured_image: StringFilter
+  featured_video: StringFilter
+  author: UserWhereInput
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
+input CategoryManyRelationFilter {
+  every: CategoryWhereInput
+  some: CategoryWhereInput
+  none: CategoryWhereInput
+}
+
+input TagManyRelationFilter {
+  every: TagWhereInput
+  some: TagWhereInput
+  none: TagWhereInput
+}
+
+input PostOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+  status: OrderDirection
+  template: OrderDirection
+  pinned: OrderDirection
+  excerpt: OrderDirection
+  featured_image: OrderDirection
+  featured_video: OrderDirection
+}
+
+input PostUpdateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CategoryRelateToManyForUpdateInput {
+  disconnect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input TagRelateToManyForUpdateInput {
+  disconnect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+input PostUpdateArgs {
+  where: PostWhereUniqueInput!
+  data: PostUpdateInput!
+}
+
+input PostCreateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input CategoryRelateToManyForCreateInput {
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
+input TagRelateToManyForCreateInput {
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+type Page {
+  id: ID!
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: Page_content_Document
+  author: User
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+type Page_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input PageWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input PageWhereInput {
+  AND: [PageWhereInput!]
+  OR: [PageWhereInput!]
+  NOT: [PageWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
+  status: StringNullableFilter
+  template: StringNullableFilter
+  pinned: IntNullableFilter
+  excerpt: StringFilter
+  featured_image: StringFilter
+  featured_video: StringFilter
+  author: UserWhereInput
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+}
+
+input PageOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+  status: OrderDirection
+  template: OrderDirection
+  pinned: OrderDirection
+  excerpt: OrderDirection
+  featured_image: OrderDirection
+  featured_video: OrderDirection
+}
+
+input PageUpdateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input PageUpdateArgs {
+  where: PageWhereUniqueInput!
+  data: PageUpdateInput!
+}
+
+input PageCreateInput {
+  title: String
+  slug: String
+  dateCreated: DateTime
+  dateModified: DateTime
+  status: String
+  template: String
+  pinned: Int
+  excerpt: String
+  featured_image: String
+  featured_video: String
+  content: JSON
+  author: UserRelateToOneForCreateInput
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+type Category {
+  id: ID!
+  name: String
+  excerpt: String
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
+  postsCount(where: PostWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+input CategoryWhereInput {
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  excerpt: StringFilter
+  posts: PostManyRelationFilter
+  pages: PageManyRelationFilter
+}
+
+input CategoryOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  excerpt: OrderDirection
+}
+
+input CategoryUpdateInput {
+  name: String
+  excerpt: String
+  posts: PostRelateToManyForUpdateInput
+  pages: PageRelateToManyForUpdateInput
+}
+
+input CategoryUpdateArgs {
+  where: CategoryWhereUniqueInput!
+  data: CategoryUpdateInput!
+}
+
+input CategoryCreateInput {
+  name: String
+  excerpt: String
+  posts: PostRelateToManyForCreateInput
+  pages: PageRelateToManyForCreateInput
+}
+
+type Tag {
+  id: ID!
+  name: String
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
+  postsCount(where: PostWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  pagesCount(where: PageWhereInput! = {}): Int
+}
+
+input TagWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+input TagWhereInput {
+  AND: [TagWhereInput!]
+  OR: [TagWhereInput!]
+  NOT: [TagWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  posts: PostManyRelationFilter
+  pages: PageManyRelationFilter
+}
+
+input TagOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input TagUpdateInput {
+  name: String
+  posts: PostRelateToManyForUpdateInput
+  pages: PageRelateToManyForUpdateInput
+}
+
+input TagUpdateArgs {
+  where: TagWhereUniqueInput!
+  data: TagUpdateInput!
+}
+
+input TagCreateInput {
+  name: String
+  posts: PostRelateToManyForCreateInput
+  pages: PageRelateToManyForCreateInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -294,6 +714,30 @@ type Mutation {
   updateRoles(data: [RoleUpdateArgs!]!): [Role]
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
+  createPost(data: PostCreateInput!): Post
+  createPosts(data: [PostCreateInput!]!): [Post]
+  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
+  updatePosts(data: [PostUpdateArgs!]!): [Post]
+  deletePost(where: PostWhereUniqueInput!): Post
+  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
+  createPage(data: PageCreateInput!): Page
+  createPages(data: [PageCreateInput!]!): [Page]
+  updatePage(where: PageWhereUniqueInput!, data: PageUpdateInput!): Page
+  updatePages(data: [PageUpdateArgs!]!): [Page]
+  deletePage(where: PageWhereUniqueInput!): Page
+  deletePages(where: [PageWhereUniqueInput!]!): [Page]
+  createCategory(data: CategoryCreateInput!): Category
+  createCategories(data: [CategoryCreateInput!]!): [Category]
+  updateCategory(where: CategoryWhereUniqueInput!, data: CategoryUpdateInput!): Category
+  updateCategories(data: [CategoryUpdateArgs!]!): [Category]
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteCategories(where: [CategoryWhereUniqueInput!]!): [Category]
+  createTag(data: TagCreateInput!): Tag
+  createTags(data: [TagCreateInput!]!): [Tag]
+  updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
+  updateTags(data: [TagUpdateArgs!]!): [Tag]
+  deleteTag(where: TagWhereUniqueInput!): Tag
+  deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   endSession: Boolean!
 }
 
@@ -304,6 +748,18 @@ type Query {
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
+  post(where: PostWhereUniqueInput!): Post
+  postsCount(where: PostWhereInput! = {}): Int
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  page(where: PageWhereUniqueInput!): Page
+  pagesCount(where: PageWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  category(where: CategoryWhereUniqueInput!): Category
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tag(where: TagWhereUniqueInput!): Tag
+  tagsCount(where: TagWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

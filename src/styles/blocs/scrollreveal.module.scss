@@ -1,0 +1,12 @@
+.wrapper {
+  transform: translateX(-3%);
+  opacity: 0;
+  transition: all 1s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.reveal {
+  opacity: 1;
+  transform: translateX(0);
+}

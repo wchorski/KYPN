@@ -1,0 +1,58 @@
+.swatch {
+  --color-1: red;
+  --color-2: blue;
+  --color-3: green;
+  --color-3-light: color-mix(
+      in srgb, white 70%, var(--color-3)
+    );
+  --color-3-dark: color-mix(
+      in srgb, black 50%, var(--color-3)
+    );
+ 
+  display: flex;
+  width: 100%;
+
+  div:nth-child(1){
+    background: var(--color-1)
+  }
+  div:nth-child(2){
+    background: color-mix(
+      in srgb, var(--color-1) 80%, var(--color-2)
+    );
+  }
+  divx:nth-child(3){
+    background: color-mix(
+      in srgb, var(--color-1) 40%, var(--color-2)
+    );
+  }
+  
+  divx:nth-child(4){
+    background: var(--color-2)
+  }
+  div:nth-child(5){
+    background: color-mix(
+      in srgb, var(--color-2) 80%, var(--color-3)
+    );
+  }
+  div:nth-child(6){
+    background: color-mix(
+      in srgb, var(--color-2) 40%, var(--color-3)
+    );
+  }
+  
+  div:nth-child(7){
+    background: var(--color-3)
+  }
+  div:nth-child(8){
+    background: var(--color-3-light)
+  }
+  div:nth-child(9){
+    background: var(--color-3-dark)
+  }
+}
+
+.box{
+  /* width: 30px; */
+  flex: 1;
+  height: 100px;
+}

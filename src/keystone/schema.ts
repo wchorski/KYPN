@@ -13,12 +13,20 @@ import type { Lists } from ".keystone/types"
 import { User } from "./schemas/User"
 import { Role } from "./schemas/Role"
 import { registerAnAccount } from "./mutations/registerAnAccount"
+import { Post } from "./schemas/Post"
+import { Page } from "./schemas/Page"
+import { Category } from "./schemas/Category"
+import { Tag } from "./schemas/Tag"
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
 export const lists: Lists = {
 	User,
 	Role,
+  Post,
+  Page,
+  Category,
+  Tag,
 }
 
 export const extendGraphqlSchema = graphql.extend((base) => {
