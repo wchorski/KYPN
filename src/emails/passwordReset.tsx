@@ -4,7 +4,7 @@ import {
   Container,
   Column,
   Head,
-  Html,
+  Html as EmailHtml,
   Img,
   Link,
   Preview,
@@ -40,7 +40,7 @@ export default function PasswordRestEmail({
   }).format(updatedDate);
 
   return (
-    <Html>
+    <EmailHtml>
       <Head />
       <Preview>You requested a password reset for your {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
@@ -106,7 +106,7 @@ export default function PasswordRestEmail({
           </Text>
         </Section>
       </Body>
-    </Html>
+    </EmailHtml>
   );
 };
 

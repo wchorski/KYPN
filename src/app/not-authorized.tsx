@@ -11,11 +11,11 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-	title: `404 | ` + envs.SITE_TITLE,
+	title: `403 | ` + envs.SITE_TITLE,
 	description: envs.SITE_DESC,
 }
 
-export default function NoDataFoundError404({ children }: Props) {
+export default function NotAuthorized403({ children }: Props) {
 	return (
 		<>
 			<PageTHeaderMain header={Header()} main={Main(children)} />
@@ -47,11 +47,17 @@ function Main(children: ReactNode) {
 				<p className={styles.watermark}>
 					<span>4</span>
 					<span>0</span>
-					<span>4</span>
+					<span>3</span>
 				</p>
 
 				{children}
-				{!children && <p> This page does not exist. </p>}
+				{!children && (
+					<p>
+						{" "}
+						You're not authorized to view this page.{" "}
+						<Link href={`/login`}> Login</Link>{" "}
+					</p>
+				)}
 
 				<Link
 					href={`/`}

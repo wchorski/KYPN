@@ -4,7 +4,7 @@ import {
   Container,
   Column,
   Head,
-  Html,
+  Html as EmailHtml,
   Img,
   Link,
   Preview,
@@ -38,7 +38,7 @@ export default function UserVerifyEmail({
   }).format(updatedDate);
 
   return (
-    <Html>
+    <EmailHtml>
       <Head />
       <Preview> Verify new {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
@@ -98,7 +98,7 @@ export default function UserVerifyEmail({
           </Text>
         </Section>
       </Body>
-    </Html>
+    </EmailHtml>
   );
 };
 

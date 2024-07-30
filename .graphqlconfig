@@ -1,9 +1,0 @@
-{
-  "extensions": {
-    "endpoints": {
-      "Local GQL endpoint": {
-        "url": "http://localhost:3000/api/graphql"
-      }
-    }
-  }
-}

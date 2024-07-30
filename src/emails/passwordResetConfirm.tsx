@@ -4,7 +4,7 @@ import {
   Container,
   Column,
   Head,
-  Html,
+  Html as EmailHtml,
   Img,
   Link,
   Preview,
@@ -36,7 +36,7 @@ export default function PasswordRestConfirmEmail({
   }).format(updatedDate);
 
   return (
-    <Html>
+    <EmailHtml>
       <Head />
       <Preview> Successful password change for {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
@@ -87,21 +87,21 @@ export default function PasswordRestConfirmEmail({
         </Container>
 
         <Section style={footer}>
-          <Row>
+          {/* <Row> */}
             {/* <Column align="right" style={{ width: '50%', paddingRight: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-twitter.png`} />
             </Column>
             <Column align="left" style={{ width: '50%', paddingLeft: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-facebook.png`} />
             </Column> */}
-          </Row>
+          {/* </Row> */}
           <Text style={{ textAlign: 'center', color: '#706a7b' }}>
             <Button href={envs.FRONTEND_URL}> {envs.SITE_TITLE}</Button> <br />
             {/* 350 Bush Street, 2nd Floor, San Francisco, CA, 94104 - USA */}
           </Text>
         </Section>
       </Body>
-    </Html>
+    </EmailHtml>
   );
 };
 

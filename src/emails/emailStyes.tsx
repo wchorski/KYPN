@@ -21,6 +21,9 @@ const statusState = {
   ACTIVE: {
     borderColor: BLUE,
   },
+  REFUNDED: {
+    borderColor: BLUE,
+  },
   OPEN: {
     borderColor: BLUE,
   },
@@ -33,7 +36,19 @@ const statusState = {
   CONFIRMED: {
     borderColor: BLUE,
   },
+  STARTED: {
+    borderColor: BLUE,
+  },
+  PROCESSING: {
+    borderColor: BLUE,
+  },
+  SHIPPED: {
+    borderColor: BLUE,
+  },
   SUSPENDED: {
+    borderColor: YELLOW,
+  },
+  PAYMENT_PENDING: {
     borderColor: YELLOW,
   },
   PAUSED: {
@@ -57,6 +72,9 @@ const statusState = {
   REJECTED: {
     borderColor: RED,
   },
+  CANCELLED: {
+    borderColor: RED,
+  },
   CANCELED: {
     borderColor: GREY,
   },
@@ -69,7 +87,19 @@ const statusState = {
   PAID: {
     borderColor: GREEN,
   },
+  RETURNED: {
+    borderColor: GREEN,
+  },
   COMPLETE: {
+    borderColor: GREEN,
+  },
+  FULFILLED: {
+    borderColor: GREEN,
+  },
+  PAYMENT_RECIEVED: {
+    borderColor: GREEN,
+  },
+  DELIVERED: {
     borderColor: GREEN,
   },
 }

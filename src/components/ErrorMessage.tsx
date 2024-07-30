@@ -15,7 +15,7 @@ const ErrorMessage = ({ error, children }: Props) => {
   return(
     // todo use error.tsx in page folder instead
     // <Section layout={'1'}>
-      <ErrorContents error={error} children={children} />
+      <ErrorContents error={error} >{children}</ErrorContents>
     // </Section>
   )
 

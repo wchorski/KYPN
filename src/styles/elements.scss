@@ -1,198 +1,210 @@
 // @import './elements/rangeslider.module.scss';
 
 table {
-  
-  td{
-    text-align: start;
-    vertical-align: middle;
-    padding: .5rem;
-  }
+	td {
+		text-align: start;
+		vertical-align: middle;
+		padding: 0.5rem;
+	}
 
-  ul{
-    padding-inline: 1rem;
-    margin: 0;
-  }
+	ul {
+		padding-inline: 1rem;
+		margin: 0;
+	}
 }
 
 hr {
-  // margin: 4rem auto;
-  max-width: var(--w-sitemax);
-  border-bottom: solid var(--c-disabled) 1px;
-  width: 100%;
+	// margin: 4rem auto;
+	max-width: var(--w-sitemax);
+	border-bottom: solid var(--c-disabled) 1px;
+	width: 100%;
 }
 
 // form
 ul.radio {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 0;
 
-  .current{
-    text-decoration: underline;
-  }
+	.current {
+		text-decoration: underline;
+	}
 }
 
 fieldset {
-  margin: 1rem 0;
-  border-color: var(--c-glass);
+	margin: 1rem 0;
+	border-color: var(--c-glass);
 }
 
 a {
-  width: fit-content;
+	width: fit-content;
 }
 
 img {
-  font-style: italic;
-  color: var(--c-txt-sub);
+	font-style: italic;
+	color: var(--c-txt-sub);
 }
 
-ul.unstyled{
-  list-style: none;
+ul.unstyled {
+	list-style: none;
 }
 
-ul, ol {
-  // padding-left: 1rem;
-  display: grid;
-  gap: .5rem;
+ul,
+ol {
+	// padding-left: 1rem;
+	display: grid;
+	gap: 0.5rem;
 }
 
-h1, h2, h3, h4, h5, h6, p {
-  &:empty {
-    display: none;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	&:empty {
+		display: none;
+	}
 }
 
 button {
-  cursor: pointer;
-  transition-property: color, background-color, filter;
-  transition-duration: .3s;
-  background-color: var(--c-body);
-  color: var(--c-txt);
-  
-  > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+	cursor: pointer;
+	transition-property: color, background-color, filter;
+	transition-duration: 0.3s;
+	background-color: var(--c-body);
+	color: var(--c-txt);
+
+	> span {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 
 .button {
-  border-radius: var(--br-dull);
-  border: solid 1px var(--c-primary);
-  // background-color: var(--c-primary);
-  padding-inline: 1rem;
-  transition: all .3s;
-  // display: grid;
-  // align-content: center;
-  // text-align: center;
-  display: grid;
-  justify-content: space-evenly;
-  align-content: center;
+	border-radius: var(--br-dull);
+	border: solid 1px var(--c-primary);
+	// background-color: var(--c-primary);
+	padding-inline: 1rem;
+	transition: all 0.3s;
+	// display: grid;
+	// align-content: center;
+	// text-align: center;
+	display: grid;
+	justify-content: space-evenly;
+	align-content: center;
 
-  span {
-    display: flex;
-    gap: 1rem;
-    justify-content: space-around;
-  }
+	span {
+		display: flex;
+		gap: 1rem;
+		justify-content: space-around;
+	}
 
-  &.medium {
-    padding: .5rem 1rem;
-    font-size: 1.3rem;
-  }
+	&.medium {
+		padding: 0.5rem 1rem;
+		font-size: 1.3rem;
+	}
 
-  &.large {
-    padding: 1rem;
-    font-size: 1.3rem;
-  }
+	&.large {
+		padding: 1rem;
+		font-size: 1.3rem;
+	}
 
-  &:hover, &:focus{
-    // background-color: var(--c-primary);
-    border: solid 1px var(--c-accent);
-    color: var(--c-txt-light);
-  }
+	&:hover,
+	&:focus {
+		// background-color: var(--c-primary);
+		border: solid 1px var(--c-accent);
+		color: var(--c-txt-light);
+	}
 
-  &:active{
-    color: var(--c-accent);
-    background-color: var(--c-txt);
-    border: solid 1px var(--c-accent);
-  }
+	&:active {
+		color: var(--c-accent);
+		background-color: var(--c-txt);
+		border: solid 1px var(--c-accent);
+	}
 }
 
 .button:disabled {
-  background-color: var(--c-disabled);
-  border-color: var(--c-disabled);
+	background-color: var(--c-disabled);
+	border-color: var(--c-disabled);
 
-  &:hover, &:focus{
-    text-decoration: line-through;
-    // background-color: var(--c-primary);
-    // color: var(--c-txt-rev);
-  }
+	&:hover,
+	&:focus {
+		text-decoration: line-through;
+		// background-color: var(--c-primary);
+		// color: var(--c-txt-rev);
+	}
 
-  &:active{
-    color: var(--c-txt-rev);
-    background-color: var(--c-disabled);
-    border: solid 1px var(--c-disabled);
-  }
+	&:active {
+		color: var(--c-txt-rev);
+		background-color: var(--c-disabled);
+		border: solid 1px var(--c-disabled);
+	}
 }
 
 .mtauto {
-  margin-top: auto;
+	margin-top: auto;
 }
-
 
 // * FORMS
 
-label:has(input[type='checkbox'] ){
-  display: flex;
-  align-items: center;
-  gap: .3rem;
+label:has(input[type="checkbox"]) {
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
 }
 
-input[type='checkbox'] {
-  appearance: none;
-  position: relative;
-  display: inline-block;
-  border: solid 3px var(--c-primary);
-  height: 1.5rem;
-  width: 1.5rem;
-  vertical-align: middle;
-  border-radius: 2rem;
-  box-shadow: 0px 1px 3px #0003 inset;
-  transition: 0.1s linear background;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+input[type="checkbox"] {
+	appearance: none;
+	position: relative;
+	display: inline-block;
+	border: solid 3px var(--c-primary);
+	height: 1.5rem;
+	width: 1.5rem;
+	vertical-align: middle;
+	border-radius: 2rem;
+	box-shadow: 0px 1px 3px #0003 inset;
+	transition: 0.1s linear background;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 input::before {
-  content: "";
-  display: block;
-  width: 1.02rem;
-  height: 1.02rem;
-  background: #fff;
-  border-radius: 1.2rem;
-  position: absolute;
-  // top: 2px;
-  // left: 2px;
-  box-shadow: 0px 1px 3px #0003;
-  transition: 0.1s linear transform;
-  transform: scale(0);
+	content: "";
+	display: block;
+	width: 1.02rem;
+	height: 1.02rem;
+	background: #fff;
+	border-radius: 1.2rem;
+	position: absolute;
+	// top: 2px;
+	// left: 2px;
+	box-shadow: 0px 1px 3px #0003;
+	transition: 0.1s linear transform;
+	transform: scale(0);
 }
 
 input:checked {
-  border-color: var(--c-accent);
+	border-color: var(--c-accent);
 
-  &::before{
-    background: var(--c-accent);
-  }
+	&::before {
+		background: var(--c-accent);
+	}
 }
 input:checked::before {
-  transform: scale(.8);
+	transform: scale(0.8);
 }
 
 textarea {
-  min-height: 6rem;
-  max-width: 75ch;
+	min-height: 6rem;
+	max-width: 75ch;
+}
+
+pre {
+	padding: 1rem;
+	background-color: var(--c-desaturated);
 }
 
 // TODO why are checkbox input types auto made to be 'readonly'?

@@ -1,319 +1,319 @@
-// @ts-ignore
-import { Context } from '.keystone/types';
-import { 
-  addons_seedjson, 
-  avail_seedjson, 
-  categories_seedjson, 
-  events_seeddata, 
-  locations_seeddata, 
-  pages_seeddata, 
-  posts_seedjson, 
-  // productImage_seedjson, 
-  products_seed, 
-  roles_seedjson, 
-  services_seedjson, 
-  subscriptionPlans_seedjson, 
-  tags_seedjson, 
-  user_seeddata 
-} from './seed_data';
+import type { Context, UserCreateInput } from ".keystone/types"
+import {
+	user_seeddata,
+	roles_seedjson,
+	addons_seedjson,
+	avail_seedjson,
+	categories_seedjson,
+	events_seeddata,
+	locations_seeddata,
+	pages_seeddata,
+	posts_seedjson,
+	products_seed,
+	services_seedjson,
+	subscriptionPlans_seedjson,
+	tags_seedjson,
+} from "./seed_data"
 //@ts-ignore
-import { prepareToUpload } from '../prepareToUpload.js';
-import { Addon, Category, Post, Product, Service, Tag, User } from '../types';
-import { slugFormat } from '../../lib/slugFormat';
+import { prepareToUpload } from "../prepareToUpload.js"
+import { Addon, Category, Post, Product, Service, Tag, User } from "../types"
+import { slugFormat } from "../../lib/slugFormat"
 
 const seedUsers = async (context: Context) => {
-  const { db } = context.sudo();
-  const rawJSONData = JSON.stringify(user_seeddata);
-  const seedUsers: any[] = JSON.parse(rawJSONData);
-  const usersAlreadyInDatabase = await db.User.findMany({
-    where: {
-      email: { in: seedUsers.map(user => user.email) },
-    },
-  });
-  const usersToCreate = seedUsers.filter(
-    // @ts-ignore
-    seedUser => !usersAlreadyInDatabase.some((u:User) => u.email === seedUser.email)
-  )
+	const { db } = context.sudo()
+	const rawJSONData = JSON.stringify(user_seeddata)
+	const seedUsers: any[] = JSON.parse(rawJSONData)
+	const usersAlreadyInDatabase = await db.User.findMany({
+		where: {
+			email: { in: seedUsers.map((user) => user.email) },
+		},
+	})
+	const usersToCreate = seedUsers.filter(
+		(seedUser) =>
+			!usersAlreadyInDatabase.some(
+				(u: UserCreateInput) => u.email === seedUser.email
+			)
+	)
 
-  usersToCreate.map(obj => {
-    console.log(" + USER: " + obj.name)
-  })
+	usersToCreate.map((obj) => {
+		console.log(" + USER: " + obj.name)
+	})
 
-  await db.User.createMany({
-    data: usersToCreate,
-  });
-};
+	await db.User.createMany({
+		data: usersToCreate,
+	})
+}
 
-const seedAvail = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjs: any[] = avail_seedjson;
-  const objsAlreadyInDatabase = await db.Availability.findMany({
-    where: {
-      // @ts-ignore
-      start: { in: seedObjs.map(obj => obj.start) },
-    },
-  });
-  const objsToCreate = seedObjs.filter(
-    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.start === seedObj.start)
-  )
+// const seedAvail = async (context: Context) => {
+// 	const { db } = context.sudo()
+// 	const seedObjs: any[] = avail_seedjson
+// 	const objsAlreadyInDatabase = await db.Availability.findMany({
+// 		where: {
+// 			// @ts-ignore
+// 			start: { in: seedObjs.map((obj) => obj.start) },
+// 		},
+// 	})
+// 	const objsToCreate = seedObjs.filter(
+// 		(seedObj) =>
+// 			!objsAlreadyInDatabase.some((obj: any) => obj.start === seedObj.start)
+// 	)
 
-  objsToCreate.map(obj => {
-    console.log(" + Avail: " + obj.start)
-  })
+// 	objsToCreate.map((obj) => {
+// 		console.log(" + Avail: " + obj.start)
+// 	})
 
-  await db.Availability.createMany({
-    data: objsToCreate,
-  });
-};
+// 	await db.Availability.createMany({
+// 		data: objsToCreate,
+// 	})
+// }
 
 const seedRoles = async (context: Context) => {
-  const { db } = context.sudo();
-  // const rawJSONData = JSON.stringify(roles_seedjson);
-  const seedRoles: any[] = roles_seedjson
-  // @ts-ignore
-  const objsAlreadyInDatabase = await db.Role.findMany({
-    where: {
-      name: { in: seedRoles.map(i => i.name) },
-    },
-  });
-  const itemsToCreate = seedRoles.filter(
-    seedRole => !objsAlreadyInDatabase.some((u: any) => u.name === seedRole.name)
-  );
-  
-  itemsToCreate.map(obj => {
-    console.log(" + Role: " + obj.name)
-  })
+	const { db } = context.sudo()
 
-  // @ts-ignore
-  await db.Role.createMany({
-    data: itemsToCreate,
-  });
-};
+	const seedRoles: any[] = roles_seedjson
+
+	const objsAlreadyInDatabase = await db.Role.findMany({
+		where: {
+			name: { in: seedRoles.map((i) => i.name) },
+		},
+	})
+	const itemsToCreate = seedRoles.filter(
+		(seedRole) =>
+			!objsAlreadyInDatabase.some((u: any) => u.name === seedRole.name)
+	)
+
+	itemsToCreate.map((obj) => {
+		console.log(" + Role: " + obj.name)
+	})
+
+	await db.Role.createMany({
+		data: itemsToCreate,
+	})
+}
 
 // seed posts and connect with users
-const seedPosts = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedPosts: any[] = posts_seedjson;
-  const postsAlreadyInDatabase = await db.Post.findMany({
-    where: {
-      slug: { in: seedPosts.map(post => post.slug) },
-    },
-  });
-  
-  const postsToCreate = seedPosts.filter(
-    // @ts-ignore
-    seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
-  );
+// const seedPosts = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedPosts: any[] = posts_seedjson;
+//   const postsAlreadyInDatabase = await db.Post.findMany({
+//     where: {
+//       slug: { in: seedPosts.map(post => post.slug) },
+//     },
+//   });
 
-  postsToCreate.map(obj => {
-    console.log(" + Post: " + obj.slug)
-  })
+//   const postsToCreate = seedPosts.filter(
+//     // @ts-ignore
+//     seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
+//   );
 
-  await db.Post.createMany({
-    data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
-  });
-};
+//   postsToCreate.map(obj => {
+//     console.log(" + Post: " + obj.slug)
+//   })
 
-const seedTags = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = tags_seedjson;
-  const objectsAlreadyInDatabase = await db.Tag.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
-  );
+//   await db.Post.createMany({
+//     data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
+//   });
+// };
 
-  objsToCreate.map(obj => {
-    console.log(" + Tag: " + obj.name)
-  })
+// const seedTags = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = tags_seedjson;
+//   const objectsAlreadyInDatabase = await db.Tag.findMany({
+//     where: {
+//       name: { in: seedObjects.map(obj => obj.name) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     //@ts-ignore
+//     seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
+//   );
 
-  await db.Tag.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   objsToCreate.map(obj => {
+//     console.log(" + Tag: " + obj.name)
+//   })
 
-const seedCategories = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = categories_seedjson;
-  const objectsAlreadyInDatabase = await db.Category.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
-  );
+//   await db.Tag.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  objsToCreate.map(obj => {
-    console.log(" + Category: " + obj.name)
-  })
+// const seedCategories = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = categories_seedjson;
+//   const objectsAlreadyInDatabase = await db.Category.findMany({
+//     where: {
+//       name: { in: seedObjects.map(obj => obj.name) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     //@ts-ignore
+//     seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
+//   );
 
-  await db.Category.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   objsToCreate.map(obj => {
+//     console.log(" + Category: " + obj.name)
+//   })
 
-const seedProducts = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = products_seed;
-  const objectsAlreadyInDatabase = await db.Product.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  })
-  
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
-  );
+//   await db.Category.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  objsToCreate.map(obj => {
-    console.log(" + Product: " + obj.slug)
-  })
+// const seedProducts = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = products_seed;
+//   const objectsAlreadyInDatabase = await db.Product.findMany({
+//     where: {
+//       slug: { in: seedObjects.map(obj => obj.slug) },
+//     },
+//   })
 
-  await db.Product.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   const objsToCreate = seedObjects.filter(
+//     //@ts-ignore
+//     seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
+//   );
 
-const seedSubscriptions = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = subscriptionPlans_seedjson;
-  const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.slug === seedObj.slug)
-  );
+//   objsToCreate.map(obj => {
+//     console.log(" + Product: " + obj.slug)
+//   })
 
-  objsToCreate.map(obj => {
-    console.log(" + SubPlan: " + obj.slug)
-  })
+//   await db.Product.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  await db.SubscriptionPlan.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+// const seedSubscriptions = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = subscriptionPlans_seedjson;
+//   const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
+//     where: {
+//       slug: { in: seedObjects.map(obj => obj.slug) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.slug === seedObj.slug)
+//   );
 
-const seedEventData = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = events_seeddata;
-  const objectsAlreadyInDatabase = await db.Event.findMany({
-    where: {
-      summary: { in: seedObjects.map(obj => obj.summary) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.summary === seedObj.summary)
-  );
+//   objsToCreate.map(obj => {
+//     console.log(" + SubPlan: " + obj.slug)
+//   })
 
-  objsToCreate.map(obj => {
-    console.log(" + Event: " + obj.summary)
-  })
+//   await db.SubscriptionPlan.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  await db.Event.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+// const seedEventData = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = events_seeddata;
+//   const objectsAlreadyInDatabase = await db.Event.findMany({
+//     where: {
+//       summary: { in: seedObjects.map(obj => obj.summary) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.summary === seedObj.summary)
+//   );
 
-const seedLocations = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = locations_seeddata;
-  const objectsAlreadyInDatabase = await db.Location.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
-  );
+//   objsToCreate.map(obj => {
+//     console.log(" + Event: " + obj.summary)
+//   })
 
-  objsToCreate.map(obj => {
-    console.log(" + Location: " + obj.name)
-  })
+//   await db.Event.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  await db.Location.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-const seedServices = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = services_seedjson;
-  const objectsAlreadyInDatabase = await db.Service.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    // @ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((p: Service) => p.name === seedObj.name)
-  );
+// const seedLocations = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = locations_seeddata;
+//   const objectsAlreadyInDatabase = await db.Location.findMany({
+//     where: {
+//       name: { in: seedObjects.map(obj => obj.name) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
+//   );
 
-  objsToCreate.map(obj => {
-    console.log(" + Service: " + obj.name)
-  })
+//   objsToCreate.map(obj => {
+//     console.log(" + Location: " + obj.name)
+//   })
 
-  await db.Service.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   await db.Location.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
+// const seedServices = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = services_seedjson;
+//   const objectsAlreadyInDatabase = await db.Service.findMany({
+//     where: {
+//       name: { in: seedObjects.map(obj => obj.name) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     // @ts-ignore
+//     seedObj => !objectsAlreadyInDatabase.some((p: Service) => p.name === seedObj.name)
+//   );
 
-const seedAddons = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = addons_seedjson;
+//   objsToCreate.map(obj => {
+//     console.log(" + Service: " + obj.name)
+//   })
 
-  // const slugNames = seedObjects.map(obj => slugFormat(obj.name))
-  
-  const objectsAlreadyInDatabase = await db.Addon.findMany({
-    where: {
-      // @ts-ignore
-      slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
-    },
-  });
-  
-  
-  // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
-  
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
-  )
+//   await db.Service.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
-  objsToCreate.map(obj => {
-    console.log(" + Addon: " + obj.slug)
-  })
+// const seedAddons = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = addons_seedjson;
 
-  await db.Addon.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   // const slugNames = seedObjects.map(obj => slugFormat(obj.name))
 
-const seedPages = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = pages_seeddata;
-  const objectsAlreadyInDatabase = await db.Page.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
-  );
+//   const objectsAlreadyInDatabase = await db.Addon.findMany({
+//     where: {
+//       // @ts-ignore
+//       slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
+//     },
+//   });
 
-  objsToCreate.map(obj => {
-    console.log(" + Page: " + obj.slug)
-  })
+//   // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
 
-  await db.Page.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+//   const objsToCreate = seedObjects.filter(
+//     seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
+//   )
+
+//   objsToCreate.map(obj => {
+//     console.log(" + Addon: " + obj.slug)
+//   })
+
+//   await db.Addon.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
+
+// const seedPages = async (context: Context) => {
+//   const { db } = context.sudo();
+//   const seedObjects: any[] = pages_seeddata;
+//   const objectsAlreadyInDatabase = await db.Page.findMany({
+//     where: {
+//       slug: { in: seedObjects.map(obj => obj.slug) },
+//     },
+//   });
+//   const objsToCreate = seedObjects.filter(
+//     seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
+//   );
+
+//   objsToCreate.map(obj => {
+//     console.log(" + Page: " + obj.slug)
+//   })
+
+//   await db.Page.createMany({
+//     data: objsToCreate.map(obj => ({ ...obj })),
+//   });
+// };
 
 // const seedProductImages = async (context: Context) => {
 //   const { db } = context.sudo();
@@ -330,11 +330,9 @@ const seedPages = async (context: Context) => {
 //     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
 //   );
 
-
 //   await db.ProductImage.createMany({
 //     data: objsToCreate.map(obj => {
 //       // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-
 
 //       return ({
 //         ...obj,
@@ -351,21 +349,21 @@ const seedPages = async (context: Context) => {
 // };
 
 export const seedDatabase = async (context: Context) => {
-  console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
-  await seedUsers(context)
-  await seedRoles(context)
-  await seedCategories(context)
-  await seedTags(context)
-  // // await seedAvail(context)
-  await seedPosts(context)
-  await seedLocations(context)
-  
-  await seedServices(context)
-  // // await seedProductImages(context)
-  await seedProducts(context)
-  await seedSubscriptions(context)
-  await seedEventData(context)
-  await seedAddons(context)
-  await seedPages(context)
-  console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
-};
+	console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`)
+	await seedUsers(context)
+	await seedRoles(context)
+	// await seedCategories(context)
+	// await seedTags(context)
+	// // // await seedAvail(context)
+	// await seedPosts(context)
+	// await seedLocations(context)
+
+	// await seedServices(context)
+	// // // await seedProductImages(context)
+	// await seedProducts(context)
+	// await seedSubscriptions(context)
+	// await seedEventData(context)
+	// await seedAddons(context)
+	// await seedPages(context)
+	console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`)
+}

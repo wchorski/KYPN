@@ -1,302 +1,90 @@
+import ErrorMessage from "@components/ErrorMessage"
+import { Table } from "@components/elements/Table"
+import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
-import Link from "next/link"
-import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop, } from "react-icons/md"
-import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
-import AccountDash from "@components/menus/AccountDash"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { keystoneContext } from "@ks/context"
-import { Order, Rental, User } from "@ks/types"
-import { LoginToView } from "@components/menus/LoginToView"
-import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
-import styles from '@styles/menus/dashboard.module.scss'
-import { Metadata } from "next"
 import { envs } from "@/envs"
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { BsSignpost } from "react-icons/bs"
+import { fetchUsers } from "@lib/fetchdata/fetchUsers"
+import { getServerSession } from "next-auth"
+import type { Session } from "next-auth"
+import { nextAuthOptions } from "@/session"
+import { Metadata } from "next"
+import Link from "next/link"
+import NotAuthorized403 from "../not-authorized"
+import NoDataFoundError404 from "../not-found"
 
 export const metadata: Metadata = {
-  title: 'Account | ' + envs.SITE_TITLE,
-  description: 'dashboard for orders, subscriptions, bookings, tickets, downloads',
+	title: "Users | " + envs.SITE_TITLE,
+	description: envs.SITE_DESC,
 }
 
 type Props = {
-  searchParams:{
-    dashState:'main'|'orders'|'rentals'|'subscriptions'|'downloads'|'tickets'|'gigs'|'gig_requests',
-  }
-  params:{id:string}
+	params: {
+		id: string | string[] | undefined
+	}
+	searchParams: { [key: string]: string | string[] | undefined }
 }
 
-const now  = new Date().toISOString()
+const page = 1
+const perPage = envs.PERPAGE
 
-export default async function AccountPage ({ params, searchParams }:Props) {
+export default async function UsersPage({ params, searchParams }: Props) {
+	const session = await getServerSession(nextAuthOptions)
+	const { users, error } = await fetchUsers(page, perPage, session)
+	if (error) return <ErrorMessage error={error} />
+	if (!users) return <p> no users found </p>
 
-  const { dashState = 'main' } = searchParams
-  // todo next-auth is find i guess
-  // @ts-ignore
-  const session = await getServerSession(nextAuthOptions)
-  if(!session) return <LoginToView />
+	const cells = users.map((user: any) => ({
+		name: user.name,
+		email: user.email,
+		role: user.role?.name,
+		account: user.id,
+	}))
 
-  const user = await keystoneContext.withSession(session).query.User.findOne({
-    // TODO have pagination in mind (or maybe by date filtering?), split this into diff queries
-    where: {
-      id: session.itemId,
-    },
-    query: USER_DASH_QUERY,
-  }) as User
-
-  const orders = await keystoneContext.withSession(session).query.Order.findMany({
-    where: {
-      user: {
-        id: { equals: session.itemId },
-      }
-    },
-    orderBy: [
-      {
-        dateCreated: "desc"
-      }
-    ],
-    query: `
-      id
-      total
-      dateCreated
-      status
-      items{
-        quantity
-      }
-    `,
-  }) as Order[]
-
-  const rentals = await keystoneContext.withSession(session).query.Rental.findMany({
-    where: {
-      customer: {
-        id: { equals: session.itemId },
-      }
-    },
-    orderBy: [
-      {
-        start: "desc"
-      }
-    ],
-    query: `
-      id
-      start
-      end
-      durationInHours
-      location
-      delivery
-      status
-    `,
-  }) as Rental[]
-
-
-
-  const employeeGigData = await keystoneContext.withSession(session).graphql.run({
-    variables: {
-      where: {
-        id: session.itemId
-      },
-      gigsWhere: {
-        end: {
-          gt: now
-        }
-      },
-      gigRequestsWhere: {
-        end: {
-          gt: now
-        }
-      },
-      orderBy: [
-        {
-          start: "desc"
-        }
-      ],
-    },
-    query: `
-      query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
-        user(where: $where){
-          id
-          gig_requests(where: $gigRequestsWhere) {
-            id
-            start
-            end
-            summary
-            status
-            service {
-              name
-            }
-          }
-          gigs(where: $gigsWhere) {
-            id
-            start
-            end
-            summary
-            status
-            service {
-              name
-            }
-          }
-        }
-      }
-    `
-  }) as {user:User}
-  const {gig_requests, gigs} = employeeGigData.user
-
-  const {tickets, error } = await fetchTicketsByUser(user?.id)
-  
-  return <main>
-    <header >
-      <Section layout={'1'}>
-        <h1 style={{display: 'none'}}> Account </h1>
-
-        {!session.data.role && (
-          <VerifyEmailCard email={user.email} />
-        )}
-        
-      </Section>
-    </header>
-
-    <Section layout={'1_4'}>
-  
-
-        {/* <h2>{session?.user?.name}</h2> */}
-
-        <nav className={styles.dashnav} >
-          <ul>
-            <li>
-              <Link 
-                href={'/account?dashState=main#main'}
-                className={dashState === 'main' ? styles.linkactive : styles.dashlink}
-              >
-                Dashboard <MdOutlineAccountBox />
-              </Link>
-            </li>
-            {(gigs.length > 0) && (
-              <li>
-                <Link 
-                  href={'/account?dashState=gigs#gigs'}
-                  className={dashState === 'gigs' ? styles.linkactive : styles.dashlink}
-                >
-                  Gigs <HiCalendar />
-                </Link>
-              </li>
-            )}
-            {(gig_requests.length > 0) && (
-              <li>
-                <Link 
-                  href={'/account?dashState=gig_requests#gig_requests'}
-                  className={dashState === 'gig_requests' ? styles.linkactive : styles.dashlink}
-                >
-                  Gig Requests <HiOutlineCalendar />
-                </Link>
-              </li>
-            )}
-            {orders.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=orders#orders'}
-                  className={dashState === 'orders' ? styles.linkactive : styles.dashlink}
-                >
-                  Orders <MdShop />
-                </Link>
-              </li>
-
-            )}
-            {rentals.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=rentals#rentals'}
-                  className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}
-                >
-                  Rentals <BsSignpost />
-                </Link>
-              </li>
-            )}
-            {user.subscriptions.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=subscriptions#subscriptions'}
-                  className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
-                >
-                  Subscriptions <MdAutorenew />
-                </Link>
-              </li>
-            )}
-            {/* //todo when downloads are added */}
-            {false && (
-              <li>
-                <Link 
-                  href={'/account?dashState=downloads#downloads'}
-                  className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}
-                >
-                  Downloads <MdOutlineDownload />
-                </Link>
-              </li>
-            )}
-            {tickets && tickets?.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=tickets#tickets'}
-                  className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}
-                >
-                  Tickets <HiOutlineTicket />
-                </Link>
-              </li>
-            )}
-          </ul>
-        </nav>
-
-    
-      <AccountDash 
-        dashState={dashState} 
-        user={user} 
-        orders={orders}
-        rentals={rentals}
-        tickets={tickets} 
-        employeeGigs={{gigs, gig_requests}}
-      />
-    </Section>
-  </main>
+	return <PageTHeaderMain header={Header({ session })} main={Main({ cells })} />
 }
 
-const USER_DASH_QUERY = `
-  id
-  name
-  email
-  phone
-  bookings {
-    id
-    price
-    start
-    service {
-      name
-    }
-    status
-  }
-  subscriptions{
-    id
-    subscriptionPlan {
-      id
-      name
-    }
-    status
-    dateModified
-    dateCreated
-  }
+function Header({ session }: { session: Session | null }) {
+	return (
+		<>
+			<Section layout={"1"}>
+				<h1> My Account </h1>
+				<h6>Session:</h6>
+				<pre>{JSON.stringify(session, null, 2)}</pre>
+				<p>
+					{" "}
+					If you have permission to <strong>Manage Users</strong> you will see
+					all users{" "}
+				</p>
+				<p>
+					{" "}
+					If you do not have permission, you will only see the current logged in
+					user
+				</p>
+				<p>
+					{" "}
+					If you are not logged in then you will see <strong>no data</strong>
+				</p>
+			</Section>
+		</>
+	)
+}
 
-  tickets {
-    id
-    orderCount
-    status
-    event {
-      id
-      start
-      summary
-      location {
-        id
-        name
-      }
-    }
-  }
+type Main = {
+	cells: any
+}
 
-`
+function Main({ cells }: Main) {
+	return (
+		<>
+			<Section layout={"1"}>
+				<h2>Users</h2>
+				<Table
+					caption=""
+					route="/users"
+					headers={["name", "email", "role", "account"]}
+					cells={cells}
+				/>
+			</Section>
+		</>
+	)
+}

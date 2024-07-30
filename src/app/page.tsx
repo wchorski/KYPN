@@ -1,25 +1,12 @@
-import { envs } from '@/envs'
-import { PageTMain } from '@components/layouts/PageTemplates'
-import { Metadata } from 'next'
- 
-export const metadata: Metadata = {
-  title: envs.SITE_TITLE,
-  description: envs.SITE_DESC,
-}
+import { envs } from "@/envs"
+import Link from "next/link"
+import React from "react"
 
-export default function Home() {
-  return (
-
-    <PageTMain 
-      main={Main()}
-    />
-
-  )
-}
-
-function Main(){
-
-  return <>
-    <p> should redirect to /home route </p>
-  </>
+export default async function HomePage() {
+	return (
+		<section>
+			<h1>{envs.SITE_TITLE}</h1>
+			<Link href={`/home`}> Users </Link>
+		</section>
+	)
 }

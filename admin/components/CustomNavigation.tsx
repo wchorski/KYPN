@@ -1,71 +1,66 @@
-import { envs } from '../../envs';
-import { NavigationContainer, NavItem, ListNavItems } from '@keystone-6/core/admin-ui/components';
-import type { NavigationProps } from '@keystone-6/core/admin-ui/components';
-import { useSession } from 'next-auth/react';
+import { envs } from "../../envs"
+import {
+	NavigationContainer,
+	NavItem,
+	ListNavItems,
+} from "@keystone-6/core/admin-ui/components"
+import type { NavigationProps } from "@keystone-6/core/admin-ui/components"
+import { useSession } from "next-auth/react"
 
-export function CustomNavigation({ authenticatedItem, lists }: NavigationProps) {
+export function CustomNavigation({
+	authenticatedItem,
+	lists,
+}: NavigationProps) {
+	const { data: session, status } = useSession()
 
-  const {data: session, status} = useSession()
+	return (
+		<NavigationContainer authenticatedItem={authenticatedItem}>
+			{session?.user && (
+				<>
+					<p style={{ paddingInline: "1rem" }}> logged in as </p>
+					<ul
+						style={{
+							paddingInline: "1rem",
+							display: "flex",
+							gap: "1rem",
+							flexDirection: "column",
+						}}
+					>
+						<li>
+							<strong>{session.user.name}</strong>
+						</li>
+						<li>{session.user.email}</li>
+						<li>
+							<a
+								href={envs.FRONTEND_URL + `/api/auth/signout`}
+								className="button"
+							>
+								{" "}
+								Sign Out{" "}
+							</a>
+						</li>
+					</ul>
+				</>
+			)}
 
-  return (
-      <NavigationContainer authenticatedItem={authenticatedItem}>
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<NavItem href="/">Dashboard</NavItem>
+			<NavItem href="/users">Users</NavItem>
+			<NavItem href="/roles">Roles</NavItem>
 
-        <p style={{paddingInline: '1rem'}}> logged in as </p>
-        <ul style={{paddingInline: '1rem', display: 'flex', gap: '1rem', flexDirection: 'column'}}>
-          <li><strong>{session?.user.name}</strong></li>
-          <li>{session?.user.email}</li>
-          <li>
-            <a href={envs.FRONTEND_URL + `/api/auth/signout`} className='button'> Sign Out </a>
-          </li>
-        </ul>
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<NavItem href="/pages"> Pages </NavItem>
+			<NavItem href="/posts"> Posts </NavItem>
 
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/">Dashboard</NavItem>
-        <NavItem href="/users">Users</NavItem>
-        <NavItem href="/roles">Roles</NavItem>
-        <NavItem href="/availabilities"> Availabilities</NavItem>
+			<hr style={{ border: "solid 1px #9999991f" }} />
 
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/services"> Services </NavItem>
-        <NavItem href="/bookings"> Bookings </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/subscription-plans"> Subscription Plans </NavItem>
-        <NavItem href="/subscription-items"> Subscription Items </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/events"> Events </NavItem>
-        <NavItem href="/tickets"> Tickets </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/locations"> Locations </NavItem>
-        <NavItem href="/addons"> Addons </NavItem>
-        <NavItem href="/coupons"> Coupons </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/products"> Products </NavItem>
-        <NavItem href="/rentals"> Rentals </NavItem>
-        <NavItem href="/orders"> Orders </NavItem>
-        <NavItem href="/cart-items"> Cart Items </NavItem>
-        <NavItem href="/order-items"> Order Items </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-        <NavItem href="/pages"> Pages </NavItem>
-        <NavItem href="/posts"> Posts </NavItem>
-        <NavItem href="/announcements"> Announcements </NavItem>
-        <NavItem href="/categories"> Categories </NavItem>
-        <NavItem href="/tags"> Tags </NavItem>
-
-        <hr style={{border: 'solid 1px #9999991f'}} />
-
-
-        {/* <NavItem href="https://keystonejs.com/">
+			{/* <NavItem href="https://keystonejs.com/">
           Keystone Docs
         </NavItem> */}
-        {/* //? auto gen from schema list */}
-        {/* <ListNavItems lists={lists}/> */}
-        {/* //? only allow certain list types */}
-        {/* <ListNavItems lists={lists} include={["User"]}/> */}
-      </NavigationContainer>
-  )
+			{/* //? auto gen from schema list */}
+			{/* <ListNavItems lists={lists}/> */}
+			{/* //? only allow certain list types */}
+			{/* <ListNavItems lists={lists} include={["User"]}/> */}
+		</NavigationContainer>
+	)
 }
