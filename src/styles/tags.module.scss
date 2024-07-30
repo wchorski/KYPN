@@ -1,0 +1,32 @@
+ul.tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-bottom: 1em;
+  padding-inline: 0;
+  list-style: none;
+
+  > li > a{
+    background-color: var(--c-dark);
+    color: var(--c-txt-light);
+    text-decoration: none;
+    border: solid 1px transparent;
+
+    border-radius: var(--br-soft);
+    padding: 0 .4rem;
+    font-size: .7rem;
+    transition: all .3s;
+
+    &:hover{
+      background-color: transparent;
+      color: var(--c-primary);
+      border: solid 1px var(--c-primary);
+    }
+
+    &::before {
+      content: '#';
+      color: grey;
+      margin-right: 1px;
+    }
+  }
+}

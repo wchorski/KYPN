@@ -13,7 +13,7 @@ import NotAuthorized403 from "../not-authorized"
 import NoDataFoundError404 from "../not-found"
 
 export const metadata: Metadata = {
-	title: "Users | " + envs.SITE_TITLE,
+	title: "Account | " + envs.SITE_TITLE,
 	description: envs.SITE_DESC,
 }
 

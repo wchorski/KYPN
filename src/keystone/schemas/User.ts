@@ -19,18 +19,13 @@ import { permissions, rules } from "../access"
 export const User: Lists.User = list({
 	access: {
 		filter: {
-			// todo will this cause privacy problems with clients?
-			// query: () => true,
 			query: rules.canManageUsers,
 			update: rules.canManageUsers,
 			// delete: () => false,
 		},
 		operation: {
-			// todo might switch back idk
-			// query: permissions.isLoggedIn,
 			query: () => true,
 			create: permissions.canManageUsers,
-			// todo NEED TO FIX THIS
 			update: permissions.canManageUsers,
 			delete: permissions.canManageUsers,
 		},
