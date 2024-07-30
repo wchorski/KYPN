@@ -37,15 +37,17 @@ model User {
 }
 
 model Role {
-  id               String  @id @default(cuid())
-  name             String  @unique @default("")
-  label            String  @unique @default("")
-  canSeeOtherUsers Boolean @default(false)
-  canManageUsers   Boolean @default(false)
-  canManageRoles   Boolean @default(false)
-  canManagePages   Boolean @default(false)
-  canManagePosts   Boolean @default(false)
-  assignedTo       User[]  @relation("User_role")
+  id                  String  @id @default(cuid())
+  name                String  @unique @default("")
+  label               String  @unique @default("")
+  canSeeOtherUsers    Boolean @default(false)
+  canManageUsers      Boolean @default(false)
+  canManageRoles      Boolean @default(false)
+  canManagePages      Boolean @default(false)
+  canManagePosts      Boolean @default(false)
+  canManageCategories Boolean @default(false)
+  canManageTags       Boolean @default(false)
+  assignedTo          User[]  @relation("User_role")
 }
 
 model Post {

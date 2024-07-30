@@ -24,6 +24,26 @@ const baseHostName = hostName.split(".").slice(-2).join(".")
 
 let _keystoneContext: Context = (globalThis as any)._keystoneContext
 
+//todo why can't i set this one query here so i don't have to change in 2 places here
+const userQuery = `
+    id
+    stripeCustomerId
+    name
+    email
+    password
+    authId
+    role {
+      id
+      name
+      canManageUsers
+      canSeeOtherUsers
+      canManageRoles
+      canManagePages
+      canManagePosts
+      canManageCategories
+      canManageTags
+    }
+  `
 async function getKeystoneContext() {
 	if (_keystoneContext) return _keystoneContext
 
@@ -93,33 +113,18 @@ export const nextAuthOptions: NextAuthOptions = {
 			session: DefaultSession // required by next-auth, not by us
 			token: DefaultJWT
 		}) {
+      
 			const sudoContext = (await getKeystoneContext()).sudo()
-			// check if the user exists in keystone
+
 			const foundUser = await sudoContext.query.User.findOne({
 				where: { email: session.user?.email },
-				query: `
-	          id
-	          stripeCustomerId
-	          name
-	          email
-	          password
-	          authId
-	          role {
-	            id
-	            name
-	            canManageUsers
-	            canSeeOtherUsers
-	            canManageRoles
-	            canManagePages
-	            canManagePosts
-	          }
-	        `,
+				query: userQuery,
 			})
 			// unauthorized
 			if (!foundUser)
 				console.log(
 					`!!! session attempt failed: ${JSON.stringify(session, null, 2)}`
-				)
+				)   
 
 			return {
 				...session,
@@ -137,62 +142,6 @@ export const nextAuthOptions: NextAuthOptions = {
 			return Promise.resolve(baseUrl)
 		},
 	},
-
-	// 	async session({
-	// 		session,
-	// 		token,
-	// 	}: {
-	// 		session: DefaultSession // required by next-auth, not by us
-	// 		token: DefaultJWT
-	// 	}) {
-	// 		const sudoContext = (await getKeystoneContext()).sudo()
-	// 		// check if the user exists in keystone
-	// 		const foundUser = await sudoContext.query.User.findOne({
-	// 			where: { email: session.user?.email },
-	// 			query: `
-	//           id
-	//           stripeCustomerId
-	//           name
-	//           email
-	//           password
-	//           authId
-	//           role {
-	//             id
-	//             name
-	//             canManageUsers
-	//             canSeeOtherUsers
-	//             canManageRoles
-	//             canManagePages
-	//             canManagePosts
-	//           }
-	//         `,
-	// 		})
-
-	// // unauthorized
-	// if (!foundUser) {
-	// 	console.log("no foundUser found in db")
-	// 	return null
-	// }
-
-	// const sessionObj = {
-	// 	...session,
-	// 	authId: token.sub,
-	// 	id: foundUser?.id,
-	// 	stripeCustomerId: foundUser?.stripeCustomerId,
-	// 	itemId: foundUser?.id,
-	// 	data: {
-	// 		role: foundUser?.role,
-	// 	},
-	// }
-
-	// 		return sessionObj
-	// 	},
-
-	// redirect: async ({ url, baseUrl }: { url: string; baseUrl: string }) => {
-	// 	if (new URL(url).hostname === hostName) return Promise.resolve(url)
-	// 	return Promise.resolve(baseUrl)
-	// },
-	// },
 
 	cookies: {
 		sessionToken: {
@@ -230,39 +179,34 @@ export const nextAuthOptions: NextAuthOptions = {
 				},
 			},
 			authorize: async (credentials: any, req: any) => {
-				// console.log({credentials});
-
+        console.log('### CredentialProvider authorize')
+        
 				if (!credentials?.email && !credentials?.password && !credentials)
-					console.log("insufficent credentials")
-
+					console.log("!!! insufficent credentials")
+        
+        console.log('login email: ', credentials.email);
+        console.log('userQuery: ', userQuery);
+        
 				const sudoContext = (await getKeystoneContext()).sudo()
 				// check if the user exists in keystone
 				const foundUser = await sudoContext.query.User.findOne({
 					where: { email: credentials?.email },
-					query: `
-            id
-            stripeCustomerId
-            name
-            email
-            password
-            authId
-            role {
-              id
-              name
-              canManageUsers
-              canSeeOtherUsers
-              canManageRoles
-              canManagePages
-              canManagePosts
-            }
-          `,
+					query: userQuery,
 				})
+        //? for debuging only
+        // .then(data => {
+        //   console.log('### query.User.findOne: );
+        //   console.log({data})
+        // }).catch(error => {
+        //   console.log({error})
+        // })
 
 				// unauthorized
 				if (!foundUser) {
 					console.log("!!! Credentials: no foundUser found in db")
 					return null
 				}
+        
 
 				if (!foundUser.password) {
 					console.log("!!! no password set for User")

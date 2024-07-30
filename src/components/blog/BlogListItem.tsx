@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link';
-import { datePretty } from '@lib/dateFormatter';
+import { datePrettyLocal } from '@lib/dateFormatter';
 import { FiCalendar } from 'react-icons/fi';
 import { CgProfile } from 'react-icons/cg';
 import { ImageDynamic } from '../elements/ImageDynamic';
@@ -67,7 +67,7 @@ export const BlogListItem = ({ id, slug, title, excerpt, featured_image, feature
               )}
               <time dateTime={dateModified} title='Publication update date'> 
                 <FiCalendar />
-                {datePretty(dateModified)}
+                {datePrettyLocal(dateModified, 'day')}
               </time>
               
           </div>

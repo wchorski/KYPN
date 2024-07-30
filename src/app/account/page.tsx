@@ -48,8 +48,10 @@ function Header({ session }: { session: Session | null }) {
 		<>
 			<Section layout={"1"}>
 				<h1> My Account </h1>
-				<h6>Session:</h6>
-				<pre>{JSON.stringify(session, null, 2)}</pre>
+				<pre>
+				  <h6>Session:</h6>
+          {JSON.stringify(session, null, 2)}
+        </pre>
 				<p>
 					{" "}
 					If you have permission to <strong>Manage Users</strong> you will see

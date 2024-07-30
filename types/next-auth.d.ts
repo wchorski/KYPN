@@ -17,14 +17,18 @@ declare module "next-auth" {
 		}
 		itemId: string
 		authId: string
-		role: {
-			id: string
-			name: string
-			canSeeOtherUsers: boolean
-			canManagePosts: boolean
-			canManageUsers: boolean
-			canManageRoles: boolean
-			canManagePages: boolean
-		}
+    data: {
+      role: {
+        id: string
+        name: string
+        canSeeOtherUsers: boolean
+        canManagePosts: boolean
+        canManageUsers: boolean
+        canManageRoles: boolean
+        canManagePages: boolean
+        canManageCategories: boolean
+        canManageTags: boolean
+      }
+    }
 	}
 }

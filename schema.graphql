@@ -241,6 +241,8 @@ type Role {
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -263,6 +265,8 @@ input RoleWhereInput {
   canManageRoles: BooleanFilter
   canManagePages: BooleanFilter
   canManagePosts: BooleanFilter
+  canManageCategories: BooleanFilter
+  canManageTags: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -281,6 +285,8 @@ input RoleOrderByInput {
   canManageRoles: OrderDirection
   canManagePages: OrderDirection
   canManagePosts: OrderDirection
+  canManageCategories: OrderDirection
+  canManageTags: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -291,6 +297,8 @@ input RoleUpdateInput {
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -314,6 +322,8 @@ input RoleCreateInput {
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 
