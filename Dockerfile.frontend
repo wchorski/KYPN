@@ -1,0 +1,31 @@
+FROM --platform=linux/amd64 node:20-alpine as builder
+# FROM node:18-alpine
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+COPY . .
+RUN yarn install --frozen-lockfile
+# For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended
+RUN yarn add sharp
+RUN yarn generate
+RUN yarn build
+RUN yarn next telemetry disable
+# RUN find ./
+
+FROM --platform=linux/amd64 node:20-alpine as runner
+WORKDIR /app
+
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/yarn.lock .
+COPY --from=builder /app/.env .
+
+COPY --from=builder /app/.keystone ./.keystone
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+
+EXPOSE 3000
+ENV NODE_ENV production
+
+CMD ["yarn", "start"]

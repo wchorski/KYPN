@@ -5,6 +5,7 @@ export default {
 	},
 	eslint: {
 		ignoreDuringBuilds: true,
+    dirs: ['app', 'pages'],
 	},
 	typescript: {
 		ignoreBuildErrors: true,
