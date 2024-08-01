@@ -24,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "fp-ts": "^2.16.9",
+    "jsonwebtoken": "^9.0.2",
     "next": "14.2.5",
     "next-auth": "^4.23.2",
     "nodemailer": "^6.9.14",
@@ -34,10 +35,14 @@
     "sass": "^1.77.8"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "typescript": "^5.5.0"
+  },
+  "resolutions": {
+    "next": "^14.0.0"
   }
 }

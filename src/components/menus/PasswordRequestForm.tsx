@@ -58,7 +58,14 @@ export function PasswordRequestForm() {
 					},
 				}),
 			})
-
+      const data = await res.json()
+      
+      if(data.error) return {
+        ...formState,
+        status: 'error',
+        message: data.error.message
+      }
+      
 			return {
 				...formState,
 				status: "success",
@@ -66,7 +73,7 @@ export function PasswordRequestForm() {
 					"Request sent. \n\n If an account with the submitted email is found, an email will be sent out with instructions to reset account password",
 			}
 		} catch (error: any) {
-			console.log("!!! password Request Form ERROR: ", error.message)
+			console.warn("!!! password Request Form ERROR: ", error.message)
 			return {
 				status: "error",
 				message: error?.message,
@@ -98,11 +105,12 @@ export function PasswordRequestForm() {
 						/>
 					</label>
 
-					{formState.status === "success" ? (
+					{(formState.status === "success" || formState.status === 'error') ? (
 						<p className={formState.status}>{formState.message}</p>
 					) : (
 						<SubmitButton />
 					)}
+
 				</fieldset>
 			</form>
 		</>

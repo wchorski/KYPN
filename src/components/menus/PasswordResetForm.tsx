@@ -84,7 +84,8 @@ export function PasswordResetForm({ token, email }: Props) {
 						passwordConfirm: "",
 					},
 				}
-
+      console.log('## pass match but...');
+      
 			const res = await fetch(`/api/gql/noauth`, {
 				method: "POST",
 				headers: {
@@ -105,8 +106,11 @@ export function PasswordResetForm({ token, email }: Props) {
 					},
 				}),
 			})
+      console.log('## pass rset form 1');
 
 			const data = await res.json()
+      console.log('## pass rset form 2');
+      
 			console.log(data)
 
 			const { error } = data

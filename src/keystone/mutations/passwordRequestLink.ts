@@ -5,7 +5,6 @@ import { Context } from '.keystone/types';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { User } from '../types';
 import { mailPasswordRequest } from '../../lib/mail';
-// @ts-ignore
 import jwt from 'jsonwebtoken'
 import { envs } from '../../../envs';
 

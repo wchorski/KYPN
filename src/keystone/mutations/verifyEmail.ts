@@ -4,7 +4,7 @@ import { Context } from '.keystone/types';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
 import { mailBooking } from '../../lib/mail';
 import { envs } from '../../../envs';
-// @ts-ignore
+
 import jwt from 'jsonwebtoken'
 import { datePrettyLocal } from '../../lib/dateFormatter';
 

@@ -7,6 +7,7 @@ import { envs } from "../../envs"
 import PasswordResetEmail from "../emails/passwordReset"
 import PasswordResetConfirmEmail from "../emails/passwordResetConfirm"
 import UserVerifyEmail from "../emails/userVerify"
+import BookingEmail from "../emails/bookings"
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT
@@ -187,4 +188,38 @@ export async function mailPasswordResetConfirm({
 	if (MAIL_USER?.includes("ethereal.email") && info) {
 		console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`)
 	}
+}
+
+type MailBooking= {
+  to: string[], 
+  operation:'create'|'update'|'delete',
+  booking:Booking, 
+  employeeNames:string[]
+}
+
+
+// const bookingHtml = render(<BookingEmail />)
+
+export async function mailBooking({
+  to, 
+  operation,
+  booking, 
+  employeeNames,
+}:MailBooking
+): Promise<void> {
+
+  const bookingHtml = render(BookingEmail({booking, operation, employeeNames}))
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: `Booking: ${operation} ${booking.status}`,
+    html: bookingHtml,
+
+  }).catch(err => console.log('!!! mailBooking ERROR: ', err) ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
 }

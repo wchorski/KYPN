@@ -1,6 +1,6 @@
 require("dotenv").config()
 import { config } from "@keystone-6/core"
-import { lists } from "./src/keystone/schema"
+import { extendGraphqlSchema, lists } from "./src/keystone/schema"
 import type { Context } from ".keystone/types"
 import { seedDatabase } from "./src/keystone/seed/seedDatabase"
 import { nextAuthSessionStrategy } from "./session"
@@ -46,6 +46,9 @@ export default config({
 		cors: { origin: [FRONTEND_URL], credentials: true },
 	},
 	lists,
+  graphql:{
+    extendGraphqlSchema,
+  },
 	ui: {
 		// the following api routes are required for nextauth.js
 		publicPages: [

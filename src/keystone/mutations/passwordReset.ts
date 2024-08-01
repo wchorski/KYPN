@@ -1,12 +1,10 @@
 import { graphql } from '@keystone-6/core';
 import { Context } from '.keystone/types';
 import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { User } from '../types';
 import { mailPasswordRequest, mailPasswordResetConfirm } from '../../lib/mail';
-// @ts-ignore
-import bcrypt from 'bcryptjs';
-// @ts-ignore
+
 import jwt from 'jsonwebtoken'
+
 import { envs } from '../../../envs';
 
 const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'

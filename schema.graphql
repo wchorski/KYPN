@@ -749,6 +749,11 @@ type Mutation {
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
   endSession: Boolean!
+  registerAnAccount(name: String!, email: String!, password: String!, passwordConfirm: String!): User
+  passwordRequestLink(email: String!): User
+  passwordReset(password: String!, token: String!, email: String!): User
+  verifyEmailRequest(email: String!): User
+  verifyEmail(token: String!, email: String!): User
 }
 
 type Query {

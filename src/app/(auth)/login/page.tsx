@@ -30,7 +30,7 @@ type Props = {
 export default async function LoginPage({ searchParams }: Props) {
 	const { error, callbackUrl } = searchParams
 	// todo next-auth is aight idk
-	//@ts-ignore
+	
 	const session = await getServerSession(nextAuthOptions)
 
 	const providers = await getProviders()

@@ -16,50 +16,50 @@ export function CustomNavigation({
 	return (
 		<NavigationContainer authenticatedItem={authenticatedItem}>
 			{session?.user && (
-				<>
-					<p style={{ paddingInline: "1rem" }}> logged in as </p>
-					<ul
-						style={{
-							paddingInline: "1rem",
-							display: "flex",
-							gap: "1rem",
-							flexDirection: "column",
-						}}
-					>
-						<li>
-							<strong>{session.user.name}</strong>
-						</li>
-						<li>{session.user.email}</li>
-						<li>
-							<a
-								href={envs.FRONTEND_URL + `/api/auth/signout`}
-								className="button"
-							>
-								{" "}
-								Sign Out{" "}
-							</a>
-						</li>
-					</ul>
-				</>
+				<div
+					style={{
+						borderLeft: "solid 5px #3b82f6",
+						paddingInline: "1rem",
+						display: "flex",
+						gap: ".3rem",
+						flexDirection: "column",
+					}}
+				>
+					<small> logged in as </small>
+
+          <strong>{session.user.name}</strong>
+	
+					<span>{session.user.email}</span>
+
+					<small>
+						<a
+							href={envs.FRONTEND_URL + `/api/auth/signout`}
+							className="button"
+							style={{ color: "red" }}
+						>
+							{" "}
+							Sign Out{" "}
+						</a>
+					</small>
+
+				</div>
 			)}
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
 			<NavItem href="/">Dashboard</NavItem>
-      <ListNavItems lists={lists} include={['User', 'Role']}/>
-			{/* <NavItem href="/users">Users</NavItem>
-			<NavItem href="/roles">Roles</NavItem> */}
+			<ListNavItems lists={lists} include={["User", "Role"]} />
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-      <ListNavItems lists={lists} include={['Page', 'Post']}/>
+			<ListNavItems lists={lists} include={["Page", "Post"]} />
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-      <ListNavItems lists={lists} include={['Category', 'Tag']}/>
+			<ListNavItems lists={lists} include={["Category", "Tag"]} />
 
 			{/* //? from ks schema: single item*/}
 			{/* <ListNavItems lists={lists}/> */}
 			{/* //? from ks schema: multi items*/}
 			{/* <ListNavItems lists={lists} include={["User"]}/> */}
-      {/* //? external link */}
+			{/* //? external link */}
 			{/* <NavItem href="https://keystonejs.com/">
           Keystone Docs
         </NavItem> */}

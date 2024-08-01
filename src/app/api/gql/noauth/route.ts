@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 			}
 		)
 	} catch (error) {
-		console.log("/api/gql/noauth ERROR: ", error)
+		console.log("!!! /api/gql/noauth ERROR: ", error)
 		return NextResponse.json(
 			{
 				error,

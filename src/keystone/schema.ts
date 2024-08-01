@@ -17,6 +17,10 @@ import { Post } from "./schemas/Post"
 import { Page } from "./schemas/Page"
 import { Category } from "./schemas/Category"
 import { Tag } from "./schemas/Tag"
+import { passwordRequestLink } from "./mutations/passwordRequestLink"
+import { verifyEmailRequest } from "./mutations/verifyEmailRequest"
+import { verifyEmail } from "./mutations/verifyEmail"
+import { passwordReset } from "./mutations/passwordReset"
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -33,6 +37,10 @@ export const extendGraphqlSchema = graphql.extend((base) => {
 	return {
 		mutation: {
 			registerAnAccount: registerAnAccount(base),
+      passwordRequestLink: passwordRequestLink(base),
+      passwordReset: passwordReset(base),
+      verifyEmailRequest: verifyEmailRequest(base),
+      verifyEmail: verifyEmail(base),
 		},
 	}
 })
