@@ -16,7 +16,7 @@ type Props = {
 
 // @ts-ignore
 export async function SessionBadge({ label }: Props): ReactElement<any, any> {
-	const session = (await getServerSession(nextAuthOptions)) as Session
+	const session = (await getServerSession(nextAuthOptions))
 
 	if (!session) return <NavLink href="/login"> Login </NavLink>
 

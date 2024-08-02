@@ -7,10 +7,11 @@ README.md
 .keystone
 .next
 .react-email
-.git
+.git*
 .env.prod
 .env.dev
 .env.local
 db
 images
 private
+.DS_Store

@@ -54,7 +54,7 @@ function Main(children: ReactNode) {
 				{!children && (
 					<p>
 						{" "}
-						You're not authorized to view this page.{" "}
+						{`You're not authorized to view this page.`}{" "}
 						<Link href={`/login`}> Login</Link>{" "}
 					</p>
 				)}

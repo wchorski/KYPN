@@ -27,12 +27,15 @@ const DB_ENDPOINT =
 	"/" +
 	DB_COLLECTION +
 	"?connect_timeout=300"
+// console.log('🔌 DB_ENDPOINT: ', DB_ENDPOINT);
+
 
 export default config({
 	db: {
 		provider: "postgresql",
 		url: DB_ENDPOINT,
 		onConnect: async (context: Context) => {
+      // console.log(`💾✅ Database Connected`); 
 			// TODO why argv doesn't work?
 			if (process.env.SEED_ME === "true") {
 				// if (process.argv.includes('--seed-database')) {
@@ -40,6 +43,7 @@ export default config({
 				// await seedDemoData(context)
 			}
 		},
+
 	},
 	server: {
 		port: Number(process.env.BACKEND_PORT) || 3001,

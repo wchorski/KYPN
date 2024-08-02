@@ -14,7 +14,8 @@
     "postinstall": "keystone build --no-ui --frozen",
     "build": "yarn keystone build --no-ui && yarn next build",
     "start": "next start",
-    "lint": "next lint --no-cache"
+    "lint": "next lint --no-cache",
+    "disable_next_telemetry": "next telemetry disable"
   },
   "dependencies": {
     "@keystone-6/core": "^6.1.0",
@@ -40,7 +41,9 @@
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5"
   },
   "resolutions": {
     "next": "^14.0.0"

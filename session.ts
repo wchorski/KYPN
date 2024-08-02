@@ -179,13 +179,11 @@ export const nextAuthOptions: NextAuthOptions = {
 				},
 			},
 			authorize: async (credentials: any, req: any) => {
-        console.log('### CredentialProvider authorize')
         
 				if (!credentials?.email && !credentials?.password && !credentials)
 					console.log("!!! insufficent credentials")
-        
-        console.log('login email: ', credentials.email);
-        console.log('userQuery: ', userQuery);
+
+        //todo create a `login-count` variable on a user to track how many successful logins?
         
 				const sudoContext = (await getKeystoneContext()).sudo()
 				// check if the user exists in keystone

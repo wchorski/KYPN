@@ -1,3 +1,9 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": [
+    "src/keystone",
+    "src/components/blocks",
+    "src/components/elements/ImageDynamic.tsx",
+    "next.config.mjs"
+  ]
 }
