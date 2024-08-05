@@ -74,7 +74,7 @@ export default function PasswordRestConfirmEmail({
             </Text>
             <Text style={paragraph}>
               Still have questions? Please contact our support email {' '}
-              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
+              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}?subject=Help Reset Password`} style={link}>
                 {envs.ADMIN_EMAIL_ADDRESS}
               </Link>
             </Text>

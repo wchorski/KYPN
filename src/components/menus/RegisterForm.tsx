@@ -2,7 +2,6 @@
 import styles from "@styles/menus/form.module.scss"
 import { useFormState, useFormStatus } from "react-dom"
 import { useRef } from "react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { envs } from "@/envs"

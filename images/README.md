@@ -5,6 +5,7 @@ build images with the shell command `build.sh`.
 I build the images on a more powerful machine and move them over to my lighter webserver
 
 You can either create a a little `build.sh` or `export.sh` (in this `./images` directory) for yourself or pick apart the commands below
+
 ```bash
 #!/bin/bash
 source ../.env

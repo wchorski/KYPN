@@ -1,6 +1,5 @@
 ARG PRODUCTION_PLATFORM
 FROM --platform=$PRODUCTION_PLATFORM node:20-alpine AS base
-RUN echo '#### plz make me smaller ####'
 
 FROM base AS builder
 WORKDIR /app
@@ -10,7 +9,7 @@ COPY yarn.lock ./
 COPY . ./
 
 RUN yarn install --production --frozen-lockfile
-# RUN yarn generate
+RUN yarn generate
 RUN yarn ks:build
 RUN yarn next telemetry disable
 
@@ -25,12 +24,16 @@ COPY --from=builder /app/package.json ./package.json
 # COPY --from=builder /app/.env .
 
 COPY --from=builder /app/.keystone ./.keystone
-# COPY --from=builder /app/schema.prisma ./schema.prisma
+COPY --from=builder /app/schema.prisma ./schema.prisma
+COPY --from=builder /app/migrations ./migrations
 # COPY --from=builder /app/next.config.mjs ./
 ## todo try getting rid of `public` folder?
 # COPY --from=builder /app/public ./public
-## todo why is this image build to +5gb size?
+## todo do i need `node_modules`?
 COPY --from=builder /app/node_modules ./node_modules
+## todo maybe only copy over single modules like 
+# COPY --from=builder /app/node_modules/@keystone-core ./node_modules/@keystone-core
+# etc
 
 EXPOSE 3001
 ENV NODE_ENV production

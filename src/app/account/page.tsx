@@ -11,6 +11,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import NotAuthorized403 from "../not-authorized"
 import NoDataFoundError404 from "../not-found"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -52,6 +53,9 @@ function Header({ session }: { session: Session | null }) {
 				  <h6>Session:</h6>
           {JSON.stringify(session, null, 2)}
         </pre>
+        {session && !session.data.role && (
+          <VerifyEmailCard email={session.user.email} />
+        )}
 				<p>
 					{" "}
 					If you have permission to <strong>Manage Users</strong> you will see

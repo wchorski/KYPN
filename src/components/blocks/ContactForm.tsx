@@ -108,6 +108,8 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
       const { contact, error } = data
 
       if(error) throw new Error(error.message)
+      console.log({contact});
+      
 
       return {
         ...formState,
@@ -165,7 +167,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
           <input 
             name={'phone'}
             id={'phone'}
-            placeholder=""
+            placeholder="000-000-0000"
             type={'tel'}
             defaultValue={formState.fieldValues.phone}
             // readOnly={formState.fieldValues.phone}
@@ -175,7 +177,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
         </label>
 
         <label htmlFor="date">
-          <span> date </span>
+          <span> event date </span>
           <input 
             name={'date'}
             id={'date'}
@@ -189,7 +191,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
         </label>
 
         <label htmlFor="time">
-          <span> time </span>
+          <span> event start time </span>
           <input 
             name={'time'}
             id={'time'}
@@ -235,8 +237,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
       <p className={formState.status}> 
         {formState.message} 
       </p>
-
-      <SubmitButton />
+      {formState.status !== 'success' ? <SubmitButton /> : <></> }
     </form>
   )
 }
@@ -259,7 +260,6 @@ function SubmitButton(){
 const MUTATE_CONTACT = `
   mutation Contact($name: String!, $phone: String!, $start: String!, $notes: String!, $email: String!, $customerId: String) {
     contact(name: $name, phone: $phone, start: $start, notes: $notes, email: $email, customerId: $customerId) {
-      status
       id
     }
   }

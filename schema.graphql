@@ -754,6 +754,7 @@ type Mutation {
   passwordReset(password: String!, token: String!, email: String!): User
   verifyEmailRequest(email: String!): User
   verifyEmail(token: String!, email: String!): User
+  contact(name: String!, customerId: String, email: String!, phone: String!, start: String!, notes: String!): User
 }
 
 type Query {

@@ -8,6 +8,7 @@ import PasswordResetEmail from "../emails/passwordReset"
 import PasswordResetConfirmEmail from "../emails/passwordResetConfirm"
 import UserVerifyEmail from "../emails/userVerify"
 import BookingEmail from "../emails/bookings"
+import ContactEmail from "../emails/contact"
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT
@@ -215,6 +216,40 @@ export async function mailBooking({
     from: ADMIN_EMAIL_ADDRESS,
     subject: `Booking: ${operation} ${booking.status}`,
     html: bookingHtml,
+
+  }).catch(err => console.log('!!! mailBooking ERROR: ', err) ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
+}
+
+type MailContact= {
+  to: string[], 
+  contact: {
+    name?:string,
+    customerId?:string,
+    phone?:string,
+    start?:string,
+    notes?:string,
+    email:string,
+  }
+}
+
+export async function mailContact({
+  to, 
+  contact,
+}:MailContact
+): Promise<void> {
+
+  const html = render(ContactEmail({contact}))
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: `New Contact Info`,
+    html,
 
   }).catch(err => console.log('!!! mailBooking ERROR: ', err) ))
 

@@ -118,8 +118,33 @@ export const User: Lists.User = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-    posts: relationship({ ref: 'Post.author', many: true }),
-    pages: relationship({ ref: 'Page.author', many: true }),
+		posts: relationship({ ref: "Post.author", many: true }),
+		pages: relationship({ ref: "Page.author", many: true }),
 	},
-	hooks: {},
+	hooks: {
+		async beforeOperation({ operation, resolvedData }) {
+			if (operation === "update") {
+				resolvedData.dateModified = new Date().toISOString()
+			}
+		},
+		async afterOperation({ operation, context, item }) {
+			if (operation === "create") {
+				const data = (await context
+					.sudo()
+					.graphql.run({
+						query: `
+            mutation VerifyEmailRequest($email: String!) {
+              verifyEmailRequest(email: $email) {
+                id
+              }
+            }
+          `,
+						variables: {
+							email: item.email,
+						},
+					})
+					.catch((err) => console.log("!!! verify email failed"))) as object
+			}
+		},
+	},
 })

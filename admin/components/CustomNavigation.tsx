@@ -1,3 +1,4 @@
+import { LoadingAnim } from "./LoadingAnim"
 import { envs } from "../../envs"
 import {
 	NavigationContainer,
@@ -15,34 +16,37 @@ export function CustomNavigation({
 
 	return (
 		<NavigationContainer authenticatedItem={authenticatedItem}>
-			{session?.user && (
-				<div
-					style={{
-						borderLeft: "solid 5px #3b82f6",
-						paddingInline: "1rem",
-						display: "flex",
-						gap: ".3rem",
-						flexDirection: "column",
-					}}
-				>
-					<small> logged in as </small>
+			{status === "loading" ? (
+				<LoadingAnim />
+			) : (
+				session?.user && (
+					<div
+						style={{
+							borderLeft: "solid 5px #3b82f6",
+							paddingInline: "1rem",
+							display: "flex",
+							gap: ".3rem",
+							flexDirection: "column",
+						}}
+					>
+						<small> logged in as </small>
 
-          <strong>{session.user.name}</strong>
-	
-					<span>{session.user.email}</span>
+						<strong>{session.user.name}</strong>
 
-					<small>
-						<a
-							href={envs.FRONTEND_URL + `/api/auth/signout`}
-							className="button"
-							style={{ color: "red" }}
-						>
-							{" "}
-							Sign Out{" "}
-						</a>
-					</small>
+						<span>{session.user.email}</span>
 
-				</div>
+						<small>
+							<a
+								href={envs.FRONTEND_URL + `/api/auth/signout`}
+								className="button"
+								style={{ color: "red" }}
+							>
+								{" "}
+								Sign Out{" "}
+							</a>
+						</small>
+					</div>
+				)
 			)}
 
 			<hr style={{ border: "solid 1px #9999991f" }} />

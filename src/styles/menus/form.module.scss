@@ -35,7 +35,7 @@
   padding: 1rem;
   border-radius: var(--br-soft);
   box-shadow: var(--boxs-1);
-  background: var(--c-txt-bg);
+  background-color: var(--c-txt-bg-darker);
 
   label {
     display: grid;
@@ -82,19 +82,19 @@
     margin-bottom: 1em;
   }
 
-  input[type="text"],
+  input,
   textarea,
   select {
-    
+    background-color: var(--c-txt-bg);
     padding: 0.5rem;
     font-size: .7rem;
-    border: 1px solid black;
+    border: 1px solid var(--c-txt-bg);
     &:focus {
       outline: 0;
       border-color: var(--c-accent);
     }
 
-    border-radius: var(--br-sharp);
+    border-radius: var(--br-dull);
     // border: solid var(--c-primary) 1px;
   }
 

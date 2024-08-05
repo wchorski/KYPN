@@ -6,8 +6,9 @@
   "scripts": {
     "email": "email dev --dir src/emails -p 3002",
     "ks:dev": "keystone dev",
+    "migrate": "yarn keystone prisma migrate dev",
     "ks:build": "keystone build",
-    "ks:start": "keystone start",
+    "ks:start": "keystone start --with-migrations",
     "n:dev": "next dev -p 3000",
     "n:build": "next build",
     "generate": "keystone prisma generate",

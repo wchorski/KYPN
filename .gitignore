@@ -15,6 +15,7 @@ keystone.db
 /db/**
 !/db/compose.example.yml
 !/db/up.sh
+!/db/README.md
 compose.yml
 seed_data.ts
 

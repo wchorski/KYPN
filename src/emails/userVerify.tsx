@@ -77,7 +77,7 @@ export default function UserVerifyEmail({
             </Text>
             <Text style={paragraph}>
               Still have questions? Please contact our support email {' '}
-              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
+              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}?subject=Help Verify Account`} style={link}>
                 {envs.ADMIN_EMAIL_ADDRESS}
               </Link>
             </Text>

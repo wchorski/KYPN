@@ -7,8 +7,8 @@ article.article :global {
   header{
     /* background: var(--c-accent); */
     position: relative;
-    height: 50vh;
-    height: 50dvh;
+    min-height: 50vh;
+    min-height: 50dvh;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;

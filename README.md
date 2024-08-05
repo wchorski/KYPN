@@ -5,14 +5,17 @@
 A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
 
 ## Features
+
 <details>
-  <summary>view</summary>
+<summary>view</summary>
 
-  ### Analytics
-  Site analytics are set up to use an externally hosted [Umami](https://umami.is/) app. There are plans to add in admin dashboard analytics that insite user count, sales, and engagement data.
+### Analytics
 
-  ### Calendar
-  Events and Bookings can auto populate a connected Google Calendar. 
+Site analytics are set up to use an externally hosted [Umami](https://umami.is/) app. There are plans to add in admin dashboard analytics that insite user count, sales, and engagement data.
+
+### Calendar
+
+Events and Bookings can auto populate a connected Google Calendar.
 
 </details>
 
@@ -57,10 +60,10 @@ uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check Keyst
 
 set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 
-| Provider | setup url |
-|----------|-----------|
-| Github | https://github.com/settings/developers |
-| Google | https://console.cloud.google.com/apis/dashboard |
+| Provider | setup url                                       |
+|----------|-------------------------------------------------|
+| Github   | https://github.com/settings/developers          |
+| Google   | https://console.cloud.google.com/apis/dashboard |
 
 ## Email
 
@@ -69,16 +72,18 @@ Right now, I'm just using gmail's SMTP. Should be good for low traffic order con
 https://myaccount.google.com/security
 
 ## Production
+
 <details>
 <summary> config </summary>
+
 - Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments
 - **self hosting** isn't strait forward. Here is my work around 
   - create a seperate `docker container` that runs `postgres`
   - run your dev environment to create the tables and edit the schemas
-  - now you can `build` and `run` your app within a `docker container`
-</details>
+  - now you can `build` and `run` your app within a `docker container` </details>
 
 ## Development
+
 <details>
 <summary> config </summary>
 
@@ -87,9 +92,10 @@ https://myaccount.google.com/security
 > [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
 
 ## Rules & Permissions
+
 any changes to **access** **filters** **operations** or **permissions** will not take effect in the NextJs app until the server is reloaded. Luckily the **Keystone** app will hot reload with these changes
 
-> 2. next `n:dev`
+> 1. next `n:dev`
 
 ### Mail Templating
 
@@ -148,19 +154,12 @@ take out the `document` field
 ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
 
 ### Database Migrations
-When returning to development you may add new fields to the database schema. This will trigger a migration. Properly name and save the migration. This file will be written inside the `./migrations` folder
 
-When returning to the production environment, you will have to apply these new changes so **Postgres** is aware of these changes.
-
-> [!warning] For Now
-> To apply migrations I connect to my prod database within my dev environment and run `yarn ks:dev`. This is not ideal. Later I will add `keystone start --with-migrations` to the `Dockerfile.backend` so that this is all automated
+When initializing a fresh database or returning to development you may add/remove fields to the database schema. You must run `yarn migrate` to generate a new `/migrations/NAME/migration.sql` file. Name the migration as if it was a git commit. These files are needed when upgrading your production build.
 </details>
 
-## Gotchas
-
-- the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies
-
 ## TODO
+
 - [ ] built in calendar for admin dash
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
 - [x] transition as much Styled Components to CSS Modules
@@ -182,10 +181,10 @@ When returning to the production environment, you will have to apply these new c
   - [x] pages
   - [ ] bookings
   - [ ] bookings
-- Announcements
-  - create dynamic announcements that are private, members only, etc. 
 
- 
+- Announcements 
+  - create dynamic announcements that are private, members only, etc.
+
 ## Color pallet?
 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874

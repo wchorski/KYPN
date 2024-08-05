@@ -4,6 +4,7 @@ import { useState } from "react"
 import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
 import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 import { Callout } from "@components/blocks/Callout"
+import { Button } from "@components/elements/Button"
 
 
 type Props = {
@@ -78,13 +79,12 @@ export function VerifyEmailCard ({ email }:Props) {
       {state === 'success' ? (
         <p className="success"> Follow further instructions sent to {email} </p>
       ): (
-        <button 
-          className={''} 
+        <Button 
           disabled={state === 'pending'}
           onClick={onSubmit}
         > 
           Request a new link 
-        </button>
+        </Button>
       )}
       <br />
       <br />
