@@ -1,8 +1,7 @@
 import { ReactNode } from "react"
-import stylesSec from '@styles/elements/section.module.scss'
-import { Section } from "@components/layouts/Section"
+// import { Section } from "@components/layouts/Section"
 import { GridLayout } from "@ks/types"
-
+import { BlockLayout as BlkLayout } from "../../components/layouts/BlockLayout";
 type Props = {
   children: ReactNode[],
   layout:number[],
@@ -10,16 +9,13 @@ type Props = {
 
 export function BlockLayout({children, layout}:Props) {
 
-  // layout [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
-
-  // const stylesArr = [stylesSec.section, stylesSec[`grid_${layout.join('_')}`] ]
-  
+  // layout input looks like [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
   const layoutString = layout.join('_') as GridLayout
 
   return (
-    <Section layout={layoutString}>
+    <BlkLayout layout={layoutString}>
       {children}
-    </Section>
+    </BlkLayout>
   )
   // return (
 

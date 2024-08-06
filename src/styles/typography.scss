@@ -1,41 +1,99 @@
 // Fonts
+//? font-size, correctional spacing,
+//! all colors are done in `colors.scss` 
+
+html{
+  font-size: var(--font-size-base);
+}
+
 body {
   font-family: var(--font-paragraph), Tahoma, sans-serif;
 }
 
 h1,h2,h3,h4,h5,h6, thead{
   font-family: var(--font-header), Verdana, sans-serif;
+  word-break: break-word;
+}
+// h1{
+//   font-size: clamp(var(--font-size-base), var(--font-size-base) + 8.333vw, calc(var(--font-size-base) * (var(--font-size-multi) * 6)));
+//   font-weight: 900;
+// }
+// h2{
+//   font-size: clamp(var(--font-size-base), var(--font-size-base) + 8.333vw, calc(var(--font-size-base) * (var(--font-size-multi) * 5)));
+// }
+
+h1 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 6));
+  font-weight: 900;
+}
+h2 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 4.5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 5));
+  font-weight: 900;
+}
+h3 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 4), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 4));
+  font-weight: 900;
+  margin-top: var(--space-m);
+  margin-bottom: var(--space-ms);
+}
+h4 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 3.5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 3));
+  font-weight: 750;
+  margin-top: var(--space-m);
+  margin-bottom: var(--space-s);
+}
+h5 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 3), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 2));
+  font-weight: 600;
+  margin-top: var(--space-m);
+  margin-bottom: var(--space-xs);
+}
+h6 {
+  font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 1));
+  font-weight: 550;
+  margin-top: var(--space-ms);
+  margin-bottom: var(--space-xs);
 }
 
-h1,h2,h3,h4,h5,h6 {
-  margin-top: 1.33em;
-  margin-bottom: 0.4em;
-  max-width: 30ch;
-  text-wrap: balance;
+p, ul, ol {
+  margin-top: 0;
 }
 
-h1{
-  font-size: calc(var(--font-size-base) * 3);
-}
-h2{
-  font-size: calc(var(--font-size-base) * 2);
-}
-h3{
-  font-size: calc(var(--font-size-base) * 1.5);
-}
-h4{
-  font-size: calc(var(--font-size-base) * 1.3);
+li > ul {
+  margin-top: var(--space-s);
 }
 
 p {
   max-width: 40ch;
-  color: var(--c-txt);
+  // font-size: var(--font-size-base);
+  // font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
 
+p, ul, ol {
+  font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
+}
 
+ul{
+  list-style-image: url('/marker.svg');
+}
+
+ul, ol {
+  list-style-position: outside;
+  padding-left: var(--space-ml);
+  max-width: 35ch;
+  display: grid;
+  gap: var(--space-s);
+}
+
+a {
+  font-weight: bold;
+}
 strong {
   -webkit-text-stroke: var(--c-txt) 1px;
   font-weight: bolder;
+}
+em{
+  color: var(--c-txt-sub);
 }
 
 center {
@@ -43,26 +101,22 @@ center {
 }
 
 
-@media (width > 800px) {
-  h1{
-    font-size: calc(var(--font-size-base) * 4);
-  }
-  h2{
-    font-size: calc(var(--font-size-base) * 3);
-  }
-  h3{
-    font-size: calc(var(--font-size-base) * 2);
-  }
+// @media (width > 800px) {
+//   h1{
+//     font-size: calc(var(--font-size-base) * 4);
+//   }
+//   h2{
+//     font-size: calc(var(--font-size-base) * 3);
+//   }
+//   h3{
+//     font-size: calc(var(--font-size-base) * 2);
+//   }
 
-  p{
-    font-size: calc(var(--font-size-base) * 1.2);
-  }
-}
+//   p{
+//     font-size: calc(var(--font-size-base) * 1.2);
+//   }
+// }
 
 .tshadow_1 {
   text-shadow: #000000d9 2px 2px 6px;
-}
-
-ul{
-  list-style-image: url('/marker.svg');
 }
