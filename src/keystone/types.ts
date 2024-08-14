@@ -24,6 +24,8 @@ export type Session = {
 	expires: string
 }
 
+export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'
+
 export type GridLayout =
 	| "1"
 	| "1_1"

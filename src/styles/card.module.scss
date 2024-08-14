@@ -1,7 +1,8 @@
 .card{
   background-color: var(--c-txt-bg);
-  padding: 1rem;
-  margin-inline: 3px;
+  // padding: 1rem;
+  padding-block: var(--space-m);
+  // margin-inline: 3px;
   border-radius: var(--br-dull);
   // height: 100%;
   display: flex;

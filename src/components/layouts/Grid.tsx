@@ -27,7 +27,7 @@ export function Grid({
 }:Props
 ) {
   //                                  gotta put a '_' in front because css no like numbers as class names
-  const stylesArr = [styles.grid, styles[`_${layout}`], className ]
+  const classNms = [styles.grid, styles[`_${layout}`], className ]
   // todo trying global instead of module
   // const stylesArr = [styles.section, styles[`grid_${layout}`] ]
 
@@ -41,20 +41,31 @@ export function Grid({
   return (
     <div 
       id={id}
-      className={stylesArr.join(' ')}
+      className={classNms.join(' ')}
       style={inlineStyles}
     >
 
-      {Array.isArray(children) ? children?.map((child:any, i:number) => (
-        <div key={i}> 
-          {child} 
-        </div>
-      )) : (
-        <div>
-          {children}
-        </div>
-      ) }
+      {children}
     
     </div>
   )
+  // return (
+  //   <div 
+  //     id={id}
+  //     className={stylesArr.join(' ')}
+  //     style={inlineStyles}
+  //   >
+
+  //     {Array.isArray(children) ? children?.map((child:any, i:number) => (
+  //       <div key={i}> 
+  //         {child} 
+  //       </div>
+  //     )) : (
+  //       <div>
+  //         {children}
+  //       </div>
+  //     ) }
+    
+  //   </div>
+  // )
 }

@@ -7,7 +7,7 @@ type Props = {
 
 export function AsideBar ({ children }:Props) {
   return (
-    <aside className={styles.aside} >
+    <aside className={styles.aside} aria-label='Site Sidebar'>
       {children}
     </aside>
   )

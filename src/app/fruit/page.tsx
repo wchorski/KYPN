@@ -1,5 +1,7 @@
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { BlockLayout } from "@components/layouts/BlockLayout"
+import { Card } from "@components/layouts/Card"
+import { Grid } from "@components/layouts/Grid"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
@@ -9,146 +11,226 @@ type Props = {
 }
 
 export default async function FruitPage({ params, searchParams }: Props) {
-	return <PageTHeaderMain header={Header()} main={Main()} />
-}
-
-function Header() {
+	// return <PageTHeaderMain header={Header()} main={Content()} />
 	return (
 		<>
-			<BlockLayout layout={"1"}>
-				<div>
-					<p>
-						{" "}
-						This is an example page to view and test typography, custom
-						components, colors, etc.{" "}
-					</p>
-				</div>
-			</BlockLayout>
+			<main>
+				<header style={{ background: "hsl(0deg 0% 50.2% / 66%)" }}>
+					<BlockLayout layout={"1"}>
+						<h1> Header of Fruit Page for testing components and variables </h1>
+						<p>
+							{" "}
+							This is an example page to view and test typography, custom
+							components, colors, etc.{" "}
+						</p>
+					</BlockLayout>
+				</header>
+
+				<Content />
+			</main>
 		</>
 	)
 }
 
-function Main() {
+// function Header() {
+// 	return (
+// 		<>
+// 			<BlockLayout layout={"1"}>
+// 				<div>
+// 					<p>
+// 						{" "}
+// 						This is an example page to view and test typography, custom
+// 						components, colors, etc.{" "}
+// 					</p>
+// 				</div>
+// 			</BlockLayout>
+// 		</>
+// 	)
+// }
+
+function Content() {
 	return (
 		<>
-			<h2> Typography </h2>
-			<section style={{ paddingInline: "1rem" }}>
+			<h2> content not inside a section tag </h2>
+			<p>
+				this content is not inside a section tag Lorem ipsum dolor sit amet
+				consectetur adipisicing elit. Fuga provident maiores molestiae
+				repellendus, facilis quam doloremque pariatur porro molestias. Possimus
+				aut dolorem consectetur nisi distinctio exercitationem deserunt quasi
+				labore repellendus.
+			</p>
+			<section>
 				<BlockLayout layout={"1"}>
+					<h2> Typography </h2>
+
+					<h1> Headings 1 </h1>
+					<p>
+						Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus
+						tempore iste quam harum assumenda mollitia sunt. Odit eaque
+						molestias aperiam aliquid, animi, voluptatibus laborum porro, vitae
+						blanditiis consequatur facere non.
+					</p>
+					<Card>
+						<p>here is some content inside a card element</p>
+						<p>
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+							Voluptas, eligendi? Tenetur, natus, odit quidem vel similique sint
+							eius culpa earum dolore aspernatur iste pariatur quibusdam fugiat
+							maxime omnis officiis quam?
+						</p>
+					</Card>
+					<Card>
+						<h5> card w pop out</h5>
+						<p>
+							Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+							Voluptas, eligendi? Tenetur, natus, odit quidem vel similique sint
+							eius culpa earum dolore aspernatur iste pariatur quibusdam fugiat
+							maxime omnis officiis quam?
+						</p>
+					</Card>
+					<h4> Plain group of cards</h4>
+					<p>
+						{" "}
+						These cards are in a plain <code>{"<div>"}</code> tag. Notice how it
+						scoots the containing children slightly in from the parent
+					</p>
 					<div>
-						<h1> Headings 1 </h1>
-						<p>
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus
-							tempore iste quam harum assumenda mollitia sunt. Odit eaque
-							molestias aperiam aliquid, animi, voluptatibus laborum porro,
-							vitae blanditiis consequatur facere non.
-						</p>
-						<h2> Headings 2 with a laaaaaaaaaaaaaaaaarge word </h2>
-						<p>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-							ab eligendi quod aliquid deleniti quia, explicabo at recusandae
-							sit adipisci incidunt ad cum itaque? Excepturi sint dignissimos
-							cumque provident asperiores?
-						</p>
-						<h3> Headings 3 </h3>
-						<p>
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-							Repudiandae in officia, voluptas culpa amet, quam enim similique
-							natus explicabo omnis repellendus delectus, cupiditate ratione
-							fuga aperiam saepe est corporis reiciendis?
-						</p>
-						<h4> Headings 4 </h4>
-						<p>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
-							ipsam, amet corrupti, perspiciatis ratione aut sunt rem maiores
-							animi nemo, libero similique quis odio. Tempora magni similique
-							dicta necessitatibus. Asperiores?
-						</p>
-						<h5> Headings 5 </h5>
-						<p>
-							Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-							Laboriosam eaque, tempore omnis molestiae quo, unde tenetur culpa
-							quidem placeat quod quae minus? Earum temporibus illo repellat
-							rerum animi aliquam vitae?
-						</p>
-						<h6> Headings 6 </h6>
-						<p>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit.
-							Recusandae in nam ratione incidunt laudantium earum quo aut quam,
-							maxime mollitia aperiam? Aspernatur odio velit sequi ab delectus
-							eveniet totam minus.
-						</p>
-
-						<h2> Paragaphs: </h2>
-						<p>
-							{" "}
-							Lorem ipsum dolor sit amet <strong> bold text </strong>{" "}
-							adipisicing elit. Debitis veritatis similique deleniti perferendis
-							rerum eligendi cum enim itaque voluptatem, inventore ducimus
-							tempore dolorum reprehenderit voluptas voluptatibus error
-							cupiditate numquam recusandae.
-						</p>
-						<p>
-							{" "}
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ex
-							possimus <em> EMPHASIZE INLINE </em> id, ipsa voluptates culpa
-							fugit ducimus odio at, rem laudantium explicabo laboriosam
-							consequatur quod saepe quaerat eius mollitia eos. Lorem ipsum
-							dolor sit amet, consectetur adipisicing elit. Cum neque doloribus
-							culpa dicta ipsa necessitatibus optio? Accusantium voluptates
-							suscipit temporibus eius explicabo! Delectus quaerat ad sint,
-							ratione natus vel laboriosam. Lorem ipsum
-						</p>
-						<ul>
-							<li>
-								{" "}
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse,
-								aut.
-							</li>
-							<li>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
-								blanditiis ducimus accusantium pariatur vero? Expedita nesciunt
-								ducimus tempora saepe temporibus!
-							</li>
-							<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</li>
-						</ul>
-						<p>
-							Lorem ipsum dolor sit <a href="/"> Inline Link </a> amet
-							consectetur adipisicing elit. Reprehenderit doloremque beatae est
-							perspiciatis. Recusandae veritatis numquam, quae voluptatem
-							reprehenderit qui itaque, libero, corporis deserunt consectetur
-							modi. Tenetur iusto impedit incidunt!
-						</p>
-						<h2> Lists: </h2>
-						<ul>
-							<li> bannana </li>
-							<li> apple </li>
-							<li> lemon </li>
-						</ul>
-						<ul>
-							<li> bannana </li>
-							<li>
-								apple
-								<ul>
-									<li> granny smith </li>
-									<li>
-										honey crisp
-										<ul>
-											<li> red </li>
-											<li> yellow </li>
-										</ul>
-									</li>
-									<li> gross green </li>
-								</ul>
-							</li>
-							<li> lemon </li>
-						</ul>
-
-						<ol>
-							<li> one </li>
-							<li> two </li>
-							<li> three </li>
-						</ol>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
 					</div>
+					<h4>
+						{" "}
+						3 col cards with <code>{`<Grid />`}</code>
+					</h4>
+					<p>
+						{" "}
+						These cards are in a plain <code>{"<div>"}</code> tag. Notice how it
+						scoots the containing children slightly in from the parent
+					</p>
+					<Grid layout={"1_1_1"}>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+					</Grid>
+					<h2> Headings 2 with a laaaaaaaaaaaaaaaaarge word </h2>
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
+						ab eligendi quod aliquid deleniti quia, explicabo at recusandae sit
+						adipisci incidunt ad cum itaque? Excepturi sint dignissimos cumque
+						provident asperiores?
+					</p>
+					<h3> Headings 3 </h3>
+					<p>
+						Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+						Repudiandae in officia, voluptas culpa amet, quam enim similique
+						natus explicabo omnis repellendus delectus, cupiditate ratione fuga
+						aperiam saepe est corporis reiciendis?
+					</p>
+					<h4> Headings 4 </h4>
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam,
+						amet corrupti, perspiciatis ratione aut sunt rem maiores animi nemo,
+						libero similique quis odio. Tempora magni similique dicta
+						necessitatibus. Asperiores?
+					</p>
+					<h5> Headings 5 </h5>
+					<p>
+						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam
+						eaque, tempore omnis molestiae quo, unde tenetur culpa quidem
+						placeat quod quae minus? Earum temporibus illo repellat rerum animi
+						aliquam vitae?
+					</p>
+					<h6> Headings 6 </h6>
+					<p>
+						Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+						in nam ratione incidunt laudantium earum quo aut quam, maxime
+						mollitia aperiam? Aspernatur odio velit sequi ab delectus eveniet
+						totam minus.
+					</p>
+
+					<h2> Paragaphs: </h2>
+					<p>
+						{" "}
+						Lorem ipsum dolor sit amet <strong> bold text </strong> adipisicing
+						elit. Debitis veritatis similique deleniti perferendis rerum
+						eligendi cum enim itaque voluptatem, inventore ducimus tempore
+						dolorum reprehenderit voluptas voluptatibus error cupiditate numquam
+						recusandae.
+					</p>
+					<p>
+						{" "}
+						Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ex
+						possimus <em> EMPHASIZE INLINE </em> id, ipsa voluptates culpa fugit
+						ducimus odio at, rem laudantium explicabo laboriosam consequatur
+						quod saepe quaerat eius mollitia eos. Lorem ipsum dolor sit amet,
+						consectetur adipisicing elit. Cum neque doloribus culpa dicta ipsa
+						necessitatibus optio? Accusantium voluptates suscipit temporibus
+						eius explicabo! Delectus quaerat ad sint, ratione natus vel
+						laboriosam. Lorem ipsum
+					</p>
+					<ul>
+						<li>
+							{" "}
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse,
+							aut.
+						</li>
+						<li>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+							blanditiis ducimus accusantium pariatur vero? Expedita nesciunt
+							ducimus tempora saepe temporibus!
+						</li>
+						<li>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</li>
+					</ul>
+					<p>
+						Lorem ipsum dolor sit <a href="/"> Inline Link </a> amet consectetur
+						adipisicing elit. Reprehenderit doloremque beatae est perspiciatis.
+						Recusandae veritatis numquam, quae voluptatem reprehenderit qui
+						itaque, libero, corporis deserunt consectetur modi. Tenetur iusto
+						impedit incidunt!
+					</p>
+					<h2> Lists: </h2>
+					<ul>
+						<li> bannana </li>
+						<li> apple </li>
+						<li> lemon </li>
+					</ul>
+					<ul>
+						<li> bannana </li>
+						<li>
+							apple
+							<ul>
+								<li> granny smith </li>
+								<li>
+									honey crisp
+									<ul>
+										<li> red </li>
+										<li> yellow </li>
+									</ul>
+								</li>
+								<li> gross green </li>
+							</ul>
+						</li>
+						<li> lemon </li>
+					</ul>
+
+					<ol>
+						<li> one </li>
+						<li> two </li>
+						<li> three </li>
+					</ol>
 				</BlockLayout>
 			</section>
 
@@ -540,7 +622,12 @@ function Main() {
 						<input type="email" name="email" />
 					</label>
 					<label htmlFor="yesno">
-						<input type="checkbox" name="yesno" id="yesno" />
+						<input
+							type="checkbox"
+							name="yesno"
+							id="yesno"
+							defaultChecked={true}
+						/>
 						<span> yes or no </span>
 					</label>
 					<label htmlFor="color">
@@ -603,6 +690,335 @@ function Main() {
 			<hr />
 			<h2> Media: </h2>
 			<ImageDynamic photoIn={""} />
+			<p>audio</p>
+
+			<hr />
+			<h2> Layouts </h2>
+			<h3> 1 Columns</h3>
+			<BlockLayout layout={"1"}>
+				<p>
+					one: Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+					Repudiandae rem minima unde eos. Ab iure veritatis iste minus eos
+					eveniet nostrum unde dolores, accusamus, fuga, porro quasi impedit
+					tempora corrupti?
+				</p>
+				{/* <p>two</p> */}
+				{/* <p>three</p> */}
+				{/* <p>four</p> */}
+			</BlockLayout>
+
+			<section style={{ border: "3px dashed hsl(38.82deg 100% 50% / 21%)" }}>
+				<h2> 2 columns BlockLayout </h2>
+				<h3>
+					Layout <code>1_1</code>{" "}
+				</h3>
+				<p>
+					{" "}
+					here are 2 columns with independant background colors that extend to
+					the edges
+				</p>
+				<BlockLayout
+					layout={"1_1"}
+					col_bg_colors={[
+						"hsl(38.82deg 100% 50% / 21%)",
+						"hsl(18.82deg 100% 50% / 21%)",
+					]}
+				>
+					<div>
+						<h4> First Column</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Second Column </h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+
+				<h3>
+					Layout <code>1_2</code>{" "}
+				</h3>
+				<p> Right is x2 larger than left</p>
+				<BlockLayout
+					layout={"1_2"}
+					col_bg_colors={[
+						"hsl(38.82deg 100% 50% / 21%)",
+						"hsl(18.82deg 100% 50% / 21%)",
+					]}
+				>
+					<div>
+						<h4> First Column</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis
+							dolorem maxime amet fuga facilis nobis culpa! Hic consectetur, non
+							optio ab impedit mollitia error cum aliquid rerum, porro sunt in!
+						</p>
+					</div>
+					<div>
+						<h4> Second Column </h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+
+				<h3>
+					Layout <code>1_4</code>{" "}
+				</h3>
+				<p> Right is x4 larger than left</p>
+				<BlockLayout
+					layout={"1_4"}
+					col_bg_colors={[
+						"hsl(38.82deg 100% 50% / 21%)",
+						"hsl(18.82deg 100% 50% / 21%)",
+					]}
+				>
+					<div>
+						<h4> First Column</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Second Column </h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+
+				<h3>
+					Layout <code>2_1</code>{" "}
+				</h3>
+				<p> Left is x2 larger than right</p>
+				<BlockLayout
+					layout={"2_1"}
+					col_bg_colors={[
+						"hsl(38.82deg 100% 50% / 21%)",
+						"hsl(18.82deg 100% 50% / 21%)",
+					]}
+				>
+					<div>
+						<h4> First Column</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+							eaque consequatur sint natus, inventore corporis accusamus ullam
+							sed, est velit alias, in aut fugit eligendi enim labore laborum
+							doloribus. Ipsum!
+						</p>
+					</div>
+					<div>
+						<h4> Second Column </h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+			</section>
+
+			<section>
+				<h2> 3 Columns</h2>
+				<h3>
+					{" "}
+					Layout <code>1_1_1</code>
+				</h3>
+				<BlockLayout
+					layout={"1_1_1"}
+					col_bg_colors={[
+						"rgb(255 0 0 / 10%)",
+						"rgb(0 255 0 / 10%)",
+						"rgb(0 0 255 / 10%)",
+					]}
+					verticalAlign={'center'}
+				>
+					<div>
+						<h4> Column One</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusa
+						</p>
+					</div>
+					<div>
+						<h4> Column Two</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat ignissimos minus suscipit dolorum, ullam dolor iste
+							autem facilis, a expedita, accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Column Three</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro inventore praesentium odio natus dignissimos minus suscipit
+							dolorum, ullam dolor iste autem facilis, a expedita, accusamus at
+							culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+
+				<h3>
+					{" "}
+					Layout <code>1_2_1</code>
+				</h3>
+				<BlockLayout
+					layout={"1_2_1"}
+					col_bg_colors={[
+						"rgb(255 0 0 / 10%)",
+						"rgb(0 255 0 / 10%)",
+						"rgb(0 0 255 / 10%)",
+					]}
+					verticalAlign={"center"}
+				>
+					<div>
+						<h4> Column One</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusa
+						</p>
+					</div>
+					<div>
+						<h4> Column Two</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat ignissimos minus suscipit dolorum, ullam dolor iste
+							autem facilis, a expedita, accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Column Three</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro inventore praesentium odio natus dignissimos minus suscipit
+							dolorum, ullam dolor iste autem facilis, a expedita, accusamus at
+							culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+			</section>
+			<section>
+				<h2> 4 Columns</h2>
+				<h3>
+					{" "}
+					Layout <code>1_1_1_1</code>
+				</h3>
+				<BlockLayout layout={"1_1_1_1"} col_bg_colors={['red', 'blue', 'green', 'pink']}>
+					<div>
+						<h4> Column One</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Column Two</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Column Three</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+					<div>
+						<h4> Column Four</h4>
+						<p>
+							{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit
+							porro quaerat inventore praesentium odio natus dignissimos minus
+							suscipit dolorum, ullam dolor iste autem facilis, a expedita,
+							accusamus at culpa tenetur!
+						</p>
+					</div>
+				</BlockLayout>
+			</section>
+			<BlockLayout layout={"1"}>
+				<h4>
+					{" "}
+					Nested 3 col cards with <code>{`<Grid />`}</code>
+				</h4>
+				<p>
+					{" "}
+					These cards are in a plain <code>{"<div>"}</code> tag. Notice how it
+					scoots the containing children slightly in from the parent
+				</p>
+				<Grid layout={"1_1_1"}>
+					<Card>
+						<p>here is some content inside a card element</p>
+					</Card>
+					<Card>
+						<p>here is some content inside a card element</p>
+					</Card>
+					<Card>
+						<p>here is some content inside a card element</p>
+					</Card>
+				</Grid>
+			</BlockLayout>
 		</>
 	)
 }

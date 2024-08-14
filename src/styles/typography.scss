@@ -64,7 +64,7 @@ li > ul {
 }
 
 p {
-  max-width: 40ch;
+  max-width: var(--w-contentmax);
   // font-size: var(--font-size-base);
   // font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
@@ -80,7 +80,7 @@ ul{
 ul, ol {
   list-style-position: outside;
   padding-left: var(--space-ml);
-  max-width: 35ch;
+  max-width: calc(var(--w-contentmax) - 20px);
   display: grid;
   gap: var(--space-s);
 }
@@ -100,6 +100,28 @@ center {
   width: 100vw;
 }
 
+code {
+  padding-inline: var(--space-s);
+	font-size: 90%;
+	white-space: nowrap;
+	border-radius: var(--br-dull);
+}
+pre > code {
+	display: block;
+	padding: 1rem 1.5rem;
+	white-space: pre;
+}
+
+ pre {
+  overflow: auto;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+}
 
 // @media (width > 800px) {
 //   h1{

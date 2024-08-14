@@ -1,0 +1,17 @@
+.grid {
+  display: grid;
+  justify-content: center;
+}
+
+._1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+._1_1 {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--w-sitemax) * 0.5), 1fr));
+}
+._1_1_1 {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--w-sitemax) * 0.13), 1fr));
+}
+._1_1_1_1 {
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--w-sitemax) * 0.25), 1fr));
+}

@@ -84,3 +84,9 @@ select:focus {
   border-color: var(--c-accent);
 	outline: 0;
 }
+
+code {
+  color: var(--c-code);
+  border-color: var(--c-code);
+  background-color: var(--c-code-bg);
+}
