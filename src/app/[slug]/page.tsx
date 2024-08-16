@@ -13,6 +13,7 @@ import { Metadata, ResolvingMetadata } from "next"
 import { Section } from "@components/layouts/Section"
 import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
+import { BlockLayout } from "@components/layouts/BlockLayout"
 export const revalidate = 5;
 
 type Props = {
@@ -110,7 +111,7 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
   
   return <>
 
-    <Section layout={'1'}>
+    <BlockLayout layout={'1'}>
       
     
       <h1>{title}</h1>
@@ -130,7 +131,7 @@ function Header({dateCreated, dateModified, title, author, featured_image, templ
 
       {/* <span>View Count : 12345</span> */}
 
-  </Section>
+  </BlockLayout>
   </>
 }
 

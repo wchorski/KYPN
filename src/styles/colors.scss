@@ -60,6 +60,15 @@ html, body {
     color-scheme: dark;
   }
 }
+
+a {
+	color: var(--c-primary);
+}
+a:hover {
+	color: var(--c-secondary);
+}
+
+
 input[type="email"],
 input[type="number"],
 input[type="search"],
@@ -85,8 +94,79 @@ select:focus {
 	outline: 0;
 }
 
-code {
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+	color: var(--c-accent);
+	border-color: var(--c-accent);
+	outline: 0;
+}
+// .button.button-primary,
+// button.button-primary,
+// input[type="submit"].button-primary,
+// input[type="reset"].button-primary,
+// input[type="button"].button-primary {
+// 	color: #fff;
+// 	background-color: #33c3f0;
+// 	border-color: #33c3f0;
+// }
+// .button.button-primary:hover,
+// button.button-primary:hover,
+// input[type="submit"].button-primary:hover,
+// input[type="reset"].button-primary:hover,
+// input[type="button"].button-primary:hover,
+// .button.button-primary:focus,
+// button.button-primary:focus,
+// input[type="submit"].button-primary:focus,
+// input[type="reset"].button-primary:focus,
+// input[type="button"].button-primary:focus {
+// 	color: #fff;
+// 	background-color: #1eaedb;
+// 	border-color: #1eaedb;
+// }
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	background-color: var(--c-txt-bg);
+	color: var(--c-primary);
+	border-color: var(--c-primary);
+}
+
+pre, code {
   color: var(--c-code);
   border-color: var(--c-code);
   background-color: var(--c-code-bg);
+}
+
+//todo always show scrollbar on overflown pre, code elements
+// code::-webkit-scrollbar {
+//   width: 12px;
+// }
+
+// code::-webkit-scrollbar-track {
+//   background: #f1f1f1;
+// }
+
+// code::-webkit-scrollbar-thumb {
+//   background: #1d3f17;
+// }
+
+// code::-webkit-scrollbar-thumb:hover {
+//   background: #3f7c4a;
+// }
+
+ul, ol {
+  &::marker {
+    background-color: var(--c-txt);
+    fill: var(--c-txt);
+  }
 }

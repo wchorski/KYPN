@@ -4,6 +4,8 @@ import { Card } from "@components/layouts/Card"
 import { Grid } from "@components/layouts/Grid"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Section } from "@components/layouts/Section"
+import { CSSProperties } from "react"
+import { IoIosAirplane, IoMdAperture, IoMdContact } from "react-icons/io"
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
 	searchParams: { q: string }
@@ -70,6 +72,9 @@ function Content() {
 						molestias aperiam aliquid, animi, voluptatibus laborum porro, vitae
 						blanditiis consequatur facere non.
 					</p>
+					<pre>
+						some code that is pre formateed to look like this is sooo coool
+					</pre>
 					<Card>
 						<p>here is some content inside a card element</p>
 						<p>
@@ -139,6 +144,30 @@ function Content() {
 						natus explicabo omnis repellendus delectus, cupiditate ratione fuga
 						aperiam saepe est corporis reiciendis?
 					</p>
+					<pre>
+						{`
+> :not(.site-grid, .grid, .grid-item, .flex, .flex-item) {
+  //todo causes overflow, but could be a really smart thing to get various amounts of content to line up
+  // width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
+  margin-inline: auto;
+  // width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
+  width: clamp(1rem, 90vw, var(--w-contentmax));
+}
+            `}
+					</pre>
+					<pre>
+						<code>
+							{`
+> :not(.site-grid, .grid, .grid-item, .flex, .flex-item) {
+  //todo causes overflow, but could be a really smart thing to get various amounts of content to line up
+  // width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
+  margin-inline: auto;
+  // width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
+  width: clamp(1rem, 90vw, var(--w-contentmax));
+}
+            `}
+						</code>
+					</pre>
 					<h4> Headings 4 </h4>
 					<p>
 						Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga ipsam,
@@ -270,300 +299,305 @@ function Content() {
 
 			<section>
 				<h2> Spacing </h2>
-				<BlockLayout layout={"1_1"}>
-					<div className="grid gap-s">
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xxl</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
+				<BlockLayout layout={"1_1"} gap="m">
+					<Card>
+						<h4> Widths </h4>
+						<div className="grid gap-s">
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xxl</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-xxl)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-							<div
-								style={{
-									width: "var(--space-xxl)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xl</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-xl)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xl</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>l</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-l)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-							<div
-								style={{
-									width: "var(--space-xl)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>ml</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-ml)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>l</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>m</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-m)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-							<div
-								style={{
-									width: "var(--space-l)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>ms</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-ms)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>ml</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>s</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-s)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
-							<div
-								style={{
-									width: "var(--space-ml)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>m</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
-							</div>
-							<div
-								style={{
-									width: "var(--space-m)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>ms</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
-							</div>
-							<div
-								style={{
-									width: "var(--space-ms)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>s</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
-							</div>
-							<div
-								style={{
-									width: "var(--space-s)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xs</span>
-							<div
-								style={{
-									width: "var(--space)",
-									height: "var(--space)",
-									background: "var(--c-primary)",
-								}}
-							>
-								{" "}
-							</div>
-							<div
-								style={{
-									width: "var(--space-xs)",
-									height: "var(--space)",
-									// background: "var(--c-secondary)",
-									outline: "1.7px dotted var(--c-secondary)",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-					</div>
-					<div className="grid gap-ml">
-						<h4> Heights </h4>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xxl</span>
-							<div
-								style={{
-									height: "var(--space-xl)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xs</span>
+								<div
+									style={{
+										width: "var(--space)",
+										height: "var(--space)",
+										background: "var(--c-primary)",
+									}}
+								>
+									{" "}
+								</div>
+								<div
+									style={{
+										width: "var(--space-xs)",
+										height: "var(--space)",
+										// background: "var(--c-secondary)",
+										outline: "1.7px dotted var(--c-secondary)",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
 						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xl</span>
-							<div
-								style={{
-									height: "var(--space-xl)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
+					</Card>
+					<Card>
+						<div className="grid gap-ml">
+							<h4> Heights </h4>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xxl</span>
+								<div
+									style={{
+										height: "var(--space-xl)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xl</span>
+								<div
+									style={{
+										height: "var(--space-xl)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>l</span>
+								<div
+									style={{
+										height: "var(--space-l)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>ml</span>
+								<div
+									style={{
+										height: "var(--space-ml)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>m</span>
+								<div
+									style={{
+										height: "var(--space-m)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>ms</span>
+								<div
+									style={{
+										height: "var(--space-ms)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>s</span>
+								<div
+									style={{
+										height: "var(--space-s)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
+							</div>
+							<div className="flex">
+								<span style={{ width: "var(--space-ml)" }}>xs</span>
+								<div
+									style={{
+										height: "var(--space-xs)",
+										border: "1.7px dotted var(--c-secondary)",
+										display: "grid",
+										alignItems: "center",
+										flex: "1",
+									}}
+								>
+									{" "}
+								</div>
 							</div>
 						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>l</span>
-							<div
-								style={{
-									height: "var(--space-l)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>ml</span>
-							<div
-								style={{
-									height: "var(--space-ml)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>m</span>
-							<div
-								style={{
-									height: "var(--space-m)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>ms</span>
-							<div
-								style={{
-									height: "var(--space-ms)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>s</span>
-							<div
-								style={{
-									height: "var(--space-s)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-						<div className="flex">
-							<span style={{ width: "var(--space-ml)" }}>xs</span>
-							<div
-								style={{
-									height: "var(--space-xs)",
-									border: "1.7px dotted var(--c-secondary)",
-									display: "grid",
-									alignItems: "center",
-									flex: "1",
-								}}
-							>
-								{" "}
-							</div>
-						</div>
-					</div>
+					</Card>
 				</BlockLayout>
 			</section>
 
@@ -580,23 +614,35 @@ function Content() {
 			</p>
 
 			<h5> button in grid</h5>
-			<div
-				// style={{display: 'grid', gap: '1rem', marginBlock: '1rem'}}
-				className="grid gap-m"
-			>
-				<button> regular </button>
-				<button className="medium button"> medium </button>
-				<button className="large button"> large </button>
+			<p>
+				{" "}
+				I do not have to use a component. Here I am using plain html elements
+				with css utilitie helpers. The same helpers I use for the components. I
+				do have to wrap any <code>.grid</code> or <code>.flex</code> element in
+				a plane <code>{"<div>"}</code> so it falls inline with narrow{" "}
+				{'"non layout"'} content
+			</p>
+			<div>
+				<div
+					// style={{display: 'grid', gap: '1rem', marginBlock: '1rem'}}
+					className="grid gap-m"
+				>
+					<button> regular </button>
+					<button className="medium button"> medium </button>
+					<button className="large button"> large </button>
+				</div>
 			</div>
 
 			<h5> buttons in flex</h5>
-			<div
-				className="flex gap-m"
-				// style={{display: 'flex', gap: '1rem', marginBlock: '1rem'}}
-			>
-				<button> regular </button>
-				<button className="medium button"> medium </button>
-				<button className="large button"> large </button>
+			<div>
+				<div
+					className="flex gap-m"
+					// style={{display: 'flex', gap: '1rem', marginBlock: '1rem'}}
+				>
+					<button> regular </button>
+					<button className="medium button"> medium </button>
+					<button className="large button"> large </button>
+				</div>
 			</div>
 
 			<a href="/"> anchor tag </a>
@@ -649,7 +695,13 @@ function Content() {
 					<legend>Select a maintenance drone:</legend>
 
 					<label htmlFor="huey">
-						<input type="radio" id="huey" name="drone" value="huey" checked />
+						<input
+							type="radio"
+							id="huey"
+							name="drone"
+							value="huey"
+							defaultChecked={true}
+						/>
 						<span>Huey</span>
 					</label>
 
@@ -871,7 +923,7 @@ function Content() {
 						"rgb(0 255 0 / 10%)",
 						"rgb(0 0 255 / 10%)",
 					]}
-					verticalAlign={'center'}
+					verticalAlign={"center"}
 				>
 					<div>
 						<h4> Column One</h4>
@@ -954,7 +1006,25 @@ function Content() {
 					{" "}
 					Layout <code>1_1_1_1</code>
 				</h3>
-				<BlockLayout layout={"1_1_1_1"} col_bg_colors={['red', 'blue', 'green', 'pink']}>
+				<p>
+					{" "}
+					the 4 column layout like all other grid layouts starts off as a single
+					stack and has 2 graduating forms
+				</p>
+				<ul>
+					<li>650px - verticle stack</li>
+					<li>800px - 4 square checker</li>
+					<li>1200px - horizontal row</li>
+				</ul>
+				<BlockLayout
+					layout={"1_1_1_1"}
+					col_bg_colors={[
+						"rgb(250, 0, 0, 20%",
+						"rgb(0, 250, 0, 20%",
+						"rgb(0, 0, 250, 20%",
+						"rgb(250, 100, 150, 20%",
+					]}
+				>
 					<div>
 						<h4> Column One</h4>
 						<p>
@@ -997,28 +1067,56 @@ function Content() {
 					</div>
 				</BlockLayout>
 			</section>
-			<BlockLayout layout={"1"}>
-				<h4>
-					{" "}
-					Nested 3 col cards with <code>{`<Grid />`}</code>
-				</h4>
-				<p>
-					{" "}
-					These cards are in a plain <code>{"<div>"}</code> tag. Notice how it
-					scoots the containing children slightly in from the parent
-				</p>
-				<Grid layout={"1_1_1"}>
-					<Card>
-						<p>here is some content inside a card element</p>
-					</Card>
-					<Card>
-						<p>here is some content inside a card element</p>
-					</Card>
-					<Card>
-						<p>here is some content inside a card element</p>
-					</Card>
-				</Grid>
-			</BlockLayout>
+			<section style={{ border: "dashed yellow 2px" }}>
+				<BlockLayout layout={"1"}>
+					<h4>
+						{" "}
+						Nested 3 col cards with <code>{`<Grid />`}</code>
+					</h4>
+					<p>
+						{" "}
+						These cards are in a plain <code>{"<div>"}</code> tag. Notice how it
+						scoots the containing children slightly in from the parent
+					</p>
+					<Grid layout={"1_1_1"}>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+						<Card>
+							<p>here is some content inside a card element</p>
+						</Card>
+					</Grid>
+				</BlockLayout>
+			</section>
+
+			<h2> outside of the layout</h2>
+			<p>
+				{" "}
+				we can use the <code>{`<Grid />`}</code> outside of{" "}
+				<code>{`<BlockLayout />`}</code> for more freedom of design
+			</p>
+			<Grid layout={"1_1_1"} gap={"xl"} style={{ opacity: "10%" }}>
+				<Card style={cardStyle}>
+					<IoMdContact style={iconStyle} />
+				</Card>
+				<Card style={cardStyle}>
+					<IoIosAirplane style={iconStyle} />
+				</Card>
+				<Card style={cardStyle}>
+					<IoMdAperture style={iconStyle} />
+				</Card>
+			</Grid>
+			<p>making for custom banners or background graphics</p>
 		</>
 	)
 }
+
+const iconStyle = {
+	fontSize: "100%",
+} as CSSProperties
+const cardStyle = {
+	fontSize: "100%",
+} as CSSProperties

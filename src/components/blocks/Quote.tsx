@@ -11,21 +11,23 @@ type QuoteProps = {
 export function Quote({ href, attribution, content }: QuoteProps) {
   
   if(href) return (
-    <Link href={href} className={styles.quote} target='blank'>
+    <blockquote className={styles.quote}>
+      <Link href={href} target='blank'>
 
-      <div style={{ fontStyle: 'italic', }}>{content}</div>
-      <strong >— {attribution}</strong>
+        <div style={{ fontStyle: 'italic', }}>{content}</div>
+        <strong >— {attribution}</strong>
 
-    </Link>
+      </Link>
+    </blockquote>
   )
   
   return (
-    <div className={styles.quote}>
+    <blockquote className={styles.quote}>
 
       <div style={{ fontStyle: 'italic', }}>{content}</div>
       <strong >— {attribution}</strong>
 
-    </div>
+    </blockquote>
   )
 
 }

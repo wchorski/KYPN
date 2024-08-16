@@ -74,15 +74,18 @@ p, ul, ol {
 }
 
 ul{
-  list-style-image: url('/marker.svg');
+  //todo how to change color
+  list-style: circle;
+  // list-style-image: url('/marker.svg');
 }
 
 ul, ol {
   list-style-position: outside;
-  padding-left: var(--space-ml);
+  padding-left: var(--space-l);
   max-width: calc(var(--w-contentmax) - 20px);
   display: grid;
   gap: var(--space-s);
+  
 }
 
 a {
@@ -114,6 +117,8 @@ pre > code {
 
  pre {
   overflow: auto;
+  padding: var(--space-ml);
+  
 }
 
 code,
@@ -138,6 +143,26 @@ samp {
 //     font-size: calc(var(--font-size-base) * 1.2);
 //   }
 // }
+
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	border-style: solid;
+	border-width: 1px;
+  margin-right: var(--space-xs);
+	display: inline-block;
+	text-align: center;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.1rem;
+	white-space: nowrap; 
+	border-radius: var(--br-dull);
+	cursor: pointer;
+	box-sizing: border-box;
+  width: fit-content;
+}
 
 .tshadow_1 {
   text-shadow: #000000d9 2px 2px 6px;

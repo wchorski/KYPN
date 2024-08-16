@@ -95,7 +95,7 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
     return <SliderSlick {...props}/>
   },
   section: props => {
-    return <Section {...props}/>
+    return <BlockLayout {...props}/>
   },
   iframe: props => {
     return <IFrame {...props}/>
@@ -144,21 +144,22 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
 
 export function BlockRender({ document }: { document: any }) {
 
-  // return <DocumentRenderer 
-  //   document={document} 
-  //   componentBlocks={customComponentRenderers}
-  //   renderers={renderers} 
-  // />;
-
   return (
-    <div className={['block-renderer', styles.blockrenderer].join(' ')}>
       <DocumentRenderer
         renderers={renderers}
         componentBlocks={customComponentRenderers}
         document={document}
       />
-    </div>
-
   )
+  //todo get rid of, no need for the wrapper w new layout css
+  // return (
+  //   <div className={['block-renderer', styles.blockrenderer].join(' ')}>
+  //     <DocumentRenderer
+  //       renderers={renderers}
+  //       componentBlocks={customComponentRenderers}
+  //       document={document}
+  //     />
+  //   </div>
+  // )
 
 }

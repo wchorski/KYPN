@@ -37,24 +37,10 @@ export function Paragraph (props:Props) {
 
 
   return (
-    <div 
-      className="element-wrap"
-      style={{
-        // display: 'grid',
-        // gridTemplateColumns: 'minmax(0, 1fr) minmax(0, var(--w-sitemax)) minmax(0, 1fr)',
-        // gridGap: '1rem',
-        // @ts-ignore
-        // textAlign: getTextAlign(),
-        
-        // maxWidth: 'var(--w-sitemax)',
-        // marginInline: 'auto',
-      }}
+    <p
+      style={pStyle}
     >
-      <p
-        style={pStyle}
-      >
-        {children}
-      </p>
-    </div>
+      {children}
+    </p>
   )
 }

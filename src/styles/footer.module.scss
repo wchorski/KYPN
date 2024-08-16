@@ -1,11 +1,11 @@
 .footer{
-  margin-top: 2rem;
-  background-color: rgb(47, 47, 47);
+  margin-top: var(--space-xl);
+  background-color: var(--c-footer);
   // min-height: 4rem;
   // padding: 2rem 0;
   position: sticky;
   top: 100%;
-  color: grey;
+  color: var(--c-text-sub);
   // text-align: center;
   // font-size: 1rem;
 

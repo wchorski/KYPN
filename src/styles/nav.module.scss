@@ -1,7 +1,7 @@
 .nav :global{
 
   backdrop-filter: blur(10px);
-  background-color: rgba(55, 55, 55, 0.559);
+  background-color: var(--c-nav);
   width: 100%;
   position: relative;
 
