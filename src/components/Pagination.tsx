@@ -78,15 +78,9 @@ export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProp
   
   if(count <= perPage) return <></>
 
-  return (<>
-    {/* <Head>
-      <title> {page} / {pageCount} </title>
-    </Head> */}
+  return <>
 
-    <div data-testid='pagination' className={[styles.pagination, 'siteWrapper'].join(' ')}>
-
-
-      {/* <Link href={`/shop?page=${page - 1}`} aria-disabled={page <= 1}> */}
+    <nav data-testid='pagination' className={[styles.pagination, 'siteWrapper'].join(' ')}>
 
       {page <= 1 ? (
         <span className='disabled' aria-disabled={true}>
@@ -100,7 +94,7 @@ export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProp
         </Link>
       )}
 
-      <div className='count-cont'>
+      <div className={styles.count_wrap}>
         <span> {page} of {pageCount}</span>
         <span data-testid='pagination-countTotal'>
           {count} Total
@@ -118,11 +112,8 @@ export async function Pagination({ page, route = 'NOROUTE', count = 0 }: PagProp
           <MdKeyboardArrowRight />
         </Link>
       )}
-
-
-
-    </div>
-  </>)
+    </nav>
+  </>
 }
 
 // export const query = gql`

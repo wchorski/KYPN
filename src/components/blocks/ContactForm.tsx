@@ -108,7 +108,6 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
       const { contact, error } = data
 
       if(error) throw new Error(error.message)
-      console.log({contact});
       
 
       return {
@@ -141,7 +140,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
     <form
       className={styles.form}  
       action={formAction}
-      style={{ background: color, ...style}}
+      style={{ ...(color ? {background: color} : {}), ...style}}
       ref={formRef}
     >
 

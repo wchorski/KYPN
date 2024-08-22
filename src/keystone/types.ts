@@ -25,6 +25,8 @@ export type Session = {
 }
 
 export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'
+export type BGColor = 'bg-c-primary'|'bg-c-secondary'|'bg-c-tertiary'|'bg-c-accent'
+export type WidthLayoutSize = 'width-full'|'width-wide'|'width-breakout'|'width-content'
 
 export type GridLayout =
 	| "1"

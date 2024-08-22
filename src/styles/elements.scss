@@ -61,9 +61,10 @@ hr {
 // 	color: var(--c-txt-sub);
 // }
 
-// ul.unstyled {
-// 	list-style: none;
-// }
+ul.unstyled {
+	list-style: none;
+  padding: 0;
+}
 
 // ul,
 // ol {
@@ -100,34 +101,30 @@ hr {
 // 	}
 // }
 
-// .button {
-// 	border-radius: var(--br-dull);
-// 	border: solid 1px var(--c-primary);
-// 	// background-color: var(--c-primary);
-// 	padding-inline: 1rem;
-// 	transition: all 0.3s;
-// 	// display: grid;
-// 	// align-content: center;
-// 	// text-align: center;
-// 	display: grid;
-// 	justify-content: space-evenly;
-// 	align-content: center;
+.button {
+	border-radius: var(--br-dull);
+	border: solid 1px var(--c-primary);
+	padding-inline: 1rem;
+	transition: all 0.3s;
+	display: grid;
+	justify-content: space-evenly;
+	align-content: center;
 
-// 	span {
-// 		display: flex;
-// 		gap: 1rem;
-// 		justify-content: space-around;
-// 	}
+	span {
+		display: flex;
+		gap: 1rem;
+		justify-content: space-around;
+	}
 
-// 	&.medium {
-// 		padding: 0.5rem 1rem;
-// 		font-size: 1.3rem;
-// 	}
+	&.medium {
+		padding: 0.5rem 1rem;
+		font-size: 1.3rem;
+	}
 
-// 	&.large {
-// 		padding: 1rem;
-// 		font-size: 1.3rem;
-// 	}
+	&.large {
+		padding: 1rem;
+		font-size: 1.3rem;
+	}
 
 // 	&:hover,
 // 	&:focus {
@@ -159,7 +156,7 @@ hr {
 // 		background-color: var(--c-disabled);
 // 		border: solid 1px var(--c-disabled);
 // 	}
-// }
+}
 
 // .mtauto {
 // 	margin-top: auto;
@@ -295,7 +292,7 @@ select {
 	border-radius: var(--br-dull);
 	border-width: 1px;
 	border-color: var(--c-seperator);
-	box-shadow: var(--boxs-1);
+	box-shadow: var(--shadow-1);
 	box-sizing: border-box;
 }
 /* Removes awkward default styles on some inputs for iOS */
@@ -330,4 +327,16 @@ fieldset {
 input[type="checkbox"],
 input[type="radio"] {
 	display: inline;
+}
+
+blockquote {
+  display: grid;
+  align-items: center;
+  border-left: 5px solid var(--c-primary);
+  padding: 8px 24px;
+  margin-left: var(--space-m);
+
+  :last-child {
+    margin-bottom: 0;
+  }
 }

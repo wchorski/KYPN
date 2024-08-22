@@ -84,6 +84,12 @@ export default {
         port: '',
         pathname: '/media/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets.nintendo.com',
+        port: '',
+        pathname: '/image/**',
+      },
     ],
   },
   async rewrites() {

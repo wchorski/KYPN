@@ -34,12 +34,13 @@
   // width: 100%;
   padding: 1rem;
   border-radius: var(--br-soft);
-  box-shadow: var(--boxs-1);
+  box-shadow: var(--shadow-1);
   background-color: var(--c-txt-bg-darker);
 
   label {
     display: grid;
     gap: .2rem;
+    color: var(--c-txt-sub);
   }
 
   label.required {
@@ -85,10 +86,11 @@
   input,
   textarea,
   select {
+    color: var(--c-txt);
     background-color: var(--c-txt-bg);
     padding: 0.5rem;
-    font-size: .7rem;
-    border: 1px solid var(--c-txt-bg);
+    // font-size: .7rem;
+    border: 1px solid var(--c-seperator);
     &:focus {
       outline: 0;
       border-color: var(--c-accent);
@@ -112,17 +114,18 @@
     max-width: fit-content;
     // background: var(--c-primary);
     border-radius: var(--br-sharp);
-    color: var(--c-primary);
-    border: solid 2px var(--c-primary);
-    font-size: 1rem;
+    // color: var(--c-primary);
+    border-width: var(--space-xs);
+    border-style: solid;
+    font-size: var(--space-ml);
     font-weight: 600;
     padding: 0.5rem 1.2rem;
-    transition: all .3s;
+    // transition: all .3s;
 
-    &:hover, &:focus{
-      border: solid 2px var(--c-accent);
-      color: var(--c-accent);
-    }
+    // &:hover, &:focus{
+    //   border: solid 2px var(--c-accent);
+    //   color: var(--c-accent);
+    // }
   }
 
   fieldset {
@@ -278,7 +281,7 @@
   select {
     
     padding: 0.5rem;
-    font-size: .7rem;
+    // font-size: .7rem;
     border: 1px solid black;
     &:focus {
       outline: 0;

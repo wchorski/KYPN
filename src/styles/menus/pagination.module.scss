@@ -1,21 +1,19 @@
-.pagination :global {
-  margin: 1rem 0;
+.pagination{
+  margin-inline: auto;
+  margin-bottom: var(--space-m);
 
   display: flex;
   /* flex-direction: column; */
   justify-content: space-between;
   align-items: center;
   text-align: center;
+}
 
-
-
-  .count-cont{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: .7rem;
-  }
-
+.count_wrap{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: .7rem;
 }

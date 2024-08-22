@@ -1,16 +1,26 @@
-.hero :global {
+.hero {
+  display: grid;
+  place-items: center;
+  min-height: 30vh;
+  background-size: cover;
+  background-position: center;
+  text-shadow: var(--shadow-3);
+  // color: var(--color-content);
+  // color: var(--color-content);
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  
-
-  .backgroundImage {
-      background-color: white;
-      background-position: center;
-      background-size: cover;
-      min-height: 400px;
-      width: 100%;
+  > * {
+    grid-column: 1;
   }
+
+  // h2, h3, h4, h5, h6 {
+  //   color: var(--color-header);
+  // }
+
+}
+.backgroundImage {
+    background-color: white;
+    background-position: center;
+    background-size: cover;
+    min-height: 400px;
+    width: 100%;
 }

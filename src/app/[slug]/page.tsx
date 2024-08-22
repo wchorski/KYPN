@@ -10,7 +10,7 @@ import fetchPage from "@lib/fetchdata/fetchPage"
 import { BlockRender } from '@components/blocks/BlockRender'
 import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
-import { Section } from "@components/layouts/Section"
+import { Section } from "@components/blocks/Section"
 import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
 import { BlockLayout } from "@components/layouts/BlockLayout"

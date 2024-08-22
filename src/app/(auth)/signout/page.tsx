@@ -2,7 +2,6 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { Callout } from "@components/blocks/Callout"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/layouts/Section"
 import DialogPopup from "@components/menus/Dialog"
 import { LoginForm } from "@components/menus/LoginForm"
 import { PasswordRequestForm } from "@components/menus/PasswordRequestForm"
@@ -14,6 +13,7 @@ import { getServerSession } from "next-auth"
 import { getCsrfToken, getProviders } from "next-auth/react"
 import Link from "next/link"
 import { CSSProperties } from "react"
+import { BlockLayout } from "@components/layouts/BlockLayout"
 
 export const metadata: Metadata = {
 	title: "Sign Out | " + envs.SITE_TITLE,
@@ -42,9 +42,9 @@ export default async function SignOutPage({ searchParams }: Props) {
 function Header(callbackUrl?: string) {
 	return (
 		<>
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<h1> Sign Out </h1>
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }
@@ -57,9 +57,9 @@ function Main() {
 				<PasswordRequestForm />
 			</DialogPopup>
 
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<SignOutButton />
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }

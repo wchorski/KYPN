@@ -2,17 +2,15 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { Callout } from "@components/blocks/Callout"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/layouts/Section"
 import DialogPopup from "@components/menus/Dialog"
 import { LoginForm } from "@components/menus/LoginForm"
 import { PasswordRequestForm } from "@components/menus/PasswordRequestForm"
-import { PasswordResetForm } from "@components/menus/PasswordResetForm"
-import { RegsiterForm } from "@components/menus/RegisterForm"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
-import { getCsrfToken, getProviders } from "next-auth/react"
+import { getProviders } from "next-auth/react"
 import Link from "next/link"
 import { CSSProperties } from "react"
+import { BlockLayout } from "@components/layouts/BlockLayout"
 
 export const metadata: Metadata = {
 	title: "Login | " + envs.SITE_TITLE,
@@ -46,12 +44,12 @@ export default async function LoginPage({ searchParams }: Props) {
 function Header(callbackUrl?: string) {
 	return (
 		<>
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<h1> Login </h1>
 				{callbackUrl && (
 					<p className="error"> You must login first to access the page </p>
 				)}
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }
@@ -68,7 +66,7 @@ function Main(
 				<PasswordRequestForm />
 			</DialogPopup>
 
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<div style={styleForms}>
 					{sessionEmail && (
 						<Callout intent={"info"}>
@@ -93,7 +91,7 @@ function Main(
 					<h4> Create a New Account </h4>
 					<Link href={`/register`}> Register Now </Link>
 				</div>
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }

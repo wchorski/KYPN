@@ -25,18 +25,17 @@ $breakpoint-l: 1200px;
 .siteWrapper {
 	max-width: var(--w-sitemax);
 	margin-inline: auto;
-  width: 100%;
+	width: 100%;
 }
 // todo could make `:is(h1, h2...)` to a `:not(div)`
 // fits any loose content to bounds of site width so you don't have to wrap everything in a wrapper
 // :is(main, section, article) > :is(h1, h2, h3, h4, h5, h6, p, ul, ol) {
-:is(main, section, article) > :not(.site-grid, .grid, .flex, .siteWrapper, header, section, article) {
-	// max-width: var(--w-sitemax);
-	max-width: var(--w-contentmax);
-	margin-inline: auto;
-	padding-inline: var(--space-m);
-	display: block;
-}
+// :is(main, section) > :not(.site-grid, .grid, .flex, .siteWrapper, .main-content, header, section, article, aside) {
+// 	max-width: var(--w-contentmax);
+// 	margin-inline: auto;
+// 	padding-inline: var(--space-m);
+// 	display: block;
+// }
 
 .layout--fullwidth {
 	// background: blue;
@@ -224,7 +223,7 @@ $breakpoint-l: 1200px;
 	// }
 }
 
-.content_center {
+.content-center {
 	> div {
 		display: grid;
 		align-content: center;
@@ -235,6 +234,8 @@ $breakpoint-l: 1200px;
 
 .site-grid {
 	display: grid;
+	//todo need to do this per item
+	// align-items: start;
 
 	grid-template-columns:
 		minmax(0, 1fr)
@@ -246,26 +247,26 @@ $breakpoint-l: 1200px;
 		// display: grid;
 		z-index: 1;
 	}
-	
-	> :not(.site-grid, .grid, .grid-item, .flex, .flex-item) {
-    //todo causes overflow, but could be a really smart thing to get various amounts of content to line up
-		// width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
+
+	> :not(.site-grid, .grid, .grid-item, .flex, .flex-item, figure) {
+		//todo causes overflow, but could be a really smart thing to get various amounts of content to line up
 		margin-inline: auto;
-    // width: clamp(1rem, var(--w-contentmax), var(--w-sitemax));
-    width: clamp(1rem, 90vw, var(--w-contentmax));
+		//todo causing overflow too
+		// width: clamp(1rem, 80vw, var(--w-contentmax));
+		width: clamp(32vw, 76vw, var(--w-contentmax));
 	}
-  > :is(h1,h2,h3,h4,h5,h6,p){
-    padding-inline: var(--space-m);
-  }
+	> :is(h1, h2, h3, h4, h5, h6, p) {
+		padding-inline: var(--space-m);
+	}
 	> .grid-item {
 		display: grid;
 		// align-items: center;
 		// place-items: center;
 	}
-  //? `div:not([class])` has no class name
+	//? `div:not([class])` has no class name
 	> .grid-item > div:not([class]) {
 		padding: var(--space-m);
-    min-width:  15rem;
+		min-width: 15rem;
 	}
 }
 
@@ -553,7 +554,9 @@ $breakpoint-l: 1200px;
 
 .flex {
 	display: flex;
-	align-items: center;
+	// align-items: center;
+	flex-wrap: wrap;
+	gap: var(--space-m);
 }
 
 .gap-xxl {
@@ -583,4 +586,278 @@ $breakpoint-l: 1200px;
 
 .padding-0 {
 	padding: 0;
+}
+
+//? my attempt at grid areas
+.post-layout {
+	display: grid;
+	grid-template-areas:
+		"header   header"
+		"content  content"
+		"footer   footer";
+
+	//todo try out minmax or clamp for these values?
+	grid-template-columns: 1fr var(--w-contentmax);
+
+	> header {
+		grid-area: header;
+	}
+
+	> .content {
+		// background-color: aqua;
+		grid-area: content;
+	}
+	// > aside {
+	//   background-color: limegreen;
+	//   grid-area: sidebar;
+	// }
+	> footer {
+		// background-color: violet;
+		grid-area: footer;
+	}
+}
+
+// .content-layout {
+// 	--padding-inline: var(--space-m);
+// 	--content-max-width: var(--w-contentmax);
+// 	--breakout-max-width: 700px;
+// 	--wide-max-width: 800px;
+
+// 	--breakout-size: calc(
+// 		(var(--breakout-max-width) - var(--content-max-width)) / 1
+// 	);
+// 	--wide-size: calc((var(--wide-max-width) - var(--content-max-width)) / 2);
+
+// 	display: grid;
+
+// 	grid-template-columns:
+// 		[width-full-start] minmax(var(--padding-inline), 1fr)
+// 		[width-wide-start] minmax(0, var(--wide-size))
+// 		[width-breakout-start] minmax(0, var(--breakout-size))
+// 		[width-content-start] min(
+// 			100% - (var(--padding-inline) * 2),
+// 			var(--content-max-width)
+// 		)
+// 		[width-content-end] minmax(0, var(--breakout-size))
+// 		[width-breakout-end] minmax(0, var(--wide-size))
+// 		[width-wide-end] minmax(var(--padding-inline), 1fr)
+// 		[width-full-end];
+// }
+
+// .content-layout
+// 	> :not(.width-full, .width-wide, .width-breakout, .post-sidebar),
+// .width-full > :not(.width-full, .width-wide, .width-breakout, .post-sidebar),
+// .width-wide > :not(.width-full, .width-wide, .width-breakout, .post-sidebar) {
+// 	grid-column: width-content;
+// }
+
+// .content-layout .width-full:not(.flex),
+// .content-layout .width-wide:not(.flex) {
+// 	display: grid;
+// }
+
+// .content-layout .width-full {
+// 	grid-column: width-full;
+// 	// display: grid;
+// 	grid-template-columns: inherit;
+// }
+
+// .content-layout .width-wide {
+// 	grid-column: width-wide;
+// 	// display: grid;
+// 	grid-template-columns: inherit;
+// }
+// .content-layout .width-content {
+// 	grid-column: width-content;
+// }
+
+// .content-layout .width-breakout {
+// 	grid-column: width-breakout;
+// }
+
+// .test-grid {
+//   background-color: rgba(238, 232, 170, 0.154);
+//   display: grid;
+//   grid-template-columns: repeat(5, 1fr);
+//   grid-template-rows: repeat(5, 1fr);
+//   // height: 50vh;
+//   z-index: 1;
+//   grid-row: 1/-1;
+//   // grid-column: 1;
+
+//   > .item.red {
+//     background-color: red;
+//     border: dashed red 2px;
+//     grid-row: 1/-1;
+//     grid-column: 2;
+//   }
+//   > .item {
+//     background-color: rgba(120, 120, 120, 0.494);
+//     border: dashed rgba(125, 125, 125, 0.522) 2px;
+//     // grid-row: 1/-1;
+//     // grid-column: 2;
+//   }
+// }
+
+// .post-sidebar {
+// 	// grid-column: width-wide-end;
+// 	// grid-row: 1 / -1;
+// 	z-index: 1;
+// 	background-color: limegreen;
+// }
+
+.post-layout {
+	// background-color: rgb(66, 64, 37);
+	--padding-inline: var(--space-m);
+	--content-max-width: var(--w-contentmax);
+	--breakout-max-width: 700px;
+	--wide-max-width: 800px;
+
+	--breakout-size: calc(
+		(var(--breakout-max-width) - var(--content-max-width)) / 1
+	);
+	--wide-size: calc((var(--wide-max-width) - var(--content-max-width)) / 2);
+
+	display: grid;
+
+	grid-template-columns:
+		[width-full-start] minmax(var(--padding-inline), 1fr)
+		[width-wide-start] minmax(0, var(--wide-size))
+		[width-breakout-start] minmax(0, var(--breakout-size))
+		[width-content-start] min(
+			100% - (var(--padding-inline) * 2),
+			var(--content-max-width)
+		)
+		[width-content-end] minmax(0, var(--breakout-size))
+		[width-breakout-end] minmax(0, var(--wide-size))
+		[width-wide-end] minmax(var(--padding-inline), 1fr)
+		[width-full-end];
+
+	> header {
+		// background: #ff44006b;
+		grid-column: 1/-1;
+		grid-row: 1;
+		grid-template-columns: inherit;
+
+    .post-title {
+      grid-column: width-wide;
+    }
+	}
+
+	> .content {
+		// background: #0084ff6b;
+		grid-row: 2;
+		grid-column: width-breakout;
+	}
+
+	> aside,
+	> .post-sidebar {
+		// background: #ff7b006b;
+		grid-column: width-content;
+		grid-row: 3;
+		z-index: 1;
+
+		> :first-child {
+			position: sticky;
+			top: var(--space-xl);
+			max-width: var(--w-contentmax);
+		}
+
+    > * > * {
+      box-shadow: var(--shadow-1);
+    }
+	}
+
+	@media screen and (width > 1185px) {
+		> aside,
+		> .post-sidebar {
+			grid-column: width-wide-end/width-full-end;
+			grid-row: 2;
+		}
+	}
+
+	> footer {
+		// background: #22ff006b;
+		grid-column: 3;
+		grid-row: 0;
+	}
+
+	> :not(.width-full, .width-wide, .width-breakout, .post-sidebar, .post-title),
+	.width-full > :not(.width-full, .width-wide, .width-breakout, .post-sidebar, .post-title),
+	.width-wide > :not(.width-full, .width-wide, .width-breakout, .post-sidebar, .post-title) {
+		grid-column: width-content;
+	}
+
+	.width-full:not(.flex),
+	.width-wide:not(.flex) {
+		display: grid;
+	}
+
+	.width-full {
+		grid-column: width-full;
+		grid-template-columns: inherit;
+	}
+
+	.width-wide {
+    z-index: 1;
+		grid-column: width-wide;
+		grid-template-columns: inherit;
+	}
+
+  .width-breakout {
+    z-index: 1;
+    grid-column: width-breakout;
+  }
+  
+	.width-content {
+    z-index: 1;
+		grid-column: width-content;
+	}
+
+}
+// .simple-layout {
+//   background-color: palegoldenrod;
+//   display: grid;
+//   grid-template-columns: repeat(5, 40rem);
+//   min-height: 10vh;
+//   min-width: 100vw;
+//   border: dotted red 1px;
+
+//   > * {
+//     border: dashed grey 2px;
+//     grid-column: 3;
+//   }
+
+//   > header {
+//     grid-column: 1/-1;
+//     grid-row: 1;
+//     grid-template-columns: inherit;
+//     display: grid;
+//     grid-gap: inherit;
+//     box-sizing: border-box;
+
+//     > * {
+//       grid-column: 3;
+//     }
+//   }
+
+//   > .content {
+//     min-height: 10rem;
+//     border: dashed grey 1px;
+//     grid-row: 2;
+//     grid-column: 3;
+//   }
+
+//   > aside {
+//     grid-column: 4/-1;
+//     grid-row: 2;
+//   }
+
+//   > footer {
+//     grid-column: 3;
+//     grid-row: 0;
+//   }
+// }
+.post_title {
+  grid-column: width-wide;
 }

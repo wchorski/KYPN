@@ -1,16 +1,19 @@
 .callout {
   // padding: 0 8px;
-  border-left: 4px solid;
+  border-left: 6px solid;
   border-radius: 4px;
   margin: 8px 0;
   display: grid;
   // grid-template-columns: 48px 1fr;
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
   width: auto;
   padding: 1rem;
+  background-color: var(--c-txt-bg);
 
   &.info{
-    background-color: #2c4d79;
+    // background-color: #2c4d79;
     border-color: #6898d5;
     
     i::after {
@@ -20,7 +23,7 @@
   }
 
   &.success{
-    background-color: #365241;
+    // background-color: #365241;
     border-color: #31bb66;
     
     i::after {
@@ -30,7 +33,7 @@
   }
 
   &.error{
-    background-color: #534040;
+    // background-color: #534040;
     border-color: #bf2121;
     
     i::after {
@@ -40,7 +43,7 @@
   }
   
   &.warning{
-    background-color: #653c0e;
+    // background-color: #653c0e;
     border-color: #d78629;
     
     i::after {
@@ -54,7 +57,7 @@
 .icon {
   display: grid;
   align-content: center;
-  margin-right: 1rem;
+  // margin-right: 1rem;
   
   &::after{
     font-size: .5rem;
@@ -64,4 +67,8 @@
 .icon::after {
   font-size: 2rem;
   font-style: normal;
+}
+
+.content {
+  flex: 1;
 }

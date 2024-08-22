@@ -1,54 +1,250 @@
+import { Blockquote } from "@components/blocks/Blockquote"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { BlockLayout } from "@components/layouts/BlockLayout"
 import { Card } from "@components/layouts/Card"
 import { Grid } from "@components/layouts/Grid"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/layouts/Section"
+import { Section } from "@components/blocks/Section"
 import { CSSProperties } from "react"
 import { IoIosAirplane, IoMdAperture, IoMdContact } from "react-icons/io"
+import styles from "@styles/page.module.scss"
+import { Callout } from "@components/blocks/Callout"
+import { ButtonLink } from "@components/blocks/ButtonLink"
+import { envs } from "@/envs"
+import { CodeBlock } from "@components/blocks/CodeBlock"
+import { ContactForm } from "@components/blocks/ContactForm"
+import { DayMonthTime } from "@components/blocks/DayMonthTime"
+import { Hero } from "@components/blocks/Hero"
+import { IFrame } from "@components/blocks/IFrame"
+import { ImageBlock } from "@components/blocks/ImageBlock"
+import { HeadingBlock } from "@components/blocks/HeadingBlock"
+import Flex from "@components/layouts/Flex"
+import Link from "next/link"
+import { Header } from "@components/elements/Header"
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
 	searchParams: { q: string }
 	params: { id: string }
 }
 
+const headers = [
+	{
+		level: 2,
+		id: "outside the section",
+		children: "outside the section",
+	},
+	{
+		level: 2,
+		id: "Links and Buttons",
+		children: "Links and Buttons",
+	},
+]
+
 export default async function FruitPage({ params, searchParams }: Props) {
 	// return <PageTHeaderMain header={Header()} main={Content()} />
 	return (
 		<>
-			<main>
-				<header style={{ background: "hsl(0deg 0% 50.2% / 66%)" }}>
-					<BlockLayout layout={"1"}>
-						<h1> Header of Fruit Page for testing components and variables </h1>
+			<main className={`post-layout`}>
+				<Header bgColor={'bg-c-accent'}>
+					<h1 className={"post-title"}>
+						{" "}
+						Header of Fruit Page for testing components and variables{" "}
+					</h1>
+					<p>
+						{" "}
+						This is an example page to view and test typography, custom
+						components, colors, etc.{" "}
+					</p>
+				</Header>
+				{/* <header
+					className={"width-full bg-c-accent"}
+				>
+					<div className="width-wide">
+						<h1 className={'post-title'}> Header of Fruit Page for testing components and variables </h1>
 						<p>
 							{" "}
 							This is an example page to view and test typography, custom
 							components, colors, etc.{" "}
 						</p>
-					</BlockLayout>
-				</header>
+					</div>
+          <hr className="width-full"/>
+				</header> */}
 
-				<Content />
+				<div className="content width-full">
+					<ContentBlocks />
+				</div>
+
+				<aside className="post-sidebar">
+					<Flex flexDirection={"column"} alignContent="flex-start">
+						<Card>
+							<label>Table of Contents</label>
+							<ul className="unstyled">
+								{headers.map((h, i) => (
+									<li key={i}>
+										<Link key={i} href={`/fruit#${String(h.children)}`}>
+											{String(h.children)}
+										</Link>
+									</li>
+								))}
+							</ul>
+						</Card>
+						<Card>ads</Card>
+						<Card>call to action</Card>
+					</Flex>
+				</aside>
+
+				<footer className="width-wide">
+					<Flex className="width-wide">
+						<Card>
+							<h2>Categories</h2>
+							<p>here are some related categories</p>
+						</Card>
+						<Card>
+							<h2>Tags</h2>
+							<p>here are some related tags</p>
+						</Card>
+					</Flex>
+				</footer>
 			</main>
+			{/* <div className="test-grid">
+				<div className="item red"> gitem </div>
+				<div className="item"> gitem </div>
+				<div className="item"> gitem </div>
+				<div className="item"> gitem </div>
+				<div className="item"> gitem </div>
+			</div> */}
 		</>
 	)
 }
 
-// function Header() {
-// 	return (
-// 		<>
-// 			<BlockLayout layout={"1"}>
-// 				<div>
-// 					<p>
-// 						{" "}
-// 						This is an example page to view and test typography, custom
-// 						components, colors, etc.{" "}
-// 					</p>
-// 				</div>
-// 			</BlockLayout>
-// 		</>
-// 	)
-// }
+function ContentBlocks() {
+	return (
+		<>
+			{/* <h2 id="outside the section"> outside the section</h2> */}
+			<HeadingBlock level={headers[0].level as any} id={headers[0].id}>
+				{headers[0].children}
+			</HeadingBlock>
+			<p>
+				{" "}
+				loose content directly inside the main tag still get placed inside the
+				width-content column
+			</p>
+
+			<Section bgColor={'bg-c-accent'}>
+				<h2> content inside section</h2>
+				<p>
+					content inside a width-full section still gets put into the
+					width-content column
+				</p>
+				<p>
+					You can even set a background color or image of the entire section
+				</p>
+			</Section>
+
+			<Callout intent={"info"}>
+				<p>callouts will always have width-breakout</p>{" "}
+				<p>
+					is this working the way it should? Lorem ipsum dolor sit amet
+					consectetur, adipisicing elit. Consequatur, odit pariatur magnam,
+					beatae quas corporis labore harum rem iusto nulla nostrum voluptates
+					ipsum adipisci rerum impedit distinctio dolore animi laudantium?
+				</p>
+			</Callout>
+			<Callout intent={"success"}>
+				<p>callouts can have different intents</p> <h4> Other Elements</h4>
+				<p> you can also put other elements in here</p>
+			</Callout>
+
+			<Blockquote>
+				<p>blockquote</p>
+			</Blockquote>
+			<HeadingBlock level={headers[1].level as any} id={headers[1].id}>
+				{headers[1].children}
+			</HeadingBlock>
+			{/* <h2 id="Links and Buttons"> Links and Buttons </h2> */}
+			<div className="flex">
+				<ButtonLink
+					link={envs.FRONTEND_URL + `/fruit#links-buttons`}
+					label="Button Link Large"
+					size="large"
+				/>
+				<ButtonLink
+					link={envs.FRONTEND_URL + `/fruit#links-buttons`}
+					label="Button Link Medium"
+					size="medium"
+				/>
+				<ButtonLink
+					link={envs.FRONTEND_URL + `/fruit#links-buttons`}
+					label="Button Link small"
+					size="small"
+				/>
+			</div>
+
+			<h4>CodeBlock</h4>
+			<CodeBlock>
+				{`
+.gap-xl {
+	gap: var(--space-xl) !important !important !important !important!important !important !important;
+}
+.gap-l {
+	gap: var(--space-l);
+}
+.gap-ml {
+	gap: var(--space-ml);
+}
+.gap-m {
+	gap: var(--space-m);
+}
+          `}
+			</CodeBlock>
+      <Section bgColor={'bg-c-primary'}>
+        <h4>Forms</h4>
+        <ContactForm />
+
+      </Section>
+
+			<h4> DayMonthTime</h4>
+			<p className="sub-text">coming soon...</p>
+			{/* <DayMonthTime dateString={"2024-10-10"} /> */}
+
+			<h4>Hero</h4>
+			<p>
+				still need to figure out a good way to color text without getting
+				overridden
+			</p>
+			<Hero
+				color={"white"}
+				imageSrc={
+					"https://assets.nintendo.com/image/upload/f_auto,q_auto/v1712945796/Marketing/pmp-lm2-hd/background-scenes/background-manor-landscape-2x.jpg"
+				}
+				caption={{
+					discriminant: false,
+				}}
+			>
+				<h3>BIG HERO TEXT</h3>
+				<p>lfg team. wohhh woooooh</p>
+			</Hero>
+
+			<h4>IFrame</h4>
+			<IFrame src="https://www.williamusic.com" />
+
+			<h3> Media </h3>
+			<h4>ImageBlock</h4>
+			<ImageBlock
+				alt="landscape chubby kirby"
+				imageSrc="https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_801/b_white/f_auto/q_auto/ncom/software/switch/70010000056620/3c95ab269b656931b9f8218ce6e48bec3d1f84d4b92f6c9ff9616b0f129c2a95"
+			/>
+			<ImageBlock
+				alt="portrait pikmin"
+				imageSrc="https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_500/ncom/software/switch/70070000018036/desc/Pikmin1-2_char"
+			/>
+			<ImageBlock alt="square placeholer" imageSrc="/assets/placeholder.png" />
+
+			<h4>ImageGallery</h4>
+			<p> todo: Coming soon to a browser near you...</p>
+		</>
+	)
+}
 
 function Content() {
 	return (
@@ -73,7 +269,19 @@ function Content() {
 						blanditiis consequatur facere non.
 					</p>
 					<pre>
-						some code that is pre formateed to look like this is sooo coool
+						{`
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--w-sitemax)) minmax(
+    0,
+    1fr
+  );
+
+  > * {
+    grid-column: 2/2;
+  }
+}
+            `}
 					</pre>
 					<Card>
 						<p>here is some content inside a card element</p>
@@ -1110,6 +1318,16 @@ function Content() {
 				</Card>
 			</Grid>
 			<p>making for custom banners or background graphics</p>
+			<section className={styles.full_width}></section>
+			<h2> Blocks </h2>
+			<p>
+				custom react components that can also be used in the rich text editor
+				within Keystone document editor
+			</p>
+			<Blockquote>
+				{" "}
+				<p> this is a quote n stuffun</p>
+			</Blockquote>
 		</>
 	)
 }

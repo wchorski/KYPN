@@ -1,7 +1,7 @@
 import ErrorMessage from "@components/ErrorMessage"
 import { Table } from "@components/elements/Table"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/layouts/Section"
+import { Section } from "@components/blocks/Section"
 import { envs } from "@/envs"
 import { fetchUsers } from "@lib/fetchdata/fetchUsers"
 import { getServerSession } from "next-auth"
@@ -12,6 +12,7 @@ import Link from "next/link"
 import NotAuthorized403 from "../not-authorized"
 import NoDataFoundError404 from "../not-found"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { BlockLayout } from "@components/layouts/BlockLayout"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -47,7 +48,7 @@ export default async function UsersPage({ params, searchParams }: Props) {
 function Header({ session }: { session: Session | null }) {
 	return (
 		<>
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<h1> My Account </h1>
 				<pre>
 				  <h6>Session:</h6>
@@ -70,7 +71,7 @@ function Header({ session }: { session: Session | null }) {
 					{" "}
 					If you are not logged in then you will see <strong>no data</strong>
 				</p>
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }
@@ -82,7 +83,7 @@ type Main = {
 function Main({ cells }: Main) {
 	return (
 		<>
-			<Section layout={"1"}>
+			<BlockLayout layout={"1"}>
 				<h2>Users</h2>
 				<Table
 					caption=""
@@ -90,7 +91,7 @@ function Main({ cells }: Main) {
 					headers={["name", "email", "role", "account"]}
 					cells={cells}
 				/>
-			</Section>
+			</BlockLayout>
 		</>
 	)
 }

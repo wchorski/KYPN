@@ -61,14 +61,6 @@ html, body {
   }
 }
 
-a {
-	color: var(--c-primary);
-}
-a:hover {
-	color: var(--c-secondary);
-}
-
-
 input[type="email"],
 input[type="number"],
 input[type="search"],
@@ -94,6 +86,21 @@ select:focus {
 	outline: 0;
 }
 
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  box-shadow: var(--shadow-1);
+	background-color: var(--c-txt-bg);
+	color: var(--c-primary);
+	border-color: var(--c-primary);
+  transition-property: color, border;
+  transition-duration: 0.1s;
+  // transition-timing-function: ease-out;
+  transition-timing-function: cubic-bezier(0,.57,0,.99);
+}
+
 .button:hover,
 button:hover,
 input[type="submit"]:hover,
@@ -104,10 +111,18 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-	color: var(--c-accent);
-	border-color: var(--c-accent);
+	color: var(--c-secondary);
+	border-color: var(--c-secondary) !important;
 	outline: 0;
 }
+
+.button:active, button:active {
+  color: var(--c-accent);
+  border-color: var(--c-accent);
+  transform: translateY(1px);
+}
+
+
 // .button.button-primary,
 // button.button-primary,
 // input[type="submit"].button-primary,
@@ -131,15 +146,6 @@ input[type="button"]:focus {
 // 	background-color: #1eaedb;
 // 	border-color: #1eaedb;
 // }
-.button,
-button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-	background-color: var(--c-txt-bg);
-	color: var(--c-primary);
-	border-color: var(--c-primary);
-}
 
 pre, code {
   color: var(--c-code);
@@ -170,3 +176,68 @@ ul, ol {
     fill: var(--c-txt);
   }
 }
+
+a {
+	color: var(--c-primary);
+  transition-duration: var(--anim-duration-fast);
+  transition-property: color, background;
+}
+a:hover {
+	color: var(--c-secondary);
+}
+
+.bg-c-primary {
+  background-color: var(--c-primary);
+  color: var(--c-txt-primary);
+  h1,h2,h3,h4,h5,h6 {
+    color: var(--c-txt-primary) !important;
+  }
+}
+.bg-c-secondary {
+  background-color: var(--c-secondary);
+  color: var(--c-txt-primary);
+  h1,h2,h3,h4,h5,h6 {
+    color: var(--c-txt-primary) !important;
+  }
+}
+.bg-c-tertiary {
+  background-color: var(--c-tertiary);
+  color: var(--c-txt-primary);
+  h1,h2,h3,h4,h5,h6 {
+    color: var(--c-txt-primary) !important;
+  }
+}
+.bg-c-accent {
+  position: relative;
+  z-index: 1;
+  // border: dashed 1px var(--c-accent);
+
+  // todo make accent bg more versitle
+  // &::after {
+  //   content: '';
+  //   width: 2%;
+  //   height: 90%;
+  //   background-color: var(--c-accent);
+  //   position: absolute;
+  //   left: 10%;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   z-index: 0;
+  //   // opacity: .5;
+  // }
+
+  > * {
+    z-index: 1;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    // color: var(--c-txt-primary) !important;
+    background-image: linear-gradient(to right, var(--c-accent), var(--c-accent));
+    display: inline;
+    background-size: 100% 10%;
+    background-repeat: no-repeat;
+    background-position: 0 105%;
+    text-shadow: var(--shadow-4);
+  }
+}
+//todo set colors from status.module.scss to here for other components to use

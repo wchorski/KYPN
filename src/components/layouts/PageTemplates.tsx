@@ -16,21 +16,42 @@ export function PageTHeaderMainAside({
 	aside,
 }: PageTHeaderMainAside) {
 	return (
-		<div
+		<main
 			className={[
 				`page-wrapper`,
 				styles["page"],
 				styles["header_main_aside"],
 			].join(" ")}
 		>
-			{header}
+			<header>{header}</header>
 
-			<MainContainer>{main}</MainContainer>
+			<div className="main-content">{main}</div>
 
 			<AsideBar>{aside}</AsideBar>
-		</div>
+		</main>
 	)
 }
+// export function PageTHeaderMainAside({
+// 	header,
+// 	main,
+// 	aside,
+// }: PageTHeaderMainAside) {
+// 	return (
+// 		<div
+// 			className={[
+// 				`page-wrapper`,
+// 				styles["page"],
+// 				styles["header_main_aside"],
+// 			].join(" ")}
+// 		>
+// 			{header}
+
+// 			<MainContainer>{main}</MainContainer>
+
+// 			<AsideBar>{aside}</AsideBar>
+// 		</div>
+// 	)
+// }
 
 type PageTHeaderMain = {
 	// template:'header_main_aside'|'HeaderMain',
@@ -50,7 +71,7 @@ export function PageTHeaderMain({
 	headerIsDisplayed = true,
 }: PageTHeaderMain) {
 	return (
-		<div
+		<main
 			className={[`page-wrapper`, styles["page"], styles["header_main"]].join(
 				" "
 			)}
@@ -67,10 +88,49 @@ export function PageTHeaderMain({
 				{header}
 			</header>
 
-			<MainContainer>{main}</MainContainer>
-		</div>
+			{main}
+		</main>
 	)
 }
+// type PageTHeaderMain = {
+// 	// template:'header_main_aside'|'HeaderMain',
+// 	header: ReactNode
+// 	headerBgImg?: string
+// 	headerBgColor?: string
+// 	headerStyles?: CSSProperties
+// 	headerIsDisplayed?: boolean
+// 	main: ReactNode
+// }
+// export function PageTHeaderMain({
+// 	header,
+// 	main,
+// 	headerBgImg,
+// 	headerBgColor,
+// 	headerStyles,
+// 	headerIsDisplayed = true,
+// }: PageTHeaderMain) {
+// 	return (
+// 		<div
+// className={[`page-wrapper`, styles["page"], styles["header_main"]].join(
+// 	" "
+// )}
+// 		>
+// 			<header
+// 				className={styles.header}
+// 				style={{
+// 					backgroundImage: headerBgImg ? `url(${headerBgImg})` : "",
+// 					backgroundColor: headerBgColor,
+// 					display: headerIsDisplayed ? "block" : "none",
+// 					...headerStyles,
+// 				}}
+// 			>
+// 				{header}
+// 			</header>
+
+// 			<MainContainer>{main}</MainContainer>
+// 		</div>
+// 	)
+// }
 
 type PageTMain = {
 	main: ReactNode

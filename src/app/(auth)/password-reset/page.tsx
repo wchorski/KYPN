@@ -1,6 +1,6 @@
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
 import { PasswordResetForm } from '@components/menus/PasswordResetForm'
+import { BlockLayout } from '@components/layouts/BlockLayout'
 type Props = {
   searchParams:{
     token:string,
@@ -23,17 +23,17 @@ export default async function PasswordResetPage ({  searchParams }:Props) {
 function Header(){
 
   return<>
-    <Section layout={'1'}>
+    <BlockLayout layout={'1'}>
       <h1> Password Reset </h1>
-    </Section>
+    </BlockLayout>
   </>
 }
 
 function Main(token:string, email:string){
 
   return<>
-    <Section layout={'1'}>
+    <BlockLayout layout={'1'}>
       <PasswordResetForm token={token} email={email} />
-    </Section>
+    </BlockLayout>
   </>
 }

@@ -14,7 +14,6 @@ import { ImageLinkList } from '@components/blocks/ImageLinkList';
 import { InfoCardList } from '@components/blocks/InfoCardList';
 import { PostsList } from '@components/blocks/PostsList';
 import { IFrame } from '@components/blocks/IFrame';
-import { Section } from '@components/blocks/Section';
 import SliderSlick from '@components/blocks/SliderSlick';
 import { Carousel } from '@components/blocks/Carousel';
 import { Quote } from '@components/blocks/Quote';
@@ -24,7 +23,9 @@ import { BlockLayout } from '@components/blocks/BlockLayout';
 import { Paragraph } from '@components/blocks/ParagraphBlock';
 import { HeadingBlock } from '@components/blocks/HeadingBlock';
 import { CodeBlock } from './CodeBlock';
-import styles from '@styles/blocs/blockrenderer.module.scss'
+// import styles from '@styles/blocs/blockrenderer.module.scss'
+import { Card } from '@components/layouts/Card';
+import { Blockquote } from './Blockquote';
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -41,8 +42,8 @@ const renderers: DocumentRendererProps['renderers'] = {
       return <BlockLayout {...props} />
     },
     // customise blockquote elements with your own styles
-    blockquote({ children }) {
-      return <blockquote className={`blockquote`}>{children}</blockquote>;
+    blockquote(props) {
+      return <Blockquote {...props}/>;
     },
     // block code ``` ```
     code(props) {
@@ -52,8 +53,8 @@ const renderers: DocumentRendererProps['renderers'] = {
       return  <Paragraph {...props}/>;
     },
     list(props) {      
-      if(props.type === 'unordered') return <ul className="element-wrap">{props.children.map((child,i) => <li key={i}>{child}</li>)}</ul>
-      return <ol className="element-wrap">{props.children.map((child,i) => <li key={i}>{child}</li>)}</ol>
+      if(props.type === 'unordered') return <ul>{props.children.map((child,i) => <li key={i}>{child}</li>)}</ul>
+      return <ol>{props.children.map((child,i) => <li key={i}>{child}</li>)}</ol>
     },
     heading(props) {
       return <HeadingBlock {...props} />
@@ -103,9 +104,11 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   postslist: props => {
     return <PostsList {...props}/>
   },
+  card: props => {
+    return <Card {...props}/>
+  },
   infocard: props => {
     return <InfoCard {...props}/>
-    
   },
   infocardlist: props => {
     return <InfoCardList {...props}/>

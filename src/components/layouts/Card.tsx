@@ -4,6 +4,7 @@ import { SpaceSize } from "@ks/types"
 
 type Props = {
 	children: ReactNode
+	content?:string,
 	layout?: "flex" | "grid"
 	direction?: "row" | "column"
 	id?: string
@@ -13,6 +14,9 @@ type Props = {
 	gap?: string
 	wrapperOverflow?: SpaceSize
   paddingBlock?: SpaceSize
+  margin?: SpaceSize
+  verticleAlign?: 'start'|'center'|'end',
+  maxWidth?:string,
 	// layout?: 'default'|'center',
 }
 
@@ -20,13 +24,17 @@ export function Card({
 	layout,
 	direction = "column",
 	children,
+  content,
 	id,
 	bgColor,
 	className,
 	style,
 	gap = "var(--space-m)",
 	wrapperOverflow,
-  paddingBlock
+  paddingBlock,
+  margin,
+  verticleAlign,
+  maxWidth
 }: Props) {
 	const allStyles = ["card", styles.card, styles[layout || ""]].join(" ")
 
@@ -35,17 +43,21 @@ export function Card({
 			id={id}
 			className={allStyles + " " + className}
 			style={{
-        backgroundColor: bgColor,
+        ...(bgColor ? {backgroundColor: bgColor} : {}),
 				flexDirection: direction,
 				gap: gap,
+        ...(margin ? {margin: margin} : {}),
+        ...(verticleAlign ? {alignSelf: verticleAlign} : {}),
         paddingInline: wrapperOverflow ? `var(--space-${wrapperOverflow})` : 'var(--space-m)',
         ...(paddingBlock ? {paddingBlock: `var(--space-${paddingBlock})`} : {}),
+        ...(maxWidth ? {maxWidth} : {}),
         // ...(isPopOut ? {marginInline: 'clamp(calc(var(--space-m) * -1)'} : {}),
         // ...(wrapperOverflow ? {'--space-wrapperOverflow': `var(--space-${wrapperOverflow})`} : {}),
         // marginInline: isPopOut ? 'calc(var(--space-m) * -1)' : 'revert-layer',
 				...style,
 			}}
 		>
+      {content && <>{content}</>}
 			{children}
 		</div>
 	)

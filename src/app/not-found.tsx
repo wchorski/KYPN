@@ -2,7 +2,7 @@ import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import Link from "next/link"
 import { Metadata } from "next"
 import { envs } from "@/envs"
-import { Section } from "@components/layouts/Section"
+import { Section } from "@components/blocks/Section"
 import styles from "../styles/elements/404.module.scss"
 import { ReactNode } from "react"
 

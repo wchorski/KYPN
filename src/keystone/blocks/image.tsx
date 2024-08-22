@@ -13,6 +13,10 @@ export const image = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
+    alt: fields.url({
+      label: 'Image Alt Text',
+      defaultValue: '',
+    }),
     color: fields.text({
       label: 'Fallback background color',
       defaultValue: 'lightgray'
@@ -33,7 +37,7 @@ export const image = component({
   preview: function Quote(props) {
 
     const currWidth = (props.fields.width.value > 0) 
-      ? props.fields.width.value+'px'
+      ? props.fields.width.value
       : '100%'
 
     return (

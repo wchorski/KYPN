@@ -3,7 +3,7 @@ import { PageTHeaderMain, PageTHeaderMainAside } from "@components/layouts/PageT
 import { Category, Post, Tag } from "@ks/types";
 import { envs } from "@/envs";
 import { Metadata } from "next";
-import { Section } from "@components/layouts/Section";
+import { Section } from "@components/blocks/Section";
 import Link from "next/link";
 import fetchCategories from "@lib/fetchdata/fetchCats";
 import fetchCategory from "@lib/fetchdata/fetchCategory";

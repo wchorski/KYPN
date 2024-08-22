@@ -1,6 +1,6 @@
 import { nextAuthOptions } from "@/session"
 import { BlogList } from "@components/blog/BlogList"
-import { Section } from "@components/layouts/Section"
+import { Section } from "@components/blocks/Section"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
 import { ReactElement } from "react"

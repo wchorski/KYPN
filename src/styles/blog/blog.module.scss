@@ -39,14 +39,19 @@ article.thumbnail :global{
   flex-direction: column;
   background-color: var(--c-txt-bg);
   height: 100%;
-  // box-shadow: var(--boxs-1);
+  // box-shadow: var(--shadow-1);
   // max-width: 70em;
   // margin-inline: auto;
+
+  h3 {
+    font-size: clamp(1rem * var(--font-size-multi) * 1, 1rem + 5.246vw, 1rem * var(--font-size-multi) * 2.5);
+  }
 
 
   figure{
     transition: transform, contrast, .3s;
     margin: 0;
+    padding: 0;
     
     &:hover, &:focus{
       transform: scale(1.01);

@@ -1,33 +1,60 @@
-import Link from "next/link";
+import Image from "next/image"
+import Link from "next/link"
 
 type Props = {
-  color:string,
-  padding:number,
-  border:number,
-  imageSrc:string,
-  width:number,
+	color?: string
+	padding?: number
+	border?: number
+	imageSrc: string
+	alt: string
+	width?: number
 }
-
-export function ImageBlock({color, imageSrc, padding = 0, border = 0, width}:Props) {
-
-  return (
-    // <figure style={{
-    //   margin: '0',
-    //   width: width + 'px',
-    //   padding: padding + 'px',
-    //   border: `solid lightgrey ${String(border)}px`,
-    //   marginInline: 'auto',
-    // }}>
-      <img
-        src={imageSrc}
-        className={`image block`}
-        style={{
-          width: width ? width+'px' : '100%',
-          objectFit: 'cover',
-          display: 'block',
-        }}
-      />
-
-    // </figure>
-  )
+//todo add lightbox
+export function ImageBlock({
+	color,
+	imageSrc,
+	alt,
+	padding = 0,
+	border = 0,
+	width,
+}: Props) {
+	return (
+		<figure
+    className="width-wide"
+			style={{
+        margin: '0'
+				// maxWidth: "calc(var(--w-contentmax) + var(--space-xxl))",
+			}}
+		>
+			<Image
+      className="width-wide"
+				alt={alt}
+				src={imageSrc}
+				// className={`image block`}
+				// layout={'fill'}
+				style={{
+					width: "100%",
+					height: "auto",
+          maxHeight: '60vh',
+          objectFit: 'contain',
+					filter: "drop-shadow(var(--shadow-3))",
+					// border: "solid 1px var(--c-seperator)",
+				}}
+				sizes={"100vw"}
+				width={0}
+				height={0}
+				// style={{
+				//   width: width ? width : '100%',
+				//   objectFit: 'cover',
+				//   display: 'block',
+				// }}
+			/>
+			<caption style={{paddingBlock: 'var(--space-ms)'}}>{alt}</caption>
+		</figure>
+	)
 }
+// img.full-width {
+//   width: 100%;
+//   max-height: 45vh;
+//   object-fit: cover;
+// }

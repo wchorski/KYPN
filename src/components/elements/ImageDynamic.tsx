@@ -5,7 +5,7 @@ type Props = {
   photoIn: {
     url:string
     altText:string,
-  }|string|undefined,
+  }|string | null | undefined,
   className?:string,
   alt?:string,
 }
@@ -19,7 +19,7 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
 
 
   return (
-    <img
+    <Image
       src={state.image.url}
       alt={state.altText}
       width={state.image.width}

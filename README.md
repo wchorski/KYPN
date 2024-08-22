@@ -87,6 +87,9 @@ https://myaccount.google.com/security
 <details>
 <summary> config </summary>
 
+1. `yarn ks:dev` (always run first if running both servers)
+2. `yarn n:dev`
+
 > [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
 
 > [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
@@ -159,6 +162,11 @@ When initializing a fresh database or returning to development you may add/remov
 </details>
 
 ## TODO
+This i need to do before moving back to main branch
+- [ ] page with side bar and site side bar (will use @container query)
+- [ ] all blocks tested
+- [ ] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
+---
 
 - [ ] built in calendar for admin dash
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top

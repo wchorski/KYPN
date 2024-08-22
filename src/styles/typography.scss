@@ -10,7 +10,7 @@ body {
   font-family: var(--font-paragraph), Tahoma, sans-serif;
 }
 
-h1,h2,h3,h4,h5,h6, thead{
+h1,h2,h3,h4,h5,h6, thead, button {
   font-family: var(--font-header), Verdana, sans-serif;
   word-break: break-word;
 }
@@ -23,40 +23,52 @@ h1,h2,h3,h4,h5,h6, thead{
 // }
 
 h1 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 6));
+  font-size: clamp(1rem * (var(--font-size-multi) * 3), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 6));
   font-weight: 900;
+  line-height: 1;
 }
 h2 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 4.5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 5));
+  font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 5));
   font-weight: 900;
+  line-height: 1;
 }
 h3 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 4), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 4));
+  font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 4));
   font-weight: 900;
   margin-top: var(--space-m);
   margin-bottom: var(--space-ms);
+  line-height: 1;
 }
 h4 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 3.5), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 3));
+  font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 3));
   font-weight: 750;
   margin-top: var(--space-m);
   margin-bottom: var(--space-s);
+  line-height: 1;
 }
 h5 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 3), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 2));
+  font-size: clamp(1rem * (var(--font-size-multi) * 1), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 2));
   font-weight: 600;
   margin-top: var(--space-m);
   margin-bottom: var(--space-xs);
+  line-height: 1;
 }
 h6 {
-  font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 1));
+  font-size: clamp(1rem * (var(--font-size-multi) * 1), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 1));
   font-weight: 550;
   margin-top: var(--space-ms);
   margin-bottom: var(--space-xs);
+  line-height: 1;
 }
 
 p, ul, ol {
   margin-top: 0;
+}
+ul:not([class]), ol:not([class]) {
+  padding-left: var(--space-xl);
+  > li:not([class]) {
+    margin-bottom: var(--space-s);
+  }
 }
 
 li > ul {
@@ -73,13 +85,17 @@ p, ul, ol {
   font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
 
+.sub-text {
+  font-size: clamp(1.4rem, 1.4rem + 1vw, 1rem * (var(--font-size-multi) * 2));
+}
+
 ul{
   //todo how to change color
   list-style: circle;
   // list-style-image: url('/marker.svg');
 }
 
-ul, ol {
+ul:not([class]), ol:not([class]) {
   list-style-position: outside;
   padding-left: var(--space-l);
   max-width: calc(var(--w-contentmax) - 20px);
@@ -155,13 +171,14 @@ input[type="button"] {
 	display: inline-block;
 	text-align: center;
 	font-size: 11px;
-	font-weight: 600;
+	font-weight: bolder;
 	letter-spacing: 0.1rem;
 	white-space: nowrap; 
 	border-radius: var(--br-dull);
 	cursor: pointer;
 	box-sizing: border-box;
   width: fit-content;
+  text-decoration: none;
 }
 
 .tshadow_1 {

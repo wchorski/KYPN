@@ -1,6 +1,6 @@
 import { nextAuthOptions } from '@/session'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
+import { Section } from '@components/blocks/Section'
 import { fetchPosts } from '@lib/fetchdata/fetchPosts'
 import fetchTags from '@lib/fetchdata/fetchTags'
 import { getServerSession } from 'next-auth'

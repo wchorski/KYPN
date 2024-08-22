@@ -1,6 +1,6 @@
 import { envs } from '@/envs'
 import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
+import { Section } from '@components/blocks/Section'
 import Link from 'next/link'
 type Props = {
   searchParams:{q:string}

@@ -10,7 +10,7 @@ export function Paragraph (props:Props) {
   const { textAlign, children } = props
   
   const pStyle:any = {
-    gridColumn: '2/3',
+    // gridColumn: '2/3',
     textAlign: textAlign,
   }
 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-// import { Section } from "@components/layouts/Section"
+// import { Section } from "@components/blocks/Section"
 import { GridLayout } from "@ks/types"
 import { BlockLayout as BlkLayout } from "../../components/layouts/BlockLayout";
 type Props = {

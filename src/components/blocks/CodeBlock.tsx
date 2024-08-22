@@ -12,11 +12,6 @@ export function CodeBlock(props: Props) {
 		children,
 	} = props
 
-	const pStyle: any = {
-		gridColumn: "2/3",
-		// textAlign: textAlign,
-	}
-
 	// switch (textAlign) {
 	//   case 'start':
 	//     pStyle.marginRight = "auto";
@@ -36,8 +31,8 @@ export function CodeBlock(props: Props) {
 	// }
 
 	return (
-		<pre className={`pre`} style={pStyle}>
-			{children}
+		<pre className="width-breakout">
+			<code>{children}</code>
 		</pre>
 	)
 }

@@ -1,11 +1,12 @@
 .quote {
   padding-left: 16px;
-  background-color: var(--c-desaturated);
+  background-color: var(--c-txt-bg);
   padding: 4px 12px 16px 48px;
   position: relative;
   border-radius: 6px;
   margin-bottom: 1rem;
   display: block;
+  box-shadow: var(--shadow-1);
   // transition: border;
   // transition-timing-function: linear;
   // transition-duration: .3s;

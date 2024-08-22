@@ -75,6 +75,7 @@ export const Post:Lists.Post = list({
     }),
     featured_image: text(),
     featured_video: text(),
+    // allow_comments: checkbox(),
 
     // the document field can be used for making rich editable content
     //   you can find out more at https://keystonejs.com/docs/guides/document-fields,
