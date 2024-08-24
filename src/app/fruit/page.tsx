@@ -21,6 +21,8 @@ import { HeadingBlock } from "@components/blocks/HeadingBlock"
 import Flex from "@components/layouts/Flex"
 import Link from "next/link"
 import { Header } from "@components/elements/Header"
+import { page_layout, page_sidebar, content, layout_full, layout_wide } from "@styles/layout.module.scss";
+import { post_header, post_title } from "@styles/blog/blogpost.module.scss";
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
 	searchParams: { q: string }
@@ -44,9 +46,9 @@ export default async function FruitPage({ params, searchParams }: Props) {
 	// return <PageTHeaderMain header={Header()} main={Content()} />
 	return (
 		<>
-			<main className={`post-layout`}>
+			<main className={page_layout}>
 				<Header bgColor={'bg-c-accent'}>
-					<h1 className={"post-title"}>
+					<h1 className={post_title}>
 						{" "}
 						Header of Fruit Page for testing components and variables{" "}
 					</h1>
@@ -56,25 +58,12 @@ export default async function FruitPage({ params, searchParams }: Props) {
 						components, colors, etc.{" "}
 					</p>
 				</Header>
-				{/* <header
-					className={"width-full bg-c-accent"}
-				>
-					<div className="width-wide">
-						<h1 className={'post-title'}> Header of Fruit Page for testing components and variables </h1>
-						<p>
-							{" "}
-							This is an example page to view and test typography, custom
-							components, colors, etc.{" "}
-						</p>
-					</div>
-          <hr className="width-full"/>
-				</header> */}
 
-				<div className="content width-full">
+				<div className={[content, layout_full].join(' ')}>
 					<ContentBlocks />
 				</div>
 
-				<aside className="post-sidebar">
+				<aside className={page_sidebar}>
 					<Flex flexDirection={"column"} alignContent="flex-start">
 						<Card>
 							<label>Table of Contents</label>
@@ -93,8 +82,8 @@ export default async function FruitPage({ params, searchParams }: Props) {
 					</Flex>
 				</aside>
 
-				<footer className="width-wide">
-					<Flex className="width-wide">
+				<footer className={layout_wide}>
+					<Flex className={layout_wide}>
 						<Card>
 							<h2>Categories</h2>
 							<p>here are some related categories</p>
@@ -106,13 +95,6 @@ export default async function FruitPage({ params, searchParams }: Props) {
 					</Flex>
 				</footer>
 			</main>
-			{/* <div className="test-grid">
-				<div className="item red"> gitem </div>
-				<div className="item"> gitem </div>
-				<div className="item"> gitem </div>
-				<div className="item"> gitem </div>
-				<div className="item"> gitem </div>
-			</div> */}
 		</>
 	)
 }
@@ -127,14 +109,14 @@ function ContentBlocks() {
 			<p>
 				{" "}
 				loose content directly inside the main tag still get placed inside the
-				width-content column
+				layout-content column
 			</p>
 
 			<Section bgColor={'bg-c-accent'}>
 				<h2> content inside section</h2>
 				<p>
-					content inside a width-full section still gets put into the
-					width-content column
+					content inside a layout-full section still gets put into the
+					layout-content column
 				</p>
 				<p>
 					You can even set a background color or image of the entire section
@@ -142,7 +124,7 @@ function ContentBlocks() {
 			</Section>
 
 			<Callout intent={"info"}>
-				<p>callouts will always have width-breakout</p>{" "}
+				<p>callouts will always have layout-breakout</p>{" "}
 				<p>
 					is this working the way it should? Lorem ipsum dolor sit amet
 					consectetur, adipisicing elit. Consequatur, odit pariatur magnam,
@@ -1318,7 +1300,7 @@ function Content() {
 				</Card>
 			</Grid>
 			<p>making for custom banners or background graphics</p>
-			<section className={styles.full_width}></section>
+			<section className={layout_full}></section>
 			<h2> Blocks </h2>
 			<p>
 				custom react components that can also be used in the rich text editor

@@ -18,6 +18,7 @@ import { nextAuthOptions } from "@/session"
 import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
 import styles from "@styles/blog/blogpost.module.scss"
+import sLayout from "@styles/layout.module.scss"
 import sArticles from "@styles/articles.module.scss"
 import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates"
 import { StatusBadge } from "@components/StatusBadge"
@@ -28,6 +29,8 @@ import { CgProfile } from "react-icons/cg"
 import { Header } from "@components/elements/Header"
 import Flex from "@components/layouts/Flex"
 import { TableOfContents } from "@components/menus/TableOfContents"
+import { slugFormat } from "@lib/slugFormat"
+import { KSHeading, TOCLink } from "@ks/types"
 
 export const revalidate = 5
 
@@ -115,20 +118,28 @@ export default async function BlogPostBySlug({ params }: Props) {
 		content,
 	} = post
 
-	// const tableOfContentLinks = content?.document.find(
-	// 	(block: any) => block.type === "heading"
-	// )
 	function findAllHeadings(arr: any) {
-		return arr.reduce((acc: any, item: any) => {
+		return arr.reduce((acc: TOCLink[], item: KSHeading) => {
 			if (item.type === "heading") {
-				acc.push(item)
+				const newItem = {
+					type: item.type,
+					level: item.level,
+					slug: slugFormat(item.children[0].text),
+					text: item.children[0].text,
+				}
+				acc.push(newItem)
 			}
 
 			for (let key in item) {
-				if (Array.isArray(item[key])) {
-					acc = acc.concat(findAllHeadings(item[key]))
-				} else if (typeof item[key] === "object" && item[key] !== null) {
-					acc = acc.concat(findAllHeadings([item[key]]))
+				const typedKey = key as keyof KSHeading
+
+				if (Array.isArray(item[typedKey])) {
+					acc = acc.concat(findAllHeadings(item[typedKey]))
+				} else if (
+					typeof item[typedKey] === "object" &&
+					item[typedKey] !== null
+				) {
+					acc = acc.concat(findAllHeadings([item[typedKey]]))
 				}
 			}
 
@@ -140,16 +151,16 @@ export default async function BlogPostBySlug({ params }: Props) {
 	return (
 		<main>
 			<article
-				//className={styles.post_article}
-				className="post-layout"
+				className={sLayout.page_layout}
+				// className="post-layout"
 			>
-				<Header bgImage={featured_image} className={styles.post_header}>
+				<Header bgImage={featured_image}>
 					<figure className={styles.featured_image_wrap}>
 						<ImageDynamic photoIn={featured_image} />
 						<ImageDynamic photoIn={featured_image} />
 					</figure>
 
-					<h1 className={"post-title"}>{title}</h1>
+					<h1 className={sLayout.page_title}>{title}</h1>
 					{status !== "PUBLIC" && (
 						<div>
 							<StatusBadge type={"post"} status={status} />
@@ -178,7 +189,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					</ul>
 				</Header>
 
-				<div className="content width-full">
+				<div className={[sLayout.content, sLayout.layout_full].join(' ')}>
 					{featured_video && (
 						<div className="featured_video">
 							<YouTubeVideo url={featured_video} altText="featured video" />
@@ -188,20 +199,18 @@ export default async function BlogPostBySlug({ params }: Props) {
 					<BlockRender document={content.document} />
 				</div>
 				{template === "WITHSIDEBAR" && (
-					<aside className="post-sidebar">
+					// <aside className="post-sidebar">
+					<aside className={sLayout.page_sidebar}>
 						<Flex flexDirection={"column"} alignContent="flex-start">
 							<Card>
-								<TableOfContents
-									headerObjs={tableOfContentLinks}
-									hrefBase={`/blog/${slug}`}
-								/>
+								<TableOfContents headerObjs={tableOfContentLinks} />
 							</Card>
 						</Flex>
 					</aside>
 				)}
 
-				<footer className="width-wide">
-					<Flex className="width-wide">
+				<footer className={sLayout.layout_wide}>
+					<Flex className={sLayout.layout_wide}>
 						<Card maxWidth="20rem">
 							<h4 className="categories">Categories: </h4>
 							<CategoriesPool />

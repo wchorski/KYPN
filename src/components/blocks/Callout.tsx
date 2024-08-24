@@ -1,6 +1,7 @@
 // note - tried to use styled components but something was overriding
 import React, { ReactNode } from "react"
 import styles from "@styles/blocs/callout.module.scss"
+import { layout_breakout } from "@styles/layout.module.scss"
 
 type CalloutProps = {
 	intent: "info" | "warning" | "error" | "success"
@@ -19,7 +20,7 @@ export function Callout({
 		styles.callout,
 		styles[intent],
 		className,
-		"width-breakout",
+		layout_breakout,
 	].join(" ")
 	return (
 		<div className={cls}>

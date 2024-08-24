@@ -8,7 +8,7 @@ type Props = {
 export function IFrame({src, height = '800px', color = 'transparent'}:Props) {
   return (
     <iframe 
-    className="width-wide"
+    className="layout-wide"
       title="Embedded Content" 
       name="htmlComp-iframe" 
       width="100%" height={height} 

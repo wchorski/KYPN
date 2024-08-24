@@ -1,64 +1,70 @@
 .error {
-  background-color: rgb(184, 1, 1);
-  color: white;
-  padding-inline: 5px;
-  width: fit-content;
-  padding: 0 1rem;
+	background-color: rgb(184, 1, 1);
+	color: white;
+	padding-inline: 5px;
+	width: fit-content;
+	padding: 0 1rem;
 }
 
 .success {
-  background-color: green;
-  color: white;
-  padding-inline: 5px;
-  width: fit-content;
-  padding: .4rem;
+	background-color: green;
+	color: white;
+	padding-inline: 5px;
+	width: fit-content;
+	padding: 0.4rem;
 }
 
-.subtext{
-  color: var(--c-txt-sub)
+.subtext {
+	color: var(--c-txt-sub);
 }
 
 hr {
-  border-color: var(--c-seperator);
+	border-color: var(--c-seperator);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  transition-property: background, color;
-  transition-duration: .3s;
-  transition-timing-function: ease-in;
-  color: var(--c-header)
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	transition-property: background, color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease-in;
+	color: var(--c-header);
 }
 
 .glass {
-  background-color: var(--c-glass);
-  backdrop-filter: blur(1px);
+	background-color: var(--c-glass);
+	backdrop-filter: blur(1px);
 }
 
-.overlay{
-  position: relative;
-  
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: var(--c-overlay);
-    pointer-events: none;
-    z-index: 0;
-  }
+.overlay {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: var(--c-overlay);
+		pointer-events: none;
+		z-index: 0;
+	}
 }
 
-html, body {
-  background-color: var(--c-body);
-  color: var(--c-txt)
+html,
+body {
+	background-color: var(--c-body);
+	color: var(--c-txt);
 }
 
 @media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+	html {
+		color-scheme: dark;
+	}
 }
 
 input[type="email"],
@@ -70,8 +76,8 @@ input[type="url"],
 input[type="password"],
 textarea,
 select {
-  background-color: var(--c-txt-bg);
-  border: 1px solid var(--c-seperator);
+	background-color: var(--c-txt-bg);
+	border: 1px solid var(--c-seperator);
 }
 input[type="email"]:focus,
 input[type="number"]:focus,
@@ -82,7 +88,7 @@ input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  border-color: var(--c-accent);
+	border-color: var(--c-accent);
 	outline: 0;
 }
 
@@ -91,14 +97,14 @@ button,
 input[type="submit"],
 input[type="reset"],
 input[type="button"] {
-  box-shadow: var(--shadow-1);
+	box-shadow: var(--shadow-1);
 	background-color: var(--c-txt-bg);
 	color: var(--c-primary);
 	border-color: var(--c-primary);
-  transition-property: color, border;
-  transition-duration: 0.1s;
-  // transition-timing-function: ease-out;
-  transition-timing-function: cubic-bezier(0,.57,0,.99);
+	transition-property: color, border;
+	transition-duration: 0.1s;
+	// transition-timing-function: ease-out;
+	transition-timing-function: cubic-bezier(0, 0.57, 0, 0.99);
 }
 
 .button:hover,
@@ -115,13 +121,17 @@ input[type="button"]:focus {
 	border-color: var(--c-secondary) !important;
 	outline: 0;
 }
-
-.button:active, button:active {
-  color: var(--c-accent);
-  border-color: var(--c-accent);
-  transform: translateY(1px);
+//https://stackoverflow.com/questions/4350786/is-it-correct-to-combine-active-and-hover-pseudo-selector-like-aactivehover
+a:active,
+a:hover:active,
+.button:active,
+.button:hover:active,
+button:active,
+button:hover:active {
+	color: var(--c-accent);
+	border-color: var(--c-accent);
+	transform: translateY(1px);
 }
-
 
 // .button.button-primary,
 // button.button-primary,
@@ -147,10 +157,11 @@ input[type="button"]:focus {
 // 	border-color: #1eaedb;
 // }
 
-pre, code {
-  color: var(--c-code);
-  border-color: var(--c-code);
-  background-color: var(--c-code-bg);
+pre,
+code {
+	color: var(--c-code);
+	border-color: var(--c-code);
+	background-color: var(--c-code-bg);
 }
 
 //todo always show scrollbar on overflown pre, code elements
@@ -170,74 +181,99 @@ pre, code {
 //   background: #3f7c4a;
 // }
 
-ul, ol {
-  &::marker {
-    background-color: var(--c-txt);
-    fill: var(--c-txt);
-  }
+ul,
+ol {
+	&::marker {
+		background-color: var(--c-txt);
+		fill: var(--c-txt);
+	}
 }
 
 a {
 	color: var(--c-primary);
-  transition-duration: var(--anim-duration-fast);
-  transition-property: color, background;
+	transition-duration: var(--anim-duration-fast);
+	transition-property: color, background;
 }
 a:hover {
 	color: var(--c-secondary);
 }
 
 .bg-c-primary {
-  background-color: var(--c-primary);
-  color: var(--c-txt-primary);
-  h1,h2,h3,h4,h5,h6 {
-    color: var(--c-txt-primary) !important;
-  }
+	background-color: var(--c-primary);
+	color: var(--c-txt-primary);
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--c-txt-primary) !important;
+	}
 }
 .bg-c-secondary {
-  background-color: var(--c-secondary);
-  color: var(--c-txt-primary);
-  h1,h2,h3,h4,h5,h6 {
-    color: var(--c-txt-primary) !important;
-  }
+	background-color: var(--c-secondary);
+	color: var(--c-txt-primary);
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--c-txt-primary) !important;
+	}
 }
 .bg-c-tertiary {
-  background-color: var(--c-tertiary);
-  color: var(--c-txt-primary);
-  h1,h2,h3,h4,h5,h6 {
-    color: var(--c-txt-primary) !important;
-  }
+	background-color: var(--c-tertiary);
+	color: var(--c-txt-primary);
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		color: var(--c-txt-primary) !important;
+	}
 }
 .bg-c-accent {
-  position: relative;
-  z-index: 1;
-  // border: dashed 1px var(--c-accent);
+	position: relative;
+	z-index: 1;
+	// border: dashed 1px var(--c-accent);
 
-  // todo make accent bg more versitle
-  // &::after {
-  //   content: '';
-  //   width: 2%;
-  //   height: 90%;
-  //   background-color: var(--c-accent);
-  //   position: absolute;
-  //   left: 10%;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   z-index: 0;
-  //   // opacity: .5;
-  // }
+	// todo make accent bg more versitle
+	// &::after {
+	//   content: '';
+	//   width: 2%;
+	//   height: 90%;
+	//   background-color: var(--c-accent);
+	//   position: absolute;
+	//   left: 10%;
+	//   top: 50%;
+	//   transform: translateY(-50%);
+	//   z-index: 0;
+	//   // opacity: .5;
+	// }
 
-  > * {
-    z-index: 1;
-  }
+	> * {
+		z-index: 1;
+	}
 
-  h1,h2,h3,h4,h5,h6 {
-    // color: var(--c-txt-primary) !important;
-    background-image: linear-gradient(to right, var(--c-accent), var(--c-accent));
-    display: inline;
-    background-size: 100% 10%;
-    background-repeat: no-repeat;
-    background-position: 0 105%;
-    text-shadow: var(--shadow-4);
-  }
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		// color: var(--c-txt-primary) !important;
+		background-image: linear-gradient(
+			to right,
+			var(--c-accent),
+			var(--c-accent)
+		);
+		display: inline;
+		background-size: 100% 10%;
+		background-repeat: no-repeat;
+		background-position: 0 105%;
+		text-shadow: var(--shadow-4);
+	}
 }
 //todo set colors from status.module.scss to here for other components to use

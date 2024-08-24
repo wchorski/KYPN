@@ -31,7 +31,7 @@ export function CodeBlock(props: Props) {
 	// }
 
 	return (
-		<pre className="width-breakout">
+		<pre className="layout-breakout">
 			<code>{children}</code>
 		</pre>
 	)

@@ -1,5 +1,6 @@
 import { CSSProperties, ReactNode } from "react"
 import { BGColor, GridLayout, SpaceSize } from "@ks/types"
+import { layout_full } from "@styles/layout.module.scss";
 // import styles from "@styles/elements/section.module.scss";
 
 type Props = {
@@ -34,7 +35,7 @@ export async function Section({
   bgColor
 }: Props) {
 	//                                  gotta put a '_' in front because css no like numbers as class names
-	const cls = [`overlay`, className, 'width-full', bgColor].join(' ')
+	const cls = [`overlay`, className, layout_full, bgColor].join(' ')
 
 	const inlineStyles: CSSProperties = {
     paddingBlock: `var(--space-${paddingBlock})`,

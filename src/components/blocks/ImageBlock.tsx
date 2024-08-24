@@ -1,5 +1,5 @@
 import Image from "next/image"
-import Link from "next/link"
+import {layout_wide} from '@styles/layout.module.scss'
 
 type Props = {
 	color?: string
@@ -20,14 +20,14 @@ export function ImageBlock({
 }: Props) {
 	return (
 		<figure
-    className="width-wide"
+			className={layout_wide}
 			style={{
-        margin: '0'
+				margin: "0",
 				// maxWidth: "calc(var(--w-contentmax) + var(--space-xxl))",
 			}}
 		>
 			<Image
-      className="width-wide"
+				className={layout_wide}
 				alt={alt}
 				src={imageSrc}
 				// className={`image block`}
@@ -35,8 +35,8 @@ export function ImageBlock({
 				style={{
 					width: "100%",
 					height: "auto",
-          maxHeight: '60vh',
-          objectFit: 'contain',
+					maxHeight: "60vh",
+					objectFit: "contain",
 					filter: "drop-shadow(var(--shadow-3))",
 					// border: "solid 1px var(--c-seperator)",
 				}}
@@ -49,7 +49,7 @@ export function ImageBlock({
 				//   display: 'block',
 				// }}
 			/>
-			<caption style={{paddingBlock: 'var(--space-ms)'}}>{alt}</caption>
+			<caption style={{ paddingBlock: "var(--space-ms)" }}>{alt}</caption>
 		</figure>
 	)
 }

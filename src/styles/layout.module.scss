@@ -1,0 +1,185 @@
+.page_layout {
+	// background-color: rgb(66, 64, 37);
+	--padding-inline: var(--space-m);
+	--content-max-width: var(--w-contentmax);
+  //todo the `150px` is a cheat because it ended up being too wide id
+  --site-max-width: (calc(var(--w-sitemax) - 150px));
+	--breakout-max-width: 700px;
+	--wide-max-width: 800px;
+  // --site-bounds: var(--w-sitemax);
+
+	--breakout-size: calc(
+		(var(--breakout-max-width) - var(--content-max-width)) / 1
+	);
+	--wide-size: calc((var(--wide-max-width) - var(--content-max-width)) / 2);
+  --site-bounds: calc((var(--site-max-width) - var(--wide-max-width)) / 2);
+
+	display: grid;
+
+	grid-template-columns:
+		[layout_full-start] minmax(0, 1fr)
+		[layout_site-start] minmax(0, var(--site-bounds))
+		[layout_wide-start] minmax(0, var(--wide-size))
+		[layout_breakout-start] minmax(0, var(--breakout-size))
+		[layout_content-start] min(
+			100% - (var(--padding-inline) * 2),
+			var(--content-max-width)
+		)
+		[layout_content-end] minmax(0, var(--breakout-size))
+		[layout_breakout-end] minmax(0, var(--wide-size))
+		[layout_wide-end] minmax(0, var(--site-bounds))
+		[layout_site-end] minmax(0, 1fr)
+		[layout_full-end];
+  //todo this is before i added `layout_site` widths.. keeping this for now incase things go south
+	// grid-template-columns:
+	// 	[layout_full-start] minmax(var(--padding-inline), 1fr)
+	// 	[layout_wide-start] minmax(0, var(--wide-size))
+	// 	[layout_wide-start] minmax(0, var(--wide-size))
+	// 	[layout_breakout-start] minmax(0, var(--breakout-size))
+	// 	[layout_content-start] min(
+	// 		100% - (var(--padding-inline) * 2),
+	// 		var(--content-max-width)
+	// 	)
+	// 	[layout_content-end] minmax(0, var(--breakout-size))
+	// 	[layout_breakout-end] minmax(0, var(--wide-size))
+	// 	[layout_wide-end] minmax(var(--padding-inline), 1fr)
+	// 	[layout_full-end];
+}
+.page_layout > header {
+	// background: #ff44006b;
+	grid-column: 1/-1;
+  //todo could be this?
+	// grid-column: layout_full;
+	grid-row: 1;
+	grid-template-columns: inherit;
+}
+.page_layout > header > .page_title {
+	grid-column: layout_wide;
+}
+
+.page_layout > .content {
+	// background: #0084ff6b;
+	grid-row: 2;
+	grid-column: layout_breakout;
+}
+
+.page_layout > aside,
+.page_layout > .page_sidebar {
+	// background: #ff7b006b;
+	grid-column: layout_content;
+	grid-row: 4;
+	z-index: 1;
+
+	> :first-child {
+		position: sticky;
+		top: var(--space-xl);
+		max-width: var(--w-contentmax);
+	}
+
+	> * > * {
+		box-shadow: var(--shadow-1);
+	}
+}
+
+.page_layout > footer {
+	// background: #22ff006b;
+	grid-column: 3;
+	grid-row: 0;
+}
+
+.page_layout
+	> :not(
+		.layout_full,
+		.layout_wide,
+		.layout_breakout,
+		.page_sidebar,
+		.page_title
+	),
+.page_layout
+	.layout_full
+	> :not(
+		.layout_full,
+		.layout_wide,
+		.layout_breakout,
+		.page_sidebar,
+		.page_title
+	),
+.page_layout
+	.layout_wide
+	> :not(
+		.layout_full,
+		.layout_wide,
+		.layout_breakout,
+		.page_sidebar,
+		.page_title
+	) {
+	grid-column: layout_content;
+}
+
+.page_layout .layout_full:not(.flex),
+.page_layout .layout_site_to_wide:not(.flex),
+.page_layout .layout_wide:not(.flex) {
+	display: grid;
+}
+
+.page_layout .layout_full {
+	grid-column: layout_full;
+	grid-template-columns: inherit;
+}
+
+.page_layout .layout_wide {
+	z-index: 1;
+	grid-column: layout_wide;
+	grid-template-columns: inherit;
+}
+
+.page_layout .layout_breakout {
+	z-index: 1;
+	grid-column: layout_breakout;
+}
+
+.page_layout .layout_content {
+	z-index: 1;
+	grid-column: layout_content;
+}
+
+.page_title {
+	grid-column: layout_wide;
+}
+
+// asymetcial layouts
+.page_layout .layout_site_to_wide {
+  grid-column: layout_site/layout_wide;
+  // grid-column-end: layout_wide;
+}
+
+//todo, dont't hardcode or make a `--w-sidebar` breakpoint variable?
+@media screen and (width < 1185px) {
+  .page_layout .layout_site_to_wide {
+    grid-column: layout_site;
+  }
+}
+
+@media screen and (width > 1185px) {
+	.page_layout > aside,
+	.page_layout > .page_sidebar {
+		grid-column: layout_wide-end/layout_full-end;
+		grid-row: 2;
+	}
+}
+
+
+
+.grid {
+  display: grid;
+}
+
+.grid.auto {
+  //? this is set on the component side via inline style
+  // --col-min-width: 22rem;
+	grid-template-columns: repeat(auto-fit, minmax(calc(var(--col-min-width)), 1fr));
+
+	> * {
+		grid-column: auto;
+	}
+}

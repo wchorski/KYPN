@@ -166,6 +166,7 @@ This i need to do before moving back to main branch
 - [ ] page with side bar and site side bar (will use @container query)
 - [ ] all blocks tested
 - [ ] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
+- [ ] look into https://smolcss.dev/ for inspo
 ---
 
 - [ ] built in calendar for admin dash

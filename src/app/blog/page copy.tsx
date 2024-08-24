@@ -17,15 +17,6 @@ import { NoData } from "@components/elements/NoData"
 import { CSSProperties } from "react"
 import { BlockLayout } from "@components/layouts/BlockLayout"
 import styles from "@styles/page.module.scss"
-import Flex from "@components/layouts/Flex"
-import {
-	page_layout,
-	layout_full,
-	layout_wide,
-	page_sidebar,
-	content,
-	layout_site_to_wide,
-} from "@styles/layout.module.scss"
 
 type Props = {
 	params: {
@@ -58,16 +49,12 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 	if (error) return <ErrorMessage error={error} />
 
 	return (
-		<main className={page_layout}>
-			<header className={layout_full}>
-				<div className={layout_wide}>
-					<h1 style={{textAlign: 'center'}}> Blog </h1>
-				</div>
-				<hr className={layout_full} />
+		<main className={styles.header_main_aside}>
+			<header className={styles.page_header}>
+				<h1>Blog</h1>
 			</header>
 
-			{/* <div className={"content layout-full"}> */}
-			<div className={[content, layout_site_to_wide].join(" ")}>
+			<div className={[styles.page_content, "main-content"].join(" ")}>
 				{/* <Pagination route="/blog" page={currPage} count={count} /> */}
 
 				<BlogList posts={posts} />
@@ -75,18 +62,16 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 
 				<Pagination route="/blog" page={currPage} count={count} />
 			</div>
-			<aside className={page_sidebar}>
-				<Flex flexDirection={"column"} alignContent="flex-start">
-					<Card>
-						<h2 style={styleHeader}> Categories </h2>
-						<CategoriesPool activeIds={categoryIds} />
-					</Card>
+			<aside className={styles.page_aside}>
+				<Card>
+					<h2 style={styleHeader}> Categories </h2>
+					<CategoriesPool activeIds={categoryIds} />
+				</Card>
 
-					<Card>
-						<h2 style={styleHeader}> Tags </h2>
-						<TagsPool />
-					</Card>
-				</Flex>
+				<Card>
+					<h2 style={styleHeader}> Tags </h2>
+					<TagsPool />
+				</Card>
 			</aside>
 		</main>
 	)
@@ -145,5 +130,5 @@ function Aside(categoryIds?: string[]) {
 }
 const styleHeader: CSSProperties = {
 	fontSize: "1.3rem",
-	marginBottom: 0,
+  marginBottom: 0,
 }

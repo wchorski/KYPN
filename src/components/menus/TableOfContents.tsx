@@ -1,20 +1,36 @@
+"use client"
+import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { VscListTree } from "react-icons/vsc"
+import styles from "@styles/tableofcontents.module.scss"
+import { IconLabel } from "@components/elements/IconLabel"
+import { useEffect, useState } from "react"
+import { useUrlHash } from "@components/hooks/useUrlHash"
+import { slugFormat } from "@lib/slugFormat"
+import type { TOCLink } from "@ks/types"
 
-interface Heading {
-	type: string
-	level: number
-	children: { text: string }[]
-}
+// interface Heading {
+// 	type: string
+// 	level: number
+// 	slug: string
+// 	text: string
+// }
+// interface KSHeading {
+// 	type: string
+// 	level: number
+// 	children: { text: string }[]
+// }
 
 type Props = {
 	headerObjs: any[]
-	hrefBase: string
 }
 
-export function TableOfContents({ hrefBase, headerObjs }: Props) {
+export function TableOfContents({ headerObjs }: Props) {
+	const { hash, setHash, removeHash } = useUrlHash()
+	const router = useRouter()
+
 	const renderList = (
-		items: Heading[],
+		items: TOCLink[],
 		currentLevel: number = 2
 	): JSX.Element[] => {
 		const listItems: JSX.Element[] = []
@@ -34,10 +50,18 @@ export function TableOfContents({ hrefBase, headerObjs }: Props) {
 				}
 
 				listItems.push(
-					<li key={i}>
-						<Link key={i} href={`${hrefBase}#${String(item.children[0].text)}`}>
-							{item.children[0].text}
-						</Link>
+					<li
+						key={i}
+						//? i have to use this components `currHash` to trigger rerender because using plain `<a>` tag
+						// className={hash === sluggedId ? styles.active : ""}
+						className={hash === item.slug ? styles.active : ""}
+					>
+						<TOCLink
+							key={i}
+							onClick={handleAnchorClick}
+							text={item.text}
+							slug={item.slug}
+						/>
 						{nestedItems.length > 0 && (
 							<ul>{renderList(nestedItems, currentLevel + 1)}</ul>
 						)}
@@ -49,28 +73,42 @@ export function TableOfContents({ hrefBase, headerObjs }: Props) {
 		return listItems
 	}
 
+	const handleAnchorClick = (
+		e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+		hash: string
+	) => {
+		setHash(hash)
+
+		//todo doing this looses out on using the `:target` class and have to use class switch `.targeted` instead
+    //todo but i want to keep history clean of inner page navigation
+		// e.preventDefault()
+		// router.replace(`#${hash}`)
+	}
+
 	return (
-		<nav aria-label="Table of contents" className="table-of-contents">
-			<h2
-				className="icon-label"
-				style={{
-					fontSize: "2rem",
-				}}
-			>
-				<VscListTree /> Table of Contents
-			</h2>
-			<ul className="unstyled">
-				{/* {headerObjs.map((h: any, i: number) => (
-					<li key={i}>
-						<Link key={i} href={`${hrefBase}#${String(h.children[0].text)}`}>
-							{h.level}
-							{` | `}
-							{h.children[0].text}
-						</Link>
-					</li>
-				))} */}
-				{renderList(headerObjs)}
-			</ul>
+		<nav aria-label="Table of contents" className={styles.table_of_contents}>
+			<IconLabel icon={<VscListTree />} label="Table of Contents" />
+			<ul className="unstyled">{renderList(headerObjs)}</ul>
 		</nav>
+	)
+}
+
+type TOCLinkProps = {
+	onClick: (
+		e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+		slug: string
+	) => any
+	text: string
+	slug: string
+}
+
+function TOCLink({ onClick, slug, text }: TOCLinkProps) {
+	return (
+		<a
+			href={`#${slug}`}
+			onClick={(e) => onClick(e, slug)}
+		>
+			{text}
+		</a>
 	)
 }

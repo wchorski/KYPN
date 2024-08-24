@@ -26,7 +26,8 @@ export type Session = {
 
 export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'
 export type BGColor = 'bg-c-primary'|'bg-c-secondary'|'bg-c-tertiary'|'bg-c-accent'
-export type WidthLayoutSize = 'width-full'|'width-wide'|'width-breakout'|'width-content'
+export type WidthLayoutSize = 'layout-full'|'layout-wide'|'layout-breakout'|'layout-content'
+export type WidthLayoutSize2 = 'layout_full'|'layout_wide'|'layout_breakout'|'layout_content'
 
 export type GridLayout =
 	| "1"
@@ -52,6 +53,18 @@ export type CheckboxOption = {
 export type DayTimes = {
 	day: Date
 	times: string[]
+}
+
+export type TOCLink = {
+	type: string
+	level: number
+	slug: string
+	text: string
+}
+export type KSHeading = {
+	type: string
+	level: number
+	children: { text: string }[]
 }
 
 // ? didn't like "[key in Permission]: boolean;"

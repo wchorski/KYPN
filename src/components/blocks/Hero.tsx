@@ -1,5 +1,6 @@
 import React, { CSSProperties, ReactNode } from "react"
 import styles from "@styles/blocs/hero.module.scss"
+import sLayout from "@styles/layout.module.scss"
 
 type HeroProps = {
 	imageSrc: string
@@ -17,6 +18,7 @@ type HeroProps = {
 
 export function Hero({ imageSrc, caption, color, children }: HeroProps) {
 
+  const cls = [styles.hero, sLayout.layout_wide].join(' ')
 	const inlineStyle = {
 		backgroundImage: `url(${imageSrc})`,
 		"--color-header": color,
@@ -24,9 +26,9 @@ export function Hero({ imageSrc, caption, color, children }: HeroProps) {
 	} as CSSProperties
 
 	return (
-		<div className={styles.hero + " width-wide"} style={inlineStyle}>
+		<div className={cls} style={inlineStyle}>
 			{/* <div
-				className={styles.backgroundImage + ' width-wide'}
+				className={styles.backgroundImage + ' layout-wide'}
 				style={{ backgroundImage: `url(${imageSrc})` }}
 			/> */}
 			{children}

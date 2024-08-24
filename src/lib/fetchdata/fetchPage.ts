@@ -2,6 +2,7 @@ import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
 import { Page } from "@ks/types";
 import { getServerSession } from "next-auth";
+import type { PageOrderByInput, Lists } from ".keystone/types"
 
 export default async function fetchPage(slug:string){
 
@@ -12,7 +13,10 @@ export default async function fetchPage(slug:string){
     const page = await keystoneContext.withSession(session).query.Page.findOne({
       where: { slug: slug },
       query: query
-    }) as Page
+    })
+    // }) as Page
+
+    const {} = page
 
     return { page }
     

@@ -84,9 +84,13 @@ p {
 p, ul, ol {
   font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
+//todo scale nav buttons that are pure icons. keep large on mobile to prevent fat thumb
+// nav.icons {
+//   font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 3));
+// }
 
 .sub-text {
-  font-size: clamp(1.4rem, 1.4rem + 1vw, 1rem * (var(--font-size-multi) * 2));
+  font-size: clamp(1rem, 1.4rem + 1vw, 1rem * (var(--font-size-multi) * 1));
 }
 
 ul{
