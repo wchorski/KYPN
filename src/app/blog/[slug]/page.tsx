@@ -18,7 +18,7 @@ import { nextAuthOptions } from "@/session"
 import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
 import styles from "@styles/blog/blogpost.module.scss"
-import sLayout from "@styles/layout.module.scss"
+import sLayout, { layout_site, page_content, page_layout } from "@styles/layout.module.scss"
 import sArticles from "@styles/articles.module.scss"
 import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates"
 import { StatusBadge } from "@components/StatusBadge"
@@ -150,11 +150,14 @@ export default async function BlogPostBySlug({ params }: Props) {
 
 	return (
 		<main>
+      <div className="siteWrapper" style={{background: 'limegreen'}}>
+        site wide block
+      </div>
 			<article
 				className={sLayout.page_layout}
 				// className="post-layout"
-			>
-				<Header bgImage={featured_image}>
+        >
+				<Header bgImage={featured_image} className={page_layout}>
 					<figure className={styles.featured_image_wrap}>
 						<ImageDynamic photoIn={featured_image} />
 						<ImageDynamic photoIn={featured_image} />
@@ -178,36 +181,43 @@ export default async function BlogPostBySlug({ params }: Props) {
 								</Link>
 							</li>
 						)}
-						<li>
-							<time dateTime={dateModified} title="Publication update date">
-								<span className="sub-text">
-									<FiCalendar />
-									{datePrettyLocal(String(dateModified), "day")}
-								</span>
-							</time>
-						</li>
+						{dateModified && (
+							<li>
+								<time
+									dateTime={String(dateModified)}
+									title="Publication update date"
+								>
+									<span className="sub-text">
+										<FiCalendar />
+										{datePrettyLocal(String(dateModified), "day")}
+									</span>
+								</time>
+							</li>
+						)}
 					</ul>
 				</Header>
+        
+        {/* <div className={layout_site}> */}
+          <div className={[page_content, sLayout.layout_full].join(" ")}>
+            {featured_video && (
+              <div className="featured_video">
+                <YouTubeVideo url={featured_video} altText="featured video" />
+              </div>
+            )}
 
-				<div className={[sLayout.content, sLayout.layout_full].join(' ')}>
-					{featured_video && (
-						<div className="featured_video">
-							<YouTubeVideo url={featured_video} altText="featured video" />
-						</div>
-					)}
-
-					<BlockRender document={content.document} />
-				</div>
-				{template === "WITHSIDEBAR" && (
-					// <aside className="post-sidebar">
-					<aside className={sLayout.page_sidebar}>
-						<Flex flexDirection={"column"} alignContent="flex-start">
-							<Card>
-								<TableOfContents headerObjs={tableOfContentLinks} />
-							</Card>
-						</Flex>
-					</aside>
-				)}
+            <BlockRender document={content.document} />
+          </div>
+          {template === "WITHSIDEBAR" && (
+            // <aside className="post-sidebar">
+            <aside className={sLayout.page_sidebar}>
+              <Flex flexDirection={"column"} alignContent="flex-start">
+                <Card>
+                  <TableOfContents headerObjs={tableOfContentLinks} />
+                </Card>
+              </Flex>
+            </aside>
+          )}
+        {/* </div> */}
 
 				<footer className={sLayout.layout_wide}>
 					<Flex className={sLayout.layout_wide}>

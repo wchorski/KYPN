@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 
 import PropTypes from 'prop-types';
 import { MdError } from 'react-icons/md';
-import { Section } from './layouts/Section';
 import styles from '@styles/error.module.scss'
 
 type Props = {
@@ -43,6 +42,12 @@ const ErrorContents = ({ error, children }: any) => {
       <p data-test="graphql-error">
 
         {error?.message?.replace('GraphQL error: ', '')}
+      </p>
+      <p data-test="graphql-error">
+        {error?.extensions?.code}
+      </p>
+      <p data-test="graphql-error">
+        {error?.extensions?.debug?.message}
       </p>
 
       {children}

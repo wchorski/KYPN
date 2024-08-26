@@ -3,7 +3,7 @@ import { envs } from "@/envs"
 // type Post = Lists.Post["fields"]
 //todo there must be a right way to pull types in from ks. i'm so close
 import { keystoneContext } from "@ks/context"
-import type { PostCreateInput as Post } from ".keystone/types"
+import {Post} from '@ks/types'
 
 export async function fetchPost(slug:string, session:any){
 
@@ -16,7 +16,7 @@ export async function fetchPost(slug:string, session:any){
       where: {
         slug: slug
       }
-    }) as Post & {id:string, content: {document: any}, author: {name:string, id:string}}
+    }) as Post
     
     return { post }
     

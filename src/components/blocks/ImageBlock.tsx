@@ -49,7 +49,7 @@ export function ImageBlock({
 				//   display: 'block',
 				// }}
 			/>
-			<caption style={{ paddingBlock: "var(--space-ms)" }}>{alt}</caption>
+			<figcaption style={{ paddingBlock: "var(--space-ms)" }}>{alt}</figcaption>
 		</figure>
 	)
 }

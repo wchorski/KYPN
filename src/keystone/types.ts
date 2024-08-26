@@ -6,6 +6,10 @@
 
 import { KeystoneGraphQLAPI, KeystoneListsAPI } from "@keystone-6/core/types"
 import type { Permission } from "./schemas/fields"
+//todo hopefully types will be auto imported from keystone context.
+// for now we will manually import types
+// https://github.com/keystonejs/keystone/discussions/8498
+import type { Lists } from ".keystone/types";
 
 export type Session = {
 	user?:
@@ -66,6 +70,13 @@ export type KSHeading = {
 	level: number
 	children: { text: string }[]
 }
+
+//** Schema Lists */
+export type User = Lists.User.Item 
+export type Category = Lists.Category.Item
+export type Tag = Lists.Tag
+export type Page = Lists.Page.Item & {categories:Category[], tags:Tag[], author:User}
+export type Post = Lists.Post.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
 
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {
@@ -270,35 +281,35 @@ export type OrderItem = {
 	dateModified: string
 }
 
-export type User = {
-	id: string
-	name: string
-	nameLast: string
-	email: string
-	phone: string
-	image: string
-	password: string
-	url: string
-	isAdmin: boolean
-	isActive: boolean
-	stripeCustomerId: string
-	posts: Post[]
-	pages: Page[]
-	servicesProvided: Service[]
-	bookings: Booking[]
-	gigs: Booking[]
-	gig_requests: Booking[]
-	availability: Availability[]
-	cart: CartItem[]
-	dateCreated: string
-	dateModified: string
-	products: Product[]
-	subscriptionPlans: SubscriptionPlan[]
-	subscriptions: SubscriptionItem[]
-	orders: OrderItem[]
-	role: Role
-	tickets: Ticket[]
-}
+// export type User = {
+// 	id: string
+// 	name: string
+// 	nameLast: string
+// 	email: string
+// 	phone: string
+// 	image: string
+// 	password: string
+// 	url: string
+// 	isAdmin: boolean
+// 	isActive: boolean
+// 	stripeCustomerId: string
+// 	posts: Post[]
+// 	pages: Page[]
+// 	servicesProvided: Service[]
+// 	bookings: Booking[]
+// 	gigs: Booking[]
+// 	gig_requests: Booking[]
+// 	availability: Availability[]
+// 	cart: CartItem[]
+// 	dateCreated: string
+// 	dateModified: string
+// 	products: Product[]
+// 	subscriptionPlans: SubscriptionPlan[]
+// 	subscriptions: SubscriptionItem[]
+// 	orders: OrderItem[]
+// 	role: Role
+// 	tickets: Ticket[]
+// }
 
 export type Availability = {
 	id: string
@@ -359,71 +370,71 @@ export type BookingPrevious = {
 	time: string
 }
 
-export type Category = {
-	id: string
-	name: string
-	description: string
-	pages: Page[]
-	posts: Post[]
-	products: Product[]
-	subscriptions: SubscriptionPlan[]
-	services: Service[]
-}
+// export type Category = {
+// 	id: string
+// 	name: string
+// 	description: string
+// 	pages: Page[]
+// 	posts: Post[]
+// 	products: Product[]
+// 	subscriptions: SubscriptionPlan[]
+// 	services: Service[]
+// }
 
-export type Tag = {
-	id: string
-	name: string
-	pages: Page[]
-	posts: Post[]
-	products: Product[]
-	subscriptions: SubscriptionPlan[]
-	services: Service[]
-}
+// export type Tag = {
+// 	id: string
+// 	name: string
+// 	pages: Page[]
+// 	posts: Post[]
+// 	products: Product[]
+// 	subscriptions: SubscriptionPlan[]
+// 	services: Service[]
+// }
 
-export type Page = {
-	id: string
-	title: string
-	slug: string
-	dateCreated: string
-	dateModified: string
-	status: string
-	template: string
-	pinned: number
-	excerpt: string
-	featured_image: string
-	featured_video: string
-	content: {
-		document: any
-	}
-	author: User
-	categories: Category[]
-	tags: Tag[]
-}
+// export type Page = {
+// 	id: string
+// 	title: string
+// 	slug: string
+// 	dateCreated: string
+// 	dateModified: string
+// 	status: string
+// 	template: string
+// 	pinned: number
+// 	excerpt: string
+// 	featured_image: string
+// 	featured_video: string
+// 	content: {
+// 		document: any
+// 	}
+// 	author: User
+// 	categories: Category[]
+// 	tags: Tag[]
+// }
 
-export type Post = {
-	id?: string
-	title?: string
-	slug?: string
-	dateCreated?: string
-	dateModified?: string
-	status?: string
-	template: string
-	pinned: number
-	excerpt?: string
-	featured_image?: string
-	featured_video?: string
-	content?:
-		| {
-				document: any
-		  }
-		| any
-	allow_comments?: boolean
-	author?: User
-	// |{connect:any},
-	categories?: Category[] | { connect: any }
-	tags?: Tag[]
-	// |{connect:any},
-}
+// export type Post = {
+// 	id?: string
+// 	title?: string
+// 	slug?: string
+// 	dateCreated?: string
+// 	dateModified?: string
+// 	status?: string
+// 	template: string
+// 	pinned: number
+// 	excerpt?: string
+// 	featured_image?: string
+// 	featured_video?: string
+// 	content?:
+// 		| {
+// 				document: any
+// 		  }
+// 		| any
+// 	allow_comments?: boolean
+// 	author?: User
+// 	// |{connect:any},
+// 	categories?: Category[] | { connect: any }
+// 	tags?: Tag[]
+// 	// |{connect:any},
+// }
 
 export type Announcement = {
 	link: string

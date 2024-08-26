@@ -21,8 +21,14 @@ import { HeadingBlock } from "@components/blocks/HeadingBlock"
 import Flex from "@components/layouts/Flex"
 import Link from "next/link"
 import { Header } from "@components/elements/Header"
-import { page_layout, page_sidebar, content, layout_full, layout_wide } from "@styles/layout.module.scss";
-import { post_header, post_title } from "@styles/blog/blogpost.module.scss";
+import {
+	page_layout,
+	page_sidebar,
+	page_content,
+	layout_full,
+	layout_wide,
+} from "@styles/layout.module.scss"
+import { post_header, post_title } from "@styles/blog/blogpost.module.scss"
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
 	searchParams: { q: string }
@@ -45,58 +51,101 @@ const headers = [
 export default async function FruitPage({ params, searchParams }: Props) {
 	// return <PageTHeaderMain header={Header()} main={Content()} />
 	return (
-		<>
-			<main className={page_layout}>
-				<Header bgColor={'bg-c-accent'}>
-					<h1 className={post_title}>
-						{" "}
-						Header of Fruit Page for testing components and variables{" "}
-					</h1>
-					<p>
-						{" "}
-						This is an example page to view and test typography, custom
-						components, colors, etc.{" "}
-					</p>
-				</Header>
+		<main className={page_layout}>
+			<header className={layout_full} style={{background: 'darkgreen'}} >
+				<h1> Page Title</h1>
+				<p>lil caption about this page</p>
+			</header>
 
-				<div className={[content, layout_full].join(' ')}>
-					<ContentBlocks />
-				</div>
+			<div className={[page_content, layout_full].join(" ")}>
+				<h2> Content Wrap </h2>
+				<p>
+					{" "}
+					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit
+					veniam minima natus magni dolor, sed a quae odit laboriosam deleniti,
+					pariatur cum incidunt eum illo alias facere quibusdam labore. Laborum?
+				</p>
+        <img src={'http://localhost:3000/_next/image?url=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Far_16%3A9%2Cb_auto%3Aborder%2Cc_lpad%2Fb_white%2Ff_auto%2Fq_auto%2Fdpr_1.5%2Fc_scale%2Cw_700%2Fncom%2Fsoftware%2Fswitch%2F70010000005302%2Fa6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636&w=1920&q=75'} />
+			</div>
 
-				<aside className={page_sidebar}>
-					<Flex flexDirection={"column"} alignContent="flex-start">
-						<Card>
-							<label>Table of Contents</label>
-							<ul className="unstyled">
-								{headers.map((h, i) => (
-									<li key={i}>
-										<Link key={i} href={`/fruit#${String(h.children)}`}>
-											{String(h.children)}
-										</Link>
-									</li>
-								))}
-							</ul>
-						</Card>
-						<Card>ads</Card>
-						<Card>call to action</Card>
-					</Flex>
-				</aside>
+			<aside className={page_sidebar}>
+				<Flex flexDirection={"column"} alignContent="flex-start">
+					<Card>
+						<h2>Sidebar Card 1</h2>
+					</Card>
+					<Card>
+						<h2>Sidebar Card 2</h2>
+					</Card>
+					<Card>
+						<h2>Sidebar Card 3</h2>
+					</Card>
+				</Flex>
+			</aside>
 
-				<footer className={layout_wide}>
-					<Flex className={layout_wide}>
-						<Card>
-							<h2>Categories</h2>
-							<p>here are some related categories</p>
-						</Card>
-						<Card>
-							<h2>Tags</h2>
-							<p>here are some related tags</p>
-						</Card>
-					</Flex>
-				</footer>
-			</main>
-		</>
+			<footer className={layout_full} style={{background: 'navy'}}>
+				<h2>Content Footer</h2>
+				<p>
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic delectus
+					sed ratione aperiam iure porro consectetur, adipisci voluptatum dolore
+					eveniet facere autem eligendi beatae odio necessitatibus id deserunt
+					suscipit quo!
+				</p>
+			</footer>
+		</main>
 	)
+	// return (
+	// 	<>
+	// 		<main className={page_layout}>
+	// 			<Header bgColor={'bg-c-accent'}>
+	// 				<h1 className={post_title}>
+	// 					{" "}
+	// 					Header of Fruit Page for testing components and variables{" "}
+	// 				</h1>
+	// 				<p>
+	// 					{" "}
+	// 					This is an example page to view and test typography, custom
+	// 					components, colors, etc.{" "}
+	// 				</p>
+	// 			</Header>
+
+	// 			<div className={[content, layout_full].join(' ')}>
+	// 				<ContentBlocks />
+	// 			</div>
+
+	// 			<aside className={page_sidebar}>
+	// 				<Flex flexDirection={"column"} alignContent="flex-start">
+	// 					<Card>
+	// 						<label>Table of Contents</label>
+	// 						<ul className="unstyled">
+	// 							{headers.map((h, i) => (
+	// 								<li key={i}>
+	// 									<Link key={i} href={`/fruit#${String(h.children)}`}>
+	// 										{String(h.children)}
+	// 									</Link>
+	// 								</li>
+	// 							))}
+	// 						</ul>
+	// 					</Card>
+	// 					<Card>ads</Card>
+	// 					<Card>call to action</Card>
+	// 				</Flex>
+	// 			</aside>
+
+	// 			<footer className={layout_wide}>
+	// 				<Flex className={layout_wide}>
+	// 					<Card>
+	// 						<h2>Categories</h2>
+	// 						<p>here are some related categories</p>
+	// 					</Card>
+	// 					<Card>
+	// 						<h2>Tags</h2>
+	// 						<p>here are some related tags</p>
+	// 					</Card>
+	// 				</Flex>
+	// 			</footer>
+	// 		</main>
+	// 	</>
+	// )
 }
 
 function ContentBlocks() {
@@ -112,7 +161,7 @@ function ContentBlocks() {
 				layout-content column
 			</p>
 
-			<Section bgColor={'bg-c-accent'}>
+			<Section bgColor={"bg-c-accent"}>
 				<h2> content inside section</h2>
 				<p>
 					content inside a layout-full section still gets put into the
@@ -179,11 +228,10 @@ function ContentBlocks() {
 }
           `}
 			</CodeBlock>
-      <Section bgColor={'bg-c-primary'}>
-        <h4>Forms</h4>
-        <ContactForm />
-
-      </Section>
+			<Section bgColor={"bg-c-primary"}>
+				<h4>Forms</h4>
+				<ContactForm />
+			</Section>
 
 			<h4> DayMonthTime</h4>
 			<p className="sub-text">coming soon...</p>

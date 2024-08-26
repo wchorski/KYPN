@@ -35,15 +35,16 @@ export default config({
 		provider: "postgresql",
 		url: DB_ENDPOINT,
 		onConnect: async (context: Context) => {
-      // console.log(`💾✅ Database Connected`); 
+      console.log(`💾✅ Database Connected`); 
 			// TODO why argv doesn't work?
 			if (process.env.SEED_ME === "true") {
+      //todo would like to have this as an arg instead of env var
 				// if (process.argv.includes('--seed-database')) {
 				await seedDatabase(context)
 				// await seedDemoData(context)
 			}
 		},
-
+    
 	},
 	server: {
 		port: Number(process.env.BACKEND_PORT) || 3001,

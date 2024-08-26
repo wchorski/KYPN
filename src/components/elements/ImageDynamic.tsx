@@ -1,5 +1,6 @@
 import Image from "next/image";
-// import { useState } from "react";
+// todo should i do a bit of styling on img here or just let parents do it?
+// import { img } from "@styles/image.module.scss";
 
 type Props = {
   photoIn: {
@@ -37,7 +38,8 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
 
 function handlePhoto(photo: any, alt?:string) {
   
-
+  //todo set width and height smart because this is like a thumbnail size
+  // https://nextjs.org/docs/pages/api-reference/components/image
   if (!photo ) {
     return {
       altText: alt || 'no alt text for this image',

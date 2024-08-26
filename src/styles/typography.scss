@@ -13,6 +13,7 @@ body {
 h1,h2,h3,h4,h5,h6, thead, button {
   font-family: var(--font-header), Verdana, sans-serif;
   word-break: break-word;
+  text-wrap: balance;
 }
 // h1{
 //   font-size: clamp(var(--font-size-base), var(--font-size-base) + 8.333vw, calc(var(--font-size-base) * (var(--font-size-multi) * 6)));
@@ -105,7 +106,7 @@ ul:not([class]), ol:not([class]) {
   max-width: calc(var(--w-contentmax) - 20px);
   display: grid;
   gap: var(--space-s);
-  
+  align-content: center;
 }
 
 a {

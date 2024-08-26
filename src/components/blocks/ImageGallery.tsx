@@ -88,6 +88,8 @@ export function ImageGallery(props:Props) {
     lightGallery.current.refresh();
   }, [items]);
   
+  const colName = `col_${columns}`
+  const gapName = `gap_${gap}`
 
   if(items.length > 0) return (
     <div 
@@ -104,8 +106,8 @@ export function ImageGallery(props:Props) {
       <div
         className={
           [
-            styles[`col_${columns}`],
-            styles[`gap_${gap}`],
+            styles[colName],
+            styles[gapName],
             styles[layout],
             styles.gallery
           ].join(' ')

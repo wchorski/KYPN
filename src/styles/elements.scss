@@ -29,8 +29,8 @@ td:last-child {
 hr {
 	// margin: 4rem auto;
 	max-width: var(--w-sitemax);
-	border-bottom-style: solid;
-	border-bottom-width: 2px;
+	border-style: solid;
+	border-width: var(--space-xxs);
 	margin-block: var(--space-l);
 	width: 90%;
 }

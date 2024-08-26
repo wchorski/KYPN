@@ -1,3 +1,4 @@
+//todo delete me if u don't want me
 import { Card } from "@components/layouts/Card"
 import {
 	PageTHeaderMain,
@@ -17,12 +18,6 @@ import { Section } from "@components/blocks/Section"
 import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
 import { BlockLayout } from "@components/layouts/BlockLayout"
-import sLayout, {
-	page_layout,
-	content,
-	layout_full,
-} from "@styles/layout.module.scss"
-import { Header } from "@components/elements/Header"
 export const revalidate = 5
 
 type Props = {
@@ -75,6 +70,7 @@ export default async function PageBySlug({ params }: Props) {
 		categories,
 		tags,
 		content,
+    
 	} = page
 
 	// console.log(data)
@@ -85,82 +81,41 @@ export default async function PageBySlug({ params }: Props) {
 	//   </NotPublicPage>
 	// )
 
-	// if (template === "FULLWIDTH" || template === "FULLWIDTH_WITHHEADER")
-	// 	return (
-	// 		<PageTHeaderMain
-	// 			header={Header({
-	// 				dateCreated,
-	// 				dateModified,
-	// 				title,
-	// 				author,
-	// 				featured_image,
-	// 				template,
-	// 			})}
-	// 			main={Main(content, status, id)}
-	// 			headerStyles={{
-	// 				backgroundImage: `url(${featured_image})`,
-	// 				backgroundPosition: "center",
-	// 				backgroundRepeat: "no-repeat",
-	// 				backgroundSize: "cover",
-	// 				display: template === "FULLWIDTH_WITHHEADER" ? "block" : "none",
-	// 			}}
-	// 		/>
-	// 	)
-
-	// return (
-	// 	<PageTHeaderMainAside
-	// 		header={Header({
-	// 			dateCreated,
-	// 			dateModified,
-	// 			title,
-	// 			author,
-	// 			featured_image,
-	// 			template,
-	// 		})}
-	// 		main={Main(content, status, id)}
-	// 		aside={Aside()}
-	// 	/>
-	// )
+	if (template === "FULLWIDTH" || template === "FULLWIDTH_WITHHEADER")
+		return (
+			<PageTHeaderMain
+				header={Header({
+					dateCreated,
+					dateModified,
+					title,
+					author,
+					featured_image,
+					template,
+				})}
+				main={Main(content, status, id)}
+				headerStyles={{
+					backgroundImage: `url(${featured_image})`,
+					backgroundPosition: "center",
+					backgroundRepeat: "no-repeat",
+					backgroundSize: "cover",
+					display: template === "FULLWIDTH_WITHHEADER" ? "block" : "none",
+				}}
+			/>
+		)
 
 	return (
-		<main className={page_layout}>
-			<Header
-				className={
-					template !== "FULLWIDTH_WITHHEADER" ? "screen-reader-text" : undefined
-				}
-				//? not accessable
-				// style={{
-				//   ...(template !== 'FULLWIDTH_WITHHEADER' ? {display: 'none'} : {})
-				// }}
-			>
-				<h1>{title}</h1>
-				<p>what is up dude?</p>
-			</Header>
-			{/* <div className={[content, layout_full].join(" ")}> */}
-			<div className={[sLayout.content, sLayout.layout_full].join(" ")}>
-				{status !== "PUBLIC" && (
-					<Card
-						className={"siteWrapper"}
-						style={{ marginInline: "auto", marginBlock: "1rem" }}
-						direction={"row"}
-					>
-						<StatusBadge type={"page"} status={status} />
-						<Link
-							href={envs.BACKEND_URL + `/pages/${id}`}
-							className={"button"}
-							target={"_blank"}
-						>
-							{" "}
-							edit page{" "}
-						</Link>
-					</Card>
-				)}
-				<BlockRender
-					//@ts-ignore
-					document={content?.document}
-				/>
-			</div>
-		</main>
+		<PageTHeaderMainAside
+			header={Header({
+				dateCreated,
+				dateModified,
+				title,
+				author,
+				featured_image,
+				template,
+			})}
+			main={Main(content, status, id)}
+			aside={Aside()}
+		/>
 	)
 }
 
@@ -181,7 +136,7 @@ type Header = {
 }
 
 //? Content
-function HeaderOld({
+function Header({
 	dateCreated,
 	dateModified,
 	title,

@@ -81,6 +81,10 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
       where,
       query: query,
     }) as Post[]
+
+    
+
+
     
     return { posts, count }
     

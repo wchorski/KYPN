@@ -15,6 +15,7 @@ type Props = {
   paddingBlock?:SpaceSize
 }
 
+// todo use a seperate .grid module that is *mostly* independant from `layout` module stuff
 export function BlockLayout({
 	id,
 	layout = "1_1",

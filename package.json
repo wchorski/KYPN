@@ -16,7 +16,8 @@
     "build": "yarn keystone build --no-ui && yarn next build",
     "start": "next start",
     "lint": "next lint --no-cache",
-    "disable_next_telemetry": "next telemetry disable"
+    "disable_next_telemetry": "next telemetry disable",
+    "modules": "typed-scss-modules src --outputFolder __generated__"
   },
   "dependencies": {
     "@keystone-6/core": "^6.1.0",
