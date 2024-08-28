@@ -5,7 +5,7 @@
   }
 }
 
-:is(h1,h2,h3,h4,h5,h6)::after {
+:is(h1,h2,h3,h4,h5,h6):target::after {
   display: block;
   content: '';
   width: 0%;

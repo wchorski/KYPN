@@ -7,13 +7,18 @@
   margin-block: var(--space-ms);
 
   > span {
-    display: none;
+    visibility: hidden;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
   }
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     background-color: #7777772d;
-    content: "";
+    content: " ";
     display: inline-block;
     height: 1px;
     position: relative;
@@ -21,12 +26,12 @@
     width: 50%;
   }
 
-  &:before {
+  &::before {
     right: 0.5em;
     margin-left: -50%;
   }
 
-  &:after {
+  &::after {
     left: 0.5em;
     margin-right: -50%;
   }

@@ -13,7 +13,7 @@ export function IconLabel({ icon, label }: Props) {
 				fontSize: "var(--space-l)",
 			}}
 		>
-			{icon} <span>{label}</span>
+			{icon} <span aria-hidden={false}>{label}</span>
 		</h2>
 	)
 }

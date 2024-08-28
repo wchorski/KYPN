@@ -13,13 +13,12 @@ import fetchPage from "@lib/fetchdata/fetchPage"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { envs } from "@/envs"
 import { Metadata, ResolvingMetadata } from "next"
-import { Section } from "@components/blocks/Section"
 import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
 import { BlockLayout } from "@components/layouts/BlockLayout"
-import sLayout, {
+import {
 	page_layout,
-	content,
+	page_content,
 	layout_full,
 } from "@styles/layout.module.scss"
 import { Header } from "@components/elements/Header"
@@ -134,10 +133,9 @@ export default async function PageBySlug({ params }: Props) {
 				// }}
 			>
 				<h1>{title}</h1>
-				<p>what is up dude?</p>
 			</Header>
-			{/* <div className={[content, layout_full].join(" ")}> */}
-			<div className={[sLayout.content, sLayout.layout_full].join(" ")}>
+
+			<div className={[page_content, layout_full].join(" ")}>
 				{status !== "PUBLIC" && (
 					<Card
 						className={"siteWrapper"}
@@ -155,11 +153,9 @@ export default async function PageBySlug({ params }: Props) {
 						</Link>
 					</Card>
 				)}
-				<BlockRender
-					//@ts-ignore
-					document={content?.document}
-				/>
+				<BlockRender document={content?.document} />
 			</div>
+
 		</main>
 	)
 }

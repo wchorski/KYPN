@@ -8,15 +8,18 @@ export const revalidate = 5
 type ProdProps = {
 	children: ReactNode[]
 	colMinWidth?: "10rem" | "18rem" | "22rem"
+  gap?:string
 }
 
 export function GridList({
 	colMinWidth = '22rem',
+  gap = '.3rem',
 	children,
 }: ProdProps): ReactElement<any, any> {
 	const cls = ["unstyled", grid, auto].join(" ")
 	const styles = {
 		"--col-min-width": colMinWidth,
+    gap,
 	} as CSSProperties
 
 	return (

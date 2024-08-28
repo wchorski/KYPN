@@ -23,9 +23,10 @@ import {
 	layout_full,
 	layout_wide,
 	page_sidebar,
-	content,
+	page_content,
 	layout_site_to_wide,
 } from "@styles/layout.module.scss"
+import { AsideBar } from "@components/layouts/AsideBar"
 
 type Props = {
 	params: {
@@ -59,16 +60,26 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 	if (!posts) return <p>no posts found</p>
 
 	return (
-		<main className={page_layout}>
+		<main
+			//todo maybe i want to use a simple grid system instead of `.page_layout` just cuz
+			className={page_layout}
+			style={
+				{
+					//todo why is this not working?
+					"--sidebar-comp-max-width": "300px",
+					"--sidebar-width-footprint": "10px",
+					// maxWidth,
+				} as CSSProperties
+			}
+		>
 			<header className={layout_full}>
 				<div className={layout_wide}>
-					<h1 style={{textAlign: 'center'}}> Blog </h1>
+					<h1 style={{ textAlign: "center" }}> Blog </h1>
+					<hr className={layout_full} />
 				</div>
-				<hr className={layout_full} />
 			</header>
 
-			{/* <div className={"content layout-full"}> */}
-			<div className={[content, layout_site_to_wide].join(" ")}>
+			<div className={[page_content, layout_site_to_wide].join(" ")}>
 				{/* <Pagination route="/blog" page={currPage} count={count} /> */}
 
 				<BlogList posts={posts} />
@@ -76,8 +87,12 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 
 				<Pagination route="/blog" page={currPage} count={count} />
 			</div>
-			<aside className={page_sidebar}>
-				<Flex flexDirection={"column"} alignContent="flex-start">
+			<AsideBar aria_label="Blog List Sidebar">
+				<Flex
+					flexDirection={"column"}
+					alignContent="flex-start"
+					style={{ marginLeft: "var(--space-m)" }}
+				>
 					<Card>
 						<h2 style={styleHeader}> Categories </h2>
 						<CategoriesPool activeIds={categoryIds} />
@@ -88,7 +103,7 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 						<TagsPool />
 					</Card>
 				</Flex>
-			</aside>
+			</AsideBar>
 		</main>
 	)
 }

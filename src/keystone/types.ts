@@ -28,7 +28,7 @@ export type Session = {
 	expires: string
 }
 
-export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'
+export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'|0|'0'
 export type BGColor = 'bg-c-primary'|'bg-c-secondary'|'bg-c-tertiary'|'bg-c-accent'
 export type WidthLayoutSize = 'layout-full'|'layout-wide'|'layout-breakout'|'layout-content'
 export type WidthLayoutSize2 = 'layout_full'|'layout_wide'|'layout_breakout'|'layout_content'
@@ -75,7 +75,7 @@ export type KSHeading = {
 export type User = Lists.User.Item 
 export type Category = Lists.Category.Item
 export type Tag = Lists.Tag
-export type Page = Lists.Page.Item & {categories:Category[], tags:Tag[], author:User}
+export type Page = Lists.Page.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
 export type Post = Lists.Post.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
 
 // ? didn't like "[key in Permission]: boolean;"

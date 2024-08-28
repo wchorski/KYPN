@@ -1,6 +1,6 @@
 import { BGColor, WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
 import { CSSProperties, ReactNode } from "react"
-import sLayout from "@styles/layout.module.scss"
+import sLayout, { layout_full } from "@styles/layout.module.scss"
 import styles from '@styles/blog/blogpost.module.scss'
 
 type Props = {
@@ -20,7 +20,7 @@ export function Header({
   style,
 	children,
 }: Props) {
-	const cls = [sLayout.layout_full, bgColor, styles.post_header, className].join(" ")
+	const cls = [layout_full, bgColor, styles.post_header, className].join(" ")
 	const inlineStyle = {
 		...(bgImage ? { backgroundImage: `url(${bgImage})` } : {}),
     ...style
@@ -31,7 +31,7 @@ export function Header({
 			style={inlineStyle}
 		>
 			<div className={sLayout[widthOfContent]}>{children}</div>
-			<hr className={sLayout.layout_full} />
+			<hr className={layout_full} />
 		</header>
 	)
 }

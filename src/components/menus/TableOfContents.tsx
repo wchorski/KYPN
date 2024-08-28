@@ -86,7 +86,7 @@ export function TableOfContents({ headerObjs }: Props) {
 	}
 
 	return (
-		<nav aria-label="Table of contents" className={styles.table_of_contents}>
+		<nav aria-label="Table of contents" title="Table of contents" className={styles.table_of_contents}>
 			<IconLabel icon={<VscListTree />} label="Table of Contents" />
 			<ul className="unstyled">{renderList(headerObjs)}</ul>
 		</nav>

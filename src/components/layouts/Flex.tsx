@@ -14,8 +14,8 @@ type Props = {
 }
 
 export default function Flex({
-	paddingInline = "m",
-	paddingBlock = "m",
+	paddingInline = 0,
+	paddingBlock = 0,
 	gap = "m",
 	justifyContent = 'center',
 	alignContent = 'center',

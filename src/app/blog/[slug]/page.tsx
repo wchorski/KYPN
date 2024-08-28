@@ -18,7 +18,14 @@ import { nextAuthOptions } from "@/session"
 import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
 import styles from "@styles/blog/blogpost.module.scss"
-import sLayout, { layout_site, page_content, page_layout } from "@styles/layout.module.scss"
+import sLayout, {
+  layout_full,
+	layout_site,
+	layout_wide,
+	page_content,
+	page_layout,
+  page_title,
+} from "@styles/layout.module.scss"
 import sArticles from "@styles/articles.module.scss"
 import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates"
 import { StatusBadge } from "@components/StatusBadge"
@@ -31,6 +38,8 @@ import Flex from "@components/layouts/Flex"
 import { TableOfContents } from "@components/menus/TableOfContents"
 import { slugFormat } from "@lib/slugFormat"
 import { KSHeading, TOCLink } from "@ks/types"
+import { CSSProperties } from "react"
+import { AsideBar } from "@components/layouts/AsideBar"
 
 export const revalidate = 5
 
@@ -150,20 +159,25 @@ export default async function BlogPostBySlug({ params }: Props) {
 
 	return (
 		<main>
-      <div className="siteWrapper" style={{background: 'limegreen'}}>
-        site wide block
-      </div>
 			<article
-				className={sLayout.page_layout}
+				className={page_layout}
+				style={
+					{
+						//todo why is this not working?
+						"--sidebar-comp-max-width": "500px",
+						"--sidebar-width-footprint": "300px",
+						// maxWidth,
+					} as CSSProperties
+				}
 				// className="post-layout"
-        >
+			>
 				<Header bgImage={featured_image} className={page_layout}>
 					<figure className={styles.featured_image_wrap}>
 						<ImageDynamic photoIn={featured_image} />
 						<ImageDynamic photoIn={featured_image} />
 					</figure>
 
-					<h1 className={sLayout.page_title}>{title}</h1>
+					<h1 className={page_title}>{title}</h1>
 					{status !== "PUBLIC" && (
 						<div>
 							<StatusBadge type={"post"} status={status} />
@@ -196,31 +210,32 @@ export default async function BlogPostBySlug({ params }: Props) {
 						)}
 					</ul>
 				</Header>
-        
-        {/* <div className={layout_site}> */}
-          <div className={[page_content, sLayout.layout_full].join(" ")}>
-            {featured_video && (
-              <div className="featured_video">
-                <YouTubeVideo url={featured_video} altText="featured video" />
-              </div>
-            )}
 
-            <BlockRender document={content.document} />
-          </div>
-          {template === "WITHSIDEBAR" && (
-            // <aside className="post-sidebar">
-            <aside className={sLayout.page_sidebar}>
-              <Flex flexDirection={"column"} alignContent="flex-start">
-                <Card>
-                  <TableOfContents headerObjs={tableOfContentLinks} />
-                </Card>
-              </Flex>
-            </aside>
-          )}
-        {/* </div> */}
+				<div className={[page_content, layout_full].join(" ")}>
+					{featured_video && (
+						<div className="featured_video">
+							<YouTubeVideo url={featured_video} altText="featured video" />
+						</div>
+					)}
 
-				<footer className={sLayout.layout_wide}>
-					<Flex className={sLayout.layout_wide}>
+					<BlockRender document={content.document} />
+				</div>
+				{template === "WITHSIDEBAR" && (
+					<AsideBar aria_label="Page Sidebar">
+						<Flex
+							flexDirection={"column"}
+							alignContent="flex-start"
+							style={{ marginLeft: "var(--space-m)" }}
+						>
+							<Card>
+								<TableOfContents headerObjs={tableOfContentLinks} />
+							</Card>
+						</Flex>
+					</AsideBar>
+				)}
+
+				<footer className={layout_wide}>
+					<Flex >
 						<Card maxWidth="20rem">
 							<h4 className="categories">Categories: </h4>
 							<CategoriesPool />
