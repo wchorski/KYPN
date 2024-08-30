@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
 import { Button } from "@components/elements/Button"
+import Flex from "@components/layouts/Flex"
 
 type State = "pending" | "error" | "success" | undefined
 
@@ -185,13 +186,15 @@ export function LoginForm({ providers }: Props) {
 
 					<p className={formState.status}>{formState.message}</p>
 
-					<div className="flex gap_1">
+					<Flex alignItems='center'>
+
 						<SubmitButton />
 
 						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
 							password reset
 						</Link>
-					</div>
+          </Flex>
+					
 				</fieldset>
 
 				<fieldset>
@@ -201,17 +204,16 @@ export function LoginForm({ providers }: Props) {
 						Object.values(providers)
 							.filter((prov: any) => prov.id !== "credentials")
 							.map((provider: any) => (
-								<button
+								<Button
 									key={provider.name}
 									type="button"
-									className={"button"}
 									disabled={state === "pending"}
 									onClick={() => socialSignin(provider.id)}
 								>
 									<span>
 										Login with {provider.name} {getIcon(provider.id)}
 									</span>
-								</button>
+								</Button>
 							))}
 				</fieldset>
 			</form>

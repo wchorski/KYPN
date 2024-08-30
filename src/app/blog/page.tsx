@@ -90,7 +90,7 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 			<AsideBar aria_label="Blog List Sidebar">
 				<Flex
 					flexDirection={"column"}
-					alignContent="flex-start"
+					alignItems="flex-start"
 					style={{ marginLeft: "var(--space-m)" }}
 				>
 					<Card>

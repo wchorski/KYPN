@@ -135,6 +135,7 @@ button.navwich {
   }
 }
 
+//todo stop it from revealing and animating during breakpoint switch
 @media screen and (width > 600px) {
   ul.menu_main {
     flex-direction: row;

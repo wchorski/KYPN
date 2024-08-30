@@ -1,9 +1,15 @@
 import ErrorMessage from "@components/ErrorMessage"
 import { Callout } from "@components/blocks/Callout"
+import { Header } from "@components/elements/Header"
 import { BlockLayout } from "@components/layouts/BlockLayout"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { fetchVerifyEmail } from "@lib/fetchdata/fetchVerifyEmail"
+import {
+	layout_content,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.scss"
 import Link from "next/link"
 type Props = {
 	searchParams: {
@@ -15,32 +21,53 @@ type Props = {
 export default async function VerifyPage({ searchParams }: Props) {
 	const { email, token } = searchParams
 
-	if (!email || !token)
-		return (
-			<main>
-				<BlockLayout layout={"1"}>
-					<p> not sure how you got here without a key... </p>
-					<p>
-						{" "}
-						<Link href={`/account`}> Get otta here </Link>{" "}
-					</p>
-				</BlockLayout>
-			</main>
-		)
+	// if (!email || !token)
+	// 	return (
+	// 		<main>
+	// 			<BlockLayout layout={"1"}>
+	// 				<p> not sure how you got here without a key... </p>
+	// 				<p>
+	// 					{" "}
+	// 					<Link href={`/account`}> Get otta here </Link>{" "}
+	// 				</p>
+	// 			</BlockLayout>
+	// 		</main>
+	// 	)
 
 	const { data, error } = await fetchVerifyEmail(email, token)
 
 	return (
-		<PageTHeaderMain header={Header()} main={Main(email, token, data, error)} />
+		<main className={page_layout}>
+			<Header widthOfContent={"layout_content"}>
+				<h1> Verify Account </h1>
+			</Header>
+
+			<div className={[page_content, layout_content].join(" ")}>
+				{(!email || !token) ? (
+					<WhyAreYouHere />
+				) : error ? (
+					<NotSuccessMessage error={error} email={email} />
+				) : (
+					<Content email={email} />
+				)}
+			</div>
+		</main>
 	)
 }
 
-function Header() {
+function Content({ email }: { email: string }) {
 	return (
 		<>
-			<BlockLayout layout={"1"}>
-				<h1> Verify Account </h1>
-			</BlockLayout>
+			
+				<h3 className="success"> Success </h3>
+				<p>
+					{" "}
+					The email <strong>{email}</strong> has been verified
+				</p>
+				<p>
+					{" "}
+					<Link href={"/account"}> View account </Link>
+				</p>
 		</>
 	)
 }
@@ -70,27 +97,14 @@ function NotSuccessMessage({ error, email }: any) {
 	}
 }
 
-function Main(email: string, token: string, data?: unknown, error?: any) {
-	if (error)
-		return (
-			<BlockLayout layout={"1"}>
-				<NotSuccessMessage error={error} email={email} />
-			</BlockLayout>
-		)
-
+function WhyAreYouHere() {
 	return (
-		<>
-			<BlockLayout layout={"1"}>
-				<h3 className="success"> Success </h3>
-				<p>
-					{" "}
-					The email <strong>{email}</strong> has been verified
-				</p>
-				<p>
-					{" "}
-					<Link href={"/account"}> View account </Link>
-				</p>
-			</BlockLayout>
-		</>
+		<div>
+			<p> not sure how you got here without a key... </p>
+			<p>
+				{" "}
+				<Link href={`/account`}> Get otta here </Link>{" "}
+			</p>
+		</div>
 	)
 }

@@ -10,6 +10,7 @@ import type { Permission } from "./schemas/fields"
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
 import type { Lists } from ".keystone/types";
+import type colorsStyles from "@styles/colors.module.scss";
 
 export type Session = {
 	user?:
@@ -29,9 +30,9 @@ export type Session = {
 }
 
 export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'|0|'0'
-export type BGColor = 'bg-c-primary'|'bg-c-secondary'|'bg-c-tertiary'|'bg-c-accent'
+export type ColorsTheme = 'bg_c_plain'|'bg_c_primary'|'bg_c_secondary'|'bg_c_tertiary'|'bg_c_accent'|'bg_c_transparent'|'bg_c_reverse_theme'
 export type WidthLayoutSize = 'layout-full'|'layout-wide'|'layout-breakout'|'layout-content'
-export type WidthLayoutSize2 = 'layout_full'|'layout_wide'|'layout_breakout'|'layout_content'
+export type WidthLayoutSize2 = 'layout_full'|'layout_wide'|'layout_breakout'|'layout_content'|'layout_site'
 
 export type GridLayout =
 	| "1"

@@ -291,8 +291,7 @@ select {
 	padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
 	border-radius: var(--br-dull);
 	border-width: 1px;
-	border-color: var(--c-seperator);
-	box-shadow: var(--shadow-1);
+  border-style: solid;
 	box-sizing: border-box;
 }
 /* Removes awkward default styles on some inputs for iOS */

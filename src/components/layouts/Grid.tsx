@@ -1,13 +1,13 @@
 import { CSSProperties, ReactNode } from "react"
 import { GridLayout, SpaceSize } from "@ks/types"
-import styleModule from "@styles/grid.module.scss"
+import {grid, auto} from "@styles/grid.module.scss"
 
 type Props = {
 	pad?: number
 	imageSrc?: string
 	color?: string
 	col?: number
-	layout: GridLayout
+	layout?: GridLayout
 	children: ReactNode | ReactNode[]
 	id?: string
 	style?: CSSProperties
@@ -15,6 +15,9 @@ type Props = {
 	gap?: SpaceSize
   verticalAlign?: "start" | "center" | "end"
 	horizontalAlign?: "start" | "center" | "end"
+  //todo make `colWidth` required if isAuto === true
+  isAuto?:boolean
+  colWidth?:string
 }
 
 export function Grid({
@@ -29,14 +32,16 @@ export function Grid({
 	gap,
 	className,
   verticalAlign = "start",
-	horizontalAlign = "center",
-  
+	horizontalAlign = "start",
+  isAuto = true,
+  colWidth
 }: Props) {
 	//                                  gotta put a '_' in front because css no like numbers as class names
-	const classNms = ["grid", styleModule.grid, styleModule[`_${layout}`], className]
+	const classNms:string[] = [grid, isAuto ? auto : '', className ? className : '']
 	// todo trying global instead of module
 	// const stylesArr = [styleModule.section, styleModule[`grid_${layout}`] ]
 	const inlineStyles = {
+    "--col-width": colWidth,
     alignItems: verticalAlign,
     justifyItems: horizontalAlign,
 		gap: gap ? `var(--space-${gap})` : "0",

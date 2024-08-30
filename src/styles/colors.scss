@@ -77,8 +77,10 @@ input[type="password"],
 textarea,
 select {
 	background-color: var(--c-txt-bg);
-	border: 1px solid var(--c-seperator);
+  border-color: var(--c-seperator);
+	box-shadow: var(--shadow-1), var(--shadow-1-inset);
 }
+
 input[type="email"]:focus,
 input[type="number"]:focus,
 input[type="search"]:focus,
@@ -197,83 +199,3 @@ a {
 a:hover {
 	color: var(--c-secondary);
 }
-
-.bg-c-primary {
-	background-color: var(--c-primary);
-	color: var(--c-txt-primary);
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		color: var(--c-txt-primary) !important;
-	}
-}
-.bg-c-secondary {
-	background-color: var(--c-secondary);
-	color: var(--c-txt-primary);
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		color: var(--c-txt-primary) !important;
-	}
-}
-.bg-c-tertiary {
-	background-color: var(--c-tertiary);
-	color: var(--c-txt-primary);
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		color: var(--c-txt-primary) !important;
-	}
-}
-.bg-c-accent {
-	position: relative;
-	z-index: 1;
-	// border: dashed 1px var(--c-accent);
-
-	// todo make accent bg more versitle
-	// &::after {
-	//   content: '';
-	//   width: 2%;
-	//   height: 90%;
-	//   background-color: var(--c-accent);
-	//   position: absolute;
-	//   left: 10%;
-	//   top: 50%;
-	//   transform: translateY(-50%);
-	//   z-index: 0;
-	//   // opacity: .5;
-	// }
-
-	> * {
-		z-index: 1;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		// color: var(--c-txt-primary) !important;
-		background-image: linear-gradient(
-			to right,
-			var(--c-accent),
-			var(--c-accent)
-		);
-		display: inline;
-		background-size: 100% 10%;
-		background-repeat: no-repeat;
-		background-position: 0 105%;
-		text-shadow: var(--shadow-4);
-	}
-}
-//todo set colors from status.module.scss to here for other components to use

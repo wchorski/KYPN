@@ -5,6 +5,12 @@ import { envs } from "@/envs"
 import { Section } from "@components/blocks/Section"
 import styles from "../styles/elements/404.module.scss"
 import { ReactNode } from "react"
+import {
+	layout_wide,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.scss"
+import { Header } from "@components/elements/Header"
 
 type Props = {
 	children?: ReactNode
@@ -17,16 +23,8 @@ export const metadata: Metadata = {
 
 export default function NoDataFoundError404({ children }: Props) {
 	return (
-		<>
-			<PageTHeaderMain header={Header()} main={Main(children)} />
-		</>
-	)
-}
-
-function Header() {
-	return (
-		<>
-			<Section layout={"1"}>
+		<main className={page_layout}>
+			<Header>
 				<h1
 					style={{
 						textAlign: "center",
@@ -35,12 +33,32 @@ function Header() {
 				>
 					404
 				</h1>
-			</Section>
-		</>
+			</Header>
+
+			<div className={[page_content, layout_wide].join(" ")}>
+				<p className={styles.watermark}>
+					<span>4</span>
+					<span>0</span>
+					<span>4</span>
+				</p>
+
+				{children}
+				{!children && <p> This page does not exist. </p>}
+
+				<p>
+					<Link
+						href={`/`}
+						// onClick={handleLink}
+					>
+						⇠ Return to previous Page
+					</Link>
+				</p>
+			</div>
+		</main>
 	)
 }
 
-function Main(children: ReactNode) {
+function Main2(children: ReactNode) {
 	return (
 		<>
 			<center>

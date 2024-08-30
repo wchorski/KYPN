@@ -224,7 +224,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					<AsideBar aria_label="Page Sidebar">
 						<Flex
 							flexDirection={"column"}
-							alignContent="flex-start"
+							alignItems="flex-start"
 							style={{ marginLeft: "var(--space-m)" }}
 						>
 							<Card>

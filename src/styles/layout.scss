@@ -251,7 +251,7 @@ $breakpoint-l: 1200px;
 
 	> :not(.site-grid, .grid, .grid-item, .flex, .flex-item, figure) {
 		//todo causes overflow, but could be a really smart thing to get various amounts of content to line up
-		margin-inline: auto;
+		// margin-inline: auto;
 		//todo causing overflow too
 		// width: clamp(1rem, 80vw, var(--w-contentmax));
 		width: clamp(32vw, 76vw, var(--w-contentmax));

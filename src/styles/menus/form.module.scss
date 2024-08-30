@@ -3,9 +3,9 @@
   flex-wrap: wrap;
   gap: 1rem;
 
-  form {
-    width: 100%;
-  }
+  // form {
+  //   width: 100%;
+  // }
 
   aside {
     position: sticky;
@@ -27,11 +27,13 @@
   }
 }
 
+//todo don't make global
 .form :global {
   display: grid;
   // gap: 3rem;
-  max-width: 20em;
-  // width: 100%;
+  //todo may want to reconsider this for forms with better layouts
+  max-width: 27rem;
+  // width: clamp(1rem, 20rem, 21rem);
   padding: 1rem;
   border-radius: var(--br-soft);
   box-shadow: var(--shadow-1);

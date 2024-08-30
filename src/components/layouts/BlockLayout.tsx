@@ -11,7 +11,7 @@ type Props = {
 	col_bg_colors?: string[]
 	col_bg_imgs?: string[]
 	verticalAlign?: "start" | "center" | "end"
-	horizontalAlign?: "start" | "center" | "end"
+	horizontalAlign?: CSSProperties['justifyItems']
   paddingBlock?:SpaceSize
 }
 
@@ -24,7 +24,7 @@ export function BlockLayout({
 	style,
 	children,
 	verticalAlign = "start",
-	horizontalAlign = "center",
+	horizontalAlign,
 	col_bg_colors,
 	col_bg_imgs,
   paddingBlock
@@ -56,7 +56,7 @@ export function BlockLayout({
 						className="grid-item"
 						style={{
 							alignItems: verticalAlign,
-							justifyContent: horizontalAlign,
+							...(horizontalAlign ? {justifyContent: horizontalAlign} : {}),
 							backgroundColor: col_bg_colors ? col_bg_colors[i] : "",
 							...(col_bg_imgs
 								? { backgroundImage: `url(${col_bg_imgs[i]})` }

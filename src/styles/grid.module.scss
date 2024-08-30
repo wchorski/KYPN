@@ -2,6 +2,19 @@
   display: grid;
   justify-content: center;
 }
+//? set in <Grid />
+// --col-width: 15rem;
+
+// cred - https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/
+// auto-fill: stretches all grid-items to fit width
+// auto-fit: creates blank space grid-items to keep compact width of each column
+.auto {
+  grid-template-columns: repeat(auto-fit, minmax(var(--col-width), 1fr));
+
+  > div {
+    width: 100%;
+  }
+}
 
 ._1 {
   grid-template-columns: repeat(1, 1fr);

@@ -74,7 +74,7 @@ export function VerifyEmailCard ({ email }:Props) {
   return (
     <Callout intent={'warning'}>
       <h4> Verify Account </h4>
-      <p> {email} has not yet been verified. Check your email for a validation link</p>
+      <p> <strong>{email} </strong> has not yet been verified. Check your email for a validation link</p>
 
       {state === 'success' ? (
         <p className="success"> Follow further instructions sent to {email} </p>

@@ -1,6 +1,7 @@
 import { CSSProperties, ReactNode } from "react"
-import styles from "@styles/card.module.scss"
-import { SpaceSize } from "@ks/types"
+import {card, } from "@styles/card.module.scss"
+import { bg_c_plain, bg_c_primary, bg_c_reverse_theme, bg_c_secondary, bg_c_transparent } from "@styles/colors.module.scss";
+import { ColorsTheme, SpaceSize } from "@ks/types"
 
 type Props = {
 	children: ReactNode
@@ -8,6 +9,7 @@ type Props = {
 	layout?: "flex" | "grid"
 	direction?: "row" | "column"
 	id?: string
+  colors?: ColorsTheme
 	bgColor?: string
 	className?: string
 	style?: CSSProperties
@@ -21,11 +23,12 @@ type Props = {
 }
 
 export function Card({
-	layout,
+	layout = 'flex',
 	direction = "column",
 	children,
   content,
 	id,
+  colors = 'bg_c_plain',
 	bgColor,
 	className,
 	style,
@@ -36,12 +39,30 @@ export function Card({
   verticleAlign,
   maxWidth
 }: Props) {
-	const allStyles = ["card", styles.card, styles[layout || ""]].join(" ")
+
+  const bgClr = (() => {
+    switch (colors) {
+      case 'bg_c_transparent':
+        return bg_c_transparent;
+      case 'bg_c_reverse_theme':
+        return bg_c_reverse_theme;
+      case 'bg_c_primary':
+        return bg_c_primary;
+      case 'bg_c_secondary':
+        return bg_c_secondary;
+      case 'bg_c_secondary':
+        return bg_c_secondary;
+      default:
+        return bg_c_plain;
+    }
+  })();
+
+	const clsnms = [card, bgClr].join(" ")
 
 	return (
 		<div
 			id={id}
-			className={allStyles + " " + className}
+			className={[clsnms, colors, className].join(' ')}
 			style={{
         ...(bgColor ? {backgroundColor: bgColor} : {}),
 				flexDirection: direction,

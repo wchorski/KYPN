@@ -14,6 +14,12 @@ import { getCsrfToken, getProviders } from "next-auth/react"
 import Link from "next/link"
 import { CSSProperties } from "react"
 import { BlockLayout } from "@components/layouts/BlockLayout"
+import {
+	layout_content,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.scss"
+import { Header } from "@components/elements/Header"
 
 export const metadata: Metadata = {
 	title: "Sign Out | " + envs.SITE_TITLE,
@@ -32,34 +38,18 @@ export default async function SignOutPage({ searchParams }: Props) {
 	const { error, callbackUrl } = searchParams
 
 	return (
-		<PageTHeaderMain
-			header={Header(callbackUrl)}
-			main={Main()}
-		/>
-	)
-}
-
-function Header(callbackUrl?: string) {
-	return (
-		<>
-			<BlockLayout layout={"1"}>
+		<main className={page_layout}>
+			<Header widthOfContent={"layout_content"}>
 				<h1> Sign Out </h1>
-			</BlockLayout>
-		</>
-	)
-}
+			</Header>
 
-function Main() {
-	return (
-		<>
+			<div className={[page_content, layout_content].join(" ")}>
+					<SignOutButton />
+			</div>
 			<DialogPopup buttonLabel="">
 				<p> Forgot your password? </p>
 				<PasswordRequestForm />
 			</DialogPopup>
-
-			<BlockLayout layout={"1"}>
-				<SignOutButton />
-			</BlockLayout>
-		</>
+		</main>
 	)
 }

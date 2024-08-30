@@ -5,7 +5,7 @@ type Props = {
 	children: ReactNode | ReactNode[]
 	style?: CSSProperties
 	justifyContent?: CSSProperties["justifyContent"]
-	alignContent?: CSSProperties["alignContent"]
+	alignItems?: CSSProperties["alignItems"]
 	paddingBlock?: SpaceSize
 	paddingInline?: SpaceSize
 	gap?: SpaceSize
@@ -17,8 +17,8 @@ export default function Flex({
 	paddingInline = 0,
 	paddingBlock = 0,
 	gap = "m",
-	justifyContent = 'center',
-	alignContent = 'center',
+	justifyContent = 'start',
+	alignItems = 'start',
 	style,
 	children,
   className,
@@ -30,7 +30,7 @@ export default function Flex({
 		paddingInline: `var(--space-${paddingInline})`,
 		gap: `var(--space-${gap})`,
 		justifyContent: justifyContent,
-		alignContent: justifyContent,
+		alignItems: alignItems,
     placeContent: 'normal',
     ...(flexDirection ? {flexDirection} : {}),
 		// justifyContent: 'space-evenly',

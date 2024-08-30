@@ -1,5 +1,5 @@
 .card{
-  background-color: var(--c-txt-bg);
+  // background-color: var(--c-txt-bg);
   // padding: 1rem;
   padding-block: var(--space-m);
   // margin-inline: 3px;
@@ -32,7 +32,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  // align-items: center;
 
   > div {
     display: grid;

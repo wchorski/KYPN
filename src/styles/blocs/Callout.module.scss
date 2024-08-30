@@ -10,7 +10,8 @@
   flex-wrap: wrap;
   gap: var(--space-m);
   width: auto;
-  padding: 1rem;
+  padding-inline: var(--space-m);
+  padding-block: var(--space-ml);
   background-color: var(--c-txt-bg);
 
   &.info{
@@ -72,4 +73,8 @@
 
 .content {
   flex: 1;
+
+  :first-child {
+    margin-top: 0;
+  }
 }

@@ -168,6 +168,8 @@ This i need to do before moving back to main branch
 - [ ] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
 - [ ] look into https://smolcss.dev/ for inspo
 ---
+- [ ] appointment schedualer https://cal.com/
+- [ ] document signing https://www.docuseal.co/
 
 - [ ] built in calendar for admin dash
 - [ ] create a special admin input search for Users & Events that hot swaps with main search at top
