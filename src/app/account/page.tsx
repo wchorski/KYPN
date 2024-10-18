@@ -51,12 +51,12 @@ function Header({ session }: { session: Session | null }) {
 			<BlockLayout layout={"1"}>
 				<h1> My Account </h1>
 				<pre>
-				  <h6>Session:</h6>
-          {JSON.stringify(session, null, 2)}
-        </pre>
-        {session && !session.data.role && (
-          <VerifyEmailCard email={session.user.email} />
-        )}
+					<h6>Session:</h6>
+					{JSON.stringify(session, null, 2)}
+				</pre>
+				{session && !session.data.role && (
+					<VerifyEmailCard email={session.user.email} />
+				)}
 				<p>
 					{" "}
 					If you have permission to <strong>Manage Users</strong> you will see
@@ -71,6 +71,8 @@ function Header({ session }: { session: Session | null }) {
 					{" "}
 					If you are not logged in then you will see <strong>no data</strong>
 				</p>
+
+        <Link href={envs.BACKEND_URL} className="button medium">KeystoneJs Admin Panel</Link>
 			</BlockLayout>
 		</>
 	)

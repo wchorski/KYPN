@@ -10,6 +10,9 @@ article.post_card {
   padding: var(--space-m);
   // margin: var(--space-ms);
   border: solid 1px var(--c-seperator);
+  height: 100%;
+  box-sizing: border-box;
+  max-width: 50rem;
 
   figure {
     margin-bottom: 0;
@@ -39,6 +42,7 @@ article.post_card {
     color: inherit;
     font-size: clamp(1rem * (var(--font-size-multi) * 2), 1rem + 0.7vw, 1rem * (var(--font-size-multi) * 3));
   }
+  
 }
 
 .meta {

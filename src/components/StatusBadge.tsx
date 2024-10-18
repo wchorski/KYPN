@@ -36,7 +36,7 @@ type Props =
 
 export function StatusBadge({ type, status }: Props) {
 	if (!status) return null
-
+  //@ts-ignore
 	const stylesArr = [styles.status, styles[status]].join(" ")
 	const prettyStatus = stringCapFirstLetter(status)
 

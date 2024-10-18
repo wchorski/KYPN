@@ -34,7 +34,6 @@ export default function SignOutButton() {
 
 	return (
 		<p>
-			See you again Soon!
 			<Link
 				className={styles.signout}
 				type="button"

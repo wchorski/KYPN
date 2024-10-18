@@ -186,14 +186,16 @@ export function LoginForm({ providers }: Props) {
 
 					<p className={formState.status}>{formState.message}</p>
 
-					<Flex alignItems='center'>
+          {formState.status !== 'success' && (
+            <Flex alignItems='center'>
 
-						<SubmitButton />
+              <SubmitButton />
 
-						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
-							password reset
-						</Link>
-          </Flex>
+              <Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
+                password reset
+              </Link>
+            </Flex>
+          )}
 					
 				</fieldset>
 

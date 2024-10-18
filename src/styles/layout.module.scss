@@ -169,6 +169,10 @@ $sidebar-breakpoint: 1185px;
 	grid-column: layout_site;
 }
 
+.page_layout hr {
+  grid-column: layout_content;
+}
+
 @media screen and (width > $sidebar-breakpoint) {
 	.page_layout:has(> aside, > .page_sidebar) {
 		grid-template-columns:
