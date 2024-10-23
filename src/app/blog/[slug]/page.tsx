@@ -130,11 +130,14 @@ export default async function BlogPostBySlug({ params }: Props) {
 	function findAllHeadings(arr: any) {
 		return arr.reduce((acc: TOCLink[], item: KSHeading) => {
 			if (item.type === "heading") {
+        console.log(JSON.stringify(item, null, 2));
+        
 				const newItem = {
 					type: item.type,
 					level: item.level,
 					slug: slugFormat(item.children[0].text),
-					text: item.children[0].text,
+					text: item.children.map(item => item.text).join(' '),
+					// text: item.children[0].text,
 				}
 				acc.push(newItem)
 			}
@@ -151,7 +154,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					acc = acc.concat(findAllHeadings([item[typedKey]]))
 				}
 			}
-
+      
 			return acc
 		}, [])
 	}
