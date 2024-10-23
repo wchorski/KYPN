@@ -219,7 +219,7 @@ $sidebar-breakpoint: 1185px;
 	//? this is set on the component side via inline style
 	// --col-min-width: 22rem;
 	grid-template-columns: repeat(
-		auto-fit,
+		auto-fill,
 		minmax(calc(var(--col-min-width)), 1fr)
 	);
 

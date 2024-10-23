@@ -29,6 +29,7 @@ import {
 	layout_wide,
 } from "@styles/layout.module.scss"
 import { post_header, post_title } from "@styles/blog/blogpost.module.scss"
+import Image from "next/image"
 // import { AddToCalendarButton } from 'add-to-calendar-button-react'
 type Props = {
 	searchParams: { q: string }
@@ -65,11 +66,12 @@ export default async function FruitPage({ params, searchParams }: Props) {
 					veniam minima natus magni dolor, sed a quae odit laboriosam deleniti,
 					pariatur cum incidunt eum illo alias facere quibusdam labore. Laborum?
 				</p>
-        <img src={'http://localhost:3000/_next/image?url=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Far_16%3A9%2Cb_auto%3Aborder%2Cc_lpad%2Fb_white%2Ff_auto%2Fq_auto%2Fdpr_1.5%2Fc_scale%2Cw_700%2Fncom%2Fsoftware%2Fswitch%2F70010000005302%2Fa6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636&w=1920&q=75'} />
+        {/* @ts-ignore */}
+        <Image alt="" src={'http://localhost:3000/_next/image?url=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Far_16%3A9%2Cb_auto%3Aborder%2Cc_lpad%2Fb_white%2Ff_auto%2Fq_auto%2Fdpr_1.5%2Fc_scale%2Cw_700%2Fncom%2Fsoftware%2Fswitch%2F70010000005302%2Fa6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636&w=1920&q=75'} />
 			</div>
 
 			<aside className={page_sidebar}>
-				<Flex flexDirection={"column"} alignContent="flex-start">
+				<Flex flexDirection={"column"} alignItems={'flex-start'}>
 					<Card>
 						<h2>Sidebar Card 1</h2>
 					</Card>
