@@ -23,6 +23,7 @@ import { imagegallery } from './imagegallery';
 import { buttonlink } from './buttonlink';
 import { image } from './image';
 import { card } from './card';
+import { table } from './table';
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
@@ -48,4 +49,5 @@ export const componentBlocks = {
   imagegallery,
   buttonlink,
   card,
+  table,
 };

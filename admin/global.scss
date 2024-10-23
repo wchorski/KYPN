@@ -1,3 +1,27 @@
+table{
+  border-collapse: collapse;
+}
+table tbody tr:nth-child(even){
+  background-color: rgba(211, 211, 211, 0.24);
+}
+table tbody tr:hover{
+  background-color: rgba(250, 255, 184, 0.24);
+}
+table td, table th{
+  border-color: lightgrey;
+  border-style: solid;
+  padding-inline: 5px;
+}
+
+table td {
+  border-bottom-width: 1px;
+}
+
+table th {
+  text-align: left;
+  border-bottom-width: 4px;
+}
+
 //todo work on this dark mode override
 // @media (prefers-color-scheme: dark) {
 

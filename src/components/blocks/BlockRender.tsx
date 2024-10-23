@@ -26,6 +26,7 @@ import { CodeBlock } from './CodeBlock';
 // import styles from '@styles/blocs/blockrenderer.module.scss'
 import { Card } from '@components/layouts/Card';
 import { Blockquote } from './Blockquote';
+import { Table } from '@components/blocks/Table';
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -143,6 +144,9 @@ const customComponentRenderers: CustomRendererProps['componentBlocks'] = {
   image: props => {
     return <ImageBlock {...props} />;
   },
+  table: props => {
+    return <Table {...props} />
+  }
 };
 
 export function BlockRender({ document }: { document: any }) {
