@@ -86,6 +86,12 @@ export default {
       },
       {
         protocol: 'https',
+        hostname: 'i.giphy.com',
+        port: '',
+        pathname: '/media/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'assets.nintendo.com',
         port: '',
         pathname: '/image/**',

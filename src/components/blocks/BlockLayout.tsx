@@ -2,34 +2,28 @@ import { ReactNode } from "react"
 // import { Section } from "@components/blocks/Section"
 import { GridLayout } from "@ks/types"
 import { BlockLayout as BlkLayout } from "../../components/layouts/BlockLayout";
+import { BlockRender } from "./BlockRender";
 type Props = {
   children: ReactNode[],
   layout:number[],
+  content?:any,
+  color?:string,
+  backgroundColor?:string,
 }
 
-export function BlockLayout({children, layout}:Props) {
-
+export function BlockLayout(props:Props) {
+  const {children, content, color, backgroundColor, layout} = props
+  
   // layout input looks like [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
-  const layoutString = layout.join('_') as GridLayout
+  const layoutString = layout ? layout.join('_') as GridLayout : '1'
 
   return (
-    <BlkLayout layout={layoutString}>
-      {children}
+    <BlkLayout layout={layoutString} color={color} backgroundColor={backgroundColor}>
+      {content ? content : children}
+      {/* {content && <BlockRender document={content}/>} */}
+      {/* {content} */}
     </BlkLayout>
   )
-  // return (
-
-  //   <section className={stylesArr.join(' ')}>
-
-  //     {children.map((child, i) => (
-  //       <div key={i}> 
-  //         {child} 
-  //       </div>
-  //     )) }
-    
-  //   </section>
-
-  // )
 }
 
 

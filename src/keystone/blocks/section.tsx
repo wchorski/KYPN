@@ -19,19 +19,23 @@ export const section = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
-    color: fields.text({
-      label: 'Fallback background color',
+    backgroundColor: fields.text({
+      label: 'Background Color',
       defaultValue: 'transparent'
+    }),
+    color: fields.text({
+      label: 'Text Color',
     }),
   },
   preview: function Preview(props) {
     return (
       <section
         style={{
-          backgroundColor: props.fields.color.value,
+          backgroundColor: props.fields.backgroundColor.value,
           backgroundImage: props.fields.imageSrc.value,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
+          color: props.fields.color.value,
         }}
       >
 

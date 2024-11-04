@@ -34,7 +34,7 @@ $sidebar-breakpoint: 1185px;
 		[layout_breakout-end] minmax(0, var(--wide-size))
 		[layout_wide-end] minmax(0, var(--site-bounds))
 		[layout_site-end] minmax(var(--padding-inline), 1fr)
-		[layout_full-end];
+		[layout_full-end];   
 }
 .page_layout > header {
 	// background: #ff44006b;

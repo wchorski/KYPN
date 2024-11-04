@@ -116,8 +116,8 @@ a {
   font-weight: bold;
 }
 strong {
-  -webkit-text-stroke: var(--c-txt) 1px;
-  font-weight: bolder;
+  // -webkit-text-stroke: var(--c-txt) 1px;
+  font-weight: bold;
 }
 em{
   color: var(--c-txt-sub);
@@ -191,4 +191,10 @@ input[type="button"] {
 
 .tshadow_1 {
   text-shadow: #000000d9 2px 2px 6px;
+}
+
+.pad-loose-elements {
+  p {
+    padding-inline: var(--space-m);
+  }
 }

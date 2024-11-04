@@ -1,4 +1,5 @@
 import { GridLayout, SpaceSize } from "@ks/types"
+import { layout_full, layout_wide, page_layout } from "@styles/layout.module.scss"
 import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
@@ -8,11 +9,13 @@ type Props = {
 	id?: string
 	gap?: SpaceSize
 	layout: GridLayout
+  color?:string,
+  backgroundColor?:string,
 	col_bg_colors?: string[]
 	col_bg_imgs?: string[]
 	verticalAlign?: "start" | "center" | "end"
-	horizontalAlign?: CSSProperties['justifyItems']
-  paddingBlock?:SpaceSize
+	horizontalAlign?: CSSProperties["justifyItems"]
+	paddingBlock?: SpaceSize
 }
 
 // todo use a seperate .grid module that is *mostly* independant from `layout` module stuff
@@ -25,26 +28,35 @@ export function BlockLayout({
 	children,
 	verticalAlign = "start",
 	horizontalAlign,
+  color, 
+  backgroundColor, 
 	col_bg_colors,
 	col_bg_imgs,
-  paddingBlock
+	paddingBlock,
 }: Props) {
 	const clsNames = ["site-grid", `_${layout}`, className].join(" ")
-	const inlineStyles = { 
-    gap: gap ? `var(--space-${gap})` : "0", 
-    ...(paddingBlock ? {paddingBlock: `var(--space-${paddingBlock})`} : {}),
-    ...style 
-  }
+	const inlineStyles = {
+		gap: gap ? `var(--space-${gap})` : "0",
+		...(paddingBlock ? { paddingBlock: `var(--space-${paddingBlock})` } : {}),
+		...style,
+	}
 
 	if (layout === "1")
 		return (
-			<div
-				id={id}
-				className={clsNames}
-				style={inlineStyles}
-			>
-				{children}
-			</div>
+      
+				<div
+					id={id}
+					className={[clsNames, layout_full, page_layout].join(' ')}
+					style={{
+            ...(color ? {color} : {}),
+            ...(color ? {'--c-header': color} : {}),
+            ...(backgroundColor ? {backgroundColor} : {}),
+						...inlineStyles,
+					}}
+				>
+					{children}
+				</div>
+	
 		)
 	//todo make a note of this, it's ugly but it works
 	return (
@@ -53,10 +65,10 @@ export function BlockLayout({
 				children?.map((child: any, i: number) => (
 					<div
 						key={i}
-						className="grid-item"
+						className={['grid-item', 'pad-loose-elements', layout_wide].join(' ')}
 						style={{
 							alignItems: verticalAlign,
-							...(horizontalAlign ? {justifyContent: horizontalAlign} : {}),
+							...(horizontalAlign ? { justifyContent: horizontalAlign } : {}),
 							backgroundColor: col_bg_colors ? col_bg_colors[i] : "",
 							...(col_bg_imgs
 								? { backgroundImage: `url(${col_bg_imgs[i]})` }

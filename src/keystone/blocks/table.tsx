@@ -2,6 +2,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
+// todo - is there anyway to make the ui more user friendly instead of nesting hell?
+
 import { jsx } from "@keystone-ui/core"
 import {
 	component,

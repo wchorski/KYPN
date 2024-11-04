@@ -9,15 +9,18 @@ type ProdProps = {
 	children: ReactNode[]
 	colMinWidth?: "10rem" | "16rem" | "18rem" | "22rem"
 	gap?: string
+  paddingInline?: string
 }
 
 export function GridList({
 	colMinWidth = "16rem",
 	gap = ".3rem",
+  paddingInline = '0',
 	children,
 }: ProdProps): ReactElement<any, any> {
 	const cls = ["unstyled", grid, auto].join(" ")
 	const styles = {
+    paddingInline,
 		"--col-min-width": colMinWidth,
 		gap,
 	} as CSSProperties

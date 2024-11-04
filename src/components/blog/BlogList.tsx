@@ -18,7 +18,7 @@ export function BlogList({ posts }: ProdProps): ReactElement<any, any> {
 	if (!posts) return <> no posts found</>
 
 	return (
-		<GridList gap="1rem">
+		<GridList gap="1rem" paddingInline="1rem">
       {posts.map((item: any, i: number) => (
         <BlogListItem {...item} key={i}/>
 			))}

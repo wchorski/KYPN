@@ -256,9 +256,9 @@ $breakpoint-l: 1200px;
 		// width: clamp(1rem, 80vw, var(--w-contentmax));
 		width: clamp(32vw, 76vw, var(--w-contentmax));
 	}
-	> :is(h1, h2, h3, h4, h5, h6, p) {
-		padding-inline: var(--space-m);
-	}
+	// > :is(h1, h2, h3, h4, h5, h6, p) {
+	// 	padding-inline: var(--space-m);
+	// }
 	> .grid-item {
 		display: grid;
 		// align-items: center;
