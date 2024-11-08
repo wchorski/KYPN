@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode } from "react"
-import { BGColor, GridLayout, SpaceSize } from "@ks/types"
+import { GridLayout, SpaceSize } from "@ks/types"
 import { layout_full } from "@styles/layout.module.scss";
 // import styles from "@styles/elements/section.module.scss";
 
@@ -9,7 +9,7 @@ type Props = {
 	imageSrc?: string
   // todo change color to bgColor and leave color for text inside
 	color?: string
-  bgColor?:BGColor
+  bgColor?:string
 	overlay?: string
 	col?: number
 	layout?: GridLayout

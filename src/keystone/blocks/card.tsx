@@ -5,6 +5,9 @@
 
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { ColorsTheme } from '@ks/types';
+import { getColorTheme } from '../../lib/styleHelpers';
+import { bg_c_plain } from '../../styles/colors.module.css';
 
 export const card = component({
   label: 'Card',
@@ -24,9 +27,24 @@ export const card = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
-    bgColor: fields.text({
-      label: 'Fallback background color',
-      defaultValue: ''
+    // backgroundColor: fields.text({
+    //   label: 'Background Color',
+    // }),
+    // color: fields.text({
+    //   label: 'Text Color',
+    // }),
+    colorTheme: fields.select({
+      label: 'Color Theme',
+      options: [
+        {value: 'bg_c_plain', label: 'Plain'},
+        {value: 'bg_c_primary', label: 'Primary'},
+        {value: 'bg_c_secondary', label: 'Secondary'},
+        {value: 'bg_c_tertiary', label: 'Tertiary'},
+        {value: 'bg_c_accent', label: 'Accent'},
+        {value: 'bg_c_transparent', label: 'transparent'},
+        {value: 'bg_c_reverse_theme', label: 'Inverted'},
+      ] as {value:ColorsTheme, label:string}[],
+      defaultValue: 'bg_c_plain'
     }),
     padding: fields.integer({
       label: 'Padding',
@@ -34,7 +52,6 @@ export const card = component({
     }),
     margin: fields.text({
       label: 'Margin',
-      defaultValue: 'var(--space-m)',
     }),
     fontSize: fields.text({
       label: 'Font Size',
@@ -58,19 +75,27 @@ export const card = component({
       defaultValue: 'start'
     })
   },
+  
   preview: function Preview(props) {
+
+    // const clrTheme = getColorTheme(props.fields.colorTheme.value)
+    const clrTheme = bg_c_plain
+
     return (
 
       <div style={{
+        // ...(props.fields.color ? {color: props.fields.color.value} : {}),
+        
+        // border: 'solid 3px ' + props.fields.backgroundColor.value,
+        // ...(props.fields.backgroundColor ? {backgroundColor: props.fields.backgroundColor.value} : {}),
         padding: props.fields.padding.value + 'rem',
-        margin: props.fields.margin.value,
+        ...(props.fields.margin ? { margin: props.fields.margin.value} : {}),
         fontSize: props.fields.fontSize.value + 'rem',
-        border: 'solid 3px ' + props.fields.bgColor.value,
-        backgroundColor: props.fields.bgColor.value,
         backgroundImage: props.fields.imageSrc.value,
         borderRadius: '5px',
         alignSelf: props.fields.verticleAlign.value,
-      }}>
+      }}
+      className={clrTheme}>
         {props.fields.content.element}
       </div>
     );

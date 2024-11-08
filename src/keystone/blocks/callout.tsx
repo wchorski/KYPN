@@ -14,6 +14,7 @@ import { AlertOctagonIcon } from '@keystone-ui/icons/icons/AlertOctagonIcon';
 import { CheckCircleIcon } from '@keystone-ui/icons/icons/CheckCircleIcon';
 import { Trash2Icon } from '@keystone-ui/icons/icons/Trash2Icon';
 import { Tooltip } from '@keystone-ui/tooltip';
+import { CalloutStatus } from '@ks/types';
 
 const calloutIconMap = {
   info: InfoIcon,
@@ -33,7 +34,7 @@ export const callout = component({
         { value: 'warning', label: 'Warning' },
         { value: 'error', label: 'Error' },
         { value: 'success', label: 'Success' },
-      ] as const,
+      ] as {value:CalloutStatus,label:string}[],
       defaultValue: 'info',
     }),
     content: fields.child({

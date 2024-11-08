@@ -162,6 +162,7 @@ When initializing a fresh database or returning to development you may add/remov
 </details>
 
 ## TODO
+- [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
 - [ ] page with side bar and site side bar (will use @container query)
 - [ ] all blocks tested
@@ -192,6 +193,10 @@ This i need to do before moving back to main branch
   - [x] pages
   - [ ] bookings
   - [ ] bookings
+
+### Blocks
+#todo
+- [ ] Gallery: better editor preview
 
 - Announcements 
   - create dynamic announcements that are private, members only, etc.

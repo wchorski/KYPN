@@ -3,6 +3,7 @@
 
 import { Box, jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { CSSProperties } from 'react';
 
 export const imagegallery = component({
   label: 'Gallery',
@@ -14,6 +15,14 @@ export const imagegallery = component({
         {label: 'masonry', value: 'masonry'},
       ],
       defaultValue: 'grid'
+    }),
+    objectFit: fields.select({
+      label: 'Image Frame Crop',
+      options: [
+        {label: 'contain', value: 'contain'},
+        {label: 'cover', value: 'cover'},
+      ],
+      defaultValue: 'contain'
     }),
     columns: fields.integer({ label: 'Columns', defaultValue: 3}),
     gap: fields.integer({label: 'Grid Gap', defaultValue: 3}),
@@ -59,7 +68,7 @@ export const imagegallery = component({
                   role="presentation"
                   src={item.fields.src.value}
                   style={{
-                    objectFit: 'contain',
+                    objectFit: props.fields.objectFit.value as CSSProperties['objectFit']|| 'contain',
                     objectPosition: 'center center',
                     height: 240,
                     width: '100%',

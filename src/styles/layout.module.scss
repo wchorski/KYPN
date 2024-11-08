@@ -110,19 +110,21 @@ $sidebar-breakpoint: 1185px;
 
 //? for any loose content that isn't put in a wrap,
 //? this prevents content from touching window edges
+
 .page_layout,
 .page_layout > .layout_full,
 .page_layout > .layout_wide {
 	// todo continue to add stuff
-	> :is(figure, img) {
+	> :is(figure, img, article) {
 		grid-column: layout_wide;
 	}
-
-	> :is(blockquote) {
+  //? must target with `:global` as to not get hash id
+	> :is( blockquote, pre, div:global(.gallery), div:global(.card) ) {
 		grid-column: layout_breakout;
+    margin-block: var(--space-l);
 	}
 
-	> :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol) {
+	> :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form) {
 		grid-column: layout_content;
 	}
 }

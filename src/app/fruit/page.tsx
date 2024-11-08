@@ -53,7 +53,7 @@ export default async function FruitPage({ params, searchParams }: Props) {
 	// return <PageTHeaderMain header={Header()} main={Content()} />
 	return (
 		<main className={page_layout}>
-			<header className={layout_full} style={{background: 'darkgreen'}} >
+			<header className={layout_full} style={{ background: "darkgreen" }}>
 				<h1> Page Title</h1>
 				<p>lil caption about this page</p>
 			</header>
@@ -66,12 +66,19 @@ export default async function FruitPage({ params, searchParams }: Props) {
 					veniam minima natus magni dolor, sed a quae odit laboriosam deleniti,
 					pariatur cum incidunt eum illo alias facere quibusdam labore. Laborum?
 				</p>
-        {/* @ts-ignore */}
-        <Image alt="" src={'http://localhost:3000/_next/image?url=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Far_16%3A9%2Cb_auto%3Aborder%2Cc_lpad%2Fb_white%2Ff_auto%2Fq_auto%2Fdpr_1.5%2Fc_scale%2Cw_700%2Fncom%2Fsoftware%2Fswitch%2F70010000005302%2Fa6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636&w=1920&q=75'} />
+				{/* @ts-ignore */}
+				<Image
+					alt="pikmin carrying orange"
+					src={
+						"https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_600/ncom/en_US/games/switch/p/pikmin-3-deluxe-switch/description-image"
+					}
+          width={400}
+          height={400}
+				/>
 			</div>
 
 			<aside className={page_sidebar}>
-				<Flex flexDirection={"column"} alignItems={'flex-start'}>
+				<Flex flexDirection={"column"} alignItems={"flex-start"}>
 					<Card>
 						<h2>Sidebar Card 1</h2>
 					</Card>
@@ -84,7 +91,7 @@ export default async function FruitPage({ params, searchParams }: Props) {
 				</Flex>
 			</aside>
 
-			<footer className={layout_full} style={{background: 'navy'}}>
+			<footer className={layout_full} style={{ background: "navy" }}>
 				<h2>Content Footer</h2>
 				<p>
 					Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic delectus

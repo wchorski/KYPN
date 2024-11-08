@@ -1,84 +1,80 @@
 import { CSSProperties, ReactNode } from "react"
-import {card, } from "@styles/card.module.scss"
-import { bg_c_plain, bg_c_primary, bg_c_reverse_theme, bg_c_secondary, bg_c_transparent } from "@styles/colors.module.scss";
+import { card } from "@styles/card.module.scss"
+import {
+	bg_c_accent,
+	bg_c_plain,
+	bg_c_primary,
+	bg_c_reverse_theme,
+	bg_c_secondary,
+	bg_c_tertiary,
+	bg_c_transparent,
+} from "@styles/colors.module.css"
 import { ColorsTheme, SpaceSize } from "@ks/types"
+import { getColorTheme } from "@lib/styleHelpers"
 
 type Props = {
 	children: ReactNode
-	content?:string,
+	content?: string
 	layout?: "flex" | "grid"
 	direction?: "row" | "column"
 	id?: string
-  colors?: ColorsTheme
-	bgColor?: string
+	colorTheme?: ColorsTheme
+	// backgroundColor?: string
 	className?: string
 	style?: CSSProperties
 	gap?: string
 	wrapperOverflow?: SpaceSize
-  paddingBlock?: SpaceSize
-  margin?: SpaceSize
-  verticleAlign?: 'start'|'center'|'end',
-  maxWidth?:string,
+	paddingBlock?: SpaceSize
+	margin?: SpaceSize
+	verticleAlign?: "start" | "center" | "end"
+	maxWidth?: string
 	// layout?: 'default'|'center',
 }
 
 export function Card({
-	layout = 'flex',
+	layout = "flex",
 	direction = "column",
 	children,
-  content,
+	content,
 	id,
-  colors = 'bg_c_plain',
-	bgColor,
+	colorTheme = "bg_c_plain",
 	className,
 	style,
 	gap = "var(--space-m)",
 	wrapperOverflow,
-  paddingBlock,
-  margin,
-  verticleAlign,
-  maxWidth
+	paddingBlock,
+	margin,
+	verticleAlign,
+	maxWidth,
 }: Props) {
+	const clrTheme = getColorTheme(colorTheme)
 
-  const bgClr = (() => {
-    switch (colors) {
-      case 'bg_c_transparent':
-        return bg_c_transparent;
-      case 'bg_c_reverse_theme':
-        return bg_c_reverse_theme;
-      case 'bg_c_primary':
-        return bg_c_primary;
-      case 'bg_c_secondary':
-        return bg_c_secondary;
-      case 'bg_c_secondary':
-        return bg_c_secondary;
-      default:
-        return bg_c_plain;
-    }
-  })();
-
-	const clsnms = [card, bgClr].join(" ")
+	const clsnms = ['card', card, clrTheme, className].join(" ")
 
 	return (
 		<div
 			id={id}
-			className={[clsnms, colors, className].join(' ')}
+			className={clsnms}
 			style={{
-        ...(bgColor ? {backgroundColor: bgColor} : {}),
+				// ...(backgroundColor ? {backgroundColor: backgroundColor} : {}),
 				flexDirection: direction,
 				gap: gap,
-        ...(margin ? {margin: margin} : {}),
-        ...(verticleAlign ? {alignSelf: verticleAlign} : {}),
-        paddingInline: wrapperOverflow ? `var(--space-${wrapperOverflow})` : 'var(--space-m)',
-        ...(paddingBlock ? {paddingBlock: `var(--space-${paddingBlock})`} : {}),
-        ...(maxWidth ? {maxWidth} : {}),
-        // ...(isPopOut ? {marginInline: 'clamp(calc(var(--space-m) * -1)'} : {}),
-        // ...(wrapperOverflow ? {'--space-wrapperOverflow': `var(--space-${wrapperOverflow})`} : {}),
-        // marginInline: isPopOut ? 'calc(var(--space-m) * -1)' : 'revert-layer',
+				...(margin ? { margin: margin } : {}),
+				...(verticleAlign ? { alignSelf: verticleAlign } : {}),
+				paddingInline: wrapperOverflow
+					? `var(--space-${wrapperOverflow})`
+					: "var(--space-m)",
+				...(paddingBlock
+					? { paddingBlock: `var(--space-${paddingBlock})` }
+					: {}),
+				...(maxWidth ? { maxWidth } : {}),
+				// ...(isPopOut ? {marginInline: 'clamp(calc(var(--space-m) * -1)'} : {}),
+				// ...(wrapperOverflow ? {'--space-wrapperOverflow': `var(--space-${wrapperOverflow})`} : {}),
+				// marginInline: isPopOut ? 'calc(var(--space-m) * -1)' : 'revert-layer',
 				...style,
 			}}
 		>
-      {content && <>{content}</>}
+			{content && <>{content}</>}
 			{children}
 		</div>
 	)

@@ -112,9 +112,9 @@ ul:not([class]), ol:not([class]) {
   align-content: center;
 }
 
-a {
-  font-weight: bold;
-}
+// a {
+//   font-weight: bold;
+// }
 strong {
   // -webkit-text-stroke: var(--c-txt) 1px;
   font-weight: bold;
@@ -179,7 +179,6 @@ input[type="button"] {
 	display: inline-block;
 	text-align: center;
 	font-size: 11px;
-	font-weight: bolder;
 	letter-spacing: 0.1rem;
 	white-space: nowrap; 
 	border-radius: var(--br-dull);
@@ -194,7 +193,7 @@ input[type="button"] {
 }
 
 .pad-loose-elements {
-  p {
+  > p {
     padding-inline: var(--space-m);
   }
 }

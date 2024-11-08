@@ -10,7 +10,8 @@ import type { Permission } from "./schemas/fields"
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
 import type { Lists } from ".keystone/types";
-import type colorsStyles from "@styles/colors.module.scss";
+
+export type CalloutStatus = 'info'|'warning'|'error'|'success'
 
 export type Session = {
 	user?:

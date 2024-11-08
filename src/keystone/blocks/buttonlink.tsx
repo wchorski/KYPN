@@ -5,6 +5,8 @@
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 
+//TODO make this a list of buttonss
+
 export const buttonlink = component({
   label: 'Button',
   schema: {

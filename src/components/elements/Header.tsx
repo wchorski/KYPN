@@ -1,11 +1,11 @@
-import { BGColor, WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
+import { WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
 import { CSSProperties, ReactNode } from "react"
 import sLayout, { layout_full } from "@styles/layout.module.scss"
 import styles from '@styles/blog/blogpost.module.scss'
 
 type Props = {
 	children: ReactNode
-	bgColor?: BGColor
+	bgColor?: string
 	bgImage?: string | null | undefined
 	widthOfContent?: WidthLayoutSize2
 	className?: string
@@ -13,7 +13,7 @@ type Props = {
 }
 
 export function Header({
-	widthOfContent = "layout_wide",
+	widthOfContent = "layout_content",
 	bgImage,
 	bgColor,
 	className,

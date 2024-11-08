@@ -1,14 +1,8 @@
 .card{
-  // background-color: var(--c-txt-bg);
-  // padding: 1rem;
   padding-block: var(--space-m);
-  // margin-inline: 3px;
+  margin-block: var(--space-m);
   border-radius: var(--br-dull);
-  // height: 100%;
   display: flex;
-  // flex-direction: column;
-  // width: fit-content;
-
 }
 .row{
   flex-direction: row;

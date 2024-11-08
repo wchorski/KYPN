@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@styles/blocs/Carousel.module.css';
+import { carousel, carouselImage, carouselItem, title } from '@styles/blocs/carousel.module.css';
 
 type CarouselProps = {
   items: {
@@ -10,12 +10,12 @@ type CarouselProps = {
 
 export function Carousel({ items = [] }: CarouselProps) {
   return (
-    <div className={styles.carousel}>
+    <div className={carousel}>
       {items.map((item, i) => {
         return (
-          <figure key={i} className={styles.carouselItem}>
-            <img role="presentation" src={item.imageSrc} className={styles.carouselImage} alt={`${item.title} video thumbnail`} />
-            <figcaption className={styles.title}>{item.title}</figcaption>
+          <figure key={i} className={carouselItem}>
+            <img role="presentation" src={item.imageSrc} className={carouselImage} alt={`${item.title} video thumbnail`} />
+            <figcaption className={title}>{item.title}</figcaption>
           </figure>
         );
       })}
