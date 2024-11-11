@@ -2,3 +2,40 @@
   width: 100%;
   height: auto;
 }
+
+.image_wrap {
+  width: fit-content;
+  margin-inline: auto;
+  margin-block: var(--space-l);
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    min-height: 50vh;
+    object-fit: contain;
+    filter: drop-shadow(var(--shadow-3));
+    // border: solid 1px var(--c-seperator),
+  }
+}
+
+.image_caption {
+  padding-block: var(--space-ms);
+  &::before {
+    // content: '⤷';
+    // content: '⇁';
+    content: '↳ ';
+    width: 100px;
+    height: 10px;
+  } 
+
+  &:empty {
+    padding: 0;
+
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+    }
+  }
+}

@@ -5,7 +5,12 @@ nav.table_of_contents {
 	a {
 		color: var(--c-txt-sub);
 		text-decoration: none;
+    cursor: pointer;
 	}
+
+  a:hover {
+    color: var(--c-primary);
+  }
 
 	ul {
 		list-style: none;

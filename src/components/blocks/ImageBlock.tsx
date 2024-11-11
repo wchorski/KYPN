@@ -1,5 +1,6 @@
 import Image from "next/image"
 import {layout_wide} from '@styles/layout.module.scss'
+import { image_caption, image_wrap } from "@styles/image.module.scss";
 
 type Props = {
 	color?: string
@@ -20,36 +21,16 @@ export function ImageBlock({
 }: Props) {
 	return (
 		<figure
-			className={layout_wide}
-			style={{
-				margin: "0",
-				// maxWidth: "calc(var(--w-contentmax) + var(--space-xxl))",
-			}}
+			className={[layout_wide, image_wrap].join(' ')}
 		>
 			<Image
-				className={layout_wide}
 				alt={alt}
 				src={imageSrc}
-				// className={`image block`}
-				// layout={'fill'}
-				style={{
-					width: "100%",
-					height: "auto",
-					maxHeight: "60vh",
-					objectFit: "contain",
-					filter: "drop-shadow(var(--shadow-3))",
-					// border: "solid 1px var(--c-seperator)",
-				}}
 				sizes={"100vw"}
 				width={0}
 				height={0}
-				// style={{
-				//   width: width ? width : '100%',
-				//   objectFit: 'cover',
-				//   display: 'block',
-				// }}
 			/>
-			<figcaption style={{ paddingBlock: "var(--space-ms)" }}>{alt}</figcaption>
+			<figcaption className={[image_caption, 'subtext'].join(' ')} >{alt}</figcaption>
 		</figure>
 	)
 }
