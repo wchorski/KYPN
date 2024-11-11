@@ -23,6 +23,7 @@ export function Hero({ imageSrc, caption, color, children }: HeroProps) {
 		backgroundImage: `url(${imageSrc})`,
 		"--color-header": color,
 		"--color-content": color,
+    ...(color ? {color} : {})
 	} as CSSProperties
 
 	return (

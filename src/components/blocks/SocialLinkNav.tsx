@@ -1,3 +1,4 @@
+import { useIcons } from "@lib/useIcons"
 import Link from "next/link"
 import { CSSProperties, ReactNode } from "react"
 import {
@@ -42,54 +43,54 @@ export function SocialLinkNav({
 	custom1,
 	style,
 }: Props) {
-	function handleRender(type: string = "") {
-		let icon: ReactNode
+	// function iconPicker(type: string = "") {
+	// 	let icon: ReactNode
 
-		switch (true) {
-			case type.includes("facebook"):
-				icon = <FaFacebook />
-				break
-			case type.includes("instagram"):
-				icon = <FaInstagram />
-				break
-			case type.includes("bandcamp"):
-				icon = <FaBandcamp />
-				break
-			case type.includes("bandlab"):
-				icon = <SiBandlab />
-				break
-			case type.includes("twitch"):
-				icon = <FaTwitch />
-				break
-			case type.includes("twitter"):
-				icon = <FaTwitter />
-				break
-			case type.includes("youtube"):
-				icon = <FaYoutube />
-				break
-			case type.includes("github"):
-				icon = <FaGithub />
-				break
-			case type.includes("linkedin"):
-				icon = <FaLinkedin />
-				break
-			default:
-				icon = <FaLink />
-				break
-		}
+	// 	switch (true) {
+	// 		case type.includes("facebook"):
+	// 			icon = <FaFacebook />
+	// 			break
+	// 		case type.includes("instagram"):
+	// 			icon = <FaInstagram />
+	// 			break
+	// 		case type.includes("bandcamp"):
+	// 			icon = <FaBandcamp />
+	// 			break
+	// 		case type.includes("bandlab"):
+	// 			icon = <SiBandlab />
+	// 			break
+	// 		case type.includes("twitch"):
+	// 			icon = <FaTwitch />
+	// 			break
+	// 		case type.includes("twitter"):
+	// 			icon = <FaTwitter />
+	// 			break
+	// 		case type.includes("youtube"):
+	// 			icon = <FaYoutube />
+	// 			break
+	// 		case type.includes("github"):
+	// 			icon = <FaGithub />
+	// 			break
+	// 		case type.includes("linkedin"):
+	// 			icon = <FaLinkedin />
+	// 			break
+	// 		default:
+	// 			icon = <FaLink />
+	// 			break
+	// 	}
 
-		return type ? (
-			<a
-				href={type}
-				target="#"
-				aria-label={`${type} link`}
-				data-tooltip={type}
-				title={type}
-			>
-				{icon}
-			</a>
-		) : null
-	}
+	// 	return type ? (
+	// 		<a
+	// 			href={type}
+	// 			target="#"
+	// 			aria-label={`${type} link`}
+	// 			data-tooltip={type}
+	// 			title={type}
+	// 		>
+	// 			{icon}
+	// 		</a>
+	// 	) : null
+	// }
 
 	return (
 		<nav
@@ -103,16 +104,16 @@ export function SocialLinkNav({
 				...style,
 			}}
 		>
-			{handleRender(facebook)}
-			{handleRender(instagram)}
-			{handleRender(bandcamp)}
-			{handleRender(bandlab)}
-			{handleRender(twitch)}
-			{handleRender(twitter)}
-			{handleRender(youtube)}
-			{handleRender(github)}
-			{handleRender(linkedin)}
-			{handleRender(custom1)}
+			{useIcons(facebook)}
+			{useIcons(instagram)}
+			{useIcons(bandcamp)}
+			{useIcons(bandlab)}
+			{useIcons(twitch)}
+			{useIcons(twitter)}
+			{useIcons(youtube)}
+			{useIcons(github)}
+			{useIcons(linkedin)}
+			{useIcons(custom1)}
 		</nav>
 	)
 }

@@ -52,6 +52,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
   // }
 
   return (
+    // @ts-ignore
     <article className={[styles.infocard, styles[`vAlign_${verticleAlign}`] ].join(' ')}  
       style={{
         paddingInline: padding + 'rem',
@@ -73,6 +74,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
         {content && <>{content}</>}
         {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
+        <p>href::: {buttonLink}</p>
         {buttonLink && (
           <Link href={buttonLink} className="button"> {buttonText} </Link>
         )}

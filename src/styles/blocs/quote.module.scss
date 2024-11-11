@@ -1,34 +1,47 @@
 .quote {
-  padding-left: 16px;
-  background-color: var(--c-txt-bg);
-  padding: 4px 12px 16px 48px;
-  position: relative;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  display: block;
-  box-shadow: var(--shadow-1);
-  // transition: border;
-  // transition-timing-function: linear;
-  // transition-duration: .3s;
-
+	padding-left: 16px;
+	background-color: var(--c-txt-bg);
+	padding: 4px 12px 16px 48px;
+	position: relative;
+	border-radius: 6px;
+	margin-bottom: 1rem;
+	display: block;
+	box-shadow: var(--shadow-1);
+	// transition: border;
+	// transition-timing-function: linear;
+	// transition-duration: .3s;
 }
 
-.quote:hover, .quote:focus {
-  color: var(--c-accent);
-  border-left: solid 3px var(--c-accent);
-}
+.quote {
+	p {
+		color: var(--c-txt);
+		text-align: left !important;
+		padding: 0.8em 0 !important;
+		margin: 0 !important;
+	}
 
-.quote p {
-  color: var(--c-txt);
-  text-align: left !important;
-  padding: .8em 0 !important;
-  margin: 0 !important;
+  a {
+    text-decoration: none;
+  }
 }
 
 .quote::after {
-  content: '\201C';
-  position: absolute;
-  top: 0;
-  left: 16px;
-  font-size: 4rem;
+	content: "\201C";
+	position: absolute;
+	top: 0;
+	left: 16px;
+	font-size: 4rem;
 }
+
+.quote:hover,
+.quote:focus {
+	color: var(--c-accent);
+	border-left-color: var(--c-accent);
+  cursor: pointer;
+
+  a {
+    color: var(--c-accent);
+    text-decoration: underline;
+  }
+}
+

@@ -1,6 +1,7 @@
 import { ColorsTheme } from "../keystone/types"
 import { bg_c_accent, bg_c_plain, bg_c_primary, bg_c_reverse_theme, bg_c_secondary, bg_c_tertiary, bg_c_transparent } from "../styles/colors.module.css"
 
+
 export function getColorTheme(colorTheme:ColorsTheme) {
   switch (colorTheme) {
     case "bg_c_transparent":

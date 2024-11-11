@@ -12,6 +12,9 @@ export const hero = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
+    color: fields.text({
+      label: 'Text Color',
+    }),
     caption: fields.conditional(fields.checkbox({ label: 'Has caption' }), {
       false: fields.empty(),
       true: fields.child({
@@ -33,6 +36,7 @@ export const hero = component({
               backgroundSize: 'cover',
               minHeight: 200,
               width: '100%',
+              ...(props.fields.color ? {color: props.fields.color.value } : {})
             }}
           />
         </NotEditable>

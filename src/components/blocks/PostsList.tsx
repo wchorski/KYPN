@@ -19,7 +19,8 @@ type Props = {
 export async function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props):ReactElement<any, any> {
   
   const session = await getServerSession(nextAuthOptions)
-  const { posts, error} = await fetchPosts(1, categories.flatMap(cat => cat.id), session)
+  const categoryIds = categories.flatMap(cat => cat.id)
+  const { posts, error} = await fetchPosts({page: 1, categoryIds, session})
 
   return (
     <Section 

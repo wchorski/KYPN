@@ -1,7 +1,7 @@
-'use client'
 /** @jsxRuntime classic */
 /** @jsx jsx */
 
+import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 
 export const tweet = component({
@@ -13,7 +13,7 @@ export const tweet = component({
         'https://twitter.com/KeystoneJS/status/1558944015953068032?s=20&t=32A2Avz9kPlefEOcXIqOXQ',
     }),
   },
-  preview: function Tweet(props) {
+  preview: function Preview(props) {
     // const wrapper = useRef<HTMLQuoteElement>(null);
     
     // useEffect(() => {

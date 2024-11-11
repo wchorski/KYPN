@@ -115,16 +115,16 @@ $sidebar-breakpoint: 1185px;
 .page_layout > .layout_full,
 .page_layout > .layout_wide {
 	// todo continue to add stuff
-	> :is(figure, img, article) {
+	> :is(figure, img, article, iframe, div:global(.mediatext)) {
 		grid-column: layout_wide;
 	}
   //? must target with `:global` as to not get hash id
-	> :is( blockquote, pre, div:global(.gallery), div:global(.card) ) {
+	> :is( blockquote, pre, div:global(.gallery), div:global(.card), div:global(.youtubeVideo) ) {
 		grid-column: layout_breakout;
     margin-block: var(--space-l);
 	}
 
-	> :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form) {
+	> :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav) {
 		grid-column: layout_content;
 	}
 }

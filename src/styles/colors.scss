@@ -41,6 +41,7 @@ h6 {
 
 .overlay {
 	position: relative;
+  z-index: 1;
 
 	&::before {
 		content: "";
@@ -51,7 +52,7 @@ h6 {
 		bottom: 0;
 		background: var(--c-overlay);
 		pointer-events: none;
-		z-index: 0;
+		z-index: -1;
 	}
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@styles/blocs/video.module.scss'
+import styles, { iframePosition, youtubeVideo } from '@styles/blocs/video.module.scss'
 
 type YouTubeVideoProps = {
   url: string;
@@ -10,8 +10,8 @@ export function YouTubeVideo({ url = '', altText = 'Embedded YouTube video' }: Y
   const embedId = getYouTubeEmbedId(url);
 
   return (
-    <div className={styles.youtubeVideo}>
-      <div className={styles.iframePosition}>
+    <div className={[youtubeVideo, 'youtubeVideo'].join(' ')}>
+      <div className={iframePosition}>
         <iframe
           width="100%"
           height="480"

@@ -23,19 +23,22 @@ article.carditem{
   transition: all .3s;
   overflow: hidden;
 
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+
   header{
     padding: 0;
+    padding-inline: var(--space);
 
-    img {
-      width: 100%;
-      object-fit: cover;
-    }
   }
 
   h3{
-    padding: 0 1rem;
+    // padding: 0 1rem;
     margin: 0;
     margin-top: 1rem;
+    font-size: clamp(1rem * (var(--font-size-multi) * 1), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 2));
   }
 
   figure{
@@ -90,9 +93,14 @@ article.vAlign_end {
   height: 100%;
   display: grid;
   gap: 1rem;
+  padding: var(--space);
 
   > a {
     margin-top: auto;
+  }
+
+  > p, ul, ol {
+    margin: 0;
   }
 }
 

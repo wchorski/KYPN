@@ -29,7 +29,7 @@ import { table } from './table';
 // schema.Post.ui.views import looks for a named export `componentBlocks`
 export const componentBlocks = {
   callout,
-  slider,
+  // slider,
   mediatext,
   section,
   postslist,
@@ -43,7 +43,7 @@ export const componentBlocks = {
   hero,
   carousel,
   quote,
-  tweet,
+  // tweet,
   youtubeVideo,
   videoLocal,
   imagegallery,
