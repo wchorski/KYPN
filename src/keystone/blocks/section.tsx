@@ -26,6 +26,10 @@ export const section = component({
     color: fields.text({
       label: 'Text Color',
     }),
+    paddingBlock: fields.text({
+      label: 'Verticle Padding',
+      defaultValue: '10vh'
+    }),
   },
   preview: function Preview(props) {
     return (
@@ -36,6 +40,8 @@ export const section = component({
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           color: props.fields.color.value,
+          paddingInline: '1rem',
+          ...( props.fields.paddingBlock ? {paddingBlock: props.fields.paddingBlock.value} : {})
         }}
       >
 
