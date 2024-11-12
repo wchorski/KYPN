@@ -13,6 +13,11 @@ import NotAuthorized403 from "../not-authorized"
 import NoDataFoundError404 from "../not-found"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { BlockLayout } from "@components/layouts/BlockLayout"
+import {
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.scss"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -42,13 +47,9 @@ export default async function UsersPage({ params, searchParams }: Props) {
 		account: user.id,
 	}))
 
-	return <PageTHeaderMain header={Header({ session })} main={Main({ cells })} />
-}
-
-function Header({ session }: { session: Session | null }) {
 	return (
-		<>
-			<BlockLayout layout={"1"}>
+		<main className={page_layout}>
+			<header className={layout_site}>
 				<h1> My Account </h1>
 				<pre>
 					<h6>Session:</h6>
@@ -57,35 +58,28 @@ function Header({ session }: { session: Session | null }) {
 				{session && !session.data.role && (
 					<VerifyEmailCard email={session.user.email} />
 				)}
-				<p>
-					{" "}
-					If you have permission to <strong>Manage Users</strong> you will see
-					all users{" "}
-				</p>
-				<p>
-					{" "}
-					If you do not have permission, you will only see the current logged in
-					user
-				</p>
-				<p>
-					{" "}
-					If you are not logged in then you will see <strong>no data</strong>
-				</p>
+				<ul>
+					<li>
+						{" "}
+						If you have permission to <strong>Manage Users</strong> you will see
+						all users{" "}
+					</li>
+					<li>
+						{" "}
+						If you do not have permission, you will only see the current logged
+						in user
+					</li>
+					<li>
+						{" "}
+						If you are not logged in then you will see <strong>no data</strong>
+					</li>
+				</ul>
 
-        <Link href={envs.BACKEND_URL} className="button medium">KeystoneJs Admin Panel</Link>
-			</BlockLayout>
-		</>
-	)
-}
-
-type Main = {
-	cells: any
-}
-
-function Main({ cells }: Main) {
-	return (
-		<>
-			<BlockLayout layout={"1"}>
+				<Link href={envs.BACKEND_URL} className="button medium">
+					KeystoneJs Admin Panel
+				</Link>
+			</header>
+			<div className={[page_content, layout_site].join(" ")}>
 				<h2>Users</h2>
 				<Table
 					caption=""
@@ -93,7 +87,7 @@ function Main({ cells }: Main) {
 					headers={["name", "email", "role", "account"]}
 					cells={cells}
 				/>
-			</BlockLayout>
-		</>
+			</div>
+		</main>
 	)
 }

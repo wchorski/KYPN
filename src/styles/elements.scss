@@ -1,7 +1,7 @@
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-	margin: var(--space-m);
+  table-layout: fixed;
 }
 thead th {
 	border-bottom-width: 3px;

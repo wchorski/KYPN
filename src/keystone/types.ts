@@ -76,7 +76,7 @@ export type KSHeading = {
 //** Schema Lists */
 export type User = Lists.User.Item 
 export type Category = Lists.Category.Item
-export type Tag = Lists.Tag
+export type Tag = Lists.Tag.Item
 export type Page = Lists.Page.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
 export type Post = Lists.Post.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
 

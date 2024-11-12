@@ -24,6 +24,7 @@ import {
 	layout_site,
 } from "@styles/layout.module.scss"
 import Flex from "@components/layouts/Flex"
+import { NoData } from "@components/elements/NoData"
 
 type Props = {
 	params: {
@@ -59,7 +60,7 @@ export default async function CategoriesPage({ params, searchParams }: Props) {
 	return (
 		<>
 			<main className={page_layout}>
-				<header className={layout_full}>
+				<header className={layout_site}>
 					<h1 style={{ marginBottom: 0 }}>
 						{" "}
 						Categories {categories ? ":" : null}
@@ -71,7 +72,7 @@ export default async function CategoriesPage({ params, searchParams }: Props) {
 
 				<div className={[page_content, layout_site].join(" ")}>
 					<h4>Posts: </h4>
-					{posts && <BlogList posts={posts} />}
+					{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
 				</div>
         <hr />
 				<footer className={layout_site}>

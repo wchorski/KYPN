@@ -7,7 +7,7 @@ import { NoData } from "./NoData"
 interface TableProps {
 	caption: string
 	cells: object[]
-	rows: object[]
+	rows?: object[]
 	headers?: string[]
 	route?: string
 }
