@@ -16,6 +16,7 @@ type Props = {
 	verticalAlign?: "start" | "center" | "end"
 	horizontalAlign?: CSSProperties["justifyItems"]
 	paddingBlock?: SpaceSize
+  nestedBlock?:boolean
 }
 
 // todo use a seperate .grid module that is *mostly* independant from `layout` module stuff
@@ -33,8 +34,10 @@ export function BlockLayout({
 	col_bg_colors,
 	col_bg_imgs,
 	paddingBlock,
+  nestedBlock = false,
 }: Props) {
-	const clsNames = ["site-grid", `_${layout}`, className].join(" ")
+  // todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
+	const clsNames = [!nestedBlock ? "site-grid" : '', `_${layout}`, className].join(" ")
 	const inlineStyles = {
 		gap: gap ? `var(--space-${gap})` : "0",
 		...(paddingBlock ? { paddingBlock: `var(--space-${paddingBlock})` } : {}),

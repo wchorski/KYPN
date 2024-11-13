@@ -52,6 +52,7 @@ export const Page:Lists.Page = list({
         { label: 'Full Width', value: 'FULLWIDTH' },
         { label: 'Full Width with Header', value: 'FULLWIDTH_WITHHEADER' },
         { label: 'With Sidebar', value: 'WITHSIDEBAR' },
+        { label: 'With Table of Contents', value: 'WITH_TABLEOFCONTENTS' },
         { label: 'Blank', value: 'BLANK' },
       ],
       defaultValue: 'FULLWIDTH',

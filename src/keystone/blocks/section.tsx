@@ -4,6 +4,7 @@
 
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { colorThemeOptions, getColorTheme } from '../../lib/styleHelpers';
 
 export const section = component({
   label: 'Section Background',
@@ -19,12 +20,17 @@ export const section = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
-    backgroundColor: fields.text({
-      label: 'Background Color',
-      defaultValue: 'transparent'
-    }),
-    color: fields.text({
-      label: 'Text Color',
+    // backgroundColor: fields.text({
+    //   label: 'Background Color',
+    //   defaultValue: 'transparent'
+    // }),
+    // color: fields.text({
+    //   label: 'Text Color',
+    // }),
+    colorTheme: fields.select({
+      label: 'Color Theme',
+      options: colorThemeOptions,
+      defaultValue: 'bg_c_plain'
     }),
     paddingBlock: fields.text({
       label: 'Verticle Padding',
@@ -32,17 +38,20 @@ export const section = component({
     }),
   },
   preview: function Preview(props) {
+    const clrTheme = getColorTheme(props.fields.colorTheme.value)
+    
     return (
       <section
         style={{
-          backgroundColor: props.fields.backgroundColor.value,
+          // backgroundColor: props.fields.backgroundColor.value,
+          // color: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
-          color: props.fields.color.value,
           paddingInline: '1rem',
           ...( props.fields.paddingBlock ? {paddingBlock: props.fields.paddingBlock.value} : {})
         }}
+        className={clrTheme} 
       >
 
         {props.fields.content.element}

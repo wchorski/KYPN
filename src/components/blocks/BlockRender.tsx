@@ -115,7 +115,12 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 		return <SliderSlick {...props} />
 	},
 	section: (props) => {
-		return <BlockLayout {...props} />
+    const propsOverride = {
+      ...props,
+      // todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
+      nestedBlock: true,
+    }
+		return <BlockLayout {...propsOverride} />
 	},
 	iframe: (props) => {
 		return <IFrame {...props} />

@@ -20,3 +20,13 @@ export function getColorTheme(colorTheme:ColorsTheme) {
       return bg_c_plain
   }
 }
+
+export const colorThemeOptions =  [
+  {value: 'bg_c_plain', label: 'Plain'},
+  {value: 'bg_c_primary', label: 'Primary'},
+  {value: 'bg_c_secondary', label: 'Secondary'},
+  {value: 'bg_c_tertiary', label: 'Tertiary'},
+  {value: 'bg_c_accent', label: 'Accent'},
+  {value: 'bg_c_transparent', label: 'transparent'},
+  {value: 'bg_c_reverse_theme', label: 'Inverted'},
+] as {value:ColorsTheme, label:string}[]

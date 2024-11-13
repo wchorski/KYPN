@@ -6,7 +6,7 @@
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import { ColorsTheme } from '@ks/types';
-import { getColorTheme } from '../../lib/styleHelpers';
+import { colorThemeOptions, getColorTheme } from '../../lib/styleHelpers';
 import { bg_c_plain } from '../../styles/colors.module.css';
 
 export const card = component({
@@ -35,15 +35,7 @@ export const card = component({
     // }),
     colorTheme: fields.select({
       label: 'Color Theme',
-      options: [
-        {value: 'bg_c_plain', label: 'Plain'},
-        {value: 'bg_c_primary', label: 'Primary'},
-        {value: 'bg_c_secondary', label: 'Secondary'},
-        {value: 'bg_c_tertiary', label: 'Tertiary'},
-        {value: 'bg_c_accent', label: 'Accent'},
-        {value: 'bg_c_transparent', label: 'transparent'},
-        {value: 'bg_c_reverse_theme', label: 'Inverted'},
-      ] as {value:ColorsTheme, label:string}[],
+      options: colorThemeOptions,
       defaultValue: 'bg_c_plain'
     }),
     padding: fields.integer({
@@ -78,8 +70,8 @@ export const card = component({
   
   preview: function Preview(props) {
 
-    // const clrTheme = getColorTheme(props.fields.colorTheme.value)
-    const clrTheme = bg_c_plain
+    const clrTheme = getColorTheme(props.fields.colorTheme.value)
+    // const clrTheme = bg_c_plain
 
     return (
 

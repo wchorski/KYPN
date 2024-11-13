@@ -7,7 +7,7 @@ import { IconLabel } from "@components/elements/IconLabel"
 import { useEffect, useState } from "react"
 import { useUrlHash } from "@components/hooks/useUrlHash"
 import { slugFormat } from "@lib/slugFormat"
-import type { TOCLink } from "@ks/types"
+import type { KSHeading, TOCLink } from "@ks/types"
 
 // interface Heading {
 // 	type: string

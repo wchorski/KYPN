@@ -19,15 +19,14 @@ import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
 import styles from "@styles/blog/blogpost.module.scss"
 import sLayout, {
-  layout_full,
+	layout_full,
 	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
-  page_title,
+	page_title,
 } from "@styles/layout.module.scss"
 import sArticles from "@styles/articles.module.scss"
-import { PostTHeaderContentFooter } from "@components/layouts/PostTemplates"
 import { StatusBadge } from "@components/StatusBadge"
 import Error404 from "../../not-found"
 import { FiCalendar } from "react-icons/fi"
@@ -39,6 +38,8 @@ import { slugFormat } from "@lib/slugFormat"
 import { KSHeading, TOCLink } from "@ks/types"
 import { CSSProperties } from "react"
 import { AsideBar } from "@components/layouts/AsideBar"
+import { NoData } from "@components/elements/NoData"
+import { findAllHeadings } from "@lib/contentHelpers"
 
 export const revalidate = 5
 
@@ -126,34 +127,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 		content,
 	} = post
 
-	function findAllHeadings(arr: any) {
-		return arr.reduce((acc: TOCLink[], item: KSHeading) => {
-			if (item.type === "heading") {      
-				const newItem = {
-					type: item.type,
-					level: item.level,
-					slug: slugFormat(item.children[0].text),
-					text: item.children.map(item => item.text).join(' '),
-				}
-				acc.push(newItem)
-			}
-
-			for (let key in item) {
-				const typedKey = key as keyof KSHeading
-
-				if (Array.isArray(item[typedKey])) {
-					acc = acc.concat(findAllHeadings(item[typedKey]))
-				} else if (
-					typeof item[typedKey] === "object" &&
-					item[typedKey] !== null
-				) {
-					acc = acc.concat(findAllHeadings([item[typedKey]]))
-				}
-			}
-      
-			return acc
-		}, [])
-	}
+	
 	const tableOfContentLinks = findAllHeadings(content?.document)
 
 	return (
@@ -216,11 +190,21 @@ export default async function BlogPostBySlug({ params }: Props) {
 							<YouTubeVideo url={featured_video} altText="featured video" />
 						</div>
 					)}
-
-					<BlockRender document={content.document} />
+					{/* {JSON.stringify(content, null, 2)} */}
+					{/* //? warns reader that there is no content writen into the post */}
+					{content.document[0].type === "paragraph" &&
+					!content.document[0].children[0].text ? (
+						<p>
+              <NoData/>
+							This post is still in the works. Check back later when more
+							content is published
+						</p>
+					) : (
+						<BlockRender document={content.document} />
+					)}
 				</div>
 				{template === "WITHSIDEBAR" && (
-					<AsideBar aria_label="Page Sidebar">
+					<AsideBar aria_label="Post Sidebar">
 						<Flex
 							flexDirection={"column"}
 							alignItems="flex-start"
@@ -234,7 +218,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 				)}
 
 				<footer className={layout_wide}>
-					<Flex >
+					<Flex>
 						<Card maxWidth="20rem">
 							<h4 className="categories">Categories: </h4>
 							<CategoriesPool />

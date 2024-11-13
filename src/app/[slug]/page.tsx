@@ -7,7 +7,7 @@ import {
 
 import Error404 from "../not-found"
 import ErrorMessage from "@components/ErrorMessage"
-import { Page } from "@ks/types"
+import { KSHeading, Page, TOCLink } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import fetchPage from "@lib/fetchdata/fetchPage"
 import { BlockRender } from "@components/blocks/BlockRender"
@@ -20,8 +20,16 @@ import {
 	page_layout,
 	page_content,
 	layout_full,
+	layout_site,
+  layout_content,
 } from "@styles/layout.module.scss"
 import { Header } from "@components/elements/Header"
+import { AsideBar } from "@components/layouts/AsideBar"
+import Flex from "@components/layouts/Flex"
+import { TableOfContents } from "@components/menus/TableOfContents"
+import { slugFormat } from "@lib/slugFormat"
+import { findAllHeadings } from "@lib/contentHelpers"
+import { CSSProperties } from "react"
 export const revalidate = 5
 
 type Props = {
@@ -121,21 +129,35 @@ export default async function PageBySlug({ params }: Props) {
 	// 	/>
 	// )
 
+	const tableOfContentLinks = findAllHeadings(content?.document)
+	// const tableOfContentLinks = findAllHeadings([])
+
 	return (
-		<main className={page_layout}>
-			<Header
-				className={
-					template !== "FULLWIDTH_WITHHEADER" ? "screen-reader-text" : undefined
-				}
+		<main
+			className={page_layout}
+			style={
+				{
+					"--sidebar-comp-max-width": "500px",
+					"--sidebar-width-footprint": "300px",
+				} as CSSProperties
+			}
+		>
+			<header
+				className={[
+					template !== "FULLWIDTH_WITHHEADER"
+						? "screen-reader-text"
+						: undefined,
+					layout_site,
+				].join(" ")}
 				//? not accessable
 				// style={{
 				//   ...(template !== 'FULLWIDTH_WITHHEADER' ? {display: 'none'} : {})
 				// }}
 			>
 				<h1>{title}</h1>
-			</Header>
+			</header>
 
-			<div className={[page_content, layout_full].join(" ")}>
+			<div className={[page_content, template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full].join(" ")}>
 				{status !== "PUBLIC" && (
 					<Card
 						className={"siteWrapper"}
@@ -155,7 +177,19 @@ export default async function PageBySlug({ params }: Props) {
 				)}
 				<BlockRender document={content?.document} />
 			</div>
-
+			{template === "WITH_TABLEOFCONTENTS" && (
+				<AsideBar aria_label="Page Sidebar">
+					<Flex
+						flexDirection={"column"}
+						alignItems="flex-start"
+						style={{ marginLeft: "var(--space-m)" }}
+					>
+						<Card>
+							<TableOfContents headerObjs={tableOfContentLinks} />
+						</Card>
+					</Flex>
+				</AsideBar>
+			)}
 		</main>
 	)
 }
@@ -245,3 +279,34 @@ function Aside() {
 		</>
 	)
 }
+
+// function findAllHeadings(arr: any) {
+//   console.log(arr);
+
+//   return arr.reduce((acc: TOCLink[], item: KSHeading) => {
+//     if (item.type === "heading") {
+//       const newItem = {
+//         type: item.type,
+//         level: item.level,
+//         slug: slugFormat(item.children[0].text),
+//         text: item.children.map((item) => item.text).join(" "),
+//       }
+//       acc.push(newItem)
+//     }
+
+//     for (let key in item) {
+//       const typedKey = key as keyof KSHeading
+
+//       if (Array.isArray(item[typedKey])) {
+//         acc = acc.concat(findAllHeadings(item[typedKey]))
+//       } else if (
+//         typeof item[typedKey] === "object" &&
+//         item[typedKey] !== null
+//       ) {
+//         acc = acc.concat(findAllHeadings([item[typedKey]]))
+//       }
+//     }
+
+//     return acc
+//   }, [])
+// }
