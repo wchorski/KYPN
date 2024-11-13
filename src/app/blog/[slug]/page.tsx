@@ -40,6 +40,7 @@ import { CSSProperties } from "react"
 import { AsideBar } from "@components/layouts/AsideBar"
 import { NoData } from "@components/elements/NoData"
 import { findAllHeadings } from "@lib/contentHelpers"
+import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
 
 export const revalidate = 5
 
@@ -168,14 +169,27 @@ export default async function BlogPostBySlug({ params }: Props) {
 								</Link>
 							</li>
 						)}
-						{dateModified && (
+						{dateCreated && (
+							<li>
+								<time
+									dateTime={String(dateCreated)}
+									title="date first posted"
+								>
+									<span className="sub-text">
+										<TbCalendarMonth />
+										{datePrettyLocal(String(dateCreated), "day")}
+									</span>
+								</time>
+							</li>
+						)}
+            {dateModified && (
 							<li>
 								<time
 									dateTime={String(dateModified)}
-									title="Publication update date"
+									title="date last modified"
 								>
 									<span className="sub-text">
-										<FiCalendar />
+										<TbCalendarUp />
 										{datePrettyLocal(String(dateModified), "day")}
 									</span>
 								</time>

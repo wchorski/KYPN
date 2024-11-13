@@ -75,7 +75,7 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
       take: perPage,
       orderBy: [
         {
-          dateModified: "desc"
+          dateCreated: "desc"
         }
       ],
       where,

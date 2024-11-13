@@ -1,7 +1,8 @@
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-  table-layout: fixed;
+  //? causes overlap
+  // table-layout: fixed;
 }
 thead th {
 	border-bottom-width: 3px;
