@@ -29,18 +29,18 @@ import sLayout, {
 import sArticles from "@styles/articles.module.scss"
 import { StatusBadge } from "@components/StatusBadge"
 import Error404 from "../../not-found"
-import { FiCalendar } from "react-icons/fi"
+import { BsShare } from "react-icons/bs"
 import { CgProfile } from "react-icons/cg"
 import { Header } from "@components/elements/Header"
 import Flex from "@components/layouts/Flex"
 import { TableOfContents } from "@components/menus/TableOfContents"
-import { slugFormat } from "@lib/slugFormat"
-import { KSHeading, TOCLink } from "@ks/types"
 import { CSSProperties } from "react"
 import { AsideBar } from "@components/layouts/AsideBar"
 import { NoData } from "@components/elements/NoData"
 import { findAllHeadings } from "@lib/contentHelpers"
 import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
+import { Button } from "@components/elements/Button"
+import { ShareButton } from "@components/elements/ShareButton"
 
 export const revalidate = 5
 
@@ -192,6 +192,9 @@ export default async function BlogPostBySlug({ params }: Props) {
 								</time>
 							</li>
 						)}
+						<li>
+							<ShareButton textToCopy={envs.FRONTEND_URL + `/blog/id/${id}`}/>
+						</li>
 					</ul>
 					{status !== "PUBLIC" && (
 						<div>

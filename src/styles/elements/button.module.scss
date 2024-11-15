@@ -26,3 +26,17 @@
 .opacity_1 {
   opacity: 1;
 }
+
+.btn_msg {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-duration: 0.3s;
+  pointer-events: none;
+  color: var(--c-accent);
+  transform: translateX(-8px);
+}
+
+.btn_msg_reveal {
+  opacity: 1;
+  transform: translateX(0);
+}

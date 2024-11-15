@@ -56,6 +56,11 @@ article.post_card {
     display: flex;
     align-items: center;
   }
+
+  li {
+    display: flex;
+    align-items: center;
+  }
 }
 .featured_image img{
   transition-duration: var(--anim-duration-fast);
