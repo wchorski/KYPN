@@ -22,6 +22,8 @@ type User {
   postsCount(where: PostWhereInput! = {}): Int
   pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
   pagesCount(where: PageWhereInput! = {}): Int
+  privatePagesAccess(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
+  privatePagesAccessCount(where: PageWhereInput! = {}): Int
 }
 
 scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339#section-5.6")
@@ -54,6 +56,7 @@ input UserWhereInput {
   role: RoleWhereInput
   posts: PostManyRelationFilter
   pages: PageManyRelationFilter
+  privatePagesAccess: PageManyRelationFilter
 }
 
 input IDFilter {
@@ -170,6 +173,7 @@ input UserUpdateInput {
   role: RoleRelateToOneForUpdateInput
   posts: PostRelateToManyForUpdateInput
   pages: PageRelateToManyForUpdateInput
+  privatePagesAccess: PageRelateToManyForUpdateInput
 }
 
 input RoleRelateToOneForUpdateInput {
@@ -215,6 +219,7 @@ input UserCreateInput {
   role: RoleRelateToOneForCreateInput
   posts: PostRelateToManyForCreateInput
   pages: PageRelateToManyForCreateInput
+  privatePagesAccess: PageRelateToManyForCreateInput
 }
 
 input RoleRelateToOneForCreateInput {
@@ -521,6 +526,8 @@ type Page {
   featured_video: String
   content: Page_content_Document
   author: User
+  privateAccess(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
+  privateAccessCount(where: UserWhereInput! = {}): Int
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -552,6 +559,7 @@ input PageWhereInput {
   featured_image: StringFilter
   featured_video: StringFilter
   author: UserWhereInput
+  privateAccess: UserManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
 }
@@ -583,6 +591,7 @@ input PageUpdateInput {
   featured_video: String
   content: JSON
   author: UserRelateToOneForUpdateInput
+  privateAccess: UserRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
 }
@@ -605,6 +614,7 @@ input PageCreateInput {
   featured_video: String
   content: JSON
   author: UserRelateToOneForCreateInput
+  privateAccess: UserRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
 }

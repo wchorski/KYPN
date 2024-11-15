@@ -1,3 +1,4 @@
+import { includes } from "fp-ts/lib/string"
 import { permissionsList } from "./schemas/permissions"
 import { ListAccessArgs } from "./types"
 
@@ -51,21 +52,24 @@ export const rules = {
 		// 1. Do they have the permission
 		if (permissions.canManagePages({ session })) return true
 
-    //todo get rid of comment if good
+		//todo get rid of comment if good
 		// 2. If not, do they own this item?
 		// if (session)
 		// 	return {
 		// 		author: { id: { equals: session?.itemId || "no_session.itemId" } },
 		// 	}
 		// return { status: { equals: "PUBLIC" } }
-    return {
-      OR: [
-        {
-          author: { id: { equals: session?.itemId } },
-        },
-        { status: { equals: "PUBLIC" } },
-      ],
-    }
+		return {
+			OR: [
+				{
+					author: { id: { equals: session?.itemId || "no_session_id" } },
+				},
+				{
+					privateAccess: { some: { id: { in: [session?.itemId || "no_session_id"] } } },
+				},
+				{ status: { equals: "PUBLIC" } },
+			],
+		}
 	},
 	canManagePosts({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
@@ -84,20 +88,20 @@ export const rules = {
 		// 1. Do they have the permission
 		if (permissions.canManagePosts({ session })) return true
 
-    //todo get rid of comment if good
+		//todo get rid of comment if good
 		// 2. If not, do they own this item?
 		// if (session)
-    //? i don't need `if` statement i guess?
-    return {
-      OR: [
-        {
-          author: { id: { equals: session?.itemId } },
-        },
-        { status: { equals: "PUBLIC" } },
-      ],
-    }
-    
-    //todo get rid of comment if good
+		//? i don't need `if` statement i guess?
+		return {
+			OR: [
+				{
+					author: { id: { equals: session?.itemId } },
+				},
+				{ status: { equals: "PUBLIC" } },
+			],
+		}
+
+		//todo get rid of comment if good
 		// return { status: { equals: "PUBLIC" } }
 	},
 
