@@ -128,7 +128,6 @@ export default async function BlogPostBySlug({ params }: Props) {
 		content,
 	} = post
 
-	
 	const tableOfContentLinks = findAllHeadings(content?.document)
 
 	return (
@@ -151,12 +150,13 @@ export default async function BlogPostBySlug({ params }: Props) {
 						<ImageDynamic photoIn={featured_image} />
 					</figure>
 
-					<h1 className={page_title}>{title}</h1>
-					{status !== "PUBLIC" && (
-						<div>
-							<StatusBadge type={"post"} status={status} />
-						</div>
-					)}
+					<h1
+						className={page_title}
+						style={{ marginBottom: "var(--space-ms)" }}
+					>
+						{title}
+					</h1>
+
 					<ul className={sArticles.meta + " unstyled"}>
 						{author && (
 							<li>
@@ -171,10 +171,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 						)}
 						{dateCreated && (
 							<li>
-								<time
-									dateTime={String(dateCreated)}
-									title="date first posted"
-								>
+								<time dateTime={String(dateCreated)} title="date first posted">
 									<span className="sub-text">
 										<TbCalendarMonth />
 										{datePrettyLocal(String(dateCreated), "day")}
@@ -182,7 +179,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 								</time>
 							</li>
 						)}
-            {dateModified && (
+						{dateModified && (
 							<li>
 								<time
 									dateTime={String(dateModified)}
@@ -196,6 +193,12 @@ export default async function BlogPostBySlug({ params }: Props) {
 							</li>
 						)}
 					</ul>
+					{status !== "PUBLIC" && (
+						<div>
+							<StatusBadge type={"post"} status={status} />
+						</div>
+					)}
+					<hr />
 				</Header>
 
 				<div className={[page_content, layout_full].join(" ")}>
@@ -209,7 +212,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					{content.document[0].type === "paragraph" &&
 					!content.document[0].children[0].text ? (
 						<p>
-              <NoData/>
+							<NoData />
 							This post is still in the works. Check back later when more
 							content is published
 						</p>

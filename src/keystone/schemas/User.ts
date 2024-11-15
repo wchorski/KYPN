@@ -121,6 +121,7 @@ export const User: Lists.User = list({
 		posts: relationship({ ref: "Post.author", many: true }),
 		pages: relationship({ ref: "Page.author", many: true }),
 		privatePagesAccess: relationship({ ref: "Page.privateAccess", many: true }),
+		privatePostsAccess: relationship({ ref: "Post.privateAccess", many: true }),
 	},
 	hooks: {
 		async beforeOperation({ operation, resolvedData }) {

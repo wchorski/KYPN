@@ -128,16 +128,8 @@ export const Page: Lists.Page = list({
 		privateAccess: relationship({
 			ref: "User.privatePagesAccess",
       ui: {
-        description: "Users with exclusive permission to view if status === PRIVATE"
+        description: "Users with exclusive permission to view if status is PRIVATE"
       },
-			// ui: {
-			// 	displayMode: 'count',
-			// 	// cardFields: ["name", "email"],
-			// 	// inlineEdit: { fields: ["name", "email"] },
-			// 	// linkToItem: true,
-			// 	// inlineConnect: true,
-			// },
-
 			many: true,
 		}),
 		categories: relationship({

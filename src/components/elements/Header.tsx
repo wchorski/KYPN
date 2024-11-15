@@ -31,7 +31,7 @@ export function Header({
 			style={inlineStyle}
 		>
 			<div className={sLayout[widthOfContent]}>{children}</div>
-			<hr className={layout_full} />
+			{/* <hr className={layout_full} /> */}
 		</header>
 	)
 }

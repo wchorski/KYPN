@@ -40,6 +40,8 @@ export const Post:Lists.Post = list({
           if(!resolvedData?.slug) return console.log('Post: no slug')
           resolvedData.slug = slugFormat(String(resolvedData.slug))
         },
+    }, ui: {
+      description: 'Warning! Changing the slug will break links that were previously shared'
     }}),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
@@ -132,6 +134,13 @@ export const Post:Lists.Post = list({
       },
       many: false,
     }),
+    privateAccess: relationship({
+			ref: "User.privatePostsAccess",
+      ui: {
+        description: "Users with exclusive permission to view if status is PRIVATE"
+      },
+			many: true,
+		}),
     categories: relationship({
       ref: 'Category.posts',
       many: true,

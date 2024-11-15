@@ -26,6 +26,8 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
       width={state.image.width}
       height={state.image.height}
       className={className}
+      placeholder={'blur'}
+      blurDataURL={'/assets/placeholder.png'}
       // style={{
       //   width: '100%',
       //   height: 'auto',
@@ -42,7 +44,7 @@ function handlePhoto(photo: any, alt?:string) {
   // https://nextjs.org/docs/pages/api-reference/components/image
   if (!photo ) {
     return {
-      altText: alt || 'no alt text for this image',
+      altText: alt || '',
       image: {
         url: `/assets/placeholder.png`,
         width: 300,
@@ -92,7 +94,7 @@ function handlePhoto(photo: any, alt?:string) {
 
   if(photo) {
     return {
-      altText: 'default image',
+      altText: '',
       image: {
         url: photo,
         width: 300,

@@ -55,6 +55,7 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
 
     const count = await context.query.Post.count({
       where: { 
+        //? filtering happens at `access.ts` per user
         // NOT: [
         //   {
         //     status: {
@@ -94,6 +95,7 @@ export async function fetchPosts({page = 1, categoryIds, tagIds, session}:Props)
   }
 }
 
+//todo move query to `page.tsx` so I can reuse this script more
 const query = `
   id
   title

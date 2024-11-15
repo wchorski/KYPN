@@ -32,6 +32,7 @@ model User {
   posts              Post[]    @relation("Post_author")
   pages              Page[]    @relation("Page_author")
   privatePagesAccess Page[]    @relation("Page_privateAccess")
+  privatePostsAccess Post[]    @relation("Post_privateAccess")
 
   @@index([stripeCustomerId])
   @@index([roleId])
@@ -66,6 +67,7 @@ model Post {
   content        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   author         User?      @relation("Post_author", fields: [authorId], references: [id])
   authorId       String?    @map("author")
+  privateAccess  User[]     @relation("Post_privateAccess")
   categories     Category[] @relation("Category_posts")
   tags           Tag[]      @relation("Post_tags")
 

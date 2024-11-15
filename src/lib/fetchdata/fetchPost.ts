@@ -1,3 +1,4 @@
+'use server'
 import { envs } from "@/envs"
 // import type { Lists } from ".keystone/types"
 // type Post = Lists.Post["fields"]
@@ -26,6 +27,7 @@ export async function fetchPost(slug:string, session:any){
   }
 }
 
+//todo move query to `page.tsx` so I can reuse this script more
 const query = `
   id
   title
@@ -56,3 +58,26 @@ const query = `
     document
   }
 ` 
+
+export async function fetchPostSlug(id:string){
+
+  try {
+
+    // todo if you add permissions on schema 'access' then you gotta add session here
+    // const post = await keystoneContext.withSession(session).query.Post.findOne({
+    const post = await keystoneContext.query.Post.findOne({
+      query: `
+        slug
+      `,
+      where: {
+        id
+      }
+    }) as Post
+    
+    return { post }
+    
+  } catch (error) {
+
+    return {error}
+  }
+}

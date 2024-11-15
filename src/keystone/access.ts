@@ -62,10 +62,10 @@ export const rules = {
 		return {
 			OR: [
 				{
-					author: { id: { equals: session?.itemId || "no_session_id" } },
+					author: { id: { equals: session?.itemId || "no_session.itemId" } },
 				},
 				{
-					privateAccess: { some: { id: { in: [session?.itemId || "no_session_id"] } } },
+					privateAccess: { some: { id: { in: [session?.itemId || "no_session.itemId"] } } },
 				},
 				{ status: { equals: "PUBLIC" } },
 			],
@@ -95,7 +95,10 @@ export const rules = {
 		return {
 			OR: [
 				{
-					author: { id: { equals: session?.itemId } },
+					author: { id: { equals: session?.itemId || "no_session.itemId"} },
+				},
+        {
+					privateAccess: { some: { id: { in: [session?.itemId || "no_session.itemId"] } } },
 				},
 				{ status: { equals: "PUBLIC" } },
 			],
@@ -111,7 +114,7 @@ export const rules = {
 		if (permissions.canManageUsers({ session })) return true
 
 		// Otherwise they may only update themselves!
-		return { id: { equals: session?.itemId } }
+		return { id: { equals: session?.itemId || "no_session.itemId" } }
 	},
 	canManageCategories({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
