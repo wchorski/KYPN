@@ -238,10 +238,12 @@ $breakpoint-l: 1200px;
 	//todo need to do this per item
 	// align-items: start;
 
-	grid-template-columns:
-		minmax(0, 1fr)
-		minmax(0, calc(var(--w-sitemax) + 1rem))
-		minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1fr);
+		
+	// grid-template-columns:
+	// 	minmax(0, 1fr)
+	// 	minmax(0, calc(var(--w-sitemax) + 1rem))
+	// 	minmax(0, 1fr);
 
 	> * {
 		grid-column: 2/3;

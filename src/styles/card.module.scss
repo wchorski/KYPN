@@ -3,6 +3,7 @@
   margin-block: var(--space-m);
   border-radius: var(--br-dull);
   display: flex;
+  box-sizing: border-box;
 }
 .row{
   flex-direction: row;

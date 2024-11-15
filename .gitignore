@@ -24,6 +24,7 @@ src/styles/vars.scss
 src/styles/fonts.ts
 src/app/layout.tsx
 src/app/home
+src/app/admin
 src/components/menus/Header.tsx
 src/components/menus/Hero.tsx
 src/components/menus/Nav.tsx

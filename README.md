@@ -164,10 +164,11 @@ When initializing a fresh database or returning to development you may add/remov
 ## TODO
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
-- [ ] page with side bar and site side bar (will use @container query)
-- [ ] all blocks tested
-- [ ] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
-- [ ] look into https://smolcss.dev/ for inspo
+- [ ] copy all data to json format and build to `cutefruit` live demo
+- [x] page with side bar and site side bar (will use @container query)
+- [x] all blocks tested
+- [x] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
+- [x] look into https://smolcss.dev/ for inspo
 ---
 - [ ] appointment schedualer https://cal.com/
 - [ ] document signing https://www.docuseal.co/

@@ -4,6 +4,7 @@ import { Section } from "@components/blocks/Section"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
 import { ReactElement } from "react"
+import { layout_site } from "@styles/layout.module.scss"
 
 type Props = {
   header:string,
@@ -33,12 +34,14 @@ export async function PostsList({header, color, colorOverlay, imageSrc, categori
       }}
       overlay={colorOverlay}
     >
+      
+        <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
+          {header}
+        </h2>
 
-      <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
-        {header}
-      </h2>
+        <BlogList posts={posts} />
+      
 
-      <BlogList posts={posts} />
 
     </Section>
   )

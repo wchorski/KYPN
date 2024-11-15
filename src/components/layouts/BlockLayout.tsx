@@ -1,5 +1,5 @@
-import { GridLayout, SpaceSize } from "@ks/types"
-import { layout_full, layout_wide, page_layout } from "@styles/layout.module.scss"
+import { GridLayout, SpaceSize, WidthLayoutSize2 } from "@ks/types"
+import { layout_full, layout_site, layout_wide, page_layout } from "@styles/layout.module.scss"
 import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
@@ -17,6 +17,7 @@ type Props = {
 	horizontalAlign?: CSSProperties["justifyItems"]
 	paddingBlock?: SpaceSize
   nestedBlock?:boolean
+  layoutWidthStyle?:WidthLayoutSize2
 }
 
 // todo use a seperate .grid module that is *mostly* independant from `layout` module stuff
@@ -35,6 +36,8 @@ export function BlockLayout({
 	col_bg_imgs,
 	paddingBlock,
   nestedBlock = false,
+  layoutWidthStyle
+  
 }: Props) {
   // todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
 	const clsNames = [!nestedBlock ? "site-grid" : '', `_${layout}`, className].join(" ")
@@ -49,7 +52,7 @@ export function BlockLayout({
       
 				<div
 					id={id}
-					className={[clsNames, layout_full, page_layout].join(' ')}
+					className={[clsNames, page_layout, layoutWidthStyle ? layoutWidthStyle : layout_full].join(' ')}
 					style={{
             ...(color ? {color} : {}),
             ...(color ? {'--c-header': color} : {}),
@@ -57,18 +60,19 @@ export function BlockLayout({
 						...inlineStyles,
 					}}
 				>
+          
 					{children}
 				</div>
 	
 		)
 	//todo make a note of this, it's ugly but it works
 	return (
-		<div id={id} className={clsNames} style={inlineStyles}>
+		<div id={id} className={[clsNames, layoutWidthStyle ? layoutWidthStyle : layout_site].join(' ')} style={inlineStyles}>
 			{Array.isArray(children) ? (
 				children?.map((child: any, i: number) => (
 					<div
 						key={i}
-						className={['grid-item', 'pad-loose-elements', layout_wide].join(' ')}
+						className={['grid-item', 'pad-loose-elements'].join(' ')}
 						style={{
 							alignItems: verticalAlign,
 							...(horizontalAlign ? { justifyContent: horizontalAlign } : {}),
