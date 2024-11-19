@@ -297,6 +297,7 @@ export const nextAuthSessionStrategy = {
 				name: author.name,
 				email: author.email,
 			},
+      
 		}
 
 		// if (!role) console.log('!!!!!! user has no role assigned for auth');

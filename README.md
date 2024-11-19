@@ -4,7 +4,7 @@
 
 A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
 
-## Features
+## 🔑 Features
 
 <details>
 <summary>view</summary>
@@ -17,45 +17,57 @@ Site analytics are set up to use an externally hosted [Umami](https://umami.is/)
 
 Events and Bookings can auto populate a connected Google Calendar.
 
+### Authentication
+[NextAuth](https://next-auth.js.org/) handles authentication which provides
+- credentials login (local db)
+  - Password Reset (email verificiation)
+- Social Logins (OAuth)
+
+### Permissions & Roles
+Roles are uniquly setup per instance. Each role can be customized by the *end user* with granular permission checkboxes setup in  `/src/keystone/schemas/permissions.ts`.
+
+Developers can sculp more complex logic with `/src/keystone/access.ts`
+
+> There is an initial db seed of **Admin**, **Editor**, **Client** Roles. These names and permissions can be customized to your project. 
 </details>
 
-## Roles
 
-> These can be edited from the Keystone UI, but here is the initial permission layout
+## Developer Environment 
+Webdev starter guide 
+<details>
+<summary>view</summary>
 
-- Admin 
-  - everything
-  - CRUD any Product
-  - CRUD any Role
-  - CRUD any Order / OrderItem
-- Editor 
-  - 'author' of products
-  - CRUD any product
-- Client 
-  - buy products
-  - view their own orders
-- Anyone 
-  - view store items
+### Init
+There are a few assets & components that you must create to give complete control over unique web parts such as 
+- logo
+- nav menu
+- header / footer
 
-## Init
+Here is a list of files you'll need to provide (there are some `*.ini` files that will help you gest started)
 
 - create site unique assets for your brand 
   - `public/assets/logo.svg`
   - `public/assets/logo.png`
   - `public/assets/placeholder.png`
   - `public/favicon.ico`
-- copy these files & folders (or use `init.sh` to automate) 
-  - `cp src/layout.init.tsx src/layout.tsx`
-  - `cp src/components/menus/Footer.init.tsx src/components/menus/Footer.tsx`
-  - `cp src/components/menus/Hero.init.tsx src/components/menus/Hero.tsx`
-  - `cp src/components/menus/Nav.init.tsx src/components/menus/Nav.tsx`
-  - `cp src/components/menus/MainNavList.init.tsxsrc/components/menus/MainNavList.tsx` <!-- - `cp src/styles-init src/styles` -->
-  - `cp src/styles/vars.init.scss src/styles/vars.scss`
-  - `cp src/styles/fonts.init.ts src/styles/fonts.ts`
-  - `cp src/keystone/seed/seed_data.empty.ts src/keystone/seed/seed_data.ts`.
+- copy these files
+  - `cp src/ini/layout.ini.tsx src/app/layout.tsx`
+  - `cp src/ini/Footer.ini.tsx src/components/private/Footer.tsx`
+  - `cp src/ini/Nav.init.tsx src/components/private/Nav.tsx`
+  - `cp src/ini/MainNavList.init.tsx src/components/private/MainNavList.tsx`
+  - `cp src/ini/vars.ini.scss src/styles/vars.scss`
+  - `cp src/ini/seed_data.ini.ts src/keystone/seed/seed_data.ts`.
+  - `cp .env.ini .env`
 
-## Authentication
+> [!tip] Private Folders
+> there are a few `private` folders here dedicated to your unique components and assets that won't be pushed to this codebase repo
 
+> ![warning] Code Editor
+> because we are ignoring these files, your code editor may not *see* these files when attempting to search/open. You will need to manually dig through to the `private` folder.
+
+2 pages ignored by this repo are `src/app/home/page.tsx` and `src/app/admin/page.tsx`. These pages are assumed to be created in and served by NextJs but could be created in KeystoneJs editor if design allows. I'm open to ignoring other common page names that webdevs may want to build in React.
+
+### Authentication
 uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration
 
 set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
@@ -65,55 +77,27 @@ set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 | Github   | https://github.com/settings/developers          |
 | Google   | https://console.cloud.google.com/apis/dashboard |
 
-## Email
-
+### Email
 Right now, I'm just using gmail's SMTP. Should be good for low traffic order confirmation & password reset. Once I integrate running mail campaigns I'll need a better solution.
 
 https://myaccount.google.com/security
 
-## Production
-
-<details>
-<summary> config </summary>
-
-- Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments
-- **self hosting** isn't strait forward. Here is my work around 
-  - create a seperate `docker container` that runs `postgres`
-  - run your dev environment to create the tables and edit the schemas
-  - now you can `build` and `run` your app within a `docker container` </details>
-
-## Development
-
-<details>
-<summary> config </summary>
-
-1. `yarn ks:dev` (always run first if running both servers)
-2. `yarn n:dev`
-
-> [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
-
-> [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
-
-## Rules & Permissions
-
-any changes to **access** **filters** **operations** or **permissions** will not take effect in the NextJs app until the server is reloaded. Luckily the **Keystone** app will hot reload with these changes
-
-> 1. next `n:dev`
-
-### Mail Templating
-
+#### Mail Templating
 [React Email](https://react.email/)
 
-### Stripe
-
+### Ecommerce (Stripe)
 using stripe CLI have it listen to this webhook
 https://stripe.com/docs/webhooks/quickstart
 
 ```sh
 stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 ```
+### Database
+Assuming you know how to setup a [Postgres](https://www.postgresql.org/) database. Endpoint configured in `.env` file.
 
-During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`
+
+#### Seed Data
+During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`.
 
 > [!info] Document
 > any field using the `document` type will query with an extra nested `document` key. You can remove this
@@ -154,7 +138,34 @@ take out the `document` field
 }
 ```
 
-ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
+#### ⚙️ Run Local Web Server
+
+1. `yarn ks:dev` (always run first if running both servers)
+2. `yarn n:dev`
+
+> [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
+
+> [!error] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
+
+## Rules & Permissions
+
+any changes to **access** **filters** **operations** or **permissions** will not take effect in the NextJs app until the server is reloaded. Luckily the **Keystone** app will hot reload with these changes
+
+> 1. next `n:dev`
+
+</details>
+
+## 🏭 Production
+
+<details>
+<summary> config </summary>
+
+- Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments
+- **self hosting** isn't strait forward. Here is my work around 
+  - create a seperate `docker container` that runs `postgres`
+  - run your dev environment to create the tables and edit the schemas
+  - now you can `build` and `run` your app within a `docker container` </details>
+
 
 ### Database Migrations
 
@@ -162,6 +173,9 @@ When initializing a fresh database or returning to development you may add/remov
 </details>
 
 ## TODO
+<details>
+<summary>view</summary>
+
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
 - [ ] Post share modem w copy link
@@ -195,6 +209,7 @@ This i need to do before moving back to main branch
   - [x] pages
   - [ ] bookings
   - [ ] bookings
+- [ ] move all `*.ini` and `styles` to a seperate repo (or asset bucket) as to not crowd this repo. Maybe have certain **Themed** style folders to pick from?
 
 ### Blocks
 #todo
@@ -206,7 +221,9 @@ This i need to do before moving back to main branch
 ## Color pallet?
 
 - https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874
+</details>
+
+---
 
 ## Credits
-
-following along with Wes Bos Tutorial
+- Wes Bos [Tutorial](https://advancedreact.com/)

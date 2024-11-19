@@ -142,7 +142,7 @@ $breakpoint-l: 1200px;
 		.banner_wrap {
 			grid-area: banner;
 			grid-column: 1/-1;
-			max-width: var(--w-sitemax);
+			// max-width: var(--w-sitemax);
 			margin-inline: auto;
 			width: 100%;
 		}

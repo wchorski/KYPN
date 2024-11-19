@@ -253,6 +253,7 @@ type Role {
   canManagePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
+  canManageAnnouncements: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -277,6 +278,7 @@ input RoleWhereInput {
   canManagePosts: BooleanFilter
   canManageCategories: BooleanFilter
   canManageTags: BooleanFilter
+  canManageAnnouncements: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -297,6 +299,7 @@ input RoleOrderByInput {
   canManagePosts: OrderDirection
   canManageCategories: OrderDirection
   canManageTags: OrderDirection
+  canManageAnnouncements: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -309,6 +312,7 @@ input RoleUpdateInput {
   canManagePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
+  canManageAnnouncements: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -334,6 +338,7 @@ input RoleCreateInput {
   canManagePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
+  canManageAnnouncements: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 
@@ -726,6 +731,68 @@ input TagCreateInput {
   pages: PageRelateToManyForCreateInput
 }
 
+type Announcement {
+  id: ID!
+  link: String
+  start: DateTime
+  end: DateTime
+  colorTheme: String
+  type: String
+  content: Announcement_content_Document
+}
+
+type Announcement_content_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
+}
+
+input AnnouncementWhereUniqueInput {
+  id: ID
+}
+
+input AnnouncementWhereInput {
+  AND: [AnnouncementWhereInput!]
+  OR: [AnnouncementWhereInput!]
+  NOT: [AnnouncementWhereInput!]
+  id: IDFilter
+  link: StringFilter
+  start: DateTimeNullableFilter
+  end: DateTimeNullableFilter
+  colorTheme: StringNullableFilter
+  type: StringNullableFilter
+}
+
+input AnnouncementOrderByInput {
+  id: OrderDirection
+  link: OrderDirection
+  start: OrderDirection
+  end: OrderDirection
+  colorTheme: OrderDirection
+  type: OrderDirection
+}
+
+input AnnouncementUpdateInput {
+  link: String
+  start: DateTime
+  end: DateTime
+  colorTheme: String
+  type: String
+  content: JSON
+}
+
+input AnnouncementUpdateArgs {
+  where: AnnouncementWhereUniqueInput!
+  data: AnnouncementUpdateInput!
+}
+
+input AnnouncementCreateInput {
+  link: String
+  start: DateTime
+  end: DateTime
+  colorTheme: String
+  type: String
+  content: JSON
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -768,6 +835,12 @@ type Mutation {
   updateTags(data: [TagUpdateArgs!]!): [Tag]
   deleteTag(where: TagWhereUniqueInput!): Tag
   deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createAnnouncement(data: AnnouncementCreateInput!): Announcement
+  createAnnouncements(data: [AnnouncementCreateInput!]!): [Announcement]
+  updateAnnouncement(where: AnnouncementWhereUniqueInput!, data: AnnouncementUpdateInput!): Announcement
+  updateAnnouncements(data: [AnnouncementUpdateArgs!]!): [Announcement]
+  deleteAnnouncement(where: AnnouncementWhereUniqueInput!): Announcement
+  deleteAnnouncements(where: [AnnouncementWhereUniqueInput!]!): [Announcement]
   endSession: Boolean!
   registerAnAccount(name: String!, email: String!, password: String!, passwordConfirm: String!): User
   passwordRequestLink(email: String!): User
@@ -796,6 +869,9 @@ type Query {
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
+  announcements(where: AnnouncementWhereInput! = {}, orderBy: [AnnouncementOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AnnouncementWhereUniqueInput): [Announcement!]
+  announcement(where: AnnouncementWhereUniqueInput!): Announcement
+  announcementsCount(where: AnnouncementWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 

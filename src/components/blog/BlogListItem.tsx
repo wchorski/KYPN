@@ -40,6 +40,11 @@ export const BlogListItem = ({
 }: Props) => {
 	return (
 		<article className={styles.post_card}>
+      {status !== "PUBLIC" && (
+						<div style={{ position: "absolute", top: "var(--space-s)", left: "var(--space-s)" }}>
+							<StatusBadge type={"post"} status={status} />
+						</div>
+					)}
 			<figure className={styles.featured_image}>
 				{featured_video ? (
 					<YouTubeVideo
@@ -61,11 +66,7 @@ export const BlogListItem = ({
 
 			<div className="wrapper">
 				<header style={{ position: "relative" }}>
-					{status !== "PUBLIC" && (
-						<div style={{ position: "absolute", top: "1rem", right: "1rem" }}>
-							<StatusBadge type={"post"} status={status} />
-						</div>
-					)}
+					
 					<Link href={`/blog/${slug}`} className="title">
 						<h3> {title} </h3>
 					</Link>

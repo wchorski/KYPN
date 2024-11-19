@@ -32,6 +32,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Tags Manager: Can see and manage any tag',
   }),
+  canManageAnnouncements: checkbox({
+    defaultValue: false,
+    label: 'Announcements Manager: Can see and manage any Announcement',
+  }),
 }
 
 export type Permission = keyof typeof permissionFields

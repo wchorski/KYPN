@@ -140,4 +140,12 @@ export const rules = {
 		// return false
 		return false
 	},
+  canManageAnnouncements({ session }: ListAccessArgs) {
+    if (!isLoggedIn({ session })) return false;
+
+    if (permissions.canManageAnnouncements({ session })) return true;
+
+    // return false
+    return false;
+  },
 }

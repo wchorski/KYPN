@@ -9,9 +9,9 @@ import type { Permission } from "./schemas/fields"
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
-import type { Lists } from ".keystone/types";
+import type { Lists } from ".keystone/types"
 
-export type CalloutStatus = 'info'|'warning'|'error'|'success'
+export type CalloutStatus = "info" | "warning" | "error" | "success"
 
 export type Session = {
 	user?:
@@ -30,10 +30,37 @@ export type Session = {
 	expires: string
 }
 
-export type SpaceSize = 'xxs'|'xs'|'s'|'ms'|'m'|'ml'|'l'|'xl'|'xxl'|0|'0'
-export type ColorsTheme = 'bg_c_plain'|'bg_c_primary'|'bg_c_secondary'|'bg_c_tertiary'|'bg_c_accent'|'bg_c_transparent'|'bg_c_reverse_theme'
-export type WidthLayoutSize = 'layout-full'|'layout-wide'|'layout-breakout'|'layout-content'
-export type WidthLayoutSize2 = 'layout_full'|'layout_wide'|'layout_breakout'|'layout_content'|'layout_site'
+export type SpaceSize =
+	| "xxs"
+	| "xs"
+	| "s"
+	| "ms"
+	| "m"
+	| "ml"
+	| "l"
+	| "xl"
+	| "xxl"
+	| 0
+	| "0"
+export type ColorsTheme =
+	| "bg_c_plain"
+	| "bg_c_primary"
+	| "bg_c_secondary"
+	| "bg_c_tertiary"
+	| "bg_c_accent"
+	| "bg_c_transparent"
+	| "bg_c_reverse_theme"
+export type WidthLayoutSize =
+	| "layout-full"
+	| "layout-wide"
+	| "layout-breakout"
+	| "layout-content"
+export type WidthLayoutSize2 =
+	| "layout_full"
+	| "layout_wide"
+	| "layout_breakout"
+	| "layout_content"
+	| "layout_site"
 
 export type GridLayout =
 	| "1"
@@ -74,12 +101,35 @@ export type KSHeading = {
 }
 
 //** Schema Lists */
-export type User = Lists.User.Item 
-export type Category = Lists.Category.Item
-export type Tag = Lists.Tag.Item
-export type Page = Lists.Page.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
-export type Post = Lists.Post.Item & {categories:Category[], tags:Tag[], author:User, content: { document: any }}
+export type User = Lists.User.Item
 
+export type Category = Lists.Category.Item
+
+export type Tag = Lists.Tag.Item
+
+export type Page = Lists.Page.Item & {
+	categories: Category[]
+	tags: Tag[]
+	author: User
+	content: { document: any }
+}
+export type Post = Lists.Post.Item & {
+	categories: Category[]
+	tags: Tag[]
+	author: User
+	content: { document: any }
+}
+
+export type Announcement = Lists.Announcement.Item & {
+	// link: string
+	// start: string
+	// end: string
+	// colorTheme: string
+	// type: "MAINTENANCE" | "NORMAL" | "CRITICAL" | "SALE"
+	content: {
+		document: any
+	}
+}
 // ? didn't like "[key in Permission]: boolean;"
 // export type Session = {
 //   itemId?: string;
@@ -437,17 +487,6 @@ export type BookingPrevious = {
 // 	tags?: Tag[]
 // 	// |{connect:any},
 // }
-
-export type Announcement = {
-	link: string
-	start: string
-	end: string
-	color: string
-	type: "MAINTENANCE" | "NORMAL" | "CRITICAL" | "SALE"
-	content: {
-		document: any
-	}
-}
 
 export type Role = {
 	id: string

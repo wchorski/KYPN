@@ -54,7 +54,7 @@ export function CustomNavigation({
 			<ListNavItems lists={lists} include={["User", "Role"]} />
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-			<ListNavItems lists={lists} include={["Page", "Post"]} />
+			<ListNavItems lists={lists} include={["Page", "Post", "Announcement"]} />
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
 			<ListNavItems lists={lists} include={["Category", "Tag"]} />

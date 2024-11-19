@@ -26,9 +26,16 @@ export function ShareButton({ textToCopy }: Props) {
 				className={["subtext", "sub-text"].join(" ")}
 				title="copy share link"
 				onClick={onClick}
-				style={{ border: "none", padding: "var(--space-s)" }}
+				style={{
+					border: "none",
+					padding: "var(--space-s)",
+					display: "flex",
+					alignItems: "center",
+					gap: "var(--space-s)",
+				}}
 			>
-				<BsShare /> Share
+				<BsShare />
+				<span> Share</span>
 			</button>
 
 			<span

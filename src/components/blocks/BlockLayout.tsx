@@ -32,7 +32,7 @@ export function BlockLayout(props: Props) {
 		nestedBlock,
 	} = props
   if(!layout || !layout.length) return null
-  console.log("##### ", layout.length);
+
 	// layout input looks like [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
 	const layoutString = layout ? (layout.join("_") as GridLayout) : "1"
 	const clrTheme = getColorTheme(colorTheme)

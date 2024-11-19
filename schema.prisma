@@ -39,17 +39,18 @@ model User {
 }
 
 model Role {
-  id                  String  @id @default(cuid())
-  name                String  @unique @default("")
-  label               String  @unique @default("")
-  canSeeOtherUsers    Boolean @default(false)
-  canManageUsers      Boolean @default(false)
-  canManageRoles      Boolean @default(false)
-  canManagePages      Boolean @default(false)
-  canManagePosts      Boolean @default(false)
-  canManageCategories Boolean @default(false)
-  canManageTags       Boolean @default(false)
-  assignedTo          User[]  @relation("User_role")
+  id                     String  @id @default(cuid())
+  name                   String  @unique @default("")
+  label                  String  @unique @default("")
+  canSeeOtherUsers       Boolean @default(false)
+  canManageUsers         Boolean @default(false)
+  canManageRoles         Boolean @default(false)
+  canManagePages         Boolean @default(false)
+  canManagePosts         Boolean @default(false)
+  canManageCategories    Boolean @default(false)
+  canManageTags          Boolean @default(false)
+  canManageAnnouncements Boolean @default(false)
+  assignedTo             User[]  @relation("User_role")
 }
 
 model Post {
@@ -109,4 +110,14 @@ model Tag {
   name  String @unique @default("")
   posts Post[] @relation("Post_tags")
   pages Page[] @relation("Page_tags")
+}
+
+model Announcement {
+  id         String    @id @default(cuid())
+  link       String    @default("")
+  start      DateTime?
+  end        DateTime?
+  colorTheme String?   @default("bg_c_plain")
+  type       String?   @default("NORMAL")
+  content    Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
 }

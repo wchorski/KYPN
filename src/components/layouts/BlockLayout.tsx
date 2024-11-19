@@ -72,7 +72,7 @@ export function BlockLayout({
 				children?.map((child: any, i: number) => (
 					<div
 						key={i}
-						className={['grid-item', 'pad-loose-elements'].join(' ')}
+						className={['grid-item'].join(' ')}
 						style={{
 							alignItems: verticalAlign,
 							...(horizontalAlign ? { justifyContent: horizontalAlign } : {}),

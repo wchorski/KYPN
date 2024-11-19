@@ -9,13 +9,13 @@ import { envs } from "@/envs"
 // import ShoppingCart from '@components/ecommerce/ShoppingCart'
 // import { AsideBar } from '@components/layouts/AsideBar'
 import { cookies } from "next/dist/client/components/headers"
-import { Providers } from "./providers"
+import { Providers } from "@/src/app/providers"
 import { Footer } from "@components/private/Footer"
 // import { AnnouncementBanner } from '@components/elements/AnnouncementBanner'
 
 const header_font = Inter({ subsets: ["latin"], variable: "--font-header" })
 const paragraph_font = Barlow({
-	weight: ['300', '500', '800'],
+	weight: ["300", "500", "800"],
 	subsets: ["latin"],
 	variable: "--font-paragraph",
 })
@@ -36,16 +36,15 @@ export default async function RootLayout({
 
 	return (
 		<html lang="en">
-      
-      {envs.UMAMI_ID && (
-        <Script
-          id="umami-next"
-          strategy="afterInteractive"
-          async
-          data-website-id={envs.UMAMI_ID}
-          src={`/stts/${envs.UMAMI_SCRIPT}`}
-        />
-      )}
+			{envs.UMAMI_ID && (
+				<Script
+					id="umami-next"
+					strategy="afterInteractive"
+					async
+					data-website-id={envs.UMAMI_ID}
+					src={`/stts/${envs.UMAMI_SCRIPT}`}
+				/>
+			)}
 
 			<body
 				className={[
@@ -56,17 +55,15 @@ export default async function RootLayout({
 				].join(" ")}
 			>
 				<Providers>
-          
-        {/* <div className="banner_wrap" >BANNER</div> */}
+					{/* <div className="banner_wrap" >BANNER</div> */}
 
-        {/* <header>empty_hero</header> */}
+					{/* <header>empty_hero</header> */}
 
-				<Nav />
+					<Nav />
 
-				{children}
+					{children}
 
-        <Footer />
-  
+					<Footer />
 				</Providers>
 			</body>
 		</html>
