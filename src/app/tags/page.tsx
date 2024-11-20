@@ -19,6 +19,8 @@ import {
 } from "@styles/layout.module.scss"
 import { NoData } from "@components/elements/NoData"
 import Flex from "@components/layouts/Flex"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 
 type Props = {
 	params: {
@@ -48,8 +50,8 @@ export default async function TagsPage({ params, searchParams }: Props) {
 	} = await fetchPosts({ page: currPage, tagIds, session })
 	const { tags, error: tagsError } = await fetchTags(tagIds)
 
-	if (postsError || tagsError)
-		return <ErrorMessage error={postsError || tagsError} />
+	if (postsError || tagsError) return <ErrorPage error={postsError || tagsError} ><p>data fetch error </p></ErrorPage>
+	if (!posts || !tags) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	return (
 		<main className={page_layout}>

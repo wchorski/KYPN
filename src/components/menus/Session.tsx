@@ -90,7 +90,6 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 //       ... on User {
 //         email
 //         id
-//         isAdmin
 //         name
 //         nameLast
 //         role {

@@ -22,7 +22,7 @@ type Props = {
 	status: Post["status"]
 
 	buttonText?: string
-  key?:number
+  keyI?:number
 }
 
 export const BlogListItem = ({
@@ -36,7 +36,6 @@ export const BlogListItem = ({
 	author,
 	buttonText = "read more",
 	status,
-  key
 }: Props) => {
 	return (
 		<article className={styles.post_card}>
@@ -53,7 +52,7 @@ export const BlogListItem = ({
 					/>
 				) : (
 					<Link href={`/blog/${slug}`}>
-						<ImageDynamic photoIn={featured_image} key={key}/>
+						<ImageDynamic photoIn={featured_image} key={id}/>
 						{/* <Image
               src={featured_image}
               alt={`post featured image`}

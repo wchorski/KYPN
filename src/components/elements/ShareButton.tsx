@@ -1,5 +1,5 @@
 "use client"
-import { btn_msg, btn_msg_reveal } from "@styles/elements/button.module.scss"
+import { btn_msg, btn_msg_reveal, btn_share } from "@styles/elements/button.module.scss"
 import { useState } from "react"
 import { BsShare } from "react-icons/bs"
 
@@ -21,7 +21,7 @@ export function ShareButton({ textToCopy }: Props) {
 	const hiddenStyle = {}
 
 	return (
-		<div style={{ display: "flex", gap: "var(--space-s)" }}>
+		<div className={btn_share}  style={{ display: "flex", gap: "var(--space-s)" }}>
 			<button
 				className={["subtext", "sub-text"].join(" ")}
 				title="copy share link"

@@ -40,6 +40,10 @@ export const Page: Lists.Page = list({
 					resolvedData.slug = slugFormat(String(resolvedData.slug))
 				},
 			},
+			ui: {
+				description:
+					"Warning! Changing the slug will break links that were previously shared",
+			},
 		}),
 		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 		dateModified: timestamp({ defaultValue: { kind: "now" } }),
@@ -69,7 +73,13 @@ export const Page: Lists.Page = list({
 				createView: { fieldMode: "edit" },
 			},
 		}),
-		pinned: integer({ defaultValue: 0 }),
+		pinned: integer({
+			defaultValue: 0,
+			ui: {
+				description:
+					'posts with lower number such as "1" will take highest priority (newer date breaks ties)',
+			},
+		}),
 		excerpt: text(),
 		featured_image: text(),
 		featured_video: text(),
@@ -127,9 +137,10 @@ export const Page: Lists.Page = list({
 
 		privateAccess: relationship({
 			ref: "User.privatePagesAccess",
-      ui: {
-        description: "Users with exclusive permission to view if status is PRIVATE"
-      },
+			ui: {
+				description:
+					"Users with exclusive permission to view if status is PRIVATE",
+			},
 			many: true,
 		}),
 		categories: relationship({

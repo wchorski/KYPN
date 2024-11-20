@@ -33,8 +33,8 @@
 }
 
 .sAnnouncement:hover .btnlink{
-  background-color: var(--c-accent);
-  color: var(--c-txt-accent);
+  background-color: var(--c-primary);
+  color: var(--c-txt-primary);
 }
 
 
@@ -51,7 +51,7 @@
   cursor: pointer;
 
   &:hover, &:focus{
-    background-color: var(--c-accent);
+    background-color: var(--c-accent) !important;
     // border-bottom: 2px dashed var(--c-primary);
     color: var(--c-txt-accent) !important;
   }

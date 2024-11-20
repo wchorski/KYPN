@@ -26,7 +26,6 @@ export const query = `
   name
   nameLast
   email
-  isAdmin
   isActive
   image
   posts {

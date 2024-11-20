@@ -11,7 +11,6 @@ type User {
   email: String
   password: String
   url: String
-  isAdmin: Boolean
   isActive: Boolean
   stripeCustomerId: String
   dateCreated: DateTime
@@ -49,7 +48,6 @@ input UserWhereInput {
   email: StringFilter
   password: StringFilter
   url: StringFilter
-  isAdmin: BooleanFilter
   isActive: BooleanFilter
   stripeCustomerId: StringFilter
   dateCreated: DateTimeNullableFilter
@@ -145,7 +143,6 @@ input UserOrderByInput {
   email: OrderDirection
   password: OrderDirection
   url: OrderDirection
-  isAdmin: OrderDirection
   isActive: OrderDirection
   stripeCustomerId: OrderDirection
   dateCreated: OrderDirection
@@ -167,7 +164,6 @@ input UserUpdateInput {
   email: String
   password: String
   url: String
-  isAdmin: Boolean
   isActive: Boolean
   stripeCustomerId: String
   dateCreated: DateTime
@@ -214,7 +210,6 @@ input UserCreateInput {
   email: String
   password: String
   url: String
-  isAdmin: Boolean
   isActive: Boolean
   stripeCustomerId: String
   dateCreated: DateTime

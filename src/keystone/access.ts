@@ -8,16 +8,6 @@ export function isLoggedIn({ session }: ListAccessArgs) {
 	return !!session
 }
 
-// export const roles = {
-//   isLoggedIn({ session }: ListAccessArgs) {
-//       return !!session;
-//   },
-
-//   isAdmin({session}:ListAccessArgs){
-
-//     return true
-//   }
-// }
 
 const generatedPermissions = Object.fromEntries(
 	permissionsList.map((permission: any) => [

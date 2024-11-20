@@ -39,15 +39,8 @@ export default async function LoginPage({ searchParams }: Props) {
 	// todo next-auth is aight idk
 
 	const session = await getServerSession(nextAuthOptions)
-
 	const providers = await getProviders()
 
-	// return (
-	// 	<PageTHeaderMain
-	// 		header={Header(callbackUrl)}
-	// 		main={Main(providers, session?.user?.email, error)}
-	// 	/>
-	// )
 	return (
 		<main className={page_layout}>
 			<DialogPopup buttonLabel="">
@@ -95,63 +88,3 @@ export default async function LoginPage({ searchParams }: Props) {
 		</main>
 	)
 }
-
-function HeaderOLD(callbackUrl?: string) {
-	return (
-		<>
-			<BlockLayout layout={"1"}>
-				<h1> Login </h1>
-				{callbackUrl && (
-					<p className="error"> You must login first to access the page </p>
-				)}
-			</BlockLayout>
-		</>
-	)
-}
-
-function Main(
-	providers: any,
-	sessionEmail?: string | null,
-	error?: "CredentialsSignin" | string
-) {
-	return (
-		<>
-			<DialogPopup buttonLabel="">
-				<p> Forgot your password? </p>
-				<PasswordRequestForm />
-			</DialogPopup>
-
-			<BlockLayout layout={"1"}>
-				<div className={layout_wide}>
-					{sessionEmail && (
-						<Callout intent={"info"}>
-							<p>
-								{" "}
-								currently logged in with email <strong> {sessionEmail} </strong>
-								. Go to your <Link href={`/account`}> Account </Link>
-							</p>
-						</Callout>
-					)}
-
-					{error && (
-						<Callout intent={"error"}>
-							{" "}
-							<p> Login failed. Please try again </p>
-						</Callout>
-					)}
-					<LoginForm providers={providers} />
-				</div>
-
-				<div className={layout_wide}>
-					<h4> Create a New Account </h4>
-					<Link href={`/register`}> Register Now </Link>
-				</div>
-			</BlockLayout>
-		</>
-	)
-}
-
-const styleForms = {
-	display: "grid",
-	gap: "1rem",
-} as CSSProperties

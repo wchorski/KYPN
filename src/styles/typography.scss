@@ -192,6 +192,12 @@ input[type="button"] {
   text-shadow: #000000d9 2px 2px 6px;
 }
 
+a:has(svg, span) {
+  display: flex;
+  gap: var(--space-s);
+  align-items: center;
+}
+
 // .pad-loose-elements {
 //   > p {
 //     padding-inline: var(--space-m);

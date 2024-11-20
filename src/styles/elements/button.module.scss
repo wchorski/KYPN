@@ -1,3 +1,6 @@
+.button{
+  border-width: var(--space-s);
+}
 .text_wrap {
   display: flex;
   justify-content: center;
@@ -33,10 +36,18 @@
   transition-duration: 0.3s;
   pointer-events: none;
   color: var(--c-accent);
-  transform: translateX(-8px);
+  transform: translateX(90%);
+  right: 0;
+  position: absolute;
+  z-index: 1;
 }
 
 .btn_msg_reveal {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateX(110%);
+}
+
+.btn_share {
+  z-index: 2;
+  position: relative;
 }

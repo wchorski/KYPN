@@ -1,23 +1,18 @@
-import ErrorMessage from "@components/ErrorMessage"
 import { Table } from "@components/elements/Table"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/blocks/Section"
 import { envs } from "@/envs"
 import { fetchUsers } from "@lib/fetchdata/fetchUsers"
 import { getServerSession } from "next-auth"
-import type { Session } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { Metadata } from "next"
 import Link from "next/link"
-import NotAuthorized403 from "../not-authorized"
-import NoDataFoundError404 from "../not-found"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { BlockLayout } from "@components/layouts/BlockLayout"
 import {
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.scss"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -37,8 +32,8 @@ const perPage = envs.PERPAGE
 export default async function UsersPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { users, error } = await fetchUsers(page, perPage, session)
-	if (error) return <ErrorMessage error={error} />
-	if (!users) return <p> no users found </p>
+	if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
+	if (!users) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	const cells = users.map((user: any) => ({
 		name: user.name,

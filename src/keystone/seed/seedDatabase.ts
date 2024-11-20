@@ -6,7 +6,9 @@ import {
 	pages_seeddata,
 	posts_seedjson,
 	tags_seedjson,
+  announcements_seed,
 } from "./seed_data"
+import { Announcement } from "@ks/types"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
@@ -305,6 +307,27 @@ const seedPages = async (context: Context) => {
   });
 };
 
+const seedAnnouncements = async (context: Context) => {
+  const { db } = context.sudo();
+  const seedObjects: Announcement[] = announcements_seed;
+  const objectsAlreadyInDatabase = await db.Announcement.findMany({
+    where: {
+      start: { in: seedObjects.map(obj => obj.start) },
+    },
+  }) as Announcement[]
+  const objsToCreate = seedObjects.filter(
+    seedObj => !objectsAlreadyInDatabase.some((obj) => obj.start === seedObj.start )
+  );
+
+  objsToCreate.map(obj => {
+    console.log(" + Announcement: " + obj.link)
+  })
+
+  await db.Announcement.createMany({
+    data: objsToCreate.map(obj => ({ ...obj })),
+  });
+};
+
 // const seedProductImages = async (context: Context) => {
 //   const { db } = context.sudo();
 //   const seedObjects: any[] = productImage_seedjson;
@@ -339,7 +362,7 @@ const seedPages = async (context: Context) => {
 // };
 
 export const seedDatabase = async (context: Context) => {
-	console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`)
+	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
 	await seedUsers(context)
 	await seedRoles(context)
 
@@ -348,5 +371,7 @@ export const seedDatabase = async (context: Context) => {
   
 	await seedPages(context)
 	await seedPosts(context)
-	console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`)
+  
+	await seedAnnouncements(context)
+	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }

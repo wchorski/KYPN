@@ -1,6 +1,7 @@
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+  margin-block: var(--space-l);
   //? causes overlap
   // table-layout: fixed;
 }

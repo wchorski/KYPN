@@ -21,7 +21,6 @@ model User {
   email              String    @unique @default("")
   password           String    @default("")
   url                String    @default("")
-  isAdmin            Boolean   @default(false)
   isActive           Boolean   @default(true)
   stripeCustomerId   String    @default("")
   dateCreated        DateTime? @default(now())

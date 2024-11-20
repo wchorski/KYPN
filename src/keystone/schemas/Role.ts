@@ -25,7 +25,14 @@ export const Role: Lists.Role = list({
 		},
 	},
 	fields: {
-		name: text({ validation: { isRequired: true }, isIndexed: "unique" }),
+		name: text({
+			validation: { isRequired: true },
+			isIndexed: "unique",
+			ui: {
+				description:
+					'Do not update! Change "Label" if you need to rename this role',
+			},
+		}),
 		label: text({ validation: { isRequired: true }, isIndexed: "unique" }),
 		...permissionFields,
 		assignedTo: relationship({

@@ -101,7 +101,7 @@ export type KSHeading = {
 }
 
 //** Schema Lists */
-export type User = Lists.User.Item
+export type User = Lists.User.Item & { role: Role }
 
 export type Category = Lists.Category.Item
 
@@ -136,7 +136,6 @@ export type Announcement = Lists.Announcement.Item & {
 //   listKey?: string;
 //   data?: {
 //     name: string;
-//     isAdmin?: boolean;
 //     role?: {
 //       id?: string;
 //       name?: string;
@@ -342,7 +341,6 @@ export type OrderItem = {
 // 	image: string
 // 	password: string
 // 	url: string
-// 	isAdmin: boolean
 // 	isActive: boolean
 // 	stripeCustomerId: string
 // 	posts: Post[]

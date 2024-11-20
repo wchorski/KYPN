@@ -17,7 +17,8 @@ keystone.db
 !/db/up.sh
 !/db/README.md
 compose.yml
-seed_data.ts
+seed_data*.ts
+!seed_data.ini.ts
 
 # pages, components, styles
 src/styles/vars.scss

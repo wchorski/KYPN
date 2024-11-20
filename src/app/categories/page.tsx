@@ -1,30 +1,21 @@
-import ErrorMessage from "@components/ErrorMessage"
-import {
-	PageTHeaderMain,
-	PageTHeaderMainAside,
-} from "@components/layouts/PageTemplates"
-import { Category, Post, Tag } from "@ks/types"
 import { envs } from "@/envs"
 import { Metadata } from "next"
-import { Section } from "@components/blocks/Section"
-import Link from "next/link"
 import fetchCategories from "@lib/fetchdata/fetchCats"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
-import { PostsList } from "@components/blocks/PostsList"
 import { BlogList } from "@components/blog/BlogList"
 import { Card } from "@components/layouts/Card"
 import {
-	layout_full,
-	layout_site_to_wide,
 	page_layout,
 	page_content,
 	layout_site,
 } from "@styles/layout.module.scss"
 import Flex from "@components/layouts/Flex"
 import { NoData } from "@components/elements/NoData"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 
 type Props = {
 	params: {
@@ -54,8 +45,8 @@ export default async function CategoriesPage({ params, searchParams }: Props) {
 	} = await fetchPosts({ page: currPage, categoryIds, session })
 	const { categories, error: catsError } = await fetchCategories(categoryIds)
 
-	if (postsError || catsError)
-		return <ErrorMessage error={postsError || catsError} />
+  if (postsError || catsError) return <ErrorPage error={postsError || catsError} ><p>data fetch error </p></ErrorPage>
+	if (!posts || !categories) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	return (
 		<>

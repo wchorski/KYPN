@@ -26,11 +26,11 @@ export const permissionFields = {
 	}),
   canManageCategories: checkbox({
     defaultValue: false,
-    label: 'Categories Manager: Can see and manage any category',
+    label: 'Categories Manager: Can manage any category',
   }),
   canManageTags: checkbox({
     defaultValue: false,
-    label: 'Tags Manager: Can see and manage any tag',
+    label: 'Tags Manager: Can manage any tag',
   }),
   canManageAnnouncements: checkbox({
     defaultValue: false,

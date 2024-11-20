@@ -1,32 +1,26 @@
 import { Pagination } from "@components/Pagination"
 import { BlogList } from "@components/blog/BlogList"
-import ErrorMessage from "@components/ErrorMessage"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { TagsPool } from "@components/menus/TagsPool"
-import { PageTHeaderMainAside } from "@components/layouts/PageTemplates"
-import { Category, Post, Tag } from "@ks/types"
 import { envs } from "@/envs"
 import { Metadata } from "next"
 import { Card } from "@components/layouts/Card"
-import { InfoCard } from "@components/blocks/InfoCard"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
-import { Section } from "@components/blocks/Section"
 import { NoData } from "@components/elements/NoData"
 import { CSSProperties } from "react"
-import { BlockLayout } from "@components/layouts/BlockLayout"
-import styles from "@styles/page.module.scss"
 import Flex from "@components/layouts/Flex"
 import {
 	page_layout,
 	layout_full,
 	layout_wide,
-	page_sidebar,
 	page_content,
 	layout_site_to_wide,
 } from "@styles/layout.module.scss"
 import { AsideBar } from "@components/layouts/AsideBar"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 
 type Props = {
 	params: {
@@ -56,8 +50,8 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 		session,
 	})
 
-	if (error) return <ErrorMessage error={error} />
-	if (!posts) return <p>no posts found</p>
+	if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
+	if (!posts) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	return (
 		<main

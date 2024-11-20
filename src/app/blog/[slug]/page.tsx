@@ -1,11 +1,7 @@
-import type { PostCreateInput as Post } from ".keystone/types"
 import Link from "next/link"
-import ErrorMessage from "@components/ErrorMessage"
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
 import {
 	datePrettyLocal,
-	datePrettyLocalDay,
-	datePrettyLocalTime,
 } from "@lib/dateFormatter"
 import { TagsPool } from "@components/menus/TagsPool"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
@@ -18,9 +14,8 @@ import { nextAuthOptions } from "@/session"
 import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
 import styles from "@styles/blog/blogpost.module.scss"
-import sLayout, {
+import {
 	layout_full,
-	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
@@ -28,8 +23,6 @@ import sLayout, {
 } from "@styles/layout.module.scss"
 import sArticles from "@styles/articles.module.scss"
 import { StatusBadge } from "@components/StatusBadge"
-import Error404 from "../../not-found"
-import { BsShare } from "react-icons/bs"
 import { CgProfile } from "react-icons/cg"
 import { Header } from "@components/elements/Header"
 import Flex from "@components/layouts/Flex"
@@ -39,8 +32,9 @@ import { AsideBar } from "@components/layouts/AsideBar"
 import { NoData } from "@components/elements/NoData"
 import { findAllHeadings } from "@lib/contentHelpers"
 import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
-import { Button } from "@components/elements/Button"
 import { ShareButton } from "@components/elements/ShareButton"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 
 export const revalidate = 5
 
@@ -97,18 +91,8 @@ export default async function BlogPostBySlug({ params }: Props) {
 	const slug = String(params.slug)
 	const { post, error } = await fetchPost(slug, session)
 
-	if (error) return <ErrorMessage error={error} />
-
-	if (!post)
-		return (
-			<Error404>
-				{" "}
-				<p>
-					{" "}
-					The post could not be found, or you do not have permission to view.{" "}
-				</p>
-			</Error404>
-		)
+	if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
+	if (!post) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	const {
 		id,

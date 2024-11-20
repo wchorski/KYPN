@@ -61,9 +61,12 @@ export const User: Lists.User = list({
 				description:
 					"Can only be changed via `passwordReset` mutation + access to owner's email",
 				itemView: {
-					fieldMode: ({ session, context, item }) =>
-						permissions.canManageUsers({ session }) ? "read" : "hidden",
+					fieldMode: 'hidden'
 				},
+				// itemView: {
+				// 	fieldMode: ({ session, context, item }) =>
+				// 		permissions.canManageUsers({ session }) ? "read" : "hidden",
+				// },
 			},
 			access: {
 				read: ({ session, context, listKey, fieldKey, operation, item }) =>
@@ -83,7 +86,6 @@ export const User: Lists.User = list({
 			},
 		}),
 		url: text(),
-		isAdmin: checkbox({ defaultValue: false }),
 		isActive: checkbox({ defaultValue: true }),
 		stripeCustomerId: text({
 			isIndexed: true,
@@ -145,7 +147,7 @@ export const User: Lists.User = list({
 							email: item.email,
 						},
 					})
-					.catch((err) => console.log("!!! verify email failed"))) as object
+					.catch((err) => console.log(`!!! verify email did not send: ${item.email}`))) as object
 			}
 		},
 	},

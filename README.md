@@ -68,6 +68,55 @@ Here is a list of files you'll need to provide (there are some `*.ini` files tha
 As a webdev, if you would like to create custom pages (that override any page created in Keystone) use the `src/app/(private)` directory. Example page ideas that you could apply to your project include. 
 - `src/app/(private)/home/page.tsx`
 - `src/app/(private)/admin/page.tsx`
+#### VSCode Snippits
+edit `typescriptreact.json` file
+
+  <details>
+
+  <summary>Typescript Page Snippit</summary>
+  ```json
+    "Typescript React Page With Import Server Comp": {
+      "prefix": [ "page-tsx", "fpi", "import-react-functional-component"],
+      "body": [
+        "import { envs } from '@/envs'",
+        "import { nextAuthOptions } from '@/session'",
+        "import {",
+        "\tlayout_site,",
+        "\tpage_content,",
+        "\tpage_layout,",
+        "\t} from '@styles/layout.module.scss'",
+        "import { getServerSession } from 'next-auth'",
+        "",
+        "type Props = {",
+        "\tsearchParams:{q:string}",
+        "\tparams:{id:string}",
+        "}",
+        "",
+        "const page = 1",
+        "const perPage = envs.PERPAGE",
+        "export default async function $0Page ({ params, searchParams }:Props) {",
+        "\tconst session = await getServerSession(nextAuthOptions)",
+        "\t// const { data, error } = await fetch()",
+        "\t// if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>",
+        "\t// if (!users) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>",
+        "",
+        "\treturn (",
+        "\t\t<main className={[page_layout].join(' ')}>",
+        "\t\t\t<header className={layout_site}>",
+        "\t\t\t\t<h1>$0Page</h1>",
+        "\t\t\t</header>",
+        "\t\t\t<div className={[page_content, layout_site].join(' ')}>",
+        "\t\t\t\t<p>content</p>",
+        "\t\t\t</div>",
+        "\t\t</main>",
+        "\t)",
+        "}",
+    
+      ],
+      "description": "A React functional Page with Typescript types for props."
+    },
+  ```
+  </details>
 
 ### Authentication
 uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration
@@ -180,7 +229,8 @@ When initializing a fresh database or returning to development you may add/remov
 
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
-- [ ] Post share modem w copy link
+- [ ] fix all error and nodata page fallbacks
+- [x] Post share modem w copy link (id)
 - [ ] copy all data to json format and build to `cutefruit` live demo
 - [x] page with side bar and site side bar (will use @container query)
 - [x] all blocks tested
