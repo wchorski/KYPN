@@ -1,7 +1,7 @@
 require("dotenv").config()
 import { getContext } from "@keystone-6/core/context"
 import { getServerSession } from "next-auth/next"
-import type { DefaultJWT, JWT } from "next-auth/jwt"
+import type { DefaultJWT } from "next-auth/jwt"
 import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
@@ -125,6 +125,8 @@ export const nextAuthOptions: NextAuthOptions = {
 				console.log(
 					`!!! session attempt failed: ${JSON.stringify(session, null, 2)}`
 				)   
+        
+        
 
 			return {
 				...session,
@@ -252,6 +254,7 @@ export const nextAuthSessionStrategy = {
 		const { req, res } = context
 		const { headers } = req ?? {}
 		if (!headers?.cookie || !res) return
+    
 
 		// next-auth needs a different cookies structure
 		const cookies: Record<string, string> = {}

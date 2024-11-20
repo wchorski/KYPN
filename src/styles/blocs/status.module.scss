@@ -8,6 +8,7 @@
   display: grid;
   align-content: center;
   width: fit-content;
+  z-index: 2;
 }
 
 .ACTIVE, .TRIAL, .DOWNPAYMENT, .CONFIRMED, .STARTED, .PRIVATE {

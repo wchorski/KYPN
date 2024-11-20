@@ -65,7 +65,9 @@ Here is a list of files you'll need to provide (there are some `*.ini` files tha
 > ![warning] Code Editor
 > because we are ignoring these files, your code editor may not *see* these files when attempting to search/open. You will need to manually dig through to the `private` folder.
 
-2 pages ignored by this repo are `src/app/home/page.tsx` and `src/app/admin/page.tsx`. These pages are assumed to be created in and served by NextJs but could be created in KeystoneJs editor if design allows. I'm open to ignoring other common page names that webdevs may want to build in React.
+As a webdev, if you would like to create custom pages (that override any page created in Keystone) use the `src/app/(private)` directory. Example page ideas that you could apply to your project include. 
+- `src/app/(private)/home/page.tsx`
+- `src/app/(private)/admin/page.tsx`
 
 ### Authentication
 uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration

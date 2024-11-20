@@ -11,8 +11,7 @@ export const Post:Lists.Post = list({
   
   access: {
     filter: {
-      query: ()=> true,
-      // query: rules.canViewPosts,
+      query: rules.canViewPosts,
       update: rules.canManagePosts,
       delete: rules.canManagePosts,
     },

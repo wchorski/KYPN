@@ -5,6 +5,7 @@ import type {
 	PostCreateInput,
 	CategoryCreateInput,
 	TagCreateInput,
+  AnnouncementCreateInput,
 } from ".keystone/types"
 
 export const user_seeddata: UserCreateInput[] = [
@@ -1526,7 +1527,7 @@ export const posts_seedjson: PostCreateInput[] = [
 		featured_image:
 			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118261/cutefruit/banners/cf-banner-8_muquqs.png",
 		featured_video: "",
-    // TODO make meaningful and relevant tags and cats
+		// TODO make meaningful and relevant tags and cats
 		tags: {
 			connect: [
 				{
@@ -1551,54 +1552,36 @@ export const posts_seedjson: PostCreateInput[] = [
 					name: "green",
 				},
 				{
-					name: "stuffed",
-				},
-				{
 					name: "orange",
-				},
-				{
-					name: "two-eyes",
-				},
-				{
-					name: "one-eyed",
-				},
-				{
-					name: "ears",
-				},
-				{
-					name: "mouth",
 				},
 				{
 					name: "leaf",
 				},
 				{
-					name: "bundle",
-				},
-				{
-					name: "nose",
+					name: "cluster",
 				},
 			],
 		},
 		categories: {
 			connect: [
 				{
-          name: 'pomes',
-        },
-        {
-          name: 'drupes',
-        },
-        {
-          name: 'berries',
-        },
-        {
-          name: 'melons',
-        },
-        {
-          name: 'citrus',
-        }, 
-        {
-          name: 'tropical',
-        },
+					name: "pomes",
+				},
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
 			],
 		},
 		content: [
@@ -1647,6 +1630,47 @@ export const posts_seedjson: PostCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "The Many Uses of Pomegranates",
@@ -1933,6 +1957,32 @@ export const posts_seedjson: PostCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
 	},
 	{
 		title: "The World of Tropical Fruits",
@@ -2702,7 +2752,42 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "The Sweet and Sour World of Citrus Fruits",
@@ -3284,7 +3369,36 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
+
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+
+				{
+					name: "nutrition",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+
+				{
+					name: "citrus",
+				},
+			],
+		},
 	},
 	{
 		title: "The Beauty and Benefits of Dragon Fruit",
@@ -3792,7 +3906,34 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+
+				{
+					name: "leaf",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "Fruit and Cheese Pairings for a Perfect Charcuterie Board",
@@ -4348,7 +4489,69 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "The Wonderful World of Apples",
@@ -4378,7 +4581,39 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+
+				{
+					name: "green",
+				},
+
+				{
+					name: "leaf",
+				},
+
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+			],
+		},
 	},
 	{
 		title: "Fruity Suprise",
@@ -4408,37 +4643,69 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
-	},
-	{
-		title: "Exploring the World of Exotic Fruits",
-		slug: "exploring-exotic-fruits",
-		dateCreated: "2022-08-24T14:00:00.000Z",
-		dateModified: "2023-04-17T14:00:00.000Z",
-		status: "PUBLIC",
-		template: "FULLWIDTH",
-		pinned: 0,
-		excerpt:
-			"Have you ever wondered what other fruits are out there beyond the ones you see at your local grocery store? There's a whole world of exotic fruits waiting to be discovered and tasted!",
-		featured_image:
-			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118261/cutefruit/banners/cf-banner-4_a1mzp8.png",
-		featured_video: "",
-		content: [
-			{
-				type: "paragraph",
-				children: [
-					{
-						text: "",
-					},
-				],
-			},
-		],
-		author: {
-			connect: {
-				email: "admin@tawtaw.site",
-			},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
 		},
-		// "privateAccess": []
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "Fruit Smoothies: A Healthy and Delicious Option",
@@ -4468,7 +4735,51 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "The World of Exotic Fruits",
@@ -4498,7 +4809,54 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
 	{
 		title: "Block Test",
@@ -6477,7 +6835,41 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+
+				{
+					name: "green",
+				},
+
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
 	},
 	{
 		title: "The Health Benefits of Berries",
@@ -6507,9 +6899,92 @@ export const posts_seedjson: PostCreateInput[] = [
 				email: "admin@tawtaw.site",
 			},
 		},
-		// "privateAccess": []
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+
+				{
+					name: "green",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
 	},
 ]
+
+export const announcements_seed: AnnouncementCreateInput[] = [
+	{
+		link: "/blog/dragon-fruit-beauty-benefits",
+		start: "2024-11-18T06:00:00.000Z",
+		end: "2027-08-29T05:00:00.000Z",
+		colorTheme: "bg_c_tertiary",
+		type: "NORMAL",
+		content: [
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Juicy Stories About Nature’s Sweetest Gifts",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Discover the fascinating world of fruits with us! From health benefits to delicious recipes, our blog serves up fresh content to keep you informed and inspired. Dive in and let the sweetness unfold.",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Follow the link or view our other ",
+					},
+					{
+						href: "/blog",
+						type: "link",
+						children: [
+							{
+								text: "blog posts",
+							},
+						],
+					},
+					{
+						text: "",
+					},
+				],
+			},
+		],
+	},
+]
+
 export const categories_seedjson: CategoryCreateInput[] = [
 	{
 		name: "pomes",
@@ -6565,31 +7040,15 @@ export const tags_seedjson: TagCreateInput[] = [
 	{
 		name: "green",
 	},
-	{
-		name: "stuffed",
-	},
+
 	{
 		name: "orange",
 	},
-	{
-		name: "two-eyes",
-	},
-	{
-		name: "one-eyed",
-	},
-	{
-		name: "ears",
-	},
-	{
-		name: "mouth",
-	},
+
 	{
 		name: "leaf",
 	},
 	{
-		name: "bundle",
-	},
-	{
-		name: "nose",
+		name: "cluster",
 	},
 ]

@@ -37,7 +37,10 @@ public/marker.svg
 public/assets/placeholder.png
 public/assets/private/*
 **/private/**
+
 !private/README.md
+/src/app/\(private\)/**
+!/src/app/\(private\)/README.md
 
 # images
 images/**
