@@ -151,7 +151,7 @@ Assuming you know how to setup a [Postgres](https://www.postgresql.org/) databas
 During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`.
 
 > [!info] Document
-> any field using the `document` type will query with an extra nested `document` key. You can remove this
+> any field using the rich text input type (usually named `content`) will query with an extra nested `document` key. I account for this in my `seedDatabase.ts` to make it easier to copy paste without having to remove the `document` key. 
 
 example query from apollo playground
 
@@ -172,7 +172,7 @@ example query from apollo playground
 }
 ```
 
-take out the `document` field
+Remove the `document` if you plan on doing any direct API access. (this is not necessary in my `seedDatabase.ts` logic.)
 
 ```json
 {

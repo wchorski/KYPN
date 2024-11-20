@@ -40,18 +40,22 @@ export const BlogListItem = ({
 	return (
 		<article className={styles.post_card}>
       {status !== "PUBLIC" && (
-						<div style={{ position: "absolute", top: "var(--space-s)", left: "var(--space-s)" }}>
+						<div style={{ position: "absolute", top: "var(--space-s)", left: "var(--space-s)", zIndex: '2' }}>
 							<StatusBadge type={"post"} status={status} />
 						</div>
 					)}
-			<figure className={styles.featured_image}>
+			
 				{featured_video ? (
+          <figure className={styles.featured_image}>
 					<YouTubeVideo
 						altText={`${title}'s featured video`}
 						url={featured_video}
 					/>
+          </figure>
 				) : (
+
 					<Link href={`/blog/${slug}`}>
+            <figure className={styles.featured_image}>
 						<ImageDynamic photoIn={featured_image} key={id}/>
 						{/* <Image
               src={featured_image}
@@ -59,9 +63,10 @@ export const BlogListItem = ({
               width={300}
               height={300}
             /> */}
+            </figure>
 					</Link>
 				)}
-			</figure>
+			
 
 			<div className="wrapper">
 				<header style={{ position: "relative" }}>

@@ -1,8 +1,6 @@
 import Link from "next/link"
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
-import {
-	datePrettyLocal,
-} from "@lib/dateFormatter"
+import { datePrettyLocal } from "@lib/dateFormatter"
 import { TagsPool } from "@components/menus/TagsPool"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
@@ -35,6 +33,7 @@ import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
 import { ShareButton } from "@components/elements/ShareButton"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
+import { IconLink } from "@components/elements/IconLink"
 
 export const revalidate = 5
 
@@ -91,8 +90,18 @@ export default async function BlogPostBySlug({ params }: Props) {
 	const slug = String(params.slug)
 	const { post, error } = await fetchPost(slug, session)
 
-	if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
-	if (!post) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
+	if (error)
+		return (
+			<ErrorPage error={error}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!post)
+		return (
+			<NoDataFoundPage>
+				<p> Post not found</p>
+			</NoDataFoundPage>
+		)
 
 	const {
 		id,
@@ -177,13 +186,22 @@ export default async function BlogPostBySlug({ params }: Props) {
 							</li>
 						)}
 						<li>
-							<ShareButton textToCopy={envs.FRONTEND_URL + `/blog/id/${id}`}/>
+							<ShareButton textToCopy={envs.FRONTEND_URL + `/blog/id/${id}`} />
 						</li>
 					</ul>
-					{status !== "PUBLIC" && (
-						<div>
-							<StatusBadge type={"post"} status={status} />
-						</div>
+					{(session?.data.role?.canManagePosts || status !== 'PUBLIC') && (
+						<Card>
+							<Flex alignItems={'center'}>
+								<StatusBadge type={"post"} status={status} />
+                {(author.email === session?.user.email || session?.data?.role?.canManagePosts) && (
+                  <IconLink
+                    icon={"edit"}
+                    href={envs.BACKEND_URL + `/posts/${id}`}
+                    label={"edit"}
+                  />
+                )}
+							</Flex>
+						</Card>
 					)}
 					<hr />
 				</Header>

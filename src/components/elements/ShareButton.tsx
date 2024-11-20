@@ -32,6 +32,7 @@ export function ShareButton({ textToCopy }: Props) {
 					display: "flex",
 					alignItems: "center",
 					gap: "var(--space-s)",
+          zIndex: '3'
 				}}
 			>
 				<BsShare />

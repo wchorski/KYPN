@@ -26,8 +26,11 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
       width={state.image.width}
       height={state.image.height}
       className={className}
-      placeholder={'blur'}
-      blurDataURL={'/assets/placeholder.png'}
+      //TODO how to gracefully show 'loading' image'
+      // placeholder={'blur'}
+      // blurDataURL={'/assets/placeholder.png'}
+      // blurDataURL={state.image.url}
+      
       // style={{
       //   width: '100%',
       //   height: 'auto',

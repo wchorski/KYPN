@@ -59,7 +59,7 @@ export const roles_seedjson: RoleCreateInput[] = [
 		label: "Editor",
 		canManagePosts: true,
 		canManagePages: true,
-    canManageCategories: true,
+		canManageCategories: true,
 		canManageTags: true,
 		assignedTo: {
 			connect: {
@@ -1528,7 +1528,6 @@ export const posts_seedjson: PostCreateInput[] = [
 		featured_image:
 			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118261/cutefruit/banners/cf-banner-8_muquqs.png",
 		featured_video: "",
-		// TODO make meaningful and relevant tags and cats
 		tags: {
 			connect: [
 				{
@@ -1585,6 +1584,267 @@ export const posts_seedjson: PostCreateInput[] = [
 				},
 			],
 		},
+		content: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Fruit is more than just food; it's a canvas for creativity! The art of transforming fruits into stunning visual masterpieces has captivated people for centuries. From simple slices arranged beautifully to intricate carvings, fruit art is a delightful way to combine nature's bounty with artistic flair.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 2,
+					children: [
+						{
+							text: "Why Fruit Art?",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Healthy and Fun",
+										},
+										{
+											text: ": It’s a nutritious alternative to processed snacks while also being visually exciting.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Engaging Activity",
+										},
+										{
+											text: ": A great way to bond with kids, family, or friends over creativity.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Perfect for Events",
+										},
+										{
+											text: ": Fruit platters and carvings elevate any gathering with their charm.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Tools of the Trade",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Creating fruit art requires only a few basic tools:",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Sharp paring knife",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Melon baller",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Cookie cutters",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Toothpicks or skewers",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Ideas to Get You Started",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Simple Arrangements",
+										},
+										{
+											text: ": Arrange colorful fruit slices like a rainbow or flower.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Carved Masterpieces",
+										},
+										{
+											text: ": Turn a watermelon into a basket or carve roses from apples.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fun Shapes",
+										},
+										{
+											text: ": Use cookie cutters to make stars, hearts, or other shapes from melons and pineapple.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 2,
+					children: [
+						{
+							text: "Inspiring Examples",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Take inspiration from social media or cooking shows. Artists worldwide are crafting animals, faces, and even towering sculptures—all from fruit!",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "So, next time you pick up a juicy piece of fruit, consider turning it into art. You’ll find joy not just in eating it, but in admiring its beauty too.",
+						},
+					],
+				},
+			],
+		},
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": []
+	},
+	{
+		title: "The Best Fruits for a Summer Picnic",
+		slug: "fruits-summer-picnic",
+		dateCreated: "2023-11-20T12:30:00.000Z",
+		dateModified: "2023-12-05T16:45:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 0,
+		excerpt:
+			"Get ready for your next summer picnic with this guide to the best fruits to pack, including watermelon, cherries, and grapes.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-3_uuufb0.png",
+		featured_video: "",
 		content: [
 			{
 				type: "paragraph",
@@ -1601,5340 +1861,5310 @@ export const posts_seedjson: PostCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
 	},
-	// {
-	// 	title: "The Best Fruits for a Summer Picnic",
-	// 	slug: "fruits-summer-picnic",
-	// 	dateCreated: "2023-11-20T12:30:00.000Z",
-	// 	dateModified: "2023-12-05T16:45:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Get ready for your next summer picnic with this guide to the best fruits to pack, including watermelon, cherries, and grapes.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-3_uuufb0.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": []
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "blue",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "green",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 			{
-	// 				name: "melons",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The Many Uses of Pomegranates",
-	// 	slug: "uses-pomegranates",
-	// 	dateCreated: "2023-10-15T10:00:00.000Z",
-	// 	dateModified: "2024-11-14T20:50:31.227Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Discover the many culinary and medicinal uses of pomegranates, including how to juice them and use their seeds in recipes.",
-	// 	featured_image:
-	// 		"https://cdn.pixabay.com/photo/2023/09/20/12/12/ai-generated-8264735_960_720.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Pomegranates aren't just a fall treat; they're versatile, health-boosting, and add vibrancy to food, skincare, and even home decor. Let's explore a few ways to enjoy this jewel-toned fruit.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Culinary Uses",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Juices and Smoothies",
-	// 				},
-	// 				{
-	// 					text: "\nA refreshing antioxidant boost, pomegranate juice is perfect on its own, in smoothies, or cocktails.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Salads and Garnishes",
-	// 				},
-	// 				{
-	// 					text: "\nSprinkle pomegranate seeds over salads for a hint of sweetness, crunch, and color. They pair beautifully with greens, nuts, and cheese—try a mix with kale and feta.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				intent: "error",
-	// 				content: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cooking with Pomegranate Molasses",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Tangy and thick, pomegranate molasses is perfect for marinades and glazes, adding depth to dishes like roasted veggies, chicken, or lamb.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "callout",
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Health and Wellness Benefits",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 0,
-	// 				padding: 1,
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/3osBLwx8M3B8e4cyk0/giphy.gif?cid=790b761105bfik4fopoesc8cjtyjb9icdpkva3x8xe27jyzi&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "layout",
-	// 			layout: [1, 1],
-	// 			children: [
-	// 				{
-	// 					type: "layout-area",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Packed with Antioxidants",
-	// 								},
-	// 								{
-	// 									text: "\nPomegranates are high in vitamin C and antioxidants, which fight inflammation and boost immunity, making them a great addition to daily smoothies or snacks.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "layout-area",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Skin Care",
-	// 								},
-	// 								{
-	// 									text: "\nRich in antioxidants, pomegranate seed oil is a popular addition to skincare for its ability to repair skin and reduce fine lines.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "black",
-	// 				content: null,
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				backgroundColor: "peachpuff",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "heading",
-	// 							level: 4,
-	// 							children: [
-	// 								{
-	// 									text: "Home and Decorative Uses",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Natural Centerpiece",
-	// 								},
-	// 								{
-	// 									text: "\nPomegranates' vibrant color makes them a stunning, natural table centerpiece, especially when mixed with candles or fall decor.",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "DIY Dried Garland",
-	// 								},
-	// 								{
-	// 									text: "\nCreate a festive pomegranate and eucalyptus garland for an aromatic, seasonal touch in your home.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "section",
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Fun DIY Ideas",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Natural Dye",
-	// 				},
-	// 				{
-	// 					text: "\nBoil pomegranate rinds to create a soft yellow dye, perfect for fabric.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Pomegranate Stamps",
-	// 				},
-	// 				{
-	// 					text: "\nCut a pomegranate in half, dip in paint, and stamp onto paper or fabric for a fun, geometric print.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Final Thoughts",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "From health benefits to creative DIYs, pomegranates bring so much more to the table than meets the eye. Next time, think beyond the snack!",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": []
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The World of Tropical Fruits",
-	// 	slug: "tropical-fruits",
-	// 	dateCreated: "2023-12-05T16:45:00.000Z",
-	// 	dateModified: "2024-11-04T20:38:34.875Z",
-	// 	status: "PUBLIC",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Explore the amazing diversity of tropical fruits, including mangos, pineapples, and papayas, and learn about their health benefits and culinary uses.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118261/cutefruit/banners/cf-banner-4_a1mzp8.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "When you think of tropical fruits, images of vibrant colors, unique shapes, and tantalizing tastes may come to mind. These fruits not only bring a splash of color and flavor to our plates but are also packed with nutrients that contribute to a healthier lifestyle. Let's dive into the world of tropical fruits and discover some of the most exotic varieties out there!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Why Tropical Fruits?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Tropical fruits often have:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "High water content",
-	// 								},
-	// 								{
-	// 									text: " – Great for hydration!",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Rich antioxidants",
-	// 								},
-	// 								{
-	// 									text: " – Boosts immunity.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Unique flavors",
-	// 								},
-	// 								{
-	// 									text: " – From sweet to sour, tropical fruits cover all taste profiles.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Whether you’re sipping on a smoothie or adding them to a salad, these fruits add a refreshing touch to any meal.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 0,
-	// 				padding: 1,
-	// 				imageSrc:
-	// 					"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3hjeG05Z25tbDd1cnpsZDlkcjh6bzNxOXNlaGE0aXZobTlnMXlzbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l378yCCaMVfzb60HS/giphy.gif",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Popular Tropical Fruits",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Here are some of the most popular tropical fruits and why they're worth trying!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "1. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Mango",
-	// 				},
-	// 				{
-	// 					text: " ",
-	// 				},
-	// 				{
-	// 					text: "(Mangifera indica)",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": Sweet, with hints of floral and citrus.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Nutrition",
-	// 								},
-	// 								{
-	// 									text: ": High in Vitamin C, Vitamin A, and fiber.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fun Fact",
-	// 								},
-	// 								{
-	// 									text: ': Known as the "king of fruits" in many parts of Asia!',
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "blockquote",
-	// 			children: [
-	// 				{
-	// 					type: "paragraph",
-	// 					children: [
-	// 						{
-	// 							text: '"The mango\'s unique sweetness and versatility make it a top choice for fruit lovers worldwide."',
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "2. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Pineapple",
-	// 				},
-	// 				{
-	// 					text: " ",
-	// 				},
-	// 				{
-	// 					text: "(Ananas comosus)",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": A blend of sweet and tangy.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Nutrition",
-	// 								},
-	// 								{
-	// 									text: ": Loaded with bromelain, an enzyme that aids digestion.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Did you know?",
-	// 								},
-	// 								{
-	// 									text: " Pineapples take up to 2 years to mature!",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Recipe Idea:",
-	// 				},
-	// 				{
-	// 					text: "\nTry grilling pineapple slices for a delicious smoky flavor. Perfect as a side dish or dessert!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "3. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Dragon Fruit",
-	// 				},
-	// 				{
-	// 					text: " ",
-	// 				},
-	// 				{
-	// 					text: "(Hylocereus undatus)",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Appearance",
-	// 								},
-	// 								{
-	// 									text: ": Bright pink or yellow skin with green scales.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": Mildly sweet with a kiwi-like texture.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Health Benefits",
-	// 								},
-	// 								{
-	// 									text: ": Rich in antioxidants and Vitamin C.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Tip: Scoop out the flesh and use it in a smoothie bowl for a beautiful breakfast!",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "4. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Papaya",
-	// 				},
-	// 				{
-	// 					text: " ",
-	// 				},
-	// 				{
-	// 					text: "(Carica papaya)",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": Soft, buttery texture with a mild sweetness.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Nutritional Highlight",
-	// 								},
-	// 								{
-	// 									text: ": Contains the enzyme papain, which helps in protein digestion.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Quick Tip",
-	// 								},
-	// 								{
-	// 									text: ": Add a squeeze of lime juice to enhance its flavor.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Lesser-Known Tropical Fruits",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "While mangoes and pineapples are well-known, there are other tropical gems to explore:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Rambutan",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Looks",
-	// 								},
-	// 								{
-	// 									text: ": Red and hairy!",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": Sweet and juicy, similar to lychee.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fun Fact",
-	// 								},
-	// 								{
-	// 									text: ": Despite its intimidating appearance, the rambutan is a favorite in Southeast Asia.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Mangosteen",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Taste",
-	// 								},
-	// 								{
-	// 									text: ": A perfect balance of sweet and sour.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Nutrition",
-	// 								},
-	// 								{
-	// 									text: ": High in xanthones, known for their antioxidant properties.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Note",
-	// 								},
-	// 								{
-	// 									text: ": Mangosteen is known as the “queen of fruits” and is often paired with mango, the king.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Tips for Buying and Storing Tropical Fruits",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "ordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Buy fresh",
-	// 								},
-	// 								{
-	// 									text: " – Check for firmness and aroma.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Avoid bruises",
-	// 								},
-	// 								{
-	// 									text: " – Look for intact skins.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Store properly",
-	// 								},
-	// 								{
-	// 									text: " – Some tropical fruits, like bananas and pineapples, ripen best at room temperature.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "blockquote",
-	// 			children: [
-	// 				{
-	// 					type: "paragraph",
-	// 					children: [
-	// 						{
-	// 							text: "Pro Tip:",
-	// 							italic: true,
-	// 						},
-	// 						{
-	// 							text: " Many tropical fruits can be frozen. Slice and freeze for smoothies or desserts!",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Conclusion",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "The world of tropical fruits is a vibrant adventure for your taste buds and your health. From juicy mangoes to nutrient-rich dragon fruits, each variety brings its unique benefits and flavors. So, the next time you’re at the market, why not try something new?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Enjoy the taste of the tropics, one bite at a time!",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "green",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "leaf",
-	// 			},
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "drupes",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The Sweet and Sour World of Citrus Fruits",
-	// 	slug: "sweet-sour-citrus-fruits",
-	// 	dateCreated: "2023-04-17T14:00:00.000Z",
-	// 	dateModified: "2024-08-26T16:56:52.752Z",
-	// 	status: "PUBLIC",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Discover the delicious and tangy world of citrus fruits, from lemons and limes to oranges and grapefruits.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118260/cutefruit/banners/cf-banner-15_w0csbb.jpg",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Citrus fruits are a vibrant family of fruits known for their refreshing flavors and nutritional benefits. From the tangy taste of lemons to the sweetness of oranges, these fruits add a burst of flavor to our daily lives. In this post, we'll explore some of the most popular citrus fruits, their unique characteristics, and their surprising uses.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "🍊 Oranges: The All-Time Favorite",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 0,
-	// 				padding: 1,
-	// 				imageSrc:
-	// 					"https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_600/ncom/en_US/games/switch/p/pikmin-3-deluxe-switch/description-image",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Oranges are perhaps the most well-known citrus fruit. Not only are they delicious, but they are also packed with vitamin C. Here's a quick overview:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Scientific Name",
-	// 								},
-	// 								{
-	// 									text: ": ",
-	// 								},
-	// 								{
-	// 									text: "Citrus sinensis",
-	// 									italic: true,
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Flavor",
-	// 								},
-	// 								{
-	// 									text: ": Sweet, with a hint of tartness",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Uses",
-	// 								},
-	// 								{
-	// 									text: ": Juice, salads, desserts",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "blockquote",
-	// 			children: [
-	// 				{
-	// 					type: "paragraph",
-	// 					children: [
-	// 						{
-	// 							text: '"An orange a day keeps the doctor away."\n— A twist on the classic saying',
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Oranges are incredibly versatile. You can enjoy them as a snack, squeeze them into juice, or even use their zest to add flavor to baked goods.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				intent: "success",
-	// 				content: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fun Fact: ",
-	// 								},
-	// 								{
-	// 									text: "Oranges are actually a hybrid of pomelo and mandarin!",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "callout",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "🍋 Lemons: The Zesty Powerhouse",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 0,
-	// 				padding: 1,
-	// 				imageSrc:
-	// 					"https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_lpad/b_white/f_auto/q_auto/dpr_1.5/c_scale,w_700/ncom/software/switch/70010000005302/a6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Lemons are known for their sharp, tangy flavor. They are a kitchen staple for their ability to brighten up any dish.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Why We Love Lemons:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "ordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Rich in Vitamin C",
-	// 								},
-	// 								{
-	// 									text: ": Boosts the immune system",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Detoxifying",
-	// 								},
-	// 								{
-	// 									text: ": Great for cleansing the body",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Flavor Enhancer",
-	// 								},
-	// 								{
-	// 									text: ": A squeeze of lemon can elevate the taste of many dishes",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Tip",
-	// 				},
-	// 				{
-	// 					text: ":\nAdd a slice of lemon to your water for a refreshing twist!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Lemons are not just for eating—they're also great for cleaning! The acidity of lemon juice makes it a natural disinfectant.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "🍈 Grapefruits: The Bittersweet Contender",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Grapefruits have a unique flavor profile, combining bitterness with a touch of sweetness. They are an acquired taste for some but highly prized for their health benefits.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Nutritional Benefits:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "High in Antioxidants",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Supports Weight Loss",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Promotes Healthy Skin",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "blockquote",
-	// 			children: [
-	// 				{
-	// 					type: "paragraph",
-	// 					children: [
-	// 						{
-	// 							text: "Did you know?\nGrapefruit can interact with certain medications, so it's important to consult with a doctor if you're on prescription meds.",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Recipe Highlight:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Try a ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "grapefruit salad",
-	// 				},
-	// 				{
-	// 					text: " with avocado, honey, and a sprinkle of sea salt for a refreshing, healthy dish.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "🍊 Mandarins: The Sweet Little Sibling",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Mandarins are small, easy-to-peel, and perfect for snacking. They are less acidic than other citrus fruits, making them a favorite among kids and adults alike.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Quick Facts:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Scientific Name",
-	// 								},
-	// 								{
-	// 									text: ": ",
-	// 								},
-	// 								{
-	// 									text: "Citrus reticulata",
-	// 									italic: true,
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Varieties",
-	// 								},
-	// 								{
-	// 									text: ": Clementines, tangerines, satsumas",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Best Season",
-	// 								},
-	// 								{
-	// 									text: ": Winter",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Did You Know?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Mandarins are one of the oldest cultivated fruits, with origins dating back to ancient China.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Conclusion",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Citrus fruits are a delightful blend of sweet, sour, and sometimes bitter flavors. Whether you prefer the sweetness of oranges or the zing of lemons, there's a citrus fruit for everyone. So next time you're at the grocery store, pick up a few and enjoy the sweet and sour world of citrus!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "yellow",
-	// 			},
+	{
+		title: "The Many Uses of Pomegranates",
+		slug: "uses-pomegranates",
+		dateCreated: "2023-10-15T10:00:00.000Z",
+		dateModified: "2024-11-14T20:50:31.227Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 0,
+		excerpt:
+			"Discover the many culinary and medicinal uses of pomegranates, including how to juice them and use their seeds in recipes.",
+		featured_image:
+			"https://cdn.pixabay.com/photo/2023/09/20/12/12/ai-generated-8264735_960_720.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Pomegranates aren't just a fall treat; they're versatile, health-boosting, and add vibrancy to food, skincare, and even home decor. Let's explore a few ways to enjoy this jewel-toned fruit.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Culinary Uses",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Juices and Smoothies",
+					},
+					{
+						text: "\nA refreshing antioxidant boost, pomegranate juice is perfect on its own, in smoothies, or cocktails.",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Salads and Garnishes",
+					},
+					{
+						text: "\nSprinkle pomegranate seeds over salads for a hint of sweetness, crunch, and color. They pair beautifully with greens, nuts, and cheese—try a mix with kale and feta.",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					intent: "error",
+					content: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Cooking with Pomegranate Molasses",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Tangy and thick, pomegranate molasses is perfect for marinades and glazes, adding depth to dishes like roasted veggies, chicken, or lamb.",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "callout",
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Health and Wellness Benefits",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "",
+					color: "lightgray",
+					width: 0,
+					border: 0,
+					padding: 1,
+					imageSrc:
+						"https://media.giphy.com/media/3osBLwx8M3B8e4cyk0/giphy.gif?cid=790b761105bfik4fopoesc8cjtyjb9icdpkva3x8xe27jyzi&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "layout",
+				layout: [1, 1],
+				children: [
+					{
+						type: "layout-area",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Packed with Antioxidants",
+									},
+									{
+										text: "\nPomegranates are high in vitamin C and antioxidants, which fight inflammation and boost immunity, making them a great addition to daily smoothies or snacks.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "layout-area",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Skin Care",
+									},
+									{
+										text: "\nRich in antioxidants, pomegranate seed oil is a popular addition to skincare for its ability to repair skin and reduce fine lines.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "black",
+					content: null,
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					backgroundColor: "peachpuff",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "heading",
+								level: 4,
+								children: [
+									{
+										text: "Home and Decorative Uses",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Natural Centerpiece",
+									},
+									{
+										text: "\nPomegranates' vibrant color makes them a stunning, natural table centerpiece, especially when mixed with candles or fall decor.",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "DIY Dried Garland",
+									},
+									{
+										text: "\nCreate a festive pomegranate and eucalyptus garland for an aromatic, seasonal touch in your home.",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "section",
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Fun DIY Ideas",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Natural Dye",
+					},
+					{
+						text: "\nBoil pomegranate rinds to create a soft yellow dye, perfect for fabric.",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Pomegranate Stamps",
+					},
+					{
+						text: "\nCut a pomegranate in half, dip in paint, and stamp onto paper or fabric for a fun, geometric print.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Final Thoughts",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "From health benefits to creative DIYs, pomegranates bring so much more to the table than meets the eye. Next time, think beyond the snack!",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": []
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
+	},
+	{
+		title: "The World of Tropical Fruits",
+		slug: "tropical-fruits",
+		dateCreated: "2023-12-05T16:45:00.000Z",
+		dateModified: "2024-11-04T20:38:34.875Z",
+		status: "PUBLIC",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Explore the amazing diversity of tropical fruits, including mangos, pineapples, and papayas, and learn about their health benefits and culinary uses.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118261/cutefruit/banners/cf-banner-4_a1mzp8.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "When you think of tropical fruits, images of vibrant colors, unique shapes, and tantalizing tastes may come to mind. These fruits not only bring a splash of color and flavor to our plates but are also packed with nutrients that contribute to a healthier lifestyle. Let's dive into the world of tropical fruits and discover some of the most exotic varieties out there!",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Why Tropical Fruits?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Tropical fruits often have:",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "High water content",
+									},
+									{
+										text: " – Great for hydration!",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Rich antioxidants",
+									},
+									{
+										text: " – Boosts immunity.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Unique flavors",
+									},
+									{
+										text: " – From sweet to sour, tropical fruits cover all taste profiles.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Whether you’re sipping on a smoothie or adding them to a salad, these fruits add a refreshing touch to any meal.",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "",
+					color: "lightgray",
+					width: 0,
+					border: 0,
+					padding: 1,
+					imageSrc:
+						"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3hjeG05Z25tbDd1cnpsZDlkcjh6bzNxOXNlaGE0aXZobTlnMXlzbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l378yCCaMVfzb60HS/giphy.gif",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Popular Tropical Fruits",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Here are some of the most popular tropical fruits and why they're worth trying!",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "1. ",
+					},
+					{
+						bold: true,
+						text: "Mango",
+					},
+					{
+						text: " ",
+					},
+					{
+						text: "(Mangifera indica)",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": Sweet, with hints of floral and citrus.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Nutrition",
+									},
+									{
+										text: ": High in Vitamin C, Vitamin A, and fiber.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fun Fact",
+									},
+									{
+										text: ': Known as the "king of fruits" in many parts of Asia!',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "blockquote",
+				children: [
+					{
+						type: "paragraph",
+						children: [
+							{
+								text: '"The mango\'s unique sweetness and versatility make it a top choice for fruit lovers worldwide."',
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "2. ",
+					},
+					{
+						bold: true,
+						text: "Pineapple",
+					},
+					{
+						text: " ",
+					},
+					{
+						text: "(Ananas comosus)",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": A blend of sweet and tangy.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Nutrition",
+									},
+									{
+										text: ": Loaded with bromelain, an enzyme that aids digestion.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Did you know?",
+									},
+									{
+										text: " Pineapples take up to 2 years to mature!",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Recipe Idea:",
+					},
+					{
+						text: "\nTry grilling pineapple slices for a delicious smoky flavor. Perfect as a side dish or dessert!",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "3. ",
+					},
+					{
+						bold: true,
+						text: "Dragon Fruit",
+					},
+					{
+						text: " ",
+					},
+					{
+						text: "(Hylocereus undatus)",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Appearance",
+									},
+									{
+										text: ": Bright pink or yellow skin with green scales.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": Mildly sweet with a kiwi-like texture.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Health Benefits",
+									},
+									{
+										text: ": Rich in antioxidants and Vitamin C.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Tip: Scoop out the flesh and use it in a smoothie bowl for a beautiful breakfast!",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "4. ",
+					},
+					{
+						bold: true,
+						text: "Papaya",
+					},
+					{
+						text: " ",
+					},
+					{
+						text: "(Carica papaya)",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": Soft, buttery texture with a mild sweetness.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Nutritional Highlight",
+									},
+									{
+										text: ": Contains the enzyme papain, which helps in protein digestion.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Quick Tip",
+									},
+									{
+										text: ": Add a squeeze of lime juice to enhance its flavor.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Lesser-Known Tropical Fruits",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "While mangoes and pineapples are well-known, there are other tropical gems to explore:",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						bold: true,
+						text: "Rambutan",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Looks",
+									},
+									{
+										text: ": Red and hairy!",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": Sweet and juicy, similar to lychee.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fun Fact",
+									},
+									{
+										text: ": Despite its intimidating appearance, the rambutan is a favorite in Southeast Asia.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						bold: true,
+						text: "Mangosteen",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Taste",
+									},
+									{
+										text: ": A perfect balance of sweet and sour.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Nutrition",
+									},
+									{
+										text: ": High in xanthones, known for their antioxidant properties.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Note",
+									},
+									{
+										text: ": Mangosteen is known as the “queen of fruits” and is often paired with mango, the king.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Tips for Buying and Storing Tropical Fruits",
+					},
+				],
+			},
+			{
+				type: "ordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Buy fresh",
+									},
+									{
+										text: " – Check for firmness and aroma.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Avoid bruises",
+									},
+									{
+										text: " – Look for intact skins.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Store properly",
+									},
+									{
+										text: " – Some tropical fruits, like bananas and pineapples, ripen best at room temperature.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "blockquote",
+				children: [
+					{
+						type: "paragraph",
+						children: [
+							{
+								text: "Pro Tip:",
+								italic: true,
+							},
+							{
+								text: " Many tropical fruits can be frozen. Slice and freeze for smoothies or desserts!",
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Conclusion",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "The world of tropical fruits is a vibrant adventure for your taste buds and your health. From juicy mangoes to nutrient-rich dragon fruits, each variety brings its unique benefits and flavors. So, the next time you’re at the market, why not try something new?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Enjoy the taste of the tropics, one bite at a time!",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "The Sweet and Sour World of Citrus Fruits",
+		slug: "sweet-sour-citrus-fruits",
+		dateCreated: "2023-04-17T14:00:00.000Z",
+		dateModified: "2024-08-26T16:56:52.752Z",
+		status: "PUBLIC",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Discover the delicious and tangy world of citrus fruits, from lemons and limes to oranges and grapefruits.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118260/cutefruit/banners/cf-banner-15_w0csbb.jpg",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Citrus fruits are a vibrant family of fruits known for their refreshing flavors and nutritional benefits. From the tangy taste of lemons to the sweetness of oranges, these fruits add a burst of flavor to our daily lives. In this post, we'll explore some of the most popular citrus fruits, their unique characteristics, and their surprising uses.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "🍊 Oranges: The All-Time Favorite",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "",
+					color: "lightgray",
+					width: 0,
+					border: 0,
+					padding: 1,
+					imageSrc:
+						"https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_600/ncom/en_US/games/switch/p/pikmin-3-deluxe-switch/description-image",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Oranges are perhaps the most well-known citrus fruit. Not only are they delicious, but they are also packed with vitamin C. Here's a quick overview:",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Scientific Name",
+									},
+									{
+										text: ": ",
+									},
+									{
+										text: "Citrus sinensis",
+										italic: true,
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Flavor",
+									},
+									{
+										text: ": Sweet, with a hint of tartness",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Uses",
+									},
+									{
+										text: ": Juice, salads, desserts",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "blockquote",
+				children: [
+					{
+						type: "paragraph",
+						children: [
+							{
+								text: '"An orange a day keeps the doctor away."\n— A twist on the classic saying',
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Oranges are incredibly versatile. You can enjoy them as a snack, squeeze them into juice, or even use their zest to add flavor to baked goods.",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					intent: "success",
+					content: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Fun Fact: ",
+									},
+									{
+										text: "Oranges are actually a hybrid of pomelo and mandarin!",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "callout",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "🍋 Lemons: The Zesty Powerhouse",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "",
+					color: "lightgray",
+					width: 0,
+					border: 0,
+					padding: 1,
+					imageSrc:
+						"https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_lpad/b_white/f_auto/q_auto/dpr_1.5/c_scale,w_700/ncom/software/switch/70010000005302/a6260af9456f2e4a87b5b3e186678cf2780a3f367ba968d790ac3918e5e4b636",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Lemons are known for their sharp, tangy flavor. They are a kitchen staple for their ability to brighten up any dish.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Why We Love Lemons:",
+					},
+				],
+			},
+			{
+				type: "ordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Rich in Vitamin C",
+									},
+									{
+										text: ": Boosts the immune system",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Detoxifying",
+									},
+									{
+										text: ": Great for cleansing the body",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Flavor Enhancer",
+									},
+									{
+										text: ": A squeeze of lemon can elevate the taste of many dishes",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Tip",
+					},
+					{
+						text: ":\nAdd a slice of lemon to your water for a refreshing twist!",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Lemons are not just for eating—they're also great for cleaning! The acidity of lemon juice makes it a natural disinfectant.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "🍈 Grapefruits: The Bittersweet Contender",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Grapefruits have a unique flavor profile, combining bitterness with a touch of sweetness. They are an acquired taste for some but highly prized for their health benefits.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Nutritional Benefits:",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "High in Antioxidants",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Supports Weight Loss",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Promotes Healthy Skin",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "blockquote",
+				children: [
+					{
+						type: "paragraph",
+						children: [
+							{
+								text: "Did you know?\nGrapefruit can interact with certain medications, so it's important to consult with a doctor if you're on prescription meds.",
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Recipe Highlight:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Try a ",
+					},
+					{
+						bold: true,
+						text: "grapefruit salad",
+					},
+					{
+						text: " with avocado, honey, and a sprinkle of sea salt for a refreshing, healthy dish.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "🍊 Mandarins: The Sweet Little Sibling",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Mandarins are small, easy-to-peel, and perfect for snacking. They are less acidic than other citrus fruits, making them a favorite among kids and adults alike.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Quick Facts:",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Scientific Name",
+									},
+									{
+										text: ": ",
+									},
+									{
+										text: "Citrus reticulata",
+										italic: true,
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Varieties",
+									},
+									{
+										text: ": Clementines, tangerines, satsumas",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Best Season",
+									},
+									{
+										text: ": Winter",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Did You Know?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Mandarins are one of the oldest cultivated fruits, with origins dating back to ancient China.",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Conclusion",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Citrus fruits are a delightful blend of sweet, sour, and sometimes bitter flavors. Whether you prefer the sweetness of oranges or the zing of lemons, there's a citrus fruit for everyone. So next time you're at the grocery store, pick up a few and enjoy the sweet and sour world of citrus!",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
 
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "leaf",
-	// 			},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
 
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "drupes",
-	// 			},
+				{
+					name: "nutrition",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
 
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The Beauty and Benefits of Dragon Fruit",
-	// 	slug: "dragon-fruit-beauty-benefits",
-	// 	dateCreated: "2024-01-12T09:15:00.000Z",
-	// 	dateModified: "2024-11-14T20:48:53.471Z",
-	// 	status: "PUBLIC",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Discover the unique appearance and nutritional benefits of dragon fruit, also known as pitaya, and learn how to incorporate it into your diet.",
-	// 	featured_image:
-	// 		"https://cdn.pixabay.com/photo/2024/07/03/09/23/ai-generated-8869297_960_720.jpg",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "The Beauty and Benefits of Dragon Fruit",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Dragon fruit, also known as pitaya, is not just a feast for the eyes; it's also a nutritional powerhouse. In this post, we'll explore the beauty and myriad benefits of this exotic fruit.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "What is Dragon Fruit?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "![Dragon Fruit](https://example.com/dragon-fruit.jpg)\n",
-	// 				},
-	// 				{
-	// 					text: "The vibrant exterior of dragon fruit makes it a standout in any fruit bowl.",
-	// 					italic: true,
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Dragon fruit comes from several different cactus species, predominantly the ",
-	// 				},
-	// 				{
-	// 					text: "Hylocereus",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: " and ",
-	// 				},
-	// 				{
-	// 					text: "Selenicereus",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: " varieties. Its unique appearance—bright pink or yellow skin with green-tipped scales—makes it a favorite among food lovers and photographers alike.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Nutritional Profile",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Dragon fruit is low in calories but packed with nutrients. Here’s a quick breakdown of its nutritional benefits:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "\n| Protein            | 1g               |\n| Fat                | 0.1g             |\n| Fiber              | 3g               |\n| Vitamin C          | 5% DV            |\n| Calcium            | 1% DV            |\n| Iron               | 4% DV            |",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				rows: [
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Calories",
-	// 							},
-	// 							{
-	// 								text: "60",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Carbohydrates",
-	// 							},
-	// 							{
-	// 								text: "13g",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Protein",
-	// 							},
-	// 							{
-	// 								text: "1g",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Fat",
-	// 							},
-	// 							{
-	// 								text: "0.1g",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Fiber",
-	// 							},
-	// 							{
-	// 								text: "3g",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Vitamin C",
-	// 							},
-	// 							{
-	// 								text: "5% DV",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Calcium",
-	// 							},
-	// 							{
-	// 								text: "1% DV",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Iron",
-	// 							},
-	// 							{
-	// 								text: "4% DV",
-	// 							},
-	// 						],
-	// 					},
-	// 				],
-	// 				caption: "",
-	// 				headers: [
-	// 					{
-	// 						text: "Nutrient",
-	// 					},
-	// 					{
-	// 						text: "Amount per 100g",
-	// 					},
-	// 				],
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "table",
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Health Benefits",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "ordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Rich in Antioxidants",
-	// 								},
-	// 								{
-	// 									text: "\nDragon fruit is loaded with antioxidants, such as vitamin C and flavonoids, which help combat oxidative stress in the body.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Supports Digestive Health",
-	// 								},
-	// 								{
-	// 									text: "\nThe high fiber content aids digestion and can help prevent constipation.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Boosts Immune System",
-	// 								},
-	// 								{
-	// 									text: "\nWith its high vitamin C content, dragon fruit can strengthen your immune system, making you less susceptible to illness.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Promotes Healthy Skin",
-	// 								},
-	// 								{
-	// 									text: "\nThe antioxidants and vitamin C in dragon fruit can contribute to glowing skin and help reduce signs of aging.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "May Aid Weight Loss",
-	// 								},
-	// 								{
-	// 									text: "\nLow in calories and high in fiber, dragon fruit can help you feel fuller for longer, making it a great addition to a weight loss diet.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "How to Enjoy Dragon Fruit",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Dragon fruit can be enjoyed in various ways:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Raw",
-	// 								},
-	// 								{
-	// 									text: ": Simply cut it in half and scoop out the flesh with a spoon.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Smoothies",
-	// 								},
-	// 								{
-	// 									text: ": Blend it with other fruits for a refreshing drink.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Salads",
-	// 								},
-	// 								{
-	// 									text: ": Add it to fruit salads for a pop of color and flavor.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Desserts",
-	// 								},
-	// 								{
-	// 									text: ": Use it in sorbets or as a topping for yogurt.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Conclusion",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Dragon fruit is not only visually stunning but also packed with health benefits. Incorporating it into your diet can provide essential nutrients and contribute to overall well-being. So why not add a little color to your plate with this exotic fruit?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Have you tried dragon fruit? Share your favorite ways to enjoy it in the comments below!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "References",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "",
-	// 								},
-	// 								{
-	// 									href: "https://example.com/nutrition",
-	// 									type: "link",
-	// 									children: [
-	// 										{
-	// 											text: "Nutrition Data",
-	// 										},
-	// 									],
-	// 								},
-	// 								{
-	// 									text: "",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "",
-	// 								},
-	// 								{
-	// 									href: "https://example.com/health-benefits",
-	// 									type: "link",
-	// 									children: [
-	// 										{
-	// 											text: "Health Benefits of Dragon Fruit",
-	// 										},
-	// 									],
-	// 								},
-	// 								{
-	// 									text: "",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
+				{
+					name: "citrus",
+				},
+			],
+		},
+	},
+	{
+		title: "The Beauty and Benefits of Dragon Fruit",
+		slug: "dragon-fruit-beauty-benefits",
+		dateCreated: "2024-01-12T09:15:00.000Z",
+		dateModified: "2024-11-14T20:48:53.471Z",
+		status: "PUBLIC",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Discover the unique appearance and nutritional benefits of dragon fruit, also known as pitaya, and learn how to incorporate it into your diet.",
+		featured_image:
+			"https://cdn.pixabay.com/photo/2024/07/03/09/23/ai-generated-8869297_960_720.jpg",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "The Beauty and Benefits of Dragon Fruit",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Dragon fruit, also known as pitaya, is not just a feast for the eyes; it's also a nutritional powerhouse. In this post, we'll explore the beauty and myriad benefits of this exotic fruit.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "What is Dragon Fruit?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "![Dragon Fruit](https://example.com/dragon-fruit.jpg)\n",
+					},
+					{
+						text: "The vibrant exterior of dragon fruit makes it a standout in any fruit bowl.",
+						italic: true,
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Dragon fruit comes from several different cactus species, predominantly the ",
+					},
+					{
+						text: "Hylocereus",
+						italic: true,
+					},
+					{
+						text: " and ",
+					},
+					{
+						text: "Selenicereus",
+						italic: true,
+					},
+					{
+						text: " varieties. Its unique appearance—bright pink or yellow skin with green-tipped scales—makes it a favorite among food lovers and photographers alike.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Nutritional Profile",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Dragon fruit is low in calories but packed with nutrients. Here’s a quick breakdown of its nutritional benefits:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "\n| Protein            | 1g               |\n| Fat                | 0.1g             |\n| Fiber              | 3g               |\n| Vitamin C          | 5% DV            |\n| Calcium            | 1% DV            |\n| Iron               | 4% DV            |",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					rows: [
+						{
+							cells: [
+								{
+									text: "Calories",
+								},
+								{
+									text: "60",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Carbohydrates",
+								},
+								{
+									text: "13g",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Protein",
+								},
+								{
+									text: "1g",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Fat",
+								},
+								{
+									text: "0.1g",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Fiber",
+								},
+								{
+									text: "3g",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Vitamin C",
+								},
+								{
+									text: "5% DV",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Calcium",
+								},
+								{
+									text: "1% DV",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Iron",
+								},
+								{
+									text: "4% DV",
+								},
+							],
+						},
+					],
+					caption: "",
+					headers: [
+						{
+							text: "Nutrient",
+						},
+						{
+							text: "Amount per 100g",
+						},
+					],
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "table",
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Health Benefits",
+					},
+				],
+			},
+			{
+				type: "ordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Rich in Antioxidants",
+									},
+									{
+										text: "\nDragon fruit is loaded with antioxidants, such as vitamin C and flavonoids, which help combat oxidative stress in the body.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Supports Digestive Health",
+									},
+									{
+										text: "\nThe high fiber content aids digestion and can help prevent constipation.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Boosts Immune System",
+									},
+									{
+										text: "\nWith its high vitamin C content, dragon fruit can strengthen your immune system, making you less susceptible to illness.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Promotes Healthy Skin",
+									},
+									{
+										text: "\nThe antioxidants and vitamin C in dragon fruit can contribute to glowing skin and help reduce signs of aging.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "May Aid Weight Loss",
+									},
+									{
+										text: "\nLow in calories and high in fiber, dragon fruit can help you feel fuller for longer, making it a great addition to a weight loss diet.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "How to Enjoy Dragon Fruit",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Dragon fruit can be enjoyed in various ways:",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Raw",
+									},
+									{
+										text: ": Simply cut it in half and scoop out the flesh with a spoon.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Smoothies",
+									},
+									{
+										text: ": Blend it with other fruits for a refreshing drink.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Salads",
+									},
+									{
+										text: ": Add it to fruit salads for a pop of color and flavor.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Desserts",
+									},
+									{
+										text: ": Use it in sorbets or as a topping for yogurt.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Conclusion",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Dragon fruit is not only visually stunning but also packed with health benefits. Incorporating it into your diet can provide essential nutrients and contribute to overall well-being. So why not add a little color to your plate with this exotic fruit?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Have you tried dragon fruit? Share your favorite ways to enjoy it in the comments below!",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "References",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "",
+									},
+									{
+										href: "https://example.com/nutrition",
+										type: "link",
+										children: [
+											{
+												text: "Nutrition Data",
+											},
+										],
+									},
+									{
+										text: "",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "",
+									},
+									{
+										href: "https://example.com/health-benefits",
+										type: "link",
+										children: [
+											{
+												text: "Health Benefits of Dragon Fruit",
+											},
+										],
+									},
+									{
+										text: "",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
 
-	// 			{
-	// 				name: "leaf",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "Fruit and Cheese Pairings for a Perfect Charcuterie Board",
-	// 	slug: "fruit-cheese-pairings-charcuterie-board",
-	// 	dateCreated: "2024-02-28T14:00:00.000Z",
-	// 	dateModified: "2024-11-14T20:49:34.746Z",
-	// 	status: "PUBLIC",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Take your charcuterie board to the next level with these delicious fruit and cheese pairings, featuring combinations like figs and goat cheese and apples and cheddar.",
-	// 	featured_image:
-	// 		"https://cdn.pixabay.com/photo/2023/08/19/23/46/ai-generated-8201391_960_720.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Why Pair Fruit and Cheese?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Combining fruit with cheese not only enhances the taste but also adds a pop of color to your board. The sweetness of the fruit can balance the saltiness or creaminess of the cheese, creating a harmonious flavor profile.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Tips for Choosing Fruits and Cheeses",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "ordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Seasonality",
-	// 								},
-	// 								{
-	// 									text: ": Use seasonal fruits for the freshest flavors.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Variety",
-	// 								},
-	// 								{
-	// 									text: ": Incorporate a range of textures and flavors—think creamy, crumbly, sharp, and sweet.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Presentation",
-	// 								},
-	// 								{
-	// 									text: ": Cut fruits into bite-sized pieces for easy serving and enjoyment.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Perfect Pairings",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Here are some delightful fruit and cheese pairings that will impress your guests:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "1. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Brie + Fresh Berries",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cheese",
-	// 								},
-	// 								{
-	// 									text: ": Creamy Brie",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fruit",
-	// 								},
-	// 								{
-	// 									text: ": Strawberries, blueberries, or raspberries",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Why it works",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ": The richness of Brie complements the tartness of fresh berries, making for a light and refreshing pairing.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "2. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Aged Cheddar + Apples",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cheese",
-	// 								},
-	// 								{
-	// 									text: ": Sharp aged cheddar",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fruit",
-	// 								},
-	// 								{
-	// 									text: ": Crisp apples (like Honeycrisp or Granny Smith)",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Why it works",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ": The sharpness of the cheddar enhances the crisp, sweet-tart flavors of the apples, creating a satisfying crunch.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "3. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Goat Cheese + Fig Jam",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cheese",
-	// 								},
-	// 								{
-	// 									text: ": Soft goat cheese",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fruit",
-	// 								},
-	// 								{
-	// 									text: ": Figs or fig jam",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Why it works",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ": The creamy texture of goat cheese combined with the sweetness of figs provides a delightful contrast, perfect for spreading on crackers.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "4. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Gorgonzola + Pears",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cheese",
-	// 								},
-	// 								{
-	// 									text: ": Blue-veined Gorgonzola",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fruit",
-	// 								},
-	// 								{
-	// 									text: ": Sliced ripe pears",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Why it works",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ": The strong, pungent flavor of Gorgonzola pairs beautifully with the sweet, juicy pears, creating a rich flavor experience.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "5. ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Manchego + Quince Paste",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Cheese",
-	// 								},
-	// 								{
-	// 									text: ": Manchego",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Fruit",
-	// 								},
-	// 								{
-	// 									text: ": Quince paste or slices",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Why it works",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ": The nutty, buttery flavor of Manchego is perfectly complemented by the sweet, floral notes of quince.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Additional Pairing Ideas",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Havarti + Grapes",
-	// 								},
-	// 								{
-	// 									text: ": The creamy texture of Havarti goes well with juicy grapes.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Parmesan + Dried Apricots",
-	// 								},
-	// 								{
-	// 									text: ": The salty, nutty flavors of Parmesan contrast with the sweetness of dried apricots.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Feta + Watermelon",
-	// 								},
-	// 								{
-	// 									text: ": The briny flavor of feta is enhanced by the sweetness of watermelon, making it a perfect summer combo.",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "Final Thoughts",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "When building your charcuterie board, remember that variety is key. Mixing different cheeses and fruits not only enhances the visual appeal but also ensures that there’s something for everyone to enjoy. Experiment with these pairings and find your favorite combinations!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Share Your Board!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "What are your favorite fruit and cheese pairings? Share your ideas in the comments below, and let’s inspire each other for our next charcuterie board creation!",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Happy pairing! 🍇🧀",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "blue",
-	// 			},
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "white",
-	// 			},
-	// 			{
-	// 				name: "black",
-	// 			},
-	// 			{
-	// 				name: "green",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "leaf",
-	// 			},
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "pomes",
-	// 			},
-	// 			{
-	// 				name: "drupes",
-	// 			},
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 			{
-	// 				name: "melons",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The Wonderful World of Apples",
-	// 	slug: "wonderful-world-apples",
-	// 	dateCreated: "2023-08-22T09:15:00.000Z",
-	// 	dateModified: "2023-08-22T09:15:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Explore the diverse world of apples, from sweet and crisp varieties like Honeycrisp and Pink Lady to tart and tangy options like Granny Smith and Braeburn.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-9_kybrry.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
+				{
+					name: "leaf",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "Fruit and Cheese Pairings for a Perfect Charcuterie Board",
+		slug: "fruit-cheese-pairings-charcuterie-board",
+		dateCreated: "2024-02-28T14:00:00.000Z",
+		dateModified: "2024-11-14T20:49:34.746Z",
+		status: "PUBLIC",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Take your charcuterie board to the next level with these delicious fruit and cheese pairings, featuring combinations like figs and goat cheese and apples and cheddar.",
+		featured_image:
+			"https://cdn.pixabay.com/photo/2023/08/19/23/46/ai-generated-8201391_960_720.png",
+		featured_video: "",
+		content: [
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Why Pair Fruit and Cheese?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Combining fruit with cheese not only enhances the taste but also adds a pop of color to your board. The sweetness of the fruit can balance the saltiness or creaminess of the cheese, creating a harmonious flavor profile.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Tips for Choosing Fruits and Cheeses",
+					},
+				],
+			},
+			{
+				type: "ordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Seasonality",
+									},
+									{
+										text: ": Use seasonal fruits for the freshest flavors.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Variety",
+									},
+									{
+										text: ": Incorporate a range of textures and flavors—think creamy, crumbly, sharp, and sweet.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Presentation",
+									},
+									{
+										text: ": Cut fruits into bite-sized pieces for easy serving and enjoyment.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Perfect Pairings",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Here are some delightful fruit and cheese pairings that will impress your guests:",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "1. ",
+					},
+					{
+						bold: true,
+						text: "Brie + Fresh Berries",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Cheese",
+									},
+									{
+										text: ": Creamy Brie",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fruit",
+									},
+									{
+										text: ": Strawberries, blueberries, or raspberries",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Why it works",
+						italic: true,
+					},
+					{
+						text: ": The richness of Brie complements the tartness of fresh berries, making for a light and refreshing pairing.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "2. ",
+					},
+					{
+						bold: true,
+						text: "Aged Cheddar + Apples",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Cheese",
+									},
+									{
+										text: ": Sharp aged cheddar",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fruit",
+									},
+									{
+										text: ": Crisp apples (like Honeycrisp or Granny Smith)",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Why it works",
+						italic: true,
+					},
+					{
+						text: ": The sharpness of the cheddar enhances the crisp, sweet-tart flavors of the apples, creating a satisfying crunch.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "3. ",
+					},
+					{
+						bold: true,
+						text: "Goat Cheese + Fig Jam",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Cheese",
+									},
+									{
+										text: ": Soft goat cheese",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fruit",
+									},
+									{
+										text: ": Figs or fig jam",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Why it works",
+						italic: true,
+					},
+					{
+						text: ": The creamy texture of goat cheese combined with the sweetness of figs provides a delightful contrast, perfect for spreading on crackers.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "4. ",
+					},
+					{
+						bold: true,
+						text: "Gorgonzola + Pears",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Cheese",
+									},
+									{
+										text: ": Blue-veined Gorgonzola",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fruit",
+									},
+									{
+										text: ": Sliced ripe pears",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Why it works",
+						italic: true,
+					},
+					{
+						text: ": The strong, pungent flavor of Gorgonzola pairs beautifully with the sweet, juicy pears, creating a rich flavor experience.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "5. ",
+					},
+					{
+						bold: true,
+						text: "Manchego + Quince Paste",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Cheese",
+									},
+									{
+										text: ": Manchego",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Fruit",
+									},
+									{
+										text: ": Quince paste or slices",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Why it works",
+						italic: true,
+					},
+					{
+						text: ": The nutty, buttery flavor of Manchego is perfectly complemented by the sweet, floral notes of quince.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Additional Pairing Ideas",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Havarti + Grapes",
+									},
+									{
+										text: ": The creamy texture of Havarti goes well with juicy grapes.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Parmesan + Dried Apricots",
+									},
+									{
+										text: ": The salty, nutty flavors of Parmesan contrast with the sweetness of dried apricots.",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										bold: true,
+										text: "Feta + Watermelon",
+									},
+									{
+										text: ": The briny flavor of feta is enhanced by the sweetness of watermelon, making it a perfect summer combo.",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "Final Thoughts",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "When building your charcuterie board, remember that variety is key. Mixing different cheeses and fruits not only enhances the visual appeal but also ensures that there’s something for everyone to enjoy. Experiment with these pairings and find your favorite combinations!",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Share Your Board!",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "What are your favorite fruit and cheese pairings? Share your ideas in the comments below, and let’s inspire each other for our next charcuterie board creation!",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Happy pairing! 🍇🧀",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "The Wonderful World of Apples",
+		slug: "wonderful-world-apples",
+		dateCreated: "2023-08-22T09:15:00.000Z",
+		dateModified: "2023-08-22T09:15:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 0,
+		excerpt:
+			"Explore the diverse world of apples, from sweet and crisp varieties like Honeycrisp and Pink Lady to tart and tangy options like Granny Smith and Braeburn.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-9_kybrry.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
 
-	// 			{
-	// 				name: "green",
-	// 			},
+				{
+					name: "green",
+				},
 
-	// 			{
-	// 				name: "leaf",
-	// 			},
+				{
+					name: "leaf",
+				},
 
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "pomes",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "Fruity Suprise",
-	// 	slug: "fruity-suprise",
-	// 	dateCreated: "2022-08-24T14:00:00.000Z",
-	// 	dateModified: "2022-08-24T14:00:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"A delightful suprise in every box. Get to know your fruity friends.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118260/cutefruit/banners/cf-banner-16_znh0zo.jpg",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "blue",
-	// 			},
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "white",
-	// 			},
-	// 			{
-	// 				name: "black",
-	// 			},
-	// 			{
-	// 				name: "green",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "leaf",
-	// 			},
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "pomes",
-	// 			},
-	// 			{
-	// 				name: "drupes",
-	// 			},
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 			{
-	// 				name: "melons",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "Fruit Smoothies: A Healthy and Delicious Option",
-	// 	slug: "fruit-smoothies-healthy-delicious",
-	// 	dateCreated: "2023-07-10T16:45:00.000Z",
-	// 	dateModified: "2023-07-10T16:45:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Find out how to make nutritious and tasty fruit smoothies using a variety of fruits, such as bananas, strawberries, and kiwis.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-3_uuufb0.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "blue",
-	// 			},
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "drupes",
-	// 			},
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 			{
-	// 				name: "melons",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The World of Exotic Fruits",
-	// 	slug: "exotic-fruits",
-	// 	dateCreated: "2023-06-15T12:30:00.000Z",
-	// 	dateModified: "2023-06-15T12:30:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 1,
-	// 	excerpt:
-	// 		"Take a journey to discover some of the most unique and exotic fruits from around the world, including jackfruit, durian, and mangosteen.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-6_nsc9sd.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "blue",
-	// 			},
-	// 			{
-	// 				name: "yellow",
-	// 			},
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "white",
-	// 			},
-	// 			{
-	// 				name: "black",
-	// 			},
-	// 			{
-	// 				name: "green",
-	// 			},
-	// 			{
-	// 				name: "orange",
-	// 			},
-	// 			{
-	// 				name: "leaf",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "drupes",
-	// 			},
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 			{
-	// 				name: "citrus",
-	// 			},
-	// 			{
-	// 				name: "tropical",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "Block Test",
-	// 	slug: "block-test",
-	// 	dateCreated: "2024-11-06T06:00:00.000Z",
-	// 	dateModified: "2024-11-15T00:27:17.569Z",
-	// 	status: "PUBLIC",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Testing custom block components that users can write into their rich text editor",
-	// 	featured_image: "",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "A List of Example Blocks Usable ",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "The paragraph block is the most basic text based block. the most simple yet effect way to convey a message.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Block List",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Here is a list of blocks denoted by their header",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Block Quote ",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "blockquote",
-	// 			children: [
-	// 				{
-	// 					type: "paragraph",
-	// 					children: [
-	// 						{
-	// 							text: 'Block quote. "I can say anything here" - myself',
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "List",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "unordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "a ",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "bullet ",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "list",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "is ",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "fun",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "ordered-list",
-	// 			children: [
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "orderd",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "lists",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "have ",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 				{
-	// 					type: "list-item",
-	// 					children: [
-	// 						{
-	// 							type: "list-item-content",
-	// 							children: [
-	// 								{
-	// 									text: "numbers",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Button",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				link: "/blog/block-test",
-	// 				color: "var(--c-accent)",
-	// 				label: "Button: Click Me",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "buttonlink",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Callout",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				intent: "info",
-	// 				content: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Callout",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Important text + icon that can contain editable rich text inside",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "callout",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				intent: "warning",
-	// 				content: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Callouts can have different icons and colors",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "callout",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Card",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_primary",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Card",
-	// 								},
-	// 								{
-	// 									text: " that I can put content inside of. Super fun and cool",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_plain",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Plain card theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_secondary",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Secondary ",
-	// 								},
-	// 								{
-	// 									text: "color theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_tertiary",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Tertiary ",
-	// 								},
-	// 								{
-	// 									text: "color theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_accent",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									bold: true,
-	// 									text: "Accent: ",
-	// 								},
-	// 								{
-	// 									text: "color theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_transparent",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Transparent color theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				width: "initial",
-	// 				margin: "",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_reverse_theme",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Inverted Color theme",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "card",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Carousel",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				items: [
-	// 					{
-	// 						title: "Orange",
-	// 						imageSrc:
-	// 							"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDZ3Nnl0dWR5bWVlazNmYXV2bm50cnRqeHo1Znh1dmd3c242MnpsaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4FGEbli278gPBPYA/giphy.gif",
-	// 					},
-	// 					{
-	// 						title: "Basket",
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGdmNjJ4MWgwbmRzb2RvdXZ4NHFsazA2Z2ZwdHIyMTR4MzhkYzZkMSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lcv7NCKzJJ2XC/giphy.gif",
-	// 					},
-	// 					{
-	// 						title: "Raspberry",
-	// 						imageSrc:
-	// 							"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZxdmxtandnZTExYjBtanZpaTlhd2lxeTh3amg3eGRuMmh6Z2JyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPd5iphX59nQTjq/giphy.gif",
-	// 					},
-	// 				],
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "carousel",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Codeblock",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "code",
-	// 			children: [
-	// 				{
-	// 					text: ".carouselItem {\n  scroll-snap-align: center;\n  scroll-snap-stop: always;\n  padding: 8px;\n  box-sizing: border-box;\n  border-radius: 6px;\n  background: var(--c-txt-bg);\n  margin: 0;\n}",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Contact Form",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "green",
-	// 				header: "Reusable Contact Form",
-	// 				isDate: true,
-	// 				isName: true,
-	// 				isNotes: true,
-	// 				isPhone: true,
-	// 				imageSrc: "",
-	// 				buttonLabel: "Submit",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "contactform",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Gallery",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					bold: true,
-	// 					text: "Grid layout",
-	// 				},
-	// 				{
-	// 					text: ". Cropping images to match framing with ",
-	// 				},
-	// 				{
-	// 					code: true,
-	// 					text: "cover",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				gap: 3,
-	// 				items: [
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/Iu0WVXXIMTOD1HtzIP/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/29s9fNQFkfLfXmGk7U/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/3o72F4nTnhd0fxsVhK/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/12g8vXmxMuA3wnIdjI/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/LkL4dGbQId8ezdHEoX/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/j5i2tzUmDA2OFeMJVL/giphy.gif?cid=ecf05e47xt1ttz5e5gl49jzu10rhe9tunoiucp6lxzrne5fu&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 				],
-	// 				layout: "grid",
-	// 				columns: 3,
-	// 				objectFit: "cover",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "imagegallery",
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "or ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Masonry layout",
-	// 				},
-	// 				{
-	// 					text: ". Images may look uneven because they are not cropped but instead using ",
-	// 				},
-	// 				{
-	// 					code: true,
-	// 					text: "contain",
-	// 				},
-	// 				{
-	// 					text: " property",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				gap: 3,
-	// 				items: [
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/5xtDarztN4Auy4RtLws/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/29s9fNQFkfLfXmGk7U/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/cJtzdZtXStihTq8rQe/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/3o72F4nTnhd0fxsVhK/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/TlK63EwPt59cg4UrUsM/giphy.gif?cid=ecf05e47f1zsle4qrm8phcm5p9ge1obr1nn8dry0ac81leg5&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 					{
-	// 						alt: "",
-	// 						src: "https://media.giphy.com/media/j5i2tzUmDA2OFeMJVL/giphy.gif?cid=ecf05e47xt1ttz5e5gl49jzu10rhe9tunoiucp6lxzrne5fu&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						caption: "",
-	// 					},
-	// 				],
-	// 				layout: "masonry",
-	// 				columns: 2,
-	// 				objectFit: "contain",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "imagegallery",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Hero",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "white",
-	// 				caption: {
-	// 					value: null,
-	// 					discriminant: true,
-	// 				},
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/LkL4dGbQId8ezdHEoX/giphy.gif?cid=ecf05e4794pkvkurocd23t49e541340v5ljefr9ow0k813nw&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Sunset Orange Dream",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["caption", "value"],
-	// 				},
-	// 			],
-	// 			component: "hero",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "IFrame Embed",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				src: "https://www.williamusic.com/",
-	// 				color: "transparent",
-	// 				height: "800px",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "iframe",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Image",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "3 strawberries",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 0,
-	// 				padding: 1,
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/TTtcRVnXxriHyjzXG4/giphy.gif?cid=ecf05e478bsk2zcet6p4jk8igdbbmpf3x0fwlro437ekobkc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				alt: "",
-	// 				color: "lightgray",
-	// 				width: 0,
-	// 				border: 1,
-	// 				padding: 0,
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/Kds38Lhus8D3YxkIAz/giphy.gif?cid=ecf05e4762c79gufeumgz4ikoj3byy7xh0yf7w0eno5m7240&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "image",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Image Link List",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				items: [
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Lemon",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/xT0GqjBCkO9BEiSEOk/giphy.gif?cid=ecf05e4762c79gufeumgz4ikoj3byy7xh0yf7w0eno5m7240&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						imageSize: "250px",
-	// 						buttonLink: "/block-test",
-	// 						buttonLabel: "",
-	// 					},
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Grapes",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/XwZ6aHOx2wwjgPdPkT/giphy.gif?cid=ecf05e47yrw41nionsr9v73xfr1n5k771ehy2lgeyd76glyo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						imageSize: "250px",
-	// 						buttonLink: "/block-test",
-	// 						buttonLabel: "",
-	// 					},
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Watermelon",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/l56r3x5ZRZ2T7fs4tu/giphy.gif?cid=ecf05e47zyy0w7ippnq36hkou8p81p1zwh2vsp36gk3wjpzt&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						imageSize: "250px",
-	// 						buttonLink: "/block-test",
-	// 						buttonLabel: "",
-	// 					},
-	// 				],
-	// 				isLink: true,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Lemons are sour!",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 0, "content"],
-	// 				},
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 1, "content"],
-	// 				},
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 2, "content"],
-	// 				},
-	// 			],
-	// 			component: "imagelinklist",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Info Card",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Putting this card on the back burner. I'd reach for ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Card",
-	// 				},
-	// 				{
-	// 					text: " or ",
-	// 				},
-	// 				{
-	// 					bold: true,
-	// 					text: "Section",
-	// 				},
-	// 				{
-	// 					text: " instead",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "Gainsboro",
-	// 				width: "initial",
-	// 				header: "Head of the Info",
-	// 				content: null,
-	// 				padding: 1,
-	// 				fontSize: "1",
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				buttonLink: "/blog/block-test",
-	// 				buttonText: "",
-	// 				verticleAlign: "start",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "An info card for info needs",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "infocard",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Info Card List",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				items: [
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Oranges",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/buaZzuG1gxjErgc9sD/giphy.gif?cid=ecf05e47hxctk5c91tjp47v2axnfdls8z1oflfx21hofnh05&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						buttonLink: "https://giphy.com/search/oranges",
-	// 						buttonLabel: "",
-	// 					},
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Apple Worm",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/na57DU1C5cqs7SsRxP/giphy.gif?cid=ecf05e47ypr9letu7tqvjj7z8ozy7zrw3ug133c8njx4lz5q&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						buttonLink: "",
-	// 						buttonLabel: "",
-	// 					},
-	// 					{
-	// 						color: "paleblue",
-	// 						header: "Pinapple Cat",
-	// 						content: null,
-	// 						imageSrc:
-	// 							"https://media.giphy.com/media/s6PGeVYNWs6pEs4EQj/giphy.gif?cid=ecf05e47ypr9letu7tqvjj7z8ozy7zrw3ug133c8njx4lz5q&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 						buttonLink: "",
-	// 						buttonLabel: "",
-	// 					},
-	// 				],
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "This card links us to a different page",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 0, "content"],
-	// 				},
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "It's on the inside what counts",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 1, "content"],
-	// 				},
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["items", 2, "content"],
-	// 				},
-	// 			],
-	// 			component: "infocardlist",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Local Video",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				url: "https://assets.tawtaw.site/pvo/2023--PVO_MIX--DJ_William--Millennial_Throwbacks%20snippit%20v2.webm",
-	// 				altText: "DJ Mix clip",
-	// 				autoPlay: false,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "videoLocal",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Media & Text",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				content: null,
-	// 				imageAlt: "glitter strawberry",
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/fD4x1OC7pHnlPdnltm/giphy.gif?cid=ecf05e47mvh9ru91x3hgdxrn9es23iuqy538jwzqdo2vnafo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 				rowReverse: false,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "heading",
-	// 							level: 5,
-	// 							children: [
-	// 								{
-	// 									text: "Side text",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "can help describe a bit more info with a fun graphic",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "mediatext",
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				content: null,
-	// 				imageAlt: "Same photo",
-	// 				imageSrc:
-	// 					"https://media.giphy.com/media/fD4x1OC7pHnlPdnltm/giphy.gif?cid=ecf05e47mvh9ru91x3hgdxrn9es23iuqy538jwzqdo2vnafo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
-	// 				rowReverse: true,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Now I should be on the Right side",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "You can reverse order of text and media without affecting the markdown",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "mediatext",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Posts List",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "gray",
-	// 				header: "Posts!!!",
-	// 				imageSrc:
-	// 					"https://cdn.pixabay.com/photo/2022/07/10/20/15/raspberries-7313700_1280.jpg",
-	// 				categories: [
-	// 					{
-	// 						id: "clzgewmlf000811f4apznlhcs",
-	// 					},
-	// 					{
-	// 						id: "clzgewmlf000611f4btbbaden",
-	// 					},
-	// 				],
-	// 				colorOverlay: "rgba(56, 56, 56, 0.63)",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "postslist",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Quote",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				href: "",
-	// 				content: null,
-	// 				attribution: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "Don't quote me on this",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "Myself",
-	// 						},
-	// 					],
-	// 					propPath: ["attribution"],
-	// 				},
-	// 			],
-	// 			component: "quote",
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				href: "/home",
-	// 				content: null,
-	// 				attribution: null,
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "You can even link a quote and have it open in a new tab",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "Myself",
-	// 						},
-	// 					],
-	// 					propPath: ["attribution"],
-	// 				},
-	// 			],
-	// 			component: "quote",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Section Background",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				content: null,
-	// 				imageSrc:
-	// 					"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-	// 				colorTheme: "bg_c_plain",
-	// 				paddingBlock: "15vh",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-block-prop",
-	// 					children: [
-	// 						{
-	// 							type: "heading",
-	// 							level: 4,
-	// 							children: [
-	// 								{
-	// 									text: "A section that has title",
-	// 								},
-	// 							],
-	// 						},
-	// 						{
-	// 							type: "paragraph",
-	// 							children: [
-	// 								{
-	// 									text: "But can also set a solid color for the background",
-	// 								},
-	// 							],
-	// 						},
-	// 					],
-	// 					propPath: ["content"],
-	// 				},
-	// 			],
-	// 			component: "section",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Social Link Nav",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				color: "gray",
-	// 				github: "https://www.github.com",
-	// 				twitch: "",
-	// 				custom1: "https://www.custom1.com",
-	// 				twitter: "",
-	// 				youtube: "",
-	// 				bandcamp: "https://www.bandcamp.com",
-	// 				facebook: "https://www.facebook.com",
-	// 				linkedin: "",
-	// 				instagram: "https://www.instagram.com",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "sociallinknav",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Table",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				rows: [
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Calories",
-	// 							},
-	// 							{
-	// 								text: "61 kcal ",
-	// 							},
-	// 							{
-	// 								text: "-",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Carbohydrates",
-	// 							},
-	// 							{
-	// 								text: "14.7 g",
-	// 							},
-	// 							{
-	// 								text: "-",
-	// 							},
-	// 						],
-	// 					},
-	// 					{
-	// 						cells: [
-	// 							{
-	// 								text: "Fiber",
-	// 							},
-	// 							{
-	// 								text: "3.0 g   ",
-	// 							},
-	// 							{
-	// 								text: "12%",
-	// 							},
-	// 						],
-	// 					},
-	// 				],
-	// 				caption: "Kiwi Nutrition",
-	// 				headers: [
-	// 					{
-	// 						text: "Nutrient",
-	// 					},
-	// 					{
-	// 						text: "Amount",
-	// 					},
-	// 					{
-	// 						text: "Daily Value % ",
-	// 					},
-	// 				],
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "table",
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Youtube Video",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "component-block",
-	// 			props: {
-	// 				url: "https://www.youtube.com/watch?v=fPWRlmedCbo",
-	// 				altText: "Embedded YouTube video",
-	// 			},
-	// 			children: [
-	// 				{
-	// 					type: "component-inline-prop",
-	// 					children: [
-	// 						{
-	// 							text: "",
-	// 						},
-	// 					],
-	// 				},
-	// 			],
-	// 			component: "youtubeVideo",
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": []
-	// },
-	// {
-	// 	title: "Secrets of the Loom",
-	// 	slug: "secrets-of-the-loom",
-	// 	dateCreated: "2024-11-15T19:39:55.004Z",
-	// 	dateModified: "2024-11-15T19:39:55.004Z",
-	// 	status: "PRIVATE",
-	// 	template: "WITHSIDEBAR",
-	// 	pinned: 0,
-	// 	excerpt:
-	// 		"Fruits are a staple of health-conscious diets, but did you know they hide some surprising secrets? These juicy delights don’t just pack vitamins; they boast unique properties you might not have heard of before. Let’s unravel the loom of fruit benefits.",
-	// 	featured_image: "",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "1. Pineapple: Nature’s Anti-Inflammatory",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Pineapple isn’t just tropical and sweet—it’s rich in bromelain, an enzyme known for reducing inflammation and aiding digestion. It’s even been studied for its potential to accelerate recovery from surgery and intense workouts.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Quick Tip:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Add fresh pineapple to post-workout smoothies for a natural recovery boost.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "2. Blackberries: Brain Boosters in Disguise",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Packed with anthocyanins, blackberries help improve memory and reduce the risk of neurodegenerative diseases. These powerful antioxidants also fight oxidative stress, keeping your mind sharp as you age.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Did You Know?",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Blackberries may enhance communication between neurons, optimizing cognitive functions.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "3. Figs: Your Secret Skin Savior",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Often overlooked, figs are brimming with polyphenols and vitamins that promote collagen production. This makes them a natural ally for radiant skin. Plus, their high calcium content strengthens nails and bones.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "Quick DIY:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Mash fresh figs into a face mask with a touch of honey for a glowing complexion.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "4. Papaya Seeds: Gut Guardians",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "While most people toss papaya seeds, they’re surprisingly nutritious! These tiny seeds have antimicrobial properties and support digestive health by eliminating harmful parasites.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 4,
-	// 			children: [
-	// 				{
-	// 					text: "Fun Fact:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Papaya seeds have a peppery flavor—try them dried and crushed as a spice.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 2,
-	// 			children: [
-	// 				{
-	// 					text: "5. Starfruit: The Hydration Hero",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Low in calories but high in water content, starfruit is excellent for hydration. It also contains ",
-	// 				},
-	// 				{
-	// 					text: "oxalic acid",
-	// 					italic: true,
-	// 				},
-	// 				{
-	// 					text: ", which may help dissolve kidney stones (with doctor approval, of course).",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "divider",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "heading",
-	// 			level: 3,
-	// 			children: [
-	// 				{
-	// 					text: "In Conclusion:",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "The next time you reach for a fruit, think beyond its surface sweetness. These hidden health benefits are nature’s way of weaving wellness into your life.",
-	// 				},
-	// 			],
-	// 		},
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "Which fruit secret surprised you most? Share your thoughts in the comments below!",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "white",
-	// 			},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+			],
+		},
+	},
+	{
+		title: "Fruity Suprise",
+		slug: "fruity-suprise",
+		dateCreated: "2022-08-24T14:00:00.000Z",
+		dateModified: "2022-08-24T14:00:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 0,
+		excerpt:
+			"A delightful suprise in every box. Get to know your fruity friends.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118260/cutefruit/banners/cf-banner-16_znh0zo.jpg",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "pomes",
+				},
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "Fruit Smoothies: A Healthy and Delicious Option",
+		slug: "fruit-smoothies-healthy-delicious",
+		dateCreated: "2023-07-10T16:45:00.000Z",
+		dateModified: "2023-07-10T16:45:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 0,
+		excerpt:
+			"Find out how to make nutritious and tasty fruit smoothies using a variety of fruits, such as bananas, strawberries, and kiwis.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-3_uuufb0.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "melons",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "The World of Exotic Fruits",
+		slug: "exotic-fruits",
+		dateCreated: "2023-06-15T12:30:00.000Z",
+		dateModified: "2023-06-15T12:30:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 1,
+		excerpt:
+			"Take a journey to discover some of the most unique and exotic fruits from around the world, including jackfruit, durian, and mangosteen.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118262/cutefruit/banners/cf-banner-6_nsc9sd.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "blue",
+				},
+				{
+					name: "yellow",
+				},
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
+				{
+					name: "black",
+				},
+				{
+					name: "green",
+				},
+				{
+					name: "orange",
+				},
+				{
+					name: "leaf",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "drupes",
+				},
+				{
+					name: "berries",
+				},
+				{
+					name: "citrus",
+				},
+				{
+					name: "tropical",
+				},
+			],
+		},
+	},
+	{
+		title: "Block Test",
+		slug: "block-test",
+		dateCreated: "2024-11-06T06:00:00.000Z",
+		dateModified: "2024-11-15T00:27:17.569Z",
+		status: "PUBLIC",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Testing custom block components that users can write into their rich text editor",
+		featured_image: "",
+		featured_video: "",
+		content: [
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "A List of Example Blocks Usable ",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "The paragraph block is the most basic text based block. the most simple yet effect way to convey a message.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Block List",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Here is a list of blocks denoted by their header",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Block Quote ",
+					},
+				],
+			},
+			{
+				type: "blockquote",
+				children: [
+					{
+						type: "paragraph",
+						children: [
+							{
+								text: 'Block quote. "I can say anything here" - myself',
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "List",
+					},
+				],
+			},
+			{
+				type: "unordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "a ",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "bullet ",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "list",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "is ",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "fun",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "ordered-list",
+				children: [
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "orderd",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "lists",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "have ",
+									},
+								],
+							},
+						],
+					},
+					{
+						type: "list-item",
+						children: [
+							{
+								type: "list-item-content",
+								children: [
+									{
+										text: "numbers",
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Button",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					link: "/blog/block-test",
+					color: "var(--c-accent)",
+					label: "Button: Click Me",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "buttonlink",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Callout",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					intent: "info",
+					content: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Callout",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Important text + icon that can contain editable rich text inside",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "callout",
+			},
+			{
+				type: "component-block",
+				props: {
+					intent: "warning",
+					content: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Callouts can have different icons and colors",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "callout",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Card",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_primary",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Card",
+									},
+									{
+										text: " that I can put content inside of. Super fun and cool",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_plain",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Plain card theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_secondary",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Secondary ",
+									},
+									{
+										text: "color theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_tertiary",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Tertiary ",
+									},
+									{
+										text: "color theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_accent",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										bold: true,
+										text: "Accent: ",
+									},
+									{
+										text: "color theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_transparent",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Transparent color theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "component-block",
+				props: {
+					width: "initial",
+					margin: "",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_reverse_theme",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Inverted Color theme",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "card",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Carousel",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					items: [
+						{
+							title: "Orange",
+							imageSrc:
+								"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDZ3Nnl0dWR5bWVlazNmYXV2bm50cnRqeHo1Znh1dmd3c242MnpsaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4FGEbli278gPBPYA/giphy.gif",
+						},
+						{
+							title: "Basket",
+							imageSrc:
+								"https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGdmNjJ4MWgwbmRzb2RvdXZ4NHFsazA2Z2ZwdHIyMTR4MzhkYzZkMSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lcv7NCKzJJ2XC/giphy.gif",
+						},
+						{
+							title: "Raspberry",
+							imageSrc:
+								"https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHZxdmxtandnZTExYjBtanZpaTlhd2lxeTh3amg3eGRuMmh6Z2JyeSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPd5iphX59nQTjq/giphy.gif",
+						},
+					],
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "carousel",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Codeblock",
+					},
+				],
+			},
+			{
+				type: "code",
+				children: [
+					{
+						text: ".carouselItem {\n  scroll-snap-align: center;\n  scroll-snap-stop: always;\n  padding: 8px;\n  box-sizing: border-box;\n  border-radius: 6px;\n  background: var(--c-txt-bg);\n  margin: 0;\n}",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Contact Form",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "green",
+					header: "Reusable Contact Form",
+					isDate: true,
+					isName: true,
+					isNotes: true,
+					isPhone: true,
+					imageSrc: "",
+					buttonLabel: "Submit",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "contactform",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Gallery",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						bold: true,
+						text: "Grid layout",
+					},
+					{
+						text: ". Cropping images to match framing with ",
+					},
+					{
+						code: true,
+						text: "cover",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					gap: 3,
+					items: [
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/Iu0WVXXIMTOD1HtzIP/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/29s9fNQFkfLfXmGk7U/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/3o72F4nTnhd0fxsVhK/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/12g8vXmxMuA3wnIdjI/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/LkL4dGbQId8ezdHEoX/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/j5i2tzUmDA2OFeMJVL/giphy.gif?cid=ecf05e47xt1ttz5e5gl49jzu10rhe9tunoiucp6lxzrne5fu&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+					],
+					layout: "grid",
+					columns: 3,
+					objectFit: "cover",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "imagegallery",
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "or ",
+					},
+					{
+						bold: true,
+						text: "Masonry layout",
+					},
+					{
+						text: ". Images may look uneven because they are not cropped but instead using ",
+					},
+					{
+						code: true,
+						text: "contain",
+					},
+					{
+						text: " property",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					gap: 3,
+					items: [
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/5xtDarztN4Auy4RtLws/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/29s9fNQFkfLfXmGk7U/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/cJtzdZtXStihTq8rQe/giphy.gif?cid=790b7611g4yqad5hb2dedetq1hon4njumki26hddy0h1n8li&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/3o72F4nTnhd0fxsVhK/giphy.gif?cid=790b7611cftg0mfmzxy0jsh42bbpoij7fk7vqgao4uoamsfg&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/TlK63EwPt59cg4UrUsM/giphy.gif?cid=ecf05e47f1zsle4qrm8phcm5p9ge1obr1nn8dry0ac81leg5&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+						{
+							alt: "",
+							src: "https://media.giphy.com/media/j5i2tzUmDA2OFeMJVL/giphy.gif?cid=ecf05e47xt1ttz5e5gl49jzu10rhe9tunoiucp6lxzrne5fu&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							caption: "",
+						},
+					],
+					layout: "masonry",
+					columns: 2,
+					objectFit: "contain",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "imagegallery",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Hero",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "white",
+					caption: {
+						value: null,
+						discriminant: true,
+					},
+					imageSrc:
+						"https://media.giphy.com/media/LkL4dGbQId8ezdHEoX/giphy.gif?cid=ecf05e4794pkvkurocd23t49e541340v5ljefr9ow0k813nw&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Sunset Orange Dream",
+									},
+								],
+							},
+						],
+						propPath: ["caption", "value"],
+					},
+				],
+				component: "hero",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "IFrame Embed",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					src: "https://www.williamusic.com/",
+					color: "transparent",
+					height: "800px",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "iframe",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Image",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "3 strawberries",
+					color: "lightgray",
+					width: 0,
+					border: 0,
+					padding: 1,
+					imageSrc:
+						"https://media.giphy.com/media/TTtcRVnXxriHyjzXG4/giphy.gif?cid=ecf05e478bsk2zcet6p4jk8igdbbmpf3x0fwlro437ekobkc&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "component-block",
+				props: {
+					alt: "",
+					color: "lightgray",
+					width: 0,
+					border: 1,
+					padding: 0,
+					imageSrc:
+						"https://media.giphy.com/media/Kds38Lhus8D3YxkIAz/giphy.gif?cid=ecf05e4762c79gufeumgz4ikoj3byy7xh0yf7w0eno5m7240&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "image",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Image Link List",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					items: [
+						{
+							color: "paleblue",
+							header: "Lemon",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/xT0GqjBCkO9BEiSEOk/giphy.gif?cid=ecf05e4762c79gufeumgz4ikoj3byy7xh0yf7w0eno5m7240&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							imageSize: "250px",
+							buttonLink: "/block-test",
+							buttonLabel: "",
+						},
+						{
+							color: "paleblue",
+							header: "Grapes",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/XwZ6aHOx2wwjgPdPkT/giphy.gif?cid=ecf05e47yrw41nionsr9v73xfr1n5k771ehy2lgeyd76glyo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							imageSize: "250px",
+							buttonLink: "/block-test",
+							buttonLabel: "",
+						},
+						{
+							color: "paleblue",
+							header: "Watermelon",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/l56r3x5ZRZ2T7fs4tu/giphy.gif?cid=ecf05e47zyy0w7ippnq36hkou8p81p1zwh2vsp36gk3wjpzt&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							imageSize: "250px",
+							buttonLink: "/block-test",
+							buttonLabel: "",
+						},
+					],
+					isLink: true,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Lemons are sour!",
+									},
+								],
+							},
+						],
+						propPath: ["items", 0, "content"],
+					},
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "",
+									},
+								],
+							},
+						],
+						propPath: ["items", 1, "content"],
+					},
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "",
+									},
+								],
+							},
+						],
+						propPath: ["items", 2, "content"],
+					},
+				],
+				component: "imagelinklist",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Info Card",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Putting this card on the back burner. I'd reach for ",
+					},
+					{
+						bold: true,
+						text: "Card",
+					},
+					{
+						text: " or ",
+					},
+					{
+						bold: true,
+						text: "Section",
+					},
+					{
+						text: " instead",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "Gainsboro",
+					width: "initial",
+					header: "Head of the Info",
+					content: null,
+					padding: 1,
+					fontSize: "1",
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					buttonLink: "/blog/block-test",
+					buttonText: "",
+					verticleAlign: "start",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "An info card for info needs",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "infocard",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Info Card List",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					items: [
+						{
+							color: "paleblue",
+							header: "Oranges",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/buaZzuG1gxjErgc9sD/giphy.gif?cid=ecf05e47hxctk5c91tjp47v2axnfdls8z1oflfx21hofnh05&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							buttonLink: "https://giphy.com/search/oranges",
+							buttonLabel: "",
+						},
+						{
+							color: "paleblue",
+							header: "Apple Worm",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/na57DU1C5cqs7SsRxP/giphy.gif?cid=ecf05e47ypr9letu7tqvjj7z8ozy7zrw3ug133c8njx4lz5q&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							buttonLink: "",
+							buttonLabel: "",
+						},
+						{
+							color: "paleblue",
+							header: "Pinapple Cat",
+							content: null,
+							imageSrc:
+								"https://media.giphy.com/media/s6PGeVYNWs6pEs4EQj/giphy.gif?cid=ecf05e47ypr9letu7tqvjj7z8ozy7zrw3ug133c8njx4lz5q&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+							buttonLink: "",
+							buttonLabel: "",
+						},
+					],
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "This card links us to a different page",
+									},
+								],
+							},
+						],
+						propPath: ["items", 0, "content"],
+					},
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "It's on the inside what counts",
+									},
+								],
+							},
+						],
+						propPath: ["items", 1, "content"],
+					},
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "",
+									},
+								],
+							},
+						],
+						propPath: ["items", 2, "content"],
+					},
+				],
+				component: "infocardlist",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Local Video",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					url: "https://assets.tawtaw.site/pvo/2023--PVO_MIX--DJ_William--Millennial_Throwbacks%20snippit%20v2.webm",
+					altText: "DJ Mix clip",
+					autoPlay: false,
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "videoLocal",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Media & Text",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					content: null,
+					imageAlt: "glitter strawberry",
+					imageSrc:
+						"https://media.giphy.com/media/fD4x1OC7pHnlPdnltm/giphy.gif?cid=ecf05e47mvh9ru91x3hgdxrn9es23iuqy538jwzqdo2vnafo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+					rowReverse: false,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "heading",
+								level: 5,
+								children: [
+									{
+										text: "Side text",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "can help describe a bit more info with a fun graphic",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "mediatext",
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					content: null,
+					imageAlt: "Same photo",
+					imageSrc:
+						"https://media.giphy.com/media/fD4x1OC7pHnlPdnltm/giphy.gif?cid=ecf05e47mvh9ru91x3hgdxrn9es23iuqy538jwzqdo2vnafo&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+					rowReverse: true,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Now I should be on the Right side",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "You can reverse order of text and media without affecting the markdown",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "mediatext",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Posts List",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "gray",
+					header: "Posts!!!",
+					imageSrc:
+						"https://cdn.pixabay.com/photo/2022/07/10/20/15/raspberries-7313700_1280.jpg",
+					categories: [
+						{
+							id: "clzgewmlf000811f4apznlhcs",
+						},
+						{
+							id: "clzgewmlf000611f4btbbaden",
+						},
+					],
+					colorOverlay: "rgba(56, 56, 56, 0.63)",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "postslist",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Quote",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					href: "",
+					content: null,
+					attribution: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "Don't quote me on this",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "Myself",
+							},
+						],
+						propPath: ["attribution"],
+					},
+				],
+				component: "quote",
+			},
+			{
+				type: "component-block",
+				props: {
+					href: "/home",
+					content: null,
+					attribution: null,
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "You can even link a quote and have it open in a new tab",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "Myself",
+							},
+						],
+						propPath: ["attribution"],
+					},
+				],
+				component: "quote",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Section Background",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					content: null,
+					imageSrc:
+						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+					colorTheme: "bg_c_plain",
+					paddingBlock: "15vh",
+				},
+				children: [
+					{
+						type: "component-block-prop",
+						children: [
+							{
+								type: "heading",
+								level: 4,
+								children: [
+									{
+										text: "A section that has title",
+									},
+								],
+							},
+							{
+								type: "paragraph",
+								children: [
+									{
+										text: "But can also set a solid color for the background",
+									},
+								],
+							},
+						],
+						propPath: ["content"],
+					},
+				],
+				component: "section",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Social Link Nav",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					color: "gray",
+					github: "https://www.github.com",
+					twitch: "",
+					custom1: "https://www.custom1.com",
+					twitter: "",
+					youtube: "",
+					bandcamp: "https://www.bandcamp.com",
+					facebook: "https://www.facebook.com",
+					linkedin: "",
+					instagram: "https://www.instagram.com",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "sociallinknav",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Table",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					rows: [
+						{
+							cells: [
+								{
+									text: "Calories",
+								},
+								{
+									text: "61 kcal ",
+								},
+								{
+									text: "-",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Carbohydrates",
+								},
+								{
+									text: "14.7 g",
+								},
+								{
+									text: "-",
+								},
+							],
+						},
+						{
+							cells: [
+								{
+									text: "Fiber",
+								},
+								{
+									text: "3.0 g   ",
+								},
+								{
+									text: "12%",
+								},
+							],
+						},
+					],
+					caption: "Kiwi Nutrition",
+					headers: [
+						{
+							text: "Nutrient",
+						},
+						{
+							text: "Amount",
+						},
+						{
+							text: "Daily Value % ",
+						},
+					],
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "table",
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Youtube Video",
+					},
+				],
+			},
+			{
+				type: "component-block",
+				props: {
+					url: "https://www.youtube.com/watch?v=fPWRlmedCbo",
+					altText: "Embedded YouTube video",
+				},
+				children: [
+					{
+						type: "component-inline-prop",
+						children: [
+							{
+								text: "",
+							},
+						],
+					},
+				],
+				component: "youtubeVideo",
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": []
+	},
+	{
+		title: "Secrets of the Loom",
+		slug: "secrets-of-the-loom",
+		dateCreated: "2024-11-15T19:39:55.004Z",
+		dateModified: "2024-11-15T19:39:55.004Z",
+		status: "PRIVATE",
+		template: "WITHSIDEBAR",
+		pinned: 0,
+		excerpt:
+			"Fruits are a staple of health-conscious diets, but did you know they hide some surprising secrets? These juicy delights don’t just pack vitamins; they boast unique properties you might not have heard of before. Let’s unravel the loom of fruit benefits.",
+		featured_image: "",
+		featured_video: "",
+		content: [
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "1. Pineapple: Nature’s Anti-Inflammatory",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Pineapple isn’t just tropical and sweet—it’s rich in bromelain, an enzyme known for reducing inflammation and aiding digestion. It’s even been studied for its potential to accelerate recovery from surgery and intense workouts.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Quick Tip:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Add fresh pineapple to post-workout smoothies for a natural recovery boost.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "2. Blackberries: Brain Boosters in Disguise",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Packed with anthocyanins, blackberries help improve memory and reduce the risk of neurodegenerative diseases. These powerful antioxidants also fight oxidative stress, keeping your mind sharp as you age.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Did You Know?",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Blackberries may enhance communication between neurons, optimizing cognitive functions.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "3. Figs: Your Secret Skin Savior",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Often overlooked, figs are brimming with polyphenols and vitamins that promote collagen production. This makes them a natural ally for radiant skin. Plus, their high calcium content strengthens nails and bones.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "Quick DIY:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Mash fresh figs into a face mask with a touch of honey for a glowing complexion.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "4. Papaya Seeds: Gut Guardians",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "While most people toss papaya seeds, they’re surprisingly nutritious! These tiny seeds have antimicrobial properties and support digestive health by eliminating harmful parasites.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 4,
+				children: [
+					{
+						text: "Fun Fact:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Papaya seeds have a peppery flavor—try them dried and crushed as a spice.",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 2,
+				children: [
+					{
+						text: "5. Starfruit: The Hydration Hero",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Low in calories but high in water content, starfruit is excellent for hydration. It also contains ",
+					},
+					{
+						text: "oxalic acid",
+						italic: true,
+					},
+					{
+						text: ", which may help dissolve kidney stones (with doctor approval, of course).",
+					},
+				],
+			},
+			{
+				type: "divider",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+			{
+				type: "heading",
+				level: 3,
+				children: [
+					{
+						text: "In Conclusion:",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "The next time you reach for a fruit, think beyond its surface sweetness. These hidden health benefits are nature’s way of weaving wellness into your life.",
+					},
+				],
+			},
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "Which fruit secret surprised you most? Share your thoughts in the comments below!",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
 
-	// 			{
-	// 				name: "green",
-	// 			},
+				{
+					name: "green",
+				},
 
-	// 			{
-	// 				name: "cluster",
-	// 			},
-	// 			{
-	// 				name: "nutrition",
-	// 			},
-	// 			{
-	// 				name: "snack",
-	// 			},
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 		],
-	// 	},
-	// },
-	// {
-	// 	title: "The Health Benefits of Berries",
-	// 	slug: "health-benefits-berries",
-	// 	dateCreated: "2023-05-01T10:00:00.000Z",
-	// 	dateModified: "2023-05-01T10:00:00.000Z",
-	// 	status: "PUBLIC",
-	// 	template: "FULLWIDTH",
-	// 	pinned: 5,
-	// 	excerpt:
-	// 		"Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries.",
-	// 	featured_image:
-	// 		"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118263/cutefruit/banners/cf-banner-13_ywbvao.png",
-	// 	featured_video: "",
-	// 	content: [
-	// 		{
-	// 			type: "paragraph",
-	// 			children: [
-	// 				{
-	// 					text: "",
-	// 				},
-	// 			],
-	// 		},
-	// 	],
-	// 	author: {
-	// 		connect: {
-	// 			email: "admin@tawtaw.site",
-	// 		},
-	// 	},
-	// 	// "privateAccess": [],
-	// 	tags: {
-	// 		connect: [
-	// 			{
-	// 				name: "red",
-	// 			},
-	// 			{
-	// 				name: "purple",
-	// 			},
-	// 			{
-	// 				name: "white",
-	// 			},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
+	},
+	{
+		title: "The Health Benefits of Berries",
+		slug: "health-benefits-berries",
+		dateCreated: "2023-05-01T10:00:00.000Z",
+		dateModified: "2023-05-01T10:00:00.000Z",
+		status: "PUBLIC",
+		template: "FULLWIDTH",
+		pinned: 5,
+		excerpt:
+			"Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries.",
+		featured_image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118263/cutefruit/banners/cf-banner-13_ywbvao.png",
+		featured_video: "",
+		content: [
+			{
+				type: "paragraph",
+				children: [
+					{
+						text: "",
+					},
+				],
+			},
+		],
+		author: {
+			connect: {
+				email: "admin@tawtaw.site",
+			},
+		},
+		// "privateAccess": [],
+		tags: {
+			connect: [
+				{
+					name: "red",
+				},
+				{
+					name: "purple",
+				},
+				{
+					name: "white",
+				},
 
-	// 			{
-	// 				name: "green",
-	// 			},
-				// {
-				// 	name: "cluster",
-				// },
-				// {
-				// 	name: "nutrition",
-				// },
-				// {
-				// 	name: "snack",
-				// },
-	// 		],
-	// 	},
-	// 	categories: {
-	// 		connect: [
-	// 			{
-	// 				name: "berries",
-	// 			},
-	// 		],
-	// 	},
-	// },
+				{
+					name: "green",
+				},
+				{
+					name: "cluster",
+				},
+				{
+					name: "nutrition",
+				},
+				{
+					name: "snack",
+				},
+			],
+		},
+		categories: {
+			connect: [
+				{
+					name: "berries",
+				},
+			],
+		},
+	},
 ]
 
 export const announcements_seed: AnnouncementCreateInput[] = [
@@ -7052,10 +7282,10 @@ export const tags_seedjson: TagCreateInput[] = [
 	{
 		name: "cluster",
 	},
-  {
-    name: "nutrition",
-  },
-  {
-    name: "snack",
-  },
+	{
+		name: "nutrition",
+	},
+	{
+		name: "snack",
+	},
 ]

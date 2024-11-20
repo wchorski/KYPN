@@ -6,7 +6,7 @@ import { component, fields, NotEditable } from '@keystone-6/fields-document/comp
 import { CSSProperties } from 'react';
 
 export const imagegallery = component({
-  label: 'Gallery',
+  label: 'Image Gallery',
   schema: {
     layout: fields.select({
       label: 'layout',

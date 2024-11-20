@@ -1,4 +1,13 @@
-import type { Lists, Context, UserCreateInput, RoleCreateInput, PageCreateInput, PostCreateInput, CategoryCreateInput, TagCreateInput} from ".keystone/types"
+import type {
+	Lists,
+	Context,
+	UserCreateInput,
+	RoleCreateInput,
+	PageCreateInput,
+	PostCreateInput,
+	CategoryCreateInput,
+	TagCreateInput,
+} from ".keystone/types"
 import {
 	user_seeddata,
 	roles_seedjson,
@@ -6,17 +15,22 @@ import {
 	pages_seeddata,
 	posts_seedjson,
 	tags_seedjson,
-  announcements_seed,
+	announcements_seed,
 } from "./seed_data"
-import { Announcement } from "@ks/types"
+import { Announcement, Page } from "@ks/types"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
-	const rawJSONData = JSON.stringify(user_seeddata)
-	const seedUsers: any[] = JSON.parse(rawJSONData)
+	const seedUsers = user_seeddata
 	const usersAlreadyInDatabase = await db.User.findMany({
 		where: {
-			email: { in: seedUsers.map((user) => user.email) },
+			email: {
+				in: seedUsers.map((user) => user.email) as
+					| string
+					| readonly string[]
+					| null
+					| undefined,
+			},
 		},
 	})
 	const usersToCreate = seedUsers.filter(
@@ -61,11 +75,17 @@ const seedUsers = async (context: Context) => {
 const seedRoles = async (context: Context) => {
 	const { db } = context.sudo()
 
-	const seedRoles: any[] = roles_seedjson
+	const seedRoles = roles_seedjson
 
 	const objsAlreadyInDatabase = await db.Role.findMany({
 		where: {
-			name: { in: seedRoles.map((i) => i.name) },
+			name: {
+				in: seedRoles.map((i) => i.name) as
+					| string
+					| readonly string[]
+					| null
+					| undefined,
+			},
 		},
 	})
 	const itemsToCreate = seedRoles.filter(
@@ -84,72 +104,96 @@ const seedRoles = async (context: Context) => {
 
 // seed posts and connect with users
 const seedPosts = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedPosts = posts_seedjson;
-  const postsAlreadyInDatabase = await db.Post.findMany({
-    where: {
-      slug: { in: seedPosts.map(post => post.slug) as string[] },
-    },
-  });
+	const { db } = context.sudo()
+	const seedPosts = posts_seedjson
+	const postsAlreadyInDatabase = await db.Post.findMany({
+		where: {
+			slug: { in: seedPosts.map((post) => post.slug) as string[] },
+		},
+	})
 
-  const postsToCreate = seedPosts.filter(
+	const postsToCreate = seedPosts.filter(
+		//? makes it easier to copy and paste res json from Apollo Sandbox
+		// @ts-ignore
+		(seedPost) => !postsAlreadyInDatabase.some((p) => p.slug === seedPost.slug)
+	)
 
-    seedPost => !postsAlreadyInDatabase.some((p) => (p.slug === seedPost.slug))
-  );
+	postsToCreate.map((obj) => {
+		console.log(" + Post: " + obj.slug)
+	})  
 
-  postsToCreate.map(obj => {
-    console.log(" + Post: " + obj.slug)
-  })
-
-  await db.Post.createMany({
-    // @ts-ignore
-    data: postsToCreate.map((p:PostCreateInput) => ({ ...p, content: p?.content?.document  })),
-  });
-};
+	await db.Post.createMany({
+    data: postsToCreate.map((p: PostCreateInput) => ({
+      ...p,
+      //? makes it easier to copy and paste res json from Apollo Sandbox
+      // @ts-ignore
+			content: p?.content?.document,
+		})),
+	})
+}
 
 const seedTags = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = tags_seedjson;
-  const objectsAlreadyInDatabase = await db.Tag.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
-  );
+	const { db } = context.sudo()
+	const seedObjects = tags_seedjson
+	const objectsAlreadyInDatabase = await db.Tag.findMany({
+		where: {
+			name: {
+				in: seedObjects.map((obj) => obj.name) as
+					| string
+					| readonly string[]
+					| null
+					| undefined,
+			},
+		},
+	})
+	const objsToCreate = seedObjects.filter(
+		//@ts-ignore
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some(
+				(dbObj) => dbObj.name === seedObj.name
+			)
+	)
 
-  objsToCreate.map(obj => {
-    console.log(" + Tag: " + obj.name)
-  })
+	objsToCreate.map((obj) => {
+		console.log(" + Tag: " + obj.name)
+	})
 
-  await db.Tag.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+	await db.Tag.createMany({
+		data: objsToCreate.map((obj) => ({ ...obj })),
+	})
+}
 
 const seedCategories = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = categories_seedjson;
-  const objectsAlreadyInDatabase = await db.Category.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
-  );
+	const { db } = context.sudo()
+	const seedObjects = categories_seedjson
+	const objectsAlreadyInDatabase = await db.Category.findMany({
+		where: {
+			name: {
+				in: seedObjects.map((obj) => obj.name) as
+					| string
+					| readonly string[]
+					| null
+					| undefined,
+			},
+		},
+	})
+	const objsToCreate = seedObjects.filter(
+		//? makes it easier to copy and paste req json from Apollo Sandbox
+		//@ts-ignore
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some(
+				(dbObj) => dbObj.name === seedObj.name
+			)
+	)
 
-  objsToCreate.map(obj => {
-    console.log(" + Category: " + obj.name)
-  })
+	objsToCreate.map((obj) => {
+		console.log(" + Category: " + obj.name)
+	})
 
-  await db.Category.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+	await db.Category.createMany({
+		data: objsToCreate.map((obj) => ({ ...obj })),
+	})
+}
 
 // const seedProducts = async (context: Context) => {
 //   const { db } = context.sudo();
@@ -287,46 +331,64 @@ const seedCategories = async (context: Context) => {
 // };
 
 const seedPages = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = pages_seeddata;
-  const objectsAlreadyInDatabase = await db.Page.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
-  );
+	const { db } = context.sudo()
+	const seedObjects = pages_seeddata
+	const objectsAlreadyInDatabase = await db.Page.findMany({
+		where: {
+			slug: {
+				in: seedObjects.map((obj) => obj.slug) as
+					| string
+					| readonly string[]
+					| null
+					| undefined,
+			},
+		},
+	})
+	const objsToCreate = seedObjects.filter(
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
+	)
 
-  objsToCreate.map(obj => {
-    console.log(" + Page: " + obj.slug)
-  })
+	objsToCreate.map((obj) => {
+		console.log(" + Page: " + obj.slug)
+	})
 
-  await db.Page.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+	await db.Page.createMany({
+    data: objsToCreate.map((obj) => ({
+      ...obj,
+      //? makes it easier to copy and paste res json from Apollo Sandbox
+      //@ts-ignore
+			content: obj?.content?.document,
+		})),
+	})
+}
 
 const seedAnnouncements = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: Announcement[] = announcements_seed;
-  const objectsAlreadyInDatabase = await db.Announcement.findMany({
-    where: {
-      start: { in: seedObjects.map(obj => obj.start) },
-    },
-  }) as Announcement[]
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj) => obj.start === seedObj.start )
-  );
+	const { db } = context.sudo()
+	const seedObjects = announcements_seed
+	const objectsAlreadyInDatabase = (await db.Announcement.findMany({
+		where: {
+			link: { in: seedObjects.map((obj) => obj.link) as string[] },
+		},
+	})) as Announcement[]
+	const objsToCreate = seedObjects.filter(
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some((obj) => obj.link === seedObj.link)
+	)
 
-  objsToCreate.map(obj => {
-    console.log(" + Announcement: " + obj.link)
-  })
+	objsToCreate.map((obj) => {
+		console.log(" + Announcement: " + obj.link)
+	})
 
-  await db.Announcement.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
+	await db.Announcement.createMany({
+    data: objsToCreate.map((obj) => ({
+      ...obj,
+      //? makes it easier to copy and paste req json from Apollo Sandbox
+      //@ts-ignore
+			content: obj?.content?.document,
+		})),
+	})
+}
 
 // const seedProductImages = async (context: Context) => {
 //   const { db } = context.sudo();
@@ -368,10 +430,10 @@ export const seedDatabase = async (context: Context) => {
 
 	await seedCategories(context)
 	await seedTags(context)
-  
+
 	await seedPages(context)
 	await seedPosts(context)
-  
+
 	await seedAnnouncements(context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }
