@@ -8,9 +8,10 @@ import { envs } from "@/envs"
 // import { ApolloWrapper } from './ApolloWrapper'
 // import ShoppingCart from '@components/ecommerce/ShoppingCart'
 // import { AsideBar } from '@components/layouts/AsideBar'
-import { cookies } from "next/dist/client/components/headers"
+
 import { Providers } from "@/src/app/providers"
 import { Footer } from "@components/private/Footer"
+// import { cookies } from "next/headers"
 // import { AnnouncementBanner } from '@components/elements/AnnouncementBanner'
 
 const header_font = Inter({ subsets: ["latin"], variable: "--font-header" })
@@ -30,9 +31,9 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	const cookieStore = cookies()
-	const sessionObj = cookieStore.get("keystonejs-session")
-	const token = sessionObj?.value
+	// const cookieStore = cookies()
+	// const sessionObj = await cookieStore.get("keystonejs-session")
+	// const token = sessionObj?.value
 
 	return (
 		<html lang="en">

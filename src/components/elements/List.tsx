@@ -1,6 +1,6 @@
 'use client'
 import { CSSProperties, ReactNode } from 'react'
-import styles from '@styles/elements/list.module.scss'
+import styles from '@styles/elements/list.module.css'
   
 type Props = {
   delay?:number,

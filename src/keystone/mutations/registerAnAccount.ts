@@ -19,7 +19,8 @@ export const registerAnAccount = (base: BaseSchemaMeta) => graphql.field({
 
     // const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
     // const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
-
+      
+      
     const now = new Date().toISOString()
 
     if(!password && (password !== passwordConfirm)) throw Error('!!! registerAnAccount: password does not match')

@@ -137,12 +137,12 @@ export const User: Lists.User = list({
 					.sudo()
 					.graphql.run({
 						query: `
-            mutation VerifyEmailRequest($email: String!) {
-              verifyEmailRequest(email: $email) {
-                id
+              mutation VerifyEmailRequest($email: String!) {
+                verifyEmailRequest(email: $email) {
+                  id
+                }
               }
-            }
-          `,
+            `,
 						variables: {
 							email: item.email,
 						},

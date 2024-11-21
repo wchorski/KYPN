@@ -29,6 +29,7 @@ export function ImageBlock({
 				sizes={"100vw"}
 				width={0}
 				height={0}
+        unoptimized={true}
 			/>
 			<figcaption className={[image_caption, 'subtext'].join(' ')} >{alt}</figcaption>
 		</figure>

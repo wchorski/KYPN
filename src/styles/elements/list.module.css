@@ -1,7 +1,6 @@
 ul.linklist{
   list-style: none;
   padding: 0;
-  // line-height: 2rem;
   margin-top: 0;
   display: grid;
   gap: .5rem;
@@ -9,12 +8,11 @@ ul.linklist{
 
 ul.animated {
 
-  > li {
+  & > li {
     opacity: 0;
     animation-name: animItem;
     animation-timing-function: ease;
     animation-fill-mode: forwards;
-    // animation: animItem 0.3s forwards ease-in;
   }
 
 }

@@ -220,7 +220,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				// if(!match) return {status: 401, message: 'incorrect password'}
 
 				if (credentials?.email === foundUser.email && match) {
-					console.log("### user is authenticated, ", foundUser.email)
+					console.log(`### ${new Date()} user login: `, foundUser.email)
 					return {
 						_type: "credentials",
 						id: foundUser.id,

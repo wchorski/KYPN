@@ -1,14 +1,5 @@
 import { CSSProperties, ReactNode } from "react"
-import { card } from "@styles/card.module.scss"
-import {
-	bg_c_accent,
-	bg_c_plain,
-	bg_c_primary,
-	bg_c_reverse_theme,
-	bg_c_secondary,
-	bg_c_tertiary,
-	bg_c_transparent,
-} from "@styles/colors.module.css"
+import { card } from "@styles/card.module.css"
 import { ColorsTheme, SpaceSize } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
 

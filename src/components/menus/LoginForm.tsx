@@ -8,7 +8,7 @@ import {
 	FaTwitterSquare,
 } from "react-icons/fa"
 import { useFormState, useFormStatus } from "react-dom"
-import { useRef, useState } from "react"
+import { useActionState, useRef, useState } from "react"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -52,7 +52,7 @@ export function LoginForm({ providers }: Props) {
 		},
 	}
 	const formRef = useRef<HTMLFormElement>(null)
-	const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	const [formState, formAction, isPending] = useActionState(onSubmit, defaultFormData)
 
 	async function onSubmit(
 		prevState: FormState,

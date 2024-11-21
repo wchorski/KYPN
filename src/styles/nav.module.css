@@ -1,79 +1,54 @@
-.nav :global{
+.nav {
 
   backdrop-filter: blur(10px);
   background-color: var(--c-nav);
   width: 100%;
   position: relative;
 
-  div.siteWrapper {
-    display: flex;
-    justify-content: space-between;
-
-    // // debug
-    // border: dashed 1px rgb(43, 226, 83);
-  }
-
-  ul {
+  & ul {
     padding: 0;
     margin: 0;
     list-style: none;
 
-    li{
+    & li{
       display: flex;
       flex-direction: column;
     }
-
-    // a {
-    //   padding: 1rem;
-    //   display: inline-block;
-    //   transition-property: color, background, border;
-    //   transition-duration: .2s;
-    //   transition-timing-function: linear;
-    //   display: grid;
-    //   place-items: center;
-    //   flex-grow: 1;
-    //   border-bottom: solid 1px transparent;
-
-    //   // &:hover, &:focus{
-    //   //   border-bottom: solid 1px var(--c-accent);
-    //   // }
-
-    //   &:active{
-    //     border-bottom: solid 1px var(--c-accent);
-    //     color: var(--c-accent);
-    //   }
-    // }
   }
 
-  ul.utility{
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+}
 
-    > li {
+.siteWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.utility{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > li {
+    height: 100%;
+
+    & > button {
       height: 100%;
+      border: none;
+      background-color: transparent;
+      color: var(--c-txt);
 
-      > button {
-        height: 100%;
-        border: none;
-        background-color: transparent;
-        color: var(--c-txt);
-
-        &:hover, &:active {
-          color: var(--c-primary);
-        }
+      &:hover, &:active {
+        color: var(--c-primary);
       }
     }
+  }
 
-    svg {
-      font-size: 2rem;
-    }
+  & svg {
+    font-size: 2rem;
   }
 }
 
-ul.menu_main {
-  // background-color: rgb(56, 63, 80);
+.menu_main {
   display: flex;
   border-radius: 0 0 var(--br-dull) var(--br-dull);
 
@@ -113,17 +88,13 @@ ul.open {
     color: var(--c-accent);
   }
 
-  span {
+  & span {
     text-decoration: none;
   }
 
-  // &:active{
-  //   border-bottom: solid 1px var(--c-accent);
-  //   color: var(--c-accent);
-  // }
 }
 
-button.navwich {
+.navwich {
   border: none;
   font-size: 3rem;
   display: grid;
@@ -135,7 +106,7 @@ button.navwich {
   }
 }
 
-//todo stop it from revealing and animating during breakpoint switch
+
 @media screen and (width > 600px) {
   ul.menu_main {
     flex-direction: row;
@@ -150,7 +121,7 @@ button.navwich {
   }
 }
 
-// link or button
+/* link or button */
 .active {
   color: var(--c-primary) !important;
 }

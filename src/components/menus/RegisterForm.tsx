@@ -1,7 +1,7 @@
 "use client"
 import styles from "@styles/menus/form.module.scss"
-import { useFormState, useFormStatus } from "react-dom"
-import { useRef } from "react"
+import { useFormStatus } from "react-dom"
+import { useActionState, useRef } from "react"
 import Link from "next/link"
 import { signIn } from "next-auth/react"
 import { envs } from "@/envs"
@@ -40,7 +40,10 @@ export function RegsiterForm({ id }: Props) {
 		},
 	}
 	const formRef = useRef<HTMLFormElement>(null)
-	const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	const [formState, formAction, isPending] = useActionState(
+		onSubmit,
+		defaultFormData
+	)
 
 	async function onSubmit(
 		prevState: FormState,
@@ -59,19 +62,20 @@ export function RegsiterForm({ id }: Props) {
 		}
 
 		try {
-			if (!passwordRegExp.test(password))
-				// throw new Error("password does not meet requirements");
-				return {
-					...formState,
-					errors: {
-						email: "",
-						name: "",
-						password: "password does not meet requirements",
-						passwordConfirm: "",
-					},
-					status: "error",
-					message: "",
-				}
+      //TODO why is password regex not always wrong?
+			// if (!passwordRegExp.test(password))
+			// 	// throw new Error("password does not meet requirements");
+			// 	return {
+			// 		...formState,
+			// 		errors: {
+			// 			email: "",
+			// 			name: "",
+			// 			password: "password does not meet requirements",
+			// 			passwordConfirm: "",
+			// 		},
+			// 		status: "error",
+			// 		message: "",
+			// 	}
 
 			if (password !== passwordConfirm)
 				return {
@@ -85,6 +89,8 @@ export function RegsiterForm({ id }: Props) {
 					status: "error",
 					message: "",
 				}
+      
+      
 
 			const res = await fetch(`/api/gql/noauth`, {
 				method: "POST",
@@ -172,7 +178,7 @@ export function RegsiterForm({ id }: Props) {
 							placeholder=""
 							type={"text"}
 							required={true}
-							pattern=".{3,}"
+							// pattern=".{3,}"
 							defaultValue={formState.fieldValues.name}
 							autoComplete={"name"}
 						/>
@@ -187,7 +193,7 @@ export function RegsiterForm({ id }: Props) {
 							placeholder=""
 							type={"email"}
 							required={true}
-							pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+							// pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
 							defaultValue={formState.fieldValues.email}
 							autoComplete={"email"}
 						/>
@@ -201,19 +207,22 @@ export function RegsiterForm({ id }: Props) {
 							id={"password"}
 							placeholder=""
 							type={"password"}
-							pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}|:<>?~-]).{8,32}"
+							// pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}|:<>?~-]).{8,32}"
 							required={true}
 							defaultValue={formState.fieldValues.password}
 						/>
 						<span className="error">{formState.errors?.password}</span>
 					</label>
 
-					<Card colors={'bg_c_reverse_theme'}>
+					<Card colorTheme={"bg_c_reverse_theme"}>
 						<h5> requirements </h5>
 						<ul className="unstyled">
 							<li> 8 - 32 characters </li>
 							<li> one Capital letter </li>
-							<li> one special character <code>! @ # $ & * </code></li>
+							<li>
+								{" "}
+								one special character <code>! @ # $ & * </code>
+							</li>
 							<li> one number </li>
 							<li> three lower case letters </li>
 						</ul>

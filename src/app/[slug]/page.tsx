@@ -10,7 +10,7 @@ import {
 	page_content,
 	layout_full,
 	layout_site,
-  layout_content,
+	layout_content,
 } from "@styles/layout.module.scss"
 import { AsideBar } from "@components/layouts/AsideBar"
 import Flex from "@components/layouts/Flex"
@@ -31,7 +31,7 @@ export async function generateMetadata(
 	{ params }: Props,
 	parent: ResolvingMetadata
 ) {
-	const { slug } = params
+	const { slug } = await params
 	const { page, error } = await fetchPage(slug)
 
 	return {
@@ -41,26 +41,27 @@ export async function generateMetadata(
 }
 
 export default async function PageBySlug({ params }: Props) {
-	const { page, error } = await fetchPage(params.slug)
-
-	// if (loading) return <QueryLoading />
-	if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
-	if (!page) return <NoDataFoundPage><p>No post found</p></NoDataFoundPage>
+	const { slug } = await params
+	const { page, error } = await fetchPage(slug)
+	
+	if (error)
+		return (
+			<ErrorPage error={error}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!page)
+		return (
+			<NoDataFoundPage>
+				<p>No post found</p>
+			</NoDataFoundPage>
+		)
 
 	const {
 		id,
 		title,
-		slug,
 		status,
-		featured_image,
-		featured_video,
-		excerpt,
-		dateModified,
-		dateCreated,
 		template,
-		author,
-		categories,
-		tags,
 		content,
 	} = page
 
@@ -91,7 +92,12 @@ export default async function PageBySlug({ params }: Props) {
 				<h1>{title}</h1>
 			</header>
 
-			<div className={[page_content, template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full].join(" ")}>
+			<div
+				className={[
+					page_content,
+					template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full,
+				].join(" ")}
+			>
 				{status !== "PUBLIC" && (
 					<Card
 						className={"siteWrapper"}

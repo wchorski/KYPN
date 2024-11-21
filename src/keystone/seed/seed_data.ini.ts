@@ -90,7 +90,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: {document: [
 			{
 				type: "paragraph",
 				children: [
@@ -174,7 +174,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 	{
 		title: "Home",
 		slug: "home",
@@ -186,7 +186,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: { document: [
 			{
 				type: "layout",
 				layout: [1, 2],
@@ -1047,7 +1047,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 	{
 		title: "Terms and Privacy",
 		slug: "terms-and-privacy",
@@ -1059,7 +1059,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: { document: [
 			{
 				type: "heading",
 				level: 2,
@@ -1511,7 +1511,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 ]
 
 export const posts_seedjson: PostCreateInput[] = [

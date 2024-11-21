@@ -1,7 +1,7 @@
 'use client'
-import { CSSProperties, FormEvent, useRef, useState } from "react"
+import { CSSProperties, FormEvent, useActionState, useRef, useState } from "react"
 import { 
-  useFormState, 
+  
   useFormStatus 
 } from "react-dom"
 
@@ -59,7 +59,7 @@ export function ContactForm({header, color, buttonLabel = 'submit', isName=true,
     }
   }
 
-  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+  const [formState, formAction, isPending] = useActionState(onSubmit, defaultFormData)
 
   // const [mutate, { error, loading, data }] = useMutation(MUTATE_CONTACT)
 

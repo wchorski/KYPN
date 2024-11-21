@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { ReactNode } from "react"
-import styles from '@styles/nav.module.scss'
+import { active, navlink } from '@styles/nav.module.css'
 import { useNavControl } from "@components/hooks/useGlobalContext"
 
 type Props = {
@@ -20,14 +20,14 @@ export function NavLink ({ target = '_self',href, children, className = '' }:Pro
   
   let isActive = (href === `/${segment}`)
 
-  const styleArr = [styles.navlink, className , 'navlink']
+  const styleArr = [navlink, className , 'navlink']
 
   return (
     <Link 
       href={href}
       target={target}
       onClick={() => setisNavOpen(false)}
-      className={isActive ? [...styleArr, styles.active,].join(' ') : styleArr.join(' ')}
+      className={isActive ? [...styleArr, active,].join(' ') : styleArr.join(' ')}
     >
       {children}
     </Link>

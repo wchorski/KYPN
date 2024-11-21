@@ -1,14 +1,14 @@
 'use client'
 import { useNavControl } from "@components/hooks/useGlobalContext"
 import { RiMenu3Line, RiMenu4Fill } from "react-icons/ri"
-import styles from '@styles/nav.module.scss'
+import {active, navwich, } from '@styles/nav.module.css'
 
 export function NavWichButton() {
 
   const { isNavOpen, toggleNav } = useNavControl()
 
   function getStyles(){
-    const stylesArray = [styles.navwich, (isNavOpen) ? styles.active : ''] 
+    const stylesArray = [navwich, (isNavOpen) ? active : ''] 
     return stylesArray.join(' ')
   }
 

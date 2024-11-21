@@ -20,35 +20,37 @@
     "modules": "typed-scss-modules src --outputFolder __generated__"
   },
   "dependencies": {
-    "@keystone-6/core": "^6.1.0",
+    "@keystone-6/core": "^6.3.1",
     "@keystone-6/document-renderer": "^1.1.2",
-    "@keystone-6/fields-document": "^9.0.0",
-    "@react-email/components": "0.0.22",
+    "@keystone-6/fields-document": "^9.1.1",
+    "@keystone-ui/core": "^5.0.2",
+    "@react-email/components": "0.0.28",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.3.1",
     "fp-ts": "^2.16.9",
     "jsonwebtoken": "^9.0.2",
-    "next": "14.2.5",
-    "next-auth": "^4.23.2",
-    "nodemailer": "^6.9.14",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-email": "2.1.6",
-    "react-icons": "^5.2.1",
-    "sass": "^1.77.8"
+    "next": "^15.0.3",
+    "next-auth": "^4.24.10",
+    "nodemailer": "^6.9.16",
+    "react": "^19.0.0-rc.1",
+    "react-dom": "^19.0.0-rc.1",
+    "react-email": "3.0.2",
+    "react-icons": "^5.3.0",
+    "sass": "^1.81.0",
+    "slate-dom": "^0.111.0"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^20",
-    "@types/nodemailer": "^6.4.15",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.5",
-    "typescript": "^5.5.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.9.1",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "eslint": "^9.15.0",
+    "eslint-config-next": "^15.0.3",
+    "typescript": "^5.6.3",
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "resolutions": {
-    "next": "^14.0.0"
+    "next": "^15.0.3"
   }
 }

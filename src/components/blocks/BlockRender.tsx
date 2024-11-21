@@ -178,6 +178,7 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 }
 
 export function BlockRender({ document }: { document: any }) {
+
 	return (
 		<DocumentRenderer
 			renderers={renderers}
@@ -185,14 +186,4 @@ export function BlockRender({ document }: { document: any }) {
 			document={document}
 		/>
 	)
-	//todo get rid of, no need for the wrapper w new layout css
-	// return (
-	//   <div className={['block-renderer', styles.blockrenderer].join(' ')}>
-	//     <DocumentRenderer
-	//       renderers={renderers}
-	//       componentBlocks={customComponentRenderers}
-	//       document={document}
-	//     />
-	//   </div>
-	// )
 }

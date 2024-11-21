@@ -44,7 +44,8 @@ export const verifyEmailRequest = (base: BaseSchemaMeta) => graphql.field({
 
       // verify token
       const token = await tokenEmailVerify({email: foundUser.email, id: foundUser.id})
-
+      console.log('tokenEmailVerify: ', token);
+      
       const mail = await mailVerifyUser({
         to: [foundUser.email, ],
         token,

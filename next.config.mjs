@@ -3,10 +3,11 @@ const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL + '/:match*' || 'no_anal
 export default {
   // todo look into build optimization with `standalone` mode
   output: "standalone",
-	experimental: {
-		// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
-		serverComponentsExternalPackages: ["graphql"],
-	},
+	// experimental: {
+	// 	// without this, 'Error: Expected Upload to be a GraphQL nullable type.'
+	// 	serverComponentsExternalPackages: ["graphql"],
+	// },
+  serverExternalPackages: ["graphql"],
 	eslint: {
 		ignoreDuringBuilds: true,
 	},

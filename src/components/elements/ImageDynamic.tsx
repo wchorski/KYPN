@@ -9,9 +9,10 @@ type Props = {
   }|string | null | undefined,
   className?:string,
   alt?:string,
+  unoptimized?:boolean
 }
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn, className, alt }: Props) {
+export function ImageDynamic({ photoIn, className, alt, unoptimized = false }: Props) {
   
   // console.log(photoIn);
   
@@ -26,6 +27,7 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
       width={state.image.width}
       height={state.image.height}
       className={className}
+      unoptimized={unoptimized}
       //TODO how to gracefully show 'loading' image'
       // placeholder={'blur'}
       // blurDataURL={'/assets/placeholder.png'}

@@ -1,5 +1,5 @@
 "use client"
-import { btn_msg, btn_msg_reveal, btn_share } from "@styles/elements/button.module.scss"
+import { btn_msg, btn_msg_reveal, btn_share } from "@styles/elements/button.module.css"
 import { useState } from "react"
 import { BsShare } from "react-icons/bs"
 

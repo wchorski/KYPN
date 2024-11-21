@@ -229,6 +229,8 @@ When initializing a fresh database or returning to development you may add/remov
 
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
+- [ ] use Next 15
+- [ ] convert any `scss` to `css` modules
 - [ ] fix all error and nodata page fallbacks
 - [x] Post share modem w copy link (id)
 - [ ] copy all data to json format and build to `cutefruit` live demo

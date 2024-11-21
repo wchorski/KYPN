@@ -2,7 +2,7 @@
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { VscListTree } from "react-icons/vsc"
-import styles from "@styles/tableofcontents.module.scss"
+import styles from "@styles/tableofcontents.module.css"
 import { IconLabel } from "@components/elements/IconLabel"
 import { useEffect, useState } from "react"
 import { useUrlHash } from "@components/hooks/useUrlHash"

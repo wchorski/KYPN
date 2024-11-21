@@ -1,7 +1,7 @@
 "use client"
 import styles from "@styles/menus/form.module.scss"
 import { useFormState, useFormStatus } from "react-dom"
-import { useRef } from "react"
+import { useActionState, useRef } from "react"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { Button } from "@components/elements/Button"
 
@@ -27,7 +27,7 @@ export function PasswordRequestForm() {
 		},
 	}
 	const formRef = useRef<HTMLFormElement>(null)
-	const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	const [formState, formAction, isPending] = useActionState(onSubmit, defaultFormData)
 
 	async function onSubmit(
 		prevState: FormState,

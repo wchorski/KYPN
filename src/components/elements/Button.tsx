@@ -1,6 +1,6 @@
 "use client"
 
-import styles from "@styles/elements/button.module.scss"
+import styles from "@styles/elements/button.module.css"
 import { ReactNode, useEffect, useState } from "react"
 import { ButtonText } from "./ButtonText"
 
