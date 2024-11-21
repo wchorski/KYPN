@@ -28,7 +28,7 @@ import { TableOfContents } from "@components/menus/TableOfContents"
 import { CSSProperties } from "react"
 import { AsideBar } from "@components/layouts/AsideBar"
 import { NoData } from "@components/elements/NoData"
-import { findAllHeadings } from "@lib/contentHelpers"
+import { findAllHeadings, isEmptyContent } from "@lib/contentHelpers"
 import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
 import { ShareButton } from "@components/elements/ShareButton"
 import ErrorPage from "@components/layouts/ErrorPage"
@@ -214,8 +214,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					)}
 					{/* {JSON.stringify(content, null, 2)} */}
 					{/* //? warns reader that there is no content writen into the post */}
-					{content.document[0].type === "paragraph" &&
-					!content.document[0].children[0].text ? (
+					{isEmptyContent(content.document) ? (
 						<p>
 							<NoData />
 							This post is still in the works. Check back later when more

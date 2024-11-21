@@ -284,7 +284,7 @@ export const nextAuthSessionStrategy = {
 		// if(authId && !authId?.includes('@')) whereObj = { where: { authId } }
 
 		const author = await context.sudo().db.User.findOne({ where: { email } })
-		if (!author) return console.log("no user found for auth")
+		if (!author) return console.log("!!! no user found for auth")
 		const roleId = author.roleId || "no_roleId"
 		const role = await context.sudo().db.Role.findOne({
 			where: { id: roleId },

@@ -46,7 +46,7 @@ export const User: Lists.User = list({
 		//   if no name is provided, an error will be displayed
 		name: text({ validation: { isRequired: true } }),
 		nameLast: text(),
-		authId: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		authId: text({ isIndexed: "unique", validation: { isRequired: true }, ui: {description: `!!! Register users through this link ${envs.FRONTEND_URL}/register.`} }),
 		image: text({}),
 		phone: text({}),
 		email: text({

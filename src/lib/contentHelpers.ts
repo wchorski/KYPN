@@ -1,6 +1,14 @@
 import { KSHeading, TOCLink } from "@ks/types"
 import { slugFormat } from "./slugFormat"
 
+export function isEmptyContent(document:any){
+  if(document[0].type === 'paragraph' && document[0].children[0].text === ''){
+    return true
+  }
+
+  return false
+}
+
 export function findAllHeadings(arr: any) {
   
   return arr.reduce((acc: TOCLink[], item: KSHeading) => {

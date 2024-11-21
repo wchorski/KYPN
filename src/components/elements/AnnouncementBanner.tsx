@@ -4,7 +4,7 @@ import { BlockRender } from "@components/blocks/BlockRender"
 import { ReactElement } from "react"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
-import { plainObj } from "@lib/contentHelpers"
+import { isEmptyContent, plainObj } from "@lib/contentHelpers"
 
 type Props = {
   prop?:string
@@ -16,9 +16,17 @@ export async function AnnouncementBanner ({ prop }:Props):ReactElement<any, any>
 
   const session = await getServerSession(nextAuthOptions)
   const {announcements, error } = await fetchAnnouncements(session)
-
+  
+  
   if(error) return <></>
-  if (!announcements || announcements.length === 0) return <></>
+  if (
+    !announcements 
+    || announcements.length === 0 
+    || isEmptyContent(announcements[0].content.document)
+  ) return <></>
+  
+  console.log({isEmptyContent: isEmptyContent(announcements[0].content.document)});
+  
 
   return (
     <AnnouncementsMarquee announcement={plainObj(announcements[0])}>
