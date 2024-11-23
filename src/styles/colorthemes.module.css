@@ -1,65 +1,48 @@
 .bg_c_plain {
-  background-color: var(--c-txt-bg);
-  color: var(--c-txt);
+	background-color: var(--c-txt-bg);
+	color: var(--c-txt);
 }
 
 .bg_c_primary {
 	background-color: var(--c-primary);
 	color: var(--c-txt-primary);
-	& h1,
-	& h2,
-	& h3,
-	& h4,
-	& h5,
-	& h6 {
-		color: var(--c-txt-primary) !important;
+	& :is(h1, h2, h3, h4, h5, h6) {
+		color: var(--c-txt-primary-h);
 	}
 }
 .bg_c_secondary {
 	background-color: var(--c-secondary);
 	color: var(--c-txt-primary);
-	& h1,
-	& h2,
-	& h3,
-	& h4,
-	& h5,
-	& h6 {
-		color: var(--c-txt-primary) !important;
+	& :is(h1, h2, h3, h4, h5, h6) {
+		color: var(--c-txt-primary-h);
 	}
 }
 .bg_c_tertiary {
 	background-color: var(--c-tertiary);
 	color: var(--c-txt-primary);
-	& h1,
-	& h2,
-	& h3,
-	& h4,
-	& h5,
-	& h6 {
-		color: var(--c-txt-primary) !important;
+	& :is(h1, h2, h3, h4, h5, h6) {
+		color: var(--c-txt-primary-h);
 	}
 }
 .bg_c_accent {
 	position: relative;
 	z-index: 1;
-  background-color: var(--c-accent);
-  color: var(--c-txt-primary);
+	background-color: var(--c-accent);
+	color: var(--c-txt-primary);
 
 	& > * {
 		z-index: 1;
 	}
 
-	& h1,
-	& h2,
-	& h3,
-	& h4,
-	& h5,
-	& h6 {
+	& :is(h1, h2, h3, h4, h5, h6) {
 		background-image: linear-gradient(
 			to right,
 			var(--c-accent),
 			var(--c-accent)
 		);
+
+		color: var(--c-txt-primary-h);
+
 		display: inline;
 		background-size: 100% 10%;
 		background-repeat: no-repeat;
@@ -70,13 +53,13 @@
 /* //todo set colors from status.module.scss to here for other components to use */
 
 .bg_c_transparent {
-  background-color: transparent;
+	background-color: transparent;
 }
 .bg_c_reverse_theme {
-  color: var(--c-txt-rev);
-  background-color: var(--c-txt-bg-rev);
-  
-  &:is(h1,h2,h3,h4,h5,h6) {
-    color: var(--c-txt-rev);
-  }
+	color: var(--c-txt-rev);
+	background-color: var(--c-txt-bg-rev);
+
+	& :is(h1, h2, h3, h4, h5, h6) {
+		color: var(--c-txt-rev);
+	}
 }

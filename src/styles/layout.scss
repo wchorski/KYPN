@@ -234,12 +234,12 @@ $breakpoint-l: 1200px;
 
 .site-grid {
 	display: grid;
-  grid-column: layout_site;
+	grid-column: layout_site;
 	//todo need to do this per item
 	// align-items: start;
 
 	grid-template-columns: minmax(0, 1fr);
-		
+
 	// grid-template-columns:
 	// 	minmax(0, 1fr)
 	// 	minmax(0, calc(var(--w-sitemax) + 1rem))
@@ -263,8 +263,10 @@ $breakpoint-l: 1200px;
 	// }
 	> .grid-item {
 		display: grid;
-		// align-items: center;
-		// place-items: center;
+
+		> :is(p, ul, ol, h1, h2, h3, h4, h5, h6) {
+			margin-inline: var(--space-m);
+		}
 	}
 	//? `div:not([class])` has no class name
 	> .grid-item > div:not([class]) {

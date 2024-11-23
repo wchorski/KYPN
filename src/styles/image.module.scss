@@ -27,9 +27,11 @@
     // content: '⤷';
     // content: '⇁';
     content: '↳ ';
-    width: 100px;
-    height: 10px;
+    // width: 100px;
+    // height: 10px;
   } 
+  margin-inline: auto;
+  width: 20rem;
 
   &:empty {
     padding: 0;

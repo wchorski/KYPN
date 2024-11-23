@@ -7,7 +7,7 @@ import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import { ColorsTheme } from '@ks/types';
 import { colorThemeOptions, getColorTheme } from '../../lib/styleHelpers';
-import { bg_c_plain } from '../../styles/colors.module.css';
+import { bg_c_plain } from '../../styles/colorthemes.module.css';
 
 export const card = component({
   label: 'Card',

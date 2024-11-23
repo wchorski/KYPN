@@ -8,7 +8,7 @@ import {
 	bg_c_secondary,
 	bg_c_tertiary,
 	bg_c_transparent,
-} from "@styles/colors.module.css"
+} from "@styles/colorthemes.module.css"
 import { ColorsTheme, SpaceSize } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
 

@@ -6,6 +6,7 @@ import { getColorTheme } from "@lib/styleHelpers"
 import { number } from "fp-ts"
 import {
 	layout_content,
+	layout_full,
 	layout_site,
 	layout_wide,
 } from "@styles/layout.module.scss"
@@ -27,14 +28,13 @@ export function BlockLayout(props: Props) {
 		children,
 		content,
 		colorTheme = "bg_c_transparent",
-		layout,
+		layout = [1],
 		paddingBlock = "4vh",
 		nestedBlock,
 	} = props
-  if(!layout || !layout.length) return null
 
 	// layout input looks like [1,1] [1,2] [2,1] [1,1,1] [1,2,1]
-	const layoutString = layout ? (layout.join("_") as GridLayout) : "1"
+	const layoutString = layout.join("_") as GridLayout
 	const clrTheme = getColorTheme(colorTheme)
 	const layoutWidthStyle = (() => {
 		switch (true) {
@@ -44,7 +44,7 @@ export function BlockLayout(props: Props) {
 				return layout_wide
 
 			default:
-				return layout_content
+				return layout_full
 		}
 	})()
 

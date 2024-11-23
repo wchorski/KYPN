@@ -190,7 +190,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 						</li>
 					</ul>
 					{(session?.data.role?.canManagePosts || status !== 'PUBLIC') && (
-						<Card>
+						
 							<Flex alignItems={'center'}>
 								<StatusBadge type={"post"} status={status} />
                 {(author.email === session?.user.email || session?.data?.role?.canManagePosts) && (
@@ -201,7 +201,7 @@ export default async function BlogPostBySlug({ params }: Props) {
                   />
                 )}
 							</Flex>
-						</Card>
+						
 					)}
 					<hr />
 				</Header>

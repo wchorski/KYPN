@@ -1,10 +1,12 @@
+import Flex from "@components/layouts/Flex"
+
 type Props = {
 	prop?: string
 }
 
 export function TawTawPowered({ prop }: Props) {
 	return (
-		<div>
+		<Flex>
 			<span> Powered by </span>
 			<a
 				href="https://www.tawtaw.site"
@@ -16,6 +18,6 @@ export function TawTawPowered({ prop }: Props) {
 			>
 				<span> {`There's a Will There's a Web.site`} </span>
 			</a>
-		</div>
+		</Flex>
 	)
 }
