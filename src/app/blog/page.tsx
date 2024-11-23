@@ -40,11 +40,12 @@ export const metadata: Metadata = {
 
 export default async function BlogFeedPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
-	const { page, categories } = searchParams
+	const { page, categories } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = categories?.split(",") || []
 
 	const { posts, count, error } = await fetchPosts({
+    query: QUERY_POSTS_ARTICLES,
 		page: currPage,
 		categoryIds,
 		session,
@@ -102,51 +103,33 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 	)
 }
 
-// function Header() {
-// 	return (
-// 		<>
-// 			<h1> Blog </h1>
-// 		</>
-// 	)
-// }
-
-// type Main = {
-// 	page: number
-// 	posts: Post[] | undefined
-// 	count: number | undefined
-// }
-
-// function Main({ posts, page, count }: Main) {
-// 	if (!posts) <p> no posts found </p>
-
-// 	return (
-// 		<>
-// 			<Pagination route="/blog" page={page || 1} count={count} />
-
-// 			<BlogList posts={posts} />
-// 			{posts?.length === 0 && <NoData name="posts" />}
-
-// 			<Pagination route="/blog" page={page || 1} count={count} />
-// 		</>
-// 	)
-// }
-
-// function Aside(categoryIds?: string[]) {
-// 	return (
-// 		<>
-// 			<Card>
-// 				<h2 style={styleHeader}> Categories </h2>
-// 				<CategoriesPool activeIds={categoryIds} />
-// 			</Card>
-
-// 			<Card>
-// 				<h2 style={styleHeader}> Tags </h2>
-// 				<TagsPool />
-// 			</Card>
-// 		</>
-// 	)
-// }
 const styleHeader: CSSProperties = {
 	fontSize: "1.3rem",
 	marginBottom: 0,
 }
+
+const QUERY_POSTS_ARTICLES = `
+  id
+  title
+  featured_image
+  featured_video
+  author {
+    id
+    name
+    nameLast
+  }
+  dateModified
+  excerpt
+  pinned
+  slug
+  status
+  template
+  tags {
+    id
+    name
+  }
+  categories {
+    id
+    name
+  }
+`

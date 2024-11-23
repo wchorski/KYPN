@@ -22,7 +22,7 @@ const perPage = envs.PERPAGE
 export default async function UserByIdPage({ params, searchParams }: Props) {
 	const { id } = params
 	const session = await getServerSession(nextAuthOptions)
-	const { user, error } = await fetchUser(id, session)
+	const { user, error } = await fetchUser(id, QUERY_USER_THIN, session)
 
 	if (error)
 		return (
@@ -71,3 +71,12 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 		</main>
 	)
 }
+
+const QUERY_USER_THIN = `
+  id
+  name
+  email
+  role {
+    name
+  }
+`

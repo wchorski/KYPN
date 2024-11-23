@@ -6878,7 +6878,7 @@ next-auth@^4.23.2:
     preact-render-to-string "^5.1.19"
     uuid "^8.3.2"
 
-next@14.1.4, next@14.2.5, next@^13.3.0, next@^14.0.0:
+next@14.1.4, next@14.2.5, next@^13.3.0:
   version "14.2.5"
   resolved "https://registry.yarnpkg.com/next/-/next-14.2.5.tgz#afe4022bb0b752962e2205836587a289270efbea"
   integrity sha512-0f8aRfBVL+mpzfBjYfQuLWh2WyAwtJXCRfkPF4UJ5qd2YwrHczsrSzXU4tRMV0OAxR8ZJZWPFn6uhSC56UTsLA==

@@ -1,4 +1,4 @@
-const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL + '/:match*' || 'no_analytics_url'
+const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL ? process.env.NEXT_PUBLIC_UMAMI_URL + '/:match*' : 'http://no_analytics_url.tawtaw.site/:match*'
 
 export default {
   // todo look into build optimization with `standalone` mode

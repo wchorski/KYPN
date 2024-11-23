@@ -1,9 +1,13 @@
-import type { Lists } from ".keystone/types"
-type User = Lists.User["fields"]
 import { keystoneContext } from "@ks/context"
+import { User } from "@ks/types"
+type Props = {
+  query:string,
+  page?:number,
+  perPage?:number,
+  session:any
+}
 
-// ? query from yoga client
-export async function fetchUsers(page = 1, perPage = 25, session: any) {
+export async function fetchUsers({query, page = 1, perPage = 25, session}:Props) {
 	const variables = {
 		skip: page * perPage - perPage,
 		take: perPage,
@@ -18,22 +22,14 @@ export async function fetchUsers(page = 1, perPage = 25, session: any) {
 		const users = (await keystoneContext
 			.withSession(session)
 			.query.User.findMany({
-				query: q_users,
+				query,
 				// ...variables
 			})) as User[]
 
 		return { users }
 	} catch (error) {
-		console.log("fetch users: ", error)
+		console.log("!!! fetchUsers: ", error)
 		return { error }
 	}
 }
 
-const q_users = `
-  id
-  name
-  email
-  role {
-    name
-  }
-`

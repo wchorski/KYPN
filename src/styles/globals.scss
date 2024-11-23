@@ -1,11 +1,10 @@
-@import './vars.scss';
-@import './colors.scss';
-@import './layout.scss';
-@import './typography.scss';
-@import './elements.scss';
-@import './animations.scss';
-// @import './blockrenderer.scss';
-@import './skeleton/normalize.scss';
+@use './vars.scss';
+@use './colors.scss';
+@use './layout.scss';
+@use './typography.scss';
+@use './elements.scss';
+@use './animations.scss';
+@use './skeleton/normalize.scss';
 
 
 html{

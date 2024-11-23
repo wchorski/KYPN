@@ -35,7 +35,7 @@ type Props = {
 }
 
 export default async function SignOutPage({ searchParams }: Props) {
-	const { error, callbackUrl } = searchParams
+	const { error, callbackUrl } = await searchParams
 
 	return (
 		<main className={page_layout}>

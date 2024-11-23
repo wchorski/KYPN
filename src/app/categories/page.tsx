@@ -35,66 +35,85 @@ export const metadata: Metadata = {
 
 export default async function CategoriesPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
-	const { page, ids } = searchParams
+	const { page, ids } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = ids?.split(",") || []
+  
 	const {
 		posts,
 		count,
 		error: postsError,
-	} = await fetchPosts({ page: currPage, categoryIds, session })
+	} = await fetchPosts({
+		query: QUERY_POSTS_ARTICLES,
+		page: currPage,
+		categoryIds,
+		session,
+	})
 	const { categories, error: catsError } = await fetchCategories(categoryIds)
 
-  if (postsError || catsError) return <ErrorPage error={postsError || catsError} ><p>data fetch error </p></ErrorPage>
-	if (!posts || !categories) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
+	if (postsError || catsError)
+		return (
+			<ErrorPage error={postsError || catsError}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!posts || !categories)
+		return (
+			<NoDataFoundPage>
+				<p>No data found</p>
+			</NoDataFoundPage>
+		)
 
 	return (
-		<>
-			<main className={page_layout}>
-				<header className={layout_site}>
-					<h1 style={{ marginBottom: 0 }}>
-						{" "}
-						Categories {categories ? ":" : null}
-					</h1>
-					<p style={{ marginTop: 0, color: "var(--c-primary)" }}>
-						{categories?.map((c) => c.name).join(", ")}
-					</p>
-				</header>
+		<main className={page_layout}>
+			<header className={layout_site}>
+				<h1 style={{ marginBottom: 0 }}>
+					{" "}
+					Categories {categories ? ":" : null}
+				</h1>
+				<p style={{ marginTop: 0, color: "var(--c-primary)" }}>
+					{categories?.map((c) => c.name).join(", ")}
+				</p>
+			</header>
 
-				<div className={[page_content, layout_site].join(" ")}>
-					<h4>Posts: </h4>
-					{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
-				</div>
-        <hr />
-				<footer className={layout_site}>
-          <Flex>
-            <Card>
-              <h4> All Categories</h4>
-              <CategoriesPool />
-            </Card>
-          </Flex>
-				</footer>
-			</main>
-			{/* <PageTHeaderMain 
-      header={Header(categories)}
-      main={Main({posts, categories})}
-    /> */}
-		</>
+			<div className={[page_content, layout_site].join(" ")}>
+				<h4>Posts: </h4>
+				{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
+			</div>
+			<hr />
+			<footer className={layout_site}>
+				<Flex>
+					<Card>
+						<h4> All Categories</h4>
+						<CategoriesPool />
+					</Card>
+				</Flex>
+			</footer>
+		</main>
 	)
 }
-
-// function Aside() {
-
-//   return<>
-//     <Card>
-//       <h2> Categories </h2>
-//       <CategoriesPool />
-
-//     </Card>
-
-//     <Card>
-//       <h2> Tags </h2>
-//       <TagsPool />
-//     </Card>
-//   </>
-// }
+const QUERY_POSTS_ARTICLES = `
+  id
+  title
+  featured_image
+  featured_video
+  author {
+    id
+    name
+    nameLast
+  }
+  dateModified
+  excerpt
+  pinned
+  slug
+  status
+  template
+  tags {
+    id
+    name
+  }
+  categories {
+    id
+    name
+  }
+`

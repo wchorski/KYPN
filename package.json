@@ -49,6 +49,6 @@
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "resolutions": {
-    "next": "^14.0.0"
+    "next": "14.2.5"
   }
 }

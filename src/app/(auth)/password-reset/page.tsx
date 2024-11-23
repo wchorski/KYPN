@@ -16,7 +16,7 @@ type Props = {
 }
 
 export default async function PasswordResetPage({ searchParams }: Props) {
-	const { token, email } = searchParams
+	const { token, email } = await searchParams
 
 	return (
 		<main className={page_layout}>

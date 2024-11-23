@@ -49,10 +49,10 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	// read route params
-
+  const {slug} = await params
 	// fetch data
 	const session = await getServerSession(nextAuthOptions)
-	const { post } = await fetchPost(String(params?.slug), session)
+	const { post } = await fetchPost(String(slug), session)
 
 	if (!post)
 		return {
@@ -75,7 +75,7 @@ export async function generateMetadata(
 			title: title,
 			// @ts-ignore
 			description: excerpt,
-			url: envs.FRONTEND_URL + "/blog/" + params.slug,
+			url: envs.FRONTEND_URL + "/blog/" + slug,
 			type: "article",
 		},
 		// @ts-ignore

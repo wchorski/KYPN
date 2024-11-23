@@ -1,5 +1,5 @@
 ARG PRODUCTION_PLATFORM
-FROM --platform=$PRODUCTION_PLATFORM node:20-alpine AS base
+FROM --platform=$PRODUCTION_PLATFORM node:22-alpine AS base
 
 FROM base AS builder
 WORKDIR /app

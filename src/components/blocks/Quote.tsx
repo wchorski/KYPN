@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styles from '@styles/blocs/quote.module.scss';
+import {quote} from '@styles/blocs/quote.module.scss';
 import Link from 'next/link';
 
 type QuoteProps = {
@@ -11,7 +11,7 @@ type QuoteProps = {
 export function Quote({ href, attribution, content }: QuoteProps) {
   
   if(href) return (
-    <blockquote className={styles.quote}>
+    <blockquote className={quote}>
       <Link href={href} target='blank'>
 
         <div style={{ fontStyle: 'italic', }}>{content}</div>
@@ -22,7 +22,7 @@ export function Quote({ href, attribution, content }: QuoteProps) {
   )
   
   return (
-    <blockquote className={styles.quote}>
+    <blockquote className={quote}>
 
       <div style={{ fontStyle: 'italic', }}>{content}</div>
       <strong >— {attribution}</strong>

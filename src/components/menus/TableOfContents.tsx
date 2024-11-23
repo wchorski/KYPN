@@ -25,6 +25,7 @@ type Props = {
 	headerObjs: any[]
 }
 
+// TODO does not account for heirarchy that may start at h3, or if nested headers are more than one level apart (h2 > h4)
 export function TableOfContents({ headerObjs }: Props) {
 	const { hash, setHash, removeHash } = useUrlHash()
 	const router = useRouter()

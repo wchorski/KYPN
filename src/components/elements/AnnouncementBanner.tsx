@@ -24,9 +24,6 @@ export async function AnnouncementBanner ({ prop }:Props):ReactElement<any, any>
     || announcements.length === 0 
     || isEmptyContent(announcements[0].content.document)
   ) return <></>
-  
-  console.log({isEmptyContent: isEmptyContent(announcements[0].content.document)});
-  
 
   return (
     <AnnouncementsMarquee announcement={plainObj(announcements[0])}>

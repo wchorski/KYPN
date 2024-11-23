@@ -19,7 +19,7 @@ type Props = {
 }
 
 export default async function VerifyPage({ searchParams }: Props) {
-	const { email, token } = searchParams
+	const { email, token } = await searchParams
 
 	// if (!email || !token)
 	// 	return (

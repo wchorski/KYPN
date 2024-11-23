@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 
 export default async function TagsPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
-	const { page, ids } = searchParams
+	const { page, ids } = await searchParams
 	const currPage = Number(page) || 1
 	const tagIds = ids?.split(",") || []
 	const {

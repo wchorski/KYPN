@@ -3,7 +3,7 @@ services:
   ## you may build db seperately in ./db/compose.yml
   db:
     container_name: ${IMAGE_BASE_NAME}-db
-    image: postgres:15
+    image: postgres:16
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}

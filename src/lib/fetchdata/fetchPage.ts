@@ -4,7 +4,7 @@ import { Category, Page } from "@ks/types";
 import { getServerSession } from "next-auth";
 import type { PageOrderByInput, Lists } from ".keystone/types"
 
-export default async function fetchPage(slug:string){
+export default async function fetchPage(slug:string, query:string){
 
   try {
 
@@ -26,26 +26,27 @@ export default async function fetchPage(slug:string){
 // ? don't include top "query getUser" on top 
 // if query direct from keystoneContext
 
-const query = `
+// ? moved to the page
+// const query = `
 
-    id
-    slug
-    title
-    template
-    dateCreated
-    dateModified
-    tags {
-      name
-    }
-    categories {
-      name
-    }
-    status
-    author{
-      id
-      name
-    }
-    content {
-      document
-    }
-`
+//     id
+//     slug
+//     title
+//     template
+//     dateCreated
+//     dateModified
+//     tags {
+//       name
+//     }
+//     categories {
+//       name
+//     }
+//     status
+//     author{
+//       id
+//       name
+//     }
+//     content {
+//       document
+//     }
+// `

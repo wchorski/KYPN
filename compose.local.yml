@@ -1,21 +1,21 @@
 services:
 
   ## db container build seperately in ./db/compose.yml
-  db:
-    container_name: ${IMAGE_BASE_NAME}-db
-    image: postgres:15
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
-      PGDATA: /data/postgres
-      POSTGRES_DB: ${DB_COLLECTION}
-    volumes:
-        - ./db/data-postgres:/data/postgres
-    # ports:
-    #   - "${DB_PORT}:5432"
-    networks:
-      - this
+  # db:
+  #   container_name: ${IMAGE_BASE_NAME}-db
+  #   image: postgres:16
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: ${DB_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+  #     PGDATA: /data/postgres
+  #     POSTGRES_DB: ${DB_COLLECTION}
+  #   volumes:
+  #       - ./db/data-postgres:/data/postgres
+  #   # ports:
+  #   #   - "${DB_PORT}:5432"
+  #   networks:
+  #     - this
 
   backend:
     container_name: ${IMAGE_BASE_NAME}-backend
@@ -29,12 +29,12 @@ services:
       args:
         PRODUCTION_PLATFORM: ${PRODUCTION_PLATFORM}
     ports: # expose this if you're not using a proxy
-      - 3001:3001
+      - 8001:3001
     networks:
       - this
       # - proxy # TODO turn back on when using proxy
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
   frontend:
     container_name: ${IMAGE_BASE_NAME}-frontend
@@ -50,12 +50,12 @@ services:
       args:
         PRODUCTION_PLATFORM: ${PRODUCTION_PLATFORM}
     ports: # expose this if you're not using a proxy
-      - 3000:3000
+      - 8000:3000
     networks:
       - this
       # - proxy # TODO turn back on when using proxy
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
 networks:    
   ## network first built in ./db/compose.yml, then linked with 'external: true' here

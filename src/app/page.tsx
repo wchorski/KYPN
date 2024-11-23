@@ -1,36 +1,20 @@
-import { envs } from '@/envs'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/blocks/Section'
-import Link from 'next/link'
+import { envs } from "@/envs"
+import Link from "next/link"
+import { layout_content, page_layout } from "@styles/layout.module.scss"
 type Props = {
-  searchParams:{q:string}
-  params:{id:string}
+	searchParams: { q: string }
+	params: { id: string }
 }
 
-export default async function AppPage ({ params, searchParams }:Props) {
-  return (
-    <PageTHeaderMain
-      header={Header()}
-      main={Main()}
-    />
-  )
-}
-
-function Header(){
-
-  return<>
-    <Section layout={'1'}>
-    <h1>{envs.SITE_TITLE}</h1>
-    
-    </Section>
-  </>
-}
-
-function Main(){
-
-  return<>
-    <Section layout={'1'}>
-      <Link href={`/home`}> Take Me Home </Link>
-    </Section>
-  </>
+export default async function AppPage({ params, searchParams }: Props) {
+	return (
+		<main>
+			<header>
+				<h1>{envs.SITE_TITLE}</h1>
+			</header>
+			<div className={[page_layout, layout_content].join(" ")}>
+				<Link href={`/home`}> Take Me Home </Link>
+			</div>
+		</main>
+	)
 }

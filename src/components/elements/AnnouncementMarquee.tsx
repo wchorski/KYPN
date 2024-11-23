@@ -5,8 +5,18 @@ import { MdClose } from "react-icons/md"
 import { FiExternalLink } from "react-icons/fi"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { Announcement } from "@ks/types"
-import { sAnnouncement, sOpened, btnClose, btnlink } from "@styles/menus/announcement.module.scss"
-import { layout_full, layout_site, page_layout } from "@styles/layout.module.scss"
+import {
+	sAnnouncement,
+	sOpened,
+	btnClose,
+	btnlink,
+} from "@styles/menus/announcement.module.css"
+import {
+	layout_full,
+	layout_site,
+	page_layout,
+	layout_wide,
+} from "@styles/layout.module.scss"
 import Flex from "@components/layouts/Flex"
 import { getColorTheme } from "@lib/styleHelpers"
 
@@ -34,8 +44,8 @@ export function AnnouncementsMarquee({ announcement, children }: Props) {
 		setisClosed(true)
 	}
 
-	const { link, colorTheme = "bg_c_plain", } = announcement
-  const clrTheme = getColorTheme(colorTheme)
+	const { link, colorTheme = "bg_c_plain" } = announcement
+	const clrTheme = getColorTheme(colorTheme)
 
 	return (
 		<div
@@ -43,31 +53,33 @@ export function AnnouncementsMarquee({ announcement, children }: Props) {
 			// 	backgroundColor: color,
 			// }}
 			className={[
-        page_layout,
-        layout_full,
+				page_layout,
+				layout_full,
 				sAnnouncement,
 				"banner_wrap",
 				isClosed ? "" : sOpened,
-        clrTheme,
+				clrTheme,
 			].join(" ")}
 		>
-      <Flex className={layout_site} alignItems={'stretch'}>
-        <div className={layout_site}>{children}</div>
+			<div className={layout_wide}>
+				<Flex alignItems={"stretch"}>
+					<div>{children}</div>
 
-        {link && (
-          <Link
-            href={link}
-            onClick={(e) => setisClosed(true)}
-            className={btnlink}
-          >
-            <FiExternalLink />
-          </Link>
-        )}
+					{link && (
+						<Link
+							href={link}
+							onClick={(e) => setisClosed(true)}
+							className={btnlink}
+						>
+							<FiExternalLink />
+						</Link>
+					)}
 
-        <button onClick={(e) => setisClosed(true)} className={btnClose}>
-          <MdClose />
-        </button>
-      </Flex>
+					<button onClick={(e) => setisClosed(true)} className={btnClose}>
+						<MdClose />
+					</button>
+				</Flex>
+			</div>
 		</div>
 	)
 }
