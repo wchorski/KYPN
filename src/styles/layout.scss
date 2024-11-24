@@ -263,16 +263,17 @@ $breakpoint-l: 1200px;
 	// }
 	> .grid-item {
 		display: grid;
-
-		> :is(p, ul, ol, h1, h2, h3, h4, h5, h6) {
-			margin-inline: var(--space-m);
-		}
+    gap: var(--space-m);
+    // TODO WHY IS MOBILE FUCKED?
+		// > :is(p, ul, ol, h1, h2, h3, h4, h5, h6) {
+		// 	margin-inline: var(--space-m);
+		// }
 	}
 	//? `div:not([class])` has no class name
-	> .grid-item > div:not([class]) {
-		padding: var(--space-m);
-		min-width: 15rem;
-	}
+	// > .grid-item > div:not([class]) {
+	// 	padding: var(--space-m);
+	// 	min-width: 15rem;
+	// }
 }
 
 // @media screen and (width > 829px) and (width < 1617px) {

@@ -21,7 +21,7 @@ export function ImageBlock({
 }: Props) {
 	return (
 		<figure
-			className={[layout_wide, image_wrap].join(' ')}
+			className={image_wrap}
 		>
 			<Image
 				alt={alt}

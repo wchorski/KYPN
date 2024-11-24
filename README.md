@@ -229,6 +229,7 @@ When initializing a fresh database or returning to development you may add/remov
 
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`???
 This i need to do before moving back to main branch
+- [ ] get rid of all `BlockLayout` files in favor of `Grid` or `Flex`
 - [ ] update all `.ini` files
 - [ ] fix all error and nodata page fallbacks
 - [x] Post share modem w copy link (id)

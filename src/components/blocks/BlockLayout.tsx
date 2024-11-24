@@ -53,7 +53,7 @@ export function BlockLayout(props: Props) {
 			layout={layoutString}
 			style={{ paddingBlock }}
 			className={clrTheme}
-			nestedBlock={nestedBlock}
+			// nestedBlock={nestedBlock}
       layoutWidthStyle={layoutWidthStyle as WidthLayoutSize2}
 		>
 			{content ? content : children}

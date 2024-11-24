@@ -68,41 +68,6 @@ ul.unstyled {
 	padding: 0;
 }
 
-// ul,
-// ol {
-// 	// padding-left: 1rem;
-// 	display: grid;
-// 	gap: 0.5rem;
-// }
-
-// h1,
-// h2,
-// h3,
-// h4,
-// h5,
-// h6,
-// p {
-// 	&:empty {
-// 		display: none;
-// 	}
-// }
-
-// button {
-// 	cursor: pointer;
-// 	transition-property: color, background-color, filter;
-// 	transition-duration: 0.3s;
-// 	background-color: var(--c-body);
-// 	color: var(--c-txt);
-//   border: solid 2px var(--c-seperator);
-//   border-radius: var(--br-dull);
-
-// 	> span {
-// 		display: flex;
-// 		justify-content: center;
-// 		align-items: center;
-// 	}
-// }
-
 .button {
 	border-radius: var(--br-dull);
 	border: solid 1px var(--c-primary);

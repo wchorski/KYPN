@@ -30,7 +30,14 @@ import { CodeBlock } from "./CodeBlock"
 import { Card } from "@components/layouts/Card"
 import { Blockquote } from "./Blockquote"
 import { Table } from "@components/blocks/Table"
-import { layout_breakout, layout_content, layout_wide } from "@styles/layout.module.scss"
+import {
+	layout_breakout,
+	layout_content,
+	layout_full,
+	layout_wide,
+} from "@styles/layout.module.scss"
+import { Grid } from "@components/layouts/Grid"
+import { GridLayout } from "@ks/types"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -44,8 +51,19 @@ const renderers: DocumentRendererProps["renderers"] = {
 		// @ts-ignore
 		block: Fragment,
 		layout: (props) => {
-			return <BlockLayout {...props} />
+			const propsOverride = {
+				...props,
+				// todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
+				layout: props.layout.join("_") as GridLayout,
+				isAuto: false,
+        style: {marginBlock: '10vh'}
+			}
+			return <Grid {...propsOverride} />
 		},
+		//? moving everything to <Grid />
+		// layout: (props) => {
+		// 	return <BlockLayout {...props} />
+		// },
 		// customise blockquote elements with your own styles
 		blockquote(props) {
 			return <Blockquote {...props} />
@@ -107,20 +125,36 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 		return <Quote {...props} />
 	},
 	carousel: (props) => {
-		return <div className={layout_wide} >
-      <Carousel {...props} />
-    </div>
+		return (
+			<div className={layout_wide}>
+				<Carousel {...props} />
+			</div>
+		)
 	},
 	slider: (props) => {
 		return <SliderSlick {...props} />
 	},
 	section: (props) => {
-    const propsOverride = {
-      ...props,
-      // todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
-      nestedBlock: true,
-    }
-		return <BlockLayout {...propsOverride} />
+		const propsOverride = {
+			...props,
+			// todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
+			// nestedBlock: true,
+			layout: "1",
+			imageSrc: "",
+		}
+		return (
+			<section
+				className={layout_full}
+				style={{
+					backgroundImage: `url(${props.imageSrc})`,
+					padding: "var(--space-m)",
+          marginBlock: '10vh',
+				}}
+			>
+				<Grid {...props} />
+			</section>
+		)
+		// return <BlockLayout {...propsOverride} />
 	},
 	iframe: (props) => {
 		return <IFrame {...props} />
@@ -130,7 +164,6 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	},
 	card: (props) => {
 		return <Card {...props} />
-  
 	},
 	infocard: (props) => {
 		return <InfoCard {...props} />
