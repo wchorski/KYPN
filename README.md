@@ -244,6 +244,7 @@ When initializing a fresh database or returning to development you may add/remov
 <summary>view</summary>
 
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`??? This i need to do before moving back to main branch
+- [ ] make cute hover/click animation on powered by `www.tawtaw.site` link
 - [ ] get rid of all `BlockLayout` files in favor of `Grid` or `Flex`
 - [ ] update all `.ini` files
 - [ ] fix all error and nodata page fallbacks

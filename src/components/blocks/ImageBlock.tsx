@@ -22,6 +22,9 @@ export function ImageBlock({
 	return (
 		<figure
 			className={image_wrap}
+      style={{
+        ...(width ? {width} : {})
+      }}
 		>
 			<Image
 				alt={alt}

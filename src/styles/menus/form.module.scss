@@ -41,6 +41,7 @@
   border-radius: var(--br-soft);
   box-shadow: var(--shadow-1);
   background-color: var(--c-txt-bg-darker);
+  height: fit-content;
 
   label {
     display: grid;
@@ -70,15 +71,15 @@
   legend{
     margin-top: 1rem;
     font-weight: bold;
-    font-size: 1.2rem;
-    color: var(--c-txt-sub);
+    font-size: 2rem;
+    // color: var(--c-txt-sub);
   }
 
   legend::after {
     height: 5px;
     content: '';
     display: block;
-    border-bottom: solid 1px var(--c-txt-sub);
+    border-bottom: solid 1px var(--c-seperator);
     // background-image: linear-gradient(
     //   to right,
     //   var(--c-primary) 0%,

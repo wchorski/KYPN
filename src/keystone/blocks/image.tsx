@@ -29,16 +29,11 @@ export const image = component({
       label: 'Frame Border',
       defaultValue: 0
     }),
-    width: fields.integer({
+    width: fields.text({
       label: 'Frame Width',
-      defaultValue: 0
     }),
   },
   preview: function Quote(props) {
-
-    const currWidth = (props.fields.width.value > 0) 
-      ? props.fields.width.value
-      : '100%'
 
     return (
 
@@ -48,7 +43,7 @@ export const image = component({
           margin: '0',
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
-          width: currWidth,
+          width: props.fields.width.value || '100%',
           // width: props.fields.width.value + 'px',
           marginInline: 'auto',
         }}>
