@@ -12,7 +12,7 @@ import {
 	_1_2_1,
   grid_item,
 } from "@styles/grid.module.css"
-import { layout_site } from "@styles/layout.module.scss"
+import { layout_site } from "@styles/layout.module.css"
 
 type Props = {
 	pad?: number

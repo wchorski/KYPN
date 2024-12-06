@@ -1,7 +1,7 @@
 import "@styles/globals.scss"
 import type { Metadata } from "next"
 import { Inter, Barlow } from "next/font/google"
-import layoutStyles from "@styles/layout.module.scss"
+import layoutStyles from "@styles/layout.module.css"
 import Script from "next/script"
 import { Nav } from "@components/private/Nav"
 import { envs } from "@/envs"

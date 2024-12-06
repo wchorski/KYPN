@@ -1,6 +1,6 @@
 import React, { CSSProperties, ReactNode } from "react"
 import styles from "@styles/blocs/hero.module.scss"
-import sLayout from "@styles/layout.module.scss"
+import sLayout from "@styles/layout.module.css"
 
 type HeroProps = {
 	imageSrc: string

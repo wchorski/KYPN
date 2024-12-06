@@ -4,6 +4,7 @@ import { BlockRender } from "@components/blocks/BlockRender"
 import { envs } from "@/envs"
 import { ResolvingMetadata } from "next"
 import { StatusBadge } from "@components/StatusBadge"
+
 import Link from "next/link"
 import {
 	page_layout,
@@ -11,7 +12,7 @@ import {
 	layout_full,
 	layout_site,
 	layout_content,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { AsideBar } from "@components/layouts/AsideBar"
 import Flex from "@components/layouts/Flex"
 import { TableOfContents } from "@components/menus/TableOfContents"
@@ -19,6 +20,7 @@ import { findAllHeadings } from "@lib/contentHelpers"
 import { CSSProperties } from "react"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
+import { notFound } from "next/navigation"
 export const revalidate = 5
 
 type Props = {
@@ -51,20 +53,9 @@ export default async function PageBySlug({ params }: Props) {
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!page)
-		return (
-			<NoDataFoundPage>
-				<p>No post found</p>
-			</NoDataFoundPage>
-		)
+	if (!page) return notFound()
 
-	const {
-		id,
-		title,
-		status,
-		template,
-		content,
-	} = page
+	const { id, title, status, template, content } = page
 
 	const tableOfContentLinks = findAllHeadings(content?.document)
 

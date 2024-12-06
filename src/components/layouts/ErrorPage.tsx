@@ -5,7 +5,7 @@ import {
   layout_site,
   page_content,
   page_layout,
-  } from '@styles/layout.module.scss'
+  } from '@styles/layout.module.css'
 import { getServerSession } from 'next-auth'
 import { ReactNode } from 'react'
 

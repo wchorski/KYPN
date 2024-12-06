@@ -1,6 +1,6 @@
 import { CSSProperties, ReactNode } from "react"
 import styles from "@styles/aside.module.scss"
-import { page_sidebar } from "@styles/layout.module.scss"
+import { page_sidebar } from "@styles/layout.module.css"
 
 type Props = {
 	children: ReactNode

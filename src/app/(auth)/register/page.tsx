@@ -8,7 +8,7 @@ import {
 	layout_content,
 	page_content,
 	page_layout,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 
 export const metadata: Metadata = {
 	title: "Regsiter | " + envs.SITE_TITLE,

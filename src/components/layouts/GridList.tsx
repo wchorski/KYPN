@@ -2,7 +2,7 @@
 import styles from "@styles/articles.module.scss"
 import { Post, WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
 import { CSSProperties, ReactElement, ReactNode } from "react"
-import { grid, auto } from "@styles/layout.module.scss"
+import { grid, auto } from "@styles/layout.module.css"
 export const revalidate = 5
 
 type ProdProps = {

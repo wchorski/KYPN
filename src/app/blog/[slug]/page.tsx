@@ -18,7 +18,7 @@ import {
 	page_content,
 	page_layout,
 	page_title,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import sArticles from "@styles/articles.module.scss"
 import { StatusBadge } from "@components/StatusBadge"
 import { CgProfile } from "react-icons/cg"
@@ -34,6 +34,7 @@ import { ShareButton } from "@components/elements/ShareButton"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { IconLink } from "@components/elements/IconLink"
+import { notFound } from "next/navigation"
 
 export const revalidate = 5
 
@@ -97,11 +98,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 			</ErrorPage>
 		)
 	if (!post)
-		return (
-			<NoDataFoundPage>
-				<p> Post not found</p>
-			</NoDataFoundPage>
-		)
+		return notFound()
 
 	const {
 		id,

@@ -18,7 +18,7 @@ import {
 	layout_wide,
 	page_content,
 	page_layout,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { Grid } from "@components/layouts/Grid"
 
 export const metadata: Metadata = {

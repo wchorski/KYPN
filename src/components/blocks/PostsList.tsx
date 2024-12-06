@@ -4,7 +4,7 @@ import { Section } from "@components/blocks/Section"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
 import { ReactElement } from "react"
-import { layout_site } from "@styles/layout.module.scss"
+import { layout_site } from "@styles/layout.module.css"
 
 type Props = {
   header:string,

@@ -4,7 +4,7 @@ import {
 	layout_wide,
 	page_content,
 	page_layout,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { NoData } from "@components/elements/NoData"
 
 type Props = {

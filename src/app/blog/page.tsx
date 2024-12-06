@@ -17,7 +17,7 @@ import {
 	layout_wide,
 	page_content,
 	layout_site_to_wide,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { AsideBar } from "@components/layouts/AsideBar"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"

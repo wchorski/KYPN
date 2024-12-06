@@ -9,7 +9,7 @@ import {
 	layout_full,
 	layout_site,
 	layout_wide,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 
 type Props = {
 	children: ReactNode[]

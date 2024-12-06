@@ -1,5 +1,5 @@
 import { GridLayout, SpaceSize, WidthLayoutSize2 } from "@ks/types"
-import { layout_full, layout_site } from "@styles/layout.module.scss"
+import { layout_full, layout_site } from "@styles/layout.module.css"
 import type { CSSProperties, ReactNode } from "react"
 
 type Props = {

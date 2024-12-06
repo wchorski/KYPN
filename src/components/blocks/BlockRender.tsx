@@ -35,7 +35,7 @@ import {
 	layout_content,
 	layout_full,
 	layout_wide,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { Grid } from "@components/layouts/Grid"
 import { GridLayout } from "@ks/types"
 

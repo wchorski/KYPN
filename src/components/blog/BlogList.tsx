@@ -3,7 +3,7 @@ import { BlogListItem } from "./BlogListItem"
 import styles from "@styles/articles.module.scss"
 import { Post, WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
 import { ReactElement } from "react"
-import sLayout, {grid, auto} from '@styles/layout.module.scss'
+import sLayout, {grid, auto} from '@styles/layout.module.css'
 import { GridList } from "@components/layouts/GridList"
 export const revalidate = 5
 

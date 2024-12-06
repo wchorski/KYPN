@@ -16,7 +16,7 @@ import {
 	layout_site,
 	page_layout,
 	layout_wide,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import Flex from "@components/layouts/Flex"
 import { getColorTheme } from "@lib/styleHelpers"
 

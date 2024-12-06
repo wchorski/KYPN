@@ -9,7 +9,7 @@ import {
 	layout_content,
 	page_content,
 	page_layout,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import Link from "next/link"
 type Props = {
 	searchParams: {

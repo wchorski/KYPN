@@ -2,7 +2,7 @@ import { envs } from "@/envs"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { Post } from "@ks/types"
-import { layout_content, page_layout } from "@styles/layout.module.scss"
+import { layout_content, page_layout } from "@styles/layout.module.css"
 import Link from "next/link"
 
 type Props = {

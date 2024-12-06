@@ -11,7 +11,7 @@ import {
 	page_layout,
 	page_content,
 	layout_site,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import Flex from "@components/layouts/Flex"
 import { NoData } from "@components/elements/NoData"
 import ErrorPage from "@components/layouts/ErrorPage"

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import {layout_wide} from '@styles/layout.module.scss'
+import {layout_wide} from '@styles/layout.module.css'
 import { image_caption, image_wrap } from "@styles/image.module.scss";
 
 type Props = {
