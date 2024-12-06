@@ -18,7 +18,6 @@ export const section = component({
     }),
     imageSrc: fields.url({
       label: 'Image URL',
-      defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
     // backgroundColor: fields.text({
     //   label: 'Background Color',

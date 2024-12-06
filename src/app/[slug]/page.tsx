@@ -21,6 +21,7 @@ import { CSSProperties } from "react"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { notFound } from "next/navigation"
+import { IconLink } from "@components/elements/IconLink"
 export const revalidate = 5
 
 type Props = {
@@ -95,18 +96,18 @@ export default async function PageBySlug({ params }: Props) {
 						className={"siteWrapper"}
 						style={{ marginInline: "auto", marginBlock: "1rem" }}
 						direction={"row"}
+						gap={"var(--space-m)"}
 					>
 						<StatusBadge type={"page"} status={status} />
-						<Link
+						<IconLink
 							href={envs.BACKEND_URL + `/pages/${id}`}
-							className={"button"}
 							target={"_blank"}
-						>
-							{" "}
-							edit page{" "}
-						</Link>
+							label={"edit page"}
+							icon={"edit"}
+						/>
 					</Card>
 				)}
+
 				<BlockRender document={content?.document} />
 			</div>
 			{template === "WITH_TABLEOFCONTENTS" && (

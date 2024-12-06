@@ -29,6 +29,13 @@ export const Page: Lists.Page = list({
 		},
 	},
 
+  ui: {
+		hideCreate: (args) => !permissions.canManagePages(args),
+		hideDelete: (args) => !permissions.canManagePages(args),
+		isHidden: (args) => !permissions.canManagePages(args),
+	},
+  
+
 	fields: {
 		title: text({ validation: { isRequired: true } }),
 		slug: text({
@@ -36,7 +43,8 @@ export const Page: Lists.Page = list({
 			validation: { isRequired: true },
 			hooks: {
 				beforeOperation({ resolvedData }) {
-					if (!resolvedData?.slug) return console.log("Page: no slug")
+					//?" Page: no slug"
+					if (!resolvedData?.slug) return undefined
 					resolvedData.slug = slugFormat(String(resolvedData.slug))
 				},
 			},
@@ -127,7 +135,7 @@ export const Page: Lists.Page = list({
 			ui: {
 				displayMode: "cards",
 				cardFields: ["name", "email"],
-				inlineEdit: { fields: ["name", "email"] },
+				// inlineEdit: { fields: ["name", "email"] },
 				linkToItem: true,
 				inlineConnect: true,
 			},

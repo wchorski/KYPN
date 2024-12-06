@@ -22,16 +22,31 @@ export const Post: Lists.Post = list({
 			delete: rules.canManagePosts,
 		},
 		operation: {
-			create: permissions.canManagePosts,
+			create: permissions.canCreatePosts,
 			query: () => true,
 			update: permissions.canManagePosts,
 			delete: permissions.canManagePosts,
 		},
 	},
+
 	ui: {
-		// todo hide these again
-		// isHidden: true,
+		hideCreate: (args) => !permissions.canCreatePosts(args),
+		hideDelete: (args) => !permissions.canCreatePosts(args),
+		// isHidden: (args) => !permissions.canManagePosts(args),
+    itemView: {
+      defaultFieldMode: ({session, context, item}) => {
+        if(permissions.canManagePosts({session, context, item})) return 'edit'
+        if(session.itemId === item.authorId) return 'edit'
+        return 'read'
+      },
+    },
 		listView: {
+      // todo how to hide list items if `session.itemId` === `item.authorId`
+      // defaultFieldMode: ({session, context}) => {
+      //   // if(permissions.canManagePosts({session, context})) return 'read'
+      //   // if(session.itemId === item.authorId) return 'edit'
+      //   return 'hidden'
+      // },
 			initialColumns: [
 				"title",
 				"status",
@@ -145,7 +160,7 @@ export const Post: Lists.Post = list({
 			ui: {
 				displayMode: "cards",
 				cardFields: ["name", "email"],
-				inlineEdit: { fields: ["name", "email"] },
+				// inlineEdit: { fields: ["name", "email"] },
 				linkToItem: true,
 				inlineConnect: true,
 			},

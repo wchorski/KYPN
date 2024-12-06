@@ -24,6 +24,10 @@ export const permissionFields = {
 		defaultValue: false,
 		label: "Posts Manager: Can see and manage any post",
 	}),
+	canCreatePosts: checkbox({
+		defaultValue: false,
+		label: "Posts Create: Can create and edit their own authored posts",
+	}),
   canManageCategories: checkbox({
     defaultValue: false,
     label: 'Categories Manager: Can manage any category',

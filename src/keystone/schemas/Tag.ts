@@ -25,9 +25,19 @@ export const Tag:Lists.Tag = list({
 
   // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
   // todo hide these again
-  // ui: {
-  //   isHidden: true,
-  // },
+  ui: {
+    hideCreate: (args) => !permissions.canManageTags(args),
+		hideDelete: (args) => !permissions.canManageTags(args),
+		// isHidden: (args) => !permissions.canManageTags(args),
+    itemView: {
+      defaultFieldMode: ({session, context, item}) => {
+        if(permissions.canManageTags({session, context, item})) return 'edit'
+        return 'read'
+      },
+    },
+  },
+
+  
 
   // this is the fields for our Tag list
   fields: {

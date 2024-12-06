@@ -23,12 +23,17 @@ export const Announcement:Lists.Announcement = list({
     }
   },
 
-  // setting this to isHidden for the user interface prevents this list being visible in the Admin UI
-  // todo hide these again
   ui: {
+    hideCreate: (args) => !permissions.canManageAnnouncements(args),
+		hideDelete: (args) => !permissions.canManageAnnouncements(args),
+		isHidden: (args) => !permissions.canManageAnnouncements(args),
 
-    // todo hide these again
-    // isHidden: true,
+		itemView: {
+			defaultFieldMode: ({ session, context, item }) => {
+				if (permissions.canManageAnnouncements({ session, context, item })) return "edit"
+				return "read"
+			},
+		},
     listView: {
       initialColumns: ['link', 'start', 'end', 'type' ],
       initialSort: { field: 'start', direction: 'DESC'}

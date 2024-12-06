@@ -38,6 +38,7 @@ import {
 } from "@styles/layout.module.css"
 import { Grid } from "@components/layouts/Grid"
 import { GridLayout } from "@ks/types"
+import { getColorTheme } from "@lib/styleHelpers"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -142,11 +143,12 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 			layout: "1",
 			imageSrc: "",
 		}
+    const colorThemeStyle = getColorTheme(props.colorTheme)
 		return (
 			<section
-				className={layout_full}
+				className={[layout_full, colorThemeStyle].join(' ')}
 				style={{
-					backgroundImage: `url(${props.imageSrc})`,
+					...(props.imageSrc ? {backgroundImage: `url(${props.imageSrc})`}: {}),
 					padding: "var(--space-m)",
           marginBlock: '10vh',
 				}}

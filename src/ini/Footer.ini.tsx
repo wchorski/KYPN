@@ -7,6 +7,12 @@ import { List } from "@components/elements/List"
 import { BlockLayout } from "@components/layouts/BlockLayout"
 import Flex from "@components/layouts/Flex"
 import { CSSProperties } from "react"
+import {
+	layout_full,
+	layout_site,
+	page_layout,
+} from "@styles/layout.module.scss"
+import { Grid } from "@components/layouts/Grid"
 
 const txtStyle = {
 	color: "var(--c-light)",
@@ -14,37 +20,42 @@ const txtStyle = {
 
 export function Footer() {
 	return (
-		<footer className={styles.footer}>
-			<BlockLayout layout={"1_1"}>
-				<div>
-					<h4 style={txtStyle}> Contact </h4>
-					<List>
-						<Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`}>
-							{" "}
-							{envs.ADMIN_EMAIL_ADDRESS}
-						</Link>
-						<SocialLinkNav
-							color={envs.COLOR_PRIMARY}
-							github="https://github.com/wchorski/KYPN"
-						/>
-					</List>
-				</div>
+		<footer className={[styles.footer, page_layout].join(" ")}>
+      <section className={layout_site}>
+        <Grid layout={"1_1"} colWidth={'25rem'}>
+          <div>
+            <h4 style={txtStyle}> Contact </h4>
+            <List>
+              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`}>
+                {" "}
+                {envs.ADMIN_EMAIL_ADDRESS}
+              </Link>
+              <SocialLinkNav
+                color={envs.COLOR_PRIMARY}
+                github="https://github.com/wchorski/KYPN"
+              />
+            </List>
+          </div>
 
-				<div>
-					<h4 style={txtStyle}> Pages </h4>
-					<List>
-						<Link href={`/blog`}> Blog </Link>
-						<Link href={`/login`}> Login </Link>
-					</List>
-				</div>
-			</BlockLayout>
-			<section style={{ backgroundColor: "var(--c-footer)" }}>
-				<div className="siteWrapper">
+          <div>
+            <h4 style={txtStyle}> Pages </h4>
+            <List>
+              <Link href={`/blog`}> Blog </Link>
+              <Link href={`/login`}> Login </Link>
+            </List>
+          </div>
+        </Grid>
+
+      </section>
+			<section
+				className={layout_full}
+				style={{ backgroundColor: "var(--c-footer)" }}
+			>
+				<div className={layout_site}>
 					<Flex
 						justifyContent={"space-between"}
 						alignItems={"center"}
-						paddingBlock={"ml"}
-						paddingInline="m"
+						
 						gap={"m"}
 						style={{ borderTop: "solid 1px var(--c-seperator-dark)" }}
 					>
@@ -54,20 +65,32 @@ export function Footer() {
 						<div>
 							<ul className={styles.terms_privacy_list}>
 								<li>
-									<Link href={`/terms-and-privacy#terms-and-conditions`}> Terms & Conditions </Link>
+									<Link
+										className={"sub-text"}
+										href={`/terms-and-privacy#terms-and-conditions`}
+									>
+										{" "}
+										Terms & Conditions{" "}
+									</Link>
 								</li>
 								<li>
-									<Link href={`/terms-and-privacy#privacy`}> Privacy Policy </Link>
+									<Link
+										className={"sub-text"}
+										href={`/terms-and-privacy#privacy`}
+									>
+										{" "}
+										Privacy Policy{" "}
+									</Link>
 								</li>
 							</ul>
 						</div>
 					</Flex>
 				</div>
 			</section>
-			<section style={{ backgroundColor: "#0a0a0a" }}>
-				<BlockLayout layout={"1"} paddingBlock={"m"}>
+			<section className={layout_full} style={{ backgroundColor: "#0a0a0a" }}>
+				<div className={layout_site} style={{ paddingBlock: "var(--space-m)", filter: "brightness(0.8)" }}>
 					<TawTawPowered />
-				</BlockLayout>
+				</div>
 			</section>
 		</footer>
 	)

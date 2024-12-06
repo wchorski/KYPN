@@ -15,7 +15,6 @@ export const user_seeddata: UserCreateInput[] = [
 		authId: "admin@tawtaw.site",
 		stripeCustomerId: undefined,
 		password: "it5-a-secret-t0-everybodY",
-		isVerified: true,
 	},
 	{
 		name: "Eddy",
@@ -23,7 +22,13 @@ export const user_seeddata: UserCreateInput[] = [
 		authId: "eddy@tawtaw.site",
 		stripeCustomerId: undefined,
 		password: "eddy@tawtaw.site",
-		isVerified: true,
+	},
+	{
+		name: "Arthur",
+		email: "arthur@tawtaw.site",
+		authId: "arthur@tawtaw.site",
+		stripeCustomerId: undefined,
+		password: "arthur@tawtaw.site",
 	},
 	{
 		name: "Cinda",
@@ -31,7 +36,6 @@ export const user_seeddata: UserCreateInput[] = [
 		authId: "cinda@tawtaw.site",
 		stripeCustomerId: undefined,
 		password: "cinda@tawtaw.site",
-		isVerified: true,
 	},
 ]
 
@@ -44,10 +48,12 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canManageUsers: true,
 		canManageRoles: true,
 		canManagePosts: true,
+		canCreatePosts: true,
 		canManagePages: true,
 		canManageCategories: true,
 		canManageTags: true,
 		canManageAnnouncements: true,
+    description: "Users with permission to create, edit, delete all data",
 		assignedTo: {
 			connect: {
 				email: "admin@tawtaw.site",
@@ -58,9 +64,10 @@ export const roles_seedjson: RoleCreateInput[] = [
 		name: "editor",
 		label: "Editor",
 		canManagePosts: true,
-		canManagePages: true,
+    canCreatePosts: true,
 		canManageCategories: true,
 		canManageTags: true,
+    description: "Users with permission to manage all site posts, categories, and tags",
 		assignedTo: {
 			connect: {
 				email: "eddy@tawtaw.site",
@@ -68,8 +75,22 @@ export const roles_seedjson: RoleCreateInput[] = [
 		},
 	},
 	{
+		name: "author",
+		label: "Author",
+    canCreatePosts: true,
+		canManageCategories: true,
+		canManageTags: true,
+    description: "Users with permission to create and edit only their own posts",
+		assignedTo: {
+			connect: {
+				email: "arthur@tawtaw.site",
+			},
+		},
+	},
+	{
 		name: "client",
 		label: "Client",
+    description: "Users that are verified account holders. Users with no role are unverified",
 		assignedTo: {
 			connect: {
 				email: "cinda@tawtaw.site",
@@ -90,7 +111,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: { document: [
 			{
 				type: "paragraph",
 				children: [
@@ -174,7 +195,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 	{
 		title: "Home",
 		slug: "home",
@@ -186,7 +207,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: { document: [
 			{
 				type: "layout",
 				layout: [1, 2],
@@ -203,7 +224,7 @@ export const pages_seeddata: PageCreateInput[] = [
 									padding: 1,
 									fontSize: "1",
 									imageSrc:
-										"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+										"",
 									colorTheme: "bg_c_transparent",
 									verticleAlign: "center",
 								},
@@ -290,7 +311,7 @@ export const pages_seeddata: PageCreateInput[] = [
 									padding: 1,
 									fontSize: "1",
 									imageSrc:
-										"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+										"",
 									colorTheme: "bg_c_plain",
 									verticleAlign: "start",
 								},
@@ -335,7 +356,7 @@ export const pages_seeddata: PageCreateInput[] = [
 									padding: 1,
 									fontSize: "1",
 									imageSrc:
-										"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+										"",
 									colorTheme: "bg_c_plain",
 									verticleAlign: "start",
 								},
@@ -380,7 +401,7 @@ export const pages_seeddata: PageCreateInput[] = [
 									padding: 1,
 									fontSize: "1",
 									imageSrc:
-										"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+										"",
 									colorTheme: "bg_c_plain",
 									verticleAlign: "start",
 								},
@@ -420,7 +441,7 @@ export const pages_seeddata: PageCreateInput[] = [
 				props: {
 					content: null,
 					imageSrc:
-						"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+						"",
 					colorTheme: "bg_c_secondary",
 					paddingBlock: "10vh",
 				},
@@ -544,7 +565,7 @@ export const pages_seeddata: PageCreateInput[] = [
 									padding: 1,
 									fontSize: "1",
 									imageSrc:
-										"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+										"",
 									colorTheme: "bg_c_transparent",
 									verticleAlign: "center",
 								},
@@ -1047,7 +1068,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 	{
 		title: "Terms and Privacy",
 		slug: "terms-and-privacy",
@@ -1059,7 +1080,7 @@ export const pages_seeddata: PageCreateInput[] = [
 		excerpt: "",
 		featured_image: "",
 		featured_video: "",
-		content: [
+		content: { document: [
 			{
 				type: "heading",
 				level: 2,
@@ -1511,7 +1532,7 @@ export const pages_seeddata: PageCreateInput[] = [
 			},
 		},
 		// "privateAccess": []
-	},
+	}},
 ]
 
 export const posts_seedjson: PostCreateInput[] = [
@@ -3418,7 +3439,7 @@ export const posts_seedjson: PostCreateInput[] = [
 					props: {
 						content: null,
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_plain",
 						paddingBlock: "10vh",
 					},
@@ -7017,7 +7038,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_primary",
 						verticleAlign: "start",
 					},
@@ -7052,7 +7073,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_plain",
 						verticleAlign: "start",
 					},
@@ -7083,7 +7104,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_secondary",
 						verticleAlign: "start",
 					},
@@ -7118,7 +7139,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_tertiary",
 						verticleAlign: "start",
 					},
@@ -7153,7 +7174,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_accent",
 						verticleAlign: "start",
 					},
@@ -7188,7 +7209,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_transparent",
 						verticleAlign: "start",
 					},
@@ -7219,7 +7240,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_reverse_theme",
 						verticleAlign: "start",
 					},
@@ -7810,7 +7831,7 @@ export const posts_seedjson: PostCreateInput[] = [
 						padding: 1,
 						fontSize: "1",
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						buttonLink: "/blog/block-test",
 						buttonText: "",
 						verticleAlign: "start",
@@ -8214,7 +8235,7 @@ export const posts_seedjson: PostCreateInput[] = [
 					props: {
 						content: null,
 						imageSrc:
-							"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+							"",
 						colorTheme: "bg_c_plain",
 						paddingBlock: "15vh",
 					},

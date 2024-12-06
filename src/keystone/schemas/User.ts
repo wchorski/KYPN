@@ -32,8 +32,11 @@ export const User: Lists.User = list({
 	},
 
 	ui: {
-		// hide backend from non admins
+		//? filter handles ui filtering
 		// hideCreate: args => !permissions.canManageUsers(args),
+    // hideCreate: (args) => !permissions.canManageUsers(args),
+		// hideDelete: (args) => !permissions.canManageUsers(args),
+		// isHidden: (args) => !permissions.canManageUsers(args),
 		listView: {
 			initialColumns: ["name", "nameLast", "email", "role"],
 			initialSort: { field: "dateCreated", direction: "DESC" },
@@ -107,7 +110,6 @@ export const User: Lists.User = list({
 				},
 			},
 		}),
-		isVerified: checkbox(),
 		role: relationship({
 			ref: "Role.assignedTo",
 			// todo add access control

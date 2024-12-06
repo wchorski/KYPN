@@ -51,8 +51,6 @@ export const verifyEmail = (base: BaseSchemaMeta) => graphql.field({
         where: { email },
         data: {
           role: { connect: { name: envs.BASIC_USER_ROLE_NAME } },
-          // @ts-ignore
-          isVerified: true,
         }
       })
 

@@ -40,7 +40,7 @@ export function Card({
 	colorTheme = "bg_c_plain",
 	className,
 	style,
-	gap = "var(--space-m)",
+	gap = "var(--space-0)",
 	wrapperOverflow,
 	paddingBlock,
 	margin,

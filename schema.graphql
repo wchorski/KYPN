@@ -15,7 +15,6 @@ type User {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  isVerified: Boolean
   role: Role
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
@@ -52,7 +51,6 @@ input UserWhereInput {
   stripeCustomerId: StringFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
-  isVerified: BooleanFilter
   role: RoleWhereInput
   posts: PostManyRelationFilter
   pages: PageManyRelationFilter
@@ -147,7 +145,6 @@ input UserOrderByInput {
   stripeCustomerId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
-  isVerified: OrderDirection
 }
 
 enum OrderDirection {
@@ -168,7 +165,6 @@ input UserUpdateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  isVerified: Boolean
   role: RoleRelateToOneForUpdateInput
   posts: PostRelateToManyForUpdateInput
   pages: PageRelateToManyForUpdateInput
@@ -214,7 +210,6 @@ input UserCreateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  isVerified: Boolean
   role: RoleRelateToOneForCreateInput
   posts: PostRelateToManyForCreateInput
   pages: PageRelateToManyForCreateInput
@@ -241,11 +236,13 @@ type Role {
   id: ID!
   name: String
   label: String
+  description: String
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canCreatePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
   canManageAnnouncements: Boolean
@@ -266,11 +263,13 @@ input RoleWhereInput {
   id: IDFilter
   name: StringFilter
   label: StringFilter
+  description: StringFilter
   canSeeOtherUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageRoles: BooleanFilter
   canManagePages: BooleanFilter
   canManagePosts: BooleanFilter
+  canCreatePosts: BooleanFilter
   canManageCategories: BooleanFilter
   canManageTags: BooleanFilter
   canManageAnnouncements: BooleanFilter
@@ -287,11 +286,13 @@ input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
   label: OrderDirection
+  description: OrderDirection
   canSeeOtherUsers: OrderDirection
   canManageUsers: OrderDirection
   canManageRoles: OrderDirection
   canManagePages: OrderDirection
   canManagePosts: OrderDirection
+  canCreatePosts: OrderDirection
   canManageCategories: OrderDirection
   canManageTags: OrderDirection
   canManageAnnouncements: OrderDirection
@@ -300,11 +301,13 @@ input RoleOrderByInput {
 input RoleUpdateInput {
   name: String
   label: String
+  description: String
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canCreatePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
   canManageAnnouncements: Boolean
@@ -326,11 +329,13 @@ input RoleUpdateArgs {
 input RoleCreateInput {
   name: String
   label: String
+  description: String
   canSeeOtherUsers: Boolean
   canManageUsers: Boolean
   canManageRoles: Boolean
   canManagePages: Boolean
   canManagePosts: Boolean
+  canCreatePosts: Boolean
   canManageCategories: Boolean
   canManageTags: Boolean
   canManageAnnouncements: Boolean

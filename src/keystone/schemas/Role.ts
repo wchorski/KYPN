@@ -34,6 +34,9 @@ export const Role: Lists.Role = list({
 			},
 		}),
 		label: text({ validation: { isRequired: true }, isIndexed: "unique" }),
+		description: text({
+			ui: { displayMode: "textarea" },
+		}),
 		...permissionFields,
 		assignedTo: relationship({
 			ref: "User.role",
