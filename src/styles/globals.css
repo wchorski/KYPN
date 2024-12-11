@@ -1,0 +1,65 @@
+@import './vars.css';
+@import './colors.css';
+@import './site-layout.css';
+@import './typography.css';
+@import './elements.css';
+@import './animations.css';
+@import './skeleton/normalize.css';
+
+
+html{
+  height: 100%;
+  scroll-padding-top: 4rem;
+}
+body{
+  min-height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+
+  /* overflow-x: hidden; */
+
+}
+
+/* // https://css-tricks.com/snippets/css/accessibilityseo-friendly-css-hiding/ */
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+.screen-reader-text:focus {
+  background-color: #eee;
+  clip: auto !important;
+  clip-path: none;
+  color: #444;
+  display: block;
+  font-size: 1em;
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000; /* Above WP toolbar. */
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

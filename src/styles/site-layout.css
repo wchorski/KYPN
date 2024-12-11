@@ -1,0 +1,114 @@
+.layout--fullwidth {
+	display: grid;
+
+	grid-template-areas:
+		"banner  banner banner  banner"
+		"headr   headr  headr   headr"
+		"navi    navi   navi    navi"
+		"main    main   main    main"
+		"footer  footer footer  footer";
+	grid-template-columns:
+		minmax(0, 1fr)
+		minmax(0, calc(var(--w-sitemax) / 2))
+		minmax(0, calc(var(--w-sitemax) / 2))
+		minmax(0, 1fr);
+
+	align-content: flex-start;
+}
+
+.layout--fullwidth, .layout--main-aside {
+	/* // todo can i catch all any future layout? "&--*" ? */
+
+		& .banner_wrap {
+			grid-area: banner;
+			grid-column: 1/-1;
+			margin-inline: auto;
+			width: 100%;
+		}
+
+		& > header {
+			grid-area: headr;
+			grid-column: 1 / -1;
+		}
+
+		& > nav {
+			grid-area: navi;
+			grid-column: 1 / -1;
+
+			position: sticky;
+			top: 0;
+			z-index: 999;
+		}
+
+		& > main {
+			& > section {
+				min-height: 45vh;
+				display: grid;
+				align-content: center;
+			}
+		}
+
+		& > footer {
+			grid-area: footer;
+			grid-column: 1 / -1;
+		}
+	}
+
+.layout--fullwidth {
+  & > main,
+  & > .page-wrapper {
+    grid-area: main;
+    grid-column: 1 / -1;
+  }
+}
+
+.layout--main-aside {
+  & > main {
+    grid-area: main;
+    grid-column: 2 / 3;
+  }
+
+  & > aside {
+    grid-area: aside;
+    grid-column: 3 / 4;
+    position: sticky;
+    top: 4em;
+  }
+}
+
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-m);
+}
+
+.gap-xxl {
+	gap: var(--space-xxl);
+}
+.gap-xl {
+	gap: var(--space-xl);
+}
+.gap-l {
+	gap: var(--space-l);
+}
+.gap-ml {
+	gap: var(--space-ml);
+}
+.gap-m {
+	gap: var(--space-m);
+}
+.gap-ms {
+	gap: var(--space-ms);
+}
+.gap-s {
+	gap: var(--space-s);
+}
+.gap-xs {
+	gap: var(--space-xs);
+}
+
+.padding-0 {
+	padding: 0;
+}
+
+

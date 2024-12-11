@@ -1,6 +1,6 @@
-// Fonts
+/* // Fonts
 //? font-size, correctional spacing,
-//! all colors are done in `colors.css` 
+// ! all colors are done in `colors.css`  */
 
 html{
   font-size: var(--font-size-base);
@@ -15,13 +15,6 @@ h1,h2,h3,h4,h5,h6, thead, button {
   word-break: break-word;
   text-wrap: balance;
 }
-// h1{
-//   font-size: clamp(var(--font-size-base), var(--font-size-base) + 8.333vw, calc(var(--font-size-base) * (var(--font-size-multi) * 6)));
-//   font-weight: 900;
-// }
-// h2{
-//   font-size: clamp(var(--font-size-base), var(--font-size-base) + 8.333vw, calc(var(--font-size-base) * (var(--font-size-multi) * 5)));
-// }
 
 h1 {
   font-size: clamp(1rem * (var(--font-size-multi) * 3), 1rem + 5.246vw, 1rem * (var(--font-size-multi) * 6));
@@ -81,26 +74,20 @@ li > ul {
 
 p {
   max-width: var(--w-contentmax);
-  // font-size: var(--font-size-base);
-  // font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
 
 p, ul, ol {
   font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 2));
 }
-//todo scale nav buttons that are pure icons. keep large on mobile to prevent fat thumb
-// nav.icons {
-//   font-size: clamp(1rem, 1rem + 1vw, 1rem * (var(--font-size-multi) * 3));
-// }
 
 .sub-text {
   font-size: clamp(1rem, 1.4rem + 1vw, 1rem * (var(--font-size-multi) * 1));
 }
 
 ul{
-  //todo how to change color
+  /* //todo how to change color and icon */
   list-style: circle;
-  // list-style-image: url('/marker.svg');
+  /* list-style-image: url('/marker.svg'); */
 }
 
 ul:not([class]), ol:not([class]) {
@@ -112,11 +99,8 @@ ul:not([class]), ol:not([class]) {
   align-content: center;
 }
 
-// a {
-//   font-weight: bold;
-// }
+
 strong {
-  // -webkit-text-stroke: var(--c-txt) 1px;
   font-weight: bold;
 }
 em{
@@ -152,22 +136,6 @@ samp {
   font-family: monospace, monospace;
 }
 
-// @media (width > 800px) {
-//   h1{
-//     font-size: calc(var(--font-size-base) * 4);
-//   }
-//   h2{
-//     font-size: calc(var(--font-size-base) * 3);
-//   }
-//   h3{
-//     font-size: calc(var(--font-size-base) * 2);
-//   }
-
-//   p{
-//     font-size: calc(var(--font-size-base) * 1.2);
-//   }
-// }
-
 .button,
 button,
 input[type="submit"],
@@ -197,9 +165,3 @@ a:has(svg, span) {
   gap: var(--space-s);
   align-items: center;
 }
-
-// .pad-loose-elements {
-//   > p {
-//     padding-inline: var(--space-m);
-//   }
-// }

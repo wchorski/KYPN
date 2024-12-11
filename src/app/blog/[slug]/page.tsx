@@ -132,7 +132,6 @@ export default async function BlogPostBySlug({ params }: Props) {
 						// maxWidth,
 					} as CSSProperties
 				}
-				// className="post-layout"
 			>
 				<Header bgImage={featured_image} className={page_layout}>
 					<figure className={styles.featured_image_wrap}>

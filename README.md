@@ -60,7 +60,7 @@ Here is a list of files you'll need to provide (there are some `*.ini` files tha
   - `cp src/ini/Footer.ini.tsx src/components/private/Footer.tsx`
   - `cp src/ini/Nav.init.tsx src/components/private/Nav.tsx`
   - `cp src/ini/MainNavList.init.tsx src/components/private/MainNavList.tsx`
-  - `cp src/ini/vars.ini.scss src/styles/vars.scss`
+  - `cp src/ini/vars.ini.css src/styles/vars.css`
   - `cp src/ini/seed_data.ini.ts src/keystone/seed/seed_data.ts`.
   - `cp .env.ini .env`
 

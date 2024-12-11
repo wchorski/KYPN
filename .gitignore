@@ -21,7 +21,7 @@ seed_data*.ts
 !seed_data.ini.ts
 
 # pages, components, styles
-src/styles/vars.scss
+src/styles/vars.css
 src/styles/fonts.ts
 src/app/layout.tsx
 src/app/home

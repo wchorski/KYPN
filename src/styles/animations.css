@@ -1,20 +1,11 @@
-//todo add `@media (prefers-reduced-motion: no-preference){` for any `transform` animation
+/* //todo add `@media (prefers-reduced-motion: no-preference){` for any `transform` animation */
 @media (prefers-reduced-motion: no-preference){
   html {
     scroll-behavior: smooth;
   }
 }
 
-// :is(h1,h2,h3,h4,h5,h6):target::after {
-//   display: block;
-//   content: '';
-//   width: 0%;
-//   transition-property: border, color, background, width, height;
-//   // transition-property: all;
-//   transition-duration: 1s;
-//   transition-timing-function: ease-out;
-//   opacity: 0;
-// }
+
 :is(h1, h2, h3, h4, h5, h6).targeted,
 :is(h1,h2,h3,h4,h5,h6):target::after {
 		content: "";

@@ -2,8 +2,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
   margin-block: var(--space-l);
-  //? causes overlap
-  // table-layout: fixed;
 }
 thead th {
 	border-bottom-width: 3px;
@@ -16,7 +14,6 @@ td {
 	padding: var(--space-m);
 	text-align: left;
 	border-bottom-style: solid;
-	// border-bottom-width: 1px;
 	border-bottom-color: var(--c-seperator);
 }
 th:first-child,
@@ -29,39 +26,12 @@ td:last-child {
 }
 
 hr {
-	// margin: 4rem auto;
 	max-width: var(--w-sitemax);
 	border-style: solid;
 	border-width: var(--space-xxs);
 	margin-block: var(--space-l);
 	width: 100%;
 }
-
-// // form
-// ul.radio {
-// 	display: flex;
-// 	flex-direction: column;
-// 	gap: 1rem;
-// 	padding: 0;
-
-// 	.current {
-// 		text-decoration: underline;
-// 	}
-// }
-
-// fieldset {
-// 	margin: 1rem 0;
-// 	border-color: var(--c-glass);
-// }
-
-// a {
-// 	width: fit-content;
-// }
-
-// img {
-// 	font-style: italic;
-// 	color: var(--c-txt-sub);
-// }
 
 ul.unstyled {
 	list-style: none;
@@ -77,7 +47,7 @@ ul.unstyled {
 	justify-content: space-evenly;
 	align-content: center;
 
-	span {
+	& span {
 		display: flex;
 		gap: 1rem;
 		justify-content: space-around;
@@ -92,108 +62,8 @@ ul.unstyled {
 		padding: 1rem;
 		font-size: 1.3rem;
 	}
-
-	// 	&:hover,
-	// 	&:focus {
-	// 		// background-color: var(--c-primary);
-	// 		border: solid 1px var(--c-accent);
-	// 		color: var(--c-txt-light);
-	// 	}
-
-	// 	&:active {
-	// 		color: var(--c-accent);
-	// 		background-color: var(--c-txt);
-	// 		border: solid 1px var(--c-accent);
-	// 	}
-	// }
-
-	// .button:disabled {
-	// 	background-color: var(--c-disabled);
-	// 	border-color: var(--c-disabled);
-
-	// 	&:hover,
-	// 	&:focus {
-	// 		text-decoration: line-through;
-	// 		// background-color: var(--c-primary);
-	// 		// color: var(--c-txt-rev);
-	// 	}
-
-	// 	&:active {
-	// 		color: var(--c-txt-rev);
-	// 		background-color: var(--c-disabled);
-	// 		border: solid 1px var(--c-disabled);
-	// 	}
 }
 
-// .mtauto {
-// 	margin-top: auto;
-// }
-
-// // * FORMS
-
-// label:has(input[type="checkbox"]) {
-// 	display: flex;
-// 	align-items: center;
-// 	gap: 0.3rem;
-// }
-
-// input[type="checkbox"] {
-// 	appearance: none;
-// 	position: relative;
-// 	display: inline-block;
-// 	border: solid 3px var(--c-primary);
-// 	height: 1.5rem;
-// 	width: 1.5rem;
-// 	vertical-align: middle;
-// 	border-radius: 2rem;
-// 	box-shadow: 0px 1px 3px #0003 inset;
-// 	transition: 0.1s linear background;
-// 	display: flex;
-// 	justify-content: center;
-// 	align-items: center;
-// }
-// input::before {
-// 	content: "";
-// 	display: block;
-// 	width: 1.02rem;
-// 	height: 1.02rem;
-// 	background: #fff;
-// 	border-radius: 1.2rem;
-// 	position: absolute;
-// 	// top: 2px;
-// 	// left: 2px;
-// 	box-shadow: 0px 1px 3px #0003;
-// 	transition: 0.1s linear transform;
-// 	transform: scale(0);
-// }
-
-// input:checked {
-// 	border-color: var(--c-accent);
-
-// 	&::before {
-// 		background: var(--c-accent);
-// 	}
-// }
-// input:checked::before {
-// 	transform: scale(0.8);
-// }
-
-// textarea {
-// 	min-height: 6rem;
-// 	max-width: 75ch;
-// }
-
-// pre {
-// 	padding: 1rem;
-// 	background-color: var(--c-desaturated);
-// }
-
-// TODO why are checkbox input types auto made to be 'readonly'?
-// input:read-only {
-//   cursor: not-allowed;
-//   border-color: var(--c-disabled);
-//   color: var(--c-disabled);
-// }
 
 form,
 fieldset {
@@ -201,17 +71,16 @@ fieldset {
 	display: grid;
 	gap: var(--space-ms);
 
-	input,
-	select,
-	textarea {
+	& input,
+	& select,
+	& textarea {
 		max-width: 45ch;
 	}
 
-	label {
-		// display: grid;
+	& label {
 		gap: var(--space-ms);
 	}
-	label:has(
+	& label:has(
 			input[type="email"],
 			input[type="number"],
 			input[type="search"],
@@ -225,7 +94,7 @@ fieldset {
 		display: grid;
 	}
 
-	label:has(input[type="checkbox"], input[type="radio"]) {
+	& label:has(input[type="checkbox"], input[type="radio"]) {
 		display: flex;
 		align-content: center;
 		cursor: pointer;
@@ -306,7 +175,7 @@ blockquote {
 	margin-left: var(--space-m);
   background-color: hsla(0, 0%, 0%, 0.11);
 
-	:last-child {
+	&:last-child {
 		margin-bottom: 0;
 	}
 }
@@ -320,7 +189,6 @@ blockquote {
     content: '';
     width: 0%;
     transition-property: border, color, background, width, height, opacity;
-    // transition-property: all;
     transition-duration: 1s;
     transition-timing-function: ease-out;
     opacity: 0;
