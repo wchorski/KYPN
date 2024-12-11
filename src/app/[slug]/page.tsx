@@ -93,7 +93,7 @@ export default async function PageBySlug({ params }: Props) {
 			>
 				{status !== "PUBLIC" && (
 					<Card
-						className={"siteWrapper"}
+						// className={"siteWrapper"}
 						style={{ marginInline: "auto", marginBlock: "1rem" }}
 						direction={"row"}
 						gap={"var(--space-m)"}

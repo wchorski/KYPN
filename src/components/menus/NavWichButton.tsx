@@ -1,7 +1,7 @@
 'use client'
 import { useNavControl } from "@components/hooks/useGlobalContext"
 import { RiMenu3Line, RiMenu4Fill } from "react-icons/ri"
-import styles from '@styles/nav.module.scss'
+import styles from '@styles/nav.module.css'
 
 export function NavWichButton() {
 

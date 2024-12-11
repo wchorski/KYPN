@@ -1,5 +1,4 @@
 .pagination{
-  margin-inline: auto;
   margin-bottom: var(--space-m);
 
   display: flex;

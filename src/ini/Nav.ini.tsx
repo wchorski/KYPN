@@ -1,4 +1,4 @@
-import styles from "@styles/nav.module.scss"
+import styles from "@styles/nav.module.css"
 import { NavWichButton } from "@components/menus/NavWichButton"
 import { SessionBadge } from "@components/menus/Session"
 import { MainNavList } from "@components/private/MainNavList"
@@ -9,7 +9,7 @@ export function Nav() {
 
 	return (
 		<nav className={styles.nav} aria-label="Main Site Navigation">
-			<div className="siteWrapper">
+			<div >
 				<NavWichButton />
 
 				<MainNavList />

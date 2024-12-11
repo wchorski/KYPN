@@ -2,7 +2,7 @@
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 import { ReactNode } from "react"
-import styles from '@styles/nav.module.scss'
+import styles from '@styles/nav.module.css'
 import { useNavControl } from "@components/hooks/useGlobalContext"
 
 type Props = {

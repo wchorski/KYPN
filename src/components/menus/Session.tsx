@@ -1,12 +1,11 @@
 import Link from "next/link"
 import { MdAccountCircle } from "react-icons/md"
-import styles from "@styles/menus/session.module.scss"
+import styles, { session_btn, sub_menu } from "@styles/menus/session.module.css"
 import SignOutButton from "./SignOutButton"
 import { NavLink } from "./NavLink"
 import { getServerSession } from "next-auth"
 
 import { nextAuthOptions } from "@/session"
-import type { Session } from "@/session"
 import { envs } from "@/envs"
 import { ReactElement } from "react"
 
@@ -16,7 +15,7 @@ type Props = {
 
 // @ts-ignore
 export async function SessionBadge({ label }: Props): ReactElement<any, any> {
-	const session = (await getServerSession(nextAuthOptions))
+	const session = await getServerSession(nextAuthOptions)
 
 	if (!session) return <NavLink href="/login"> Login </NavLink>
 
@@ -26,14 +25,17 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 			id="session-badge"
 			aria-label="account menu link"
 		>
-			<NavLink href={`/account`} className="account-toggle">
+			<NavLink href={`/account`} className={session_btn}>
 				<MdAccountCircle />
 				<span>{label}</span>
 			</NavLink>
 
-			<ul className="sub-menu">
-				<li className="name">{session?.user?.name}</li>
-				<li className="email">{session?.user?.email}</li>
+			<ul className={sub_menu}>
+				<li className="user">
+					<span>{session?.user?.name}</span>
+					<br />
+					<span className={'sub-text'} >{session?.user?.email}</span>
+				</li>
 				<li>
 					{" "}
 					<NavLink className="button" href={`/account`}>

@@ -11,7 +11,7 @@ import {
 	layout_full,
 	layout_site,
 	page_layout,
-} from "@styles/layout.module.scss"
+} from "@styles/layout.module.css"
 import { Grid } from "@components/layouts/Grid"
 
 const txtStyle = {

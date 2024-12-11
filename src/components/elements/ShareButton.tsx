@@ -23,7 +23,7 @@ export function ShareButton({ textToCopy }: Props) {
 	return (
 		<div className={btn_share}  style={{ display: "flex", gap: "var(--space-s)" }}>
 			<button
-				className={["subtext", "sub-text"].join(" ")}
+				className={["sub-text", "sub-text"].join(" ")}
 				title="copy share link"
 				onClick={onClick}
 				style={{
@@ -41,7 +41,7 @@ export function ShareButton({ textToCopy }: Props) {
 
 			<span
 				className={[
-					"subtext",
+					"sub-text",
 					"sub-text",
 					btn_msg,
 					isCopied ? btn_msg_reveal : "",
