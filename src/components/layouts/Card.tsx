@@ -25,7 +25,9 @@ type Props = {
 	gap?: string
 	wrapperOverflow?: SpaceSize
 	paddingBlock?: SpaceSize
-	margin?: SpaceSize
+	// margin?: SpaceSize
+	marginBlock?: string
+	marginInline?: string
 	verticleAlign?: "start" | "center" | "end"
 	maxWidth?: string
 	// layout?: 'default'|'center',
@@ -43,13 +45,14 @@ export function Card({
 	gap = "var(--space-0)",
 	wrapperOverflow,
 	paddingBlock,
-	margin,
+	marginBlock,
+	marginInline,
 	verticleAlign,
 	maxWidth,
 }: Props) {
 	const clrTheme = getColorTheme(colorTheme)
 
-	const clsnms = ['card', card, clrTheme, className].join(" ")
+	const clsnms = ["card", card, clrTheme, className].join(" ")
 
 	return (
 		<div
@@ -59,7 +62,8 @@ export function Card({
 				// ...(backgroundColor ? {backgroundColor: backgroundColor} : {}),
 				flexDirection: direction,
 				gap: gap,
-				...(margin ? { margin: margin } : {}),
+				...(marginBlock ? { marginBlock } : {}),
+				...(marginInline ? { marginInline } : {}),
 				...(verticleAlign ? { alignSelf: verticleAlign } : {}),
 				paddingInline: wrapperOverflow
 					? `var(--space-${wrapperOverflow})`

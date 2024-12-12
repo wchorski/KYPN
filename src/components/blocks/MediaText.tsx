@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { mediatext, content_wrap, media_wrap } from '@styles/blocs/mediatext.module.scss'
+import { mediatext, content_wrap, media_wrap } from '@styles/blocs/mediatext.module.css'
 import { ReactNode } from "react";
 
 // const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`

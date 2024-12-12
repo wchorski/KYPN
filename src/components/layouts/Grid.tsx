@@ -31,6 +31,7 @@ type Props = {
 	//todo make `colWidth` required if isAuto === true
 	isAuto?: boolean
 	colWidth?: string
+  alignContent?:CSSProperties['alignContent']
 }
 
 export function Grid({
@@ -49,6 +50,7 @@ export function Grid({
 	horizontalAlign = "start",
 	isAuto = true,
 	colWidth,
+  alignContent = 'center'
 }: Props) {
 	const layoutStyle = (() => {
 		switch (layout) {
@@ -93,7 +95,7 @@ export function Grid({
 		return (
 			<div id={id} className={classNms} style={inlineStyles}>
 				{children.map((child, i) => (
-					<div key={i} className={grid_item}>
+					<div key={i} className={grid_item} style={{alignContent}}>
 						{child}
 					</div>
 				))}

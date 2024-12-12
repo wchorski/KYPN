@@ -1,4 +1,4 @@
-import styles from '@styles/blog/blogpost.module.scss'
+import styles from '@styles/blog/blogpost.module.css'
 import { CSSProperties, ReactNode } from "react"
 
 type PostTHeaderMain = {

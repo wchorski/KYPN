@@ -42,8 +42,12 @@ export const card = component({
       label: 'Padding',
       defaultValue: 1
     }),
-    margin: fields.text({
-      label: 'Margin',
+    marginBlock: fields.text({
+      label: 'Margin Verticle',
+      defaultValue: 'var(--space-m)'
+    }),
+    marginInline: fields.text({
+      label: 'Margin Horizontal',
     }),
     fontSize: fields.text({
       label: 'Font Size',
@@ -81,7 +85,8 @@ export const card = component({
         // border: 'solid 3px ' + props.fields.backgroundColor.value,
         // ...(props.fields.backgroundColor ? {backgroundColor: props.fields.backgroundColor.value} : {}),
         padding: props.fields.padding.value + 'rem',
-        ...(props.fields.margin ? { margin: props.fields.margin.value} : {}),
+        ...(props.fields.marginBlock ? { marginBlock: props.fields.marginBlock.value} : {}),
+        ...(props.fields.marginInline ? { marginInline: props.fields.marginInline.value} : {}),
         fontSize: props.fields.fontSize.value + 'rem',
         backgroundImage: props.fields.imageSrc.value,
         borderRadius: '5px',

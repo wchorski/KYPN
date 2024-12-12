@@ -75,7 +75,10 @@ As a webdev, if you would like to create custom pages (that override any page cr
 - `src/app/(private)/home/page.tsx`
 - `src/app/(private)/admin/page.tsx`
 
-#### VSCode Snippits
+### CSS Module Styles
+styling is done by a mix of global styles and css modules. that are imported into each component with intellisens. This is done by the package `typescript-plugin-css-modules`. You must set your code editor's typescript to **Use Workspace Version**. I am moving away from sass as modern CSS has all the features I need. 
+
+### VSCode Snippits
 
 edit `typescriptreact.json` file
 

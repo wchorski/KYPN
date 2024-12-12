@@ -11,7 +11,7 @@ import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { Metadata, ResolvingMetadata } from "next"
 import { Card } from "@components/layouts/Card"
-import styles from "@styles/blog/blogpost.module.scss"
+import { featured_image_wrap } from "@styles/blog/blogpost.module.css"
 import {
 	layout_full,
 	layout_wide,
@@ -134,7 +134,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 				}
 			>
 				<Header bgImage={featured_image} className={page_layout}>
-					<figure className={styles.featured_image_wrap}>
+					<figure className={featured_image_wrap}>
 						<ImageDynamic photoIn={featured_image} />
 						<ImageDynamic photoIn={featured_image} />
 					</figure>
