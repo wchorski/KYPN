@@ -50,7 +50,7 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	// read route params
-  const {slug} = await params
+	const { slug } = await params
 	// fetch data
 	const session = await getServerSession(nextAuthOptions)
 	const { post } = await fetchPost(String(slug), session)
@@ -97,8 +97,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!post)
-		return notFound()
+	if (!post) return notFound()
 
 	const {
 		id,
@@ -134,9 +133,17 @@ export default async function BlogPostBySlug({ params }: Props) {
 				}
 			>
 				<Header bgImage={featured_image} className={page_layout}>
-					<figure className={featured_image_wrap}>
-						<ImageDynamic photoIn={featured_image} />
-						<ImageDynamic photoIn={featured_image} />
+					<figure
+						className={featured_image_wrap}
+						style={
+							{
+								// backgroundImage: "url('/assets/question.png')",
+								"--bg-image-url": `url('${featured_image}')`,
+							} as CSSProperties
+						}
+					>
+						{/* <ImageDynamic photoIn={featured_image} className="background" alt="post background"/> */}
+						<ImageDynamic photoIn={featured_image} alt="featured image for post"/>
 					</figure>
 
 					<h1
@@ -185,19 +192,18 @@ export default async function BlogPostBySlug({ params }: Props) {
 							<ShareButton textToCopy={envs.FRONTEND_URL + `/blog/id/${id}`} />
 						</li>
 					</ul>
-					{(session?.data.role?.canManagePosts || status !== 'PUBLIC') && (
-						
-							<Flex alignItems={'center'}>
-								<StatusBadge type={"post"} status={status} />
-                {(author.email === session?.user.email || session?.data?.role?.canManagePosts) && (
-                  <IconLink
-                    icon={"edit"}
-                    href={envs.BACKEND_URL + `/posts/${id}`}
-                    label={"edit"}
-                  />
-                )}
-							</Flex>
-						
+					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
+						<Flex alignItems={"center"}>
+							<StatusBadge type={"post"} status={status} />
+							{(author.email === session?.user.email ||
+								session?.data?.role?.canManagePosts) && (
+								<IconLink
+									icon={"edit"}
+									href={envs.BACKEND_URL + `/posts/${id}`}
+									label={"edit"}
+								/>
+							)}
+						</Flex>
 					)}
 					<hr />
 				</Header>

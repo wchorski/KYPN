@@ -21,6 +21,7 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
 
   return (
     <Image
+      // src={'/assets/question.png'}
       src={state.image.url}
       alt={state.altText}
       width={state.image.width}

@@ -71,11 +71,11 @@ fieldset {
 	display: grid;
 	gap: var(--space-ms);
 
-	& input,
+	/* & input,
 	& select,
 	& textarea {
 		max-width: 45ch;
-	}
+	} */
 
 	& label {
 		gap: var(--space-ms);
