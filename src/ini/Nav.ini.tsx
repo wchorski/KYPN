@@ -1,20 +1,26 @@
-import styles from "@styles/nav.module.css"
-import { NavWichButton } from "@components/menus/NavWichButton"
-import { SessionBadge } from "@components/menus/Session"
-import { MainNavList } from "@components/private/MainNavList"
+import styles, { nav, utility } from "@styles/nav.module.css"
+import { NavWichButton } from "../menus/NavWichButton"
+import { SessionBadge } from "../menus/Session"
+import { MainNavList } from "./MainNavList"
+import { layout_site, page_layout } from "@styles/layout.module.css"
+import Flex from "@components/layouts/Flex"
 
 export function Nav() {
 	// const { isNavOpen, toggleNav } = useNavControl()
 	const isNavOpen = true
 
 	return (
-		<nav className={styles.nav} aria-label="Main Site Navigation">
-			<div >
+		<nav className={[nav, page_layout].join(' ')} aria-label="Main Site Navigation">
+			<Flex 
+        // className="siteWrapper"
+        justifyContent={'space-between'}
+        className={layout_site} 
+      >
 				<NavWichButton />
 
 				<MainNavList />
 
-				<ul className="links utility">
+				<ul className={utility}>
 					{/* <li>
             <CartButton />
           </li> */}
@@ -22,7 +28,7 @@ export function Nav() {
 						<SessionBadge label="account" />
 					</li>
 				</ul>
-			</div>
+			</Flex>
 		</nav>
 	)
 }

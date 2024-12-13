@@ -1,6 +1,6 @@
 import styles from "@styles/footer.module.scss"
 import Link from "next/link"
-import { TawTawPowered } from "@components/menus/TawTawPowered"
+import { TawTawPowered } from "../menus/TawTawPowered"
 import { envs } from "@/envs"
 import { SocialLinkNav } from "@components/blocks/SocialLinkNav"
 import { List } from "@components/elements/List"
@@ -22,7 +22,7 @@ export function Footer() {
 	return (
 		<footer className={[styles.footer, page_layout].join(" ")}>
       <section className={layout_site}>
-        <Grid layout={"1_1"} colWidth={'25rem'}>
+        <Grid layout={"1_1"} colWidth={'12rem'}>
           <div>
             <h4 style={txtStyle}> Contact </h4>
             <List>

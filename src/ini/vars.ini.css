@@ -11,7 +11,8 @@
     --c-txt-bg: hsl(0, 0%, 100%);
     --c-txt-bg-rev: hsl(197deg 8.74% 24.25%);
     --c-txt-bg-darker: hsl(190, 7%, 84%);
-    --c-txt-primary: black;
+    --c-txt-primary: rgb(44, 44, 44);
+    --c-txt-primary-h: black;
     --c-txt-accent: black;
     --c-txt-sub: rgb(150, 150, 150);
     --c-tertiary: rgb(219, 129, 154);
@@ -79,7 +80,8 @@
     --c-txt-bg: hsl(197deg 8.74% 24.25%);
     --c-txt-bg-rev: hsl(198, 20%, 84%);
     --c-txt-bg-darker: #151819;
-    --c-txt-primary: black;
+    --c-txt-primary: rgb(44, 44, 44);
+    --c-txt-primary-h: black;
     --c-txt-accent: black;
     --c-txt-sub: rgb(150, 150, 150);
     --c-tertiary: rgb(219, 129, 154);
@@ -141,12 +143,8 @@
   }
 }
 
-// $sidebar-breakpoint: 1185px;
-
 :root {
   --c-debug: yellow;
-  // todo how to use vars in media query "$--w-sitemax" in page.module.scss
-  // --w-contentmax: 65ch;
   --p-sitewrapper: 1rem;
   --p-sectionblock: 3rem;
 
@@ -155,11 +153,7 @@
   --w-content-breakout: 700px;
   --w-contentmax: 620px;
   --w-sidebar: 600px;
-  //? sidebar max width is seperate if you want overhang.
-  //make same widht if you want to keep sidebar inside site bounds
   --w-sidebar-max: 500px;
-  //todo not used $sidebar-breakpoint in layout.module.css
-  // --w-sidebar-breakpoint: $sidebar-breakpoint;
 
   --space: 1rem;
   --space-0: 0;
@@ -182,41 +176,8 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
   --font-size-base: 16px;
-  // perfect 4ths
-  --font-size-multi: 0.75014068;
+
+  --font-size-multi: 0.55014068;
 
   --anim-duration-fast: 0.3s;
 }
-
-// @media (prefers-color-scheme: dark) {
-//   :root {
-//     --foreground-rgb: 255, 255, 255;
-//     --background-start-rgb: 0, 0, 0;
-//     --background-end-rgb: 0, 0, 0;
-
-//     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-//     --secondary-glow: linear-gradient(
-//       to bottom right,
-//       rgba(1, 65, 255, 0),
-//       rgba(1, 65, 255, 0),
-//       rgba(1, 65, 255, 0.3)
-//     );
-
-//     --tile-start-rgb: 2, 13, 46;
-//     --tile-end-rgb: 2, 5, 19;
-//     --tile-border: conic-gradient(
-//       #ffffff80,
-//       #ffffff40,
-//       #ffffff30,
-//       #ffffff20,
-//       #ffffff10,
-//       #ffffff10,
-//       #ffffff80
-//     );
-
-//     --callout-rgb: 20, 20, 20;
-//     --callout-border-rgb: 108, 108, 108;
-//     --card-rgb: 100, 100, 100;
-//     --card-border-rgb: 200, 200, 200;
-//   }
-// }

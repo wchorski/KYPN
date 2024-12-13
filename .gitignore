@@ -41,7 +41,8 @@ public/assets/private/*
 
 !private/README.md
 /src/app/\(private\)/**
-!/src/app/\(private\)/README.md
+!src/app/\(private\)/README.md
+!src/components/private/README.md
 
 # images
 images/**

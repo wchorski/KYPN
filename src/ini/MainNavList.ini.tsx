@@ -1,9 +1,7 @@
 "use client"
-import { ReactNode } from "react"
-import { NavLink } from "@components/menus/NavLink"
+import { NavLink } from "../menus/NavLink"
 import styles from "@styles/nav.module.css"
 import { useNavControl } from "@components/hooks/useGlobalContext"
-import Image from "next/image"
 
 export function MainNavList() {
 	const { isNavOpen } = useNavControl()
