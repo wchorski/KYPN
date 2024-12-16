@@ -1,49 +1,44 @@
-nav.table_of_contents {
+.heading_fix::after {
+  opacity: 1 !important;
+}
+.table_of_contents {
 	margin-bottom: 1.5em;
   color: var(--c-txt-sub);
 
-	a {
+	& a {
 		color: var(--c-txt-sub);
 		text-decoration: none;
     cursor: pointer;
 	}
 
-  a:hover {
+  & a:hover {
     color: var(--c-primary);
   }
 
-	ul {
+	& ul {
 		list-style: none;
-		// width: 200px;
-		text-indent: -25px; // MUST MATCH key property
-		margin-left: 25px; //  MUST MATCH key property  */
+
+    /* // MUST MATCH key property */
+		text-indent: -25px; 
+		margin-left: 25px;
 		margin-bottom: 5px;
 	}
-	li {
+	& li {
 		margin-bottom: var(--space-s);
 	}
 
-	// li > a:hover {
-	// 	color: var(--c-2);
-	// }
-
-	ul {
+	& ul {
 		list-style: none;
-		/* font-weight: 900; */
 		padding: 0;
 
-		li:before {
+		& li:before {
 			content: "#";
 			width: 10px;
 			height: 20px;
 			color: var(--c-seperator);
-			/* display: block; */
-			/* float: left; */
-			/* margin-right: 5px; */
+
 		}
-		/* li ul{
-      padding-left: 1em;
-    } */
+
 	}
 }
 li.active {

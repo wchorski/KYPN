@@ -6,7 +6,7 @@
   text-align: center;
   margin-block: var(--space-ms);
 
-  > span {
+  & > span {
     visibility: hidden;
     position: absolute;
     width: 1px;

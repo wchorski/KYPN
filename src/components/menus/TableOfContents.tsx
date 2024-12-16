@@ -2,7 +2,7 @@
 import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
 import { VscListTree } from "react-icons/vsc"
-import styles from "@styles/tableofcontents.module.scss"
+import styles, { heading_fix, table_of_contents } from "@styles/tableofcontents.module.css"
 import { IconLabel } from "@components/elements/IconLabel"
 import { useEffect, useState } from "react"
 import { useUrlHash } from "@components/hooks/useUrlHash"
@@ -87,8 +87,8 @@ export function TableOfContents({ headerObjs }: Props) {
 	}
 
 	return (
-		<nav aria-label="Table of contents" title="Table of contents" className={styles.table_of_contents}>
-			<IconLabel icon={<VscListTree />} label="Table of Contents" />
+		<nav aria-label="Table of contents" title="Table of contents" className={table_of_contents}>
+			<IconLabel icon={<VscListTree />} label="Table of Contents" className={heading_fix}/>
 			<ul className="unstyled">{renderList(headerObjs)}</ul>
 		</nav>
 	)

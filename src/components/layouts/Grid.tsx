@@ -12,7 +12,7 @@ import {
 	_1_2_1,
   grid_item,
 } from "@styles/grid.module.css"
-import { layout_site } from "@styles/layout.module.css"
+import { layout_site, layout_wide } from "@styles/layout.module.css"
 
 type Props = {
 	pad?: number
@@ -73,10 +73,12 @@ export function Grid({
 		}
 	})()
 
+  const layoutArray = layout.split('_')
+
 	const classNms = [
 		grid,
 		isAuto ? auto : layoutStyle,
-		layout_site,
+		layoutArray.length > 2 ? layout_site : layout_wide,
 		className,
 	].join(" ")
 	// todo trying global instead of module
