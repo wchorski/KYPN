@@ -1,4 +1,7 @@
-# #!/bin/bash
+#!/bin/bash
+
+##? For KYPN dev. to backup cutefruit ini files
+
 # cp "./public/favicon.ico" "./src/ini/favicon.ico"
 # cp "./public/assets/placeholder.png" "./src/ini/placeholder.png"
 ## Next Components

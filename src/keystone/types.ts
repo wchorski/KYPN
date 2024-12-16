@@ -9,7 +9,7 @@ import type { Permission } from "./schemas/fields"
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
-import type { Lists } from ".keystone/types"
+import type { Lists, PostCreateInput } from ".keystone/types"
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
 
@@ -118,6 +118,19 @@ export type Post = Lists.Post.Item & {
 	tags: Tag[]
 	author: User
 	content: { document: any }
+}
+
+//? makes it easy to query data with Apollo tool and copy paste json into `seed_data.ts` without any reformatting 
+export type SeedPost = PostCreateInput & {
+  tags: {
+    name:string
+  }[]
+  categories: {
+    name:string
+  }[]
+  author: {
+    email:string
+  }
 }
 
 export type Announcement = Lists.Announcement.Item & {

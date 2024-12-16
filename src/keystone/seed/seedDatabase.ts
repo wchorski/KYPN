@@ -17,7 +17,7 @@ import {
 	tags_seedjson,
 	announcements_seed,
 } from "./seed_data"
-import { Announcement, Page } from "@ks/types"
+import { Announcement, Page, SeedPost } from "@ks/types"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
@@ -120,14 +120,18 @@ const seedPosts = async (context: Context) => {
 
 	postsToCreate.map((obj) => {
 		console.log(" + Post: " + obj.slug)
-	})  
+	})
 
 	await db.Post.createMany({
-    data: postsToCreate.map((p: PostCreateInput) => ({
-      ...p,
-      //? makes it easier to copy and paste res json from Apollo Sandbox
-      // @ts-ignore
+		data: postsToCreate.map((p: SeedPost) => ({
+			...p,
+			//? makes it easier to copy and paste res json from Apollo Sandbox
+			//@ts-ignore
 			content: p?.content?.document,
+      //@ts-ignore
+			categories: { connect: p?.categories },
+			tags: { connect: p?.tags },
+      author: { connect: p?.author }
 		})),
 	})
 }
@@ -149,9 +153,7 @@ const seedTags = async (context: Context) => {
 	const objsToCreate = seedObjects.filter(
 		//@ts-ignore
 		(seedObj) =>
-			!objectsAlreadyInDatabase.some(
-				(dbObj) => dbObj.name === seedObj.name
-			)
+			!objectsAlreadyInDatabase.some((dbObj) => dbObj.name === seedObj.name)
 	)
 
 	objsToCreate.map((obj) => {
@@ -181,9 +183,7 @@ const seedCategories = async (context: Context) => {
 		//? makes it easier to copy and paste req json from Apollo Sandbox
 		//@ts-ignore
 		(seedObj) =>
-			!objectsAlreadyInDatabase.some(
-				(dbObj) => dbObj.name === seedObj.name
-			)
+			!objectsAlreadyInDatabase.some((dbObj) => dbObj.name === seedObj.name)
 	)
 
 	objsToCreate.map((obj) => {
@@ -354,10 +354,10 @@ const seedPages = async (context: Context) => {
 	})
 
 	await db.Page.createMany({
-    data: objsToCreate.map((obj) => ({
-      ...obj,
-      //? makes it easier to copy and paste res json from Apollo Sandbox
-      //@ts-ignore
+		data: objsToCreate.map((obj) => ({
+			...obj,
+			//? makes it easier to copy and paste res json from Apollo Sandbox
+			//@ts-ignore
 			content: obj?.content?.document,
 		})),
 	})
@@ -381,10 +381,10 @@ const seedAnnouncements = async (context: Context) => {
 	})
 
 	await db.Announcement.createMany({
-    data: objsToCreate.map((obj) => ({
-      ...obj,
-      //? makes it easier to copy and paste req json from Apollo Sandbox
-      //@ts-ignore
+		data: objsToCreate.map((obj) => ({
+			...obj,
+			//? makes it easier to copy and paste req json from Apollo Sandbox
+			//@ts-ignore
 			content: obj?.content?.document,
 		})),
 	})
