@@ -74,15 +74,11 @@ export const rules = {
 		}
 	},
 	canViewPosts({ session }: ListAccessArgs) {
+		//? posts are public. don't need login for guests to view
 		// if (!isLoggedIn({ session })) return false;
 
-		// 1. Do they have the permission
 		if (permissions.canManagePosts({ session })) return true
 
-		//todo get rid of comment if good
-		// 2. If not, do they own this item?
-		// if (session)
-		//? i don't need `if` statement i guess?
 		return {
 			OR: [
 				{
@@ -142,306 +138,312 @@ export const rules = {
 		return false
 	},
 	canManageProducts({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageProducts({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageProducts({ session })) return true
 
-    // 2. If not, do they own this item?
-    if (session) return { author: { id: { equals: session.itemId } } };
-    return false;
-  },
-  canViewProducts({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
+		// 2. If not, do they own this item?
+		if (session) return { author: { id: { equals: session.itemId } } }
+		return false
+	},
+	canViewProducts({ session }: ListAccessArgs) {
+		// if (!isLoggedIn({ session })) return false;
 
-    if (permissions.canManageProducts({ session })) return true; // They can read everything!
+		if (permissions.canManageProducts({ session })) return true // They can read everything!
 
-    // if(session) return {
-    //   OR: [
-    //     { author: { id: { equals: session.itemId } } },
-    //     { status: { equals: "AVAILABLE" } },
-    //     { status: { equals: "PUBLIC" } },
-    //     { status: { equals: "OUT_OF_STOCK" } },
-    //   ],
-    // };
-    // ? if anonymous user
-    return {
-      OR: [
-        { author: { id: { equals: session?.itemId || "no_session.itemId" } } },
-        { status: { equals: "PUBLIC" } },
-        { status: { equals: "OUT_OF_STOCK" } },
-      ],
-    };
-  },
+		// if(session) return {
+		//   OR: [
+		//     { author: { id: { equals: session.itemId } } },
+		//     { status: { equals: "AVAILABLE" } },
+		//     { status: { equals: "PUBLIC" } },
+		//     { status: { equals: "OUT_OF_STOCK" } },
+		//   ],
+		// };
+		// ? if anonymous user
+		return {
+			OR: [
+				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
+				{ status: { equals: "PUBLIC" } },
+				{ status: { equals: "OUT_OF_STOCK" } },
+			],
+		}
+	},
 
-  canManageAddons({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+	canManageAddons({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageAddons({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageAddons({ session })) return true
 
-    // 2. If not, do they own this item?
-    // nobody owns an addon
+		// 2. If not, do they own this item?
+		// nobody owns an addon
 
-    // return false
-    return false;
-  },
+		// return false
+		return false
+	},
 
-  canViewAddons({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
+	canViewAddons({ session }: ListAccessArgs) {
+		// if (!isLoggedIn({ session })) return false;
 
-    if (permissions.canManageAddons({ session })) return true; // They can read everything!
+		if (permissions.canManageAddons({ session })) return true // They can read everything!
 
-    return {
-      OR: [
-        { author: { id: { equals: session?.itemId || "no_session.itemId" } } },
-        { status: { equals: "PUBLIC" } },
-        { status: { equals: "OUT_OF_STOCK" } },
-      ],
-    };
-  },
+		return {
+			OR: [
+				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
+				// { status: { equals: "PUBLIC" } },
+				// { status: { equals: "OUT_OF_STOCK" } },
+				{ status: { in: ["PUBLIC", "OUT_OF_STOCK"] } },
+			],
+		}
+	},
 
-  canManageServices({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+	canManageServices({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    if (permissions.canManageServices({ session })) return true;
+		if (permissions.canManageServices({ session })) return true
 
-    return false;
-  },
-  canViewServices({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
+		return false
+	},
+	canViewServices({ session }: ListAccessArgs) {
+		// if (!isLoggedIn({ session })) return false;
 
-    if (permissions.canManageServices({ session })) return true; // They can read everything!
-    
-    return {
-      OR: [
-        { employees: { some: { id: { in: [session?.itemId || "no_session.itemId"] } } } },
-        { status: { equals: "PUBLIC" } },
-      ],
-    };
-  },
+		if (permissions.canManageServices({ session })) return true // They can read everything!
 
-  canViewBookings({ session }: ListAccessArgs){
-      // 1. Do they have the permission
-      if (!isLoggedIn({ session })) return false;
-      if (permissions.canManageBookings({ session })) return true;
-  
-      // 2. If not, do they own this item?
-      if(session) return {
-        OR: [
-          {
-            employees: {
-              some: {
-                id: {
-                  in: [session?.itemId || "no_session.itemId"],
-                },
-              },
-            },
-          },
-          {
-            employee_requests: {
-              some: {
-                id: {
-                  in: [session?.itemId || "no_session.itemId"],
-                },
-              },
-            },
-          },
-          {
-            customer: {
-              id: {
-                equals: session?.itemId || "no_session.itemId",
-              },
-            },
-          },
-        ],
-      };
-  
-      return false
-  },
+		return {
+			OR: [
+				{
+					employees: {
+						some: { id: { in: [session?.itemId || "no_session.itemId"] } },
+					},
+				},
+				{ status: { equals: "PUBLIC" } },
+			],
+		}
+	},
 
-  canManageBookings({ session }: ListAccessArgs) {
-    // anonymous users can create bookings
-    // if (!isLoggedIn({ session })) return false;
+	canViewBookings({ session }: ListAccessArgs) {
+		// 1. Do they have the permission
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageBookings({ session })) return true
 
-    // 1. Do they have the permission
-    if (permissions.canManageBookings({ session })) return true;
-    
-    // 2. If not, are they the customer or employee?
-    if(session) return {
-      OR: [
-        {
-          employees: {
-            some: {
-              id: {
-                in: [session?.itemId || "no_session.itemId"],
-              },
-            },
-          },
-        },
-        {
-          employee_requests: {
-            some: {
-              id: {
-                in: [session?.itemId || "no_session.itemId"],
-              },
-            },
-          },
-        },
-        // customer can only view
-        // {
-        //   customer: {
-        //     id: {
-        //       equals: session?.itemId || "no_session.itemId",
-        //     },
-        //   },
-        // },
-      ],
-    };
+		// 2. If not, do they own this item?
+		if (session)
+			return {
+				OR: [
+					{
+						employees: {
+							some: {
+								id: {
+									in: [session?.itemId || "no_session.itemId"],
+								},
+							},
+						},
+					},
+					{
+						employee_requests: {
+							some: {
+								id: {
+									in: [session?.itemId || "no_session.itemId"],
+								},
+							},
+						},
+					},
+					{
+						customer: {
+							id: {
+								equals: session?.itemId || "no_session.itemId",
+							},
+						},
+					},
+				],
+			}
 
-    return false
-  },
-  canManageAvailability({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		return false
+	},
 
-    // 1. Do they have the permission
-    if (permissions.canManageAvailability({ session })) return true;
+	canManageBookings({ session }: ListAccessArgs) {
+		// anonymous users can create bookings
+		// if (!isLoggedIn({ session })) return false;
 
-    // 2. If not, do they own this item?
-    return {
-      employee: { id: { equals: session?.itemId || "no_session.itemId" } },
-    };
-  },
-  canViewAvailability({ session }: ListAccessArgs) {
-    // if (!isLoggedIn({ session })) return false;
+		// 1. Do they have the permission
+		if (permissions.canManageBookings({ session })) return true
 
-    // 1. Do they have the permission
-    if (permissions.canManageAvailability({ session })) return true;
+		// 2. If not, are they the customer or employee?
+		if (session)
+			return {
+				OR: [
+					{
+						employees: {
+							some: {
+								id: {
+									in: [session?.itemId || "no_session.itemId"],
+								},
+							},
+						},
+					},
+					{
+						employee_requests: {
+							some: {
+								id: {
+									in: [session?.itemId || "no_session.itemId"],
+								},
+							},
+						},
+					},
+					// customer can only view
+					// {
+					//   customer: {
+					//     id: {
+					//       equals: session?.itemId || "no_session.itemId",
+					//     },
+					//   },
+					// },
+				],
+			}
 
-    // 2. If not, do they own this item?
-    return {
-      employee: { id: { equals: session?.itemId || "no_session.itemId" } },
-    };
-  },
-  canManageLocations({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		return false
+	},
+	canManageAvailability({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageLocations({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageAvailability({ session })) return true
 
-    // 2. If not, do they own this item?
-    return false;
-  },
+		// 2. If not, do they own this item?
+		return {
+			employee: { id: { equals: session?.itemId || "no_session.itemId" } },
+		}
+	},
+	canViewAvailability({ session }: ListAccessArgs) {
+		// if (!isLoggedIn({ session })) return false;
 
-  canManageEvents({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		// 1. Do they have the permission
+		if (permissions.canManageAvailability({ session })) return true
 
-    // if(session?.data.isAdmin) return true
-    // 1. compair against permissions checkbox
-    if (permissions.canManageEvents({ session })) return true;
+		// 2. If not, do they own this item?
+		return {
+			employee: { id: { equals: session?.itemId || "no_session.itemId" } },
+		}
+	},
+	canManageLocations({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 2. If not, are they a host of this event?
-    //todo have multiple hosts
-    // todo query item.hosts.id and match session.user.id
-    // return false
-    return {
-      hosts: {
-        some: {
-          id: {
-            in: [session?.itemId],
-          },
-        },
-      },
-    };
-  },
-  canManageTickets({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		// 1. Do they have the permission
+		if (permissions.canManageLocations({ session })) return true
 
-    // 1. has role permission?
-    if (permissions.canManageTickets({ session })) return true;
+		// 2. If not, do they own this item?
+		return false
+	},
 
-    if (!session) return false;
+	canManageEvents({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 2. are they a host of this event, or tocket holder?
-    // ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen
-    return {
-      OR: [
-        {
-          event: {
-            hosts: {
-              some: {
-                id: {
-                  in: [session.itemId],
-                },
-              },
-            },
-          },
-        },
-        {
-          holder: {
-            id: {
-              equals: session.itemId || "no_session.itemId",
-            },
-          },
-        },
-      ],
-    };
-    // return { holder: { id: { equals: session?.itemId }} }
-  },
+		// if(session?.data.isAdmin) return true
+		// 1. compair against permissions checkbox
+		if (permissions.canManageEvents({ session })) return true
 
-  canOrder({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		// 2. If not, are they a host of this event?
+		//todo have multiple hosts
+		// todo query item.hosts.id and match session.user.id
+		// return false
+		return {
+			hosts: {
+				some: {
+					id: {
+						in: [session?.itemId],
+					},
+				},
+			},
+		}
+	},
+	canManageTickets({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageCart({ session })) return true;
+		// 1. has role permission?
+		if (permissions.canManageTickets({ session })) return true
 
-    // 2. If not, do they own this item?
-    return { user: { id: { equals: session?.itemId || "no_session.itemId" } } };
-  },
-  canManageOrders({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
-    if (permissions.canManageOrders({ session })) return true;
-    return false;
-  },
-  canManageOrderItems({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		if (!session) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageCart({ session })) return true;
+		// 2. are they a host of this event, or tocket holder?
+		// ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen
+		return {
+			OR: [
+				{
+					event: {
+						hosts: {
+							some: {
+								id: {
+									in: [session.itemId],
+								},
+							},
+						},
+					},
+				},
+				{
+					holder: {
+						id: {
+							equals: session.itemId || "no_session.itemId",
+						},
+					},
+				},
+			],
+		}
+		// return { holder: { id: { equals: session?.itemId }} }
+	},
 
-    // 2. If not, do they own this item?
-    return {
-      order: {
-        user: { id: { equals: session?.itemId || "no_session.itemId" } },
-      },
-    };
-  },
-  canManageSubscriptionPlans({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+	canOrder({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageSubscriptionPlans({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageCart({ session })) return true
 
-    // 2. If not, do they own this item?
-    return false;
-  },
-  canManageSubscriptionItems({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		// 2. If not, do they own this item?
+		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
+	},
+	canManageOrders({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageOrders({ session })) return true
+		return false
+	},
+	canManageOrderItems({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageSubscriptionPlans({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageCart({ session })) return true
 
-    // do they own?
-    return { user: { id: { equals: session?.itemId || "no_session.itemId" } } };
-  },
-  canManageCoupons({ session }: ListAccessArgs) {
-    if (!isLoggedIn({ session })) return false;
+		// 2. If not, do they own this item?
+		return {
+			order: {
+				user: { id: { equals: session?.itemId || "no_session.itemId" } },
+			},
+		}
+	},
+	canManageSubscriptionPlans({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
 
-    // 1. Do they have the permission
-    if (permissions.canManageCoupons({ session })) return true;
+		// 1. Do they have the permission
+		if (permissions.canManageSubscriptionPlans({ session })) return true
 
-    // 2. If not, then no
-    return false;
-  },
-  
+		// 2. If not, do they own this item?
+		return false
+	},
+	canManageSubscriptionItems({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+
+		// 1. Do they have the permission
+		if (permissions.canManageSubscriptionPlans({ session })) return true
+
+		// do they own?
+		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
+	},
+	canManageCoupons({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+
+		// 1. Do they have the permission
+		if (permissions.canManageCoupons({ session })) return true
+
+		// 2. If not, then no
+		return false
+	},
 }

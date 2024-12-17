@@ -6,8 +6,78 @@ import type {
 	CategoryCreateInput,
 	TagCreateInput,
 	AnnouncementCreateInput,
+  AddonCreateInput,
+  LocationCreateInput,
 } from ".keystone/types"
-import { SeedPost } from "@ks/types"
+import { SeedPost, SeedService } from "@ks/types"
+
+export const locations_seed:LocationCreateInput[] = [
+  {
+    name: 'On-Site',
+    address: 'n/a',
+    rooms: 1,
+  },
+  {
+    name: 'Zesty Lounge',
+    address: '123 Zelst Blvd, Chicago IL 60606',
+    rooms: 1,
+  },
+]
+
+export const addons_seed:AddonCreateInput[] = [
+  {
+    "name": "Organic Upgrade",
+    "slug": "organic-upgrade",
+    "excerpt": "All fruits in your order will be certified organic, grown without synthetic pesticides or fertilizers.",
+    "price": 26000
+  },
+  {
+    "name": "Personalized Packaging",
+    "slug": "personalized-packaging",
+    "excerpt": "Customized packaging with handwritten notes or branding for gifting or corporate events.",
+    "price": 10000
+  },
+  {
+    "name": "Reusable Tote Bags",
+    "slug": "reusable-tote-bags",
+    "excerpt": "10 Cute FruitFruit™️ branded, eco-friendly tote bag for easy and sustainable fruit carrying for all your guests.",
+    "price": 8000
+  },
+]
+
+export const services_seed:SeedService[] = [
+  {
+    "name": "Fresh Fruit Fiesta",
+    "excerpt": "A variety of fruit flavored spreads and fruity fun decore all provided by our friendly hosts.",
+    "price": 100000,
+    status: "PUBLIC",
+    addons: [
+      { slug: "organic-upgrade"},
+      { slug: "personalized-packaging"},
+      { slug: "reusable-tote-bags"},
+    ]
+  },
+  {
+    "name": "Smoothie Bar Social",
+    "excerpt": "On-site smoothie bar offering customizable fruit blends for events and gatherings.",
+    "price": 15000,
+    status: "PUBLIC",
+    addons: [
+      { slug: "organic-upgrade"},
+    ]
+  },
+  {
+    "name": "Juicing Workshops",
+    "excerpt": "Interactive sessions teaching you how to make fresh, nutrient-packed fruit juices at home.",
+    "price": 45,
+    status: "PUBLIC",
+    addons: [
+      { slug: "organic-upgrade"},
+      { slug: "personalized-packaging"},
+      { slug: "reusable-tote-bags"},
+    ]
+  }
+]
 
 export const user_seeddata: UserCreateInput[] = [
 	{
@@ -45,7 +115,7 @@ export const roles_seedjson: RoleCreateInput[] = [
 	{
 		name: "admin",
 		label: "Admin",
-		canSeeOtherUsers: true,
+		canViewUsers: true,
 		canManageUsers: true,
 		canManageRoles: true,
 		canManagePosts: true,
@@ -54,7 +124,22 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canManageCategories: true,
 		canManageTags: true,
 		canManageAnnouncements: true,
-		description: "Users with permission to create, edit, delete all data",
+		canManageProducts: true,
+		canViewProducts: true,
+		canManageAddons: true,
+		canManageBookings: true,
+		canManageAvailability: true,
+		canCreateAvailability: true,
+		canManageEvents: true,
+		canManageTickets: true,
+		canManageCart: true,
+		canManageOrders: true,
+		canManageLocations: true,
+		canManageServices: true,
+		canManageSubscriptionPlans: true,
+		canManageSubscriptionItems: true,
+		canManageCoupons: true,
+		// description: "Users with permission to create, edit, delete all data",
 		assignedTo: {
 			connect: {
 				email: "admin@tawtaw.site",
@@ -68,8 +153,8 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canCreatePosts: true,
 		canManageCategories: true,
 		canManageTags: true,
-		description:
-			"Users with permission to manage all site posts, categories, and tags",
+		// description:
+		// 	"Users with permission to manage all site posts, categories, and tags",
 		assignedTo: {
 			connect: {
 				email: "eddy@tawtaw.site",
@@ -82,8 +167,8 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canCreatePosts: true,
 		canManageCategories: true,
 		canManageTags: true,
-		description:
-			"Users with permission to create and edit only their own posts",
+		// description:
+		// 	"Users with permission to create and edit only their own posts",
 		assignedTo: {
 			connect: {
 				email: "arthur@tawtaw.site",
@@ -93,8 +178,8 @@ export const roles_seedjson: RoleCreateInput[] = [
 	{
 		name: "client",
 		label: "Client",
-		description:
-			"Users that are verified account holders. Users with no role are unverified",
+		// description:
+		// 	"Users that are verified account holders. Users with no role are unverified",
 		assignedTo: {
 			connect: {
 				email: "cinda@tawtaw.site",
@@ -229,8 +314,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_transparent",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -317,8 +401,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_primary",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -358,8 +441,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_accent",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -404,8 +486,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_secondary",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -445,8 +526,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_reverse_theme",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -491,8 +571,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_tertiary",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -532,8 +611,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_plain",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -713,8 +791,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 1,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_transparent",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -1182,8 +1259,7 @@ export const pages_seeddata: PageCreateInput[] = [
 										content: null,
 										padding: 0,
 										fontSize: "1",
-										imageSrc:
-											"",
+										imageSrc: "",
 										colorTheme: "bg_c_transparent",
 										marginBlock: "var(--space-m)",
 										marginInline: "",
@@ -2697,8 +2773,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_primary",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2733,8 +2808,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_plain",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2765,8 +2839,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_secondary",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2801,8 +2874,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_tertiary",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2837,8 +2909,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_accent",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2873,8 +2944,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_transparent",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -2905,8 +2975,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_reverse_theme",
 						marginBlock: "var(--space-m)",
 						marginInline: "",
@@ -3498,8 +3567,7 @@ export const posts_seedjson: SeedPost[] = [
 						content: null,
 						padding: 1,
 						fontSize: "1",
-						imageSrc:
-							"",
+						imageSrc: "",
 						buttonLink: "/blog/block-test",
 						buttonText: "",
 						verticleAlign: "start",
@@ -3895,8 +3963,7 @@ export const posts_seedjson: SeedPost[] = [
 					type: "component-block",
 					props: {
 						content: null,
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_plain",
 						paddingBlock: "15vh",
 					},
@@ -4288,8 +4355,7 @@ export const posts_seedjson: SeedPost[] = [
 					type: "component-block",
 					props: {
 						content: null,
-						imageSrc:
-							"",
+						imageSrc: "",
 						colorTheme: "bg_c_plain",
 						paddingBlock: "10vh",
 					},

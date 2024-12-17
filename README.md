@@ -64,6 +64,9 @@ Here is a list of files you'll need to provide (there are some `*.ini` files tha
   - `cp src/ini/seed_data.ini.ts src/keystone/seed/seed_data.ts`.
   - `cp .env.ini .env`
 
+> [!warning] .env.local
+> **NextJs** chooses `.env.local` over `.env` file. If you shuffling around env files I'd recomend setting it to `.env.dev` as to not run into split variable files when running the 2 dev servers
+
 > [!tip] Private Folders
 > there are a few `private` folders here dedicated to your unique components and assets that won't be pushed to this codebase repo
 
@@ -213,7 +216,9 @@ Remove the `document` if you plan on doing any direct API access. (this is not n
 1. `yarn ks:dev` (always run first if running both servers)
 2. `yarn n:dev`
 
-> [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
+> [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` 
+> 
+> The **NextJS** packs in a version of it's own Keystone app that does not hot reload.
 
 > [!error] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
 

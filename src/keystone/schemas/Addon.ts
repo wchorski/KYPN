@@ -12,16 +12,16 @@ export const Addon:Lists.Addon = list({
 
   access: {
     filter: {
-      // todo filter out any status = 'DRAFT'
       query: rules.canViewAddons,
       update: rules.canManageAddons,
       delete: rules.canManageAddons,
     },
     operation: {
       create: permissions.canManageAddons,
-      query: permissions.canViewAddons,
-      update: permissions.isLoggedIn,
-      delete: permissions.isLoggedIn,
+      query: () => true,
+      // query: permissions.canViewAddons,
+      update: permissions.canManageAddons,
+      delete: permissions.canManageAddons,
     }
   },
 
@@ -47,7 +47,6 @@ export const Addon:Lists.Addon = list({
         },
     }}),
     image: text(),
-    test: text(),
     excerpt: text({
       ui: {
         displayMode: 'textarea'
@@ -62,7 +61,7 @@ export const Addon:Lists.Addon = list({
         { label: 'Out of Stock', value: 'OUT_OF_STOCK' },
         { label: 'Private', value: 'PRIVATE' },
       ],
-      defaultValue: 'AVAILABLE',
+      defaultValue: 'PUBLIC',
       ui: {
         displayMode: 'segmented-control',
         createView: { fieldMode: 'edit' }

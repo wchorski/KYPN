@@ -15,6 +15,8 @@ type User {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   role: Role
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
@@ -63,6 +65,8 @@ input UserWhereInput {
   stripeCustomerId: StringFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+  buisnessHourOpen: StringNullableFilter
+  buisnessHourClosed: StringNullableFilter
   role: RoleWhereInput
   posts: PostManyRelationFilter
   pages: PageManyRelationFilter
@@ -137,6 +141,21 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
 input PostManyRelationFilter {
   every: PostWhereInput
   some: PostWhereInput
@@ -187,6 +206,8 @@ input UserOrderByInput {
   stripeCustomerId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
+  buisnessHourOpen: OrderDirection
+  buisnessHourClosed: OrderDirection
 }
 
 enum OrderDirection {
@@ -207,6 +228,8 @@ input UserUpdateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   role: RoleRelateToOneForUpdateInput
   posts: PostRelateToManyForUpdateInput
   pages: PageRelateToManyForUpdateInput
@@ -286,6 +309,8 @@ input UserCreateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
+  buisnessHourOpen: String
+  buisnessHourClosed: String
   role: RoleRelateToOneForCreateInput
   posts: PostRelateToManyForCreateInput
   pages: PageRelateToManyForCreateInput
@@ -574,21 +599,6 @@ input PostWhereInput {
   privateAccess: UserManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: StringNullableFilter
 }
 
 input IntNullableFilter {
@@ -1458,7 +1468,6 @@ type Addon {
   name: String
   slug: String
   image: String
-  test: String
   excerpt: String
   price: Int
   stripeProductId: String
@@ -1490,7 +1499,6 @@ input AddonWhereInput {
   name: StringFilter
   slug: StringFilter
   image: StringFilter
-  test: StringFilter
   excerpt: StringFilter
   price: IntNullableFilter
   stripeProductId: StringFilter
@@ -1509,7 +1517,6 @@ input AddonOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   image: OrderDirection
-  test: OrderDirection
   excerpt: OrderDirection
   price: OrderDirection
   stripeProductId: OrderDirection
@@ -1522,7 +1529,6 @@ input AddonUpdateInput {
   name: String
   slug: String
   image: String
-  test: String
   excerpt: String
   price: Int
   stripeProductId: String
@@ -1545,7 +1551,6 @@ input AddonCreateInput {
   name: String
   slug: String
   image: String
-  test: String
   excerpt: String
   price: Int
   stripeProductId: String

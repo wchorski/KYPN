@@ -101,7 +101,7 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 //           canManageServices
 //           canManageRoles
 //           canManageUsers
-//           canSeeOtherUsers
+//           canViewUsers
 //           canManageTickets
 //           canManageEvents
 //           canManagePosts

@@ -1,17 +1,19 @@
 import {
+  Addon,
 	Booking,
 	Order,
 	Page,
 	Post,
 	Product,
 	Rental,
+	Service,
 	SubscriptionItem,
 	Ticket,
 } from "@ks/types"
 import { stringCapFirstLetter } from "@lib/slugFormat"
-import styles from "@styles/blocs/status.module.scss"
+import styles from "@styles/blocs/status.module.css"
 
-type Props =
+export type StatusType =
 	| {
 			type: "subscriptionItem"
 			status?: SubscriptionItem["status"] | string | null | undefined
@@ -33,8 +35,11 @@ type Props =
 	| { type: "rental"; status?: Rental["status"] | string | null | undefined }
 	| { type: "post"; status?: Post["status"] | string | null | undefined }
 	| { type: "page"; status?: Page["status"] | string | null | undefined }
+	| { type: "service"; status?: Service["status"] | string | null | undefined }
+	| { type: "addon"; status?: Addon["status"] | string | null | undefined }
+  | { type: "any"; status?: string | null | undefined }
 
-export function StatusBadge({ type, status }: Props) {
+export function StatusBadge({ type, status }: StatusType) {
 	if (!status) return null
   //@ts-ignore
 	const stylesArr = [styles.status, styles[status]].join(" ")

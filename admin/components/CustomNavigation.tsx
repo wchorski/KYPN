@@ -7,6 +7,10 @@ import {
 } from "@keystone-6/core/admin-ui/components"
 import type { NavigationProps } from "@keystone-6/core/admin-ui/components"
 import { useSession } from "next-auth/react"
+import { PiUsersThreeFill } from "react-icons/pi"
+import { BsFilePostFill } from "react-icons/bs"
+import { IoBookmarks } from "react-icons/io5"
+import { FaTags } from "react-icons/fa6"
 
 export function CustomNavigation({
 	authenticatedItem,
@@ -50,14 +54,35 @@ export function CustomNavigation({
 			)}
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-			<NavItem href="/">Dashboard</NavItem>
-			<ListNavItems lists={lists} include={["User", "Role"]} />
+			<div className="nav-link-group">
+				<PiUsersThreeFill />
+				<NavItem href="/">Dashboard</NavItem>
+				<ListNavItems lists={lists} include={["User", "Role"]} />
+			</div>
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-			<ListNavItems lists={lists} include={["Page", "Post", "Announcement"]} />
+			<div className="nav-link-group">
+				<BsFilePostFill />
+				<ListNavItems
+					lists={lists}
+					include={["Page", "Post", "Announcement"]}
+				/>
+			</div>
 
 			<hr style={{ border: "solid 1px #9999991f" }} />
-			<ListNavItems lists={lists} include={["Category", "Tag"]} />
+			<div className="nav-link-group">
+				<IoBookmarks />
+				<ListNavItems
+					lists={lists}
+					include={["Booking", "Service", "Addon", "Availability", "Location"]}
+				/>
+			</div>
+
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<div className="nav-link-group">
+				<FaTags />
+				<ListNavItems lists={lists} include={["Category", "Tag"]} />
+			</div>
 
 			{/* //? from ks schema: single item*/}
 			{/* <ListNavItems lists={lists}/> */}

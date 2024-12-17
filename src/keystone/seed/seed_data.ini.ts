@@ -44,7 +44,7 @@ export const roles_seedjson: RoleCreateInput[] = [
 	{
 		name: "admin",
 		label: "Admin",
-		canSeeOtherUsers: true,
+		canViewUsers: true,
 		canManageUsers: true,
 		canManageRoles: true,
 		canManagePosts: true,

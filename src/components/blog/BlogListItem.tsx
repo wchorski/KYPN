@@ -22,7 +22,7 @@ type Props = {
 	status: Post["status"]
 
 	buttonText?: string
-  keyI?:number
+	keyI?: number
 }
 
 export const BlogListItem = ({
@@ -39,38 +39,42 @@ export const BlogListItem = ({
 }: Props) => {
 	return (
 		<article className={styles.post_card}>
-      {status !== "PUBLIC" && (
-						<div style={{ position: "absolute", top: "var(--space-s)", left: "var(--space-s)", zIndex: '2' }}>
-							<StatusBadge type={"post"} status={status} />
-						</div>
-					)}
-			
-				{featured_video ? (
-          <figure className={styles.featured_image}>
+			{status !== "PUBLIC" && (
+				<div
+					style={{
+						position: "absolute",
+						top: "var(--space-s)",
+						left: "var(--space-s)",
+						zIndex: "2",
+					}}
+				>
+					<StatusBadge type={"post"} status={status} />
+				</div>
+			)}
+
+			{featured_video ? (
+				<figure className={styles.featured_image}>
 					<YouTubeVideo
 						altText={`${title}'s featured video`}
 						url={featured_video}
 					/>
-          </figure>
-				) : (
-
-					<Link href={`/blog/${slug}`}>
-            <figure className={styles.featured_image}>
-						<ImageDynamic photoIn={featured_image} key={id}/>
+				</figure>
+			) : (
+				<Link href={`/blog/${slug}`}>
+					<figure className={styles.featured_image}>
+						<ImageDynamic photoIn={featured_image} key={id} />
 						{/* <Image
               src={featured_image}
               alt={`post featured image`}
               width={300}
               height={300}
             /> */}
-            </figure>
-					</Link>
-				)}
-			
+					</figure>
+				</Link>
+			)}
 
 			<div className="wrapper">
 				<header style={{ position: "relative" }}>
-					
 					<Link href={`/blog/${slug}`} className="title">
 						<h3> {title} </h3>
 					</Link>

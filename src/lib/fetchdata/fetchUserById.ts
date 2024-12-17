@@ -41,7 +41,7 @@ export const query = `
     id
     name
     canManageProducts
-    canSeeOtherUsers
+    canViewUsers
     canManageUsers
     canManageRoles
     canManageCart

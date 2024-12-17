@@ -1,4 +1,13 @@
-
+.nav-link-group {
+  position: relative;
+  & svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.7rem;
+    z-index: 3;
+  }
+}
 
 table{
   border-collapse: collapse;

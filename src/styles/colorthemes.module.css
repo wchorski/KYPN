@@ -50,7 +50,7 @@
 		text-shadow: var(--shadow-4);
 	}
 }
-/* //todo set colors from status.module.scss to here for other components to use */
+/* //todo set colors from status.module.css to here for other components to use */
 
 .bg_c_transparent {
 	background-color: transparent;

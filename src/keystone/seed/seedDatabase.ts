@@ -16,6 +16,9 @@ import {
 	posts_seedjson,
 	tags_seedjson,
 	announcements_seed,
+	services_seed,
+	addons_seed,
+	locations_seed,
 } from "./seed_data"
 import { Announcement, Page, SeedPost } from "@ks/types"
 
@@ -105,14 +108,13 @@ const seedRoles = async (context: Context) => {
 // seed posts and connect with users
 const seedPosts = async (context: Context) => {
 	const { db } = context.sudo()
-	const seedPosts = posts_seedjson
 	const postsAlreadyInDatabase = await db.Post.findMany({
 		where: {
-			slug: { in: seedPosts.map((post) => post.slug) as string[] },
+			slug: { in: posts_seedjson.map((post) => post.slug) as string[] },
 		},
 	})
 
-	const postsToCreate = seedPosts.filter(
+	const postsToCreate = posts_seedjson.filter(
 		//? makes it easier to copy and paste res json from Apollo Sandbox
 		// @ts-ignore
 		(seedPost) => !postsAlreadyInDatabase.some((p) => p.slug === seedPost.slug)
@@ -123,15 +125,13 @@ const seedPosts = async (context: Context) => {
 	})
 
 	await db.Post.createMany({
-		data: postsToCreate.map((p: SeedPost) => ({
-			...p,
+		data: postsToCreate.map((obj) => ({
+			...obj,
 			//? makes it easier to copy and paste res json from Apollo Sandbox
-			//@ts-ignore
-			content: p?.content?.document,
-      //@ts-ignore
-			categories: { connect: p?.categories },
-			tags: { connect: p?.tags },
-      author: { connect: p?.author }
+			content: obj?.content?.document,
+			categories: { connect: obj?.categories },
+			tags: { connect: obj?.tags },
+			author: { connect: obj?.author },
 		})),
 	})
 }
@@ -260,75 +260,79 @@ const seedCategories = async (context: Context) => {
 //   });
 // };
 
-// const seedLocations = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = locations_seeddata;
-//   const objectsAlreadyInDatabase = await db.Location.findMany({
-//     where: {
-//       name: { in: seedObjects.map(obj => obj.name) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
-//   );
+const seedLocations = async (context: Context) => {
+	const { db } = context.sudo()
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Location: " + obj.name)
-//   })
+	const objectsAlreadyInDatabase = await db.Location.findMany({
+		where: {
+			name: { in: locations_seed.map((obj) => obj.name) as string[] },
+		},
+	})
+	const objsToCreate = locations_seed.filter(
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
+	)
 
-//   await db.Location.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
-// const seedServices = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = services_seedjson;
-//   const objectsAlreadyInDatabase = await db.Service.findMany({
-//     where: {
-//       name: { in: seedObjects.map(obj => obj.name) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     // @ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some((p: Service) => p.name === seedObj.name)
-//   );
+	objsToCreate.map((obj) => {
+		console.log(" + Location: " + obj.name)
+	})
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Service: " + obj.name)
-//   })
+	await db.Location.createMany({
+		data: objsToCreate.map((obj) => obj),
+	})
+}
 
-//   await db.Service.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+const seedServices = async (context: Context) => {
+	const { db } = context.sudo()
 
-// const seedAddons = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = addons_seedjson;
+	const objectsAlreadyInDatabase = await db.Service.findMany({
+		where: {
+			name: { in: services_seed.map((obj) => obj.name) as string[] },
+		},
+	})
+	const objsToCreate = services_seed.filter(
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
+	)
 
-//   // const slugNames = seedObjects.map(obj => slugFormat(obj.name))
+	objsToCreate.map((obj) => {
+		console.log(" + Service: " + obj.name)
+	})
 
-//   const objectsAlreadyInDatabase = await db.Addon.findMany({
-//     where: {
-//       // @ts-ignore
-//       slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
-//     },
-//   });
+	await db.Service.createMany({
+		data: objsToCreate.map((obj) => ({
+			...obj,
+			//? makes it easier to copy and paste res json from Apollo Sandbox
+			description: obj?.description?.document,
+			// categories: { connect: p?.categories },
+			// tags: { connect: p?.tags },
+			addons: { connect: obj?.addons },
+		})),
+	})
+}
 
-//   // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
+const seedAddons = async (context: Context) => {
+	const { db } = context.sudo()
 
-//   const objsToCreate = seedObjects.filter(
-//     seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
-//   )
+	const objectsAlreadyInDatabase = await db.Addon.findMany({
+		where: {
+			slug: { in: addons_seed.map((obj) => obj.slug) as string[] },
+		},
+	})
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Addon: " + obj.slug)
-//   })
+	const objsToCreate = addons_seed.filter(
+		(seedObj) =>
+			!objectsAlreadyInDatabase.some((obj) => obj.slug === seedObj.slug)
+	)
 
-//   await db.Addon.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+	objsToCreate.map((obj) => {
+		console.log(" + Addon: " + obj.slug)
+	})
+
+	await db.Addon.createMany({
+		data: objsToCreate,
+	})
+}
 
 const seedPages = async (context: Context) => {
 	const { db } = context.sudo()
@@ -430,10 +434,12 @@ export const seedDatabase = async (context: Context) => {
 
 	await seedCategories(context)
 	await seedTags(context)
-
 	await seedPages(context)
 	await seedPosts(context)
-
 	await seedAnnouncements(context)
+
+	await seedLocations(context)
+	await seedAddons(context)
+	await seedServices(context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }

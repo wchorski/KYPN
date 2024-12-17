@@ -3,6 +3,7 @@ import type { Lists } from ".keystone/types"
 import {
 	checkbox,
 	relationship,
+	select,
 	text,
 	timestamp,
 } from "@keystone-6/core/fields"
@@ -13,6 +14,7 @@ var bcrypt = require("bcryptjs")
 import { envs } from "../../../envs"
 // import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
+import { timesArray } from "../../lib/timeArrayCreator"
 // import { mailVerifyUser } from "../../lib/mail";
 // import { tokenEmailVerify } from "../../lib/tokenEmailVerify";
 
@@ -25,7 +27,8 @@ export const User: Lists.User = list({
 			// delete: () => false,
 		},
 		operation: {
-			query: permissions.canViewUsers,
+			query: () => true,
+			// query: permissions.canViewUsers,
 			create: permissions.canManageUsers,
 			update: permissions.canManageUsers,
 			delete: permissions.canManageUsers,
@@ -111,6 +114,21 @@ export const User: Lists.User = list({
 				},
 			},
 		}),
+    buisnessHourOpen: select({
+      options: timesArray(),
+      defaultValue: '09:00:00',
+      ui: {
+        displayMode: 'select',
+        createView: { fieldMode: 'edit' }
+      }
+    }),
+    buisnessHourClosed: select({
+      options: timesArray(),
+      defaultValue: '18:00:00',
+      ui: {
+        displayMode: 'select',
+      }
+    }),
 		role: relationship({
 			ref: "Role.assignedTo",
 			// todo add access control

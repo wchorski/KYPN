@@ -4,17 +4,22 @@ import styles, {
 	carditem,
 	cardlist,
 	content_wrap,
-} from "@styles/blocs/infocard.module.scss"
+	statusBadge,
+} from "@styles/blocs/infocard.module.css"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { SubscriptionItem } from "@ks/types"
+import { StatusBadge, StatusType } from "@components/StatusBadge"
+import { featured_image } from "@styles/articles.module.scss"
 
 export type InfoCard = {
+  id:string,
 	header: string
 	content?: string | ReactNode
 	children?: ReactNode
 	buttonLink: string
 	buttonLabel: string
 	imageSrc: string
-	color: string
+	statusType?: StatusType
 }
 
 type Props = {
@@ -42,7 +47,20 @@ export function InfoCardItem({
 }) {
 	return (
 		<article className={carditem}>
-			<ImageDynamic photoIn={item.imageSrc} />
+			{item.statusType?.status !== "PUBLIC" && (
+				<div className={statusBadge}>
+					<StatusBadge
+						type={item.statusType?.type || "any"}
+						status={item.statusType?.status}
+					/>
+				</div>
+			)}
+      <Link href={`/service/${item.id}`}>
+					<figure className={featured_image}>
+						<ImageDynamic photoIn={item.imageSrc} key={item.id} />
+					</figure>
+				</Link>
+			
 			<header>
 				{/* <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure> */}
 				<h3>{item.header}</h3>
