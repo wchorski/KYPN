@@ -36,12 +36,29 @@ const userQuery = `
       id
       name
       canManageUsers
-      canSeeOtherUsers
+      canViewUsers
       canManageRoles
       canManagePages
       canManagePosts
+      canCreatePosts
       canManageCategories
       canManageTags
+      canManageAnnouncements
+      canManageProducts
+      canViewProducts
+      canManageAddons
+      canManageBookings
+      canManageAvailability
+      canCreateAvailability
+      canManageEvents
+      canManageTickets
+      canManageCart
+      canManageOrders
+      canManageLocations
+      canManageServices
+      canManageSubscriptionPlans
+      canManageSubscriptionItems
+      canManageCoupons
     }
   `
 async function getKeystoneContext() {

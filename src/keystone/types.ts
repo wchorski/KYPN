@@ -11,6 +11,13 @@ import type { Permission } from "./schemas/fields"
 // https://github.com/keystonejs/keystone/discussions/8498
 import type { Lists, PostCreateInput } from ".keystone/types"
 
+export type Booking = Lists.Booking.Item & {
+	// categories: Category[]
+	// tags: Tag[]
+	author: User
+	content: { document: any }
+}
+
 export type CalloutStatus = "info" | "warning" | "error" | "success"
 
 export type Session = {
@@ -525,6 +532,7 @@ export type Role = {
 	canManageSubscriptionPlans: boolean
 	canManageSubscriptionItems: boolean
 	canManageCoupons: boolean
+  canManageProducts: boolean,
 }
 
 export type Service = {

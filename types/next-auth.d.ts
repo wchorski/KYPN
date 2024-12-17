@@ -17,18 +17,35 @@ declare module "next-auth" {
 		}
 		itemId: string
 		authId: string
-    data: {
-      role: {
-        id: string
-        name: string
-        canSeeOtherUsers: boolean
-        canManagePosts: boolean
-        canManageUsers: boolean
-        canManageRoles: boolean
-        canManagePages: boolean
-        canManageCategories: boolean
-        canManageTags: boolean
-      }
-    }
+		data: {
+			role: {
+				id: string
+				name: string
+				canManageUsers: boolean
+				canViewUsers: boolean
+				canManageRoles: boolean
+				canManagePages: boolean
+				canManagePosts: boolean
+				canCreatePosts: boolean
+				canManageCategories: boolean
+				canManageTags: boolean
+				canManageAnnouncements: boolean
+				canManageProducts: boolean
+				canViewProducts: boolean
+				canManageAddons: boolean
+				canManageBookings: boolean
+				canManageAvailability: boolean
+				canCreateAvailability: boolean
+				canManageEvents: boolean
+				canManageTickets: boolean
+				canManageCart: boolean
+				canManageOrders: boolean
+				canManageLocations: boolean
+				canManageServices: boolean
+				canManageSubscriptionPlans: boolean
+				canManageSubscriptionItems: boolean
+				canManageCoupons: boolean
+			}
+		}
 	}
 }

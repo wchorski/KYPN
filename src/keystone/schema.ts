@@ -23,6 +23,11 @@ import { verifyEmail } from "./mutations/verifyEmail"
 import { passwordReset } from "./mutations/passwordReset"
 import { contact } from "./mutations/contact"
 import { Announcement } from "./schemas/Announcement"
+import { Booking } from "./schemas/Booking"
+import { Location } from "./schemas/Location"
+import { Availability } from "./schemas/Availability"
+import { Service } from "./schemas/Service"
+import { Addon } from "./schemas/Addon"
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
@@ -34,6 +39,11 @@ export const lists: Lists = {
   Category,
   Tag,
   Announcement, 
+  Booking,
+  Location,
+  Availability,
+  Service,
+  Addon,
 }
 
 export const extendGraphqlSchema = graphql.extend((base) => {

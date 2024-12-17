@@ -1,10 +1,10 @@
-import { checkbox } from "@keystone-6/core/fields"
+  import { checkbox } from "@keystone-6/core/fields"
 //! When you add a field here also add it to these files below
 //! `session.ts` `userQuery` object on top
 //! `/types/next-auth.d.ts` under `role:`
 //! `fetchUserById.ts` query
 export const permissionFields = {
-	canSeeOtherUsers: checkbox({
+	canViewUsers: checkbox({
 		defaultValue: false,
 		label: "Users Viewer: Can query any User",
 	}),
@@ -39,6 +39,66 @@ export const permissionFields = {
   canManageAnnouncements: checkbox({
     defaultValue: false,
     label: 'Announcements Manager: Can see and manage any Announcement',
+  }),
+  canManageProducts: checkbox({
+    defaultValue: false,
+    label: 'Products Manager: Can update and delete any product',
+  }),
+  canViewProducts: checkbox({
+    defaultValue: false,
+    label: 'Products Viewer: Read any product (even if the product is "Draft" or "Private") ',
+  }),
+  canManageAddons: checkbox({
+    defaultValue: false,
+    label: 'Add-ons Manager: Can update and delete any addon',
+  }),
+  canManageBookings: checkbox({
+    defaultValue: false,
+    label: 'Bookings Manager: Can update and delete any booking',
+  }),
+  canManageAvailability: checkbox({
+    defaultValue: false,
+    label: 'Availability Manager: Can update and delete any Availability',
+  }),
+  canCreateAvailability: checkbox({
+		defaultValue: false,
+		label: "Availability: Can create own Availability",
+	}),
+  canManageEvents: checkbox({
+    defaultValue: false,
+    label: 'Events Manager: Can update and delete any event',
+  }),
+  canManageTickets: checkbox({
+    defaultValue: false,
+    label: 'Tickets Manager: Can update and delete any Ticket',
+  }),
+  canManageCart: checkbox({
+    defaultValue: false,
+    label: 'Cart Manager: Can see and manage any Cart or Cart Item',
+  }),
+  canManageOrders: checkbox({
+    defaultValue: false,
+    label: 'Orders Manager: Can see and manage any Order',
+  }),
+  canManageLocations: checkbox({
+    defaultValue: false,
+    label: 'Locations Manager: Can see and manage any location',
+  }),
+  canManageServices: checkbox({
+    defaultValue: false,
+    label: 'Services Manager: Can see and manage any service',
+  }),
+  canManageSubscriptionPlans: checkbox({
+    defaultValue: false,
+    label: 'Subscription Plans Manager: Can see and manage any Subscription Plan offered',
+  }),
+  canManageSubscriptionItems: checkbox({
+    defaultValue: false,
+    label: 'Subscription Item Manager: Can see and manage any current running subscriptions',
+  }),
+  canManageCoupons: checkbox({
+    defaultValue: false,
+    label: 'Coupons Manager: Can create / delete coupons',
   }),
 }
 

@@ -57,5 +57,11 @@ export const Category: Lists.Category = list({
 		}),
 		posts: relationship({ ref: "Post.categories", many: true }),
 		pages: relationship({ ref: "Page.categories", many: true }),
+    addons: relationship({ ref: 'Addon.categories', many: true }),
+    services: relationship({ ref: 'Service.categories', many: true }),
+    locations: relationship({ ref: 'Location.categories', many: true }),
+    // products: relationship({ ref: 'Product.categories', many: true }),
+    // subscriptions: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
+    // events: relationship({ ref: 'Event.categories', many: true }),
 	},
 })
