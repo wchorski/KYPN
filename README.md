@@ -284,6 +284,7 @@ When initializing a fresh database or returning to development you may add/remov
   - [ ] bookings
   - [ ] bookings
 - [ ] move all `*.ini` and `styles` to a seperate repo (or asset bucket) as to not crowd this repo. Maybe have certain **Themed** style folders to pick from?
+- [ ] keystone not compatible with **Node 22 LTE**
 
 ### Blocks
 
