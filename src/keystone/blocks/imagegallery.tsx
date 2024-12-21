@@ -1,7 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
+import React from 'react';
 
-import { Box, jsx } from '@keystone-ui/core';
+// import { Box } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import { CSSProperties } from 'react';
 
@@ -50,9 +49,10 @@ export const imagegallery = component({
         >
           {props.fields.items.elements.map(item => {
             return (
-              <Box
+              // <Box
+              <div
                 key={item.key}
-                margin="xsmall"
+                // margin="xsmall"
                 style={{
                   minWidth: '31.8%',
                   scrollSnapAlign: 'center',
@@ -97,7 +97,7 @@ export const imagegallery = component({
                 >
                   {item.fields.caption.value}
                 </p>
-              </Box>
+              </div>
             );
           })}
         </div>

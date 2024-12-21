@@ -208,7 +208,7 @@ export function RegsiterForm({ id }: Props) {
 						<span className="error">{formState.errors?.password}</span>
 					</label>
 
-					<Card colors={'bg_c_reverse_theme'}>
+					<Card colorTheme={'bg_c_reverse_theme'}>
 						<h5> requirements </h5>
 						<ul className="unstyled">
 							<li> 8 - 32 characters </li>

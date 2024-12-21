@@ -1652,41 +1652,41 @@ type Mutation {
 }
 
 type Query {
-  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
+  roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   rolesCount(where: RoleWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   post(where: PostWhereUniqueInput!): Post
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
-  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
   page(where: PageWhereUniqueInput!): Page
+  pages(where: PageWhereInput! = {}, orderBy: [PageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PageWhereUniqueInput): [Page!]
   pagesCount(where: PageWhereInput! = {}): Int
-  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
-  announcements(where: AnnouncementWhereInput! = {}, orderBy: [AnnouncementOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AnnouncementWhereUniqueInput): [Announcement!]
   announcement(where: AnnouncementWhereUniqueInput!): Announcement
+  announcements(where: AnnouncementWhereInput! = {}, orderBy: [AnnouncementOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AnnouncementWhereUniqueInput): [Announcement!]
   announcementsCount(where: AnnouncementWhereInput! = {}): Int
-  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   booking(where: BookingWhereUniqueInput!): Booking
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   bookingsCount(where: BookingWhereInput! = {}): Int
-  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
   location(where: LocationWhereUniqueInput!): Location
+  locations(where: LocationWhereInput! = {}, orderBy: [LocationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: LocationWhereUniqueInput): [Location!]
   locationsCount(where: LocationWhereInput! = {}): Int
-  availabilities(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availability(where: AvailabilityWhereUniqueInput!): Availability
+  availabilities(where: AvailabilityWhereInput! = {}, orderBy: [AvailabilityOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AvailabilityWhereUniqueInput): [Availability!]
   availabilitiesCount(where: AvailabilityWhereInput! = {}): Int
-  services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   service(where: ServiceWhereUniqueInput!): Service
+  services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
-  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addon(where: AddonWhereUniqueInput!): Addon
+  addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
@@ -1716,6 +1716,7 @@ type KeystoneAdminUIListMeta {
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
+  graphql: KeystoneAdminUIGraphQL!
   initialSort: KeystoneAdminUISort
   isHidden: Boolean!
   isSingleton: Boolean!
@@ -1781,6 +1782,33 @@ type KeystoneAdminUIFieldGroupMeta {
   label: String!
   description: String
   fields: [KeystoneAdminUIFieldMeta!]!
+}
+
+type KeystoneAdminUIGraphQL {
+  names: KeystoneAdminUIGraphQLNames!
+}
+
+type KeystoneAdminUIGraphQLNames {
+  outputTypeName: String!
+  whereInputName: String!
+  whereUniqueInputName: String!
+  createInputName: String!
+  createMutationName: String!
+  createManyMutationName: String!
+  relateToOneForCreateInputName: String!
+  relateToManyForCreateInputName: String!
+  itemQueryName: String!
+  listOrderName: String!
+  listQueryCountName: String!
+  listQueryName: String!
+  updateInputName: String!
+  updateMutationName: String!
+  updateManyInputName: String!
+  updateManyMutationName: String!
+  relateToOneForUpdateInputName: String!
+  relateToManyForUpdateInputName: String!
+  deleteMutationName: String!
+  deleteManyMutationName: String!
 }
 
 type KeystoneAdminUISort {

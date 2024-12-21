@@ -1,7 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
+import React from 'react';
 
-import { Box, jsx } from '@keystone-ui/core';
+// import { Box } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 
 export const carousel = component({
@@ -18,9 +17,10 @@ export const carousel = component({
         >
           {props.fields.items.elements.map(item => {
             return (
-              <Box
+              // <Box
+              <div
                 key={item.key}
-                margin="xsmall"
+                // margin="xsmall"
                 style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
@@ -52,7 +52,7 @@ export const carousel = component({
                 >
                   {item.fields.title.value}
                 </h1>
-              </Box>
+              </div>
             );
           })}
         </div>

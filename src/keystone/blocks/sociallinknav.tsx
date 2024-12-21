@@ -1,7 +1,4 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from "@keystone-ui/core"
+import React from 'react';
 import {
 	component,
 	fields,

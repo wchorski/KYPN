@@ -47,7 +47,13 @@
     display: grid;
     gap: .2rem;
     color: var(--c-txt-sub);
+
+    & span:first-child{
+      font-weight: bold;
+      font-size: .8rem;
+    }
   }
+  
 
   label.required {
     span:first-child::after {
@@ -134,6 +140,11 @@
     // }
   }
 
+  button[type='reset'] {
+    border: none;
+    background-color: transparent;
+  }
+
   fieldset {
     border: 0;
     padding: 0;
@@ -194,6 +205,8 @@
   }
 
   .error, .success, .status {
+
+    margin-bottom: 0;
 
     &:empty{
       display: none;
@@ -256,8 +269,8 @@
   display: grid;
   gap: .2rem;
 
-  span.label{
-    font-weight: lighter;
+  span.label:first-child{
+    font-weight: bold;
     font-size: .8rem;
   }
 

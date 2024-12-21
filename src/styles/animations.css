@@ -1,21 +1,90 @@
 /* //todo add `@media (prefers-reduced-motion: no-preference){` for any `transform` animation */
-@media (prefers-reduced-motion: no-preference){
-  html {
-    scroll-behavior: smooth;
+button,
+.button {
+  &:enabled:active {
+    transform: translateY(1px);
+  }
+
+  &.pending {
+    cursor: progress;
   }
 }
 
 
-:is(h1, h2, h3, h4, h5, h6).targeted,
-:is(h1,h2,h3,h4,h5,h6):target::after {
-		content: "";
-		width: 100%;
-		height: var(--space-s);
-		background-color: var(--c-accent);
-		background: linear-gradient(-55deg, transparent, var(--c-accent));
-		position: absolute;
-		bottom: 0%;
-		left: 0;
-		z-index: 0;
-		opacity: 1;
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
 	}
+}
+
+:is(h1, h2, h3, h4, h5, h6).targeted,
+:is(h1, h2, h3, h4, h5, h6):target::after {
+	content: "";
+	width: 100%;
+	height: var(--space-s);
+	background-color: var(--c-accent);
+	background: linear-gradient(-55deg, transparent, var(--c-accent));
+	position: absolute;
+	bottom: 0%;
+	left: 0;
+	z-index: 0;
+	opacity: 1;
+}
+
+.anim_border_spin {
+	/* display: grid;
+	grid-template-areas: "stack"; */
+  position: relative;
+
+	/* & span {
+		grid-area: stack;
+		place-content: center;
+		border-radius: var(--br-dull);
+	} */
+
+	&::before {
+		content: "";
+		pointer-events: none;
+		/* grid-area: stack; */
+    position: absolute;
+
+		height: 1px;
+		/* place-self: end; */
+    background-color: var(--c-txt);
+    bottom: 0;
+    left: 0;
+		width: 100%;
+		border-radius: var(--br-dull);
+
+		margin-bottom: calc(-1 * var(--space-s));
+		/* background-color: var(--c-bg); */
+		background-image: linear-gradient(
+			80deg,
+			var(--c-body) 10%,
+			var(--c-accent) 90%,
+			transparent 20%
+		);
+
+		background-size: 900% 60%;
+
+		animation-name: border_spin;
+		animation-duration: 2000ms;
+		animation-iteration-count: infinite;
+		animation-direction: reverse;
+		animation-fill-mode: forwards;
+		animation-timing-function: linear;
+
+	}
+}
+
+@keyframes border_spin {
+	0% {
+		background-position: 0% 50%;
+	}
+	/* 10% {
+		background-position: 30% 50%;
+	} */
+	100% {
+		background-position: 100% 50%;
+	}
+}

@@ -54,7 +54,7 @@ type Props = {
 
 export default async function BookingSinglePage ({ params, searchParams }:Props) {
 
-  const {id} = params
+  const {id} = await params
 
   const { booking, error } = await fetchBooking(id)
 

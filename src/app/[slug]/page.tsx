@@ -34,7 +34,7 @@ export async function generateMetadata(
 	{ params }: Props,
 	parent: ResolvingMetadata
 ) {
-	const { slug } = params
+	const { slug } = await params
 	const { page, error } = await fetchPage(slug, QUERY_PAGE)
 
 	return {

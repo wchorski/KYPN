@@ -5,7 +5,7 @@ import { VscListTree } from "react-icons/vsc"
 import styles, { heading_fix, table_of_contents } from "@styles/tableofcontents.module.css"
 import { IconLabel } from "@components/elements/IconLabel"
 import { useEffect, useState } from "react"
-import { useUrlHash } from "@components/hooks/useUrlHash"
+import { useUrlHash } from "@hooks/useUrlHash"
 import { slugFormat } from "@lib/slugFormat"
 import type { KSHeading, TOCLink } from "@ks/types"
 

@@ -18,7 +18,7 @@ import { getServerSession } from "next-auth"
 import NoDataFoundError404 from "../not-found"
 import { plainObj } from "@lib/utils"
 import { notFound } from "next/navigation"
-import { layout_wide, page_layout } from "@styles/layout.module.css"
+import { layout_wide, page_content, page_layout } from "@styles/layout.module.css"
 
 export const metadata: Metadata = {
 	title: "Bookings | " + envs.SITE_TITLE,
@@ -60,11 +60,11 @@ export default async function BookingsPage({ searchParams }: Props) {
 	// const data = {services, locations, addons, employees, availabilities, gigs, session, prevBooking}
 
 	return (
-		<main>
-			<header className={page_layout}>
+		<main className={page_layout} >
+			<header className={layout_wide}>
 				<h1> Book a Service </h1>
 			</header>
-			<div className={layout_wide} >
+			<div className={page_content} >
 				<BookingForm3 data={plainObj(data)} />
 			</div>
 		</main>

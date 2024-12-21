@@ -4,7 +4,7 @@ import { Inter, Barlow } from "next/font/google"
 import Script from "next/script"
 import { Nav } from "@components/private/Nav"
 import { envs } from "@/envs"
-import { cookies } from "next/dist/client/components/headers"
+// import { cookies } from "next/dist/client/components/headers"
 import { Providers } from "./providers"
 import { Footer } from "@components/private/Footer"
 import { AnnouncementBanner } from "@components/elements/AnnouncementBanner"
@@ -33,9 +33,9 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	const cookieStore = cookies()
-	const sessionObj = cookieStore.get("keystonejs-session")
-	const token = sessionObj?.value
+	// const cookieStore = cookies()
+	// const sessionObj = cookieStore.get("keystonejs-session")
+	// const token = sessionObj?.value
 
 	return (
 		<html lang="en">

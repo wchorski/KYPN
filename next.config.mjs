@@ -105,5 +105,5 @@ export default {
         destination: ANALYTICS_URL,
       },
     ]
-  },
+  }
 }

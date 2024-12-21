@@ -1,7 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
+import React from 'react';
 
-import { jsx, useTheme } from '@keystone-ui/core';
+import { useTheme } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import {
   ToolbarButton,
@@ -50,6 +49,9 @@ export const callout = component({
     const { palette, radii, spacing } = useTheme();
     const intentMap = {
       info: {
+        // background: palette.blue100,
+        // foreground: palette.blue700,
+        // icon: calloutIconMap.info,
         background: palette.blue100,
         foreground: palette.blue700,
         icon: calloutIconMap.info,

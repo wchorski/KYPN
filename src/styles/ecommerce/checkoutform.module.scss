@@ -1,0 +1,18 @@
+form.checkout { 
+  box-shadow: 0 1px 2px 2px black;
+  background-color: azure;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 1rem;
+  display: grid;
+  grid-gap: 1rem;
+
+  max-width: 30em;
+}
+
+button.submit{
+  text-align: center;
+  display: grid;
+  align-content: center;
+  padding: 1rem;
+}

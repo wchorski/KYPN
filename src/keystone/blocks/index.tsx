@@ -1,7 +1,5 @@
 'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
+//TODO next needs 'use client' but idk if it's causing upgrade problems
 import { callout } from './callout';
 import { hero } from './hero';
 import { carousel } from './carousel';
@@ -28,26 +26,26 @@ import { table } from './table';
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
 export const componentBlocks = {
-  callout,
-  // slider,
-  mediatext,
-  section,
-  postslist,
-  image,
-  infocard,
-  infocardlist,
-  imagelinklist,
-  contactform,
-  sociallinknav,
-  iframe,
-  hero,
-  carousel,
-  quote,
-  // tweet,
-  youtubeVideo,
-  videoLocal,
-  imagegallery,
-  buttonlink,
-  card,
-  table,
+  // callout,
+  // // slider,
+  // mediatext,
+  // section,
+  // postslist,
+  // image,
+  // infocard,
+  // infocardlist,
+  // imagelinklist,
+  // contactform,
+  // sociallinknav,
+  // iframe,
+  // hero,
+  // carousel,
+  // quote,
+  // // tweet,
+  // youtubeVideo,
+  // videoLocal,
+  // imagegallery,
+  // buttonlink,
+  // card,
+  // table,
 };

@@ -13,7 +13,7 @@ type Props = {
 
 export default async function LocationByIdPage ({ params, searchParams }:Props) {
 
-  const { id } = params
+  const { id } = await params
 
   const { location } = await fetchLocation(id)
 

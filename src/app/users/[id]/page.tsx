@@ -20,7 +20,7 @@ type Props = {
 const page = 1
 const perPage = envs.PERPAGE
 export default async function UserByIdPage({ params, searchParams }: Props) {
-	const { id } = params
+	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { user, error } = await fetchUser(id, QUERY_USER_THIN, session)
 

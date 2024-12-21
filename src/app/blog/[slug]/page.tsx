@@ -88,8 +88,8 @@ export async function generateMetadata(
 
 export default async function BlogPostBySlug({ params }: Props) {
 	const session = await getServerSession(nextAuthOptions)
-	const slug = String(params.slug)
-	const { post, error } = await fetchPost(slug, session)
+	const { slug } = await params
+	const { post, error } = await fetchPost(String(slug), session)
 
 	if (error)
 		return (
@@ -143,7 +143,10 @@ export default async function BlogPostBySlug({ params }: Props) {
 						}
 					>
 						{/* <ImageDynamic photoIn={featured_image} className="background" alt="post background"/> */}
-						<ImageDynamic photoIn={featured_image} alt="featured image for post"/>
+						<ImageDynamic
+							photoIn={featured_image}
+							alt="featured image for post"
+						/>
 					</figure>
 
 					<h1

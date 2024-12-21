@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default async function Page({ params, searchParams }: Props) {
-	const { id } = params
+	const { id } = await params
 
 	const { post, error } = await fetchPostId(id)
 	if (error)

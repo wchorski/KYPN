@@ -1,9 +1,4 @@
-
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
+import React from 'react';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import { ColorsTheme } from '@ks/types';
 import { colorThemeOptions, getColorTheme } from '../../lib/styleHelpers';

@@ -33,10 +33,12 @@
     "next-auth": "^4.23.2",
     "nodemailer": "^6.9.14",
     "react": "^18",
+    "react-calendar": "^5.1.0",
     "react-dom": "^18",
     "react-email": "2.1.6",
     "react-icons": "^5.2.1",
     "sass": "^1.77.8",
+    "slate-dom": "^0.111.0",
     "stripe": "^17.4.0"
   },
   "devDependencies": {

@@ -56,6 +56,7 @@ export const User: Lists.User = list({
 		authId: text({ isIndexed: "unique", validation: { isRequired: true }, ui: {description: `!!! Register users through this link ${envs.FRONTEND_URL}/register.`} }),
 		image: text({}),
 		phone: text({}),
+    //TODO trim any white space around this address before saving to db
 		email: text({
 			validation: { isRequired: true },
 			// by adding isIndexed: 'unique', we're saying that no user can have the same

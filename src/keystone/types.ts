@@ -16,6 +16,15 @@ export type Booking = Lists.Booking.Item & {
 	// tags: Tag[]
 	author: User
 	content: { document: any }
+  service?: Service
+  location: Location
+  addons: Addon[]
+  employees: User[]
+  employee_requests: User[]
+  customer: User
+  start:string,
+  end:string
+
 }
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
@@ -108,7 +117,18 @@ export type KSHeading = {
 }
 
 //** Schema Lists */
-export type User = Lists.User.Item & { role: Role }
+export type User = Lists.User.Item & { 
+  role: Role 
+  posts: Post[]
+  pages: Page[]
+  privatePagesAccess: Page[]
+  privatePostsAccess: Post[]
+  servicesProvided: Service[]
+  bookings: Booking[]
+  gigs: Booking[]
+  gig_requests: Booking[]
+  availability: Availability[]
+}
 
 export type Category = Lists.Category.Item
 
@@ -404,7 +424,12 @@ export type Order = {
 // 	tickets: Ticket[]
 // }
 
-// export type Availability = {
+export type Availability = Lists.Availability.Item & {
+  employee: User,
+  start:string
+  end:string
+  bookings: Booking[]
+}
 // 	id: string
 // 	start: string
 // 	end: string
@@ -456,12 +481,12 @@ export type Order = {
 // 	}
 // }
 
-// export type BookingPrevious = {
-// 	bookingId: string
-// 	serviceId: string
-// 	date: string
-// 	time: string
-// }
+export type BookingPrevious = {
+	bookingId: string
+	serviceId: string
+	date: string
+	time: string
+}
 
 // export type Category = {
 // 	id: string
@@ -568,6 +593,7 @@ export type Service = Lists.Service.Item & {
 	tags: Tag[]
 	locations: Location[]
 	addons: Addon[]
+  buisnessDays:number[]
 }
 
 export type Location = {
@@ -660,7 +686,7 @@ export type AddonCheckboxOptions = {
 	label: string
 	id: string
 	isChecked: boolean
-	price: number
+	price: number|null
 }
 
 export type IDObj = {

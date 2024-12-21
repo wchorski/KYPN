@@ -1,31 +1,19 @@
 import { Addon, } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchAddon(id:string){
+type Props = {
+	id: string
+	query: string
+	session: any
+}
+
+export default async function fetchAddon({id, query, session}:Props){
 
   try {
 
-    const addon = await keystoneContext.query.Addon.findOne({
+    const addon = await keystoneContext.withSession(session).query.Addon.findOne({
       where: { id },
-      query: `
-        id
-        name
-        excerpt
-        price
-        image
-        services {
-          id
-          name
-        }
-        categories {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
-      `,
+      query,
     }) as Addon
     
     return { addon }

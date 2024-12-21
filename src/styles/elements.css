@@ -148,12 +148,7 @@ textarea {
 	padding-top: 6px;
 	padding-bottom: 6px;
 }
-label,
-legend {
-	display: block;
-	margin-bottom: 0.5rem;
-	font-weight: 600;
-}
+
 fieldset {
 	padding: 0;
 	margin-bottom: var(--space-ml);

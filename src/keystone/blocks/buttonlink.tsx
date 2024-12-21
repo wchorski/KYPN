@@ -1,7 +1,4 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
+import React from 'react';
 import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 

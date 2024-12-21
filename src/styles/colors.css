@@ -1,17 +1,18 @@
-.error {
-	background-color: rgb(184, 1, 1);
-	color: white;
-	padding-inline: 5px;
-	width: fit-content;
-	padding: 0 1rem;
+
+.success, .error {
+  border-width: var(--space-xxs);
+  border-left-width: var(--space-s);
+  border-style: solid;
+	padding-inline: var(--space-m);
+	padding-block: var(--space-s);
+  color: var(--c-header);
 }
 
 .success {
-	background-color: green;
-	color: white;
-	padding-inline: 5px;
-	width: fit-content;
-	padding: 0.4rem;
+  border-color: var(--c-success);
+}
+.error {
+  border-color: var(--c-error);
 }
 
 .sub-text {
@@ -41,7 +42,7 @@ h6 {
 
 .overlay {
 	position: relative;
-  z-index: 1;
+	z-index: 1;
 
 	&::before {
 		content: "";
@@ -78,7 +79,7 @@ input[type="password"],
 textarea,
 select {
 	background-color: var(--c-txt-bg);
-  border-color: var(--c-seperator);
+	border-color: var(--c-seperator);
 	box-shadow: var(--shadow-1), var(--shadow-1-inset);
 }
 
@@ -109,31 +110,40 @@ input[type="button"] {
 	transition-timing-function: cubic-bezier(0, 0.57, 0, 0.99);
 }
 
-.button:hover,
-button:hover,
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-.button:focus,
-button:focus,
-input[type="submit"]:focus,
-input[type="reset"]:focus,
-input[type="button"]:focus {
-	color: var(--c-secondary);
-	border-color: var(--c-secondary) !important;
-	outline: 0;
+
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	&:focus:not(:disabled),
+	&:hover:not(:disabled) {
+		color: var(--c-secondary);
+		border-color: var(--c-secondary);
+		outline: 0;
+	}
 }
 /* //https://stackoverflow.com/questions/4350786/is-it-correct-to-combine-active-and-hover-pseudo-selector-like-aactivehover */
-a:active,
-a:hover:active,
-.button:active,
-.button:hover:active,
-button:active,
-button:hover:active {
-	color: var(--c-accent);
-	border-color: var(--c-accent);
-	transform: translateY(1px);
+
+a,
+.button,
+button {
+	&:active:active:not(:disabled),
+	&:hover:not(:disabled) {
+		color: var(--c-accent);
+		border-color: var(--c-accent);
+	}
 }
+
+a,
+button, 
+.button {
+  &:disabled {
+    border-color: var(--c-disabled);
+    color: var(--c-disabled);
+  }
+} 
+
 pre,
 code {
 	color: var(--c-code);
