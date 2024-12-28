@@ -11,6 +11,7 @@ import {
 	page_layout,
 } from "@styles/layout.module.css"
 import { getServerSession } from "next-auth"
+import { notFound } from "next/navigation"
 
 type Props = {
 	searchParams: { q: string }
@@ -28,19 +29,14 @@ export default async function Page({ params, searchParams }: Props) {
 		perPage,
 		session,
 	})
-  
+
 	if (error)
 		return (
 			<ErrorPage error={error}>
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!users)
-		return (
-			<NoDataFoundPage>
-				<p>No users found</p>
-			</NoDataFoundPage>
-		)
+	if (!users) return notFound()
 
 	const cells = users.map((user: any) => ({
 		name: user.name,

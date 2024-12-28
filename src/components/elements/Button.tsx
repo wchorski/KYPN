@@ -6,7 +6,7 @@ import { ButtonText } from "./ButtonText"
 
 type Props = {
 	size?: "small" | "medium" | "large"
-	type?: "button" | "reset" | "submit"
+	type: HTMLButtonElement['type']
 	children: ReactNode | ReactNode[]
 	onClick?: (e: any) => any
 	disabled?: boolean

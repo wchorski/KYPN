@@ -1,5 +1,5 @@
 // cred = https://medium.com/@omril_15649/replacing-react-hook-form-in-react-19-dd069f29d505
-import { HTMLInputTypeAttribute, useEffect, useState } from "react"
+import { HTMLInputTypeAttribute, HTMLProps, useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 
 type FormProps<T> = {
@@ -25,8 +25,9 @@ export function useForm<T>(
 	// }
 
 	useEffect(() => {
-		// submitAction()
-		console.log("## useForm useEffect Happened")
+    setSubmitCount(prev => prev + 1)
+    console.log('useForm submitCount: ', submitCount);
+    
 
 		// return () =>
 	}, [state])
@@ -52,17 +53,35 @@ export function SubmitButton() {
 }
 
 type InputFieldProps = {
-	type: HTMLInputTypeAttribute,
+	type: HTMLInputTypeAttribute
 	name: string
 	error: string | undefined
 	label?: string
-}
+} & HTMLProps<HTMLInputElement>
 
-export function InputField({ type, name, error, label }: InputFieldProps) {
+export function InputField({
+	type,
+	name,
+	error,
+	label,
+	required = false,
+	defaultValue,
+	autoComplete,
+	pattern,
+	placeholder,
+}: InputFieldProps) {
 	return (
 		<label htmlFor={name}>
 			<span>{label || name}</span>
-			<input name={name} type={type} />
+			<input
+				name={name}
+				type={type}
+				required={required}
+				autoComplete={autoComplete}
+				defaultValue={defaultValue}
+				pattern={pattern}
+				placeholder={placeholder || name}
+			/>
 			<span className="error">{error}</span>
 		</label>
 	)

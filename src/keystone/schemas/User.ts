@@ -21,8 +21,8 @@ import { timesArray } from "../../lib/timeArrayCreator"
 export const User: Lists.User = list({
 	access: {
 		filter: {
-			query: () => true,
-			// query: rules.canManageUsers,
+			// query: () => true,
+			query: rules.canManageUsers,
 			update: rules.canManageUsers,
 			// delete: () => false,
 		},

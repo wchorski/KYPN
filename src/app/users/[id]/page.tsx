@@ -10,6 +10,7 @@ import {
 } from "@styles/layout.module.css"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import { BiEdit } from "react-icons/bi"
 
 type Props = {
@@ -30,12 +31,8 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!user)
-		return (
-			<NoDataFoundPage>
-				<p>No users found</p>
-			</NoDataFoundPage>
-		)
+	if (!user) return notFound()
+  console.log({user});
 
 	const { name, email, role } = user
 
@@ -57,7 +54,7 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 						</tr>
 						<tr>
 							<td>Role: </td>
-							<td>{role.name}</td>
+							<td>{role?.name || 'unverified'}</td>
 						</tr>
 					</tbody>
 				</table>
