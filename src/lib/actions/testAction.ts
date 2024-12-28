@@ -28,6 +28,7 @@ export type TestUsernameState = {
 	valueErrors?: Record<keyof TestUsernameValues, string> | undefined
 	error?: string
 	success?: string
+  url?:string
 }
 
 export async function submitTestUsername(

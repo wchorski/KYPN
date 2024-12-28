@@ -17,8 +17,6 @@ export const registerAnAccount = (base: BaseSchemaMeta) => graphql.field({
 
   async resolve(source, values, context:Context) {
     const  { name, email, password, passwordConfirm } = values
-    console.log('##STARTING: mutation - registerAnAccount.ts');
-    
     // const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
     // const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
 
@@ -39,9 +37,6 @@ export const registerAnAccount = (base: BaseSchemaMeta) => graphql.field({
         ]
       }
     })
-
-    console.log({email});
-    console.log({existingUsersCount});
     
 
     if(existingUsersCount > 0) throw Error(`!!! Registration failed. If this error persists please contact ${envs.ADMIN_EMAIL_ADDRESS} to resolve this issue 🍒`)

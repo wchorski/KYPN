@@ -1,4 +1,5 @@
 "use server"
+import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
 
 export type RegisterAnAccountValues = {
@@ -9,7 +10,7 @@ export type RegisterAnAccountValues = {
 }
 
 export type RegisterAnAccountState = {
-  userId?:string,
+  url?:string,
 	values?: RegisterAnAccountValues
 	valueErrors?: Record<keyof RegisterAnAccountValues, string> | undefined
 	error?: string
@@ -22,16 +23,8 @@ export async function actionRegisterAnAccount(
 ): Promise<RegisterAnAccountState> {
 	try {
 		const values = Object.fromEntries(formData) as RegisterAnAccountValues
-		// @ts-ignore
-		delete values["$ACTION_REF_1"]
-		// @ts-ignore
-		delete values["$ACTION_1:0"]
-		// @ts-ignore
-		delete values["$ACTION_1:1"]
-		// @ts-ignore
-		delete values["$ACTION_KEY"]
-
-		console.log({ values })
+		// // @ts-ignore
+		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 		const { name, email, password, passwordConfirm } = values
 		const data = (await keystoneContext.graphql.run({
 			query: `
@@ -50,10 +43,8 @@ export async function actionRegisterAnAccount(
 			// },
 		})) as { registerAnAccount: { id: string } }
 
-		console.log({ data })
-
 		return {
-			userId: data.registerAnAccount.id,
+			url: envs.FRONTEND_URL + `/users/${data.registerAnAccount.id}`,
 			success: `Success! Account registered with ${email}`,
 		} 
 	} catch (error) {
