@@ -1,4 +1,5 @@
 // cred = https://medium.com/@omril_15649/replacing-react-hook-form-in-react-19-dd069f29d505
+// cred - https://aurorascharff.no/posts/handling-form-validation-errors-and-resets-with-useactionstate/
 import { HTMLInputTypeAttribute, HTMLProps, useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 
@@ -13,6 +14,7 @@ export function useForm<T>(
 	initState: T
 ): FormProps<T> {
 	// @ts-ignore
+	// const [state, action] = useFormState<T, FormData>(submitAction, initState)
 	// const [state, action] = useFormState<T, FormData>(submitAction, initState)
 	const [state, action] = useFormState<T, FormData>(submitAction, initState)
 	const [submitCount, setSubmitCount] = useState(0)
@@ -52,37 +54,4 @@ export function SubmitButton() {
 	)
 }
 
-type InputFieldProps = {
-	type: HTMLInputTypeAttribute
-	name: string
-	error: string | undefined
-	label?: string
-} & HTMLProps<HTMLInputElement>
 
-export function InputField({
-	type,
-	name,
-	error,
-	label,
-	required = false,
-	defaultValue,
-	autoComplete,
-	pattern,
-	placeholder,
-}: InputFieldProps) {
-	return (
-		<label htmlFor={name}>
-			<span>{label || name}</span>
-			<input
-				name={name}
-				type={type}
-				required={required}
-				autoComplete={autoComplete}
-				defaultValue={defaultValue}
-				pattern={pattern}
-				placeholder={placeholder || name}
-			/>
-			<span className="error">{error}</span>
-		</label>
-	)
-}

@@ -104,6 +104,7 @@
     padding: 0.5rem;
     // font-size: .7rem;
     border: 1px solid var(--c-seperator);
+    z-index: 1;
     &:focus {
       outline: 0;
       border-color: var(--c-accent);
@@ -205,7 +206,32 @@
     display: none;
   }
 
-  .error, .success, .status {
+  label:has(span.error:not(:empty)){
+    span:first-child{
+      color: var(--c-error);
+    }
+    input{
+      border-color: var(--c-error);
+    }
+  }
+
+  span.error {
+    padding: var(--space-xs);
+    font-size: small;
+    border: none;
+    background-color: var(--c-txt-bg-darker);
+    color: var(--c-error);
+    margin-top: calc(var(--space-ms) * -1);
+    padding-top: var(--space-ms);
+    z-index: 0;
+
+    &:empty{
+      visibility: hidden;
+      display: none;
+    }
+  }
+  
+  p.error, p.success, p.status {
 
     margin-bottom: 0;
 

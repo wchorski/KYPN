@@ -12,6 +12,7 @@ export type RegisterAnAccountValues = {
 
 export type RegisterAnAccountState = {
 	url?: string
+	id?: string
 	values?: RegisterAnAccountValues
 	valueErrors?: Record<keyof RegisterAnAccountValues, string> | undefined
 	error?: string
@@ -28,12 +29,13 @@ export async function actionRegisterAnAccount(
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 		const { name, email, password, passwordConfirm } = values
 
-		const validationErrors = validateForm({
+		const valueErrors = validateForm({
 			password,
 			passwordConfirm,
 			email,
 		})
-    if(validationErrors) return validationErrors
+		if (valueErrors)
+			return { valueErrors, values, error: "Check for errors in form fields" }
 
 		const data = (await keystoneContext.graphql.run({
 			query: `
@@ -53,6 +55,7 @@ export async function actionRegisterAnAccount(
 				name: "",
 				passwordConfirm: "",
 			},
+			id: data.registerAnAccount.id,
 			// url: envs.FRONTEND_URL + `/users/${data.registerAnAccount.id}`,
 			url: envs.FRONTEND_URL + `/account`,
 			success: `Success! Account registered`,
@@ -73,34 +76,21 @@ type Validation = {
 }
 
 function validateForm({ password, passwordConfirm, email }: Validation) {
+	// @ts-ignore
+	let valueErrors: RegisterAnAccountState["valueErrors"] = {}
+	if (!valueErrors) return null
+
 	if (!password || password !== passwordConfirm)
-		return {
-			valueErrors: {
-				name: "",
-				password: "",
-				passwordConfirm: "Passwords do not match. Retype password",
-				email: "",
-			},
-			error: "Error in password field",
-		}
-	if (!passwordRegExp.test(password))
-		return {
-			valueErrors: {
-				name: "",
-				password: "Password strength does not meet requirements",
-				passwordConfirm: "",
-				email: "",
-			},
-			error: "Error in password field",
-		}
-	if (!emailRegex.test(email))
-		return {
-			valueErrors: {
-				name: "",
-				password: "",
-				passwordConfirm: "",
-				email: "Check spelling or use different email",
-			},
-			error: "Error in email field",
-		}
+		valueErrors.passwordConfirm = "Passwords do not match. Retype password"
+
+	if (password && !passwordRegExp.test(password))
+		valueErrors.password = "Password strength does not meet requirements"
+
+	if (!emailRegex.test(email)) {
+		console.log("### NEXTJS email val triggered")
+		valueErrors.email = "Check spelling or use different email"
+	}
+
+	if (Object.keys(valueErrors).length === 0) return undefined
+	return valueErrors
 }
