@@ -3,22 +3,6 @@ import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
 import { emailRegex, passwordRegExp } from "@lib/regexPatterns"
 
-export type RegisterAnAccountValues = {
-	name: string
-	email: string
-	password: string
-	passwordConfirm: string
-}
-
-export type RegisterAnAccountState = {
-	url?: string
-	id?: string
-	values?: RegisterAnAccountValues
-	valueErrors?: Record<keyof RegisterAnAccountValues, string> | undefined
-	error?: string
-	success?: string
-}
-
 export async function actionRegisterAnAccount(
 	prevState: RegisterAnAccountState,
 	formData: FormData
@@ -29,11 +13,7 @@ export async function actionRegisterAnAccount(
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 		const { name, email, password, passwordConfirm } = values
 
-		const valueErrors = validateForm({
-			password,
-			passwordConfirm,
-			email,
-		})
+		const valueErrors = validateValues(values)
 		if (valueErrors)
 			return { valueErrors, values, error: "Check for errors in form fields" }
 
@@ -69,16 +49,14 @@ export async function actionRegisterAnAccount(
 	}
 }
 
-type Validation = {
-	password?: string
-	passwordConfirm?: string
-	email: string
-}
-
-function validateForm({ password, passwordConfirm, email }: Validation) {
+function validateValues({
+	password,
+	passwordConfirm,
+	email,
+}: RegisterAnAccountValues) {
 	// @ts-ignore
 	let valueErrors: RegisterAnAccountState["valueErrors"] = {}
-	if (!valueErrors) return null
+	if (!valueErrors) return undefined
 
 	if (!password || password !== passwordConfirm)
 		valueErrors.passwordConfirm = "Passwords do not match. Retype password"
@@ -86,11 +64,25 @@ function validateForm({ password, passwordConfirm, email }: Validation) {
 	if (password && !passwordRegExp.test(password))
 		valueErrors.password = "Password strength does not meet requirements"
 
-	if (!emailRegex.test(email)) {
-		console.log("### NEXTJS email val triggered")
+	if (!emailRegex.test(email))
 		valueErrors.email = "Check spelling or use different email"
-	}
 
 	if (Object.keys(valueErrors).length === 0) return undefined
 	return valueErrors
+}
+
+export type RegisterAnAccountValues = {
+	name: string
+	email: string
+	password: string
+	passwordConfirm: string
+}
+
+export type RegisterAnAccountState = {
+	url?: string
+	id?: string
+	values?: RegisterAnAccountValues
+	valueErrors?: Record<keyof RegisterAnAccountValues, string> | undefined
+	error?: string
+	success?: string
 }

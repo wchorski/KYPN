@@ -10,12 +10,10 @@ import {
 } from "@lib/actions/actionRegisterAnAccount"
 import { form } from "@styles/menus/form.module.scss"
 import { signIn } from "next-auth/react"
-import { useState } from "react"
-import { useFormState, useFormStatus } from "react-dom"
 
 const initState: RegisterAnAccountState = {
 	values: {
-		name: "initalName",
+		name: "",
 		email: "",
 		password: "",
 		passwordConfirm: "",
@@ -28,8 +26,8 @@ const initState: RegisterAnAccountState = {
 }
 
 export function ActionRegsiterForm() {
-	const [resetKey, setResetKey] = useState(0)
-	const resetForm = () => setResetKey(prev => prev + 1)
+	// const [resetKey, setResetKey] = useState(0)
+	// const resetForm = () => setResetKey(prev => prev + 1)
 	const { state, action, submitCount } = useForm(
 		actionRegisterAnAccount,
 		initState
@@ -45,15 +43,15 @@ export function ActionRegsiterForm() {
 	}
 
 	return (
-		<Form
+		<form
 			action={action}
 			className={form}
-			debugKey={resetKey}
-			key={resetKey}
-			resetForm={resetForm}
+			// debugKey={resetKey}
+			// key={resetKey}
+			// resetForm={resetForm}
 		>
-			<legend> Register an Account </legend>
 			<fieldset disabled={state.success ? true : false}>
+				<legend> Register an Account </legend>
 				<InputField
 					name={"name"}
 					type={"text"}
@@ -73,6 +71,7 @@ export function ActionRegsiterForm() {
 					name={"password"}
 					type={"password"}
 					required={true}
+          autoComplete={"new-password"}
 					defaultValue={state.values?.password}
 					error={state.valueErrors?.password}
 				/>
@@ -99,6 +98,7 @@ export function ActionRegsiterForm() {
 					label={"Confirm password"}
 					type={"password"}
 					required={true}
+          autoComplete={"new-password"}
 					defaultValue={state.values?.passwordConfirm}
 					error={state.valueErrors?.passwordConfirm}
 				/>
@@ -125,6 +125,6 @@ export function ActionRegsiterForm() {
 				</p>
 			)}
 			<p className={"error"}>{state.error}</p>
-		</Form>
+		</form>
 	)
 }

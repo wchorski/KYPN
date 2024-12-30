@@ -86,10 +86,10 @@ export function VerifyEmailCard ({ email }:Props) {
           Request a new link 
         </Button>
       )}
-      <br />
+      {/* <br />
       <br />
 
-      <p>{statusIcon(state)}</p>
+      <p>{statusIcon(state)}</p> */}
     </Callout>
   )
 }

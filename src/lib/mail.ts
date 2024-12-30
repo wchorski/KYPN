@@ -47,7 +47,7 @@ function makeANiceEmail(text: string): string {
 
 type FormValues = {
 	name?: string
-	phone?: string
+	tel?: string
 	email: string
 	notes?: string
 	start?: string
@@ -61,14 +61,14 @@ type Customer = {
 	id: string | undefined | null
 	name?: string
 	email?: string
-	phone?: string
+	tel?: string
 }
 
 type Employee = {
 	id: string
 	name?: string
 	email?: string
-	phone?: string
+	tel?: string
 }
 
 type OrderItem = {
@@ -230,7 +230,7 @@ type MailContact= {
   contact: {
     name?:string,
     customerId?:string,
-    phone?:string,
+    tel?:string,
     start?:string,
     notes?:string,
     email:string,

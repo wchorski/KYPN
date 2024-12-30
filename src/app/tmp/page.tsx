@@ -1,6 +1,7 @@
 import { envs } from '@/envs'
 import { nextAuthOptions } from '@/session'
 import { ActionForm } from '@components/ActionForm'
+import { ContactForm } from '@components/blocks/ContactForm'
 import { ActionRegsiterForm } from '@components/forms/ActionRegisterForm'
 import { ReactForm } from '@components/forms/ReactForm'
 import { FormState } from '@components/FormState'
@@ -28,15 +29,16 @@ export default async function Page ({ params, searchParams }:Props) {
   return (
     <main className={[page_layout].join(' ')}>
       <header className={layout_content}>
-        <h1>Forms</h1>
+        <h1>Temporary Page</h1>
       </header>
       <div className={[page_content, layout_content].join(' ')}>
         {/* <ActionForm/>
         <ActionButtonId id={'wc_123'}/> */}
         {/* <ReactForm /> */}
-        <ActionRegsiterForm />
+        {/* <ActionRegsiterForm /> */}
         {/* <FormState /> */}
         {/* <ActionButtonTest id={'wc_123'}/> */}
+        <ContactForm header={'Contact'} />
       </div>
     </main>
   )

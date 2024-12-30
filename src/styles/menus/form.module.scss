@@ -63,6 +63,11 @@
       // color: red;
     }
   }
+
+  label:has(input[type="hidden"]){
+    display: none;
+  }
+
   label:has(input:required) {
     span:first-child::after {
       content: " *";
@@ -232,6 +237,12 @@
   }
   
   p.error, p.success, p.status {
+
+    & pre {
+      white-space: pre-wrap;
+      padding: 0;
+      background-color: transparent;
+    }
 
     margin-bottom: 0;
 

@@ -15,8 +15,8 @@ export const registerAnAccount = (base: BaseSchemaMeta) =>
 			passwordConfirm: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 		},
 
-		async resolve(source, values, context: Context) {
-			const { name, email, password, passwordConfirm } = values
+		async resolve(source, variables, context: Context) {
+			const { name, email, password, passwordConfirm } = variables
 			// const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
 			// const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
 

@@ -1,5 +1,6 @@
 // cred = https://medium.com/@omril_15649/replacing-react-hook-form-in-react-19-dd069f29d505
 // cred - https://aurorascharff.no/posts/handling-form-validation-errors-and-resets-with-useactionstate/
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { HTMLInputTypeAttribute, HTMLProps, useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 
@@ -49,7 +50,7 @@ export function SubmitButton() {
 			disabled={pending}
 			className={pending ? "anim_border_spin pending" : ""}
 		>
-			Submit
+			{pending ? <LoadingAnim /> : "Submit"}
 		</button>
 	)
 }

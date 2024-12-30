@@ -2,38 +2,34 @@ import { input_label } from "@styles/menus/form.module.scss"
 import type { HTMLInputTypeAttribute, HTMLProps } from "react"
 
 type Props = {
-	type: HTMLInputTypeAttribute | undefined
 	name: string
 	error: string | undefined
 	label?: string
-} & HTMLProps<HTMLInputElement>
+} & HTMLProps<HTMLTextAreaElement>
 
-export function InputField({
-	type = 'text',
-	name,
-	error,
-	label,
-	required = false,
-	defaultValue,
-	autoComplete,
-	pattern,
-	placeholder,
-}: Props) {
+export function TextareaField(props: Props) {
+	const {
+		name,
+		error,
+		label,
+		required = false,
+		autoComplete,
+		placeholder,
+    hidden,
+	} = props
 	return (
 		<label
 			htmlFor={name}
 			className={input_label}
 			title={required ? `${label || name} is required` : label || name}
+      style={{display: hidden ? 'contents' : 'none'}}
 		>
 			<span>{label || name}</span>
-			<input
-				name={name}
-				type={type}
+			<textarea
+				{...props}
 				required={required}
-        // autocomplete - https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
-				autoComplete={autoComplete}
-				defaultValue={defaultValue}
-				pattern={pattern}
+				autoComplete={autoComplete || name}
+				// defaultValue={defaultValue}
 				placeholder={placeholder || `${label || name}...`}
 			/>
 			<span className="error">{error}</span>
