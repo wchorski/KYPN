@@ -32,7 +32,22 @@ const DB_ENDPOINT =
 
 export default config({
 	db: {
+
 		provider: "postgresql",
+    //? makes `email` or other options not case sensative when searching or filtering
+    // cred - https://github.com/keystonejs/keystone/discussions/8963#discussioncomment-8211316
+    //TODO how to "enable the citext type with CREATE EXTENSION "citext"; on the relevant database. for postgres"
+    // extendPrismaSchema(schema) {
+    //   return schema
+    //     .split('\n')
+    //     .map(line => {
+    //       if (line.includes('email') || line.includes('clientEmail')) {
+    //         return line + ' @postgresql.Citext'
+    //       }
+    //       return line
+    //     })
+    //     .join('\n')
+    //  },
 		url: DB_ENDPOINT,
 		onConnect: async (context: Context) => {
       console.log(`💾✅ Database Connected`); 

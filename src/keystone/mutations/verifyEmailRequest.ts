@@ -6,6 +6,7 @@ import { mailBooking, mailVerifyUser } from '../../lib/mail';
 import { envs } from '../../../envs';
 // @ts-ignore
 import { tokenEmailVerify } from '../../lib/tokenEmailVerify';
+import { User } from '../types';
 
 type Payload = {
   id:string,
@@ -24,20 +25,45 @@ export const verifyEmailRequest = (base: BaseSchemaMeta) => graphql.field({
 
   async resolve(source, { email }, context:Context) {
 
-    const { query } = context.sudo();
+    const { graphql: sudoGQL } = context.sudo();
 
     try {
-      const foundUser = await query.User.findOne({
-        where: { email },
-        query: `
-          id
-          email
-          name
-          role{
-            name
+      const data = (await sudoGQL.run({
+				query: `
+          query Users($where: UserWhereInput!) {
+            users(where: $where) {
+              id
+              email
+              name
+              role{
+                name
+              }
+            }
           }
-        `
-      })
+        `,
+				variables: {
+					where: {
+						email: {
+							equals: email,
+							mode: "insensitive",
+						},
+					},
+				},
+			})) as { users: User[]  }
+      const foundUser = data.users[0]
+
+      // const foundUser = await query.User.findOne({
+      //   where: { email },
+      //   query: `
+      //     id
+      //     email
+      //     name
+      //     role{
+      //       name
+      //     }
+      //   `
+      // })
+      
       if(!foundUser) throw new Error('!!! no user found')
       
       if(foundUser.role?.name) throw new Error('!!! user already is of role: ' + JSON.stringify(foundUser.role.label, null, 2))

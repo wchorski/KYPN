@@ -6,6 +6,7 @@ import {
 	select,
 	text,
 	timestamp,
+  
 } from "@keystone-6/core/fields"
 // import { permissions, rules } from "../access";
 // import stripeConfig, { stripeCustomerCreate, stripeCustomerDelete } from "../../lib/stripe";
@@ -59,9 +60,16 @@ export const User: Lists.User = list({
     //TODO trim any white space around this address before saving to db
 		email: text({
 			validation: { isRequired: true },
+      
 			// by adding isIndexed: 'unique', we're saying that no user can have the same
 			// email as another user - this may or may not be a good idea for your project
 			isIndexed: "unique",
+      //? was thinking of lower caps all saved data, but would cause problems down the road
+      // hooks:{
+      //   beforeOperation(){
+
+      //   }
+      // }
 		}),
 
 		password: text({

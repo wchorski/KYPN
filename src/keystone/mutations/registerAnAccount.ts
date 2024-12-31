@@ -24,31 +24,46 @@ export const registerAnAccount = (base: BaseSchemaMeta) =>
 
 			if (!password || password !== passwordConfirm)
 				throw Error("!!! Passwords do not match. Retype password")
-      if (!passwordRegExp.test(password))
-        throw Error("!!! Password strength does not meet requirements")
-      if(!emailRegex.test(email))
-        throw Error('!!! Email not valid')
+			if (!passwordRegExp.test(password))
+				throw Error("!!! Password strength does not meet requirements")
+			if (!emailRegex.test(email)) throw Error("!!! Email not valid")
 
-			const { db, query } = context.sudo()
+			const { db: sudoDB, graphql: sudoGQL } = context.sudo()
 
-			const existingUsersCount = await query.User.count({
-				where: {
-					OR: [
-						{
-							email: {
-								equals: email,
-							},
+			const data = (await sudoGQL.run({
+				query: `
+              query Query($where: UserWhereInput!) {
+                usersCount(where: $where)
+              }
+            `,
+				variables: {
+					where: {
+						email: {
+							equals: email,
+							mode: "insensitive",
 						},
-					],
+					},
 				},
-			})
+			})) as { usersCount: number  }
+      //? have to use gql with `insensitive` mode
+			// const existingUsersCount = await query.User.count({
+			// 	where: {
+			// 		OR: [
+			// 			{
+			// 				email: {
+			// 					equals: email,
+			// 				},
+			// 			},
+			// 		],
+			// 	},
+			// })
 
-			if (existingUsersCount > 0)
+			if (data.usersCount > 0)
 				throw Error(
 					`!!! Registration failed. If this error persists please contact ${envs.ADMIN_EMAIL_ADDRESS} to resolve this issue 🍒`
 				)
 
-			const user = await db.User.createOne({
+			const user = await sudoDB.User.createOne({
 				data: {
 					name,
 					email,

@@ -1,5 +1,9 @@
 .button{
   border-width: var(--space-s);
+
+  & span {
+    text-wrap: wrap;
+  }
 }
 .text_wrap {
   display: flex;
@@ -11,10 +15,8 @@
 }
 
 .signout{
-  // background-color: var(--c-dark);
-  // color: var(--c-desaturated);
   border-Radius: var(--br-dull);
-  // border: none;
+
   cursor: pointer;
 
   &:hover, &:focus{

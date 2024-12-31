@@ -43,7 +43,7 @@ export function ContactForm({
 			date: "",
 			time: "",
 			notes: "",
-      //TODO setting defaults here doesn't set correct `defaulValue` in form
+			//TODO setting defaults here doesn't set correct `defaulValue` in form
 			email: session?.user?.email || "",
 			customerId: session?.itemId || "",
 		},
@@ -89,38 +89,38 @@ export function ContactForm({
 
 				<InputField
 					name={"name"}
-					type={isName ? "text" : 'hidden'}
-          autoComplete={'name given-name family-name nickname'}
+					type={isName ? "text" : "hidden"}
+					autoComplete={"name given-name family-name nickname"}
 					defaultValue={state.values?.name}
 					error={state.valueErrors?.name}
 				/>
 
 				<InputField
 					name={"tel"}
-          label={'phone number'}
-          type={isPhone ? "tel" : 'hidden'}
-          autoComplete="tel tel-local tel-national"
+					label={"phone number"}
+					type={isPhone ? "tel" : "hidden"}
+					autoComplete="tel tel-local tel-national"
 					defaultValue={state.values?.tel}
 					error={state.valueErrors?.tel}
 				/>
 
 				<InputField
 					name={"date"}
-					type={isDate ? "date" : 'hidden'}
+					type={isDate ? "date" : "hidden"}
 					defaultValue={state.values?.date}
 					error={state.valueErrors?.date}
 				/>
 
 				<InputField
 					name={"time"}
-					type={isDate ? "time" : 'hidden'}
+					type={isDate ? "time" : "hidden"}
 					defaultValue={state.values?.time}
 					error={state.valueErrors?.time}
 				/>
 
 				<TextareaField
 					name={"notes"}
-          hidden={!isNotes}
+					hidden={!isNotes}
 					id={"notes"}
 					placeholder="..."
 					defaultValue={state.values?.notes}
@@ -131,7 +131,9 @@ export function ContactForm({
 			{!state.success ? (
 				<SubmitButton />
 			) : (
-				<p className={"success"}><pre>{state.success}</pre></p>
+				<p className={"success"}>
+					<pre>{state.success}</pre>
+				</p>
 			)}
 			<p className={"error"}>{state.error}</p>
 		</form>

@@ -10,7 +10,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
 import { CartItem, Rental } from "@ks/types";
 import { checkProductRentalAvail } from "@lib/checkProductRentalAvail";
-import styles from '@styles/elements/button.module.scss'
+import styles from '@styles/elements/button.module.css'
 import { Button } from "@components/elements/Button";
 
 type Props = {

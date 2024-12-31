@@ -65,17 +65,9 @@ ul.unstyled {
 }
 
 
-form,
+/* form,
 fieldset {
 	padding: var(--space-m);
-	display: grid;
-	gap: var(--space-ms);
-
-	/* & input,
-	& select,
-	& textarea {
-		max-width: 45ch;
-	} */
 
 	& label {
 		gap: var(--space-ms);
@@ -103,7 +95,7 @@ fieldset {
 			width: var(--space-ml);
 		}
 	}
-}
+} */
 input[type="checkbox"],
 input[type="radio"],
 select {

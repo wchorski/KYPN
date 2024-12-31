@@ -128,12 +128,8 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 								<td> {daysOfWeek(buisnessDays as number[]).join(", ")} </td>
 							</tr>
 							<tr>
-								<td> Hours Open: </td>
-								<td> {timePretty(buisnessHourOpen || "")} </td>
-							</tr>
-							<tr>
-								<td> Hours Closed: </td>
-								<td> {timePretty(buisnessHourClosed || "")} </td>
+								<td> Buisness Hours: </td>
+								<td> {timePretty(buisnessHourOpen || "")} - {timePretty(buisnessHourClosed || "")}  </td>
 							</tr>
 						</tbody>
 					</table>

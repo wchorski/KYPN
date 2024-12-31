@@ -3,6 +3,7 @@ import { envs } from "@/envs"
 import { Form } from "@components/Form"
 import { InputField } from "@components/InputField"
 import { Card } from "@components/layouts/Card"
+import { PasswordRequirements } from "@components/menus/PasswordRequirements"
 import { SubmitButton, useForm } from "@hooks/useForm"
 import {
 	actionRegisterAnAccount,
@@ -77,20 +78,7 @@ export function ActionRegsiterForm() {
 				/>
 
 				<Card colorTheme={"bg_c_reverse_theme"}>
-					<h5> requirements </h5>
-					<ul className="unstyled">
-						<li> 8 - 32 characters </li>
-						<li> one Capital letter </li>
-						<li>
-							{" "}
-							one special character <code>!@#+=$&-_^%*</code>
-						</li>
-						<li>
-							{" "}
-							one number <code> 0-9 </code>
-						</li>
-						<li> three lower case letters </li>
-					</ul>
+					<PasswordRequirements />
 				</Card>
 
 				<InputField

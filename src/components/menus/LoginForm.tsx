@@ -156,70 +156,64 @@ export function LoginForm({ providers }: Props) {
 	}
 
 	return (
-		<>
-			<form action={formAction} className={styles.form} ref={formRef}>
-				<fieldset>
-					<label htmlFor="email">
-						Email
-						<input
-							name={"email"}
-							id={"email"}
-							placeholder="sam@hotmail.com"
-							type={"text"}
-							required={true}
-							defaultValue={formState.fieldValues.email}
-							autoComplete={"email"}
-						/>
-					</label>
+		<form action={formAction} className={styles.form} ref={formRef}>
+			<fieldset>
+				<label htmlFor="email">
+					Email
+					<input
+						name={"email"}
+						id={"email"}
+						placeholder="sam@hotmail.com"
+						type={"text"}
+						required={true}
+						defaultValue={formState.fieldValues.email}
+						autoComplete={"email"}
+					/>
+				</label>
 
-					<label htmlFor="password">
-						Password
-						<input
-							name={"password"}
-							id={"password"}
-							placeholder="***"
-							type={"password"}
-							required={true}
-							defaultValue={formState.fieldValues.password}
-						/>
-					</label>
+				<label htmlFor="password">
+					Password
+					<input
+						name={"password"}
+						id={"password"}
+						placeholder="***"
+						type={"password"}
+						required={true}
+						defaultValue={formState.fieldValues.password}
+					/>
+				</label>
 
-					<p className={formState.status}>{formState.message}</p>
+				<p className={formState.status}>{formState.message}</p>
 
-          {formState.status !== 'success' && (
-            <Flex alignItems='center'>
+				{formState.status !== "success" && (
+					<Flex alignItems="center">
+						<SubmitButton />
 
-              <SubmitButton />
+						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
+							password reset
+						</Link>
+					</Flex>
+				)}
+			</fieldset>
 
-              <Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
-                password reset
-              </Link>
-            </Flex>
-          )}
-					
-				</fieldset>
+			<fieldset>
+				<legend> or with Social {statusIcon(state)}</legend>
 
-				<fieldset>
-					<legend> or with Social {statusIcon(state)}</legend>
-
-					{providers &&
-						Object.values(providers)
-							.filter((prov: any) => prov.id !== "credentials")
-							.map((provider: any) => (
-								<Button
-									key={provider.name}
-									type="button"
-									disabled={state === "pending"}
-									onClick={() => socialSignin(provider.id)}
-								>
-									<span>
-										Login with {provider.name} {getIcon(provider.id)}
-									</span>
-								</Button>
-							))}
-				</fieldset>
-			</form>
-		</>
+				{providers &&
+					Object.values(providers)
+						.filter((prov: any) => prov.id !== "credentials")
+						.map((provider: any) => (
+							<Button
+								key={provider.name}
+								type="button"
+								disabled={state === "pending"}
+								onClick={() => socialSignin(provider.id)}
+							>
+								Login with {provider.name} {getIcon(provider.id)}
+							</Button>
+						))}
+			</fieldset>
+		</form>
 	)
 }
 

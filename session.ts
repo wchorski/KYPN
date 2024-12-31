@@ -10,6 +10,7 @@ import type { Context } from ".keystone/types"
 var bcrypt = require("bcryptjs")
 import { envs } from "./envs"
 import { AdapterUser } from "next-auth/adapters"
+import { User } from "./src/keystone/types"
 
 // WARNING: you need to change this
 // console.log(process.env.NEXTAUTH_URL);
@@ -130,20 +131,34 @@ export const nextAuthOptions: NextAuthOptions = {
 			session: DefaultSession // required by next-auth, not by us
 			token: DefaultJWT
 		}) {
-      
 			const sudoContext = (await getKeystoneContext()).sudo()
-
-			const foundUser = await sudoContext.query.User.findOne({
-				where: { email: session.user?.email },
-				query: userQuery,
-			})
+			const data = (await sudoContext.graphql.run({
+				query: `
+                  query Users($where: UserWhereInput!) {
+                    users(where: $where) {
+                      ${userQuery}
+                    }
+                  }
+                `,
+				variables: {
+					where: {
+						email: {
+							equals: session.user?.email,
+							mode: "insensitive",
+						},
+					},
+				},
+			})) as { users: User[] }
+			const foundUser = data.users[0]
+			// const foundUser = await sudoContext.query.User.findOne({
+			// 	where: { email: session.user?.email },
+			// 	query: userQuery,
+			// })
 			// unauthorized
 			if (!foundUser)
 				console.log(
 					`!!! session attempt failed: ${JSON.stringify(session, null, 2)}`
-				)   
-        
-        
+				)
 
 			return {
 				...session,
@@ -198,32 +213,48 @@ export const nextAuthOptions: NextAuthOptions = {
 				},
 			},
 			authorize: async (credentials: any, req: any) => {
-        
 				if (!credentials?.email && !credentials?.password && !credentials)
 					console.log("!!! insufficent credentials")
 
-        //todo create a `login-count` variable on a user to track how many successful logins?
-        
+				//todo create a `login-count` variable on a user to track how many successful logins?
+
 				const sudoContext = (await getKeystoneContext()).sudo()
 				// check if the user exists in keystone
-				const foundUser = await sudoContext.query.User.findOne({
-					where: { email: credentials?.email },
-					query: userQuery,
-				})
-        //? for debuging only
-        // .then(data => {
-        //   console.log('### query.User.findOne: );
-        //   console.log({data})
-        // }).catch(error => {
-        //   console.log({error})
-        // })
+        const data = (await sudoContext.graphql.run({
+					query: `
+            query Users($where: UserWhereInput!) {
+              users(where: $where) {
+                ${userQuery}
+              }
+            }
+          `,
+					variables: {
+						where: {
+							email: {
+								equals: credentials?.email,
+								mode: "insensitive",
+							},
+						},
+					},
+				})) as { users: User[] }
+				const foundUser = data.users[0]
+				// const foundUser = await sudoContext.query.User.findOne({
+				// 	where: { email: credentials?.email },
+				// 	query: userQuery,
+				// })
+				//? for debuging only
+				// .then(data => {
+				//   console.log('### query.User.findOne: );
+				//   console.log({data})
+				// }).catch(error => {
+				//   console.log({error})
+				// })
 
 				// unauthorized
 				if (!foundUser) {
 					console.log("!!! Credentials: no foundUser found in db")
 					return null
 				}
-        
 
 				if (!foundUser.password) {
 					console.log("!!! no password set for User")
@@ -246,7 +277,6 @@ export const nextAuthOptions: NextAuthOptions = {
 						image: foundUser.image,
 						email: foundUser.email,
 						role: foundUser.role,
-						img: foundUser.img,
 						user: {
 							email: foundUser.email,
 							stripeCustomerId: foundUser.stripeCustomerId,
@@ -271,7 +301,6 @@ export const nextAuthSessionStrategy = {
 		const { req, res } = context
 		const { headers } = req ?? {}
 		if (!headers?.cookie || !res) return
-    
 
 		// next-auth needs a different cookies structure
 		const cookies: Record<string, string> = {}
@@ -317,7 +346,6 @@ export const nextAuthSessionStrategy = {
 				name: author.name,
 				email: author.email,
 			},
-      
 		}
 
 		// if (!role) console.log('!!!!!! user has no role assigned for auth');
