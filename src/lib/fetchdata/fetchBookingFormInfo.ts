@@ -155,10 +155,7 @@ export default async function fetchBookingFormData({session}:Props){
           id
         }
       `
-    }) as Booking[]
-    // console.log({gigs});
-    
-    
+    }) as Booking[]    
     
     // todo actually i think i want to as a users part as I don't want to be querying 1 user multple times. also I'm already querying addons multiple times too
     

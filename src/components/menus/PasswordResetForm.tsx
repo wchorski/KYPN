@@ -14,8 +14,8 @@ import {
 import { Card } from "@components/layouts/Card"
 import { InputField } from "@components/InputField"
 import { signIn } from "next-auth/react"
-import { SubmitButton } from "@hooks/useForm"
 import { Callout } from "@components/blocks/Callout"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 // type Fields = {
 // 	password: string

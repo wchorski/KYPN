@@ -10,7 +10,7 @@ import {
 	dayOfWeek,
 } from "../../lib/dateCheck"
 import { Location, User, Addon } from "../types"
-import { convertToIsoWithTimezone } from "../../lib/dateFormatter"
+import { datePrettyLocal, dateToISOTimezone } from "../../lib/dateFormatter"
 
 const now = new Date().toISOString()
 
@@ -39,7 +39,10 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 		async resolve(
 			source,
-			{
+			variables,
+			context: Context
+		) {
+      const {
 				serviceId,
 				locationId,
 				addonIds,
@@ -55,33 +58,29 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				timeZone,
 				address,
 				amount_total,
-			},
-			context: Context
-		) {
-			const contextSudo = context.sudo()
+			} = variables
+
+			const sudoContext = context.sudo()
 			let description = ""
 			// const start = new Date(date + "T" + time).toISOString()
-			const start = convertToIsoWithTimezone(date, time, timeZone)
-      console.log({start});
+
+			const start = dateToISOTimezone(date, time, timeZone)
+      // console.log("mutation: ", {variables});
+			// console.log({ date, time })
+			// console.log({ start })
+      // console.log(datePrettyLocal(start, 'full'));
       
-
-			// USER
-			const userCount = (await contextSudo.query.User.count({
-				where: { id: { equals: customerId } },
-			})) as number
-
-			const hasAccount = userCount > 0 ? true : false
 
 			// SERVICE
 			const service = await context.query.Service.findOne({
 				where: { id: serviceId },
 				query: `
-        id
-        name
-        durationInHours
-        price
-        buisnessDays
-      `,
+          id
+          name
+          durationInHours
+          price
+          buisnessDays
+        `,
 			})
 			if (!service) throw Error("!!! bookAService: No service found")
 
@@ -89,22 +88,23 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 			const end = calcEndTime(start, service.durationInHours)
 
-			const day = new Date(start).getDay()
+			// const day = new Date(start).getDay()
+			const day = start.getDay()
 			if (!service.buisnessDays?.includes(day))
 				throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
 
 			// Location
 			if (locationId) {
-				const selectedLocation = (await contextSudo.query.Location.findOne({
+				const selectedLocation = (await sudoContext.query.Location.findOne({
 					where: { id: locationId },
 					query: `
-        name
-        rooms
-        bookings {
-          start
-          end
-        }
-        `,
+            name
+            rooms
+            bookings {
+              start
+              end
+            }
+          `,
 				})) as Location
 				if (selectedLocation) {
 					// check to see if this booking's start/end lands on any of the gig's start/end
@@ -132,7 +132,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				// maybe query gigs seperately?
 
 				// todo just run a graphql query?
-				const employeesThatHaveCurrentGigs = (await contextSudo.graphql.run({
+				const employeesThatHaveCurrentGigs = (await sudoContext.graphql.run({
 					query: `
           query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
             users(where: $where) {
@@ -167,7 +167,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 								gt: now,
 							},
 							status: {
-								in: ["CONFIRMED", "DOWNPAYMENT", "HOLDING"],
+								in: ["CONFIRMED", "DOWNPAYMENT", "HOLDING", "PAID"],
 							},
 						},
 						availWhere: {
@@ -182,15 +182,15 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 				let employeeNames = ""
 				bookedEmployees.map((emp) => {
-					if (dateCheckAvail(String(start), String(end), emp.availability))
+					if (dateCheckAvail(start, end, emp.availability))
 						// console.log(`+++ Open Day no vaction set for ${emp.name}`)
 						console.log("")
-					else throw new Error(`CONFLICT: vacation day for ${emp.name}`)
+					else throw new Error(`!!! CONFLICT: vacation day for ${emp.name}`)
 
-					if (dateCheckAvail(String(start), String(end), emp.gigs))
+					if (dateCheckAvail(start, end, emp.gigs))
 						// console.log(`+++ No Gigs yet set for ${emp.name}`)
 						console.log("")
-					else throw new Error(`CONFLICT: double booking ${emp.name} `)
+					else throw new Error(`!!! CONFLICT: double booking ${emp.name} `)
 
 					employeeNames += emp.email + ", "
 				})
@@ -217,8 +217,11 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			)
 			const priceTotal = service.price + addonsCombinedPrice
 
+      console.log({start});
+      console.log('bookAServiceMutation: ', datePrettyLocal(start.toISOString(), 'full'));
+      
 			// BOOKING
-			const booking = await contextSudo.db.Booking.createOne({
+			const booking = await sudoContext.db.Booking.createOne({
 				data: {
 					// summary: `${customerName || customerEmail} | ${service?.name}`,
 					service: { connect: { id: serviceId } },

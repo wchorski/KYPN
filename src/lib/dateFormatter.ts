@@ -1,32 +1,64 @@
-export function formatHours(time: string) {
-	return time?.replace(".00", "")
+export function dateToISOTimezone(
+	date: string,
+	time: string,
+	timeZone: string
+): Date {
+	const localTimestamp = new Date(`${date}T${time}`)
+
+	const dateInTimezone = new Date(
+		new Intl.DateTimeFormat("en-US", {
+			timeZone,
+			year: "numeric",
+			month: "2-digit",
+			day: "2-digit",
+			hour: "2-digit",
+			minute: "2-digit",
+			second: "2-digit",
+			hour12: false,
+		}).format(localTimestamp)
+	)
+
+	return dateInTimezone
+
+	//   const isoString = new Date(
+	//     dateInTimezone.getTime() + dateInTimezone.getTimezoneOffset() * 60 * 1000
+	// 	).toISOString()
+
+	// console.log(datePrettyLocal(isoString, 'full'));
+
+	// 	return isoString
 }
 
-export function convertToIsoWithTimezone (date: string, time: string, timeZone: string): string {
-  // Combine date and time into a single string
-  const dateTimeString = `${date}T${time}:00`
+//? does what above does but i think it's written better
+// export function convertToIsoWithTimezone (date: string, time: string, timeZone: string): string {
+//   // Combine date and time into a single string
+//   const dateTimeString = `${date}T${time}:00`
 
-  // Create a Date object from the combined string
-  const localDate = new Date(dateTimeString)
+//   // Create a Date object from the combined string
+//   const localDate = new Date(dateTimeString)
 
-  // Format the date and time in the specified time zone
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  }).format(localDate)
+//   // Format the date and time in the specified time zone
+//   const formattedDate = new Intl.DateTimeFormat('en-US', {
+//     timeZone,
+//     year: 'numeric',
+//     month: '2-digit',
+//     day: '2-digit',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     second: '2-digit',
+//   }).format(localDate)
 
-  // Extract parts from the formatted date
-  const [month, day, year, hour, minute, second] = formattedDate
-    .replace(/, /g, ' ')
-    .match(/\d+/g) || []
+//   // Extract parts from the formatted date
+//   const [month, day, year, hour, minute, second] = formattedDate
+//     .replace(/, /g, ' ')
+//     .match(/\d+/g) || []
 
-  // Construct and return the ISO string
-  return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).toISOString()
+//   // Construct and return the ISO string
+//   return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).toISOString()
+// }
+
+export function formatHours(time: string) {
+	return time?.replace(".00", "")
 }
 
 // function datePrettyLocalFull(date: string) {
@@ -93,7 +125,7 @@ export function timePrettyTo12HourFormat(timeString: string) {
 
 export function datePrettyLocal(date: string, option: "day" | "time" | "full") {
 	// console.log('pretty date input, ', date);
-  if(!date) return 'n/a'
+	if (!date) return "n/a"
 
 	let options = {}
 	switch (option) {

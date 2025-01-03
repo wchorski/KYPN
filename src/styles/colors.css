@@ -139,7 +139,8 @@ a,
 button, 
 .button {
   &:disabled {
-    border-color: var(--c-disabled);
+    /* border-color: var(--c-disabled); */
+    border-color: transparent !important;
     color: var(--c-disabled);
   }
 } 

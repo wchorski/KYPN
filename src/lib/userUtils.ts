@@ -21,7 +21,7 @@ export function findEmployeeBusyRanges(employee:User){
       start: new Date(avail.start).toString(),
       end: new Date(avail.end).toString(),
     }
-    console.table({availRange});
+    
     busyRanges.push(availRange)
   })
   

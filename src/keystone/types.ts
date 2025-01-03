@@ -12,9 +12,8 @@ import type { Permission } from "./schemas/fields"
 import type { Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
 
 export type Booking = Lists.Booking.Item & {
-
 	author: User
-	content: { document: any }
+	details: { document: any }
   service?: Service
   location: Location
   addons: Addon[]
@@ -27,6 +26,7 @@ export type Booking = Lists.Booking.Item & {
   end:string
   //? virtual item isn't included
   durationInHours:string
+  summary:string
 }
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
@@ -410,6 +410,8 @@ export type Availability = Lists.Availability.Item & {
 export type BookingPrevious = {
 	bookingId: string
 	serviceId: string
+  locationId: string
+  employeeId: string
 	date: string
 	time: string
 }

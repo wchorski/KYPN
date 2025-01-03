@@ -1,4 +1,4 @@
-nav.dashnav {
+.dashnav {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -6,7 +6,7 @@ nav.dashnav {
   position: sticky;
   top: 4rem;
   
-  > ul {
+  & > ul {
     position: sticky;
     top: 3rem;
     display: flex;
@@ -18,12 +18,12 @@ nav.dashnav {
   }
   
 
-  li{
+  & li{
     display: flex;
     width: 100%;
   }
 
-  a {
+  & a {
     background-color: var(--c-txt-bg);
     flex-grow: 1;
     width: 100%;
@@ -37,9 +37,12 @@ nav.dashnav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    &:not(:hover, :active){
+      text-decoration: none;
+    }
     
   
-    svg {
+    & svg {
       font-size: 1.6rem;
       float: right;
       margin-left: 1em;
@@ -49,9 +52,9 @@ nav.dashnav {
 
 }
 
-// a.dashlink {
-  
-// }
+a.dashlink {
+  color: inherit; 
+}
 
 
 .linkactive{
@@ -65,7 +68,7 @@ nav.dashnav {
   display: grid;
   gap: 1.5rem;
 
-  .card {
+  & .card {
     scroll-behavior: smooth;
   }
 }

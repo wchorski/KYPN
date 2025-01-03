@@ -175,6 +175,7 @@ model Booking {
   details           Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   notes             String    @default("")
   secretNotes       String    @default("")
+  revision          Int       @default(0)
   dateCreated       DateTime? @default(now())
   dateModified      DateTime? @default(now())
   google            Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")

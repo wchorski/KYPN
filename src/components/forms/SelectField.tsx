@@ -9,9 +9,9 @@ type Props = {
 } & HTMLProps<HTMLSelectElement>
 
 export function SelectField(props: Props) {
-	const { name, label, value, onChange, options, error } = props
+	const { name, label, value, onChange, options, error, required } = props
 	return (
-		<label htmlFor={name}>
+		<label htmlFor={name} title={required ? `${label || name} is required` : name}>
 			<span> {label || name} </span>
 			<select value={value} required={false} onChange={onChange} {...props}>
 				<option value={""}> -- select {label || name} -- </option>

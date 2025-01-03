@@ -138,7 +138,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 						<BlockRender document={description.document} />
 					</Card>
 
-					<Link href={`/bookings?serviceId=${id}`} className="button large">
+					<Link href={`/book-a-service?serviceId=${id}`} className="button large">
 						{" "}
 						Book this Service{" "}
 					</Link>

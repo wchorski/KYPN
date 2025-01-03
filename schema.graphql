@@ -1059,6 +1059,7 @@ type Booking {
   details: Booking_details_Document
   notes: String
   secretNotes: String
+  revision: Int
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -1096,6 +1097,7 @@ input BookingWhereInput {
   status: StringNullableFilter
   notes: StringFilter
   secretNotes: StringFilter
+  revision: IntFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -1135,6 +1137,7 @@ input BookingOrderByInput {
   status: OrderDirection
   notes: OrderDirection
   secretNotes: OrderDirection
+  revision: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -1158,6 +1161,7 @@ input BookingUpdateInput {
   details: JSON
   notes: String
   secretNotes: String
+  revision: Int
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -1199,6 +1203,7 @@ input BookingCreateInput {
   details: JSON
   notes: String
   secretNotes: String
+  revision: Int
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON

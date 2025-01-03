@@ -264,7 +264,7 @@ export const rules = {
 
 	canManageBookings({ session }: ListAccessArgs) {
 		// anonymous users can create bookings
-		// if (!isLoggedIn({ session })) return false;
+		if (!isLoggedIn({ session })) return false;
 
 		// 1. Do they have the permission
 		if (permissions.canManageBookings({ session })) return true

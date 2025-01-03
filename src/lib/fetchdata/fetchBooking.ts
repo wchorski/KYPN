@@ -1,13 +1,20 @@
 import { Booking } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import type { Session } from "next-auth";
 
-export default async function fetchBooking(id:string){ 
+type Props = {
+  id:string
+  session: Session|null
+  query:string
+}
+
+export default async function fetchBooking({id, session, query}:Props){ 
 
   try {
 
-    const booking = await keystoneContext.sudo().query.Booking.findOne({
-      where: { id: id },
-      query: query
+    const booking = await keystoneContext.withSession(session).query.Booking.findOne({
+      where: { id },
+      query
     }) as Booking
     
     return { booking }
@@ -17,52 +24,3 @@ export default async function fetchBooking(id:string){
     return { error }
   }
 }
-
-
-const query = `
-  id
-  email
-  phone
-  name
-  dateCreated
-  dateModified
-  addonsCount
-  end
-  google
-  start
-  status
-  summary
-  notes
-  price
-  details {
-    document
-  }
-  addons {
-    id
-    excerpt
-    name
-    price
-  }
-  customer {
-    id
-    email
-    phone
-    name
-    nameLast
-  }
-  employees {
-    id
-    name
-    email
-    image
-  }
-  location {
-    id
-    name
-    address
-  }
-  service {
-    id
-    name
-  }
-`

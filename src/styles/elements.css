@@ -1,7 +1,7 @@
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-  margin-block: var(--space-l);
+	margin-block: var(--space-l);
 }
 thead th {
 	border-bottom-width: 3px;
@@ -38,6 +38,10 @@ ul.unstyled {
 	padding: 0;
 }
 
+button:disabled {
+	cursor: not-allowed;
+}
+
 .button {
 	border-radius: var(--br-dull);
 	border: solid 1px var(--c-primary);
@@ -63,7 +67,6 @@ ul.unstyled {
 		font-size: 1.3rem;
 	}
 }
-
 
 /* form,
 fieldset {
@@ -119,7 +122,7 @@ select {
 	padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
 	border-radius: var(--br-dull);
 	border-width: 1px;
-  border-style: solid;
+	border-style: solid;
 	box-sizing: border-box;
 }
 /* Removes awkward default styles on some inputs for iOS */
@@ -154,13 +157,13 @@ input[type="radio"] {
 blockquote {
 	display: grid;
 	align-items: center;
-  border-left-color: var(--c-primary);
-  border-left-style: solid;
+	border-left-color: var(--c-primary);
+	border-left-style: solid;
 	border-left-width: 5px;
 	padding-block: var(--space-m);
 	padding-inline: var(--space-ml);
 	margin-left: var(--space-m);
-  background-color: hsla(0, 0%, 0%, 0.11);
+	background-color: hsla(0, 0%, 0%, 0.11);
 
 	&:last-child {
 		margin-bottom: 0;
@@ -172,12 +175,12 @@ blockquote {
 	position: relative;
 
 	&::after {
-    display: block;
-    content: '';
-    width: 0%;
-    transition-property: border, color, background, width, height, opacity;
-    transition-duration: 1s;
-    transition-timing-function: ease-out;
-    opacity: 0;
-  }
+		display: block;
+		content: "";
+		width: 0%;
+		transition-property: border, color, background, width, height, opacity;
+		transition-duration: 1s;
+		transition-timing-function: ease-out;
+		opacity: 0;
+	}
 }

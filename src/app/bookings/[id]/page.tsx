@@ -15,7 +15,7 @@ import { FiEdit } from "react-icons/fi"
 import { CgExternal } from "react-icons/cg"
 import DialogPopup from "@components/menus/Dialog"
 import { StatusBadge } from "@components/StatusBadge"
-import styles from "@styles/booking.module.css"
+import styles, { booking_single } from "@styles/booking.module.css"
 import { Metadata, ResolvingMetadata } from "next"
 import { envs } from "@/envs"
 import { getServerSession } from "next-auth"
@@ -40,7 +40,8 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const session = await getServerSession(nextAuthOptions)
-	const { booking, error } = await fetchBooking(String(params?.id))
+  const { id } = await params
+	const { booking, error } = await fetchBooking({id, session, query: `summary`})
 
 	if (!booking)
 		return {
@@ -62,9 +63,10 @@ export default async function BookingSinglePage({
 	params,
 	searchParams,
 }: Props) {
+  const session = await getServerSession(nextAuthOptions)
 	const { id } = await params
 
-	const { booking, error } = await fetchBooking(id)
+	const { booking, error } = await fetchBooking({id, session, query: QUERY_BOOKING_RECIEPT})
 
 	if (error) return <ErrorMessage error={error} />
 	if (!booking) return notFound()
@@ -77,6 +79,7 @@ export default async function BookingSinglePage({
 		phone,
 		name,
 		location,
+    address,
 		service,
 		price,
 		notes,
@@ -86,6 +89,7 @@ export default async function BookingSinglePage({
 		dateModified,
 		start,
 		end,
+    revision,
 	} = booking
 
 	return (
@@ -119,17 +123,16 @@ export default async function BookingSinglePage({
             <FiEdit /> Edit 
           </Link> */}
 				</Flex>
-				<small>last updated: {datePrettyLocal(dateModified, "full")}</small>
+				<small>last updated: {datePrettyLocal(dateModified, "full")} v{revision}</small>
 			</header>
 
 			<div className={layout_content}>
-				<div className={styles.booking_single}>
+				<div className={booking_single}>
 					<table>
 						<tbody>
 							<tr>
 								<td>
-									{" "}
-									<label>Client: </label>{" "}
+									<label>Client: </label>
 								</td>
 								<td>
 									{customer ? (
@@ -151,7 +154,7 @@ export default async function BookingSinglePage({
 								<td>
 									<label>Location: </label>{" "}
 								</td>
-								<td>{location?.name || "n/a"}</td>
+								<td>{location?.name} {address && `| ${address}`}</td>
 							</tr>
 							<tr>
 								<td>
@@ -204,7 +207,7 @@ export default async function BookingSinglePage({
 					{employees.length > 0 && (
 						<>
 							<h2> Employees Assigned </h2>
-							<ul className="employees">
+							<ul className="employees" style={{padding: '0', listStyle: 'none'}}>
 								{employees.map((emp) => (
 									<li key={emp.id}>
 										<UserBadge user={emp} />
@@ -215,7 +218,7 @@ export default async function BookingSinglePage({
 					)}
 
 					{details && (
-						<div className={styles.description_wrap}>
+						<div className={''}>
 							<BlockRender document={details.document} />
 						</div>
 					)}
@@ -242,3 +245,53 @@ export default async function BookingSinglePage({
 		</main>
 	)
 }
+
+const QUERY_BOOKING_RECIEPT = `
+  id
+  email
+  phone
+  name
+  dateCreated
+  dateModified
+  addonsCount
+  end
+  google
+  start
+  status
+  summary
+  notes
+  price
+  address
+  revision
+  details {
+    document
+  }
+  addons {
+    id
+    excerpt
+    name
+    price
+  }
+  customer {
+    id
+    email
+    phone
+    name
+    nameLast
+  }
+  employees {
+    id
+    name
+    email
+    image
+  }
+  location {
+    id
+    name
+    address
+  }
+  service {
+    id
+    name
+  }
+`

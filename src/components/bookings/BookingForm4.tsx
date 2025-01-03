@@ -95,7 +95,7 @@ type StateRed = {
 	service?: Service
 	buisnessDays: number[]
 	buisnessHours: { start: string; end: string }
-	location: string
+	location: Location | undefined
 	locationOptions: SelectOption[]
 	staff?:
 		| {
@@ -186,7 +186,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		locationOptions: [],
 		staffOptions: [],
 		date: prevBooking?.date || "",
-		location: "",
+		location: undefined,
 		time: prevBooking?.time || "",
 		total: 0,
 		blackoutDates: [],
@@ -237,7 +237,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 					staff: undefined,
 					time: "",
 					date: "",
-					location: "",
+					location: undefined,
 					locationOptions: locationOpts,
 					staffOptions: staffOpts,
 					addonOptions: addonOptions,
@@ -245,7 +245,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 				}
 
 			case "SET_LOCATION":
-				return { ...state, location: action.payload }
+				const selectedLocation = locations.find(
+					(loc) => loc.id === action.payload
+				)
+				return { ...state, location: selectedLocation }
 
 			case "SET_LOCATION_OPTIONS":
 				return { ...state, locationOptions: action.payload }
@@ -369,6 +372,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	function calcTotalPrice(addonIds: string[], serviceId: string | undefined) {
 		if (!serviceId) return 0
 		const pickedAddons = addons.filter((ad) => addonIds.includes(ad.id))
+    
 		const addonsPrice = pickedAddons.reduce(
 			(accumulator, currentValue) => accumulator + (currentValue?.price || 0),
 			0
@@ -478,11 +482,18 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	// 	}
 	// }
 
-	// useEffect(() => {
-	// 	if (formState.message === "success") {
-	// 		formRef.current?.reset()
-	// 	}
-	// }, [formState])
+	useEffect(() => {
+		// if (formState.message === "success") {
+		// 	formRef.current?.reset()
+		// }
+    if(prevBooking?.serviceId){
+      dispatchRed({
+        type: "SET_SERVICE",
+        payload: prevBooking?.serviceId,
+      })
+
+    }
+	}, [prevBooking])
 
 	function findPartialDays(id: string) {
 		// const pickedService = services.find((x: any) => x.id === stateRed.service?.id)
@@ -495,6 +506,11 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 			start: stateRed.service?.buisnessHourOpen || "",
 			end: stateRed.service?.buisnessHourClosed || "",
 		}
+
+    selectedEmpl.gigs = gigs.filter((gig) =>
+			gig.employees.flatMap((emp) => emp.id).includes(selectedEmpl.id)
+		)
+
 		const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
 
 		const buisnessTimeStrings = filterBuisnessTimes(
@@ -522,6 +538,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 				return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
 			})
+      
 
 			partialDays.push({
 				day,
@@ -530,11 +547,16 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 			return openTimes.length > 0 ? true : false
 		})
+    console.log({busyDays});
 
 		const blackoutDays = partialDays.filter((d) => {
 			return d.times.length <= 0
 		})
 		const blackoutDts = blackoutDays.map((d) => d.day)
+    console.log({blackoutDts});
+    console.log({partialDays});
+
+    
 
 		dispatchRed({ type: "SET_BLACKOUT_DATES", payload: blackoutDts })
 		dispatchRed({ type: "SET_PARTIAL_DATES", payload: partialDays })
@@ -555,11 +577,13 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		const employeeGigs = gigs.filter((gig) =>
 			gig.employees.flatMap((emp) => emp.id).includes(pickedStaff.id)
 		)
+
 		const staffGigsLocal = employeeGigs.flatMap((gig: Booking) => {
 			const start = new Date(gig.start).toLocaleDateString("en-CA")
 			const end = new Date(gig.end).toLocaleDateString("en-CA")
 			return [start, end]
 		})
+
 
 		if (staffGigsLocal?.includes(date)) {
 			const staffGigs = employeeGigs.filter((gig: Booking) => {
@@ -630,7 +654,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<SelectField
 								name={"serviceId"}
 								label={"service"}
-								defaultValue={state.values?.serviceId}
+								defaultValue={prevBooking?.serviceId || state.values?.serviceId}
 								required={true}
 								onChange={(e) => {
 									dispatchRed({
@@ -645,14 +669,16 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<SelectField
 								name={"locationId"}
 								label={"location"}
-								defaultValue={state.values?.locationId}
+								defaultValue={
+									prevBooking?.locationId || state.values?.locationId
+								}
 								required={true}
-								onChange={(e) => {
+								onChange={(e) =>
 									dispatchRed({
 										type: "SET_LOCATION",
 										payload: e.currentTarget.value,
 									})
-								}}
+								}
 								options={stateRed.locationOptions}
 								error={state.valueErrors?.locationId}
 							/>
@@ -660,9 +686,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<InputField
 								label={"Event Address"}
 								name={"address"}
-								type={"text"}
+								type={stateRed.location?.address === "n/a" ? "text" : "hidden"}
 								placeholder="123 Rainbow Rd, Mushroom KI 10203"
-								required={false}
+								required={stateRed.location?.address === "n/a"}
 								defaultValue={state.values?.address}
 								error={state.valueErrors?.address}
 							/>
@@ -670,7 +696,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<SelectField
 								name={"employeeId"}
 								label={"staff member"}
-								defaultValue={state.values?.employeeId}
+								defaultValue={
+									prevBooking?.employeeId || state.values?.employeeId
+								}
 								required={true}
 								onChange={(e) => {
 									dispatchRed({
@@ -730,7 +758,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								label={"day of event"}
 								type={"hidden"}
 								// type={"date"}
-								defaultValue={state.values?.date}
+                disabled={true}
+								defaultValue={prevBooking?.date || state.values?.date}
 								required={true}
 								onChange={(e) =>
 									dispatchRed({
@@ -755,7 +784,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								name={"time"}
 								// type={"time"}
 								type={"hidden"}
-								defaultValue={state.values?.time}
+                disabled={true}
+								defaultValue={prevBooking?.time || state.values?.time}
 								required={true}
 								onChange={(e) => {
 									dispatchRed({
@@ -855,24 +885,15 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 				) : (
 					<div className={formStyles.success_message}>
 						<BsFillBookmarkFill />
-						<h2> Success! </h2>
-						<p>
-							{`Your booking is being processed. For the next steps, we'll reach out with instructions via the contact provided.`}
-						</p>
-						<ul>
-							{stateRed.customer &&
-								Object.keys(stateRed.customer).map((key, i) => (
-									// @ts-ignore
-									<li key={i}> {stateRed.customer[key]} </li>
-								))}
-						</ul>
+						<h2> Booking Requested! </h2>
+						<p>{state.success}</p>
 						<Link href={state.url}> Account bookings ⇢ </Link> <br />
 						<Link href={`/bookings/${state.id}`}> Booking Status </Link>
 					</div>
 				)}
 			</div>
 
-			<aside key={stateRed.addonOptions.length}>
+			<aside key={stateRed.addonOptions.length} style={{ maxWidth: "20rem" }}>
 				<table>
 					<tbody>
 						<tr>
@@ -882,19 +903,15 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Location: </td>
 							<td>
-								{" "}
-								{locations.find((loc) => stateRed.location)?.name || (
-									<span className="subtext"> n/a </span>
-								)}{" "}
+								{stateRed.location?.name || <span className="sub-text"> n/a </span>}
 							</td>
 						</tr>
 						<tr>
 							<td> Staff: </td>
 							<td>
-								{" "}
 								{stateRed.staff?.name || (
-									<span className="subtext"> n/a </span>
-								)}{" "}
+									<span className="sub-text"> n/a </span>
+								)}
 							</td>
 						</tr>
 						<tr>
@@ -903,7 +920,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								{stateRed.date ? (
 									datePrettyLocal(stateRed.date + "T00:00-0800", "day")
 								) : (
-									<span className="subtext"> n/a </span>
+									<span className="sub-text"> n/a </span>
 								)}
 								{stateRed.time
 									? " @ " + timePrettyTo12HourFormat(stateRed.time)
@@ -913,7 +930,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Addons: </td>
 							<td>
-								<ul>
+								<ul style={{padding: '0'}} >
 									{stateRed.addonOptions
 										.filter((opt) => opt.isChecked)
 										.map((ad, i) => (
@@ -925,7 +942,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Estimate: </td>
 							<td>
-								{moneyFormatter(
+                {moneyFormatter(stateRed.total)}
+								{/* {moneyFormatter(
 									getServicePicked(stateRed.service?.id || "")?.price ||
 										0 +
 											stateRed.addonOptions
@@ -935,7 +953,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 														accumulator + (addon.price || 0),
 													0
 												)
-								)}
+								)} */}
 							</td>
 						</tr>
 					</tbody>

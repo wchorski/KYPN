@@ -60,13 +60,15 @@ export default async function BookingsPage({ searchParams }: Props) {
 
 	if (error) return <ErrorMessage error={error} />
 	if (!data) return notFound()
+  //@ts-ignore
+  data.prevBooking = prevBooking
 
 	return (
 		<main className={page_layout}>
 			<header className={layout_wide}>
 				<h1> Book a Service </h1>
 			</header>
-			<div className={page_content}>
+			<div className={[page_content, layout_wide].join(' ')}>
 				<BookingForm
 					data={plainObj(data)}
 					session={plainObj(session)}

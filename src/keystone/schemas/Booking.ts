@@ -38,13 +38,18 @@ export const Booking: Lists.Booking = list({
 		filter: {
 			query: rules.canViewBookings,
 			update: rules.canManageBookings,
-			delete: () => false,
+			// delete: () => false,
 		},
 		operation: {
 			create: permissions.canManageBookings,
-			query: permissions.canManageBookings,
-			update: permissions.canManageBookings,
-			delete: () => false,
+			query: () => true,
+			// query: permissions.canManageBookings,
+      //? seems sketchy, but the filter handles security
+			update: () => true,
+			// update: permissions.canManageBookings,
+			// delete: () => false,
+      // TODO find a way where only Admin can delete (not customer or employee)
+			delete: permissions.canManageBookings,
 		},
 	},
 
@@ -78,6 +83,10 @@ export const Booking: Lists.Booking = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
+		//? may want to stick date and time as seperate values
+		//? then turn start & end into virtual fields
+		// date:
+		// time:
 		start: timestamp({ validation: { isRequired: true } }),
 		end: timestamp({ validation: { isRequired: true } }),
 		timeZone: select({
@@ -87,9 +96,10 @@ export const Booking: Lists.Booking = list({
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
+				description: "event venue's time zone",
 			},
 		}),
-		address: text({}),
+		address: text({ ui: { description: "event venue's location" } }),
 		summary: virtual({
 			field: graphql.field({
 				type: graphql.String,
@@ -140,6 +150,7 @@ export const Booking: Lists.Booking = list({
 				{ label: "Down Payment", value: "DOWNPAYMENT" },
 				{ label: "Holding", value: "HOLDING" },
 				{ label: "Requested", value: "REQUESTED" },
+				{ label: "Declined", value: "DECLINED" },
 			],
 			defaultValue: "LEAD",
 			ui: {
@@ -209,6 +220,15 @@ export const Booking: Lists.Booking = list({
 					permissions.canManageBookings({ session }),
 			},
 		}),
+    revision: integer({
+			defaultValue: 0,
+			validation: { isRequired: true },
+			ui: {
+				createView: {
+					fieldMode: 'hidden',
+				},
+			},
+		}),
 		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 		google: json({
@@ -226,9 +246,10 @@ export const Booking: Lists.Booking = list({
 
 			// }
 
-			// if (operation === 'update') {
-
-			// }
+			if (operation === "update") {
+				resolvedData.dateModified = new Date()
+				resolvedData.revision = item.revision + 1
+			}
 
 			if (operation === "delete") {
 				const employees = (await context.sudo().query.User.findMany({
@@ -378,11 +399,11 @@ async function handleCalendarUpdate(item: any, context: any) {
 		description: calDescription,
 		start: {
 			dateTime: calStart,
-      timeZone: item.timeZone
+			timeZone: item.timeZone,
 		},
 		end: {
 			dateTime: calEnd,
-			timeZone: item.timeZone
+			timeZone: item.timeZone,
 		},
 	})
 

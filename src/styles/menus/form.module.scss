@@ -27,6 +27,10 @@
   }
 }
 
+.mini_form {
+  border: dashed white 1px;
+}
+
 //todo don't make global
 .form :global {
   // display: grid;
@@ -68,7 +72,7 @@
     display: none;
   }
 
-  label:has(input:required) {
+  label:has(input:required, select:required) {
     span:first-child::after {
       content: " *";
       // color: red;

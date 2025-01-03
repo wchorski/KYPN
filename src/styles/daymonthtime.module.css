@@ -2,8 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: solid 2px var(--c-txt);
-  border-radius: var(--br-sharp);
+  /* border: solid 2px var(--c-txt); */
+  /* border-radius: var(--br-sharp); */
   max-width: 12rem;
 
   & time{

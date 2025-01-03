@@ -53,7 +53,7 @@ export async function deleteCalendarEvent(eventId:string){
   if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
   let calendar = google.calendar('v3')
 
-  console.log('local file -- - eventId, ', eventId);
+  console.log('## calEvent Deleted. eventId: ', eventId);
   
   
   try {
