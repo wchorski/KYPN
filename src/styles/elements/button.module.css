@@ -1,55 +1,67 @@
-.button{
-  border-width: var(--space-s);
+.button {
+	border-width: var(--space-s);
 
-  & span {
-    text-wrap: wrap;
-  }
+	& span {
+		text-wrap: wrap;
+	}
 }
+
+.stack_el {
+	display: grid;
+	grid-template-areas: stack;
+	place-items: center;
+
+	& > * {
+		grid-area: stack;
+	}
+}
+
 .text_wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  transition-duration: .3s;
-  transition-property: opacity;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	transition-duration: 0.3s;
+	transition-property: opacity;
 }
 
-.signout{
-  border-Radius: var(--br-dull);
+.signout {
+	border-radius: var(--br-dull);
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover, &:focus{
-    color: red !important;
-  }
+	&:hover,
+	&:focus {
+		color: red !important;
+	}
 }
 
 .opacity_0 {
-  opacity: 0;
+	opacity: 0;
 }
 
 .opacity_1 {
-  opacity: 1;
+	opacity: 1;
 }
 
 .btn_msg {
-  opacity: 0;
-  transition-property: opacity, transform;
-  transition-duration: 0.3s;
-  pointer-events: none;
-  color: var(--c-accent);
-  transform: translateX(90%);
-  right: 0;
-  position: absolute;
-  z-index: 1;
+	opacity: 0;
+	transition-property: opacity, transform;
+	transition-duration: 0.3s;
+	pointer-events: none;
+	color: var(--c-accent);
+	transform: translateX(90%);
+	right: 0;
+	position: absolute;
+	z-index: 1;
 }
 
 .btn_msg_reveal {
-  opacity: 1;
-  transform: translateX(110%);
+	opacity: 1;
+	transform: translateX(110%);
 }
 
 .btn_share {
-  z-index: 2;
-  position: relative;
+	z-index: 2;
+	position: relative;
 }

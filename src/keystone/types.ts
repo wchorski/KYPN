@@ -12,8 +12,7 @@ import type { Permission } from "./schemas/fields"
 import type { Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
 
 export type Booking = Lists.Booking.Item & {
-	// categories: Category[]
-	// tags: Tag[]
+
 	author: User
 	content: { document: any }
   service?: Service
@@ -22,9 +21,12 @@ export type Booking = Lists.Booking.Item & {
   employees: User[]
   employee_requests: User[]
   customer: User
-  start:string,
+  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+  dateModified:string
+  start:string
   end:string
-
+  //? virtual item isn't included
+  durationInHours:string
 }
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
@@ -323,7 +325,7 @@ export type Rental = {
 		| "LEAD"
 		| "PAID"
 		| "DOWNPAYMENT"
-		| "HOLD"
+		| "HOLDING"
 	// dateCreated?: string
 	// dateModified?: string
 	// delivery: boolean
@@ -395,91 +397,15 @@ export type Order = {
 // 	dateModified: string
 // }
 
-// export type User = {
-// 	id: string
-// 	name: string
-// 	nameLast: string
-// 	email: string
-// 	phone: string
-// 	image: string
-// 	password: string
-// 	url: string
-// 	isActive: boolean
-// 	stripeCustomerId: string
-// 	posts: Post[]
-// 	pages: Page[]
-// 	servicesProvided: Service[]
-// 	bookings: Booking[]
-// 	gigs: Booking[]
-// 	gig_requests: Booking[]
-// 	availability: Availability[]
-// 	cart: CartItem[]
-// 	dateCreated: string
-// 	dateModified: string
-// 	products: Product[]
-// 	subscriptionPlans: SubscriptionPlan[]
-// 	subscriptions: SubscriptionItem[]
-// 	orders: OrderItem[]
-// 	role: Role
-// 	tickets: Ticket[]
-// }
-
 export type Availability = Lists.Availability.Item & {
   employee: User,
   start:string
   end:string
   bookings: Booking[]
+  //? virtual "number" is technically a string
+  durationInHours:string,
 }
-// 	id: string
-// 	start: string
-// 	end: string
-// 	durationInHours: string
-// 	employee: User
-// 	type: string
-// 	status: string
-// 	dateCreated: string
-// 	dateModified: string
-// }
 
-// export type Booking = {
-// 	typeof: "booking"
-// 	id: string
-// 	start: string
-// 	end: string
-// 	summary: string
-// 	durationInHours: string
-// 	service?: Service
-// 	price: number
-// 	employees: User[]
-// 	employee_requests: User[]
-// 	addons: Addon[]
-// 	customer: User
-// 	location: Location
-// 	email: string
-// 	phone: string
-// 	name: string
-// 	notes: string
-// 	status:
-// 		| "CONFIRMED"
-// 		| "POSTPONED"
-// 		| "CANCELED"
-// 		| "LEAD"
-// 		| "PAID"
-// 		| "DOWNPAYMENT"
-// 		| "HOLD"
-// 	dateCreated: string
-// 	dateModified: string
-// 	google?: {
-// 		id?: string
-// 		kind?: string
-// 		status?: string
-// 		message?: string
-// 		htmlLink?: string
-// 	}
-// 	details: {
-// 		document: any
-// 	}
-// }
 
 export type BookingPrevious = {
 	bookingId: string
@@ -487,101 +413,6 @@ export type BookingPrevious = {
 	date: string
 	time: string
 }
-
-// export type Category = {
-// 	id: string
-// 	name: string
-// 	description: string
-// 	pages: Page[]
-// 	posts: Post[]
-// 	products: Product[]
-// 	subscriptions: SubscriptionPlan[]
-// 	services: Service[]
-// }
-
-// export type Tag = {
-// 	id: string
-// 	name: string
-// 	pages: Page[]
-// 	posts: Post[]
-// 	products: Product[]
-// 	subscriptions: SubscriptionPlan[]
-// 	services: Service[]
-// }
-
-// export type Page = {
-// 	id: string
-// 	title: string
-// 	slug: string
-// 	dateCreated: string
-// 	dateModified: string
-// 	status: string
-// 	template: string
-// 	pinned: number
-// 	excerpt: string
-// 	featured_image: string
-// 	featured_video: string
-// 	content: {
-// 		document: any
-// 	}
-// 	author: User
-// 	categories: Category[]
-// 	tags: Tag[]
-// }
-
-// export type Post = {
-// 	id?: string
-// 	title?: string
-// 	slug?: string
-// 	dateCreated?: string
-// 	dateModified?: string
-// 	status?: string
-// 	template: string
-// 	pinned: number
-// 	excerpt?: string
-// 	featured_image?: string
-// 	featured_video?: string
-// 	content?:
-// 		| {
-// 				document: any
-// 		  }
-// 		| any
-// 	allow_comments?: boolean
-// 	author?: User
-// 	// |{connect:any},
-// 	categories?: Category[] | { connect: any }
-// 	tags?: Tag[]
-// 	// |{connect:any},
-// }
-
-// export type Role = {
-// 	id: string
-// 	name: string
-// 	assignedTo: User
-// 	name: string
-// 	canManageProducts: boolean
-// 	canManageAddons: boolean
-// 	canManageBookings: boolean
-// 	canManageAvailability: boolean
-// 	canManageEvents: boolean
-// 	canManageAnnouncements: boolean
-// 	canManageTickets: boolean
-// 	canViewUsers: boolean
-// 	canManagePosts: boolean
-// 	canManageUsers: boolean
-// 	canManageRoles: boolean
-// 	canManageCart: boolean
-// 	canManageOrders: boolean
-// 	canManageCategories: boolean
-// 	canManageTags: boolean
-// 	canManageLocations: boolean
-// 	canManagePages: boolean
-// 	canManageServices: boolean
-// 	canManageSubscriptionPlans: boolean
-// 	canManageSubscriptionItems: boolean
-// 	canManageCoupons: boolean
-//   canManageProducts: boolean,
-// }
 
 export type Service = Lists.Service.Item & {
   description: {
@@ -596,11 +427,7 @@ export type Service = Lists.Service.Item & {
   buisnessDays:number[]
 }
 
-export type Location = {
-	id: string
-	name: string
-	address: string
-	rooms: number
+export type Location = Lists.Location.Item & {
 	services: Service[]
 	bookings: Booking[]
 	categories: Category[]

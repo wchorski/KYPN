@@ -1,6 +1,8 @@
 .nav-link-group {
   position: relative;
   & svg {
+    padding: 2px;
+    color: grey;
     position: absolute;
     top: 0;
     right: 0;

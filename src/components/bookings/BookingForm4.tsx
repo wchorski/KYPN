@@ -12,7 +12,6 @@ import {
 	Location,
 	SelectOption,
 	Service,
-	Session,
 	User,
 } from "@ks/types"
 import { generateTimesArray } from "@lib/generateTimesArray"
@@ -23,11 +22,11 @@ import {
 	useReducer,
 	useRef,
 	useState,
-  useActionState
+	useActionState,
 } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 
-import formStyles from "@styles/menus/form.module.scss"
+import formStyles, { form } from "@styles/menus/form.module.scss"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { calcEndTime } from "@lib/dateCheck"
 import moneyFormatter from "@lib/moneyFormatter"
@@ -45,6 +44,17 @@ import { findOverlapTimes } from "@lib/dateCheckCal"
 import Link from "next/link"
 import { BsFillBookmarkFill } from "react-icons/bs"
 import { Button } from "@components/elements/Button"
+import { SelectField } from "@components/forms/SelectField"
+import { InputField } from "@components/InputField"
+import { TextareaField } from "@components/TextareaField"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { useForm } from "@hooks/useForm"
+import {
+	actionBookAService,
+	BookAServiceState,
+} from "@lib/actions/actionBookAService"
+import { Session } from "next-auth"
+import { envs } from "@/envs"
 
 type Fields = {
 	// event: string,
@@ -77,7 +87,8 @@ type Props = {
 		gigs?: Booking[] | undefined
 		prevBooking?: BookingPrevious | undefined
 	}
-	session?: Session
+	session: Session | null
+	timeZoneOptions?: SelectOption[]
 }
 
 type StateRed = {
@@ -133,7 +144,7 @@ type FormAsideAction =
 
 const genTimeStrings = generateTimesArray().map((t) => t.value)
 
-export function BookingForm3({ data, session }: Props) {
+export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	const {
 		services = [],
 		locations = [],
@@ -144,7 +155,6 @@ export function BookingForm3({ data, session }: Props) {
 		prevBooking,
 	} = data
 
-	const serviceRef = useRef<HTMLSelectElement>(null)
 	const formRef = useRef<HTMLFormElement>(null)
 	const dateRef = useRef<HTMLInputElement>(null)
 
@@ -307,28 +317,54 @@ export function BookingForm3({ data, session }: Props) {
 		return services.find((x) => x.id === id) as Service
 	}
 
-	const defaultFormState: FormState = {
-		message: "",
-		errors: undefined,
-		fieldValues: {
-			service: prevBooking?.serviceId || "",
-			location: "",
-			staff: "",
+	// const defaultFormState: FormState = {
+	// 	message: "",
+	// 	errors: undefined,
+	// 	fieldValues: {
+	// 		service: prevBooking?.serviceId || "",
+	// 		location: "",
+	// 		staff: "",
+	// 		addonIds: [],
+	// 		date: prevBooking?.date || "",
+	// 		timeStart: prevBooking?.time || "",
+	// 		// timeEnd: '',
+	// 		name: "",
+	// 		email: session?.user?.email || "",
+	// 		phone: "",
+	// 		notes: "",
+	// 	},
+	// }
+
+	const initState: BookAServiceState = {
+		values: {
+			serviceId: "",
+			locationId: "",
 			addonIds: [],
-			date: prevBooking?.date || "",
-			timeStart: prevBooking?.time || "",
-			// timeEnd: '',
-			name: "",
-			email: session?.user?.email || "",
+			employeeId: "",
+			// start: "",
+			date: "",
+			time: "",
+			address: "",
+			timeZone: timeZoneOptions ? timeZoneOptions[0].value : "",
+			customerId: session?.itemId || "",
+			name: session?.user.name || "",
+			email: session?.user.email || "",
 			phone: "",
 			notes: "",
+			amountTotal: 0,
 		},
+		valueErrors: undefined,
+		error: undefined,
+		success: undefined,
+		url: undefined,
+		id: undefined,
 	}
 
-	const [formState, formAction] = useFormState<FormState>(
-		onSubmit,
-		defaultFormState
-	)
+	// const [formState, formAction] = useFormState<FormState>(
+	// 	onSubmit,
+	// 	defaultFormState
+	// )
+	const { state, action, submitCount } = useForm(actionBookAService, initState)
 
 	function calcTotalPrice(addonIds: string[], serviceId: string | undefined) {
 		if (!serviceId) return 0
@@ -340,113 +376,113 @@ export function BookingForm3({ data, session }: Props) {
 		return addonsPrice + (getServicePicked(serviceId).price || 0)
 	}
 
-	async function onSubmit(
-		prevState: FormState,
-		formdata: FormData
-	): Promise<FormState> {
-		const service = formdata.get("service") as string
-		const location = formdata.get("location") as string
-		const staff = formdata.get("staff") as string
-		const date = formdata.get("date") as string
-		const timeStart = formdata.get("timeStart") as string
-		// const timeEnd   = formdata.get('timeEnd') as string
-		const name = formdata.get("name") as string
-		const email = formdata.get("email") as string
-		const phone = formdata.get("phone") as string
-		const notes = formdata.get("notes") as string
-		// const addonIds = addons.map(addon => formdata.get(addon.name) ).filter(item => item !== null) as string[]
-		const addonIds = stateRed.addonOptions
-			.filter((addon) => addon.isChecked)
-			.flatMap((addon) => addon.id) as string[]
+	// async function onSubmit(
+	// 	prevState: FormState,
+	// 	formdata: FormData
+	// ): Promise<FormState> {
+	// 	const service = formdata.get("service") as string
+	// 	const location = formdata.get("location") as string
+	// 	const staff = formdata.get("staff") as string
+	// 	const date = formdata.get("date") as string
+	// 	const timeStart = formdata.get("timeStart") as string
+	// 	// const timeEnd   = formdata.get('timeEnd') as string
+	// 	const name = formdata.get("name") as string
+	// 	const email = formdata.get("email") as string
+	// 	const phone = formdata.get("phone") as string
+	// 	const notes = formdata.get("notes") as string
+	// 	// const addonIds = addons.map(addon => formdata.get(addon.name) ).filter(item => item !== null) as string[]
+	// 	const addonIds = stateRed.addonOptions
+	// 		.filter((addon) => addon.isChecked)
+	// 		.flatMap((addon) => addon.id) as string[]
 
-		const inputValues: Fields = {
-			service,
-			location,
-			staff,
-			addonIds,
-			date,
-			timeStart,
-			// timeEnd,
-			name,
-			email,
-			phone,
-			notes,
-		}
+	// 	const inputValues: Fields = {
+	// 		service,
+	// 		location,
+	// 		staff,
+	// 		addonIds,
+	// 		date,
+	// 		timeStart,
+	// 		// timeEnd,
+	// 		name,
+	// 		email,
+	// 		phone,
+	// 		notes,
+	// 	}
 
-		try {
-			if (typeof email !== "string") throw new Error("email is not string")
+	// 	try {
+	// 		if (typeof email !== "string") throw new Error("email is not string")
 
-			const data = {
-				// summary: `${name || email} | ${getServicePicked(service)?.name}`,
-				serviceId: service,
-				locationId: location,
-				addonIds,
-				employeeId: staff,
-				start: new Date(date + "T" + timeStart).toISOString(),
-				// end: calcEndTime(date+'T'+ timeStart, String(getServicePicked(service)?.durationInHours)),
-				customerName: name,
-				customerEmail: email,
-				customerPhone: phone,
-				notes: notes,
-				amountTotal: calcTotalPrice(addonIds, service),
-			}
+	// 		const data = {
+	// 			// summary: `${name || email} | ${getServicePicked(service)?.name}`,
+	// 			serviceId: service,
+	// 			locationId: location,
+	// 			addonIds,
+	// 			employeeId: staff,
+	// 			start: new Date(date + "T" + timeStart).toISOString(),
+	// 			// end: calcEndTime(date+'T'+ timeStart, String(getServicePicked(service)?.durationInHours)),
+	// 			customerName: name,
+	// 			customerEmail: email,
+	// 			customerPhone: phone,
+	// 			notes: notes,
+	// 			amountTotal: calcTotalPrice(addonIds, service),
+	// 		}
 
-			const res = await fetch(`/api/gql/noauth`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					query: `
-            mutation BookAService($serviceId: String!, $start: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerName: String, $customerEmail: String!, $customerPhone: String, $notes: String, $amountTotal: Int) {
-              bookAService(serviceId: $serviceId, start: $start, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerName: $customerName, customerEmail: $customerEmail, customerPhone: $customerPhone, notes: $notes, amount_total: $amountTotal) {
-                id
-              }
-            }
-          `,
-					variables: data,
-				}),
-			})
+	// 		const res = await fetch(`/api/gql/noauth`, {
+	// 			method: "POST",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 			},
+	// 			body: JSON.stringify({
+	// 				query: `
+	//           mutation BookAService($serviceId: String!, $start: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerName: String, $customerEmail: String!, $customerPhone: String, $notes: String, $amountTotal: Int) {
+	//             bookAService(serviceId: $serviceId, start: $start, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerName: $customerName, customerEmail: $customerEmail, customerPhone: $customerPhone, notes: $notes, amount_total: $amountTotal) {
+	//               id
+	//             }
+	//           }
+	//         `,
+	// 				variables: data,
+	// 			}),
+	// 		})
 
-			const { bookAService, error } = await res.json()
-			if (error) throw new Error(error.message)
-			dispatchRed({ type: "SET_BOOKING_ID", payload: bookAService.id })
-			dispatchRed({ type: "SET_CUSTOMER", payload: { name, email, phone } })
-			// // return check to see if employee is avail
+	// 		const { bookAService, error } = await res.json()
+	// 		if (error) throw new Error(error.message)
+	// 		dispatchRed({ type: "SET_BOOKING_ID", payload: bookAService.id })
+	// 		dispatchRed({ type: "SET_CUSTOMER", payload: { name, email, phone } })
+	// 		// // return check to see if employee is avail
 
-			return {
-				...formState,
-				message: "success",
-			}
-		} catch (error: any) {
-			console.log(error)
+	// 		return {
+	// 			...formState,
+	// 			message: "success",
+	// 		}
+	// 	} catch (error: any) {
+	// 		console.log(error)
 
-			return {
-				message: error?.message,
-				// TODO validate each field
-				errors: {
-					service: "",
-					location: "",
-					staff: "",
-					date: "",
-					timeStart: "",
-					// timeEnd: '',
-					name: "",
-					email: "",
-					phone: "",
-					notes: "",
-					addonIds: "",
-				},
-				fieldValues: inputValues,
-			}
-		}
-	}
+	// 		return {
+	// 			message: error?.message,
+	// 			// TODO validate each field
+	// 			errors: {
+	// 				service: "",
+	// 				location: "",
+	// 				staff: "",
+	// 				date: "",
+	// 				timeStart: "",
+	// 				// timeEnd: '',
+	// 				name: "",
+	// 				email: "",
+	// 				phone: "",
+	// 				notes: "",
+	// 				addonIds: "",
+	// 			},
+	// 			fieldValues: inputValues,
+	// 		}
+	// 	}
+	// }
 
-	useEffect(() => {
-		if (formState.message === "success") {
-			formRef.current?.reset()
-		}
-	}, [formState])
+	// useEffect(() => {
+	// 	if (formState.message === "success") {
+	// 		formRef.current?.reset()
+	// 	}
+	// }, [formState])
 
 	function findPartialDays(id: string) {
 		// const pickedService = services.find((x: any) => x.id === stateRed.service?.id)
@@ -586,90 +622,66 @@ export function BookingForm3({ data, session }: Props) {
 	return (
 		<div className={formStyles.grid_wrap}>
 			<div>
-				{!stateRed.bookingId ? (
-					<form action={formAction} ref={formRef} className={formStyles.form}>
+				{!state.id || !state.url ? (
+					<form action={action} ref={formRef} className={form}>
 						<fieldset>
 							<legend> The What </legend>
 
-							<label htmlFor={"service"}>
-								<span> Service </span>
-								<select
-									ref={serviceRef}
-									name={"service"}
-									id={"service"}
-									defaultValue={formState.fieldValues.service}
-									required={true}
-									onChange={(e) => {
-										// handleServiceUpdate(e.target.value)
-										// updateFormAside('service', e.target.value)
-										dispatchRed({
-											type: "SET_SERVICE",
-											payload: e.target.value,
-										})
-										// dispatchRed({type: 'SET_TOTAL', payload: calcTotalPrice(addonOptions.filter(opt => opt.isChecked).flatMap(ad => ad.id), foundService?.id)} )
-									}}
-								>
-									<option value={""}> -- select service -- </option>
+							<SelectField
+								name={"serviceId"}
+								label={"service"}
+								defaultValue={state.values?.serviceId}
+								required={true}
+								onChange={(e) => {
+									dispatchRed({
+										type: "SET_SERVICE",
+										payload: e.currentTarget.value,
+									})
+								}}
+								options={serviceOptions}
+								error={state.valueErrors?.serviceId}
+							/>
 
-									{serviceOptions.map((opt, i) => (
-										<option key={i} value={opt.value}>
-											{" "}
-											{opt.label}{" "}
-										</option>
-									))}
-								</select>
-								<span className="error"> {formState.errors?.service} </span>
-							</label>
+							<SelectField
+								name={"locationId"}
+								label={"location"}
+								defaultValue={state.values?.locationId}
+								required={true}
+								onChange={(e) => {
+									dispatchRed({
+										type: "SET_LOCATION",
+										payload: e.currentTarget.value,
+									})
+								}}
+								options={stateRed.locationOptions}
+								error={state.valueErrors?.locationId}
+							/>
 
-							<label htmlFor={"location"}>
-								<span> Location </span>
-								<select
-									name={"location"}
-									id={"location"}
-									value={stateRed.location}
-									required={false}
-									onChange={(e) =>
-										dispatchRed({
-											type: "SET_LOCATION",
-											payload: e.target.value,
-										})
-									}
-								>
-									<option value={""}> -- select location -- </option>
+							<InputField
+								label={"Event Address"}
+								name={"address"}
+								type={"text"}
+								placeholder="123 Rainbow Rd, Mushroom KI 10203"
+								required={false}
+								defaultValue={state.values?.address}
+								error={state.valueErrors?.address}
+							/>
 
-									{stateRed.locationOptions?.map((opt, i) => (
-										<option key={i} value={opt.value}>
-											{" "}
-											{opt.label}{" "}
-										</option>
-									))}
-								</select>
-								<span className="error"> {formState.errors?.location} </span>
-							</label>
-
-							<label htmlFor={"staff"}>
-								<span> Staff </span>
-								<select
-									name={"staff"}
-									id={"staff"}
-									value={stateRed.staff?.id || ""}
-									required={false}
-									onChange={(e) => {
-										dispatchRed({ type: "SET_STAFF", payload: e.target.value })
-										findPartialDays(e.target.value)
-									}}
-								>
-									<option value={""}> -- select staff member -- </option>
-
-									{stateRed.staffOptions?.map((opt, i) => (
-										<option key={i} value={opt.value}>
-											{" "}
-											{opt.label}{" "}
-										</option>
-									))}
-								</select>
-								<span className="error"> {formState.errors?.staff} </span>
-							</label>
+							<SelectField
+								name={"employeeId"}
+								label={"staff member"}
+								defaultValue={state.values?.employeeId}
+								required={true}
+								onChange={(e) => {
+									dispatchRed({
+										type: "SET_STAFF",
+										payload: e.currentTarget.value,
+									})
+									findPartialDays(e.currentTarget.value)
+								}}
+								options={stateRed.staffOptions}
+								error={state.valueErrors?.employeeId}
+							/>
 
 							{addons.length > 0 && (
 								<>
@@ -680,12 +692,12 @@ export function BookingForm3({ data, session }: Props) {
 									<div className={formStyles.addons_wrap}>
 										{stateRed.addonOptions.map((addon) => (
 											<label
-												key={addon.name}
-												htmlFor={addon.name}
+												key={addon.id}
+												htmlFor={addon.id}
 												className={"checkbox"}
 											>
 												<input
-													name={addon.name}
+													name={"addonIds"}
 													value={addon.id}
 													type={"checkbox"}
 													readOnly={false}
@@ -694,8 +706,8 @@ export function BookingForm3({ data, session }: Props) {
 														dispatchRed({
 															type: "ADDON_CHECKBOX",
 															payload: {
-																value: e.target.value,
-																isChecked: e.target.checked,
+																value: e.currentTarget.value,
+																isChecked: e.currentTarget.checked,
 															},
 														})
 													}}
@@ -713,25 +725,24 @@ export function BookingForm3({ data, session }: Props) {
 
 						<fieldset>
 							<legend> The When </legend>
-
-							<label htmlFor="date">
-								<span> Date of Engagment </span>
-								<input
-									ref={dateRef}
-									name={"date"}
-									id={"date"}
-									type={"date"}
-									defaultValue={formState.fieldValues.date}
-									// readOnly={formState.fieldValues.date}
-									required={true}
-									onChange={(e) =>
-										dispatchRed({ type: "SET_DATE", payload: e.target.value })
-									}
-									style={{ pointerEvents: "none", display: "none" }}
-									// disabled={true}
-								/>
-								<span className="error"> {formState.errors?.date} </span>
-							</label>
+							<InputField
+								name={"date"}
+								label={"day of event"}
+								type={"hidden"}
+								// type={"date"}
+								defaultValue={state.values?.date}
+								required={true}
+								onChange={(e) =>
+									dispatchRed({
+										type: "SET_DATE",
+										payload: e.currentTarget.value,
+									})
+								}
+								// style={{ pointerEvents: "none", display: "none" }}
+								error={state.valueErrors?.date}
+								ref={dateRef}
+							/>
+							<h5>Day of Event</h5>
 							<CalendarDatePicker
 								blackoutDays={stateRed.blackoutDates}
 								// blackoutDays={[]}
@@ -739,25 +750,23 @@ export function BookingForm3({ data, session }: Props) {
 								onDateCallback={onDateCallback}
 							/>
 
-							<label htmlFor="timeStart">
-								<span> Start Time </span>
-								<input
-									ref={timeRef}
-									name={"timeStart"}
-									id={"timeStart"}
-									type={"time"}
-									defaultValue={formState.fieldValues.timeStart}
-									onChange={(e) => {
-										dispatchRed({ type: "SET_TIME", payload: e.target.value })
-										handleBlackoutTimes(e.target.value)
-									}}
-									// readOnly={formState.fieldValues.timeStart}
-									style={{ pointerEvents: "none", display: "none" }}
-									// disabled={true}
-									required={true}
-								/>
-								<span className="error"> {formState.errors?.timeStart} </span>
-							</label>
+							<h5>Start Time</h5>
+							<InputField
+								name={"time"}
+								// type={"time"}
+								type={"hidden"}
+								defaultValue={state.values?.time}
+								required={true}
+								onChange={(e) => {
+									dispatchRed({
+										type: "SET_TIME",
+										payload: e.currentTarget.value,
+									})
+									handleBlackoutTimes(e.currentTarget.value)
+								}}
+								error={state.valueErrors?.time}
+								ref={timeRef}
+							/>
 							{/* //TODO collaps to drawer other time buttons when picked */}
 							<TimePicker
 								key={dateRef.current?.value}
@@ -772,81 +781,83 @@ export function BookingForm3({ data, session }: Props) {
 								// partialDates={partialDates}
 								// serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
 							/>
+							<SelectField
+								name={"timeZone"}
+								label={"event time zone"}
+								defaultValue={
+									(timeZoneOptions && timeZoneOptions[0].value) || ""
+								}
+								required={true}
+								options={timeZoneOptions || []}
+								error={state.valueErrors?.timeZone}
+							/>
 						</fieldset>
 
 						<fieldset>
 							<legend> The Who </legend>
+							<InputField
+								name={"customerId"}
+								type={"hidden"}
+								required={false}
+								defaultValue={session?.itemId || state.values?.customerId}
+								error={state.valueErrors?.customerId}
+							/>
 
-							<label htmlFor="name">
-								<span> Name </span>
-								<input
-									name={"name"}
-									id={"name"}
-									type={"text"}
-									defaultValue={formState.fieldValues.name}
-									// readOnly={formState.fieldValues.name}
-									required={false}
-								/>
-								<span className="error"> {formState.errors?.name} </span>
-							</label>
+							<InputField
+								name={"name"}
+								type={"text"}
+								required={false}
+								defaultValue={session?.user?.name || state.values?.name}
+								error={state.valueErrors?.name}
+							/>
 
-							<label htmlFor="email">
-								<span> Email </span>
-								<input
-									name={"email"}
-									id={"email"}
-									placeholder="yanny@mail.lan"
-									type={"text"}
-									defaultValue={formState.fieldValues.email}
-									// readOnly={formState.fieldValues.email}
-									required={true}
-								/>
-								<span className="error"> {formState.errors?.email} </span>
-							</label>
+							<InputField
+								name={"email"}
+								type={"email"}
+								placeholder="my-inbox@mail.lan"
+								required={false}
+								defaultValue={session?.user?.email || state.values?.email}
+								error={state.valueErrors?.email}
+							/>
 
-							<label htmlFor="phone">
-								<span> Phone Number </span>
-								<input
-									name={"phone"}
-									id={"phone"}
-									placeholder="312 312 1234"
-									type={"phone"}
-									defaultValue={formState.fieldValues.phone}
-									// readOnly={formState.fieldValues.phone}
-									required={false}
-								/>
-								<span className="error"> {formState.errors?.phone} </span>
-							</label>
-
-							<label htmlFor="notes">
-								<span> Notes </span>
-								<textarea
-									name={"email"}
-									id={"email"}
-									placeholder="..."
-									defaultValue={formState.fieldValues.notes}
-									// readOnly={formState.fieldValues.notes}
-									required={false}
-								/>
-								<span className="error"> {formState.errors?.notes} </span>
-							</label>
+							<InputField
+								name={"phone"}
+								type={"tel"}
+								placeholder="000 000-0000"
+								required={false}
+								defaultValue={state.values?.phone}
+								error={state.valueErrors?.phone}
+							/>
+							{/* // TODO switch phone to tel */}
+							{/* <InputField
+								name={"tel"}
+								type={"tel"}
+                placeholder="000 000-0000"
+								required={false}
+								defaultValue={formState.fieldValues.tel}
+								error={formState.errors?.tel}
+							/> */}
+							<TextareaField
+								name="notes"
+								placeholder="..."
+								defaultValue={state.values?.notes}
+								required={false}
+								error={state.valueErrors?.notes}
+							/>
 						</fieldset>
-
-						<p
-							className={formState.message === "success" ? "success" : "error"}
-						>
-							{formState.message}
-						</p>
-
-						<SubmitButton />
+						{!state.success ? (
+							<SubmitButton label={"Request Booking"} />
+						) : (
+							<p className={"success"}>{state.success}</p>
+						)}
+						<p className={"error"}>{state.error}</p>
 					</form>
 				) : (
 					<div className={formStyles.success_message}>
 						<BsFillBookmarkFill />
 						<h2> Success! </h2>
 						<p>
-							{`Your booking is being processed. For the next steps, we'll reach
-							out with instructions via the contact provided.`}
+							{`Your booking is being processed. For the next steps, we'll reach out with instructions via the contact provided.`}
 						</p>
 						<ul>
 							{stateRed.customer &&
@@ -855,15 +866,8 @@ export function BookingForm3({ data, session }: Props) {
 									<li key={i}> {stateRed.customer[key]} </li>
 								))}
 						</ul>
-						<Link href={`/account?dashState=orders#orders`}>
-							{" "}
-							Account bookings ⇢{" "}
-						</Link>{" "}
-						<br />
-						<Link href={`/bookings/${stateRed.bookingId}`}>
-							{" "}
-							Booking Status{" "}
-						</Link>
+						<Link href={state.url}> Account bookings ⇢ </Link> <br />
+						<Link href={`/bookings/${state.id}`}> Booking Status </Link>
 					</div>
 				)}
 			</div>
@@ -927,7 +931,8 @@ export function BookingForm3({ data, session }: Props) {
 											stateRed.addonOptions
 												.filter((addon) => addon.isChecked)
 												.reduce(
-													(accumulator, addon) => accumulator + (addon.price || 0),
+													(accumulator, addon) =>
+														accumulator + (addon.price || 0),
 													0
 												)
 								)}
@@ -937,15 +942,5 @@ export function BookingForm3({ data, session }: Props) {
 				</table>
 			</aside>
 		</div>
-	)
-}
-
-function SubmitButton() {
-	const { pending } = useFormStatus()
-
-	return (
-		<Button type={"submit"} disabled={pending}>
-			Submit Booking
-		</Button>
 	)
 }

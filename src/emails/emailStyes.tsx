@@ -60,6 +60,9 @@ const statusState = {
   HOLD: {
     borderColor: YELLOW,
   },
+  HOLDING: {
+    borderColor: YELLOW,
+  },
   YELLOW: {
     borderColor: YELLOW,
   },

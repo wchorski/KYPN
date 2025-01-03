@@ -42,17 +42,24 @@ export function useForm<T>(
 	}
 }
 
-export function SubmitButton() {
-	const { pending } = useFormStatus()
-	return (
-		<button
-			type={"submit"}
-			disabled={pending}
-			className={pending ? "anim_border_spin pending" : ""}
-		>
-			{pending ? <LoadingAnim /> : "Submit"}
-		</button>
-	)
-}
+// type SubmitButtonsProps = {
+//   label?:string
+// }
+
+// export function SubmitButton({label}:SubmitButtonsProps) {
+// 	const { pending } = useFormStatus()
+
+//   const btnText = label || "Submit"
+
+// 	return (
+// 		<button
+// 			type={"submit"}
+// 			disabled={pending}
+// 			className={pending ? "anim_border_spin pending" : ""}
+// 		>
+// 			{pending ? <LoadingAnim /> : btnText}
+// 		</button>
+// 	)
+// }
 
 

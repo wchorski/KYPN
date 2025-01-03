@@ -84,6 +84,10 @@ export const permissionFields = {
     defaultValue: false,
     label: 'Locations Manager: Can see and manage any location',
   }),
+  canViewPrivateLocations: checkbox({
+    defaultValue: false,
+    label: 'Locations View: Can view PRIVATE Locations',
+  }),
   canManageServices: checkbox({
     defaultValue: false,
     label: 'Services Manager: Can see and manage any service',

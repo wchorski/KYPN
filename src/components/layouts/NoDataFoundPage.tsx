@@ -14,7 +14,7 @@ type Props = {
 export function NoDataFoundPage({ children }: Props) {
 	return (
 		<main className={page_layout}>
-			<div className={[page_content, layout_wide].join(" ")}>
+			<div className={[page_content, layout_wide].join(" ")} style={{color: 'var(--c-disabled)'}}>
 				<NoData />
 				{children}
 			</div>

@@ -1,17 +1,20 @@
 import { Addon, Availability, Booking, Location, Service, User } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
+type Props ={
+  session:any
+}
 const now = new Date().toISOString()
 
-export default async function fetchBookingFormData(){
+export default async function fetchBookingFormData({session}:Props){
 
   // bypass all access & permissions 
-  const contextSudo = keystoneContext.sudo()
+  const sudoContext = keystoneContext.sudo()
   const context = keystoneContext
 
   try {
 
-    const services = await context.query.Service.findMany({
+    const services = await context.withSession(session).query.Service.findMany({
       // where: {
       //   status: {
       //     in: [
@@ -31,7 +34,7 @@ export default async function fetchBookingFormData(){
       `,
     }) as Service[]
 
-    const locations = await contextSudo.query.Location.findMany({
+    const locations = await context.withSession(session).query.Location.findMany({
       where: {
         services: {
           some: {
@@ -57,7 +60,7 @@ export default async function fetchBookingFormData(){
       `
     }) as Location[]
 
-    const addons = await contextSudo.query.Addon.findMany({
+    const addons = await context.withSession(session).query.Addon.findMany({
       where: {
         services: {
           some: {
@@ -66,11 +69,12 @@ export default async function fetchBookingFormData(){
             }
           }
         },
-        // status: {
-        //   in: [
-        //     "AVAILABLE",
-        //   ]
-        // },
+        // TODO when `stockCount` is added swich to if(stockCount > 0)
+        status: {
+          notIn: [
+            "OUT_OF_STOCK",
+          ]
+        },
       },
       query: `
         id
@@ -83,7 +87,7 @@ export default async function fetchBookingFormData(){
       `,
     }) as Addon[]
 
-    const employees = await contextSudo.query.User.findMany({
+    const employees = await sudoContext.query.User.findMany({
       where: {
         servicesProvided: {
           some: {
@@ -104,7 +108,7 @@ export default async function fetchBookingFormData(){
       `
     }) as User[]
     
-    const availabilities = await contextSudo.query.Availability.findMany({
+    const availabilities = await sudoContext.query.Availability.findMany({
       where: {
         end: {
           gt: now
@@ -123,7 +127,7 @@ export default async function fetchBookingFormData(){
       `
     }) as Availability[]
     
-    const gigs = await contextSudo.query.Booking.findMany({
+    const gigs = await sudoContext.query.Booking.findMany({
       where: {
         end: {
           gt: now
@@ -132,7 +136,7 @@ export default async function fetchBookingFormData(){
           in: [
             "CONFIRMED",
             "DOWNPAYMENT",
-            "HOLD"
+            "HOLDING"
           ]
         },
         employees: {

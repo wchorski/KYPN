@@ -335,6 +335,22 @@ export const rules = {
 		// 2. If not, do they own this item?
 		return false
 	},
+	canViewPrivateLocations({ session }: ListAccessArgs) {
+		if (permissions.canManageLocations({ session })) return true
+		if (permissions.canViewPrivateLocations({ session })) return true
+
+		return { status: { equals: "PUBLIC" } }
+		// return {
+		// 	OR: [
+		// 		// {
+		// 		// 	privateAccess: {
+		// 		// 		some: { id: { in: [session?.itemId || "no_session.itemId"] } },
+		// 		// 	},
+		// 		// },
+		// 		{ status: { equals: "PUBLIC" } },
+		// 	],
+		// }
+	},
 
 	canManageEvents({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false

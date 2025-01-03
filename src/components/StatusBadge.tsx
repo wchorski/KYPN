@@ -42,7 +42,7 @@ export type StatusType =
 export function StatusBadge({ type, status }: StatusType) {
 	if (!status) return null
   //@ts-ignore
-	const stylesArr = [styles.status, styles[status]].join(" ")
+	const stylesArr = [styles.status, styles[status], 'status-badge'].join(" ")
 	const prettyStatus = stringCapFirstLetter(status)
 
 	return <span className={stylesArr}>{prettyStatus}</span>

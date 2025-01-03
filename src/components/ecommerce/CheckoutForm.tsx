@@ -285,7 +285,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
           end: state.end,
           location,
           notes,
-          status: 'HOLD',
+          status: 'HOLDING',
           delivery: state.isDelivery,
           order: newOrder as Order,
         }})

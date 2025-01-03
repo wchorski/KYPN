@@ -384,6 +384,7 @@ type Role {
   canManageCart: Boolean
   canManageOrders: Boolean
   canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
@@ -426,6 +427,7 @@ input RoleWhereInput {
   canManageCart: BooleanFilter
   canManageOrders: BooleanFilter
   canManageLocations: BooleanFilter
+  canViewPrivateLocations: BooleanFilter
   canManageServices: BooleanFilter
   canManageSubscriptionPlans: BooleanFilter
   canManageSubscriptionItems: BooleanFilter
@@ -464,6 +466,7 @@ input RoleOrderByInput {
   canManageCart: OrderDirection
   canManageOrders: OrderDirection
   canManageLocations: OrderDirection
+  canViewPrivateLocations: OrderDirection
   canManageServices: OrderDirection
   canManageSubscriptionPlans: OrderDirection
   canManageSubscriptionItems: OrderDirection
@@ -494,6 +497,7 @@ input RoleUpdateInput {
   canManageCart: Boolean
   canManageOrders: Boolean
   canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
@@ -537,6 +541,7 @@ input RoleCreateInput {
   canManageCart: Boolean
   canManageOrders: Boolean
   canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
@@ -1033,6 +1038,8 @@ type Booking {
   typeof: String
   start: DateTime
   end: DateTime
+  timeZone: String
+  address: String
   summary: String
   durationInHours: Decimal
   price: Int
@@ -1074,6 +1081,8 @@ input BookingWhereInput {
   id: IDFilter
   start: DateTimeFilter
   end: DateTimeFilter
+  timeZone: StringFilter
+  address: StringFilter
   price: IntFilter
   service: ServiceWhereInput
   location: LocationWhereInput
@@ -1117,6 +1126,8 @@ input BookingOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
+  timeZone: OrderDirection
+  address: OrderDirection
   price: OrderDirection
   email: OrderDirection
   phone: OrderDirection
@@ -1131,6 +1142,8 @@ input BookingOrderByInput {
 input BookingUpdateInput {
   start: DateTime
   end: DateTime
+  timeZone: String
+  address: String
   price: Int
   service: ServiceRelateToOneForUpdateInput
   location: LocationRelateToOneForUpdateInput
@@ -1170,6 +1183,8 @@ input BookingUpdateArgs {
 input BookingCreateInput {
   start: DateTime
   end: DateTime
+  timeZone: String
+  address: String
   price: Int
   service: ServiceRelateToOneForCreateInput
   location: LocationRelateToOneForCreateInput
@@ -1204,6 +1219,8 @@ type Location {
   name: String
   address: String
   rooms: Int
+  status: String
+  notes: String
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
@@ -1227,7 +1244,9 @@ input LocationWhereInput {
   id: IDFilter
   name: StringFilter
   address: StringFilter
-  rooms: IntNullableFilter
+  rooms: IntFilter
+  status: StringNullableFilter
+  notes: StringFilter
   services: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   categories: CategoryManyRelationFilter
@@ -1239,12 +1258,16 @@ input LocationOrderByInput {
   name: OrderDirection
   address: OrderDirection
   rooms: OrderDirection
+  status: OrderDirection
+  notes: OrderDirection
 }
 
 input LocationUpdateInput {
   name: String
   address: String
   rooms: Int
+  status: String
+  notes: String
   services: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
@@ -1260,6 +1283,8 @@ input LocationCreateInput {
   name: String
   address: String
   rooms: Int
+  status: String
+  notes: String
   services: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
@@ -1500,7 +1525,7 @@ input AddonWhereInput {
   slug: StringFilter
   image: StringFilter
   excerpt: StringFilter
-  price: IntNullableFilter
+  price: IntFilter
   stripeProductId: StringFilter
   status: StringNullableFilter
   author: UserWhereInput
@@ -1649,6 +1674,7 @@ type Mutation {
   verifyEmailRequest(email: String!): User
   verifyEmail(token: String!, email: String!): User
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
+  bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
 }
 
 type Query {

@@ -5,7 +5,7 @@ import Script from "next/script"
 import { Nav } from "@components/private/Nav"
 import { envs } from "@/envs"
 // import { cookies } from "next/dist/client/components/headers"
-import { Providers } from "./providers"
+import { Providers } from "@/src/app/providers"
 import { Footer } from "@components/private/Footer"
 import { AnnouncementBanner } from "@components/elements/AnnouncementBanner"
 
@@ -39,7 +39,7 @@ export default async function RootLayout({
 
 	return (
 		<html lang="en">
-			{envs.UMAMI_ID && (
+			{envs.UMAMI_ID && envs.NODE_ENV === 'production' && (
 				<Script
 					id="umami-next"
 					strategy="afterInteractive"

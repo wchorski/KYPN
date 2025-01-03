@@ -9,9 +9,10 @@ import {
 	actionContactFormSubmit,
 	ContactState,
 } from "@lib/actions/actionContactFormSubmit"
-import { SubmitButton, useForm } from "@hooks/useForm"
+import { useForm } from "@hooks/useForm"
 import { InputField } from "@components/InputField"
 import { TextareaField } from "@components/TextareaField"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 type Props = {
 	header?: string

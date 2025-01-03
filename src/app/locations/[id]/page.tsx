@@ -1,58 +1,86 @@
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import { Location } from '@ks/types'
-import fetchLocation from '@lib/fetchdata/fetchLocation'
-import styles from '@styles/location.module.scss'
-import Map from "@components/blocks/Map";
-import { NoData } from '@components/elements/NoData'
+import { PageTHeaderMain } from "@components/layouts/PageTemplates"
+import { Location } from "@ks/types"
+import fetchLocation from "@lib/fetchdata/fetchLocation"
+import styles from "@styles/location.module.css"
+import Map from "@components/blocks/Map"
+import { NoData } from "@components/elements/NoData"
+import { layout_content, page_layout } from "@styles/layout.module.css"
+import { notFound } from "next/navigation"
+import ErrorMessage from "@components/ErrorMessage"
+import { getServerSession } from "next-auth"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
-  searchParams:{q:string}
-  params:{id:string}
+	searchParams: { q: string }
+	params: { id: string }
 }
 
-export default async function LocationByIdPage ({ params, searchParams }:Props) {
+export default async function LocationByIdPage({
+	params,
+	searchParams,
+}: Props) {
+	const { id } = await params
+	const session = await getServerSession(nextAuthOptions)
+	const { location, error } = await fetchLocation({
+		id,
+		query: QUERY_LOCATION,
+		session,
+	})
 
-  const { id } = await params
+	if (error) return <ErrorMessage error={error} />
+	if (!location) return notFound()
+    
+	const { name, address, notes } = location
 
-  const { location } = await fetchLocation(id)
-
-  return (
-    <PageTHeaderMain
-      header={Header(location?.name)}
-      main={Main(location)}
-    />
-  )
+	return (
+		<main className={page_layout}>
+			<header className={layout_content} >
+				<h1> {name} </h1>
+			</header>
+			<div className={layout_content}>
+				<article className={styles.location}>
+					<address>{address}</address>
+          <br/>
+					<p>{notes}</p>
+					{address && <Map address={address} />}
+				</article>
+			</div>
+		</main>
+	)
 }
 
-function Header(name?:string){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> {name} </h1>
-    </Section>
-  </>
-}
-
-function Main(location:Location|undefined){
-
-  if(!location) return <NoData />
-
-  const { name, address, } = location
-
-  return<>
-    <Section layout={'1'}>
-      <article className={styles.location} >
-
-        <address>
-          {address}
-        </address>
-
-        {address && (
-          <Map address={address}/>
-        )}
-        
-      </article>
-    </Section>
-  </>
-}
+const QUERY_LOCATION = `
+  id
+  name
+  address
+  rooms
+  notes
+  categories {
+    id
+    name
+  }
+  tags {
+    id
+    name
+  }
+`
+// TODO add events
+// const QUERY_LOCATION = `
+//   id
+//   name
+//   address
+//   rooms
+//   events {
+//     id
+//     summary
+//     start
+//   }
+//   categories {
+//     id
+//     name
+//   }
+//   tags {
+//     id
+//     name
+//   }
+// `

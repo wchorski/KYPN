@@ -1,40 +1,25 @@
 import { Location } from "@ks/types";
 import { keystoneContext } from '@ks/context';
 
-export default async function fetchLocations(){
+type Props = {
+  query:string
+  session:any
+}
+
+export default async function fetchLocations({query, session}:Props){
 
   try {
 
     // const variables = {}
-    const locations = await keystoneContext.query.Location.findMany({
-      query: query,
+    const locations = await keystoneContext.withSession(session).query.Location.findMany({
+      query,
       // ...variables,
     }) as Location[]
     
     return { locations }
     
   } catch (error) {
-    console.log('!!! fetch locations: ', error)
+    console.log('!!! fetchLocations: ', error)
     return { error }
   }
 }
-
-const query = `
-  id
-  name
-  address
-  rooms
-  events {
-    id
-    summary
-    start
-  }
-  categories {
-    id
-    name
-  }
-  tags {
-    id
-    name
-  }
-`

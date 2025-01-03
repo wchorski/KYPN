@@ -56,6 +56,7 @@ const userQuery = `
       canManageCart
       canManageOrders
       canManageLocations
+      canViewPrivateLocations
       canManageServices
       canManageSubscriptionPlans
       canManageSubscriptionItems
@@ -104,9 +105,9 @@ export const nextAuthOptions: NextAuthOptions = {
           id
         `,
 			})
-			// todo for now don't make new user if one does not exist
+			
 			if (!author) {
-				console.log("no user found in db")
+				console.log("### no user found in db")
 			}
 			// console.log({author});
 

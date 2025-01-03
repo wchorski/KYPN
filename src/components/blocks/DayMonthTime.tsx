@@ -1,4 +1,4 @@
-import styles from '@styles/daymonthtime.module.scss'
+import styles from '@styles/daymonthtime.module.css'
 
 export function DayMonthTime({dateString}:{dateString:string}){
 

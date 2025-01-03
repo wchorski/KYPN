@@ -73,7 +73,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 	const { id } = await params
 
 	const { service, error } = await fetchService({ id, query: QUERY, session })
-	console.log({ error })
+	
 	if (error)
 		return (
 			<ErrorPage error={error}>

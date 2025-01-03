@@ -2,8 +2,8 @@
 import styles from "@styles/menus/form.module.scss"
 import { useFormState, useFormStatus } from "react-dom"
 import { useRef } from "react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { Button } from "@components/elements/Button"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 type Fields = {
 	email: string
@@ -114,15 +114,5 @@ export function PasswordRequestForm() {
 				</fieldset>
 			</form>
 		</>
-	)
-}
-
-function SubmitButton() {
-	const { pending } = useFormStatus()
-
-	return (
-		<Button disabled={pending} type={"submit"}>
-			Submit
-		</Button>
 	)
 }

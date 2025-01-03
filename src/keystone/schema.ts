@@ -28,33 +28,35 @@ import { Location } from "./schemas/Location"
 import { Availability } from "./schemas/Availability"
 import { Service } from "./schemas/Service"
 import { Addon } from "./schemas/Addon"
+import { bookAService } from "./mutations/bookAService"
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
 export const lists: Lists = {
 	User,
 	Role,
-  Post,
-  Page,
-  Category,
-  Tag,
-  Announcement, 
-  Booking,
-  Location,
-  Availability,
-  Service,
-  Addon,
+	Post,
+	Page,
+	Category,
+	Tag,
+	Announcement,
+	Booking,
+	Location,
+	Availability,
+	Service,
+	Addon,
 }
 
 export const extendGraphqlSchema = graphql.extend((base) => {
 	return {
 		mutation: {
 			registerAnAccount: registerAnAccount(base),
-      passwordRequestLink: passwordRequestLink(base),
-      passwordReset: passwordReset(base),
-      verifyEmailRequest: verifyEmailRequest(base),
-      verifyEmail: verifyEmail(base),
-      contact: contact(base),
+			passwordRequestLink: passwordRequestLink(base),
+			passwordReset: passwordReset(base),
+			verifyEmailRequest: verifyEmailRequest(base),
+			verifyEmail: verifyEmail(base),
+			contact: contact(base),
+			bookAService: bookAService(base),
 		},
 	}
 })

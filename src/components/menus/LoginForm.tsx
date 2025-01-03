@@ -1,5 +1,5 @@
 "use client"
-import styles from "@styles/menus/form.module.scss"
+import  { form } from "@styles/menus/form.module.scss"
 import {
 	FaGithub,
 	FaFacebookSquare,
@@ -8,7 +8,7 @@ import {
 	FaTwitterSquare,
 } from "react-icons/fa"
 import { useFormState, useFormStatus } from "react-dom"
-import { useRef, useState } from "react"
+import {  useState } from "react"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -18,6 +18,8 @@ import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
 import { Button } from "@components/elements/Button"
 import Flex from "@components/layouts/Flex"
+import { InputField } from "@components/InputField"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 type State = "pending" | "error" | "success" | undefined
 
@@ -51,7 +53,7 @@ export function LoginForm({ providers }: Props) {
 			password: "",
 		},
 	}
-	const formRef = useRef<HTMLFormElement>(null)
+
 	const [formState, formAction] = useFormState(onSubmit, defaultFormData)
 
 	async function onSubmit(
@@ -156,38 +158,32 @@ export function LoginForm({ providers }: Props) {
 	}
 
 	return (
-		<form action={formAction} className={styles.form} ref={formRef}>
+		<form action={formAction} className={form}>
 			<fieldset>
-				<label htmlFor="email">
-					Email
-					<input
-						name={"email"}
-						id={"email"}
-						placeholder="sam@hotmail.com"
-						type={"text"}
-						required={true}
-						defaultValue={formState.fieldValues.email}
-						autoComplete={"email"}
-					/>
-				</label>
-
-				<label htmlFor="password">
-					Password
-					<input
-						name={"password"}
-						id={"password"}
-						placeholder="***"
-						type={"password"}
-						required={true}
-						defaultValue={formState.fieldValues.password}
-					/>
-				</label>
+				<InputField
+					name={"email"}
+					type={"email"}
+					required={true}
+          autoComplete={"email"}
+          placeholder={"sam@hotmail.com"}
+          defaultValue={formState.fieldValues.email}
+					error={formState.errors?.email}
+				/>
+        <InputField
+					name={"password"}
+					type={"password"}
+					required={true}
+          autoComplete={"password"}
+          placeholder={"***"}
+          defaultValue={formState.fieldValues.password}
+					error={formState.errors?.password}
+				/>
 
 				<p className={formState.status}>{formState.message}</p>
 
 				{formState.status !== "success" && (
 					<Flex alignItems="center">
-						<SubmitButton />
+						<SubmitButton  label={"Login"}/>
 
 						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
 							password reset
@@ -217,19 +213,3 @@ export function LoginForm({ providers }: Props) {
 	)
 }
 
-function SubmitButton() {
-	const { pending } = useFormStatus()
-
-	return (
-		// <button
-		//   disabled={pending}
-		//   type={'submit'}
-		// >
-		//   {pending ? <LoadingAnim /> : 'Login'}
-		// </button>
-		<Button size={"medium"} disabled={pending} type={"submit"}>
-			{" "}
-			Login{" "}
-		</Button>
-	)
-}

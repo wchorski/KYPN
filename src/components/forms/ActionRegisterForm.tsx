@@ -4,13 +4,14 @@ import { Form } from "@components/Form"
 import { InputField } from "@components/InputField"
 import { Card } from "@components/layouts/Card"
 import { PasswordRequirements } from "@components/menus/PasswordRequirements"
-import { SubmitButton, useForm } from "@hooks/useForm"
+import { useForm } from "@hooks/useForm"
 import {
 	actionRegisterAnAccount,
 	type RegisterAnAccountState,
 } from "@lib/actions/actionRegisterAnAccount"
 import { form } from "@styles/menus/form.module.scss"
 import { signIn } from "next-auth/react"
+import { SubmitButton } from "./SubmitButton"
 
 const initState: RegisterAnAccountState = {
 	values: {

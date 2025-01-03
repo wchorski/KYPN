@@ -59,7 +59,10 @@ const NEXT_PUBLIC__ANALYTICS_LINK =
 	process.env.NEXT_PUBLIC__ANALYTICS_LINK || "no_link"
 const ASSET_REPO = process.env.NEXT_PUBLIC_ASSET_REPO
 
+const TIMEZONES = process.env.TIMEZONES ? process.env.TIMEZONES.split(',') : []
+
 export const envs = {
+  TIMEZONES,
 	NEXT_PUBLIC__ANALYTICS_LINK,
 	NEXT_PUBLIC_COPYWRITE,
 	BASIC_USER_ROLE_NAME,

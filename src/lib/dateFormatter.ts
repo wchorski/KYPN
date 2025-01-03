@@ -2,23 +2,50 @@ export function formatHours(time: string) {
 	return time?.replace(".00", "")
 }
 
-function datePrettyLocalFull(date: string) {
-	const options = {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-		timeZone: "America/Chicago",
-		timeZoneName: "short",
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	}
+export function convertToIsoWithTimezone (date: string, time: string, timeZone: string): string {
+  // Combine date and time into a single string
+  const dateTimeString = `${date}T${time}:00`
 
-	const newDate = new Date(date)
+  // Create a Date object from the combined string
+  const localDate = new Date(dateTimeString)
 
-	// @ts-ignore
-	return newDate.toLocaleTimeString("en-US", options)
+  // Format the date and time in the specified time zone
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).format(localDate)
+
+  // Extract parts from the formatted date
+  const [month, day, year, hour, minute, second] = formattedDate
+    .replace(/, /g, ' ')
+    .match(/\d+/g) || []
+
+  // Construct and return the ISO string
+  return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).toISOString()
 }
+
+// function datePrettyLocalFull(date: string) {
+// 	const options = {
+// 		year: "numeric",
+// 		month: "long",
+// 		day: "numeric",
+// 		timeZone: "America/Chicago",
+// 		timeZoneName: "short",
+// 		hour: "numeric",
+// 		minute: "numeric",
+// 		hour12: true,
+// 	}
+
+// 	const newDate = new Date(date)
+
+// 	// @ts-ignore
+// 	return newDate.toLocaleTimeString("en-US", options)
+// }
 
 export enum DATE_OPTION {
 	DAY = "day",
@@ -66,6 +93,7 @@ export function timePrettyTo12HourFormat(timeString: string) {
 
 export function datePrettyLocal(date: string, option: "day" | "time" | "full") {
 	// console.log('pretty date input, ', date);
+  if(!date) return 'n/a'
 
 	let options = {}
 	switch (option) {

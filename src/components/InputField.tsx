@@ -1,5 +1,10 @@
 import { input_label } from "@styles/menus/form.module.scss"
-import type { HTMLInputTypeAttribute, HTMLProps } from "react"
+import {
+	forwardRef,
+	type Ref,
+	type HTMLInputTypeAttribute,
+	type HTMLProps,
+} from "react"
 
 type Props = {
 	type: HTMLInputTypeAttribute | undefined
@@ -8,17 +13,18 @@ type Props = {
 	label?: string
 } & HTMLProps<HTMLInputElement>
 
-export function InputField({
-	type = 'text',
-	name,
-	error,
-	label,
-	required = false,
-	defaultValue,
-	autoComplete,
-	pattern,
-	placeholder,
-}: Props) {
+function InputFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
+	const {
+		type = "text",
+		name,
+		error,
+		label,
+		required = false,
+		defaultValue,
+		autoComplete,
+		pattern,
+		placeholder,
+	} = props
 	return (
 		<label
 			htmlFor={name}
@@ -30,13 +36,16 @@ export function InputField({
 				name={name}
 				type={type}
 				required={required}
-        // autocomplete - https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
+				// autocomplete - https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
 				autoComplete={autoComplete}
 				defaultValue={defaultValue}
 				pattern={pattern}
 				placeholder={placeholder || `${label || name}...`}
+				ref={ref}
 			/>
 			<span className="error">{error}</span>
 		</label>
 	)
 }
+//? allows ref to be passed down
+export const InputField = forwardRef(InputFieldComponent)
