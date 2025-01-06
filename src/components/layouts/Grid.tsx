@@ -97,7 +97,7 @@ export function Grid({
 		return (
 			<div id={id} className={classNms} style={inlineStyles}>
 				{children.map((child, i) => (
-					<div key={i} className={grid_item} style={{alignContent}}>
+					<div key={i} className={grid_item} style={{alignContent, gridColumn: i + 1}}>
 						{child}
 					</div>
 				))}

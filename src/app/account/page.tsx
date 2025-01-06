@@ -21,11 +21,13 @@ import { BsSignpost } from "react-icons/bs"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
 import {
 	layout_site,
+	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import { Grid } from "@components/layouts/Grid"
+import { IconBookmark } from "@lib/useIcons"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -42,6 +44,7 @@ type Props = {
 			| "subscriptions"
 			| "downloads"
 			| "tickets"
+			| "bookings"
 			| "gigs"
 			| "gig_requests"
 	}
@@ -114,6 +117,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 	//   `,
 	// }) as Rental[]
 
+  // TODO move this to a `fetchDATA` function
 	const employeeGigData = (await keystoneContext
 		.withSession(session)
     // .sudo()
@@ -139,32 +143,32 @@ export default async function AccountPage({ params, searchParams }: Props) {
 				],
 			},
 			query: `
-      query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
-        user(where: $where){
-          id
-          gig_requests(where: $gigRequestsWhere) {
+        query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
+          user(where: $where){
             id
-            start
-            end
-            summary
-            status
-            service {
-              name
+            gig_requests(where: $gigRequestsWhere) {
+              id
+              start
+              end
+              summary
+              status
+              service {
+                name
+              }
             }
-          }
-          gigs(where: $gigsWhere) {
-            id
-            start
-            end
-            summary
-            status
-            service {
-              name
+            gigs(where: $gigsWhere) {
+              id
+              start
+              end
+              summary
+              status
+              service {
+                name
+              }
             }
           }
         }
-      }
-    `,
+      `,
 		})) as { user: User }
 	const { gig_requests, gigs } = employeeGigData.user
 
@@ -179,36 +183,48 @@ export default async function AccountPage({ params, searchParams }: Props) {
 				{!session.data.role && <VerifyEmailCard email={user.email} />}
 			</header>
 
-			<div className={[page_content, layout_site].join(" ")}>
-				<Grid layout={"1_4"}>
+			<div className={[page_content, layout_wide].join(" ")}>
+				<Grid layout={"1_4"} isAuto={false} alignContent={'start'}>
 					<nav className={styles.dashnav}>
 						<ul>
 							<li>
-								<Link
-									href={"/account?dashState=main#main"}
+								<a
+									href={"?dashState=main#main"}
 									className={
 										dashState === "main" ? styles.linkactive : styles.dashlink
 									}
 								>
 									Dashboard <MdOutlineAccountBox />
-								</Link>
+								</a>
 							</li>
+							{user.bookings.length > 0 && (
+								<li>
+									<a
+										href={"?dashState=bookings#bookings"}
+										className={
+											dashState === "bookings" ? styles.linkactive : styles.dashlink
+										}
+									>
+										Bookings  <IconBookmark />
+									</a>
+								</li>
+							)}
 							{gigs.length > 0 && (
 								<li>
-									<Link
-										href={"/account?dashState=gigs#gigs"}
+									<a
+										href={"?dashState=gigs#gigs"}
 										className={
 											dashState === "gigs" ? styles.linkactive : styles.dashlink
 										}
 									>
 										Gigs <HiCalendar />
-									</Link>
+									</a>
 								</li>
 							)}
 							{gig_requests.length > 0 && (
 								<li>
-									<Link
-										href={"/account?dashState=gig_requests#gig_requests"}
+									<a
+										href={"?dashState=gig_requests#gig_requests"}
 										className={
 											dashState === "gig_requests"
 												? styles.linkactive
@@ -216,7 +232,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 										}
 									>
 										Gig Requests <HiOutlineCalendar />
-									</Link>
+									</a>
 								</li>
 							)}
 							{/* {orders.length > 0 && (

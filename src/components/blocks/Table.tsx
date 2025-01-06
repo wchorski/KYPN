@@ -1,6 +1,6 @@
 import Link from "next/link"
 import React, { useState } from "react"
-import {table} from "@styles/elements/table.module.scss"
+import {table} from "@styles/elements/table.module.css"
 import { NoData } from "@components/elements/NoData"
 import { layout_wide } from "@styles/layout.module.css"
 

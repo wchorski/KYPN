@@ -1,4 +1,3 @@
-import { LoadingAnim } from "./LoadingAnim"
 import { envs } from "../../envs"
 import {
 	NavigationContainer,
@@ -11,6 +10,7 @@ import { PiUsersThreeFill } from "react-icons/pi"
 import { BsFilePostFill } from "react-icons/bs"
 import { IoBookmarks } from "react-icons/io5"
 import { FaTags } from "react-icons/fa6"
+import type { CSSProperties } from "react"
 
 export function CustomNavigation({
 	authenticatedItem,
@@ -18,20 +18,22 @@ export function CustomNavigation({
 }: NavigationProps) {
 	const { data: session, status } = useSession()
 
+  const styleBorder = {
+    borderLeft: "solid 5px #3b82f6",
+    paddingInline: "1rem",
+    display: "flex",
+    gap: ".3rem",
+    flexDirection: "column",
+  } as CSSProperties
+
 	return (
 		<NavigationContainer authenticatedItem={authenticatedItem}>
 			{status === "loading" ? (
-				<LoadingAnim />
+				<p style={styleBorder}>Loading...</p>
 			) : (
 				session?.user && (
 					<div
-						style={{
-							borderLeft: "solid 5px #3b82f6",
-							paddingInline: "1rem",
-							display: "flex",
-							gap: ".3rem",
-							flexDirection: "column",
-						}}
+						style={styleBorder}
 					>
 						<small> logged in as </small>
 

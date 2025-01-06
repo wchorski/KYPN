@@ -16,7 +16,7 @@ import styles from "@styles/menus/dashboard.module.css";
 import { StatusBadge } from "@components/StatusBadge";
 import {
   EmployeeGigDecisionForm,
-} from "@components/bookings/EmployeeGigActionForm";
+} from "@components/bookings/EmployeeGigDecisionForm";
 
 type Props = {
   dashState: string;
@@ -105,7 +105,7 @@ export default function AccountDash({
 
   return (
     <div className={styles.dashboard}>
-      <Card id="main">
+      <Card id="main" marginBlock={'0'}>
         <h3
           className={dashState === "main" ? styles.linkactive : styles.dashlink}
         >
@@ -119,10 +119,10 @@ export default function AccountDash({
       </Card>
 
       {user.bookings.length > 0 && (
-        <Card id="services">
+        <Card id="bookings" marginBlock={'0'}>
           <h3
             className={
-              dashState === "services" ? styles.linkactive : styles.dashlink
+              dashState === "bookings" ? styles.linkactive : styles.dashlink
             }
           >
             Bookings
@@ -137,7 +137,7 @@ export default function AccountDash({
         </Card>
       )}
       {gigs.length > 0 && (
-        <Card id="gigs">
+        <Card id="gigs" marginBlock={'0'}>
           <h3
             className={
               dashState === "gigs" ? styles.linkactive : styles.dashlink
@@ -156,7 +156,7 @@ export default function AccountDash({
       )}
 
       {gig_requests.length > 0 && (
-        <Card id="gig_requests">
+        <Card id="gig_requests" marginBlock={'0'}>
           <h3
             className={
               dashState === "gig_requests" ? styles.linkactive : styles.dashlink
@@ -175,7 +175,7 @@ export default function AccountDash({
       )}
 
       {/* {orders.length > 0 && (
-        <Card id="orders">
+        <Card id="orders" marginBlock={'0'}>
           <h3
             className={
               dashState === "orders" ? styles.linkactive : styles.dashlink
@@ -193,7 +193,7 @@ export default function AccountDash({
         </Card>
       )} */}
       {/* {rentals.length > 0 && (
-        <Card id="rentals">
+        <Card id="rentals" marginBlock={'0'}>
           <h3
             className={
               dashState === "rentals" ? styles.linkactive : styles.dashlink
@@ -220,7 +220,7 @@ export default function AccountDash({
       )} */}
 
       {/* {user.subscriptions.length > 0 && (
-        <Card id="subscriptions">
+        <Card id="subscriptions" marginBlock={'0'}>
           <h3
             className={
               dashState === "subscriptions"
@@ -242,7 +242,7 @@ export default function AccountDash({
 
       {/* // todo when download link is added to product */}
       {false && (
-        <Card id="downloads">
+        <Card id="downloads" marginBlock={'0'}>
           <h3
             className={
               dashState === "downloads" ? styles.linkactive : styles.dashlink
@@ -254,7 +254,7 @@ export default function AccountDash({
       )}
 
       {/* {tickets.length > 0 && (
-        <Card id="tickets">
+        <Card id="tickets" marginBlock={'0'}>
           <h3
             className={
               dashState === "tickets" ? styles.linkactive : styles.dashlink

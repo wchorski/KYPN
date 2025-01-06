@@ -19,23 +19,9 @@ export async function POST(req: NextRequest) {
 			variables: variables,
 		})) as object
 
-		return NextResponse.json(
-			{
-				...data,
-			},
-			{
-				status: 222,
-			}
-		)
+		return NextResponse.json({ ...data }, { status: 222 })
 	} catch (error) {
 		console.log("/api/gql/protected ERROR: ", error)
-		return NextResponse.json(
-			{
-				error,
-			},
-			{
-				status: 555,
-			}
-		)
+		return NextResponse.json({ error }, { status: 555 })
 	}
 }

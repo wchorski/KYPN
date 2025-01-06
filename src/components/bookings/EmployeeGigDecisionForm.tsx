@@ -2,22 +2,14 @@
 
 import { InputField } from "@components/InputField"
 import { StatusBadge } from "@components/StatusBadge"
-import { Button } from "@components/elements/Button"
+import { RadioInput } from "@components/forms/RadioInput"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { useForm } from "@hooks/useForm"
 import {
 	actionEmployeeGigDecision,
 	EmployeeGigDecisionState,
 } from "@lib/actions/actionEmployeeGigDecision"
-import { form, mini_form } from "@styles/menus/form.module.scss"
-import { useState } from "react"
-
-type UpdateBookingResponse = {
-	updateBooking?: {
-		id: string
-	}
-	error?: any
-}
+import { mini_form } from "@styles/menus/form.module.scss"
 
 type EmployeeGigDecision = "" | "CONFIRMED" | "DECLINED"
 
@@ -27,20 +19,10 @@ type Props = {
 	decision: EmployeeGigDecision | string | null
 }
 
-type Fields = {
-	decision: EmployeeGigDecision
-}
-
 const decisionOptions = [
 	{ value: "CONFIRMED", label: "Confirm" },
 	{ value: "DECLINED", label: "Decline" },
 ]
-
-type FormState = {
-	message: string
-	errors: Record<keyof Fields, string> | undefined
-	fieldValues: Fields
-}
 
 export function EmployeeGigDecisionForm({
 	userId,
@@ -167,7 +149,13 @@ export function EmployeeGigDecisionForm({
 			className={mini_form}
 		>
 			<fieldset>
-				<ul className="radio">
+        <RadioInput 
+          name={'decision'}
+          dataId={bookingId}
+          options={decisionOptions}
+          defaultOptionValue={state.values?.decision}
+        />
+				{/* <ul className="radio">
 					{decisionOptions.map((opt, i) => (
 						<label htmlFor="decision" key={i}>
 							<input
@@ -184,7 +172,7 @@ export function EmployeeGigDecisionForm({
 							)}
 						</label>
 					))}
-				</ul>
+				</ul> */}
 
 				<InputField
 					name={"userId"}

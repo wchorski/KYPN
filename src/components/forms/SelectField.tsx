@@ -11,9 +11,12 @@ type Props = {
 export function SelectField(props: Props) {
 	const { name, label, value, onChange, options, error, required } = props
 	return (
-		<label htmlFor={name} title={required ? `${label || name} is required` : name}>
+		<label
+			htmlFor={name}
+			title={required ? `${label || name} is required` : name}
+		>
 			<span> {label || name} </span>
-			<select value={value} required={false} onChange={onChange} {...props}>
+			<select {...props} value={value} required={false} onChange={onChange}>
 				<option value={""}> -- select {label || name} -- </option>
 
 				{options?.map((opt, i) => (

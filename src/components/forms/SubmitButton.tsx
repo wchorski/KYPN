@@ -19,7 +19,8 @@ export function SubmitButton({label}:SubmitButtonsProps) {
       className={[stack_el, pending ? "anim_border_spin pending" : ""].join(' ')}
     >
       <span className={pending ? hidden : ''}>{btnText}</span>
-      {pending && <LoadingAnim /> }
+      {/* {pending && <LoadingAnim /> } */}
+      <LoadingAnim isVisable={pending}/> 
     </button>
   )
 }

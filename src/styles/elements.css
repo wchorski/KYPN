@@ -1,7 +1,7 @@
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-	margin-block: var(--space-l);
+	/* margin-block: var(--space-l); */
 }
 thead th {
 	border-bottom-width: 3px;
@@ -146,7 +146,6 @@ textarea {
 
 fieldset {
 	padding: 0;
-	margin-bottom: var(--space-ml);
 	border-width: 0;
 }
 input[type="checkbox"],

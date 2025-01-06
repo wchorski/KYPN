@@ -1,16 +1,16 @@
-import styles from '@styles/eyecandy/loading.module.scss'
+import { loading } from '@styles/eyecandy/loading.module.css'
 
-export function LoadingAnim () {
+export function LoadingAnim ({isVisable = false}:{isVisable?:boolean}) {
 
   const dots = ['1', '2', '3']
   const duration = 1
   const delay = 0.3
 
   return (
-    <div className={styles.loading}>
-      <ul>
+    <div className={loading} style={{visibility: isVisable ? 'visible' : 'hidden'}} aria-label={'loading animation pending'}>
+      <div>
         {dots.map((dot, i) => (
-          <li
+          <div
             key={i}
             style={{
               animationDuration: duration + 's',
@@ -18,16 +18,16 @@ export function LoadingAnim () {
             }}
           >
             
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   )
 }
 
 export function LoadingAnimTAWTAW() {
   return (
-    <span className={styles.loading} >
+    <span className={loading} >
       <svg width="60" height="30" viewBox="-20 -20 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g id="tawtaw-logo">
           <rect className="rotating-rect" id="left"   x="0"       y="0" width="80" height="80" rx="10" />

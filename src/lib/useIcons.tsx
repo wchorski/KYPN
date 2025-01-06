@@ -11,7 +11,13 @@ import {
 	FaLink,
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
+import { BsFillBookmarkFill } from "react-icons/bs"
 
+export const IconBookmark = () => {
+  return <BsFillBookmarkFill />
+}
+
+// TODO rename to IconSocial
 export function useIcons(type: string = "") {
   let icon: ReactNode
 
