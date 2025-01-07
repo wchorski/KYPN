@@ -28,7 +28,6 @@ import { envs } from "../../../envs"
 import { Decimal } from "@keystone-6/core/types"
 import { allowAll } from "@keystone-6/core/access"
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "no_frontend_url"
 // const EMAIL_ADDRESS = 'y@m'
 
 // const rightnow = new Date().toISOString()
@@ -448,7 +447,7 @@ async function handleCalendarDetails(item: any, context: any) {
 		"\n"
 	calDescription += "STATUS: " + selectedBooking.status + " \n"
 	calDescription +=
-		"SERVICE: " + selectedBooking.service?.name || "No Service Selected" + " \n"
+		"SERVICE: " + selectedBooking.service?.name || "No Service Selected" + " \n\n"
 	calDescription +=
 		"ADDONS: \n" +
 		selectedBooking?.addons
@@ -462,12 +461,13 @@ async function handleCalendarDetails(item: any, context: any) {
 			.join(", \n") +
 		" \n\n"
 	calDescription += "NOTES: " + selectedBooking.notes + "\n"
-	calDescription += "URL: " + FRONTEND_URL + `/bookings/${item.id}`
+	calDescription += "URL: " + envs.FRONTEND_URL + `/bookings/${item.id}`
 
-	const calSummary =
-		selectedBooking.name ||
-		"anonymous" + " | " + selectedBooking.service?.name ||
-		"No Service Selected"
+	const calSummary = selectedBooking.summary
+	// const calSummary =
+	// 	selectedBooking.name ||
+	// 	"anonymous" + " | " + selectedBooking.service?.name ||
+	// 	"No Service Selected"
 
 	const calcEnd = calcEndTime(
 		selectedBooking.start,

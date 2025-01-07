@@ -242,7 +242,9 @@ export type ListAccessArgs = {
 // 	duration_in_months: number
 // 	duration: "once" | "repeating" | "forever"
 // }
-
+export type Event = Lists.Event.Item & {
+  
+}
 // export type Event = {
 // 	typeof: "event"
 // 	id: string
