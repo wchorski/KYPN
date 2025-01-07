@@ -12,7 +12,7 @@ export async function actionBookAService(
 		const values = Object.fromEntries(formData) as BookAServiceValues
 		//? array of checkboxes w same name `addonIds`
 		values.addonIds = formData.getAll("addonIds") as string[]
-    // console.log("action: ", {values});
+    console.log("action: ", {values});
 		// // @ts-ignore
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 		// const {  } = values
@@ -64,13 +64,19 @@ export async function actionBookAService(
 	}
 }
 
-function validateValues({ email }: BookAServiceValues) {
+function validateValues({ email, date, time }: BookAServiceValues) {
 	// @ts-ignore
 	let valueErrors: BookAServiceState["valueErrors"] = {}
 	if (!valueErrors) return undefined
 
 	if (!emailRegex.test(email))
 		valueErrors.email = "Check spelling or use different email"
+
+	if (!date)
+		valueErrors.date = "Event date must be selected"
+
+	if (!time)
+		valueErrors.time = "Start time must be selected"
 
 	if (Object.keys(valueErrors).length === 0) return undefined
 	return valueErrors

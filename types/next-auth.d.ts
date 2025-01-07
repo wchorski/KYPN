@@ -14,6 +14,7 @@ declare module "next-auth" {
 			email: string
 			id: string
 			stripeCustomerId: string
+      image: string
 		}
 		itemId: string
 		authId: string

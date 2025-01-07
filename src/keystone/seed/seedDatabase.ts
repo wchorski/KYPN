@@ -429,8 +429,8 @@ const seedAnnouncements = async (context: Context) => {
 
 export const seedDatabase = async (context: Context) => {
 	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
-	await seedUsers(context)
 	await seedRoles(context)
+	await seedUsers(context)
 
 	await seedCategories(context)
 	await seedTags(context)

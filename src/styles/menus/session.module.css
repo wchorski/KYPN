@@ -1,3 +1,13 @@
+.session_image {
+  margin: 0;
+
+  & > img {
+    padding-right: 1rem;
+    width: 100%;
+    transform: scale(2) translateY(2px);
+  }
+}
+
 .session_badge :global {
   text-align: right;
   position: relative;

@@ -372,7 +372,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	function calcTotalPrice(addonIds: string[], serviceId: string | undefined) {
 		if (!serviceId) return 0
 		const pickedAddons = addons.filter((ad) => addonIds.includes(ad.id))
-    
+
 		const addonsPrice = pickedAddons.reduce(
 			(accumulator, currentValue) => accumulator + (currentValue?.price || 0),
 			0
@@ -380,119 +380,16 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		return addonsPrice + (getServicePicked(serviceId).price || 0)
 	}
 
-	// async function onSubmit(
-	// 	prevState: FormState,
-	// 	formdata: FormData
-	// ): Promise<FormState> {
-	// 	const service = formdata.get("service") as string
-	// 	const location = formdata.get("location") as string
-	// 	const staff = formdata.get("staff") as string
-	// 	const date = formdata.get("date") as string
-	// 	const timeStart = formdata.get("timeStart") as string
-	// 	// const timeEnd   = formdata.get('timeEnd') as string
-	// 	const name = formdata.get("name") as string
-	// 	const email = formdata.get("email") as string
-	// 	const phone = formdata.get("phone") as string
-	// 	const notes = formdata.get("notes") as string
-	// 	// const addonIds = addons.map(addon => formdata.get(addon.name) ).filter(item => item !== null) as string[]
-	// 	const addonIds = stateRed.addonOptions
-	// 		.filter((addon) => addon.isChecked)
-	// 		.flatMap((addon) => addon.id) as string[]
-
-	// 	const inputValues: Fields = {
-	// 		service,
-	// 		location,
-	// 		staff,
-	// 		addonIds,
-	// 		date,
-	// 		timeStart,
-	// 		// timeEnd,
-	// 		name,
-	// 		email,
-	// 		phone,
-	// 		notes,
-	// 	}
-
-	// 	try {
-	// 		if (typeof email !== "string") throw new Error("email is not string")
-
-	// 		const data = {
-	// 			// summary: `${name || email} | ${getServicePicked(service)?.name}`,
-	// 			serviceId: service,
-	// 			locationId: location,
-	// 			addonIds,
-	// 			employeeId: staff,
-	// 			start: new Date(date + "T" + timeStart).toISOString(),
-	// 			// end: calcEndTime(date+'T'+ timeStart, String(getServicePicked(service)?.durationInHours)),
-	// 			customerName: name,
-	// 			customerEmail: email,
-	// 			customerPhone: phone,
-	// 			notes: notes,
-	// 			amountTotal: calcTotalPrice(addonIds, service),
-	// 		}
-
-	// 		const res = await fetch(`/api/gql/noauth`, {
-	// 			method: "POST",
-	// 			headers: {
-	// 				"Content-Type": "application/json",
-	// 			},
-	// 			body: JSON.stringify({
-	// 				query: `
-	//           mutation BookAService($serviceId: String!, $start: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerName: String, $customerEmail: String!, $customerPhone: String, $notes: String, $amountTotal: Int) {
-	//             bookAService(serviceId: $serviceId, start: $start, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerName: $customerName, customerEmail: $customerEmail, customerPhone: $customerPhone, notes: $notes, amount_total: $amountTotal) {
-	//               id
-	//             }
-	//           }
-	//         `,
-	// 				variables: data,
-	// 			}),
-	// 		})
-
-	// 		const { bookAService, error } = await res.json()
-	// 		if (error) throw new Error(error.message)
-	// 		dispatchRed({ type: "SET_BOOKING_ID", payload: bookAService.id })
-	// 		dispatchRed({ type: "SET_CUSTOMER", payload: { name, email, phone } })
-	// 		// // return check to see if employee is avail
-
-	// 		return {
-	// 			...formState,
-	// 			message: "success",
-	// 		}
-	// 	} catch (error: any) {
-	// 		console.log(error)
-
-	// 		return {
-	// 			message: error?.message,
-	// 			// TODO validate each field
-	// 			errors: {
-	// 				service: "",
-	// 				location: "",
-	// 				staff: "",
-	// 				date: "",
-	// 				timeStart: "",
-	// 				// timeEnd: '',
-	// 				name: "",
-	// 				email: "",
-	// 				phone: "",
-	// 				notes: "",
-	// 				addonIds: "",
-	// 			},
-	// 			fieldValues: inputValues,
-	// 		}
-	// 	}
-	// }
-
 	useEffect(() => {
 		// if (formState.message === "success") {
 		// 	formRef.current?.reset()
 		// }
-    if(prevBooking?.serviceId){
-      dispatchRed({
-        type: "SET_SERVICE",
-        payload: prevBooking?.serviceId,
-      })
-
-    }
+		if (prevBooking?.serviceId) {
+			dispatchRed({
+				type: "SET_SERVICE",
+				payload: prevBooking?.serviceId,
+			})
+		}
 	}, [prevBooking])
 
 	function findPartialDays(id: string) {
@@ -507,7 +404,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 			end: stateRed.service?.buisnessHourClosed || "",
 		}
 
-    selectedEmpl.gigs = gigs.filter((gig) =>
+		selectedEmpl.gigs = gigs.filter((gig) =>
 			gig.employees.flatMap((emp) => emp.id).includes(selectedEmpl.id)
 		)
 
@@ -538,7 +435,6 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 				return isDateRangeAvailable(testStart, testEnd, employeeBusyRanges)
 			})
-      
 
 			partialDays.push({
 				day,
@@ -547,16 +443,11 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 			return openTimes.length > 0 ? true : false
 		})
-    console.log({busyDays});
 
 		const blackoutDays = partialDays.filter((d) => {
 			return d.times.length <= 0
 		})
 		const blackoutDts = blackoutDays.map((d) => d.day)
-    console.log({blackoutDts});
-    console.log({partialDays});
-
-    
 
 		dispatchRed({ type: "SET_BLACKOUT_DATES", payload: blackoutDts })
 		dispatchRed({ type: "SET_PARTIAL_DATES", payload: partialDays })
@@ -583,7 +474,6 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 			const end = new Date(gig.end).toLocaleDateString("en-CA")
 			return [start, end]
 		})
-
 
 		if (staffGigsLocal?.includes(date)) {
 			const staffGigs = employeeGigs.filter((gig: Booking) => {
@@ -756,10 +646,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<InputField
 								name={"date"}
 								label={"day of event"}
-								type={"hidden"}
 								// type={"date"}
-                disabled={true}
-								defaultValue={prevBooking?.date || state.values?.date}
+								type={"hidden"}
+								// defaultValue={prevBooking?.date || state.values?.date}
+								value={stateRed.date}
 								required={true}
 								onChange={(e) =>
 									dispatchRed({
@@ -778,14 +668,15 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								buisnessDays={stateRed.service?.buisnessDays || []}
 								onDateCallback={onDateCallback}
 							/>
+							<p className={"error"}>{state.valueErrors?.date}</p>
 
 							<h5>Start Time</h5>
 							<InputField
 								name={"time"}
 								// type={"time"}
 								type={"hidden"}
-                disabled={true}
-								defaultValue={prevBooking?.time || state.values?.time}
+								// defaultValue={prevBooking?.time || state.values?.time}
+								value={stateRed.time}
 								required={true}
 								onChange={(e) => {
 									dispatchRed({
@@ -811,6 +702,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								// partialDates={partialDates}
 								// serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
 							/>
+							<p className={"error"}>{state.valueErrors?.time}</p>
+
 							<SelectField
 								name={"timeZone"}
 								label={"event time zone"}
@@ -903,7 +796,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Location: </td>
 							<td>
-								{stateRed.location?.name || <span className="sub-text"> n/a </span>}
+								{stateRed.location?.name || (
+									<span className="sub-text"> n/a </span>
+								)}
 							</td>
 						</tr>
 						<tr>
@@ -930,7 +825,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Addons: </td>
 							<td>
-								<ul style={{padding: '0'}} >
+								<ul style={{ padding: "0" }}>
 									{stateRed.addonOptions
 										.filter((opt) => opt.isChecked)
 										.map((ad, i) => (
@@ -942,7 +837,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<tr>
 							<td> Estimate: </td>
 							<td>
-                {moneyFormatter(stateRed.total)}
+								{moneyFormatter(stateRed.total)}
 								{/* {moneyFormatter(
 									getServicePicked(stateRed.service?.id || "")?.price ||
 										0 +

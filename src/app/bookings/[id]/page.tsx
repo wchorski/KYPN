@@ -29,6 +29,10 @@ import {
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import Flex from "@components/layouts/Flex"
+import { session_image } from "@styles/menus/session.module.css"
+import { IconUserAccountAvatar } from "@lib/useIcons"
+import { Card } from "@components/layouts/Card"
+import { NoData } from "@components/elements/NoData"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -40,8 +44,12 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const session = await getServerSession(nextAuthOptions)
-  const { id } = await params
-	const { booking, error } = await fetchBooking({id, session, query: `summary`})
+	const { id } = await params
+	const { booking, error } = await fetchBooking({
+		id,
+		session,
+		query: `summary`,
+	})
 
 	if (!booking)
 		return {
@@ -63,10 +71,14 @@ export default async function BookingSinglePage({
 	params,
 	searchParams,
 }: Props) {
-  const session = await getServerSession(nextAuthOptions)
+	const session = await getServerSession(nextAuthOptions)
 	const { id } = await params
 
-	const { booking, error } = await fetchBooking({id, session, query: QUERY_BOOKING_RECIEPT})
+	const { booking, error } = await fetchBooking({
+		id,
+		session,
+		query: QUERY_BOOKING_RECIEPT,
+	})
 
 	if (error) return <ErrorMessage error={error} />
 	if (!booking) return notFound()
@@ -79,7 +91,7 @@ export default async function BookingSinglePage({
 		phone,
 		name,
 		location,
-    address,
+		address,
 		service,
 		price,
 		notes,
@@ -89,16 +101,14 @@ export default async function BookingSinglePage({
 		dateModified,
 		start,
 		end,
-    revision,
+		revision,
 	} = booking
 
 	return (
 		<main className={page_layout}>
 			<header className={layout_breakout}>
-				<h1>
-					{summary}
-				</h1>
-				<Flex alignItems={'center'}>
+				<h1>{summary}</h1>
+				<Flex alignItems={"center"}>
 					<StatusBadge type={"booking"} status={status} />{" "}
 					<Link
 						className="edit"
@@ -106,8 +116,7 @@ export default async function BookingSinglePage({
 					>
 						<FiEdit /> Edit
 					</Link>
-
-          {/* //TODO add a way to update form */}
+					{/* //TODO add a way to update form */}
 					{/* <Link 
             className="edit button" 
             href={`/bookings?${
@@ -122,8 +131,31 @@ export default async function BookingSinglePage({
           > 
             <FiEdit /> Edit 
           </Link> */}
+					{customer && (
+						<Card direction={'row'} gap={'var(--space-m)'} paddingBlock={'s'} marginBlock={'0'}>
+							<figure style={{margin: '0'}}>
+								{customer.image ? (
+									<img
+										src={customer.image}
+										alt={"user avatar"}
+										width={20}
+										height={20}
+									/>
+								) : (
+									<IconUserAccountAvatar />
+								)}
+							</figure>
+							<span>
+								<Link href={`/users/${customer.id}`}>
+									{customer?.name + ' | ' + customer.email}
+								</Link>
+							</span>
+						</Card>
+					)}
 				</Flex>
-				<small>last updated: {datePrettyLocal(dateModified, "full")} v{revision}</small>
+				<small>
+					last updated: {datePrettyLocal(dateModified, "full")} v{revision}
+				</small>
 			</header>
 
 			<div className={layout_content}>
@@ -135,15 +167,11 @@ export default async function BookingSinglePage({
 									<label>Client: </label>
 								</td>
 								<td>
-									{customer ? (
-										<Link href={`/users/${customer.id}`}>{customer?.name}</Link>
-									) : (
-										<span> {name} (Unregistered User) </span>
-									)}
+
+                  <span> {name} {customer.email !== email ? ' (Unregistered User)' : ''} </span>
+	
 									<br />
-									<span>
-										{customer?.email} {customer?.email ? "," : ""} {email}
-									</span>
+									<span>{email}</span>
 									<br />
 									<span>
 										{customer?.phone} {customer?.phone ? "," : ""} {phone}
@@ -154,7 +182,9 @@ export default async function BookingSinglePage({
 								<td>
 									<label>Location: </label>{" "}
 								</td>
-								<td>{location?.name} {address && `| ${address}`}</td>
+								<td>
+									{location?.name} {address && `| ${address}`}
+								</td>
 							</tr>
 							<tr>
 								<td>
@@ -189,11 +219,18 @@ export default async function BookingSinglePage({
 							<h2>Add-Ons</h2>
 							<ul className="addons">
 								{addons.map((ad) => (
-									<li key={ad.id} title={ad.excerpt}>
-										{ad.name}
-										<Link href={`/addons/${ad.id}`} target={"_blank"}>
-											{" "}
-											<CgExternal />{" "}
+									<li
+										key={ad.id}
+										title={ad.excerpt}
+										style={{ display: "flex" }}
+									>
+										<Link
+											href={`/addons/${ad.id}`}
+											target={"_blank"}
+											title={`view add-on ${ad.name}`}
+										>
+											{ad.name}
+											<CgExternal />
 										</Link>
 									</li>
 								))}
@@ -207,7 +244,10 @@ export default async function BookingSinglePage({
 					{employees.length > 0 && (
 						<>
 							<h2> Employees Assigned </h2>
-							<ul className="employees" style={{padding: '0', listStyle: 'none'}}>
+							<ul
+								className="employees"
+								style={{ padding: "0", listStyle: "none" }}
+							>
 								{employees.map((emp) => (
 									<li key={emp.id}>
 										<UserBadge user={emp} />
@@ -218,13 +258,13 @@ export default async function BookingSinglePage({
 					)}
 
 					{details && (
-						<div className={''}>
+						<div className={""}>
 							<BlockRender document={details.document} />
 						</div>
 					)}
 
 					<h2> Notes </h2>
-					<p>{notes}</p>
+					<p>{notes ? notes : <NoData name="notes" />}</p>
 				</div>
 			</div>
 
@@ -278,6 +318,7 @@ const QUERY_BOOKING_RECIEPT = `
     phone
     name
     nameLast
+    image
   }
   employees {
     id

@@ -20,6 +20,7 @@ import {
 	page_layout,
 } from "@styles/layout.module.css"
 import { Grid } from "@components/layouts/Grid"
+import Flex from "@components/layouts/Flex"
 
 export const metadata: Metadata = {
 	title: "Login | " + envs.SITE_TITLE,
@@ -55,7 +56,10 @@ export default async function LoginPage({ searchParams }: Props) {
 				)}
 			</Header>
 			<div className={[page_content, layout_wide].join(" ")}>
-				<Grid isAuto={true} gap={"ml"} colWidth={'17rem'}>
+				{/* <Grid isAuto={true} gap={"ml"} colWidth={'17rem'}> */}
+        <Flex>
+
+        
 					<div>
 						<LoginForm providers={providers} />
 					</div>
@@ -80,10 +84,11 @@ export default async function LoginPage({ searchParams }: Props) {
 						)}
 						<h4> Create a New Account </h4>
 						<p>
-							<Link href={`/register`}> Register Now </Link>
+							<Link href={`/register`} className={'button  large'}> Register Now </Link>
 						</p>
 					</div>
-				</Grid>
+        </Flex>
+				{/* </Grid> */}
 			</div>
 		</main>
 	)

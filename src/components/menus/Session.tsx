@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { MdAccountCircle } from "react-icons/md"
-import styles, { session_btn, sub_menu } from "@styles/menus/session.module.css"
+import styles, { session_btn, session_image, sub_menu } from "@styles/menus/session.module.css"
 import SignOutButton from "./SignOutButton"
 import { NavLink } from "./NavLink"
 import { getServerSession } from "next-auth"
@@ -8,6 +8,8 @@ import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { envs } from "@/envs"
 import { ReactElement } from "react"
+
+
 
 type Props = {
 	label: string
@@ -26,7 +28,18 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 			aria-label="account menu link"
 		>
 			<NavLink href={`/account`} className={session_btn}>
-				<MdAccountCircle />
+				<figure className={session_image} >
+					{session.user.image ? (
+						<img
+							src={session.user.image}
+							alt={"user avatar"}
+							width={20}
+							height={20}
+						/>
+					) : (
+						<MdAccountCircle />
+					)}
+				</figure>
 				<span>{label}</span>
 			</NavLink>
 
@@ -34,7 +47,7 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 				<li className="user">
 					<span>{session?.user?.name}</span>
 					<br />
-					<span className={'sub-text'} >{session?.user?.email}</span>
+					<span className={"sub-text"}>{session?.user?.email}</span>
 				</li>
 				<li>
 					{" "}

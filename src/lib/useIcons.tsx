@@ -12,9 +12,13 @@ import {
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill } from "react-icons/bs"
+import { MdAccountCircle } from "react-icons/md"
 
 export const IconBookmark = () => {
   return <BsFillBookmarkFill />
+}
+export const IconUserAccountAvatar = () => {
+  return <MdAccountCircle />
 }
 
 // TODO rename to IconSocial

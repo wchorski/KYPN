@@ -3,6 +3,7 @@ import { nextAuthOptions } from "@/session"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
+import { IconUserAccountAvatar } from "@lib/useIcons"
 import {
 	layout_site,
 	page_content,
@@ -32,14 +33,25 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 			</ErrorPage>
 		)
 	if (!user) return notFound()
-  console.log({user});
 
-	const { name, email, role } = user
+	const { name, email, role, image } = user
 
 	return (
 		<main className={[page_layout].join(" ")}>
 			<header className={layout_site}>
 				<h1>User: {name}</h1>
+				<figure style={{ margin: "0" }}>
+					{image ? (
+						<img
+							src={image}
+							alt={"user avatar"}
+							width={100}
+							height={100}
+						/>
+					) : (
+						<IconUserAccountAvatar />
+					)}
+				</figure>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<table>
@@ -54,7 +66,7 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 						</tr>
 						<tr>
 							<td>Role: </td>
-							<td>{role?.name || 'unverified'}</td>
+							<td>{role?.name || "unverified"}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -73,6 +85,7 @@ const QUERY_USER_THIN = `
   id
   name
   email
+  image
   role {
     name
   }

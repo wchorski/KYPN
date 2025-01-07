@@ -33,6 +33,8 @@ const userQuery = `
     email
     password
     authId
+    image
+    dateCreated
     role {
       id
       name
@@ -135,12 +137,12 @@ export const nextAuthOptions: NextAuthOptions = {
 			const sudoContext = (await getKeystoneContext()).sudo()
 			const data = (await sudoContext.graphql.run({
 				query: `
-                  query Users($where: UserWhereInput!) {
-                    users(where: $where) {
-                      ${userQuery}
-                    }
-                  }
-                `,
+          query Users($where: UserWhereInput!) {
+            users(where: $where) {
+              ${userQuery}
+            }
+          }
+        `,
 				variables: {
 					where: {
 						email: {
@@ -163,6 +165,14 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			return {
 				...session,
+        //TODO why isn't spread ...session giving other user props?
+        user: {
+          name: foundUser.name,
+          nameLast: foundUser.nameLast,
+          image: foundUser.image,
+          email: foundUser.email,
+          dateCreated: foundUser.dateCreated,
+        },
 				authId: token.sub,
 				id: foundUser?.id,
 				stripeCustomerId: foundUser?.stripeCustomerId,
@@ -214,7 +224,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				},
 			},
 			authorize: async (credentials: any, req: any) => {
-				if (!credentials?.email && !credentials?.password && !credentials)
+				if (!credentials.email && !credentials.password && !credentials)
 					console.log("!!! insufficent credentials")
 
 				//todo create a `login-count` variable on a user to track how many successful logins?
@@ -232,7 +242,7 @@ export const nextAuthOptions: NextAuthOptions = {
 					variables: {
 						where: {
 							email: {
-								equals: credentials?.email,
+								equals: credentials.email,
 								mode: "insensitive",
 							},
 						},
@@ -261,25 +271,29 @@ export const nextAuthOptions: NextAuthOptions = {
 					console.log("!!! no password set for User")
 					return null
 				}
+        console.log({foundUser});
+        
 				// const match = (credentials?.password === foundUser.password)
-				const match = await bcrypt.compare(
+				const isPasswordMatch = await bcrypt.compare(
 					credentials?.password,
 					foundUser.password
 				)
 				// if(!match) return {status: 401, message: 'incorrect password'}
 
-				if (credentials?.email === foundUser.email && match) {
+        //? proper way to compair strings in case insensative manor. but do i even need it?
+				// if (isPasswordMatch && (credentials.email.localeCompare(foundUser.email, undefined, { sensitivity: 'base' }) === 0)) {
+				if (isPasswordMatch) {
 					console.log("### user is authenticated, ", foundUser.email)
 					return {
 						_type: "credentials",
 						id: foundUser.id,
 						authId: foundUser.email,
-						name: foundUser.name,
-						image: foundUser.image,
-						email: foundUser.email,
 						role: foundUser.role,
+            email: foundUser.email,
 						user: {
+              name: foundUser.name,
 							email: foundUser.email,
+              image: foundUser.image,
 							stripeCustomerId: foundUser.stripeCustomerId,
 						},
 					}
