@@ -19,6 +19,12 @@ export function MainNavList() {
 			<li>
 				<NavLink href={`/blog`}> Blog </NavLink>{" "}
 			</li>
+			<li>
+				<NavLink href={`/services`}> Services </NavLink>{" "}
+			</li>
+			<li>
+				<NavLink href={`/book-a-service`}> Book a Service </NavLink>{" "}
+			</li>
 		</ul>
 	)
 }

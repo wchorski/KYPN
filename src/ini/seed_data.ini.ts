@@ -6,77 +6,82 @@ import type {
 	CategoryCreateInput,
 	TagCreateInput,
 	AnnouncementCreateInput,
-  AddonCreateInput,
-  LocationCreateInput,
+	AddonCreateInput,
+	LocationCreateInput,
+	BookingCreateInput,
 } from ".keystone/types"
-import { SeedPost, SeedService } from "@ks/types"
+import { SeedBookings, SeedPost, SeedService } from "@ks/types"
 
-export const locations_seed:LocationCreateInput[] = [
-  {
-    name: 'On-Site',
-    address: 'n/a',
-    rooms: 1,
-  },
-  {
-    name: 'Zesty Lounge',
-    address: '123 Zelst Blvd, Chicago IL 60606',
-    rooms: 1,
-  },
+export const locations_seed: LocationCreateInput[] = [
+	{
+		name: "On-Site",
+		address: "n/a",
+		rooms: 999,
+	},
+	{
+		name: "Zesty Lounge",
+		address: "123 Zelst Blvd, Chicago IL 60606",
+		rooms: 1,
+	},
 ]
 
-export const addons_seed:AddonCreateInput[] = [
-  {
-    "name": "Organic Upgrade",
-    "slug": "organic-upgrade",
-    "excerpt": "All fruits in your order will be certified organic, grown without synthetic pesticides or fertilizers.",
-    "price": 26000
-  },
-  {
-    "name": "Personalized Packaging",
-    "slug": "personalized-packaging",
-    "excerpt": "Customized packaging with handwritten notes or branding for gifting or corporate events.",
-    "price": 10000
-  },
-  {
-    "name": "Reusable Tote Bags",
-    "slug": "reusable-tote-bags",
-    "excerpt": "10 Cute FruitFruit™️ branded, eco-friendly tote bag for easy and sustainable fruit carrying for all your guests.",
-    "price": 8000
-  },
+export const addons_seed: AddonCreateInput[] = [
+	{
+		name: "Organic Upgrade",
+		slug: "organic-upgrade",
+		excerpt:
+			"All fruits in your order will be certified organic, grown without synthetic pesticides or fertilizers.",
+		price: 26000,
+	},
+	{
+		name: "Personalized Packaging",
+		slug: "personalized-packaging",
+		excerpt:
+			"Customized packaging with handwritten notes or branding for gifting or corporate events.",
+		price: 10000,
+	},
+	{
+		name: "Reusable Tote Bags",
+		slug: "reusable-tote-bags",
+		excerpt:
+			"10 Cute FruitFruit™️ branded, eco-friendly tote bag for easy and sustainable fruit carrying for all your guests.",
+		price: 8000,
+	},
 ]
 
-export const services_seed:SeedService[] = [
-  {
-    "name": "Fresh Fruit Fiesta",
-    "excerpt": "A variety of fruit flavored spreads and fruity fun decore all provided by our friendly hosts.",
-    "price": 100000,
-    status: "PUBLIC",
-    addons: [
-      { slug: "organic-upgrade"},
-      { slug: "personalized-packaging"},
-      { slug: "reusable-tote-bags"},
-    ]
-  },
-  {
-    "name": "Smoothie Bar Social",
-    "excerpt": "On-site smoothie bar offering customizable fruit blends for events and gatherings.",
-    "price": 15000,
-    status: "PUBLIC",
-    addons: [
-      { slug: "organic-upgrade"},
-    ]
-  },
-  {
-    "name": "Juicing Workshops",
-    "excerpt": "Interactive sessions teaching you how to make fresh, nutrient-packed fruit juices at home.",
-    "price": 45,
-    status: "PUBLIC",
-    addons: [
-      { slug: "organic-upgrade"},
-      { slug: "personalized-packaging"},
-      { slug: "reusable-tote-bags"},
-    ]
-  }
+export const services_seed: SeedService[] = [
+	{
+		name: "Fresh Fruit Fiesta",
+		excerpt:
+			"A variety of fruit flavored spreads and fruity fun decore all provided by our friendly hosts.",
+		price: 100000,
+		status: "PUBLIC",
+		addons: [
+			{ slug: "organic-upgrade" },
+			{ slug: "personalized-packaging" },
+			{ slug: "reusable-tote-bags" },
+		],
+	},
+	{
+		name: "Smoothie Bar Social",
+		excerpt:
+			"On-site smoothie bar offering customizable fruit blends for events and gatherings.",
+		price: 15000,
+		status: "PUBLIC",
+		addons: [{ slug: "organic-upgrade" }],
+	},
+	{
+		name: "Juicing Workshops",
+		excerpt:
+			"Interactive sessions teaching you how to make fresh, nutrient-packed fruit juices at home.",
+		price: 45,
+		status: "PUBLIC",
+		addons: [
+			{ slug: "organic-upgrade" },
+			{ slug: "personalized-packaging" },
+			{ slug: "reusable-tote-bags" },
+		],
+	},
 ]
 
 export const user_seeddata: UserCreateInput[] = [
@@ -84,29 +89,185 @@ export const user_seeddata: UserCreateInput[] = [
 		name: "CuteFruitAdmin",
 		email: "admin@tawtaw.site",
 		authId: "admin@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Avery&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
 		stripeCustomerId: undefined,
 		password: "it5-a-secret-t0-everybodY",
+		role: { connect: { name: "admin" } },
 	},
 	{
 		name: "Eddy",
 		email: "eddy@tawtaw.site",
 		authId: "eddy@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Vivian&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
 		stripeCustomerId: undefined,
 		password: "eddy@tawtaw.site",
+		role: { connect: { name: "editor" } },
 	},
 	{
 		name: "Arthur",
 		email: "arthur@tawtaw.site",
 		authId: "arthur@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Wyatt&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
 		stripeCustomerId: undefined,
 		password: "arthur@tawtaw.site",
+		role: { connect: { name: "author" } },
 	},
 	{
 		name: "Cinda",
 		email: "cinda@tawtaw.site",
 		authId: "cinda@tawtaw.site",
-		stripeCustomerId: undefined,
 		password: "cinda@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Emery&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
+		stripeCustomerId: undefined,
+		role: { connect: { name: "client" } },
+	},
+	{
+		name: "Catherine",
+		email: "Catherine@tawtaw.site",
+		authId: "Catherine@tawtaw.site",
+		password: "Catherine@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Katherine&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
+		stripeCustomerId: undefined,
+		role: { connect: { name: "client" } },
+	},
+	{
+		name: "Cinderella",
+		email: "Cinderella@tawtaw.site",
+		authId: "Cinderella@tawtaw.site",
+		password: "Cinderella@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Vivian&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
+		stripeCustomerId: undefined,
+		role: { connect: { name: "client" } },
+	},
+	{
+		name: "Colin",
+		email: "Colin@tawtaw.site",
+		authId: "Colin@tawtaw.site",
+		password: "Colin@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Aidan&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
+		stripeCustomerId: undefined,
+		role: { connect: { name: "client" } },
+	},
+	{
+		name: "Cole",
+		email: "Cole@tawtaw.site",
+		authId: "Cole@tawtaw.site",
+		password: "Cole@tawtaw.site",
+		image:
+			"https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Maria&backgroundColor=00897b,00acc1,039be5,1e88e5,3949ab,43a047,546e7a,5e35b1,6d4c41,757575,7cb342,8e24aa,c0ca33,d81b60,e53935,f4511e,fb8c00,fdd835,ffb300,d1d4f9,b6e3f4,c0aede,ffd5dc,ffdfbf,transparent",
+		stripeCustomerId: undefined,
+		role: { connect: { name: "client" } },
+	},
+	// {
+	// 	name: "",
+	// 	email: "@tawtaw.site",
+	// 	authId: "@tawtaw.site",
+	//   image: '',
+	// 	stripeCustomerId: undefined,
+	// 	password: "@tawtaw.site",
+	// 	role: { connect: { name: "client" } },
+	// },
+]
+
+export const bookings_seedjson: SeedBookings[] = [
+	{
+		start: "2025-01-15T19:15:00.000Z",
+		end: "2025-01-16T01:15:00.000Z",
+		timeZone: "America/Chicago",
+		address: "",
+		service: {
+			name: "Smoothie Bar Social",
+		},
+		location: {
+			name: "On-Site",
+		},
+		addons: [],
+		employees: [],
+		customer: {
+			email: "Cole@tawtaw.site",
+		},
+		email: "Cole@tawtaw.site",
+		phone: "123 122-1234",
+		name: "Cole",
+		status: "REQUESTED",
+		notes: "",
+		secretNotes: "",
+		revision: 1,
+		dateCreated: "2025-01-07T00:38:02.934Z",
+		dateModified: "2025-01-07T00:38:03.543Z",
+	},
+	{
+		start: "2025-02-05T17:15:00.000Z",
+		end: "2025-02-05T23:15:00.000Z",
+		timeZone: "America/Chicago",
+		address: "",
+		service: {
+			name: "Fresh Fruit Fiesta",
+		},
+		location: {
+			name: "On-Site",
+		},
+		addons: [
+			{
+				slug: "reusable-tote-bags",
+			},
+			{
+				slug: "personalized-packaging",
+			},
+		],
+		employees: [],
+		customer: {
+			email: "Colin@tawtaw.site",
+		},
+		email: "Colin@tawtaw.site",
+		phone: "123 122-1234",
+		name: "Colin",
+		status: "REQUESTED",
+		notes: "",
+		secretNotes: "",
+		revision: 1,
+		dateCreated: "2025-01-07T01:28:05.116Z",
+		dateModified: "2025-01-07T01:28:05.517Z",
+	},
+	{
+		start: "2025-02-03T18:15:00.000Z",
+		end: "2025-02-04T00:15:00.000Z",
+		timeZone: "America/Chicago",
+		address: "",
+		service: {
+			name: "Juicing Workshops",
+		},
+		location: {
+			name: "On-Site",
+		},
+		addons: [
+			{
+				slug: "reusable-tote-bags",
+			},
+			{
+				slug: "personalized-packaging",
+			},
+		],
+		employees: [],
+		customer: {
+			email: "Catherine@tawtaw.site",
+		},
+		email: "Catherine@tawtaw.site",
+		phone: "123 122-1234",
+		name: "Catherine",
+		status: "REQUESTED",
+		notes: "",
+		secretNotes: "",
+		revision: 1,
+		dateCreated: "2025-01-07T01:30:50.703Z",
+		dateModified: "2025-01-07T01:30:51.262Z",
 	},
 ]
 
@@ -135,16 +296,17 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canManageCart: true,
 		canManageOrders: true,
 		canManageLocations: true,
+		canViewPrivateLocations: true,
 		canManageServices: true,
 		canManageSubscriptionPlans: true,
 		canManageSubscriptionItems: true,
 		canManageCoupons: true,
-		// description: "Users with permission to create, edit, delete all data",
-		assignedTo: {
-			connect: {
-				email: "admin@tawtaw.site",
-			},
-		},
+		description: "Users with permission to create, edit, delete all data",
+		// assignedTo: {
+		// 	connect: {
+		// 		email: "admin@tawtaw.site",
+		// 	},
+		// },
 	},
 	{
 		name: "editor",
@@ -153,13 +315,13 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canCreatePosts: true,
 		canManageCategories: true,
 		canManageTags: true,
-		// description:
-		// 	"Users with permission to manage all site posts, categories, and tags",
-		assignedTo: {
-			connect: {
-				email: "eddy@tawtaw.site",
-			},
-		},
+		description:
+			"Users with permission to manage all site posts, categories, and tags",
+		// assignedTo: {
+		// 	connect: {
+		// 		email: "eddy@tawtaw.site",
+		// 	},
+		// },
 	},
 	{
 		name: "author",
@@ -167,24 +329,24 @@ export const roles_seedjson: RoleCreateInput[] = [
 		canCreatePosts: true,
 		canManageCategories: true,
 		canManageTags: true,
-		// description:
-		// 	"Users with permission to create and edit only their own posts",
-		assignedTo: {
-			connect: {
-				email: "arthur@tawtaw.site",
-			},
-		},
+		description:
+			"Users with permission to create and edit only their own posts",
+		// assignedTo: {
+		// 	connect: {
+		// 		email: "arthur@tawtaw.site",
+		// 	},
+		// },
 	},
 	{
 		name: "client",
 		label: "Client",
-		// description:
-		// 	"Users that are verified account holders. Users with no role are unverified",
-		assignedTo: {
-			connect: {
-				email: "cinda@tawtaw.site",
-			},
-		},
+		description:
+			"Users that are verified account holders. Users with no role are unverified",
+		// assignedTo: {
+		// 	connect: {
+		// 		email: "cinda@tawtaw.site",
+		// 	},
+		// },
 	},
 ]
 

@@ -9,7 +9,7 @@ import type { Permission } from "./schemas/fields"
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
-import type { Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
+import type { BookingCreateInput, Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
 
 export type Booking = Lists.Booking.Item & {
 	author: User
@@ -163,6 +163,24 @@ export type SeedPost = PostCreateInput & {
     name:string
   }[]
   author?: {
+    email:string
+  }
+}
+
+export type SeedBookings = BookingCreateInput & {
+  service?:{
+    name:string
+  }
+  location?:{
+    name:string
+  }
+  addons?:{
+    slug:string
+  }[]
+  employees?:{
+    email:string
+  }[]
+  customer?:{
     email:string
   }
 }

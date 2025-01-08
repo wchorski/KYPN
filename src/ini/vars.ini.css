@@ -21,7 +21,8 @@
     --c-light: hsl(192, 27%, 77%);
     --c-desaturated: hsl(193, 5%, 32%);
     --c-accent: hsl(54, 75%, 43%);
-    --c-error: red;
+    --c-error: rgb(200, 74, 74);
+    --c-success: rgb(80, 195, 80);
     --c-disabled: rgba(182, 182, 182, 0.672);
     --c-seperator: hsl(0, 0%, 89.4%);
     --c-txt-disabled: rgb(87, 87, 87);
@@ -93,7 +94,8 @@
     --c-light: hsl(192, 27%, 77%);
     --c-desaturated: hsl(193, 5%, 32%);
     --c-accent: rgb(235, 223, 113);
-    --c-error: red;
+    --c-error: rgb(200, 74, 74);
+    --c-success: rgb(80, 195, 80);
     --c-disabled: rgba(182, 182, 182, 0.672);
     --c-seperator: #52585e;
     --c-seperator-dark: #1f1f1f;

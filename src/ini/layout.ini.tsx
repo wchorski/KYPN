@@ -5,7 +5,7 @@ import Script from "next/script"
 import { Nav } from "@components/private/Nav"
 import { envs } from "@/envs"
 // import { cookies } from "next/dist/client/components/headers"
-import { Providers } from "@/src/app/providers"
+import { Providers } from "./providers"
 import { Footer } from "@components/private/Footer"
 import { AnnouncementBanner } from "@components/elements/AnnouncementBanner"
 

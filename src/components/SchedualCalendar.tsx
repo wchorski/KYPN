@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
-import styles from '@styles/events/calendar.module.scss'
+import styles from '@styles/events/calendar.module.css'
 import type { Booking, Event as TEvent } from "@ks/types";
 import { datePrettyLocalTime } from "@lib/dateFormatter";
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"

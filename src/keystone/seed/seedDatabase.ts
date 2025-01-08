@@ -7,6 +7,7 @@ import type {
 	PostCreateInput,
 	CategoryCreateInput,
 	TagCreateInput,
+	BookingCreateInput,
 } from ".keystone/types"
 import {
 	user_seeddata,
@@ -19,6 +20,7 @@ import {
 	services_seed,
 	addons_seed,
 	locations_seed,
+	bookings_seedjson,
 } from "./seed_data"
 import { Announcement, Page, SeedPost } from "@ks/types"
 
@@ -28,11 +30,7 @@ const seedUsers = async (context: Context) => {
 	const usersAlreadyInDatabase = await db.User.findMany({
 		where: {
 			email: {
-				in: seedUsers.map((user) => user.email) as
-					| string
-					| readonly string[]
-					| null
-					| undefined,
+				in: seedUsers.map((user) => user.email) as string[],
 			},
 		},
 	})
@@ -50,6 +48,50 @@ const seedUsers = async (context: Context) => {
 	await db.User.createMany({
 		data: usersToCreate,
 	})
+}
+
+const seedBookings = async (context: Context) => {
+	const { db } = context.sudo()
+	const itemsAlreadyInDatabase = await db["Booking"].findMany({
+		where: {
+			start: {
+				in: bookings_seedjson.flatMap((item) => item.start) as string[],
+			},
+		},
+	})
+  
+	const itemsToCreate = bookings_seedjson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some((prevItem) => prevItem.start.toISOString() === item.start)
+	)
+
+	itemsToCreate.map((item) => {
+		console.log(" + Booking: " + item.name + ' | ' + item.service?.name)
+	})
+
+	await db["Booking"].createMany({
+		data: itemsToCreate.map((item) => ({
+			...item,
+			service: { connect: { name: item.service?.name } },
+			location: { connect: { name: item.location?.name } },
+			customer: { connect: { email: item.customer?.email } },
+			addons: { connect: item.addons?.map((adn) => ({ slug: adn.slug })) },
+			employees: {
+				connect: item.employees?.map((emp) => ({ email: emp.email })),
+			},
+		})),
+	})
+
+	// await db.Post.createMany({
+	// 	data: postsToCreate.map((obj) => ({
+	// 		...obj,
+	// 		//? makes it easier to copy and paste res json from Apollo Sandbox
+	// 		content: obj?.content?.document,
+	// 		categories: { connect: obj?.categories },
+	// 		tags: { connect: obj?.tags },
+	// 		author: { connect: obj?.author },
+	// 	})),
+	// })
 }
 
 // const seedAvail = async (context: Context) => {
@@ -441,5 +483,7 @@ export const seedDatabase = async (context: Context) => {
 	await seedLocations(context)
 	await seedAddons(context)
 	await seedServices(context)
+
+  await seedBookings(context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }

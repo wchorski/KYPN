@@ -271,7 +271,6 @@ export const nextAuthOptions: NextAuthOptions = {
 					console.log("!!! no password set for User")
 					return null
 				}
-        console.log({foundUser});
         
 				// const match = (credentials?.password === foundUser.password)
 				const isPasswordMatch = await bcrypt.compare(

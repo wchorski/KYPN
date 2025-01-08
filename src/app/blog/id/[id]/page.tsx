@@ -11,6 +11,8 @@ type Props = {
 	params: { id: string }
 }
 
+// TODO metadata
+
 export default async function Page({ params, searchParams }: Props) {
 	const { id } = await params
 

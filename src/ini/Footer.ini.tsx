@@ -41,6 +41,8 @@ export function Footer() {
             <h4 style={txtStyle}> Pages </h4>
             <List>
               <Link href={`/blog`}> Blog </Link>
+              <Link href={`/services`}> Services </Link>
+              <Link href={`/book-a-service`}> Book a Service </Link>
               <Link href={`/login`}> Login </Link>
             </List>
           </div>
