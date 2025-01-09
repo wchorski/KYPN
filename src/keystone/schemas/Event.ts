@@ -13,6 +13,7 @@ export const Event:Lists.Event = list({
   access: {
     filter: {
       // query: rules.canReadProducts,
+      // TODO if private events then create canViewEvents
       query: () => true,
 
       delete: rules.canManageEvents,

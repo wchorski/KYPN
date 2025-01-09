@@ -1,8 +1,8 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 // @ts-ignore
 import type { Lists } from '.keystone/types';
 import { allowAll } from "@keystone-6/core/access";
-import { integer, relationship, select, } from "@keystone-6/core/fields";
+import { integer, relationship, select, virtual, } from "@keystone-6/core/fields";
 
 
 export const CartItem:Lists.CartItem = list({
@@ -13,6 +13,17 @@ export const CartItem:Lists.CartItem = list({
   
 
   fields: {
+    typeof: virtual({
+          field: graphql.field({
+            type: graphql.String,
+            resolve() {
+              return "cartitem";
+            },
+          }),
+          ui: {
+            itemView: { fieldMode: 'hidden'}
+          }
+        }),
     quantity: integer({
       defaultValue: 1,
       validation: { isRequired: true }

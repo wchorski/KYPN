@@ -9,25 +9,30 @@ import type { Permission } from "./schemas/fields"
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
-import type { BookingCreateInput, Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
+import type {
+	BookingCreateInput,
+	Lists,
+	PostCreateInput,
+	ServiceCreateInput,
+} from ".keystone/types"
 
 export type Booking = Lists.Booking.Item & {
-  typeof: 'booking'
+	typeof: "booking"
 	author: User
 	details: { document: any }
-  service?: Service
-  location: Location
-  addons: Addon[]
-  employees: User[]
-  employee_requests: User[]
-  customer: User
-  //? these are redefined because ks sees them as `Date` but really it's just ISO string
-  dateModified:string
-  start:string
-  end:string
-  //? virtual item isn't included
-  durationInHours:string
-  summary:string
+	service?: Service
+	location: Location
+	addons: Addon[]
+	employees: User[]
+	employee_requests: User[]
+	customer: User
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateModified: string
+	start: string
+	end: string
+	//? virtual item isn't included
+	durationInHours: string
+	summary: string
 }
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
@@ -119,19 +124,26 @@ export type KSHeading = {
 	children: { text: string }[]
 }
 
-//** Schema Lists */
-export type User = Lists.User.Item & { 
-  typeof: 'user'
-  role: Role 
-  posts: Post[]
-  pages: Page[]
-  privatePagesAccess: Page[]
-  privatePostsAccess: Post[]
-  servicesProvided: Service[]
-  bookings: Booking[]
-  gigs: Booking[]
-  gig_requests: Booking[]
-  availability: Availability[]
+//** Schema Lists START */
+//** Schema Lists START */
+//** Schema Lists START */
+
+export type Role = Lists.Role.Item & {
+	assignedTo: User[]
+}
+
+export type User = Lists.User.Item & {
+	typeof: "user"
+	role: Role
+	posts: Post[]
+	pages: Page[]
+	privatePagesAccess: Page[]
+	privatePostsAccess: Post[]
+	servicesProvided: Service[]
+	bookings: Booking[]
+	gigs: Booking[]
+	gig_requests: Booking[]
+	availability: Availability[]
 }
 
 export type Category = Lists.Category.Item
@@ -151,58 +163,56 @@ export type Post = Lists.Post.Item & {
 	content: { document: any }
 }
 
-
-
-//? makes it easy to query data with Apollo tool and copy paste json into `seed_data.ts` without any reformatting 
+//? makes it easy to query data with Apollo tool and copy paste json into `seed_data.ts` without any reformatting
 export type SeedPost = PostCreateInput & {
-  content?:{
-    document:any
-  }
-  tags?: {
-    name:string
-  }[]
-  categories?: {
-    name:string
-  }[]
-  author?: {
-    email:string
-  }
+	content?: {
+		document: any
+	}
+	tags?: {
+		name: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+	author?: {
+		email: string
+	}
 }
 
 export type SeedBookings = BookingCreateInput & {
-  service?:{
-    name:string
-  }
-  location?:{
-    name:string
-  }
-  addons?:{
-    slug:string
-  }[]
-  employees?:{
-    email:string
-  }[]
-  customer?:{
-    email:string
-  }
+	service?: {
+		name: string
+	}
+	location?: {
+		name: string
+	}
+	addons?: {
+		slug: string
+	}[]
+	employees?: {
+		email: string
+	}[]
+	customer?: {
+		email: string
+	}
 }
 
 export type SeedService = ServiceCreateInput & {
-  description?:{
-    document:any
-  }
-  tags?: {
-    name:string
-  }[]
-  categories?: {
-    name:string
-  }[]
-  author?: {
-    email:string
-  }
-  addons?: {
-    slug: string
-  }[]
+	description?: {
+		document: any
+	}
+	tags?: {
+		name: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+	author?: {
+		email: string
+	}
+	addons?: {
+		slug: string
+	}[]
 }
 
 export type Announcement = Lists.Announcement.Item & {
@@ -248,22 +258,31 @@ export type ListAccessArgs = {
 	context?: any
 }
 
-// export type CartItem = {
-// 	id: string
-// 	type: "SALE" | "RENTAL"
-// 	quantity: number
-// 	product: Product
-// }
+export type CartItem = Lists.CartItem.Item & {
+	typeof: "cartitem"
+	product: Product
+	user: User
+}
 
-// export type Coupon = {
-// 	name: string
-// 	amount_off: number
-// 	percent_off: number
-// 	duration_in_months: number
-// 	duration: "once" | "repeating" | "forever"
-// }
+export type Coupon = Lists.Coupon.Item & {
+	products: Product[]
+	subscriptionItems: SubscriptionItem[]
+	subscriptionPlans: SubscriptionPlan[]
+	events: Event[]
+	tickets: Ticket[]
+	bookings: Booking[]
+	services: Service[]
+}
+
 export type Event = Lists.Event.Item & {
-  typeof: 'event'
+	typeof: "event"
+	location: Location
+	hosts: User[]
+	cohosts: User[]
+	tickets: Ticket[]
+	coupons: Coupon[]
+	categories: Category[]
+	tags: Tag[]
 }
 // export type Event = {
 // 	typeof: "event"
@@ -289,75 +308,42 @@ export type Event = Lists.Event.Item & {
 // }
 
 export type Ticket = {
-	status: string
-	// id: string
-	// email: string
-	// qrcode: string
-	// event: Event
-	// holder: User
-	// orderCount: string
+	typeof: "ticket"
+	eventSummary: string
+	event: Event
+	holder: User
+	order: Order
+	coupons: Coupon[]
 }
 
-export type Product = {
-	status: string
-	// id: string
-	// price: number
-	// rental_price: number
-	// name: string
-	// slug: string
-	// stockCount: number
-	// excerpt: string
-	// description: {
-	// 	document: any
-	// }
-	// photo: Photo
-	// image: string
-	// stripeProductId: string
-	// stripePriceId: string
-	// tags: Tag[]
-	// categories: Category[]
-	// dateCreated: string
-	// dateModified: string
-	// author: User
-	// rentals: Rental
-	// isForSale: boolean
-	// isForRent: boolean
+export type Product = Lists.Product.Item & {
+  typeof: 'product'
+	description: {
+		document: any
+	}
+	tags: Tag[]
+	categories: Category[]
+	author: User
+	rentals: Rental
 }
 
-export type Rental = {
-	// id: string
-	// start: string
-	// end: string
-	// summary?: string
-	// durationInHours?: string
-	// order: Order
-	// price?: number
-	// // employees: User[],
-	// addons?: Addon[]
-	// customer?: User
-	// location: string
-	// email?: string
-	// phone?: string
-	// name?: string
-	// notes: string
-	status:
-		| "ACTIVE"
-		| "POSTPONED"
-		| "CANCELED"
-		| "LEAD"
-		| "PAID"
-		| "DOWNPAYMENT"
-		| "HOLDING"
-	// dateCreated?: string
-	// dateModified?: string
-	// delivery: boolean
-	// google?: {
-	// 	id?: string
-	// 	kind?: string
-	// 	status?: string
-	// 	message?: string
-	// 	htmlLink?: string
-	// }
+export type Rental = Lists.Rental.Item & {
+	typeof: "rental"
+	summary: string
+	order: Order
+	// employees: User[],
+	addons?: Addon[]
+	customer?: User
+	dateCreated?: string
+	dateModified?: string
+	delivery: boolean
+	google?: {
+		id?: string
+		kind?: string
+		status?: string
+		message?: string
+		htmlLink?: string
+	}
 }
 
 // export type ProductImage = {
@@ -381,74 +367,51 @@ export type Rental = {
 // 	Orders: [Order]
 // }
 // export type Order = Lists.Order.Item
-export type Order = {
-	// id: string
-	// charge?: string
-	// total: number
-	// dateCreated?: string
-	// user?: User
-	// items: OrderItem[]
-	// ticketItems?: Ticket[]
-	status:
-		| "OPEN"
-		| "CANCELLED"
-		| "FULFILLED"
-		| "REFUNDED"
-		| "RETURNED"
-		| "EXPIRED"
-		| "STARTED"
-		| "PAYMENT_PENDING"
-		| "PAYMENT_RECIEVED"
-		| "PROCESSING"
-		| "SHIPPED"
-		| "DELIVERED"
+export type Order = Lists.Order.Item & {
+	user: User
+	items: OrderItem[]
+	rental: Rental
+	ticketItems: Ticket[]
 }
 
-// export type OrderItem = {
-// 	id: string
-// 	name: string
-// 	description: string
-// 	price: number
-// 	quantity: number
-// 	type: "RENTAL" | "SALE"
-// 	productId: string
-// 	product: Product
-// 	photo: Photo
-// 	image: string
-// 	dateCreated: string
-// 	dateModified: string
-// }
+export type OrderItem = Lists.OrderItem.Item & {
+	product: Product
+	dateCreated: string
+	dateModified: string
+	order: Order
+}
 
 export type Availability = Lists.Availability.Item & {
-  employee: User,
-  start:string
-  end:string
-  bookings: Booking[]
-  //? virtual "number" is technically a string
-  durationInHours:string,
+  typeof: 'availability'
+	employee: User
+	start: string
+	end: string
+	bookings: Booking[]
+	//? virtual "number" is technically a string
+	durationInHours: string
 }
-
 
 export type BookingPrevious = {
 	bookingId: string
 	serviceId: string
-  locationId: string
-  employeeId: string
+	locationId: string
+	employeeId: string
 	date: string
 	time: string
 }
 
 export type Service = Lists.Service.Item & {
-  description: {
-    document: any
-  }
-  employees: User[]
+  typeof: 'service'
+	description: {
+		document: any
+	}
+	employees: User[]
 	bookings: Booking[]
 	categories: Category[]
 	tags: Tag[]
 	locations: Location[]
 	addons: Addon[]
-  buisnessDays:number[]
+	buisnessDays: number[]
 }
 
 export type Location = Lists.Location.Item & {
@@ -462,82 +425,43 @@ export type Location = Lists.Location.Item & {
 export type Billing_Interval = "day" | "week" | "month" | "year"
 export type Duration = "forever" | "once" | "repeating"
 
-// export type SubscriptionPlan = {
-// 	id: string
-// 	image: string
-// 	author: User
-// 	name: string
-// 	slug: string
-// 	excerpt: string
-// 	description: {
-// 		document: any
-// 	}
-// 	status: string
-// 	price: number
-// 	stripeProductId: string
-// 	stripePriceId: string
-// 	billing_interval: Billing_Interval
-// 	items: SubscriptionItem[]
-// 	stockMax: number
-// 	tags: Tag[]
-// 	categories: Category[]
-// 	addons: Addon[]
-// 	coupons: Coupon[]
-// }
+export type SubscriptionPlan = Lists.SubscriptionPlan.Item & {
+	author: User
+	description: {
+		document: any
+	}
+	billing_interval: Billing_Interval
+	items: SubscriptionItem[]
+	tags: Tag[]
+	categories: Category[]
+	addons: Addon[]
+	coupons: Coupon[]
+}
 
-export type SubscriptionItem = {
-	// id: string
-	status:
-		| "ACTIVE"
-		| "TRIAL"
-		| "EXPIRED"
-		| "CANCELED"
-		| "SUSPENDED"
-		| "PAUSED"
-		| "DELINQUENT"
-	// custom_price: number
-	// billing_interval: Billing_Interval
-	// subscriptionPlan: SubscriptionPlan
-	// isActive: boolean
-	// isDelinquent: boolean
-	// user: User
-	// stripeSubscriptionId: string
-	// stripeChargeId: string
-	// dateCreated: string
-	// dateModified: string
-	// notes: string
+export type SubscriptionItem = Lists.SubscriptionItem.Item & {
+	typeof: "subscriptionitem"
+	subscriptionPlan: SubscriptionPlan
+	billing_interval: Billing_Interval
+	user: User
 }
 export type Addon = Lists.Addon.Item & {
-  author?: User
-  services?:Service[]
-  bookings?:Booking[]
-  categories: Category[]
+	author?: User
+	services?: Service[]
+	bookings?: Booking[]
+	categories: Category[]
 	tags: Tag[]
 }
-// export type Addon = {
-// 	id: string
-// 	name: string
-// 	slug: string
-// 	image: string
-// 	description: string
-// 	price: number
-// 	stripeProductId: string
-// 	services: Service[]
-// 	bookings: Booking[]
-// 	categories: Category[]
-// 	tags: Tag[]
-// 	excerpt: string
-// 	status: "DRAFT" | "PUBLIC" | "OUT_OF_STOCK" | "PRIVATE"
-// 	dateCreated: string
-// 	dateModified: string
-// }
+
+//** Schema Lists END */
+//** Schema Lists END */
+//** Schema Lists END */
 
 export type AddonCheckboxOptions = {
 	name: string
 	label: string
 	id: string
 	isChecked: boolean
-	price: number|null
+	price: number | null
 }
 
 export type IDObj = {

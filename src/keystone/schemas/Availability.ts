@@ -37,6 +37,17 @@ export const Availability:Lists.Availability = list({
 
 
   fields: {
+    typeof: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				resolve() {
+					return "availability"
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({validation: { isRequired: true } }),
     durationInHours: virtual({

@@ -50,6 +50,17 @@ export const Rental:Lists.Rental = list({
 
 
   fields: {
+    typeof: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve() {
+          return "rental";
+        },
+      }),
+      ui: {
+        itemView: { fieldMode: 'hidden'}
+      }
+    }),
     start: timestamp({ validation: { isRequired: true } }),
     end: timestamp({ validation: { isRequired: true } }),
     // summary: text({validation: { isRequired: true }, defaultValue: '[NEW BOOKING]'}),

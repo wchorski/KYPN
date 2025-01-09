@@ -40,6 +40,17 @@ export const Ticket:Lists.Ticket = list({
 
 
   fields: {
+    typeof: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        resolve() {
+          return "ticket";
+        },
+      }),
+      ui: {
+        itemView: { fieldMode: 'hidden'}
+      }
+    }),
     eventSummary: virtual({
       field: graphql.field({
         type: graphql.String,

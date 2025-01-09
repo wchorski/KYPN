@@ -19,7 +19,6 @@ export const Order:Lists.Order = list({
       delete: () => false,
     },
     operation: {
-      // query: () => permissions.isLoggedIn,
       // TODO battle test these access
       create: isLoggedIn,
       query: isLoggedIn,

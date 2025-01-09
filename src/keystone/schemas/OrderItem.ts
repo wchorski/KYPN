@@ -43,8 +43,6 @@ export const OrderItem:Lists.OrderItem = list({
     quantity: integer(),
     order: relationship({ ref: 'Order.items' }),
     product: relationship({ref: 'Product.orderItems', many: false}),
-    // todo add this link for receipt convienince?
-    // product: relationship({ ref: 'Product.items' }),
     dateCreated: timestamp({defaultValue: { kind: 'now' },}),
     dateModified: timestamp({defaultValue: { kind: 'now' },}),
   },
