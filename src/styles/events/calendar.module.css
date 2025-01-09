@@ -1,18 +1,10 @@
-@media screen and (width < 696px) {
-  .hide_on_mobile {
-    display: none;
-  
-  }
-  
-}
-
-
 .header :global{
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   font-size: 2rem;
+  margin-bottom: var(--space-m);
 
   & p.month-label{
     margin: 1rem 0;
@@ -124,7 +116,7 @@
 
   & label{
     padding: 5px;
-    border-radius: 50%;
+    border-radius: var(--br-soft);
     color: var(--c-txt);
     display: inline-block;
     width: 15px;
@@ -180,4 +172,20 @@
       margin-right: auto;
     }
   }
+}
+
+.reveal_on_mobile {
+  display: none;
+}
+
+@media screen and (width < 696px) {
+  .hide_on_mobile {
+    display: none;
+  
+  }
+  .reveal_on_mobile {
+    display: contents;
+  
+  }
+  
 }

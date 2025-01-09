@@ -9,6 +9,8 @@ import PasswordResetConfirmEmail from "../emails/passwordResetConfirm"
 import UserVerifyEmail from "../emails/userVerify"
 import BookingEmail from "../emails/bookings"
 import ContactEmail from "../emails/contact"
+import OrdersEmail from "../emails/orders"
+import SubscriptionItemEmail from "../emails/subscriptionItem"
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT
@@ -252,6 +254,55 @@ export async function mailContact({
     html,
 
   }).catch(err => console.log('!!! mailBooking ERROR: ', err) ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+
+  }
+}
+
+type MailOrder = {
+  to:string[],
+  operation:'create'|'update'|'delete',
+  order:Order, 
+}
+
+
+export async function mailOrder({to, operation, order }:MailOrder): Promise<void> {
+  // email the user a token
+
+  const html = render(OrdersEmail({operation, order}))
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: `Order: ${order.status}`,
+    html,
+  }).catch(err => console.log('!!! mailOrder ERROR: ', err) ))
+
+  if (MAIL_USER?.includes('ethereal.email') && info) {
+    console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);
+  }
+
+}
+
+type MailSub = {
+  to:string[],
+  operation:'create'|'update'|'delete',
+  subscriptionItem:SubscriptionItem, 
+}
+
+export async function mailSubscription({to, operation, subscriptionItem }:MailSub): Promise<void> {
+  // email the user a token
+
+  const html = render(SubscriptionItemEmail({operation, subscriptionItem}))
+
+  const info = (await transport.sendMail({
+    to,
+    from: ADMIN_EMAIL_ADDRESS,
+    subject: `Subscription: ${subscriptionItem.status}`,
+    html,
+  }).catch(err => console.log('!!! mailSubscription ERROR: ', err) ))
 
   if (MAIL_USER?.includes('ethereal.email') && info) {
     console.log(`💌 Message Sent!  Preview it at ${getTestMessageUrl(info)}`);

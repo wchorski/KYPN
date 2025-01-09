@@ -48,8 +48,8 @@ export const Tag:Lists.Tag = list({
     addons: relationship({ ref: 'Addon.tags', many: true }),
     services: relationship({ ref: 'Service.tags', many: true }),
     locations: relationship({ ref: 'Location.tags', many: true }),
-    // products: relationship({ ref: 'Product.tags', many: true }),
-    // subscriptions: relationship({ ref: 'SubscriptionPlan.tags', many: true }),
-    // events: relationship({ ref: 'Event.tags', many: true }),
+    products: relationship({ ref: 'Product.tags', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionPlan.tags', many: true }),
+    events: relationship({ ref: 'Event.tags', many: true }),
   },
 })

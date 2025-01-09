@@ -12,6 +12,7 @@ import type { Permission } from "./schemas/fields"
 import type { BookingCreateInput, Lists, PostCreateInput, ServiceCreateInput } from ".keystone/types"
 
 export type Booking = Lists.Booking.Item & {
+  typeof: 'booking'
 	author: User
 	details: { document: any }
   service?: Service
@@ -120,6 +121,7 @@ export type KSHeading = {
 
 //** Schema Lists */
 export type User = Lists.User.Item & { 
+  typeof: 'user'
   role: Role 
   posts: Post[]
   pages: Page[]
@@ -261,7 +263,7 @@ export type ListAccessArgs = {
 // 	duration: "once" | "repeating" | "forever"
 // }
 export type Event = Lists.Event.Item & {
-  
+  typeof: 'event'
 }
 // export type Event = {
 // 	typeof: "event"

@@ -51,8 +51,8 @@ const seedUsers = async (context: Context) => {
 }
 
 const seedBookings = async (context: Context) => {
-	const { db } = context.sudo()
-	const itemsAlreadyInDatabase = await db["Booking"].findMany({
+	const { db: sudoDB } = context.sudo()
+	const itemsAlreadyInDatabase = await sudoDB["Booking"].findMany({
 		where: {
 			start: {
 				in: bookings_seedjson.flatMap((item) => item.start) as string[],
@@ -69,7 +69,7 @@ const seedBookings = async (context: Context) => {
 		console.log(" + Booking: " + item.name + ' | ' + item.service?.name)
 	})
 
-	await db["Booking"].createMany({
+	await sudoDB["Booking"].createMany({
 		data: itemsToCreate.map((item) => ({
 			...item,
 			service: { connect: { name: item.service?.name } },

@@ -31,6 +31,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManagePages({ session })) return true
+    if(!session) return false
 
 		// 2. If not, do they own this item?
 		return {
@@ -40,6 +41,7 @@ export const rules = {
 	canViewPages({ session }: ListAccessArgs) {
 		// 1. Do they have the permission
 		if (permissions.canManagePages({ session })) return true
+    if(!session) return false
 
 		//todo get rid of comment if good
 		// 2. If not, do they own this item?
@@ -101,6 +103,7 @@ export const rules = {
 		if (!isLoggedIn({ session })) return false
 
 		if (permissions.canManageUsers({ session })) return true
+    if(!session) return false
 
 		// Otherwise they may only update themselves!
 		return { id: { equals: session?.itemId || "no_session.itemId" } }
@@ -144,14 +147,14 @@ export const rules = {
 		if (permissions.canManageProducts({ session })) return true
 
 		// 2. If not, do they own this item?
-		if (session) return { author: { id: { equals: session.itemId } } }
+		if (session) return { author: { id: { equals: session.itemId || 'no_session.itemId' } } }
 		return false
 	},
 	canViewProducts({ session }: ListAccessArgs) {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageProducts({ session })) return true // They can read everything!
-
+    if(!session) return false
 		// if(session) return {
 		//   OR: [
 		//     { author: { id: { equals: session.itemId } } },
@@ -187,7 +190,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageAddons({ session })) return true // They can read everything!
-
+    if(!session) return false
 		return {
 			OR: [
 				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
@@ -209,7 +212,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageServices({ session })) return true // They can read everything!
-
+    if(!session) return false
 		return {
 			OR: [
 				{
@@ -226,7 +229,7 @@ export const rules = {
 		// 1. Do they have the permission
 		if (!isLoggedIn({ session })) return false
 		if (permissions.canManageBookings({ session })) return true
-
+    
 		// 2. If not, do they own this item?
 		if (session)
 			return {
@@ -264,7 +267,7 @@ export const rules = {
 
 	canManageBookings({ session }: ListAccessArgs) {
 		// anonymous users can create bookings
-		if (!isLoggedIn({ session })) return false;
+		if (!isLoggedIn({ session })) return false
 
 		// 1. Do they have the permission
 		if (permissions.canManageBookings({ session })) return true
@@ -309,7 +312,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManageAvailability({ session })) return true
-
+    if(!session) return false
 		// 2. If not, do they own this item?
 		return {
 			employee: { id: { equals: session?.itemId || "no_session.itemId" } },
@@ -320,7 +323,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManageAvailability({ session })) return true
-
+    if(!session) return false
 		// 2. If not, do they own this item?
 		return {
 			employee: { id: { equals: session?.itemId || "no_session.itemId" } },
@@ -358,7 +361,7 @@ export const rules = {
 		// if(session?.data.isAdmin) return true
 		// 1. compair against permissions checkbox
 		if (permissions.canManageEvents({ session })) return true
-
+    if(!session) return false
 		// 2. If not, are they a host of this event?
 		//todo have multiple hosts
 		// todo query item.hosts.id and match session.user.id
@@ -367,7 +370,7 @@ export const rules = {
 			hosts: {
 				some: {
 					id: {
-						in: [session?.itemId],
+						in: [session.itemId || 'no_session.itemId'],
 					},
 				},
 			},
@@ -390,7 +393,7 @@ export const rules = {
 						hosts: {
 							some: {
 								id: {
-									in: [session.itemId],
+									in: [session.itemId || "no_session.itemId"],
 								},
 							},
 						},
@@ -413,7 +416,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManageCart({ session })) return true
-
+    if(!session) return false
 		// 2. If not, do they own this item?
 		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
 	},
@@ -427,7 +430,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManageCart({ session })) return true
-
+    if(!session) return false
 		// 2. If not, do they own this item?
 		return {
 			order: {
@@ -449,7 +452,7 @@ export const rules = {
 
 		// 1. Do they have the permission
 		if (permissions.canManageSubscriptionPlans({ session })) return true
-
+    if(!session) return false
 		// do they own?
 		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
 	},

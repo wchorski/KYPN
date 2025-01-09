@@ -25,7 +25,8 @@ export const Location: Lists.Location = list({
 	// todo hide these again
 	ui: {
 		// hide backend from non admins
-		isHidden: true,
+		// isHidden: true,
+    isHidden: (args) => !permissions.canManageLocations(args),
 		listView: {
 			initialColumns: ["name", "status", "rooms", "address"],
 			initialSort: { field: "name", direction: "DESC" },
@@ -55,6 +56,7 @@ export const Location: Lists.Location = list({
 		}),
 		services: relationship({ ref: "Service.locations", many: true }),
 		bookings: relationship({ ref: "Booking.location", many: true }),
+		events: relationship({ ref: "Event.location", many: true }),
 		categories: relationship({
 			ref: "Category.locations",
 			many: true,

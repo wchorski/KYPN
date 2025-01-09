@@ -23,7 +23,7 @@ import {
 	deleteCalendarEvent,
 	updateCalendarEvent,
 } from "../../lib/googleapi/calCreate"
-import { permissions, rules } from "../access"
+import { isLoggedIn, permissions, rules } from "../access"
 import { envs } from "../../../envs"
 import { Decimal } from "@keystone-6/core/types"
 import { allowAll } from "@keystone-6/core/access"
@@ -41,10 +41,10 @@ export const Booking: Lists.Booking = list({
 		},
 		operation: {
 			create: permissions.canManageBookings,
-			query: () => true,
+			query: isLoggedIn,
 			// query: permissions.canManageBookings,
       //? seems sketchy, but the filter handles security
-			update: () => true,
+			update: isLoggedIn,
 			// update: permissions.canManageBookings,
 			// delete: () => false,
       // TODO find a way where only Admin can delete (not customer or employee)
@@ -136,6 +136,7 @@ export const Booking: Lists.Booking = list({
 		}),
 		employee_requests: relationship({ ref: "User.gig_requests", many: true }),
 		customer: relationship({ ref: "User.bookings", many: false }),
+		coupons: relationship({ ref: "Coupon.bookings", many: true }),
 		email: text(),
 		phone: text(),
 		name: text(),

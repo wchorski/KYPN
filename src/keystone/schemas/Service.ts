@@ -140,6 +140,7 @@ export const Service:Lists.Service = list({
     employees: relationship({ ref: 'User.servicesProvided', many: true }),
     locations: relationship({ ref: 'Location.services', many: true }),
     bookings: relationship({ ref: 'Booking.service', many: true }),
+    coupons: relationship({ ref: 'Coupon.services', many: true }),
     
     categories: relationship({
       ref: 'Category.services',

@@ -158,31 +158,31 @@ export const User: Lists.User = list({
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
     gig_requests: relationship({ ref: 'Booking.employee_requests', many: true }),
-    // eventsHost: relationship({ ref: 'Event.hosts', many: true }),
-    // eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
+    eventsHost: relationship({ ref: 'Event.hosts', many: true }),
+    eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
     availability: relationship({ ref: 'Availability.employee', many: true }),
-    // cart: relationship({
-    //   ref: 'CartItem.user',
-    //   many: true,
-    //   ui: {
-    //     createView: { fieldMode: 'hidden' },
-    //     itemView: { fieldMode: 'hidden' }
-    //   }
-    // }),
+    cart: relationship({
+      ref: 'CartItem.user',
+      many: true,
+      ui: {
+        createView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'hidden' }
+      }
+    }),
 
-    // products: relationship({ ref: 'Product.author', many: true }),
+    products: relationship({ ref: 'Product.author', many: true }),
     addons: relationship({ ref: 'Addon.author', many: true }),
-    // rentals: relationship({ ref: 'Rental.customer', many: true }),
-    // subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
-    // subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
-    // orders: relationship({
-    //   ref: 'Order.user',
-    //   many: true,
-    // }),
-    // tickets: relationship({
-    //   ref: 'Ticket.holder',
-    //   many: true,
-    // }),
+    rentals: relationship({ ref: 'Rental.customer', many: true }),
+    subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
+    subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
+    orders: relationship({
+      ref: 'Order.user',
+      many: true,
+    }),
+    tickets: relationship({
+      ref: 'Ticket.holder',
+      many: true,
+    }),
 	},
 	hooks: {
 		async beforeOperation({ operation, resolvedData }) {

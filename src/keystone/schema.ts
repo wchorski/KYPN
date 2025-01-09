@@ -16,6 +16,9 @@ import { registerAnAccount } from "./mutations/registerAnAccount"
 import { Post } from "./schemas/Post"
 import { Page } from "./schemas/Page"
 import { Category } from "./schemas/Category"
+import { Ticket } from "./schemas/Ticket"
+import { Event } from "./schemas/Event"
+import { Order } from "./schemas/Order"
 import { Tag } from "./schemas/Tag"
 import { passwordRequestLink } from "./mutations/passwordRequestLink"
 import { verifyEmailRequest } from "./mutations/verifyEmailRequest"
@@ -29,22 +32,39 @@ import { Availability } from "./schemas/Availability"
 import { Service } from "./schemas/Service"
 import { Addon } from "./schemas/Addon"
 import { bookAService } from "./mutations/bookAService"
+import { Coupon } from "./schemas/Coupon"
+import { OrderItem } from "./schemas/OrderItem"
+import { Rental } from "./schemas/Rental"
+import { Product } from "./schemas/Product"
+import { SubscriptionItem } from "./schemas/SubscriptionItem"
+import { SubscriptionPlan } from "./schemas/SubscriptionPlan"
+import { CartItem } from "./schemas/CartItem"
 
 // todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
 
 export const lists: Lists = {
 	User,
-	Role,
-	Post,
-	Page,
-	Category,
-	Tag,
-	Announcement,
-	Booking,
-	Location,
-	Availability,
-	Service,
-	Addon,
+  Role,
+  Announcement,
+  Booking,
+  Service,
+  Location,
+  Addon,
+  Availability,
+  SubscriptionPlan,
+  SubscriptionItem,
+  Product,
+  Rental,
+  CartItem,
+  OrderItem,
+  Order,
+  Coupon,
+  Page,
+  Post,
+  Event,
+  Ticket,
+  Category,
+  Tag,
 }
 
 export const extendGraphqlSchema = graphql.extend((base) => {

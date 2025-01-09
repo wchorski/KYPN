@@ -11,62 +11,79 @@ import {
 	FaLink,
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
-import { BsFillBookmarkFill } from "react-icons/bs"
+import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { MdAccountCircle } from "react-icons/md"
 
 export const IconBookmark = () => {
-  return <BsFillBookmarkFill />
+	return <BsFillBookmarkFill />
+}
+export const IconEventTicket = () => {
+	return <BsFillTicketPerforatedFill />
 }
 export const IconUserAccountAvatar = () => {
-  return <MdAccountCircle />
+	return <MdAccountCircle />
+}
+
+export const IconItem = ({type}:{type: "booking" | "event" | "user" | string}) => {
+	switch (type) {
+		case "booking":
+			return <IconBookmark />
+		case "event":
+			return <IconEventTicket />
+		case "user":
+			return <IconUserAccountAvatar />
+
+		default:
+			break
+	}
 }
 
 // TODO rename to IconSocial
 export function useIcons(type: string = "") {
-  let icon: ReactNode
+	let icon: ReactNode
 
-  switch (true) {
-    case type.includes("facebook"):
-      icon = <FaFacebook />
-      break
-    case type.includes("instagram"):
-      icon = <FaInstagram />
-      break
-    case type.includes("bandcamp"):
-      icon = <FaBandcamp />
-      break
-    case type.includes("bandlab"):
-      icon = <SiBandlab />
-      break
-    case type.includes("twitch"):
-      icon = <FaTwitch />
-      break
-    case type.includes("twitter"):
-      icon = <FaTwitter />
-      break
-    case type.includes("youtube"):
-      icon = <FaYoutube />
-      break
-    case type.includes("github"):
-      icon = <FaGithub />
-      break
-    case type.includes("linkedin"):
-      icon = <FaLinkedin />
-      break
-    default:
-      icon = <FaLink />
-      break
-  }
+	switch (true) {
+		case type.includes("facebook"):
+			icon = <FaFacebook />
+			break
+		case type.includes("instagram"):
+			icon = <FaInstagram />
+			break
+		case type.includes("bandcamp"):
+			icon = <FaBandcamp />
+			break
+		case type.includes("bandlab"):
+			icon = <SiBandlab />
+			break
+		case type.includes("twitch"):
+			icon = <FaTwitch />
+			break
+		case type.includes("twitter"):
+			icon = <FaTwitter />
+			break
+		case type.includes("youtube"):
+			icon = <FaYoutube />
+			break
+		case type.includes("github"):
+			icon = <FaGithub />
+			break
+		case type.includes("linkedin"):
+			icon = <FaLinkedin />
+			break
+		default:
+			icon = <FaLink />
+			break
+	}
 
-  return type ? (
-    <a
-      href={type}
-      target="#"
-      aria-label={`${type} link`}
-      data-tooltip={type}
-      title={type}
-    >
-      {icon}
-    </a>
-  ) : null
+	return type ? (
+		<a
+			href={type}
+			target="#"
+			aria-label={`${type} link`}
+			data-tooltip={type}
+			title={type}
+		>
+			{icon}
+		</a>
+	) : null
 }

@@ -7,9 +7,11 @@ import {
 import type { NavigationProps } from "@keystone-6/core/admin-ui/components"
 import { useSession } from "next-auth/react"
 import { PiUsersThreeFill } from "react-icons/pi"
-import { BsFilePostFill } from "react-icons/bs"
+import { BsFilePostFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { IoBookmarks } from "react-icons/io5"
 import { FaTags } from "react-icons/fa6"
+import { TiShoppingCart } from "react-icons/ti";
+import { MdOutlineInventory2 } from "react-icons/md";
 import type { CSSProperties } from "react"
 
 export function CustomNavigation({
@@ -76,7 +78,34 @@ export function CustomNavigation({
 				<IoBookmarks />
 				<ListNavItems
 					lists={lists}
-					include={["Booking", "Service", "Addon", "Availability", "Location"]}
+					include={["Booking", "Service", "Rental", "Addon", "Availability", "Location"]}
+				/>
+			</div>
+
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<div className="nav-link-group">
+        <MdOutlineInventory2 />
+				<ListNavItems
+					lists={lists}
+					include={["Product", "SubscriptionPlan", "", "Coupon"]}
+				/>
+			</div>
+
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<div className="nav-link-group">
+				<TiShoppingCart />
+				<ListNavItems
+					lists={lists}
+					include={["Order", "SubscriptionItem"]}
+				/>
+			</div>
+
+			<hr style={{ border: "solid 1px #9999991f" }} />
+			<div className="nav-link-group">
+				<BsFillTicketPerforatedFill />
+				<ListNavItems
+					lists={lists}
+					include={["Event", "Ticket"]}
 				/>
 			</div>
 
