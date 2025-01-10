@@ -222,6 +222,9 @@ export type Coupon = Lists.Coupon.Item & {
 export type Event = Lists.Event.Item & {
 	typeof: "event"
 	location: Location
+  description: {
+    document: any
+  }
 	hosts: User[]
 	cohosts: User[]
 	tickets: Ticket[]
