@@ -214,7 +214,7 @@ export const Product: Lists.Product = list({
 								envs.FRONTEND_URL + "/assets/private/placeholder.png",
 						],
 						metadata: {
-							// @ts-ignore //todo might cause problems
+
 							category: resolvedData.categories
 								? resolvedData.categories[0].name
 								: "uncategorized",

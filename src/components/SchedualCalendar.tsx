@@ -16,17 +16,18 @@ import { ReactNode } from "react"
 import { SchedualChip } from "./SchedualChip"
 import Flex from "./layouts/Flex"
 import { NoData } from "./elements/NoData"
+import { layout_content, layout_site } from "@styles/layout.module.css"
 
 type Props = {
 	date: string
-	events: TEvent[] | undefined
-	bookings: Booking[] | undefined
+	events?: TEvent[] | undefined
+	bookings?: Booking[] | undefined 
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
 // const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-export function SchedualCalendar({ date, events, bookings }: Props) {
+export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 	function nextMonth(date: string) {
 		const curDate = new Date(date)
 		const firstOfMonth = new Date(curDate.getFullYear(), curDate.getMonth())
@@ -44,7 +45,7 @@ export function SchedualCalendar({ date, events, bookings }: Props) {
 	}
 
 	return (
-		<div>
+		<div className={["schedual-calendar-wrap"].join(' ')}>
 			<header className={header}>
 				<Link
 					href={`?${new URLSearchParams({
@@ -129,9 +130,9 @@ export function SchedualCalendar({ date, events, bookings }: Props) {
 			</div>
 
 			{/* //TODO group schedual items per date (while removing empty days)  */}
-			<div className={reveal_on_mobile}>
+			<div className={[reveal_on_mobile, layout_content].join(' ')}>
 				{/* <h3> List View </h3> */}
-				{events && events.length > 0 && (
+				{events.length > 0 && (
 					<>
 						<h4> Events </h4>
 						<ul>
@@ -145,13 +146,13 @@ export function SchedualCalendar({ date, events, bookings }: Props) {
 					</>
 				)}
 
-				{bookings && bookings.length > 0 && (
+				{bookings.length > 0 && (
 					<>
 						<h4> Bookings </h4>
 						<ul>
 							{bookings?.map((book) => (
 								<li key={book.id}>
-									<Flex gap={"m"} alignItems={"center"}>
+									<Flex gap={"ms"} alignItems={"center"}>
 										<span>{datePrettyLocal(book.start, "day")} </span>
 										<SchedualChip item={book} key={book.id} />
 									</Flex>
@@ -161,7 +162,7 @@ export function SchedualCalendar({ date, events, bookings }: Props) {
 					</>
 				)}
 
-				{bookings && bookings.length === 0 && events && events.length === 0 && (
+				{bookings.length === 0 && events.length === 0 && (
 					<NoData>
 						<p>No schedual items for this month</p>
 					</NoData>
@@ -178,18 +179,6 @@ type TSchedualChipDayGroup = {
 }
 
 function SchedualChipDayGroup({ date, day, item }: TSchedualChipDayGroup) {
-	const icon = (() => {
-		switch (true) {
-			case item.typeof === "booking":
-				return <BsFillBookmarkFill />
-			case item.typeof === "event":
-				return <BsFillTicketPerforatedFill />
-
-			default:
-				throw Error("!!! SchedualChip: no type for item")
-		}
-	})()
-
 	// let style = [styles.event_chip]
 	// if (item.typeof === "booking") style.push(styles.booking)
 
@@ -202,15 +191,6 @@ function SchedualChipDayGroup({ date, day, item }: TSchedualChipDayGroup) {
 		)
 	)
 		return <SchedualChip item={item} />
-	// return (
-	// 	<span key={data.id}>
-	// 		<Link href={`/${hrefPre}/${data.id}`}>
-	// 			{icon} {"  "}
-	// 			{data.summary}
-	// 			<br />@ {datePrettyLocalTime(data.start || "")}
-	// 		</Link>
-	// 	</span>
-	// )
 
 	//? day has no schedual items
 	return null

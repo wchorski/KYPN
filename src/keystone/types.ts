@@ -11,29 +11,11 @@ import type { Permission } from "./schemas/fields"
 // https://github.com/keystonejs/keystone/discussions/8498
 import type {
 	BookingCreateInput,
+	EventCreateInput,
 	Lists,
 	PostCreateInput,
 	ServiceCreateInput,
 } from ".keystone/types"
-
-export type Booking = Lists.Booking.Item & {
-	typeof: "booking"
-	author: User
-	details: { document: any }
-	service?: Service
-	location: Location
-	addons: Addon[]
-	employees: User[]
-	employee_requests: User[]
-	customer: User
-	//? these are redefined because ks sees them as `Date` but really it's just ISO string
-	dateModified: string
-	start: string
-	end: string
-	//? virtual item isn't included
-	durationInHours: string
-	summary: string
-}
 
 export type CalloutStatus = "info" | "warning" | "error" | "success"
 
@@ -144,75 +126,52 @@ export type User = Lists.User.Item & {
 	gigs: Booking[]
 	gig_requests: Booking[]
 	availability: Availability[]
+  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateCreated: string
+	dateModified: string
 }
 
 export type Category = Lists.Category.Item
 
 export type Tag = Lists.Tag.Item
 
+export type Booking = Lists.Booking.Item & {
+	typeof: "booking"
+	author: User
+	details: { document: any }
+	service?: Service
+	location: Location
+	addons: Addon[]
+	employees: User[]
+	employee_requests: User[]
+	customer: User
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateCreated: string
+	dateModified: string
+	start: string
+	end: string
+	//? virtual item isn't included
+	durationInHours: string
+	summary: string
+}
+
 export type Page = Lists.Page.Item & {
 	categories: Category[]
 	tags: Tag[]
 	author: User
 	content: { document: any }
+  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateCreated: string
+	dateModified: string
 }
 export type Post = Lists.Post.Item & {
 	categories: Category[]
 	tags: Tag[]
 	author: User
 	content: { document: any }
-}
-
-//? makes it easy to query data with Apollo tool and copy paste json into `seed_data.ts` without any reformatting
-export type SeedPost = PostCreateInput & {
-	content?: {
-		document: any
-	}
-	tags?: {
-		name: string
-	}[]
-	categories?: {
-		name: string
-	}[]
-	author?: {
-		email: string
-	}
-}
-
-export type SeedBookings = BookingCreateInput & {
-	service?: {
-		name: string
-	}
-	location?: {
-		name: string
-	}
-	addons?: {
-		slug: string
-	}[]
-	employees?: {
-		email: string
-	}[]
-	customer?: {
-		email: string
-	}
-}
-
-export type SeedService = ServiceCreateInput & {
-	description?: {
-		document: any
-	}
-	tags?: {
-		name: string
-	}[]
-	categories?: {
-		name: string
-	}[]
-	author?: {
-		email: string
-	}
-	addons?: {
-		slug: string
-	}[]
+  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateCreated: string
+	dateModified: string
 }
 
 export type Announcement = Lists.Announcement.Item & {
@@ -225,20 +184,6 @@ export type Announcement = Lists.Announcement.Item & {
 		document: any
 	}
 }
-// ? didn't like "[key in Permission]: boolean;"
-// export type Session = {
-//   itemId?: string;
-//   listKey?: string;
-//   data?: {
-//     name: string;
-//     role?: {
-//       id?: string;
-//       name?: string;
-//     } & {
-//       [key in Permission]: boolean;
-//     };
-//   };
-// }|null
 
 export type ListsAPI = KeystoneListsAPI<any /* KeystoneListsTypeInfo */>
 export type GraphqlAPI = KeystoneGraphQLAPI<any /* KeystoneListsTypeInfo */>
@@ -283,29 +228,10 @@ export type Event = Lists.Event.Item & {
 	coupons: Coupon[]
 	categories: Category[]
 	tags: Tag[]
+  //? ks types as date but api gives string
+	start: string
+	end: string
 }
-// export type Event = {
-// 	typeof: "event"
-// 	id: string
-// 	summary: string
-// 	location: Location
-// 	start: string
-// 	end: string
-// 	price: number
-// 	hosts: User[]
-// 	tickets: Ticket[]
-// 	seats: number
-// 	description: {
-// 		document: any
-// 	}
-// 	excerpt: string
-// 	image: string
-// 	status: string
-// 	dateCreated: string
-// 	dateModified: string
-// 	tags: Tag[]
-// 	categories: Category[]
-// }
 
 export type Ticket = {
 	typeof: "ticket"
@@ -317,7 +243,7 @@ export type Ticket = {
 }
 
 export type Product = Lists.Product.Item & {
-  typeof: 'product'
+	typeof: "product"
 	description: {
 		document: any
 	}
@@ -363,10 +289,7 @@ export type Rental = Lists.Rental.Item & {
 // 	}
 // }
 
-// export type Orders = {
-// 	Orders: [Order]
-// }
-// export type Order = Lists.Order.Item
+
 export type Order = Lists.Order.Item & {
 	user: User
 	items: OrderItem[]
@@ -382,7 +305,7 @@ export type OrderItem = Lists.OrderItem.Item & {
 }
 
 export type Availability = Lists.Availability.Item & {
-  typeof: 'availability'
+	typeof: "availability"
 	employee: User
 	start: string
 	end: string
@@ -401,7 +324,7 @@ export type BookingPrevious = {
 }
 
 export type Service = Lists.Service.Item & {
-  typeof: 'service'
+	typeof: "service"
 	description: {
 		document: any
 	}
@@ -455,6 +378,78 @@ export type Addon = Lists.Addon.Item & {
 //** Schema Lists END */
 //** Schema Lists END */
 //** Schema Lists END */
+
+//** Seed mods START */
+//? makes it easy to query data with Apollo tool and copy paste json into `seed_data.ts` without any reformatting
+export type SeedPost = PostCreateInput & {
+	content?: {
+		document: any
+	}
+	tags?: {
+		name: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+	author?: {
+		email: string
+	}
+}
+
+export type SeedBookings = BookingCreateInput & {
+	service?: {
+		name: string
+	}
+	location?: {
+		name: string
+	}
+	addons?: {
+		slug: string
+	}[]
+	employees?: {
+		email: string
+	}[]
+	customer?: {
+		email: string
+	}
+}
+
+export type SeedEvents = EventCreateInput & {
+	location?: {
+		name: string
+	}
+	hosts?: {
+		email: string
+	}[]
+	cohosts?: {
+		email: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+	tags?: {
+		name: string
+	}[]
+}
+
+export type SeedService = ServiceCreateInput & {
+	description?: {
+		document: any
+	}
+	tags?: {
+		name: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+	author?: {
+		email: string
+	}
+	addons?: {
+		slug: string
+	}[]
+}
+//** Seed mods END*/
 
 export type AddonCheckboxOptions = {
 	name: string

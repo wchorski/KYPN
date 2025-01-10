@@ -21,6 +21,7 @@ import {
 	addons_seed,
 	locations_seed,
 	bookings_seedjson,
+	events_seedjson,
 } from "./seed_data"
 import { Announcement, Page, SeedPost } from "@ks/types"
 
@@ -59,14 +60,16 @@ const seedBookings = async (context: Context) => {
 			},
 		},
 	})
-  
+
 	const itemsToCreate = bookings_seedjson.filter(
 		(item) =>
-			!itemsAlreadyInDatabase.some((prevItem) => prevItem.start.toISOString() === item.start)
+			!itemsAlreadyInDatabase.some(
+				(prevItem) => prevItem.start.toISOString() === item.start
+			)
 	)
 
 	itemsToCreate.map((item) => {
-		console.log(" + Booking: " + item.name + ' | ' + item.service?.name)
+		console.log(" + Booking: " + item.name + " | " + item.service?.name)
 	})
 
 	await sudoDB["Booking"].createMany({
@@ -281,26 +284,43 @@ const seedCategories = async (context: Context) => {
 //   });
 // };
 
-// const seedEventData = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = events_seeddata;
-//   const objectsAlreadyInDatabase = await db.Event.findMany({
-//     where: {
-//       summary: { in: seedObjects.map(obj => obj.summary) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.summary === seedObj.summary)
-//   );
+//TODO use this as template for other seedITEMS. maybe DRY it up
+const seedEvents = async (context: Context) => {
+	const { db: sudoDB } = context.sudo()
+	const seedJson = events_seedjson
+	const schemaType = "Event"
+  const compairKey = 'summary'
+	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
+		where: {
+			[compairKey]: {
+				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+			},
+		},
+	})
 
-//   objsToCreate.map(obj => {
-//     console.log(" + Event: " + obj.summary)
-//   })
+	const itemsToCreate = seedJson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some(
+				(prevItem) => prevItem[compairKey] === item[compairKey]
+			)
+	)
 
-//   await db.Event.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
+	itemsToCreate.map((item) => {
+		console.log(` + ${schemaType}: ` + item[compairKey])
+	})
+
+	await sudoDB[schemaType].createMany({
+		data: itemsToCreate.map((item) => ({
+			...item,
+			location: { connect: { name: item.location?.name } },
+
+			hosts: { connect: item.hosts?.map((user) => ({ email: user.email })) },
+			cohosts: {
+				connect: item.cohosts?.map((user) => ({ email: user.email })),
+			},
+		})),
+	})
+}
 
 const seedLocations = async (context: Context) => {
 	const { db } = context.sudo()
@@ -484,6 +504,7 @@ export const seedDatabase = async (context: Context) => {
 	await seedAddons(context)
 	await seedServices(context)
 
-  await seedBookings(context)
+	await seedBookings(context)
+	await seedEvents(context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }

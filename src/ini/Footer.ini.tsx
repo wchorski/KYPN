@@ -22,7 +22,7 @@ export function Footer() {
 	return (
 		<footer className={[styles.footer, page_layout].join(" ")}>
       <section className={layout_site}>
-        <Grid layout={"1_1"} colWidth={'12rem'}>
+        <Grid layout={"1_1"} colWidth={'12rem'} alignContent={'start'}>
           <div>
             <h4 style={txtStyle}> Contact </h4>
             <List>

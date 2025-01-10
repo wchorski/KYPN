@@ -34,7 +34,7 @@ export const IconItem = ({type}:{type: "booking" | "event" | "user" | string}) =
 			return <IconUserAccountAvatar />
 
 		default:
-			break
+			return null
 	}
 }
 

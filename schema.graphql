@@ -1027,6 +1027,7 @@ input CouponRelateToManyForCreateInput {
 
 type Service {
   id: ID!
+  typeof: String
   name: String
   image: String
   excerpt: String
@@ -1432,6 +1433,7 @@ input AddonCreateInput {
 
 type Availability {
   id: ID!
+  typeof: String
   start: DateTime
   end: DateTime
   durationInHours: Decimal
@@ -1624,6 +1626,7 @@ input SubscriptionPlanCreateInput {
 
 type SubscriptionItem {
   id: ID!
+  typeof: String
   custom_price: Int
   subscriptionPlan: SubscriptionPlan
   isActive: Boolean
@@ -1733,6 +1736,7 @@ input SubscriptionPlanRelateToOneForCreateInput {
 
 type Product {
   id: ID!
+  typeof: String
   image: String
   name: String
   stripeProductId: String
@@ -1888,6 +1892,7 @@ input OrderItemRelateToManyForCreateInput {
 
 type Rental {
   id: ID!
+  typeof: String
   start: DateTime
   end: DateTime
   summary: String
@@ -2007,6 +2012,7 @@ input OrderRelateToOneForCreateInput {
 
 type CartItem {
   id: ID!
+  typeof: String
   quantity: Int
   type: String
   product: Product
@@ -2681,6 +2687,7 @@ input EventCreateInput {
 
 type Ticket {
   id: ID!
+  typeof: String
   eventSummary: String
   eventStart: DateTime
   qrcode: String

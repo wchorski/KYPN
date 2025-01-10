@@ -29,18 +29,18 @@ export default async function LocationByIdPage({
 
 	if (error) return <ErrorMessage error={error} />
 	if (!location) return notFound()
-    
+
 	const { name, address, notes } = location
 
 	return (
 		<main className={page_layout}>
-			<header className={layout_content} >
+			<header className={layout_content}>
 				<h1> {name} </h1>
 			</header>
 			<div className={layout_content}>
 				<article className={styles.location}>
 					<address>{address}</address>
-          <br/>
+					<br />
 					<p>{notes}</p>
 					{address && <Map address={address} />}
 				</article>

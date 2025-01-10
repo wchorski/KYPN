@@ -264,7 +264,7 @@ When initializing a fresh database or returning to development you may add/remov
 - [x] look into https://smolcss.dev/ for inspo
 
 ---
-
+- [ ] Toast notification with status timer on bottom border edge (like bitwarden)
 - [ ] appointment schedualer https://cal.com/
 - [ ] document signing https://www.docuseal.co/
 - [ ] built in calendar for admin dash

@@ -22,6 +22,8 @@ const Map = ({address}:tMap) => {
 
   return (
     <div style={{ aspectRatio: DEFAULT_WIDTH / DEFAULT_HEIGHT }}>
+      <p className={'sub-text'} > ***Map Placeholder...</p>
+      <p className={'sub-text'} > ***Image Placeholder...</p>
       <DynamicMap address={address}/>
     </div>
   )

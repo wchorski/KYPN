@@ -14,16 +14,19 @@ export function MainNavList() {
 	return (
 		<ul className={getStyles()}>
 			<li>
-				<NavLink href={`/home`}> Home </NavLink>
+				<NavLink href={`/home`}>Home</NavLink>
 			</li>
 			<li>
-				<NavLink href={`/blog`}> Blog </NavLink>{" "}
+				<NavLink href={`/blog`}>Blog</NavLink>
 			</li>
 			<li>
-				<NavLink href={`/services`}> Services </NavLink>{" "}
+				<NavLink href={`/services`}>Services</NavLink>
 			</li>
 			<li>
-				<NavLink href={`/book-a-service`}> Book a Service </NavLink>{" "}
+				<NavLink href={`/book-a-service`}>Book a Service</NavLink>
+			</li>
+			<li>
+				<NavLink href={`/events`}>Events</NavLink>
 			</li>
 		</ul>
 	)
