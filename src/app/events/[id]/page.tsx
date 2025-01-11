@@ -3,7 +3,7 @@ import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { PageTMain } from "@components/layouts/PageTemplates"
-import { Event, Session, Tag, User } from "@ks/types"
+import { Event, Tag, User } from "@ks/types"
 import {
 	datePrettyLocal,
 	datePrettyLocalDay,
@@ -11,7 +11,7 @@ import {
 } from "@lib/dateFormatter"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import { Metadata, ResolvingMetadata } from "next"
-import { getServerSession } from "next-auth"
+import { getServerSession, Session } from "next-auth"
 import Link from "next/link"
 import { RiFileEditFill } from "react-icons/ri"
 import styleProduct from "@styles/ecommerce/productSingle.module.scss"
@@ -20,7 +20,7 @@ import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
 import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
-import styles from "@styles/events/event.module.scss"
+import styles from "@styles/events/event.module.css"
 import { AddToCalendar } from "@components/widgets/AddToCalendar"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { plainObj } from "@lib/utils"
@@ -153,7 +153,7 @@ export default async function EventByID({ params }: Props) {
 					</div>
 				</header>
 
-				<div className={styles.content}>
+				<div className={''}>
 					<h1>{summary}</h1>
 
 					<Card layout={"flex"} direction={"row"}>

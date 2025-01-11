@@ -1,249 +1,212 @@
-'use client'
+"use client"
 
 import { useEffect, useReducer, useRef } from "react"
-import { 
-  useFormState, 
-  useFormStatus 
-} from "react-dom"
+import { useFormState, useFormStatus } from "react-dom"
 
-import formStyles from '@styles/menus/form.module.scss'
 import { Event, User } from "@ks/types"
 import { envs } from "@/envs"
 import { loadStripe } from "@stripe/stripe-js"
 import moneyFormatter from "@lib/moneyFormatter"
 import { Button } from "@components/elements/Button"
-
-type Fields = {
-  // event: string,
-  email: string,
-  quantity: number,
-}
-
-type FormState = {
-  message: string,
-  errors: Record<keyof Fields, string> | undefined,
-  fieldValues: Fields,
-}
+import { useForm } from "@hooks/useForm"
+import {
+	actionTicketCheckout,
+	TicketCheckoutState,
+} from "@lib/actions/actionTicketCheckout"
+import { form } from "@styles/menus/form.module.scss"
+import { InputField } from "@components/InputField"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 type Props = {
-  event:Event,
-  user?:User,
+	event: Event
+	user?: User
 }
 
 type StateRed = {
-  email:string,
-  total:number,
+	email: string
+	total: number
 }
 
-type Action =
-  | { type: 'RESET' }
-  | { type: 'SET_PRICE'; payload:number }
+type Action = { type: "RESET" } | { type: "SET_PRICE"; payload: number }
 
-export function TicketForm ({ event, user }:Props) {
+export function TicketForm({ event, user }: Props) {
+	const initState: TicketCheckoutState = {
+		values: {
+			userId: user?.id,
+			eventId: event.id,
+			email: user?.email || "",
+			quantity: 1,
+		},
+		valueErrors: undefined,
+		error: undefined,
+		success: undefined,
+		url: undefined,
+		id: undefined,
+	}
 
-  const formRef = useRef<HTMLFormElement>(null)
+	const defaultstateRed: StateRed = {
+		email: user?.email || "",
+		total: event.price,
+	}
+	const reducer = (state: StateRed, action: Action): StateRed => {
+		switch (action.type) {
+			case "SET_PRICE":
+				return {
+					...state,
+					total: event.price * action.payload,
+				}
 
-  const defaultstateRed:StateRed = {
-    email: user?.email || '',
-    total: event.price,
-  }
-  const reducer = (state:StateRed, action:Action):StateRed => {
-    
-    switch (action.type) {
-      case 'SET_PRICE':
-        return {
-          ...state,
-          total: action.payload
-        }
+			case "RESET":
+				return defaultstateRed
 
-      case 'RESET': 
-      return defaultstateRed
+			default:
+				throw new Error()
+		}
+	}
 
-      default:
-        throw new Error()
-    }
-  }
-  
-  const [stateRed, dispatchRed] = useReducer(reducer, defaultstateRed)
+	const [stateRed, dispatchRed] = useReducer(reducer, defaultstateRed)
 
-  const defaultFormData = {
-    message: '',
-    errors: undefined,
-    fieldValues: {
-      // event: event.id || '',
-      email: user?.email || '',
-      quantity: 1,
-    }
-  }
+	// const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	const { state, action, submitCount } = useForm(
+		actionTicketCheckout,
+		initState
+	)
 
-  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	// async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
+	//   // console.log('START FORM');
+	//   // console.log({data});
 
-  useEffect(() => {
-    if(formState.message === 'success'){
-      formRef.current?.reset()
-    }
-  }, [formState])
+	//   const email = data.get('email') as string
+	//   // const event = data.get('event') as string
+	//   const quantity = Number(data.get('quantity') as string)
 
-  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
-    // console.log('START FORM');
-    // console.log({data});
-    
-    const email = data.get('email') as string
-    // const event = data.get('event') as string
-    const quantity = Number(data.get('quantity') as string)
+	//   const inputValues = {
+	//     email,
+	//     event: event.id,
+	//     quantity
+	//   }
 
-    const inputValues = {
-      email,
-      event: event.id,
-      quantity
-    }
+	//   try {
 
-    try {
+	//     if(!envs.STRIPE_PUBLIC_KEY) return {
+	//       ...formState,
+	//       message: '!!! NO STRIPE PUBLIC KEY'
+	//     }
 
-      if(!envs.STRIPE_PUBLIC_KEY) return {
-        ...formState,
-        message: '!!! NO STRIPE PUBLIC KEY'
-      }
+	//     const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
+	//     if (!stripe) throw new Error('Stripe failed to initialize.');
 
-      const stripe = await loadStripe(envs.STRIPE_PUBLIC_KEY as string);
-      if (!stripe) throw new Error('Stripe failed to initialize.');
+	//     if(typeof email !== 'string') throw new Error('email is not string')
+	//     // if(typeof event !== 'string') throw new Error('event is not string')
+	//     if(typeof quantity !== 'number') throw new Error('quantity is not number')
 
-      if(typeof email !== 'string') throw new Error('email is not string')
-      // if(typeof event !== 'string') throw new Error('event is not string')
-      if(typeof quantity !== 'number') throw new Error('quantity is not number')
+	//     const res = await fetch(`/api/checkout/tickets`, {
+	//       method: 'POST',
+	//       headers: {
+	//         'Content-Type': 'application/json',
+	//       },
+	//       body: JSON.stringify({
+	//         email,
+	//         event: event.id,
+	//         quantity,
+	//       }),
+	//     })
 
-      const res = await fetch(`/api/checkout/tickets`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          event: event.id,
-          quantity,
-        }),
-      })
+	//     const data = await res.json()
 
-      const data = await res.json()
+	//     const { sessionId, message , isSeatsAvailable, error } = data
 
-      const { sessionId, message , isSeatsAvailable, error } = data
+	//       if(!isSeatsAvailable) return {
+	//         ...formState,
+	//         message: message
+	//       }
 
-        if(!isSeatsAvailable) return {
-          ...formState,
-          message: message
-        }
+	//       const stripeError = await stripe.redirectToCheckout({sessionId});
 
-        const stripeError = await stripe.redirectToCheckout({sessionId});
+	//       if (stripeError) {
+	//         console.log('!!! StripeCheckoutButton stripe Error: ');
+	//         console.error(stripeError);
 
-        if (stripeError) {
-          console.log('!!! StripeCheckoutButton stripe Error: ');
-          console.error(stripeError);
-          
-          return {
-            ...formState,
-            message: stripeError
-          }
-        }
+	//         return {
+	//           ...formState,
+	//           message: stripeError
+	//         }
+	//       }
 
-      return {
-        ...formState,
-        message: 'success',
-      }
-      
-    } catch (error:any) {
-      console.log(error);
-      
-      return {
-        message: error?.message,
-        // TODO validate each field
-        errors: {
-          // event: '',
-          email: '',
-          quantity: ''
-        },
-        fieldValues: inputValues
-      }
-    }
-  }
+	//     return {
+	//       ...formState,
+	//       message: 'success',
+	//     }
 
-  return (
-    <form
-      action={formAction}
-      ref={formRef}
-      className={formStyles.form} 
-    >
-      <fieldset>
-        <legend> Get Tickets </legend>
+	//   } catch (error:any) {
+	//     console.log(error);
 
-        {/* <label htmlFor="event">
-          <span> Event </span>
-          <input 
-            name={'event'}
-            id={'event'}
-            placeholder=""
-            type={'text'}
-            defaultValue={formState.fieldValues.event}
-            readOnly={true}
-          />
-          <span className="error"> {formState.errors?.event} </span>
-        </label> */}
+	//     return {
+	//       message: error?.message,
+	//       // TODO validate each field
+	//       errors: {
+	//         // event: '',
+	//         email: '',
+	//         quantity: ''
+	//       },
+	//       fieldValues: inputValues
+	//     }
+	//   }
+	// }
 
-        <label htmlFor="email">
-          <span> Email </span>
-          <input 
-            name={'email'}
-            id={'email'}
-            placeholder="yanny@mail.lan"
-            type={'text'}
-            defaultValue={formState.fieldValues.email}
-            readOnly={formState.fieldValues.email}
-          />
-          <span className="error"> {formState.errors?.email} </span>
-        </label>
+	return (
+		<form action={action} className={form}>
+			<fieldset disabled={state.success ? true : false}>
+				<legend> Get Tickets </legend>
 
-        <label htmlFor="age">
-          <span> Quantity </span>
-          <input 
-            name={'quantity'}
-            id={'quantity'}
-            placeholder="1"
-            type={'number'}
-            defaultValue={formState.fieldValues.quantity}
-            onChange={(e) => dispatchRed({type: 'SET_PRICE', payload: event.price * Number(e.target.value)})}
-          />
-          <span className="error"> {formState.errors?.quantity} </span>
-        </label>
-      </fieldset>
+				<InputField 
+          name={'eventId'}
+          type={'hidden'}
+          // type={'text'}
+          defaultValue={state.values?.eventId}
+          error={state.values?.eventId}
+        />
+        <InputField 
+          name={'userId'}
+          type={'hidden'}
+          // type={'text'}
+          defaultValue={state.values?.userId}
+          error={state.values?.userId}
+        />
 
-      <p> subtotal: {moneyFormatter(stateRed.total)}</p>
+				<InputField
+					name={"email"}
+					type={"email"}
+					placeholder={"cptolimar@HocotateFreightCo.net"}
+					defaultValue={state.values?.email}
+					error={state.valueErrors?.email}
+				/>
 
-      <p className={(formState.message === 'success') ? 'success' : 'error'}> 
-        {formState.message} 
-      </p>
+				<InputField
+					name={"quantity"}
+					type={"number"}
+					placeholder={"1"}
+					defaultValue={state.values?.quantity}
+					error={state.valueErrors?.quantity}
+					onChange={(e) =>
+						dispatchRed({
+							type: "SET_PRICE",
+							payload: Number(e.currentTarget.value),
+						})
+					}
+				/>
+			</fieldset>
 
-      <SubmitButton />
-    </form>
-  )
-}
+			<p> subtotal: {moneyFormatter(stateRed.total)}</p>
 
+			<SubmitButton />
 
-function SubmitButton(){
-
-  const { pending, } = useFormStatus()
-
-  return(
-    // <button
-    //   disabled={pending}
-    //   type={'submit'}
-    // >
-    //   {pending ? <LoadingAnim /> : 'Submit'}
-    // </button>
-    <Button
-      type={'submit'}
-      size={'medium'}
-      disabled={pending}
-    >
-      Submit
-    </Button>
-  )
+			<p className={"error"}>{state.error}</p>
+			<p className={"success"}>
+				{state.success}
+				{state.url}
+				{state.id}
+			</p>
+		</form>
+	)
 }

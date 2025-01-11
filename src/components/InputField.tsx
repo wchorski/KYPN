@@ -32,14 +32,16 @@ function InputFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
 			title={required ? `${label || name} is required` : label || name}
 		>
 			<span>{label || name}</span>
+      {/* //TODO prob can remove all `input` props that dont have custom logic */}
 			<input
-				name={name}
-				type={type}
-				required={required}
-				// autocomplete - https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
-				autoComplete={autoComplete}
-				defaultValue={defaultValue}
-				pattern={pattern}
+        {...props}
+				// name={name}
+				// type={type}
+				// required={required}
+				// // autocomplete - https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
+				// autoComplete={autoComplete}
+				// defaultValue={defaultValue}
+				// pattern={pattern}
 				placeholder={placeholder || `${label || name}...`}
 				ref={ref}
 			/>

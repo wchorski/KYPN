@@ -3,8 +3,10 @@ import 'dotenv/config'
 import { envs } from '../../envs';
 import { Billing_Interval, Duration, SubscriptionItem } from '../keystone/types';
 
-const stripeConfig = new Stripe(envs.STRIPE_SECRET as string, {
-  apiVersion: '2023-10-16',
+if(!envs.STRIPE_SECRET) throw new Error('!!! STRIP_SECRET is missing.')
+  
+const stripeConfig = new Stripe(envs.STRIPE_SECRET, {
+  apiVersion: '2024-12-18.acacia; custom_checkout_beta=v1' as any,
 });
 
 type StripeProduct = {

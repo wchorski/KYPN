@@ -167,6 +167,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				...session,
         //TODO why isn't spread ...session giving other user props?
         user: {
+          id: foundUser.id,
           name: foundUser.name,
           nameLast: foundUser.nameLast,
           image: foundUser.image,
@@ -290,6 +291,7 @@ export const nextAuthOptions: NextAuthOptions = {
 						role: foundUser.role,
             email: foundUser.email,
 						user: {
+              id: foundUser.id,
               name: foundUser.name,
 							email: foundUser.email,
               image: foundUser.image,

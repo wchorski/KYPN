@@ -40,7 +40,7 @@
     "react-icons": "^5.2.1",
     "sass": "^1.77.8",
     "slate-dom": "^0.111.0",
-    "stripe": "^17.4.0"
+    "stripe": "17.4.0-beta.2"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.6",

@@ -2,6 +2,7 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
+import stripeConfig from "@lib/stripe"
 import { getServerSession } from "next-auth"
 
 export async function actionTicketCheckout(
@@ -9,7 +10,9 @@ export async function actionTicketCheckout(
   formData: FormData
 ): Promise<TicketCheckoutState> {
   try {
+    // @ts-ignore
     const values = Object.fromEntries(formData) as TicketCheckoutValues
+    values.quantity = Number(formData.get('quantity'))
     // // @ts-ignore
     // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
     const {  } = values
@@ -21,21 +24,22 @@ export async function actionTicketCheckout(
     	return { valueErrors, values, error: "Check for errors in form fields" }
     const session = await getServerSession(nextAuthOptions)
 
-    const data = (await keystoneContext.withSession(session).graphql.run({
-      query: `
+    // const data = (await keystoneContext.withSession(session).graphql.run({
+    //   query: `
         
-      `,
-      variables: {
+    //   `,
+    //   variables: {
         
-      },
-    })) as { ticket: { id: string } }
-    console.log({data});
+    //   },
+    // })) as { ticket: { id: string } }
+    // console.log({data});
+    // stripeCheckout()
 
     return {
       //@ts-ignore
       // values: {
       // },
-      id: data.ticket.id,
+      // id: data.ticket.id,
       // url: envs.FRONTEND_URL + `/users/${data.PasswordReset.id}`,
       url: envs.FRONTEND_URL + `/account`,
       success: `Ticket Purchased`,
@@ -43,11 +47,35 @@ export async function actionTicketCheckout(
   } catch (error) {
     console.log("!!! actionTicketCheckout: ", error)
     return {
-      error: "Gig decision failed: " + error,
+      error: "Ticket Checkout failed: " + error,
       success: undefined,
     }
   }
 }
+
+async function stripeCheckout(){
+  const session = await stripeConfig.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'T-shirt',
+          },
+          unit_amount: 2000,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    ui_mode: 'custom',
+    // The URL of your payment completion page
+    return_url: envs.FRONTEND_URL + '/checkout/completed'
+  });
+
+  return session.client_secret
+}
+
 
 function validateValues({}: TicketCheckoutValues) {
   // @ts-ignore
@@ -61,7 +89,7 @@ function validateValues({}: TicketCheckoutValues) {
 }
 
 export type TicketCheckoutValues = {
-  sessionId:string
+  userId?:string
   eventId:string
   quantity:number
   email:string

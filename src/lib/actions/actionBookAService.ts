@@ -12,7 +12,7 @@ export async function actionBookAService(
 		const values = Object.fromEntries(formData) as BookAServiceValues
 		//? array of checkboxes w same name `addonIds`
 		values.addonIds = formData.getAll("addonIds") as string[]
-    console.log("action: ", {values});
+    // console.log("action: ", {values});
 		// // @ts-ignore
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 		// const {  } = values
