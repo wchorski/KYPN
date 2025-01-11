@@ -7,7 +7,7 @@ type Props = {
   children:ReactNode
 }
 
-export function Providers ({ authenticatedItem, lists }: NavigationProps) {
+export function KSProviders ({ authenticatedItem, lists }: NavigationProps) {
   return (
     <SessionProvider>
       <CustomNavigation authenticatedItem={authenticatedItem} lists={lists}/>

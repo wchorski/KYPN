@@ -1,5 +1,5 @@
 import type { AdminConfig } from '@keystone-6/core/types';
-import { Providers } from './components/Providers';
+import { KSProviders } from './components/KSProviders';
 import './global.css'
 import '../src/styles/vars.css'
 import type { CSSProperties } from 'react';
@@ -9,7 +9,7 @@ function CustomLogo () {
 }
 
 export const components: AdminConfig['components'] = {
-  Navigation: Providers,
+  Navigation: KSProviders,
   Logo: CustomLogo,
 }
 

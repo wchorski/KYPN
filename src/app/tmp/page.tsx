@@ -1,4 +1,4 @@
-import { envs } from '@/envs'
+
 import { nextAuthOptions } from '@/session'
 import { ActionForm } from '@components/ActionForm'
 import { ContactForm } from '@components/blocks/ContactForm'
@@ -18,8 +18,7 @@ type Props = {
   params:{id:string}
 }
 
-const page = 1
-const perPage = envs.PERPAGE
+
 export default async function Page ({ params, searchParams }:Props) {
   const session = await getServerSession(nextAuthOptions)
   // const { data, error } = await fetch()

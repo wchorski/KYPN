@@ -1,7 +1,6 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
 import { IconUserAccountAvatar } from "@lib/useIcons"
 import {
@@ -19,8 +18,7 @@ type Props = {
 	params: { id: string }
 }
 
-const page = 1
-const perPage = envs.PERPAGE
+
 export default async function UserByIdPage({ params, searchParams }: Props) {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)

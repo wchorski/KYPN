@@ -11,7 +11,7 @@ type Props = {
 export const Providers = ({ children }: Props) => {
 	return (
 		<SessionProvider>
-			<GlobalContextProvider>{children}</GlobalContextProvider>
+			  <GlobalContextProvider>{children}</GlobalContextProvider>
 		</SessionProvider>
 	)
 }

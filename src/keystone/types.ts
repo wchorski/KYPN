@@ -236,7 +236,7 @@ export type Event = Lists.Event.Item & {
 	end: string
 }
 
-export type Ticket = {
+export type Ticket = Lists.Ticket.Item & {
 	typeof: "ticket"
 	eventSummary: string
 	event: Event

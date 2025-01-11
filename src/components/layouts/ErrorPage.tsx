@@ -1,4 +1,4 @@
-import { envs } from '@/envs'
+
 import ErrorMessage from '@components/ErrorMessage'
 
 import {
@@ -14,8 +14,6 @@ type Props = {
   error:object | null | undefined | unknown,
 }
 
-const page = 1
-const perPage = envs.PERPAGE
 export default async function ErrorPage ({ error, children }:Props) {
 
   return (
