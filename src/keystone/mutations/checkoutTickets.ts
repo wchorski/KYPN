@@ -8,7 +8,7 @@ import stripeConfig from "../../lib/stripe"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 import type {Event} from '../types'
-import stripe from "@lib/get-stripejs"
+import stripe from "../../lib/stripe"
 import { envs } from "../../../envs"
 
 export const checkoutTickets = (base: BaseSchemaMeta) =>
@@ -16,7 +16,7 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 		type: base.object("Ticket"),
 
 		args: {
-			chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			// chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			sessionId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			eventId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
@@ -26,7 +26,7 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 
 		async resolve(source, variables, context: Context) {
 			const {
-				chargeId,
+				// chargeId,
 				eventId,
 				sessionId,
 				quantity,
@@ -46,11 +46,11 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			const event = await context.query.Event.findOne({
 				where: { id: eventId },
 				query: `
-        id
-        seats
-        price
-      `,
-			})
+          id
+          seats
+          price
+        `,
+			}) as Event
 			if (!event) throw new Error("No Event Found")
 
 			const seatsTaken = await countAvailableSeats({
@@ -71,7 +71,7 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			const ticketItems = Array.from({ length: quantity }, (_, index) => ({
 				event: { connect: { id: eventId } },
 				holder: user ? { connect: { id: user.id } } : null,
-				cost: event.price,
+				price: event.price,
 				email: customerEmail,
 				orderCount: `${index + 1} of ${quantity}`,
 			}))

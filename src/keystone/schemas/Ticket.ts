@@ -88,7 +88,7 @@ export const Ticket: Lists.Ticket = list({
 		qrcode: text(),
 		email: text(),
 		orderCount: text(),
-		cost: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+		price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
 		chargeId: text(),
 		status: select({
 			options: [

@@ -7,16 +7,16 @@ import {
 	EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
 
-import { postStripeSession } from "@lib/actions/actionStripeSession"
+import { postStripeSession, StripeCheckoutSessionAction } from "@lib/actions/actionStripeSession"
 import { envs } from "@/envs"
 
 const stripePromise = loadStripe(envs.STRIPE_PUBLIC_KEY as string)
 
-export function StripeCheckoutForm({ priceId }: { priceId: string }) {
+export function StripeCheckoutForm(props:StripeCheckoutSessionAction) {
 	const fetchClientSecret = useCallback(async () => {
-		const stripeResponse = await postStripeSession({ priceId })
+		const stripeResponse = await postStripeSession(props)
 		return stripeResponse.clientSecret
-	}, [priceId])
+	}, [props])
 
 	const options = { fetchClientSecret }
 

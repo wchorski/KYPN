@@ -24,16 +24,18 @@ export async function actionTicketCheckout(
     	return { valueErrors, values, error: "Check for errors in form fields" }
     const session = await getServerSession(nextAuthOptions)
 
-    // const data = (await keystoneContext.withSession(session).graphql.run({
-    //   query: `
-        
-    //   `,
-    //   variables: {
-        
-    //   },
-    // })) as { ticket: { id: string } }
-    // console.log({data});
-    // stripeCheckout()
+    const data = (await keystoneContext.withSession(session).graphql.run({
+      query: `
+        mutation CheckoutTickets($chargeId: String!, $sessionId: String!, $eventId: String!, $customerEmail: String!, $quantity: Int!, $amountTotal: Int!) {
+          checkoutTickets(chargeId: $chargeId, sessionId: $sessionId, eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, amount_total: $amountTotal) {
+            id
+          }
+        }
+      `,
+      variables: values,
+    })) as { ticket: { id: string } }
+    console.log({data});
+    stripeCheckout()
 
     return {
       //@ts-ignore

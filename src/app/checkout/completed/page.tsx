@@ -12,6 +12,12 @@ import {
 import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
 import ErrorPage from "@components/layouts/ErrorPage"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+	title: `Checkout Completed | ` + envs.SITE_TITLE,
+	description: envs.SITE_DESC,
+}
 
 type Props = {
 	searchParams: { stripeCheckoutSessionId: string }
@@ -48,7 +54,7 @@ export default async function CheckoutSuccessPage({
 		return (
 			<main className={[page_layout].join(" ")}>
 				<header className={layout_site}>
-					<h1>Checkout Successful</h1>
+					<h1>Checkout Completed</h1>
 				</header>
 				<div className={[page_content, layout_site].join(" ")}>
 					<ul>
@@ -64,7 +70,8 @@ export default async function CheckoutSuccessPage({
 							<Link href={`/account?dashState=orders#orders`}>My Account</Link>
 						</li>
 					</ul>
-					{/* <pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre> */}
+					<h3>Stripe Checkout Session Response Debug</h3>
+					<pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre>
 				</div>
 			</main>
 		)

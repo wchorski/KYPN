@@ -3089,6 +3089,7 @@ type Mutation {
   verifyEmail(token: String!, email: String!): User
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
+  checkoutTickets(sessionId: String!, eventId: String!, customerEmail: String!, quantity: Int!, amount_total: Int!): Ticket
 }
 
 type Query {

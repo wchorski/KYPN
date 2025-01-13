@@ -162,21 +162,8 @@ export const Product: Lists.Product = list({
 		addons: relationship({ ref: "Addon.products", many: true }),
 		coupons: relationship({ ref: "Coupon.products", many: true }),
 		tags: relationship({
-			// we could have used 'Tag', but then the relationship would only be 1-way
 			ref: "Tag.products",
-
-			// a Post can have many Tags, not just one
 			many: true,
-
-			// this is some customisations for changing how this will look in the AdminUI
-			// ui: {
-			//   displayMode: 'cards',
-			//   cardFields: ['name'],
-			//   inlineEdit: { fields: ['name'] },
-			//   linkToItem: true,
-			//   inlineConnect: true,
-			//   inlineCreate: { fields: ['name'] },
-			// },
 		}),
 		categories: relationship({
 			ref: "Category.products",
