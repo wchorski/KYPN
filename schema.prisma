@@ -340,22 +340,22 @@ model OrderItem {
 }
 
 model Order {
-  id               String      @id @default(cuid())
-  email            String      @default("")
-  notes            String      @default("")
-  total            Int?
-  charge           String      @default("")
-  shipping_address String      @default("")
-  stripeSessionId  String      @default("")
-  status           String?     @default("STARTED")
-  items            OrderItem[] @relation("OrderItem_order")
-  rental           Rental?     @relation("Order_rental", fields: [rentalId], references: [id])
-  rentalId         String?     @unique @map("rental")
-  ticketItems      Ticket[]    @relation("Ticket_order")
-  user             User?       @relation("Order_user", fields: [userId], references: [id])
-  userId           String?     @map("user")
-  dateCreated      DateTime?   @default(now())
-  dateModified     DateTime?   @default(now())
+  id                      String      @id @default(cuid())
+  email                   String      @default("")
+  notes                   String      @default("")
+  total                   Int?
+  stripeCheckoutSessionId String      @default("")
+  stripePaymentIntent     String      @default("")
+  shipping_address        String      @default("")
+  status                  String?     @default("STARTED")
+  items                   OrderItem[] @relation("OrderItem_order")
+  rental                  Rental?     @relation("Order_rental", fields: [rentalId], references: [id])
+  rentalId                String?     @unique @map("rental")
+  ticketItems             Ticket[]    @relation("Ticket_order")
+  user                    User?       @relation("Order_user", fields: [userId], references: [id])
+  userId                  String?     @map("user")
+  dateCreated             DateTime?   @default(now())
+  dateModified            DateTime?   @default(now())
 
   @@index([userId])
 }
@@ -451,7 +451,7 @@ model Ticket {
   qrcode       String    @default("")
   email        String    @default("")
   orderCount   String    @default("")
-  cost         Int       @default(0)
+  price        Int       @default(0)
   chargeId     String    @default("")
   status       String?   @default("PAID")
   event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])

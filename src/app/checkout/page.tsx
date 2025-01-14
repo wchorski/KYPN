@@ -1,7 +1,7 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
-import { Event, Product } from "@ks/types"
+import { Event, Product, User } from "@ks/types"
 import {
 	layout_site,
 	page_content,
@@ -46,15 +46,15 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 					quantity={3}
 					event={
 						{
-							id: "123",
-							summary: "My Cool Event",
+							id: "cm5r75edq0000h1l8yqmd5esa",
+							summary: "Tropical Fruit Tasting Tour",
 							image:
 								"https://cdn.pixabay.com/photo/2020/04/19/06/45/icecream-5062097_1280.jpg",
-							price: 55500,
+							price: 100,
 						} as Event
 					}
-          email={'Fireatwill35@gmail.com'}
-          stripeCustomerId={session?.user.stripeCustomerId}
+          email={session?.user.email}
+          user={session?.user as User}
 				/>
 			</div>
 		</main>

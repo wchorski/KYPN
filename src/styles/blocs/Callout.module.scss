@@ -1,11 +1,8 @@
 .callout {
   grid-column: layout_breakout;
-  // padding: 0 8px;
   border-left: 6px solid;
   border-radius: 4px;
   margin: 8px 0;
-  display: grid;
-  // grid-template-columns: 48px 1fr;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-m);
@@ -18,7 +15,7 @@
     // background-color: #2c4d79;
     border-color: #6898d5;
     
-    i::after {
+    & i::after {
       color: #6898d5;
       content: '\24D8';
     }
@@ -28,7 +25,7 @@
     // background-color: #365241;
     border-color: #31bb66;
     
-    i::after {
+    & i::after {
       color: #31bb66;
       content: '\2713';
     }
@@ -38,7 +35,7 @@
     // background-color: #534040;
     border-color: #bf2121;
     
-    i::after {
+    & i::after {
       color: #bf2121;
       content: '\2717';
     }
@@ -48,7 +45,7 @@
     // background-color: #653c0e;
     border-color: #d78629;
     
-    i::after {
+    & i::after {
       color: #d78629;
       content: '\26A0';
     }
@@ -73,8 +70,12 @@
 
 .content {
   flex: 1;
+  align-content: center;
 
-  :first-child {
+  & :first-child {
     margin-top: 0;
+  }
+  & :last-child {
+    margin-bottom: 0;
   }
 }

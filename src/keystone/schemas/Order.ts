@@ -16,21 +16,29 @@ export const Order:Lists.Order = list({
     filter: {
       query: rules.canOrder,
       update: rules.canManageOrders,
-      delete: () => false,
+      delete: rules.canManageOrders,
     },
     operation: {
       // TODO battle test these access
-      create: isLoggedIn,
+      // TODO maybe make Orders completely locked down and only mutations (sudo) can create them
+      create: permissions.canManageOrders,
       query: isLoggedIn,
       update: permissions.canManageOrders,
-      delete: () => false,
+      // TODO will want to switch back to false (order status canceled)
+      delete: permissions.canManageOrders,
+      // delete: () => false,
     },
   },
 
   ui: {
     listView: {
-      initialColumns: ['label', 'dateCreated', 'user', 'status', 'payment_status' ]
+      initialSort: {
+        field: 'dateCreated',
+        direction: 'DESC'
+      },
+      initialColumns: ['label', 'dateCreated', 'status', 'user', 'email', ]
     }
+    
   },
 
   fields: {
@@ -49,9 +57,9 @@ export const Order:Lists.Order = list({
       }
     }),
     total: integer(),
-    charge: text({validation: { isRequired: false }}),
+    stripeCheckoutSessionId: text(),
+    stripePaymentIntent: text({ui:{ description: `https://dashboard.stripe.com/payments/STIPEPAYMENTINTENT`}}),
     shipping_address: text(),
-    stripeSessionId: text(),
     status: select({
       options: [
         { label: 'started', value: 'STARTED' },
@@ -106,6 +114,7 @@ export const Order:Lists.Order = list({
             dateCreated
             status
             total
+            email
             user {
               name
               email
@@ -127,17 +136,9 @@ export const Order:Lists.Order = list({
             }
           `
         }) as OrderType        
-        
-
-        const customer = await context.sudo().query.User.findOne({
-          where: { id: item.userId },
-          query: `
-            email
-          `
-        }) as User
 
         const mail = await mailOrder({
-          to: [envs.ADMIN_EMAIL_ADDRESS, customer?.email || ''],
+          to: [envs.ADMIN_EMAIL_ADDRESS, item.email || order.user?.email || ''],
           operation,
           order,
         })

@@ -40,7 +40,7 @@ export const Ticket: Lists.Ticket = list({
 		// hide backend from non admins
 		// isHidden: true,
 		listView: {
-			initialColumns: ["eventStart", "eventSummary", "email", "status"],
+			initialColumns: ["eventStart", "eventSummary", "holder", "email", "status"],
 			// initialSort: { field: 'eventStart', direction: 'ASC'}
 		},
 	},

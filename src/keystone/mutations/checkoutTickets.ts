@@ -2,7 +2,7 @@
 
 import { graphql } from "@keystone-6/core"
 // @ts-ignore
-import { Context, Lists } from ".keystone/types"
+import { Context, Lists, TicketCreateInput } from ".keystone/types"
 // import { relationship } from '@keystone-6/core/fields';
 import stripeConfig from "../../lib/stripe"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
@@ -10,40 +10,40 @@ import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 import type {Event} from '../types'
 import stripe from "../../lib/stripe"
 import { envs } from "../../../envs"
+import { getServerSession } from "next-auth"
+import { nextAuthOptions } from "../../../session"
 
 export const checkoutTickets = (base: BaseSchemaMeta) =>
 	graphql.field({
-		type: base.object("Ticket"),
+		type: base.object("Order"),
 
 		args: {
-			// chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-			sessionId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			stripeCheckoutSessionId: graphql.arg({ type: graphql.String }),
+			stripePaymentIntent: graphql.arg({ type: graphql.String }),
+			userId: graphql.arg({ type: graphql.String }),
 			eventId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			quantity: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
-			amount_total: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
 		},
 
 		async resolve(source, variables, context: Context) {
+      //? Stripe Webhook validates payment success
+      // TODO SECURITY!!!!! 
+      console.log('### !!! SECURITY ISSUE. CAN I JUST CLAIM TICKETS WITHOUT PAYMENT?');
+      const session = await getServerSession(nextAuthOptions)
+      // if(!session) throw new Error('No')
+      // const sudoContext = context.sudo()
+
 			const {
-				// chargeId,
+				stripeCheckoutSessionId,
+        stripePaymentIntent,
 				eventId,
-				sessionId,
+				userId,
 				quantity,
 				customerEmail,
-				amount_total,
 			} = variables
-			//Query the current user
-			const user = await context.query.User.findOne({
-				where: { id: sessionId },
-				query: `
-          id
-          name
-          email
-        `,
-			})
 
-			const event = await context.query.Event.findOne({
+			const event = await context.withSession(session).query.Event.findOne({
 				where: { id: eventId },
 				query: `
           id
@@ -56,8 +56,8 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			const seatsTaken = await countAvailableSeats({
 				context,
 				eventId,
-				quantity,
 			})
+      //? if (# of seats customer is requesting + already taken seats) is over event.seats max
 			if (quantity + seatsTaken > event.seats)
 				throw new Error(
 					`Not enough seats available for event. ${
@@ -65,48 +65,47 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					} seats left.`
 				)
 
-      await stripeTicketCheckout(event, quantity, stripeCustomerId)
+      // const stripeSession = await stripeTicketCheckout(event, quantity, stripeCustomerId)
+      // if(stripeSession === 'failed') throw new Error('payment failed')
       
 			//Create an order based on the cart item
-			const ticketItems = Array.from({ length: quantity }, (_, index) => ({
+			const ticketItems:TicketCreateInput[] = Array.from({ length: quantity }, (_, index) => ({
 				event: { connect: { id: eventId } },
-				holder: user ? { connect: { id: user.id } } : null,
+				holder: userId ? { connect: { id: userId } } : null,
 				price: event.price,
 				email: customerEmail,
 				orderCount: `${index + 1} of ${quantity}`,
 			}))
 
+      // TODO perform any coupons here
+      const amountTotal = event.price * quantity
+
 			const now = new Date()
-			const order = await context.db.Order.createOne({
+			const order = await context.sudo().db.Order.createOne({
+			// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					total: amount_total,
+					total: amountTotal,
 					ticketItems: { create: ticketItems },
-					user: user ? { connect: { id: user.id } } : null,
-					charge: chargeId,
+					user: userId ? { connect: { id: userId } } : null,
+					stripeCheckoutSessionId,
+					stripePaymentIntent,
 					dateCreated: now.toISOString(),
+          email: customerEmail,
+          //TODO maybe not secure
+          ...(stripeCheckoutSessionId ? {status: "PAYMENT_RECIEVED"} : {})
 				},
 			})
+      // console.log("### ORDER CREATED, ", {order});
 
 			//Clean up! Delete all cart items
 			// await context.db.CartItem.deleteMany({
 			//   where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
 			// })
 
-			// todo SEND EMAIL
-			// mailCheckoutReceipt(
-			//   order.id,
-			//   [user.email, ADMIN_EMAIL_ADDRESS],
-			//   user.name,
-			//   ADMIN_EMAIL_ADDRESS,
-			//   ticketItems,
-			//   now.toISOString(),
-			//   totalOrder,
-			// )
+			//? email sent with Order afterOperation
 
 			return {
-				status: "success",
-				message: "checkout tickets successful",
-				order,
+				status: order.status,
 				id: order.id,
 			}
 		},
@@ -115,13 +114,11 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 type CheckSeatsProps = {
 	context: KeystoneContextFromListTypeInfo<Lists.Ticket.TypeInfo<any>>
 	eventId: string
-	quantity: number
 }
 
 async function countAvailableSeats({
 	context,
 	eventId,
-	quantity,
 }: CheckSeatsProps) {
 
 	const seatsTaken = (await context.sudo().query.Ticket.count({
@@ -137,45 +134,46 @@ async function countAvailableSeats({
 	return seatsTaken
 }
 
-async function stripeTicketCheckout(event: Event, quantity: number, stripeCustomerId:string) {
+// TODO do i want to process stripe in mutation or with embeded form + webhook?
+// async function stripeTicketCheckout(event: Event, quantity: number, stripeCustomerId:string) {
 
-  try {
-    const lineItems = Array.from({ length: quantity }, (item, i) => {
-      return {
-        price_data: {
-          // TODO make this part of CartItem schema item.currency, not hard coded
-          currency: "usd",
-          product_data: {
-            name: `Ticket to ${event.summary} (${i + 1} of ${quantity})`,
-            images: [event.image],
-            metadata: {
-              eventId: event.id,
-              ticketIndex: `${i + 1} of ${quantity}`,
-            },
-          },
-          unit_amount: event.price,
-        },
-        quantity: 1,
-      }
-    })
+//   try {
+//     const lineItems = Array.from({ length: quantity }, (item, i) => {
+//       return {
+//         price_data: {
+//           // TODO make this part of CartItem schema item.currency, not hard coded
+//           currency: "usd",
+//           product_data: {
+//             name: `Ticket to ${event.summary} (${i + 1} of ${quantity})`,
+//             images: [event.image],
+//             metadata: {
+//               eventId: event.id,
+//               ticketIndex: `${i + 1} of ${quantity}`,
+//             },
+//           },
+//           unit_amount: event.price,
+//         },
+//         quantity: 1,
+//       }
+//     })
   
-    const stripeSession = await stripe.checkout.sessions.create({
-      // customer_email: email || 'anonymous',
-      customer: stripeCustomerId,
-      payment_method_types: ["card", ],
-      line_items: lineItems,
-      mode: "payment",
-      success_url: `${envs.FRONTEND_URL}/account?dashState=tickets#tickets`,
-      cancel_url: `${envs.FRONTEND_URL}/events/${event.id}`,
-      metadata: {
-        type: 'checkout.tickets',
-        eventId: event.id,
-        quantity: quantity,
-      }
-    })
-  } catch (error) {
-    console.log('!!! stripe checkoutTicket: ', error);
+//     const stripeSession = await stripe.checkout.sessions.create({
+//       // customer_email: email || 'anonymous',
+//       customer: stripeCustomerId,
+//       payment_method_types: ["card", ],
+//       line_items: lineItems,
+//       mode: "payment",
+//       success_url: `${envs.FRONTEND_URL}/account?dashState=tickets#tickets`,
+//       cancel_url: `${envs.FRONTEND_URL}/events/${event.id}`,
+//       metadata: {
+//         type: 'checkout.tickets',
+//         eventId: event.id,
+//         quantity: quantity,
+//       }
+//     })
+//   } catch (error) {
+//     console.log('!!! stripe checkoutTicket: ', error);
     
     
-  }
-}
+//   }
+// }

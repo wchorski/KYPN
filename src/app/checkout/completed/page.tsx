@@ -13,6 +13,8 @@ import { StatusBadge } from "@components/StatusBadge"
 import Link from "next/link"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { Metadata } from "next"
+import moneyFormatter from "@lib/moneyFormatter"
+import { Callout } from "@components/blocks/Callout"
 
 export const metadata: Metadata = {
 	title: `Checkout Completed | ` + envs.SITE_TITLE,
@@ -50,15 +52,22 @@ export default async function CheckoutSuccessPage({
 			</ErrorPage>
 		)
 
-	if (stripeCheckoutSession && stripeCheckoutSessionId)
+	if (stripeCheckoutSession.status === "complete" && stripeCheckoutSessionId) {
+		// TODO verify if order has been completed with ks?
+		// if(stripeCheckoutSession.metadata.typeof === 'ticket')
 		return (
 			<main className={[page_layout].join(" ")}>
 				<header className={layout_site}>
 					<h1>Checkout Completed</h1>
 				</header>
 				<div className={[page_content, layout_site].join(" ")}>
+					<Callout intent={"success"}>
+						<p>Print this page</p>
+					</Callout>
 					<ul>
-						<li>amount_total: {stripeCheckoutSession.amount_total}</li>
+						<li>
+							amount_total: {moneyFormatter(stripeCheckoutSession.amount_total)}
+						</li>
 						<li>
 							payment_status:{" "}
 							<StatusBadge
@@ -66,12 +75,38 @@ export default async function CheckoutSuccessPage({
 								status={stripeCheckoutSession.payment_status}
 							/>
 						</li>
+						<li>checkout_id: {stripeCheckoutSession.id}</li>
+						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li>
 						<li>
 							<Link href={`/account?dashState=orders#orders`}>My Account</Link>
 						</li>
 					</ul>
+
 					<h3>Stripe Checkout Session Response Debug</h3>
+					<p>
+						stripeCheckoutSession.metadata.typeof{" "}
+						<strong>{stripeCheckoutSession.metadata.typeof}</strong>
+					</p>
 					<pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre>
+				</div>
+			</main>
+		)
+	}
+
+	if (stripeCheckoutSession.status === "open" && stripeCheckoutSessionId)
+		return (
+			<main className={[page_layout].join(" ")}>
+				<header className={layout_site}>
+					<h1>Checkout Open </h1>
+				</header>
+				<div className={[page_content, layout_site].join(" ")}>
+					<p>
+						Stripe has not completed this checkout. Contact{" "}
+						{envs.ADMIN_EMAIL_ADDRESS} and add this as the subject{" "}
+						<code>stripe_checkout_id: {stripeCheckoutSession.id}</code>
+						<Link href={`/account`}>account</Link> or return to{" "}
+						<Link href={`/checkout`}>checkout</Link>
+					</p>
 				</div>
 			</main>
 		)
@@ -83,7 +118,6 @@ export default async function CheckoutSuccessPage({
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<p>
-					{" "}
 					No checkout session provided. View your{" "}
 					<Link href={`/account`}>account</Link> or return to{" "}
 					<Link href={`/checkout`}>checkout</Link>

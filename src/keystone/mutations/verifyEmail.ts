@@ -26,7 +26,7 @@ export const verifyEmail = (base: BaseSchemaMeta) =>
 		},
 
 		async resolve(source, { email, token }, context: Context) {
-			const { query } = context.sudo()
+			const sudoContext = context.sudo()
 
 			try {
 				// const foundUser = await query.User.findOne({
@@ -38,7 +38,7 @@ export const verifyEmail = (base: BaseSchemaMeta) =>
 				//     }
 				//   `
 				// })
-				const data = (await context.sudo().graphql.run({
+				const data = (await sudoContext.graphql.run({
 					query: `
             query Users($where: UserWhereInput!) {
               users(where: $where) {
@@ -74,7 +74,7 @@ export const verifyEmail = (base: BaseSchemaMeta) =>
 				const payload = (await jwt.verify(token, secret)) as Payload
 
 				// TODO may be case sensative?!?!?!?!??!
-				const user = await query.User.updateOne({
+				const user = await sudoContext.query.User.updateOne({
 					where: { email },
 					data: {
 						role: { connect: { name: envs.BASIC_USER_ROLE_NAME } },

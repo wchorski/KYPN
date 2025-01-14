@@ -9,8 +9,8 @@ import {
 	PasswordRequestState,
 } from "@lib/actions/actionPassworRequest"
 import { InputField } from "@components/InputField"
-import { SubmitButton } from "@hooks/useForm"
 import Link from "next/link"
+import { SubmitButton } from "@components/forms/SubmitButton"
 
 const initState: PasswordRequestState = {
 	values: {

@@ -2154,9 +2154,9 @@ type Order {
   email: String
   notes: String
   total: Int
-  charge: String
+  stripeCheckoutSessionId: String
+  stripePaymentIntent: String
   shipping_address: String
-  stripeSessionId: String
   status: String
   items(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   itemsCount(where: OrderItemWhereInput! = {}): Int
@@ -2180,9 +2180,9 @@ input OrderWhereInput {
   email: StringFilter
   notes: StringFilter
   total: IntNullableFilter
-  charge: StringFilter
+  stripeCheckoutSessionId: StringFilter
+  stripePaymentIntent: StringFilter
   shipping_address: StringFilter
-  stripeSessionId: StringFilter
   status: StringNullableFilter
   items: OrderItemManyRelationFilter
   rental: RentalWhereInput
@@ -2197,9 +2197,9 @@ input OrderOrderByInput {
   email: OrderDirection
   notes: OrderDirection
   total: OrderDirection
-  charge: OrderDirection
+  stripeCheckoutSessionId: OrderDirection
+  stripePaymentIntent: OrderDirection
   shipping_address: OrderDirection
-  stripeSessionId: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -2209,9 +2209,9 @@ input OrderUpdateInput {
   email: String
   notes: String
   total: Int
-  charge: String
+  stripeCheckoutSessionId: String
+  stripePaymentIntent: String
   shipping_address: String
-  stripeSessionId: String
   status: String
   items: OrderItemRelateToManyForUpdateInput
   rental: RentalRelateToOneForUpdateInput
@@ -2236,9 +2236,9 @@ input OrderCreateInput {
   email: String
   notes: String
   total: Int
-  charge: String
+  stripeCheckoutSessionId: String
+  stripePaymentIntent: String
   shipping_address: String
-  stripeSessionId: String
   status: String
   items: OrderItemRelateToManyForCreateInput
   rental: RentalRelateToOneForCreateInput
@@ -2693,7 +2693,7 @@ type Ticket {
   qrcode: String
   email: String
   orderCount: String
-  cost: Int
+  price: Int
   chargeId: String
   status: String
   event: Event
@@ -2717,7 +2717,7 @@ input TicketWhereInput {
   qrcode: StringFilter
   email: StringFilter
   orderCount: StringFilter
-  cost: IntFilter
+  price: IntFilter
   chargeId: StringFilter
   status: StringNullableFilter
   event: EventWhereInput
@@ -2733,7 +2733,7 @@ input TicketOrderByInput {
   qrcode: OrderDirection
   email: OrderDirection
   orderCount: OrderDirection
-  cost: OrderDirection
+  price: OrderDirection
   chargeId: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
@@ -2744,7 +2744,7 @@ input TicketUpdateInput {
   qrcode: String
   email: String
   orderCount: String
-  cost: Int
+  price: Int
   chargeId: String
   status: String
   event: EventRelateToOneForUpdateInput
@@ -2770,7 +2770,7 @@ input TicketCreateInput {
   qrcode: String
   email: String
   orderCount: String
-  cost: Int
+  price: Int
   chargeId: String
   status: String
   event: EventRelateToOneForCreateInput
@@ -3089,7 +3089,7 @@ type Mutation {
   verifyEmail(token: String!, email: String!): User
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
-  checkoutTickets(sessionId: String!, eventId: String!, customerEmail: String!, quantity: Int!, amount_total: Int!): Ticket
+  checkoutTickets(stripeCheckoutSessionId: String, stripePaymentIntent: String, userId: String, eventId: String!, customerEmail: String!, quantity: Int!): Order
 }
 
 type Query {

@@ -161,7 +161,7 @@ using stripe CLI have it listen to this webhook
 https://stripe.com/docs/webhooks/quickstart
 
 ```sh
-stripe listen --forward-to http://localhost:3000/api/checkout/webhook
+stripe listen --forward-to http://localhost:3000/api/webhooks/stripe
 ```
 
 ### Database
@@ -262,8 +262,10 @@ When initializing a fresh database or returning to development you may add/remov
 - [x] all blocks tested
 - [x] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
 - [x] look into https://smolcss.dev/ for inspo
-
+- [ ] stripe returns. How to refund products, tickets, subscriptions, etc
 ---
+- [ ] add testing again
+  - [ ] stripe webhook testing - https://accreditly.io/articles/test-stripe-webhooks-without-using-ngrok#content-3-local-stripe-webhook-testing-with-docker
 - [ ] Toast notification with status timer on bottom border edge (like bitwarden)
 - [ ] appointment schedualer https://cal.com/
 - [ ] document signing https://www.docuseal.co/
