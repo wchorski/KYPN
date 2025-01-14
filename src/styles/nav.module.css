@@ -54,6 +54,8 @@ ul.menu_main {
   top: 100%;
   background-color: var(--c-txt-bg);
   width: 100%;
+  /* //TODO need better way of setting height without f'ing up mobile drawer */
+  /* height: 100%; */
   transition-property: max-height, background;
   transition-duration: .7s;
 
@@ -120,4 +122,10 @@ button.navwich {
 /* // link or button */
 .active {
   color: var(--c-primary) !important;
+}
+
+@media screen and (width < 600px) {
+  .desktop_label {
+    display: none;
+  }
 }

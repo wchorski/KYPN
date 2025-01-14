@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { envs } from "@/envs"
 import { ReactElement } from "react"
+import { desktop_label } from "@styles/nav.module.css"
 
 
 
@@ -40,7 +41,7 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 						<MdAccountCircle />
 					)}
 				</figure>
-				<span>{label}</span>
+				<span className={desktop_label} >{label}</span>
 			</NavLink>
 
 			<ul className={sub_menu}>

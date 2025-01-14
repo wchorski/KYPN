@@ -17,9 +17,10 @@ export function SchedualChip({ item }: Props) {
 		<span key={item.id} className={event_chip}>
 			<Link href={`/${item.typeof}s/${item.id}`}>
 				<IconItem type={item.typeof} />
-				{"  "}
-				{item.summary}
-				<br />@ {datePrettyLocalTime(item.start)}
+        <div>
+          <h6>{item.summary}</h6>
+          <time dateTime={item.start}>@ {datePrettyLocalTime(item.start)}</time>
+        </div>
 			</Link>
 		</span>
 	)

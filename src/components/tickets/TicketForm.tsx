@@ -16,6 +16,7 @@ import {
 import { form } from "@styles/menus/form.module.scss"
 import { InputField } from "@components/InputField"
 import { SubmitButton } from "@components/forms/SubmitButton"
+import Link from "next/link"
 
 type Props = {
 	event: Event
@@ -204,7 +205,7 @@ export function TicketForm({ event, user }: Props) {
 			<p className={"error"}>{state.error}</p>
 			<p className={"success"}>
 				{state.success}
-				{state.url}
+				<Link href={state.url || ''}>Checkout</Link>
 				{state.id}
 			</p>
 		</form>

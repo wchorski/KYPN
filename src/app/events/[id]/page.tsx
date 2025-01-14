@@ -18,13 +18,14 @@ import styleProduct from "@styles/ecommerce/productSingle.module.scss"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
-import DialogPopup from "@components/menus/Dialog"
 import { TicketForm } from "@components/tickets/TicketForm"
 import styles from "@styles/events/event.module.css"
 import { AddToCalendar } from "@components/widgets/AddToCalendar"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { plainObj } from "@lib/utils"
 import { page_content, page_layout } from "@styles/layout.module.css"
+import { notFound } from "next/navigation"
+import { DialogPopup } from "@components/menus/Dialog"
 // import { AddToCalendarButton } from "add-to-calendar-button-react";
 
 export async function generateMetadata(
@@ -80,7 +81,7 @@ export default async function EventByID({ params }: Props) {
 	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
 
 	if (error) return <ErrorMessage error={error} />
-	if (!event) return <p> no event found </p>
+	if (!event) return notFound()
 
 	const {
 		image,
@@ -112,7 +113,7 @@ export default async function EventByID({ params }: Props) {
 	return (
 		<main className={page_layout}>
 			<DialogPopup
-				title={`${summary}`}
+				title={summary}
 				onClose={onClose}
 				onOk={onOk}
 				buttonLabel=""

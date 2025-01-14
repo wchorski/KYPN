@@ -152,13 +152,16 @@
     }
 
     &:active{
-      border: solid 1px var(--c-accent);
+      /* //TODO how to override properly? */
+      border-color: var(--c-tertiary) !important;
       color: var(--c-accent);
+      transform: translateY(2px);
     }
 
     & > svg {
-      font-size: 1.2rem;
+      font-size: 1.6rem;
       color: var(--c-primary);
+      width: var(--space-l);
     }
   }
 }

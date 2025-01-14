@@ -1,6 +1,6 @@
 'use client'
 
-import { useCart } from "@hooks/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import { MdShoppingBag } from "react-icons/md"
 import styles from '@styles/ecommerce/cart.module.scss'
 

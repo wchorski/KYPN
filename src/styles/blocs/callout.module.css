@@ -12,7 +12,6 @@
   background-color: var(--c-txt-bg);
 
   &.info{
-    // background-color: #2c4d79;
     border-color: #6898d5;
     
     & i::after {
@@ -22,7 +21,6 @@
   }
 
   &.success{
-    // background-color: #365241;
     border-color: #31bb66;
     
     & i::after {
@@ -32,7 +30,6 @@
   }
 
   &.error{
-    // background-color: #534040;
     border-color: #bf2121;
     
     & i::after {
@@ -42,7 +39,6 @@
   }
   
   &.warning{
-    // background-color: #653c0e;
     border-color: #d78629;
     
     & i::after {
@@ -56,7 +52,6 @@
 .icon {
   display: grid;
   align-content: center;
-  // margin-right: 1rem;
   
   &::after{
     font-size: .5rem;
