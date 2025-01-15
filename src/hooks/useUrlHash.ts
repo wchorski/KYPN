@@ -26,7 +26,8 @@ export function useUrlHash() {
 	useEffect(() => {
 		setIsClient(true)
 		const hash = getHash()
-		setHash(decodeURIComponent(hash || "no_hash").replace(/^#/, ""))
+    if(!hash) return
+		setHash(decodeURIComponent(hash).replace(/^#/, ""))
 
 	}, [params])
 

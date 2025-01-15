@@ -107,7 +107,6 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 				where: { user: { id: { equals: userId } } },
 				query: `id`,
 			})) as { id: string }[]
-			console.log({ cartItemsToDelete })
 
 			await sudoContext.db.CartItem.deleteMany({
 				where: cartItemsToDelete,

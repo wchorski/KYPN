@@ -27,8 +27,18 @@ import {
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import { Grid } from "@components/layouts/Grid"
-import { IconBookmark } from "@lib/useIcons"
+import {
+	IconAccountBox,
+	IconBookmark,
+	IconCalendar,
+	IconCalendarOutlined,
+	IconShoppingBag,
+	IconTicketOutlined,
+} from "@lib/useIcons"
 import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
+import { ReactNode } from "react"
+import { DashNavLink } from "@components/menus/DashNavLink"
+import { DashNav, DashNavData } from "@components/menus/DashNav"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -36,27 +46,9 @@ export const metadata: Metadata = {
 		"dashboard for orders, subscriptions, bookings, tickets, downloads",
 }
 
-type Props = {
-	searchParams: {
-		dashState:
-			| "main"
-			| "orders"
-			| "rentals"
-			| "subscriptions"
-			| "downloads"
-			| "tickets"
-			| "bookings"
-			| "gigs"
-			| "gig_requests"
-	}
-	params: { id: string }
-}
-
 const now = new Date().toISOString()
 
-export default async function AccountPage({ params, searchParams }: Props) {
-	const { dashState = "main" } = searchParams
-
+export default async function AccountPage() {
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return <LoginToViewPage />
 
@@ -74,27 +66,27 @@ export default async function AccountPage({ params, searchParams }: Props) {
 		session
 	)
 
-	// const orders = await keystoneContext.withSession(session).query.Order.findMany({
-	//   where: {
-	//     user: {
-	//       id: { equals: session.itemId },
-	//     }
-	//   },
-	//   orderBy: [
-	//     {
-	//       dateCreated: "desc"
-	//     }
-	//   ],
-	//   query: `
-	//     id
-	//     total
-	//     dateCreated
-	//     status
-	//     items{
-	//       quantity
-	//     }
-	//   `,
-	// }) as Order[]
+	const orders = (await keystoneContext
+		.withSession(session)
+		.query.Order.findMany({
+			where: {
+				user: {
+					id: { equals: session.itemId },
+				},
+			},
+			orderBy: [
+				{
+					dateCreated: "desc",
+				},
+			],
+			query: `
+        id
+        total
+        dateCreated
+        status
+        count
+      `,
+		})) as Order[]
 
 	// const rentals = await keystoneContext.withSession(session).query.Rental.findMany({
 	//   where: {
@@ -174,7 +166,69 @@ export default async function AccountPage({ params, searchParams }: Props) {
 	if (!user) return notFound()
 	const { gig_requests, gigs } = employeeGigData.user
 
-	const {tickets, error: errorTickets } = await fetchTicketsByUser(user.id)
+	const { tickets, error: errorTickets } = await fetchTicketsByUser(user.id)
+
+	const dashNavData: DashNavData = [
+		{
+			slug: "main",
+			text: "Dashboard",
+			isCount: true,
+			icon: <IconAccountBox />,
+		},
+		{
+			slug: "bookings",
+			isCount: user.bookings.length > 0,
+			icon: <IconBookmark />,
+		},
+		{
+			slug: "tickets",
+			isCount: tickets && tickets.length > 0 ? true : false,
+			icon: <IconTicketOutlined />,
+		},
+		{
+			slug: "gigs",
+			isCount: gigs.length > 0,
+			icon: <IconCalendar />,
+		},
+		{
+			slug: "gig_requests",
+			text: "Gig Requests",
+			isCount: gig_requests.length > 0,
+			icon: <IconCalendarOutlined />,
+		},
+		{
+			slug: "orders",
+			isCount: orders.length > 0,
+			icon: <IconShoppingBag />,
+		},
+		{
+			slug: "rentals",
+			isCount: false,
+			// count: rentals.length > 0,
+			icon: <></>,
+		},
+		{
+			slug: "subscriptions",
+			isCount: false,
+			// count: subscriptions.length > 0,
+			icon: <></>,
+		},
+		{
+			slug: "downloads",
+			isCount: false,
+			// count: downloads.length > 0,
+			icon: <></>,
+		},
+	]
+
+	const data = {
+		user,
+		orders,
+		tickets,
+		rentals: [],
+		downloads: [],
+		employeeGigs: { gigs, gig_requests },
+	}
 
 	return (
 		<main className={page_layout}>
@@ -186,140 +240,9 @@ export default async function AccountPage({ params, searchParams }: Props) {
 
 			<div className={[page_content, layout_wide].join(" ")}>
 				<Grid layout={"1_4"} isAuto={false} alignContent={"start"}>
-					<nav className={styles.dashnav}>
-						<ul>
-							<li>
-								<a
-									href={"?dashState=main#main"}
-									className={
-										dashState === "main" ? styles.linkactive : styles.dashlink
-									}
-								>
-									Dashboard <MdOutlineAccountBox />
-								</a>
-							</li>
-							{user.bookings.length > 0 && (
-								<li>
-									<a
-										href={"?dashState=bookings#bookings"}
-										className={
-											dashState === "bookings"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Bookings <IconBookmark />
-									</a>
-								</li>
-							)}
-							{gigs.length > 0 && (
-								<li>
-									<a
-										href={"?dashState=gigs#gigs"}
-										className={
-											dashState === "gigs" ? styles.linkactive : styles.dashlink
-										}
-									>
-										Gigs <HiCalendar />
-									</a>
-								</li>
-							)}
-							{gig_requests.length > 0 && (
-								<li>
-									<a
-										href={"?dashState=gig_requests#gig_requests"}
-										className={
-											dashState === "gig_requests"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Gig Requests <HiOutlineCalendar />
-									</a>
-								</li>
-							)}
-							{/* {orders.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=orders#orders"}
-										className={
-											dashState === "orders"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Orders <MdShop />
-									</Link>
-								</li>
-							)} */}
-							{/* {rentals.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=rentals#rentals"}
-										className={
-											dashState === "rentals"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Rentals <BsSignpost />
-									</Link>
-								</li>
-							)} */}
-							{/* {user.subscriptions.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=subscriptions#subscriptions"}
-										className={
-											dashState === "subscriptions"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Subscriptions <MdAutorenew />
-									</Link>
-								</li>
-							)} */}
-							{/* //todo when downloads are added */}
-							{/* {false && (
-								<li>
-									<Link
-										href={"/account?dashState=downloads#downloads"}
-										className={
-											dashState === "downloads"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Downloads <MdOutlineDownload />
-									</Link>
-								</li>
-							)} */}
-							{tickets && tickets?.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=tickets#tickets"}
-										className={
-											dashState === "tickets"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Tickets <HiOutlineTicket />
-									</Link>
-								</li>
-							)}
-						</ul>
-					</nav>
+					<DashNav dashNavData={dashNavData} />
 
-					<AccountDash
-						dashState={dashState}
-						user={user}
-						// orders={orders}
-						// rentals={rentals}
-						tickets={tickets}
-						employeeGigs={{ gigs, gig_requests }}
-					/>
+					<AccountDash data={data} />
 				</Grid>
 			</div>
 		</main>

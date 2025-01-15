@@ -53,7 +53,8 @@
 }
 
 a.dashlink {
-  color: inherit; 
+  /* color: inherit;  */
+  border-bottom: solid 1px transparent;
 }
 
 
@@ -70,5 +71,9 @@ a.dashlink {
 
   & .card {
     scroll-behavior: smooth;
+  }
+  & > *:target > h3{
+    color: var(--c-accent);
+    border-bottom-color: var(--c-accent);
   }
 }

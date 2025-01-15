@@ -2112,12 +2112,12 @@ input OrderItemWhereInput {
   description: StringFilter
   image: StringFilter
   type: StringFilter
-  price: IntNullableFilter
-  quantity: IntNullableFilter
+  price: IntFilter
+  quantity: IntFilter
   order: OrderWhereInput
   product: ProductWhereInput
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input OrderItemOrderByInput {
@@ -2165,10 +2165,12 @@ input OrderItemCreateInput {
 
 type Order {
   id: ID!
+  typeof: String
   label: String
   email: String
   notes: String
   total: Int
+  count: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String
@@ -2194,7 +2196,7 @@ input OrderWhereInput {
   id: IDFilter
   email: StringFilter
   notes: StringFilter
-  total: IntNullableFilter
+  total: IntFilter
   stripeCheckoutSessionId: StringFilter
   stripePaymentIntent: StringFilter
   shipping_address: StringFilter
@@ -2203,8 +2205,8 @@ input OrderWhereInput {
   rental: RentalWhereInput
   ticketItems: TicketManyRelationFilter
   user: UserWhereInput
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input OrderOrderByInput {

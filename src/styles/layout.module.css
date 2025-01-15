@@ -66,8 +66,9 @@
 }
 
 .page_layout > footer {
-	grid-column: 3;
-	grid-row: 0;
+	grid-column: layout_wide;
+	grid-row: 3;
+  grid-template-columns: inherit;
 }
 
 .page_layout,

@@ -10,7 +10,7 @@ import { getServerSession } from 'next-auth'
 import { ReactNode } from 'react'
 
 type Props = {
-  children:ReactNode
+  children?:ReactNode
   error:object | null | undefined | unknown,
 }
 

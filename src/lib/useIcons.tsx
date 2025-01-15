@@ -12,7 +12,8 @@ import {
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { MdAccountCircle } from "react-icons/md"
+import { MdAccountCircle, MdOutlineAccountBox, MdShop } from "react-icons/md"
+import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 
 export const IconBookmark = () => {
 	return <BsFillBookmarkFill />
@@ -20,9 +21,20 @@ export const IconBookmark = () => {
 export const IconEventTicket = () => {
 	return <BsFillTicketPerforatedFill />
 }
+
+export const IconTicketOutlined = () =>  <HiOutlineTicket />
+export const IconAccountBox = () =>  <MdOutlineAccountBox />
+
 export const IconUserAccountAvatar = () => {
 	return <MdAccountCircle />
 }
+
+export const IconCalendarOutlined = () =>  <HiOutlineCalendar/>
+export const IconCalendar = () =>  <HiCalendar/>
+
+export const IconShoppingBag = () => <MdShop />
+
+
 
 export const IconItem = ({type}:{type: "booking" | "event" | "user" | string}) => {
 	switch (type) {

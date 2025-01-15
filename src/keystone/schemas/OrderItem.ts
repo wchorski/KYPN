@@ -39,12 +39,12 @@ export const OrderItem:Lists.OrderItem = list({
         createView: { fieldMode: 'edit' }
       }
     }),
-    price: integer(),
-    quantity: integer(),
+    price: integer({validation: {isRequired: true}}),
+    quantity: integer({validation: {isRequired: true}}),
     order: relationship({ ref: 'Order.items' }),
     product: relationship({ref: 'Product.orderItems', many: false}),
-    dateCreated: timestamp({defaultValue: { kind: 'now' },}),
-    dateModified: timestamp({defaultValue: { kind: 'now' },}),
+    dateCreated: timestamp({defaultValue: { kind: 'now' }, validation: {isRequired: true}}),
+    dateModified: timestamp({defaultValue: { kind: 'now' }, validation: {isRequired: true}}),
   },
 
   hooks:{

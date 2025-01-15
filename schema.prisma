@@ -324,19 +324,19 @@ model CartItem {
 }
 
 model OrderItem {
-  id           String    @id @default(cuid())
-  name         String    @default("")
-  description  String    @default("")
-  image        String    @default("")
+  id           String   @id @default(cuid())
+  name         String   @default("")
+  description  String   @default("")
+  image        String   @default("")
   type         String
-  price        Int?
-  quantity     Int?
-  order        Order?    @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId      String?   @map("order")
-  product      Product?  @relation("OrderItem_product", fields: [productId], references: [id])
-  productId    String?   @map("product")
-  dateCreated  DateTime? @default(now())
-  dateModified DateTime? @default(now())
+  price        Int
+  quantity     Int
+  order        Order?   @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId      String?  @map("order")
+  product      Product? @relation("OrderItem_product", fields: [productId], references: [id])
+  productId    String?  @map("product")
+  dateCreated  DateTime @default(now())
+  dateModified DateTime @default(now())
 
   @@index([orderId])
   @@index([productId])
@@ -346,7 +346,7 @@ model Order {
   id                      String      @id @default(cuid())
   email                   String      @default("")
   notes                   String      @default("")
-  total                   Int?
+  total                   Int
   stripeCheckoutSessionId String      @default("")
   stripePaymentIntent     String      @default("")
   shipping_address        String      @default("")
@@ -357,8 +357,8 @@ model Order {
   ticketItems             Ticket[]    @relation("Ticket_order")
   user                    User?       @relation("Order_user", fields: [userId], references: [id])
   userId                  String?     @map("user")
-  dateCreated             DateTime?   @default(now())
-  dateModified            DateTime?   @default(now())
+  dateCreated             DateTime    @default(now())
+  dateModified            DateTime    @default(now())
 
   @@index([userId])
 }

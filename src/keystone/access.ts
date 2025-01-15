@@ -425,6 +425,12 @@ export const rules = {
 		if (permissions.canManageOrders({ session })) return true
 		return false
 	},
+	canViewOrders({ session }: ListAccessArgs) {
+    if(!session) return false
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageOrders({ session })) return true
+		return { user: { id: { equals: session.itemId } } }
+	},
 	canManageOrderItems({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 

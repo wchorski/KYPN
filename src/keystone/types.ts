@@ -298,10 +298,14 @@ export type Rental = Lists.Rental.Item & {
 
 
 export type Order = Lists.Order.Item & {
+  typeof: 'order',
+  count: number,
 	user: User
 	items: OrderItem[]
 	rental: Rental
 	ticketItems: Ticket[]
+  dateCreated:string
+  dateModified:string
 }
 
 export type OrderItem = Lists.OrderItem.Item & {
