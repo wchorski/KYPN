@@ -112,16 +112,17 @@ export const Ticket: Lists.Ticket = list({
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 		event: relationship({
 			ref: "Event.tickets",
 			many: false,
-      ui: {
-        itemView: {fieldMode: 'read'},
-        inlineConnect: false,
-		    displayMode: 'cards',
-		    cardFields: ['id', 'summary', 'start', 'location'],
-		  }
+			ui: {
+				itemView: { fieldMode: "read" },
+				inlineConnect: false,
+				displayMode: "cards",
+				cardFields: ["id", "summary", "start", "location"],
+			},
 		}),
 		holder: relationship({
 			ref: "User.tickets",

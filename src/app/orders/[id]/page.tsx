@@ -18,6 +18,7 @@ import {
 } from "@styles/layout.module.css"
 import { fetchOrder } from "@lib/fetchdata/fetchOrder"
 import ErrorPage from "@components/layouts/ErrorPage"
+import { notFound } from "next/navigation"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
@@ -43,7 +44,7 @@ export default async function OrderByIdPage({ params }: Props) {
 	const { order, error } = await fetchOrder({ id, query, session })
 
 	if (error) return <ErrorPage error={error} />
-	if (!order) return
+	if (!order) return notFound()
 
 	const {
 		status,
