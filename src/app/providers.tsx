@@ -1,4 +1,5 @@
 "use client"
+import { CartStateProvider } from "@components/hooks/CartStateContext"
 import { GlobalContextProvider } from "@hooks/useGlobalContext"
 // cred Ethan - https://www.youtube.com/watch?v=2kgqPvs0j_I
 
@@ -11,7 +12,9 @@ type Props = {
 export const Providers = ({ children }: Props) => {
 	return (
 		<SessionProvider>
-			  <GlobalContextProvider>{children}</GlobalContextProvider>
+			<GlobalContextProvider>
+				<CartStateProvider>{children}</CartStateProvider>
+			</GlobalContextProvider>
 		</SessionProvider>
 	)
 }

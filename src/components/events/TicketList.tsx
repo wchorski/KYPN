@@ -1,8 +1,7 @@
 import { Ticket } from '@ks/types'
-import styles from '@styles/events/tickets.module.scss'
+import styles from '@styles/events/tickets.module.css'
 import { ReactNode } from 'react'
 import { TicketListItem } from './TicketListItem'
-import { NoData } from '@components/elements/NoData'
 
 type Props = {
   children?:ReactNode,

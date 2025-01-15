@@ -1,7 +1,10 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
+import { useCart } from "@components/hooks/CartStateContext"
+import { keystoneContext } from "@ks/context"
 import { Event, Product, User } from "@ks/types"
+import { plainObj } from "@lib/contentHelpers"
 import {
 	layout_site,
 	page_content,
@@ -9,6 +12,7 @@ import {
 } from "@styles/layout.module.css"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
 	title: `Checkout | ` + envs.SITE_TITLE,
@@ -26,36 +30,61 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 	// if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
 	// if (!users) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
+	if (!session) return redirect("/login")
+
+	const user = (await keystoneContext.withSession(session).query.User.findOne({
+		where: { id: session.itemId },
+		query: `
+      cart {
+        type
+        quantity
+        product {
+          id
+          name
+          image
+          price
+        }
+        event {
+          id
+          summary
+          image
+          price
+        }
+      }
+    `,
+	})) as User
+
+	const filteredTicketItems = plainObj(user.cart.filter((item) => item.event))
+	const filteredProductItems = plainObj(
+		user.cart.filter((item) => item.product)
+	)
+
+	// TODO if price total is 0 then show non stripe form
+
 	return (
 		<main className={[page_layout].join(" ")}>
 			<header className={layout_site}>
 				<h1>Checkout</h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
-				{/* // TODO if price is 0 then show non */}
-				{/* <StripeCheckoutForm
-					itemType={"product"}
-					quantity={1}
-					product={
-						{ stripePriceId: "price_1Qg8jEG7Yy3hdDH3hTPw9xp5" } as Product
-					}
-				/> */}
-				{/* // TODO if price is 0 then show non stripe form */}
-				<StripeCheckoutForm
-					itemType={"ticket"}
-					quantity={3}
-					event={
-						{
-							id: "cm5r75edq0000h1l8yqmd5esa",
-							summary: "Tropical Fruit Tasting Tour",
-							image:
-								"https://cdn.pixabay.com/photo/2020/04/19/06/45/icecream-5062097_1280.jpg",
-							price: 100,
-						} as Event
-					}
-          email={session?.user.email}
-          user={session?.user as User}
-				/>
+				{user.cart.length === 0 ? (
+					<p> No items in cart. </p>
+				) : filteredTicketItems ? (
+					<StripeCheckoutForm
+						itemType={"ticket"}
+						cartItems={filteredTicketItems}
+						email={session.user.email}
+						user={session.user as User}
+					/>
+				) : filteredProductItems ? (
+					<StripeCheckoutForm
+						itemType={"product"}
+						cartItems={filteredProductItems}
+						user={session.user as User}
+					/>
+				) : (
+					<p> uh..... </p>
+				)}
 			</div>
 		</main>
 	)

@@ -10,9 +10,9 @@ import moneyFormatter from "@lib/moneyFormatter"
 import { Button } from "@components/elements/Button"
 import { useForm } from "@hooks/useForm"
 import {
-	actionTicketCheckout,
+	actionTicketToCart,
 	TicketCheckoutState,
-} from "@lib/actions/actionTicketCheckout"
+} from "@lib/actions/actionTicketToCart"
 import { form } from "@styles/menus/form.module.scss"
 import { InputField } from "@components/InputField"
 import { SubmitButton } from "@components/forms/SubmitButton"
@@ -68,10 +68,7 @@ export function TicketForm({ event, user }: Props) {
 	const [stateRed, dispatchRed] = useReducer(reducer, defaultstateRed)
 
 	// const [formState, formAction] = useFormState(onSubmit, defaultFormData)
-	const { state, action, submitCount } = useForm(
-		actionTicketCheckout,
-		initState
-	)
+	const { state, action, submitCount } = useForm(actionTicketToCart, initState)
 
 	// async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
 	//   // console.log('START FORM');
@@ -160,20 +157,20 @@ export function TicketForm({ event, user }: Props) {
 			<fieldset disabled={state.success ? true : false}>
 				<legend> Get Tickets </legend>
 
-				<InputField 
-          name={'eventId'}
-          type={'hidden'}
-          // type={'text'}
-          defaultValue={state.values?.eventId}
-          error={state.values?.eventId}
-        />
-        <InputField 
-          name={'userId'}
-          type={'hidden'}
-          // type={'text'}
-          defaultValue={state.values?.userId}
-          error={state.values?.userId}
-        />
+				<InputField
+					name={"eventId"}
+					type={"hidden"}
+					// type={'text'}
+					defaultValue={state.values?.eventId}
+					error={state.values?.eventId}
+				/>
+				<InputField
+					name={"userId"}
+					type={"hidden"}
+					// type={'text'}
+					defaultValue={state.values?.userId}
+					error={state.values?.userId}
+				/>
 
 				<InputField
 					name={"email"}
@@ -200,14 +197,17 @@ export function TicketForm({ event, user }: Props) {
 
 			<p> subtotal: {moneyFormatter(stateRed.total)}</p>
 
-			<SubmitButton />
+			{!state.success ? (
+				<SubmitButton />
+			) : (
+				<p className={"success"}>
+					{state.success}
+					<Link href={state.url || ""}>Checkout</Link>
+					{state.id}
+				</p>
+			)}
 
 			<p className={"error"}>{state.error}</p>
-			<p className={"success"}>
-				{state.success}
-				<Link href={state.url || ''}>Checkout</Link>
-				{state.id}
-			</p>
 		</form>
 	)
 }

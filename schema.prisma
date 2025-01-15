@@ -267,7 +267,7 @@ model Product {
   isForSale             Boolean     @default(true)
   isForRent             Boolean     @default(false)
   status                String?     @default("DRAFT")
-  price                 Int?
+  price                 Int         @default(0)
   rental_price          Int?
   stockCount            Int         @default(0)
   author                User?       @relation("Product_author", fields: [authorId], references: [id])
@@ -313,10 +313,13 @@ model CartItem {
   type      String
   product   Product? @relation("CartItem_product", fields: [productId], references: [id])
   productId String?  @map("product")
+  event     Event?   @relation("CartItem_event", fields: [eventId], references: [id])
+  eventId   String?  @map("event")
   user      User?    @relation("CartItem_user", fields: [userId], references: [id])
   userId    String?  @map("user")
 
   @@index([productId])
+  @@index([eventId])
   @@index([userId])
 }
 
@@ -422,26 +425,27 @@ model Post {
 }
 
 model Event {
-  id           String     @id @default(cuid())
-  summary      String     @default("[NEW]")
-  start        DateTime
-  end          DateTime?
-  price        Int        @default(0)
-  seats        Int
-  image        String     @default("")
-  excerpt      String     @default("")
-  description  Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  status       String?    @default("ACTIVE")
-  location     Location?  @relation("Event_location", fields: [locationId], references: [id])
-  locationId   String?    @map("location")
-  hosts        User[]     @relation("Event_hosts")
-  cohosts      User[]     @relation("Event_cohosts")
-  tickets      Ticket[]   @relation("Ticket_event")
-  coupons      Coupon[]   @relation("Coupon_events")
-  dateCreated  DateTime?  @default(now())
-  dateModified DateTime?  @default(now())
-  categories   Category[] @relation("Category_events")
-  tags         Tag[]      @relation("Event_tags")
+  id                  String     @id @default(cuid())
+  summary             String     @default("[NEW]")
+  start               DateTime
+  end                 DateTime?
+  price               Int        @default(0)
+  seats               Int
+  image               String     @default("")
+  excerpt             String     @default("")
+  description         Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  status              String?    @default("ACTIVE")
+  location            Location?  @relation("Event_location", fields: [locationId], references: [id])
+  locationId          String?    @map("location")
+  hosts               User[]     @relation("Event_hosts")
+  cohosts             User[]     @relation("Event_cohosts")
+  tickets             Ticket[]   @relation("Ticket_event")
+  coupons             Coupon[]   @relation("Coupon_events")
+  dateCreated         DateTime?  @default(now())
+  dateModified        DateTime?  @default(now())
+  categories          Category[] @relation("Category_events")
+  tags                Tag[]      @relation("Event_tags")
+  from_CartItem_event CartItem[] @relation("CartItem_event")
 
   @@index([locationId])
 }

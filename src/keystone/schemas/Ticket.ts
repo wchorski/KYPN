@@ -40,7 +40,13 @@ export const Ticket: Lists.Ticket = list({
 		// hide backend from non admins
 		// isHidden: true,
 		listView: {
-			initialColumns: ["eventStart", "eventSummary", "holder", "email", "status"],
+			initialColumns: [
+				"eventStart",
+				"eventSummary",
+				"holder",
+				"email",
+				"status",
+			],
 			// initialSort: { field: 'eventStart', direction: 'ASC'}
 		},
 	},
@@ -87,7 +93,7 @@ export const Ticket: Lists.Ticket = list({
 		}),
 		qrcode: text(),
 		email: text(),
-		orderCount: text(),
+		orderCount: text({ ui: { itemView: { fieldMode: "read" } } }),
 		price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
 		chargeId: text(),
 		status: select({
@@ -110,6 +116,12 @@ export const Ticket: Lists.Ticket = list({
 		event: relationship({
 			ref: "Event.tickets",
 			many: false,
+      ui: {
+        itemView: {fieldMode: 'read'},
+        inlineConnect: false,
+		    displayMode: 'cards',
+		    cardFields: ['id', 'summary', 'start', 'location'],
+		  }
 		}),
 		holder: relationship({
 			ref: "User.tickets",
@@ -126,7 +138,8 @@ export const Ticket: Lists.Ticket = list({
 			if (operation === "create") {
 				// if event has started, don't allow purchase of ticket
 
-				if (!resolvedData.event?.connect?.id) throw new Error('!!! No Event selected for ticket')
+				if (!resolvedData.event?.connect?.id)
+					throw new Error("!!! No Event selected for ticket")
 
 				const event = await context.db.Event.findOne({
 					where: { id: resolvedData.event.connect.id },
@@ -149,4 +162,3 @@ export const Ticket: Lists.Ticket = list({
 		},
 	},
 })
-

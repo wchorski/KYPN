@@ -16,13 +16,15 @@ button.remove {
 
 
 li.item :global{
-  padding: 1em 0;
+  padding: var(--space-m);
   border-bottom: 1px solid rgba(43, 43, 43, 0.424);
   display: flex;
   // justify-content: space-between;
   grid-template-columns: auto 1fr auto;
   background-color: var(--c-txt-bg);
   border-radius: var(--br-dull);
+  max-width: 20rem;
+  p
 
   img{
     margin-inline: 1rem;

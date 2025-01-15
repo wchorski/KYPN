@@ -9,13 +9,8 @@ ul.tickets :global {
     padding: .5em;
 
     display: flex;
-
-    & .actions_wrap {
-      margin-left: auto;
-      display: flex;
-      gap: .3rem;
-
-    }
+    flex-wrap: wrap;
+    gap: var(--space-m);
 
     & .qrbutton{
       margin-left: auto;
@@ -25,6 +20,13 @@ ul.tickets :global {
 
     }
   }
+}
+
+.actions_wrap {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-ms);
+
 }
 
 article.ticket :global {

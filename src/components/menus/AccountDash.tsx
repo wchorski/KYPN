@@ -17,13 +17,14 @@ import { StatusBadge } from "@components/StatusBadge";
 import {
   EmployeeGigDecisionForm,
 } from "@components/bookings/EmployeeGigDecisionForm";
+import { TicketList } from "@components/events/TicketList";
 
 type Props = {
   dashState: string;
   user: User;
   // orders: Order[];
   // rentals: Rental[];
-  // tickets: Ticket[] | undefined;
+  tickets: Ticket[]|undefined;
   employeeGigs: {
     gig_requests: Booking[];
     gigs: Booking[];
@@ -32,7 +33,7 @@ type Props = {
 
 export default function AccountDash({
   user,
-  // tickets = [],
+  tickets = [],
   dashState,
   // orders,
   // rentals,
@@ -253,7 +254,7 @@ export default function AccountDash({
         </Card>
       )}
 
-      {/* {tickets.length > 0 && (
+      {tickets.length > 0 && (
         <Card id="tickets" marginBlock={'0'}>
           <h3
             className={
@@ -272,7 +273,7 @@ export default function AccountDash({
           )}
           <TicketList tickets={tickets} />
         </Card>
-      )} */}
+      )}
     </div>
   );
 }

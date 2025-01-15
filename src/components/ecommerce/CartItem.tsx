@@ -1,119 +1,135 @@
-'use client'
+"use client"
 import moneyFormatter from "@lib/moneyFormatter"
-import styles from '@styles/ecommerce/cart.module.scss'
+import styles from "@styles/ecommerce/cart.module.scss"
 import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
-import { CartItem as TCartItem, CartItem as CartItemType } from "@ks/types"
+import type { CartItem } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
-import { useCart } from "@hooks/CartStateContext"
+import { useCart } from "@components/hooks/CartStateContext"
 import Link from "next/link"
 
 type UpdateCartItem = {
-  id:string,
-  quantity:number,
+	id: string
+	quantity: number
 }
 
 type Props = {
-  item:TCartItem,
-  sessionId:string|undefined,
+	item: CartItem
+	sessionId: string | undefined
 }
 
-export default function CartItem({ item, sessionId }:Props) {
+export default function CartItem({ item, sessionId }: Props) {
+	const [error, setError] = useState<any>(undefined)
+	const { getUserCart } = useCart()
 
-  const [error, setError] = useState<any>(undefined)
-  const { getUserCart } = useCart()
+  console.log(item)
 
-  if (!item?.product) return (
-    <li className={styles.item} >
-      <p>This cart item is no longer supplied by our store</p>
-    </li>
-  )
-  
-  const { product: { id, description, name, price, rental_price, photo, image}, quantity, id: cartItemId, type }:CartItemType = item
+	if (item.event)
+		return (
+			<li className={styles.item}>
+				<p>Ticket: {item.event.summary} x{item.quantity} </p>
+			</li>
+		)
 
-  const [quantityState, setQuantityState] = useState(quantity)
+	if (!item?.product)
+		return (
+			<li className={styles.item}>
+				<p>This cart item is no longer supplied by our store</p>
+			</li>
+		)
 
-  useEffect(() => {
-    setQuantityState(quantity)
-  
-    // return () => 
-  }, [quantity])
-  
+	const {
+		product: { id, description, name, price, rental_price, image },
+		quantity,
+		id: cartItemId,
+		type,
+	}: CartItem = item
 
-  async function updateQuantity(value:number){
+	const [quantityState, setQuantityState] = useState(quantity)
 
-    const variables = {
-      where: {
-        id: cartItemId
-      },
-      data: {
-        quantity: value
-      }
-    }
-    
-    try {
-      // const { user } = await client.request(query, variables) as { user:User }
-      const res = await fetch(`/api/gql/protected`, {
-        method: 'POST',
-        body: JSON.stringify({query, variables})
-      }) 
+	useEffect(() => {
+		setQuantityState(quantity)
 
-      const { updateCartItem } = await res.json() as { updateCartItem:UpdateCartItem}
-      setQuantityState(updateCartItem.quantity)
-    
-      
-    } catch (error) {
-      console.warn('cart item udate error: ', error);
-      setError(error)
-    } finally {
-      getUserCart(sessionId)
-    }
-  }
+		// return () =>
+	}, [quantity])
 
+	async function updateQuantity(value: number) {
+		const variables = {
+			where: {
+				id: cartItemId,
+			},
+			data: {
+				quantity: value,
+			},
+		}
 
-  return <>
-    <li className={styles.item} >
+		try {
+			// const { user } = await client.request(query, variables) as { user:User }
+			const res = await fetch(`/api/gql/protected`, {
+				method: "POST",
+				body: JSON.stringify({ query, variables }),
+			})
 
-      <ImageDynamic photoIn={{ url: image, altText: `${name} featured image`, } || photo} />
+			const { updateCartItem } = (await res.json()) as {
+				updateCartItem: UpdateCartItem
+			}
+			setQuantityState(updateCartItem.quantity)
+		} catch (error) {
+			console.warn("cart item udate error: ", error)
+			setError(error)
+		} finally {
+			getUserCart(sessionId)
+		}
+	}
 
-      <div>
-        <h5>
-          <Link href={`/shop/products/${id}`}> {name} </Link>
-        </h5>
+	return (
+		<>
+			<li className={styles.item}>
+				<ImageDynamic
+					photoIn={{ url: image, altText: `${name} featured image` }}
+				/>
 
-        <input 
-          type="number" 
-          value={quantityState}
-          // defaultValue={quantity}
-          onChange={e => updateQuantity(Number(e.target.value))}
-          // todo only update once input is unselected
-          // onBlur={e => updateQuantity(Number(e.target.value))}
-        /> 
-      </div>
+				<div>
+					<h5>
+						<Link href={`/shop/products/${id}`}> {name} </Link>
+					</h5>
 
-      <div className="perItemTotal">
+					<input
+						type="number"
+						value={quantityState}
+						// defaultValue={quantity}
+						onChange={(e) => updateQuantity(Number(e.target.value))}
+						// todo only update once input is unselected
+						// onBlur={e => updateQuantity(Number(e.target.value))}
+					/>
+				</div>
 
-        {type === 'RENTAL' 
-          ? <>
-            <p>{moneyFormatter(rental_price * quantity)} <small>/hour</small> </p>
-            <em> {moneyFormatter(rental_price)} /hour each </em>
-          </>
-          : <>
-            <p>{moneyFormatter(price * quantity)}</p>
-            <em> {moneyFormatter(price)} each </em>
-          </>
-        }
-      </div>
+				<div className="perItemTotal">
+					{type === "RENTAL" && rental_price ? (
+						<>
+							<p>
+								{moneyFormatter(rental_price * quantity)} <small>/hour</small>{" "}
+							</p>
+							<em> {moneyFormatter(rental_price)} /hour each </em>
+						</>
+					) : price ? (
+						<>
+							<p>{moneyFormatter(price * quantity)}</p>
+							<em> {moneyFormatter(price)} each </em>
+						</>
+					) : (
+						<></>
+					)}
+				</div>
 
-      <CartRemoveItem id={item.id} />
+				<CartRemoveItem id={item.id} />
+			</li>
 
-    </li>
-
-    <ErrorMessage error={error}/>
-  </>
-  
+			<ErrorMessage error={error} />
+		</>
+	)
 }
 
 const query = `

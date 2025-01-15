@@ -6,7 +6,7 @@ import stripeConfig from "@lib/stripe"
 import { getServerSession } from "next-auth"
 import { redirect, RedirectType } from "next/navigation"
 
-export async function actionTicketCheckout(
+export async function actionTicketToCart(
 	prevState: TicketCheckoutState,
 	formData: FormData
 ): Promise<TicketCheckoutState> {
@@ -16,30 +16,34 @@ export async function actionTicketCheckout(
 		values.quantity = Number(formData.get("quantity"))
 		// // @ts-ignore
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		const {} = values
 		console.log({ values })
+    // TODO i don't need values.email if account is necessary
 
 		const valueErrors = validateValues(values)
 		if (valueErrors)
 			return { valueErrors, values, error: "Check for errors in form fields" }
 
 		const session = await getServerSession(nextAuthOptions)
-    // TODO addToCart
+		
+    
 
-		// const data = (await keystoneContext.withSession(session).graphql.run({
-		//   query: `
-		//     mutation CheckoutTickets($chargeId: String!, $sessionId: String!, $eventId: String!, $customerEmail: String!, $quantity: Int!, $amountTotal: Int!) {
-		//       checkoutTickets(chargeId: $chargeId, sessionId: $sessionId, eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, amount_total: $amountTotal) {
-		//         id
-		//       }
-		//     }
-		//   `,
-		//   variables: values,
-		// })) as { ticket: { id: string } }
-		// console.log({data});
-		// stripeCheckout()
-    
-    
+		const data = (await keystoneContext.withSession(session).graphql.run({
+			query: `
+		    mutation AddToCart($type: String!, $productId: ID, $eventId: ID, $quantity: Int!) {
+          addToCart(type: $type, productId: $productId, eventId: $eventId, quantity: $quantity) {
+            quantity
+          }
+        }
+		  `,
+			variables: {
+				type: "SALE",
+				quantity: values.quantity,
+				eventId: values.eventId,
+			},
+		})) as { addToCart: { quantity: number } }
+		
+		
+    if(!data.addToCart) throw new Error('Ticket Add to Cart Failed')
 		return {
 			//@ts-ignore
 			// values: {
@@ -49,17 +53,16 @@ export async function actionTicketCheckout(
 			url: envs.FRONTEND_URL + `/checkout`,
 			success: `Tickets added to cart. Redirecting to checkout`,
 		}
-
-    
 	} catch (error) {
 		console.log("!!! actionTicketCheckout: ", error)
 		return {
 			error: "Ticket Checkout failed: " + error,
 			success: undefined,
 		}
-	} finally {
-    redirect('/checkout', RedirectType.push)
-  }
+	} 
+  finally {
+		redirect("/checkout", RedirectType.push)
+	}
 }
 
 // async function stripeCheckout(){

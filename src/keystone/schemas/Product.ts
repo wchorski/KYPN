@@ -56,12 +56,12 @@ export const Product: Lists.Product = list({
 	fields: {
 		// photo: relationship({
 		//   ref: 'ProductImage.product',
-		//   ui: {
-		//     displayMode: 'cards',
-		//     cardFields: ['image', 'altText', 'filename'],
-		//     inlineCreate: { fields: ['image', 'altText', 'filename'] },
-		//     inlineEdit: { fields: ['image', 'altText', 'filename'] }
-		//   }
+		  // ui: {
+		  //   displayMode: 'cards',
+		  //   cardFields: ['image', 'altText', 'filename'],
+		  //   inlineCreate: { fields: ['image', 'altText', 'filename'] },
+		  //   inlineEdit: { fields: ['image', 'altText', 'filename'] }
+		  // }
 		// }),
 		typeof: virtual({
 			field: graphql.field({
@@ -150,7 +150,7 @@ export const Product: Lists.Product = list({
 			},
 		}),
 
-		price: integer(),
+		price: integer({validation: {isRequired: true}, defaultValue: 0}),
 		rental_price: integer(),
 
 		stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
@@ -203,6 +203,7 @@ export const Product: Lists.Product = list({
 						metadata: {
 
 							category: resolvedData.categories
+              // @ts-ignore
 								? resolvedData.categories[0].name
 								: "uncategorized",
 							status: resolvedData.status || "",

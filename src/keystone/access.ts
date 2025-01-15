@@ -411,7 +411,7 @@ export const rules = {
 		// return { holder: { id: { equals: session?.itemId }} }
 	},
 
-	canOrder({ session }: ListAccessArgs) {
+	canViewCart({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 
 		// 1. Do they have the permission

@@ -7,7 +7,7 @@ import { Context, Lists, TicketCreateInput } from ".keystone/types"
 import stripeConfig from "../../lib/stripe"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
-import type {Event} from '../types'
+import type { Event } from "../types"
 import stripe from "../../lib/stripe"
 import { envs } from "../../../envs"
 import { getServerSession } from "next-auth"
@@ -20,44 +20,47 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 		args: {
 			stripeCheckoutSessionId: graphql.arg({ type: graphql.String }),
 			stripePaymentIntent: graphql.arg({ type: graphql.String }),
-			userId: graphql.arg({ type: graphql.String }),
+			userId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			eventId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			quantity: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
 		},
 
 		async resolve(source, variables, context: Context) {
-      //? Stripe Webhook validates payment success
-      // TODO SECURITY!!!!! 
-      console.log('### !!! SECURITY ISSUE. CAN I JUST CLAIM TICKETS WITHOUT PAYMENT?');
-      const session = await getServerSession(nextAuthOptions)
-      // if(!session) throw new Error('No')
-      // const sudoContext = context.sudo()
+			//? Stripe Webhook validates payment success
+			// TODO SECURITY!!!!!
+			console.log(
+				"### !!! SECURITY ISSUE. CAN I JUST CLAIM TICKETS WITHOUT PAYMENT?"
+			)
+			// const session = await getServerSession(nextAuthOptions)
+			// if(!session) throw new Error('No')
+			const sudoContext = context.sudo()
+			const session = context.session
 
 			const {
 				stripeCheckoutSessionId,
-        stripePaymentIntent,
+				stripePaymentIntent,
 				eventId,
 				userId,
 				quantity,
 				customerEmail,
 			} = variables
 
-			const event = await context.withSession(session).query.Event.findOne({
+			const event = (await context.withSession(session).query.Event.findOne({
 				where: { id: eventId },
 				query: `
           id
           seats
           price
         `,
-			}) as Event
+			})) as Event
 			if (!event) throw new Error("No Event Found")
 
 			const seatsTaken = await countAvailableSeats({
 				context,
 				eventId,
 			})
-      //? if (# of seats customer is requesting + already taken seats) is over event.seats max
+			//? if (# of seats customer is requesting + already taken seats) is over event.seats max
 			if (quantity + seatsTaken > event.seats)
 				throw new Error(
 					`Not enough seats available for event. ${
@@ -65,24 +68,27 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					} seats left.`
 				)
 
-      // const stripeSession = await stripeTicketCheckout(event, quantity, stripeCustomerId)
-      // if(stripeSession === 'failed') throw new Error('payment failed')
-      
-			//Create an order based on the cart item
-			const ticketItems:TicketCreateInput[] = Array.from({ length: quantity }, (_, index) => ({
-				event: { connect: { id: eventId } },
-				holder: userId ? { connect: { id: userId } } : null,
-				price: event.price,
-				email: customerEmail,
-				orderCount: `${index + 1} of ${quantity}`,
-			}))
+			// const stripeSession = await stripeTicketCheckout(event, quantity, stripeCustomerId)
+			// if(stripeSession === 'failed') throw new Error('payment failed')
 
-      // TODO perform any coupons here
-      const amountTotal = event.price * quantity
+			//Create an order based on the cart item
+			const ticketItems: TicketCreateInput[] = Array.from(
+				{ length: quantity },
+				(_, index) => ({
+					event: { connect: { id: eventId } },
+					holder: userId ? { connect: { id: userId } } : null,
+					price: event.price,
+					email: customerEmail,
+					orderCount: `${index + 1} of ${quantity}`,
+				})
+			)
+
+			// TODO perform any coupons here
+			const amountTotal = event.price * quantity
 
 			const now = new Date()
-			const order = await context.sudo().db.Order.createOne({
-			// const order = await context.withSession(session).db.Order.createOne({
+			const order = await sudoContext.db.Order.createOne({
+				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
 					total: amountTotal,
 					ticketItems: { create: ticketItems },
@@ -90,17 +96,22 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					stripeCheckoutSessionId,
 					stripePaymentIntent,
 					dateCreated: now.toISOString(),
-          email: customerEmail,
-          //TODO maybe not secure
-          ...(stripeCheckoutSessionId ? {status: "PAYMENT_RECIEVED"} : {})
+					email: customerEmail,
+					//TODO maybe not secure
+					...(stripeCheckoutSessionId ? { status: "PAYMENT_RECIEVED" } : {}),
 				},
 			})
-      // console.log("### ORDER CREATED, ", {order});
+			// console.log("### ORDER CREATED, ", {order});
 
-			//Clean up! Delete all cart items
-			// await context.db.CartItem.deleteMany({
-			//   where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
-			// })
+			const cartItemsToDelete = (await sudoContext.query.CartItem.findMany({
+				where: { user: { id: { equals: userId } } },
+				query: `id`,
+			})) as { id: string }[]
+			console.log({ cartItemsToDelete })
+
+			await sudoContext.db.CartItem.deleteMany({
+				where: cartItemsToDelete,
+			})
 
 			//? email sent with Order afterOperation
 
@@ -116,11 +127,10 @@ type CheckSeatsProps = {
 	eventId: string
 }
 
-async function countAvailableSeats({
+export async function countAvailableSeats({
 	context,
 	eventId,
 }: CheckSeatsProps) {
-
 	const seatsTaken = (await context.sudo().query.Ticket.count({
 		where: {
 			event: {
@@ -156,7 +166,7 @@ async function countAvailableSeats({
 //         quantity: 1,
 //       }
 //     })
-  
+
 //     const stripeSession = await stripe.checkout.sessions.create({
 //       // customer_email: email || 'anonymous',
 //       customer: stripeCustomerId,
@@ -173,7 +183,6 @@ async function countAvailableSeats({
 //     })
 //   } catch (error) {
 //     console.log('!!! stripe checkoutTicket: ', error);
-    
-    
+
 //   }
 // }

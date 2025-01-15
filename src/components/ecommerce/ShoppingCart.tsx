@@ -1,6 +1,6 @@
 'use client'
 import { calcTotalPrice } from '@lib/calcTotalPrice'
-import { useCart } from '@hooks/CartStateContext'
+import { useCart } from '@components/hooks/CartStateContext'
 import moneyFormatter from '@lib/moneyFormatter'
 import styles from '@styles/ecommerce/cart.module.scss'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -14,7 +14,7 @@ import { LoadingAnim } from '@components/elements/LoadingAnim'
 import { CartItemsList } from './CartItemsList'
 import { CartTotal } from './CartTotal'
 
-export default function ShoppingCart() {
+export function ShoppingCart() {
 
   const elementRef = useRef<HTMLDivElement | null>(null);
   

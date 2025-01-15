@@ -1,7 +1,7 @@
 "use server"
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { Event, Product, Ticket, User } from "@ks/types"
+import type { CartItem, Event, Product, Ticket, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -10,36 +10,35 @@ if (!envs.STRIPE_SECRET) throw new Error("!!! ❌ envs.STRIPE_SECRET not set")
 const stripe = new Stripe(envs.STRIPE_SECRET)
 
 export type StripeCheckoutSessionAction = {
-	quantity: number
-	user?: User
+	user: User
 	email?: string
-} & (
-	| {
-			itemType: "product"
-			product: Product
-	  }
-	| {
-			itemType: "ticket"
-			event: Event
-	  }
-)
+	cartItems: CartItem[]
+  // TODO this is here for my peace of mind, but prob can omit
+	itemType: "ticket" | "product"
+}
+// & (
+// 	| {
+// 			itemType: "product"
+// 			product: Product
+// 	  }
+// 	| {
+// 			itemType: "ticket"
+// 			event: Event
+// 	  }
+//   )
 
 export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
-	const { itemType, quantity, email, user } = props
+	const { itemType, cartItems, email, user } = props
 
 	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined =
 		(() => {
+
 			switch (itemType) {
 				case "product":
-					return [
-						{
-							price: props.product.stripePriceId, // Use priceId for products
-							quantity: quantity,
-						},
-					]
+					return createProductLineItems(cartItems)
 
 				case "ticket":
-					return createTicketLineItems(quantity, props.event, user)
+					return createTicketLineItems(cartItems, user)
 
 				default:
 					return undefined
@@ -54,12 +53,13 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		line_items,
 		mode: "payment",
 		return_url: returnUrl,
-    ...(email ? {customer_email: email} : {}),
+		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
 		metadata: {
 			typeof: itemType,
+			customerId: user.id,
 			...(itemType === "ticket"
-				? { eventId: props.event.id, holderId: user?.id }
+				? { eventId: props.cartItems[0].event?.id }
 				: {}),
 			orderId: null,
 		},
@@ -94,29 +94,57 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 //* Line Item helpers
 //* Line Item helpers
 //* Line Item helpers
-function createTicketLineItems(quantity: number, event: Event, user?: User) {
-	return Array.from(
-		{ length: quantity },
-		(item: Ticket, i: number): Stripe.Checkout.SessionCreateParams.LineItem => {
-			return {
-				price_data: {
-					// TODO make this part of CartItem schema item.currency, not hard coded
-					currency: "usd",
-					product_data: {
-						name: `Ticket to ${event.summary} (${i + 1} of ${quantity})`,
-						images: [event.image],
-						metadata: {
-							eventId: event.id,
-							ticketIndex: `${i + 1} of ${quantity}`,
-							typeof: "ticket",
-							holderId: user?.id || "anonymous",
-						},
+function createProductLineItems(cartItems: CartItem[]) {
+	return cartItems.flatMap(({product, quantity}): Stripe.Checkout.SessionCreateParams.LineItem[] => {
+		if (!product) return []
+		return [{
+			price_data: {
+				// TODO make this part of CartItem schema item.currency, not hard coded
+				currency: "usd",
+				product_data: {
+					name: product.name,
+					images: [product?.image || ""],
+					metadata: {
+						productId: product.id,
+						typeof: "product",
 					},
-
-					unit_amount: event.price,
 				},
-				quantity: 1,
+
+				unit_amount: product.price,
+			},
+			quantity,
+		}]
+	})
+}
+
+function createTicketLineItems(cartItems: CartItem[], user?: User) {
+	return cartItems.flatMap(({event, quantity}) => {
+		if (!event) return []
+		return Array.from(
+			{ length: quantity },
+			(_, i: number): Stripe.Checkout.SessionCreateParams.LineItem => {
+				return {
+					price_data: {
+						// TODO make this part of CartItem schema item.currency, not hard coded
+						currency: "usd",
+						product_data: {
+							name: `Ticket to ${event.summary} (${i + 1} of ${
+								quantity
+							})`,
+							images: [event?.image || ""],
+							metadata: {
+								eventId: event.id,
+								ticketIndex: `${i + 1} of ${quantity}`,
+								typeof: "ticket",
+								holderId: user?.id || "anonymous",
+							},
+						},
+
+						unit_amount: event.price,
+					},
+					quantity: 1,
+				}
 			}
-		}
-	)
+		)
+	})
 }

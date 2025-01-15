@@ -56,6 +56,10 @@ function CartStateProvider ({children}:{children: ReactNode}){
                   id
                   type
                   quantity
+                  event {
+                    id
+                    summary
+                  }
                   product {
                     id
                     price

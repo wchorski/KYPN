@@ -141,7 +141,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 			// checkoutSession.id = stripeCheckoutSessionId
 			const data = (await keystoneContext.graphql.run({
 				query: `
-          mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!, $stripeCheckoutSessionId: String, $userId: String, $stripePaymentIntent: String) {
+          mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!, $stripeCheckoutSessionId: String, $userId: String!, $stripePaymentIntent: String) {
             checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, stripeCheckoutSessionId: $stripeCheckoutSessionId, userId: $userId, stripePaymentIntent: $stripePaymentIntent) {
               id
               status
@@ -152,7 +152,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 					stripeCheckoutSessionId: checkoutSession.id,
 					stripePaymentIntent: checkoutSession.payment_intent,
 					eventId: checkoutSession.metadata.eventId,
-					userId: checkoutSession.metadata.holderId,
+					userId: checkoutSession.metadata.customerId,
 					quantity: lineItems.length,
 					customerEmail: checkoutSession.customer_email || checkoutSession.customer_details?.email || 'anonymous',
 				},
@@ -175,7 +175,7 @@ type WithMetadata = Stripe.Checkout.Session &
 				metadata: {
 					typeof: "ticket"
 					eventId: string
-					holderId: string
+					customerId: string
 					orderId: string
 				}
 		  }
@@ -183,6 +183,7 @@ type WithMetadata = Stripe.Checkout.Session &
 				metadata: {
 					typeof: "product"
 					orderId: string
+          customerId: string
 				}
 		  }
 	)

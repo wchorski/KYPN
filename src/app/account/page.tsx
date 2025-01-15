@@ -28,6 +28,7 @@ import {
 import { notFound } from "next/navigation"
 import { Grid } from "@components/layouts/Grid"
 import { IconBookmark } from "@lib/useIcons"
+import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -117,10 +118,10 @@ export default async function AccountPage({ params, searchParams }: Props) {
 	//   `,
 	// }) as Rental[]
 
-  // TODO move this to a `fetchDATA` function
+	// TODO move this to a `fetchDATA` function
 	const employeeGigData = (await keystoneContext
 		.withSession(session)
-    // .sudo()
+		// .sudo()
 		.graphql.run({
 			variables: {
 				where: {
@@ -170,11 +171,11 @@ export default async function AccountPage({ params, searchParams }: Props) {
         }
       `,
 		})) as { user: User }
+	if (!user) return notFound()
 	const { gig_requests, gigs } = employeeGigData.user
 
-	// const {tickets, error } = await fetchTicketsByUser(user?.id)
+	const {tickets, error: errorTickets } = await fetchTicketsByUser(user.id)
 
-	if (!user) return notFound()
 	return (
 		<main className={page_layout}>
 			<header className={layout_site}>
@@ -184,7 +185,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 			</header>
 
 			<div className={[page_content, layout_wide].join(" ")}>
-				<Grid layout={"1_4"} isAuto={false} alignContent={'start'}>
+				<Grid layout={"1_4"} isAuto={false} alignContent={"start"}>
 					<nav className={styles.dashnav}>
 						<ul>
 							<li>
@@ -202,10 +203,12 @@ export default async function AccountPage({ params, searchParams }: Props) {
 									<a
 										href={"?dashState=bookings#bookings"}
 										className={
-											dashState === "bookings" ? styles.linkactive : styles.dashlink
+											dashState === "bookings"
+												? styles.linkactive
+												: styles.dashlink
 										}
 									>
-										Bookings  <IconBookmark />
+										Bookings <IconBookmark />
 									</a>
 								</li>
 							)}
@@ -292,7 +295,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 									</Link>
 								</li>
 							)} */}
-							{/* {tickets && tickets?.length > 0 && (
+							{tickets && tickets?.length > 0 && (
 								<li>
 									<Link
 										href={"/account?dashState=tickets#tickets"}
@@ -305,7 +308,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 										Tickets <HiOutlineTicket />
 									</Link>
 								</li>
-							)} */}
+							)}
 						</ul>
 					</nav>
 
@@ -314,7 +317,7 @@ export default async function AccountPage({ params, searchParams }: Props) {
 						user={user}
 						// orders={orders}
 						// rentals={rentals}
-						// tickets={tickets}
+						tickets={tickets}
 						employeeGigs={{ gigs, gig_requests }}
 					/>
 				</Grid>
@@ -337,7 +340,24 @@ const USER_DASH_QUERY = `
     }
     status
   }
+  tickets {
+    id
+    orderCount
+    status
+    event {
+      id
+      start
+      summary
+      location {
+        id
+        name
+      }
+    }
+  }
 `
+
+// clamp(1rem, 90vw, 31rem)
+
 // const USER_DASH_QUERY = `
 //   id
 //   name
@@ -362,18 +382,18 @@ const USER_DASH_QUERY = `
 //     dateModified
 //     dateCreated
 //   }
-//   tickets {
+// tickets {
+//   id
+//   orderCount
+//   status
+//   event {
 //     id
-//     orderCount
-//     status
-//     event {
+//     start
+//     summary
+//     location {
 //       id
-//       start
-//       summary
-//       location {
-//         id
-//         name
-//       }
+//       name
 //     }
 //   }
+// }
 // `

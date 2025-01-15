@@ -1788,7 +1788,7 @@ input ProductWhereInput {
   isForSale: BooleanFilter
   isForRent: BooleanFilter
   status: StringNullableFilter
-  price: IntNullableFilter
+  price: IntFilter
   rental_price: IntNullableFilter
   stockCount: IntFilter
   author: UserWhereInput
@@ -2016,6 +2016,7 @@ type CartItem {
   quantity: Int
   type: String
   product: Product
+  event: Event
   user: User
 }
 
@@ -2031,6 +2032,7 @@ input CartItemWhereInput {
   quantity: IntFilter
   type: StringFilter
   product: ProductWhereInput
+  event: EventWhereInput
   user: UserWhereInput
 }
 
@@ -2044,12 +2046,19 @@ input CartItemUpdateInput {
   quantity: Int
   type: String
   product: ProductRelateToOneForUpdateInput
+  event: EventRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
 input ProductRelateToOneForUpdateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
+input EventRelateToOneForUpdateInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -2062,12 +2071,18 @@ input CartItemCreateInput {
   quantity: Int
   type: String
   product: ProductRelateToOneForCreateInput
+  event: EventRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
 input ProductRelateToOneForCreateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
+}
+
+input EventRelateToOneForCreateInput {
+  create: EventCreateInput
+  connect: EventWhereUniqueInput
 }
 
 type OrderItem {
@@ -2755,12 +2770,6 @@ input TicketUpdateInput {
   dateModified: DateTime
 }
 
-input EventRelateToOneForUpdateInput {
-  create: EventCreateInput
-  connect: EventWhereUniqueInput
-  disconnect: Boolean
-}
-
 input TicketUpdateArgs {
   where: TicketWhereUniqueInput!
   data: TicketUpdateInput!
@@ -2779,11 +2788,6 @@ input TicketCreateInput {
   coupons: CouponRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input EventRelateToOneForCreateInput {
-  create: EventCreateInput
-  connect: EventWhereUniqueInput
 }
 
 type Category {
@@ -3089,7 +3093,8 @@ type Mutation {
   verifyEmail(token: String!, email: String!): User
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
-  checkoutTickets(stripeCheckoutSessionId: String, stripePaymentIntent: String, userId: String, eventId: String!, customerEmail: String!, quantity: Int!): Order
+  checkoutTickets(stripeCheckoutSessionId: String, stripePaymentIntent: String, userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
+  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID): CartItem
 }
 
 type Query {
