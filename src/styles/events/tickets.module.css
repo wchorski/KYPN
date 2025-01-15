@@ -44,12 +44,14 @@ ul.tickets :global {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: var(--space-ml);
 }
 
-.details{
+ul.details{
   list-style: none;
   border-left: dashed 1px #e0e0e0;
   padding: 1em;
+  margin: 0;
 }
 
 .qrcode_wrap{
@@ -62,8 +64,8 @@ ul.tickets :global {
   align-items: center;
 
   & svg{
-    width: 200px;
-    height: 200px;
+    width: 400px;
+    height: 400px;
   }
 }
 
