@@ -1,6 +1,8 @@
 // cred - https://stackoverflow.com/questions/71352151/how-to-access-items-metadata-in-stripe-checkout-session/71352601#71352601
 import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
+import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
@@ -135,10 +137,14 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
   // TODO checkoutSession.payment_status === "unpaid",
   if(checkoutSession.payment_status !== "paid") throw new Error('!!! 💳❌ stripe payment not recieved')
 
+
 	switch (checkoutSession.metadata.typeof) {
 		case "ticket":
 			// Array(lineItems[i].id) = stripeLineItemIds ?
 			// checkoutSession.id = stripeCheckoutSessionId
+      
+      //? could send stripe session to mutation if tyring to verify
+			// const data = (await keystoneContext.withSession({stripeMetaCustomerId: session.metadata?.customerId}).graphql.run({
 			const data = (await keystoneContext.graphql.run({
 				query: `
           mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!, $stripeCheckoutSessionId: String, $userId: String!, $stripePaymentIntent: String) {
@@ -158,7 +164,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 				},
 			})) as { checkoutTickets: { id: string; status: string } }
 			// console.log("### stripe webhook. checkoutTickets mutation data")
-			// console.log({ data })
+			console.log({ data })
 			break
 
 		// case "product":

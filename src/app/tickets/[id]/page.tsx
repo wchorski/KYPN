@@ -18,6 +18,8 @@ import { notFound } from "next/navigation"
 import { LoginToViewPage } from "@components/menus/LoginToViewPage"
 import { StatusBadge } from "@components/StatusBadge"
 import { QRCode } from "@components/elements/QRCodeSVG"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 
 export const metadata: Metadata = {
 	title: "Ticket | " + envs.SITE_TITLE,
@@ -35,9 +37,20 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return <LoginToViewPage />
 
-	const { ticket, error } = await fetchTicket(id, query, session)
+	const { ticket, sudoTicketCount = 0, error } = await fetchTicket(
+		id,
+		query,
+		session
+	)
 
 	if (error) return <ErrorMessage error={error} />
+	if (sudoTicketCount > 0 && !ticket)
+		return (
+			<ErrorPage error={{}}>
+        <p>Account must be verified to claim Ticket</p>
+				<VerifyEmailCard email={session.user.email} />
+			</ErrorPage>
+		)
 	if (!ticket) return notFound()
 
 	const { status, event, holder, email, orderCount } = ticket
@@ -87,8 +100,8 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						<QRCode text={envs.FRONTEND_URL + `/tickets/${id}?popup=modal`} />
 					</div>
 				</article>
-        
-				<footer style={{marginTop: 'var(--space-l)'}}>
+
+				<footer style={{ marginTop: "var(--space-l)" }}>
 					{(hostIds.includes(session.itemId) ||
 						session.data.role.canManageTickets) && (
 						<Link

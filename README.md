@@ -263,6 +263,7 @@ When initializing a fresh database or returning to development you may add/remov
 - [x] page layout that isn't complicated https://codepen.io/kevinpowell/pen/ExrZrrw?editors=1100
 - [x] look into https://smolcss.dev/ for inspo
 - [ ] stripe returns. How to refund products, tickets, subscriptions, etc
+  - [ ] automate update Orders accordingling 
 ---
 - [ ] add testing again
   - [ ] stripe webhook testing - https://accreditly.io/articles/test-stripe-webhooks-without-using-ngrok#content-3-local-stripe-webhook-testing-with-docker

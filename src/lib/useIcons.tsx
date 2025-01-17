@@ -14,25 +14,25 @@ import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { MdAccountCircle, MdOutlineAccountBox, MdShop } from "react-icons/md"
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
+import { RiFileEditFill } from "react-icons/ri"
 
-export const IconBookmark = () => {
-	return <BsFillBookmarkFill />
-}
-export const IconEventTicket = () => {
-	return <BsFillTicketPerforatedFill />
-}
+export const IconBookmark = () => <BsFillBookmarkFill />
+
+export const IconEventTicket = () =>  <BsFillTicketPerforatedFill />
+
 
 export const IconTicketOutlined = () =>  <HiOutlineTicket />
 export const IconAccountBox = () =>  <MdOutlineAccountBox />
 
-export const IconUserAccountAvatar = () => {
-	return <MdAccountCircle />
-}
+export const IconUserAccountAvatar = () =>  <MdAccountCircle />
+
 
 export const IconCalendarOutlined = () =>  <HiOutlineCalendar/>
 export const IconCalendar = () =>  <HiCalendar/>
 
 export const IconShoppingBag = () => <MdShop />
+
+export const IconEditPagePencile = () => <RiFileEditFill />
 
 
 

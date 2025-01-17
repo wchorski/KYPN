@@ -1,16 +1,13 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { Callout } from "@components/blocks/Callout"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import DialogPopup from "@components/menus/Dialog"
+import { DialogPopup } from "@components/menus/Dialog"
 import { LoginForm } from "@components/menus/LoginForm"
 import { PasswordRequestForm } from "@components/menus/PasswordRequestForm"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
 import { getProviders } from "next-auth/react"
 import Link from "next/link"
-import { CSSProperties } from "react"
-import { BlockLayout } from "@components/layouts/BlockLayout"
 import { Header } from "@components/elements/Header"
 import {
 	layout_full,
@@ -19,7 +16,6 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { Grid } from "@components/layouts/Grid"
 import Flex from "@components/layouts/Flex"
 
 export const metadata: Metadata = {
@@ -49,17 +45,14 @@ export default async function LoginPage({ searchParams }: Props) {
 				<PasswordRequestForm />
 			</DialogPopup>
 
-			<Header widthOfContent={'layout_wide'}>
+			<Header widthOfContent={"layout_wide"}>
 				<h1> Login </h1>
 				{callbackUrl && (
 					<p className="error"> You must login first to access the page </p>
 				)}
 			</Header>
 			<div className={[page_content, layout_wide].join(" ")}>
-				{/* <Grid isAuto={true} gap={"ml"} colWidth={'17rem'}> */}
-        <Flex>
-
-        
+				<Flex>
 					<div>
 						<LoginForm providers={providers} />
 					</div>
@@ -84,11 +77,13 @@ export default async function LoginPage({ searchParams }: Props) {
 						)}
 						<h4> Create a New Account </h4>
 						<p>
-							<Link href={`/register`} className={'button  large'}> Register Now </Link>
+							<Link href={`/register`} className={"button  large"}>
+								{" "}
+								Register Now{" "}
+							</Link>
 						</p>
 					</div>
-        </Flex>
-				{/* </Grid> */}
+				</Flex>
 			</div>
 		</main>
 	)

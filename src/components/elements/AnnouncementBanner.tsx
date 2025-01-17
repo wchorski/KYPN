@@ -4,7 +4,7 @@ import { BlockRender } from "@components/blocks/BlockRender"
 import { ReactElement } from "react"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
-import { isEmptyContent, plainObj } from "@lib/contentHelpers"
+import { isEmptyDocument, plainObj } from "@lib/contentHelpers"
 
 type Props = {
   prop?:string
@@ -22,7 +22,7 @@ export async function AnnouncementBanner ({ prop }:Props):ReactElement<any, any>
   if (
     !announcements 
     || announcements.length === 0 
-    || isEmptyContent(announcements[0].content.document)
+    || isEmptyDocument(announcements[0].content.document)
   ) return <></>
 
   return (

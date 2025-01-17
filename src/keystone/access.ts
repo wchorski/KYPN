@@ -383,6 +383,7 @@ export const rules = {
 		if (permissions.canManageTickets({ session })) return true
 
 		if (!session) return false
+    if(session.data.role === null) return false
 
 		// 2. are they a host of this event, or tocket holder?
 		// ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen

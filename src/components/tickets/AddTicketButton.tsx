@@ -3,13 +3,12 @@ import moneyFormatter from "@lib/moneyFormatter"
 import Link from "next/link"
 
 type Props = {
-  price:number|undefined,
   date:string|undefined,
 }
 
 const now = new Date()
 
-export function AddTicketButton ({ price, date }:Props) {
+export function AddTicketButton ({  date }:Props) {
   const startDate = new Date(String(date))
 
   if(now > startDate) return (
@@ -33,11 +32,7 @@ export function AddTicketButton ({ price, date }:Props) {
       }}
       // onClick={() => setIsPopup(true)}
     > 
-      {price && price > 0 ? (
-        <span>{moneyFormatter(price)} per Ticket</span>
-      ) : (
-        <span> Free </span>
-      )}
+      <span>Get Tickets</span>
     </Link>
   )
 }

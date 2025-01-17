@@ -2736,7 +2736,7 @@ input TicketWhereInput {
   orderCount: StringFilter
   price: IntFilter
   chargeId: StringFilter
-  status: StringNullableFilter
+  status: StringFilter
   event: EventWhereInput
   holder: UserWhereInput
   order: OrderWhereInput

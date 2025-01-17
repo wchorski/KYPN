@@ -184,6 +184,8 @@ export function TicketForm({ event, user }: Props) {
 					name={"quantity"}
 					type={"number"}
 					placeholder={"1"}
+          min={1}
+          max={50}
 					defaultValue={state.values?.quantity}
 					error={state.valueErrors?.quantity}
 					onChange={(e) =>

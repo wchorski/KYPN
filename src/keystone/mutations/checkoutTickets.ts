@@ -37,6 +37,12 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			const sudoContext = context.sudo()
 			const session = context.session
 
+			// console.log(
+			// 	"### checkoutTickets session::",
+			// 	JSON.stringify(session, null, 2)
+			// )
+			// if (!session) throw new Error("checkoutTicket: No Session provided")
+
 			const {
 				stripeCheckoutSessionId,
 				stripePaymentIntent,
@@ -46,6 +52,18 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 				customerEmail,
 			} = variables
 
+			// const user = await sudoContext.query.User.findOne({
+			// 	where: { id: session.stripeMetaCustomerId || userId },
+			// 	query: `
+      //     role {
+      //       id
+      //     }
+      //   `,
+			// })
+			// if (!user) throw new Error("checkoutTicket Error 🫥")
+			// console.log({ user })
+
+      // TODO this won't work for private events. session will be empty if coming from webhook
 			const event = (await context.withSession(session).query.Event.findOne({
 				where: { id: eventId },
 				query: `
@@ -86,7 +104,36 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			// TODO perform any coupons here
 			const amountTotal = event.price * quantity
 
-			const now = new Date()
+      // TODO catch any orders that may have backdoored and were not verified
+			//? still create an order that has status = 'FAILED'
+      //* nvm ALLOW unverified to buy, but don't allow them to retrieve ticket if not verified
+			// if (user.role === null) {
+			// 	const order = await sudoContext.db.Order.createOne({
+			// 		// const order = await context.withSession(session).db.Order.createOne({
+			// 		data: {
+      //       total: amountTotal,
+			// 			user: userId
+			// 				? { connect: { id: session.stripeMetaCustomerId || userId } }
+			// 				: null,
+			// 			stripeCheckoutSessionId,
+			// 			stripePaymentIntent,
+			// 			email: customerEmail,
+			// 			//TODO maybe not secure
+			// 			...(stripeCheckoutSessionId ? { status: "FAILED" } : {}),
+			// 		},
+			// 	})
+			// 	console.log("❌ order FAILEd, ", { order })
+
+			// 	throw new Error(
+			// 		"!!! User must verify their account to purchase tickets"
+			// 	)
+
+			// 	// return {
+			// 	//   status: order.status,
+			// 	//   id: order.id,
+			// 	// }
+			// }
+
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
@@ -95,7 +142,6 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					user: userId ? { connect: { id: userId } } : null,
 					stripeCheckoutSessionId,
 					stripePaymentIntent,
-					dateCreated: now.toISOString(),
 					email: customerEmail,
 					//TODO maybe not secure
 					...(stripeCheckoutSessionId ? { status: "PAYMENT_RECIEVED" } : {}),

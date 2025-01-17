@@ -12,7 +12,6 @@ import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
 import { Order, Rental, User } from "@ks/types"
 import { LoginToViewPage } from "@components/menus/LoginToViewPage"
-// import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
 import styles from "@styles/menus/dashboard.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
@@ -35,7 +34,7 @@ import {
 	IconShoppingBag,
 	IconTicketOutlined,
 } from "@lib/useIcons"
-import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
+import {fetchTicketsByUser} from "@lib/fetchdata/fetchTicketsByUser"
 import { ReactNode } from "react"
 import { DashNavLink } from "@components/menus/DashNavLink"
 import { DashNav, DashNavData } from "@components/menus/DashNav"
@@ -166,7 +165,7 @@ export default async function AccountPage() {
 	if (!user) return notFound()
 	const { gig_requests, gigs } = employeeGigData.user
 
-	const { tickets, error: errorTickets } = await fetchTicketsByUser(user.id)
+	const { tickets, sudoTicketCount = 0, error: errorTickets } = await fetchTicketsByUser(user.id)
 
 	const dashNavData: DashNavData = [
 		{
@@ -182,7 +181,7 @@ export default async function AccountPage() {
 		},
 		{
 			slug: "tickets",
-			isCount: tickets && tickets.length > 0 ? true : false,
+			isCount: sudoTicketCount > 0 || tickets && tickets.length > 0 ? true : false,
 			icon: <IconTicketOutlined />,
 		},
 		{
@@ -225,6 +224,7 @@ export default async function AccountPage() {
 		user,
 		orders,
 		tickets,
+    sudoTicketCount,
 		rentals: [],
 		downloads: [],
 		employeeGigs: { gigs, gig_requests },

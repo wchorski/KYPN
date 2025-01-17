@@ -183,3 +183,12 @@ blockquote {
 		opacity: 0;
 	}
 }
+
+.sticky {
+  position: sticky;
+  top: var(--space-ml);
+}
+
+.thick-underline-text {
+  border-bottom: solid var(--space-s) var(--c-seperator);
+}

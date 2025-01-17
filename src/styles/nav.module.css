@@ -1,3 +1,9 @@
+.linkWicon {
+  display: flex !important;
+  gap: var(--space-ms);
+  flex-wrap: wrap;
+}
+
 .nav {
 
   backdrop-filter: blur(10px);

@@ -131,6 +131,7 @@ export const Order: Lists.Order = list({
 				{ label: "expired", value: "EXPIRED" },
 				{ label: "refunded", value: "REFUNDED" },
 				{ label: "returned", value: "RETURNED" },
+				{ label: "failed", value: "FAILED" },
 			],
 			defaultValue: "STARTED",
 			ui: {

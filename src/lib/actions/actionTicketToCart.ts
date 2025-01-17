@@ -10,22 +10,27 @@ export async function actionTicketToCart(
 	prevState: TicketCheckoutState,
 	formData: FormData
 ): Promise<TicketCheckoutState> {
+	let isErrorFlagged = false
+
 	try {
 		// @ts-ignore
 		const values = Object.fromEntries(formData) as TicketCheckoutValues
 		values.quantity = Number(formData.get("quantity"))
 		// // @ts-ignore
 		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		console.log({ values })
-    // TODO i don't need values.email if account is necessary
+		// console.log({ values })
+		// TODO i don't need values.email if account is necessary
 
 		const valueErrors = validateValues(values)
 		if (valueErrors)
 			return { valueErrors, values, error: "Check for errors in form fields" }
 
 		const session = await getServerSession(nextAuthOptions)
-		
-    
+
+    //? this stops it from being added to cart. 
+    //? i put in extra measures so user can't query tickets if they are not verified (even if they are purchased)
+		if (session?.data.role === null)
+			throw new Error(`!!! User must verify their account to purchase tickets. Visit "${envs.FRONTEND_DOMAIN}/account" for more info.`)
 
 		const data = (await keystoneContext.withSession(session).graphql.run({
 			query: `
@@ -41,9 +46,9 @@ export async function actionTicketToCart(
 				eventId: values.eventId,
 			},
 		})) as { addToCart: { quantity: number } }
-		
-		
-    if(!data.addToCart) throw new Error('Ticket Add to Cart Failed')
+
+		if (!data.addToCart) throw new Error("Ticket Add to Cart Failed")
+
 		return {
 			//@ts-ignore
 			// values: {
@@ -55,13 +60,13 @@ export async function actionTicketToCart(
 		}
 	} catch (error) {
 		console.log("!!! actionTicketCheckout: ", error)
+		isErrorFlagged = true
 		return {
 			error: "Ticket Checkout failed: " + error,
 			success: undefined,
 		}
-	} 
-  finally {
-		redirect("/checkout", RedirectType.push)
+	} finally {
+		if (!isErrorFlagged) redirect("/checkout", RedirectType.push)
 	}
 }
 
@@ -88,12 +93,13 @@ export async function actionTicketToCart(
 //   return session.client_secret
 // }
 
-function validateValues({}: TicketCheckoutValues) {
+function validateValues({quantity}: TicketCheckoutValues) {
 	// @ts-ignore
 	let valueErrors: TicketCheckoutState["valueErrors"] = {}
 	if (!valueErrors) return undefined
 
 	//TODO add custom validation rules
+  if(quantity <= 0) valueErrors.quantity = 'Quantity must be at least 1 or above'
 
 	if (Object.keys(valueErrors).length === 0) return undefined
 	return valueErrors

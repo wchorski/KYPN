@@ -457,7 +457,7 @@ model Ticket {
   orderCount   String    @default("")
   price        Int       @default(0)
   chargeId     String    @default("")
-  status       String?   @default("PAID")
+  status       String    @default("PAID")
   event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])
   eventId      String?   @map("event")
   holder       User?     @relation("Ticket_holder", fields: [holderId], references: [id])

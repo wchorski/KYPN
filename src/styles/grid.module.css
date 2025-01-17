@@ -47,12 +47,21 @@
 @media screen and (width > 700px) {
   ._1_1 {
     grid-template-columns: 1fr 1fr;
+    /* & > div:first-child {
+      grid-column: 1;
+    }
+    & > div:last-child {
+      grid-column: 2;
+    } */
   }
 	._2_1 {
 		grid-template-columns: 2fr 1fr;
 	}
 	._1_2 {
 		grid-template-columns: 1fr 2fr;
+	}
+	._1_4 {
+		grid-template-columns: 1fr 4fr;
 	}
 }
 @media screen and (width > 900px) {

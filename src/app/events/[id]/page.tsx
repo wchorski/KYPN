@@ -23,9 +23,19 @@ import styles from "@styles/events/event.module.css"
 import { AddToCalendar } from "@components/widgets/AddToCalendar"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { plainObj } from "@lib/utils"
-import { page_content, page_layout } from "@styles/layout.module.css"
+import {
+	layout_site,
+	layout_wide,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import { DialogPopup } from "@components/menus/Dialog"
+import moneyFormatter from "@lib/moneyFormatter"
+import { IconEditPagePencile } from "@lib/useIcons"
+import { IconLink } from "@components/elements/IconLink"
+import { isEmptyDocument } from "@lib/contentHelpers"
+import Flex from "@components/layouts/Flex"
 // import { AddToCalendarButton } from "add-to-calendar-button-react";
 
 export async function generateMetadata(
@@ -94,7 +104,7 @@ export default async function EventByID({ params }: Props) {
 		end,
 		seats,
 		hosts,
-    cohosts,
+		cohosts,
 		location,
 		categories,
 		tags,
@@ -112,12 +122,7 @@ export default async function EventByID({ params }: Props) {
 
 	return (
 		<main className={page_layout}>
-			<DialogPopup
-				title={summary}
-				onClose={onClose}
-				onOk={onOk}
-				buttonLabel=""
-			>
+			<DialogPopup title={summary} onClose={onClose} onOk={onOk} buttonLabel="">
 				<p>{datePrettyLocal(start, "full")}</p>
 				{session ? (
 					<TicketForm event={plainObj(event)} user={session.user as User} />
@@ -131,14 +136,18 @@ export default async function EventByID({ params }: Props) {
 				)}
 			</DialogPopup>
 
-			<article className={[styleProduct.product, page_content].join(" ")}>
-				<header>
+			<article
+				className={[styleProduct.product, page_content, layout_site].join(" ")}
+			>
+				<header className={"sticky"}>
 					<div className="container">
 						<picture className={styles.featured}>
 							<ImageDynamic photoIn={image} />
 						</picture>
 
-						{/* <h3>{summary}</h3> */}
+						<AddToCalendar summary={summary} start={start} end={end} />
+
+						<hr />
 						<ul className="categories">
 							{categories?.map((cat) => (
 								<li key={cat.id}>
@@ -150,104 +159,133 @@ export default async function EventByID({ params }: Props) {
 							))}
 						</ul>
 
-						<AddToCalendar summary={summary} start={start} end={end} />
+						<ul className="tags">
+							{tags?.map((tag) => (
+								<li key={tag.id}>
+									<Link href={`/blogs/search?tags=${tag.id}`}>
+										{" "}
+										{tag.name}{" "}
+									</Link>
+								</li>
+							))}
+						</ul>
 					</div>
 				</header>
 
-				<div className={''}>
+				<div className={""}>
 					<h1>{summary}</h1>
 
-					<Card layout={"flex"} direction={"row"}>
-						<div
-							className="info-cont"
-							style={{
-								display: "grid",
-								alignContent: "center",
-								height: "100%",
-							}}
-						>
-							<ul className="meta unstyled padding-0">
-								<li>{datePrettyLocalDay(start || "")}</li>
-								<li>{datePrettyLocalTime(start || "")}</li>
-								{/* <li> capacity: {seats}</li> */}
-								{location && (
-									<li>
+					<div
+						className="info-cont"
+						style={{
+							display: "grid",
+							alignContent: "center",
+							height: "100%",
+						}}
+					>
+						<ul className="meta unstyled padding-0">
+							<li>{datePrettyLocalDay(start || "")}</li>
+							<li>{datePrettyLocalTime(start || "")}</li>
+							{/* <li> capacity: {seats}</li> */}
+							{location && (
+								<li>
+									<Link href={`/locations/${location.id}`}>
 										<address>
 											{location?.name}
 											<br />
 											{location?.address}
 										</address>
-									</li>
-								)}
-							</ul>
-						</div>
-
-						{!session?.data.role ? (
-							<VerifyEmailCard email={""} />
-						) : (
-							<AddTicketButton price={price} date={start} />
-						)}
-					</Card>
-
-					<br />
-					<h3>About</h3>
-					<div className={styles.description}>
-						<BlockRender document={description?.document} />
+									</Link>
+								</li>
+							)}
+						</ul>
 					</div>
+					<Card>
+            
+						<Flex justifyContent={"space-between"} alignItems={"center"}>
+							{price > 0 ? (
+								<span style={{ alignContent: "center" }}>
+									{moneyFormatter(price)} per Ticket
+								</span>
+							) : (
+								<span style={{ alignContent: "center" }}> Free </span>
+							)}
 
-					<hr />
-					<ul className="tags">
-						{tags?.map((tag) => (
-							<li key={tag.id}>
-								<Link href={`/blogs/search?tags=${tag.id}`}> {tag.name} </Link>
-							</li>
-						))}
-					</ul>
-
-					{/* //todo have multiple hosts */}
-					{/* {session && (host?.id === session.id || session.isAdmin) && ( */}
-					{canViewHostPanel([...hosts, ...cohosts], session) && (
-							<section className="admin-panel">
-								<h2> Host Panel </h2>
-
-								<h3>Hosts</h3>
-								<ul>
-									{hosts?.map((host) => (
-										<li key={host?.id}>
-											<Link href={`/users/${host?.id}`}>
-												{" "}
-												{host?.name} | {host?.email}{" "}
-											</Link>
-										</li>
-									))}
-								</ul>
-
-								<Link href={`/events/edit/${id}`} className="medium">
-									<RiFileEditFill />
-									Edit Event Details
+							{!session ? (
+								<Link href={"/login"} className="button medium">
+									Login to Purchase
 								</Link>
+							) : session?.data.role !== null ? (
+								<VerifyEmailCard email={session.user.email} />
+							) : (
+								<AddTicketButton date={start} />
+							)}
+						</Flex>
+					</Card>
+					{!isEmptyDocument(description?.document) && (
+						<>
+							<br />
+							<h3 className={"thick-underline-text"}>About</h3>
+							<br />
 
-								<h3>Edit Attendees</h3>
-								<div style={{ position: "relative" }}>
-									{/* <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/> */}
-								</div>
-
-								<h3>All Ticket Holders</h3>
-								{/* <AttendeeTable event={data.event} className="display-none" /> */}
-								{/* <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/> */}
-							</section>
-						)}
+							<BlockRender document={description?.document} />
+						</>
+					)}
 				</div>
 			</article>
+			<footer>
+				{/* //todo have multiple hosts */}
+				{/* {session && (host?.id === session.id || session.isAdmin) && ( */}
+				{canViewHostPanel([...hosts, ...cohosts], session) && (
+					<section className={layout_wide}>
+						<Card>
+							<h2> Host Panel </h2>
+
+							<h3>Hosts</h3>
+							<ul>
+								{hosts?.map((host) => (
+									<li key={host?.id}>
+										<Link href={`/users/${host?.id}`}>
+											{" "}
+											{host?.name} | {host?.email}{" "}
+										</Link>
+									</li>
+								))}
+							</ul>
+
+							<IconLink
+								icon={"edit"}
+								href={envs.BACKEND_URL + `/events/${id}`}
+								className="button medium"
+							>
+								<span>Edit Event Details</span>
+							</IconLink>
+
+							<hr />
+
+							<h3>Edit Attendees</h3>
+							<div style={{ position: "relative" }}>
+								<p> feature coming soon...</p>
+								{/* <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/> */}
+							</div>
+
+							<h3>All Ticket Holders</h3>
+							<p> feature coming soon...</p>
+							{/* <AttendeeTable event={data.event} className="display-none" /> */}
+							{/* <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/> */}
+						</Card>
+					</section>
+				)}
+			</footer>
 		</main>
 	)
 }
 
-function canViewHostPanel(allHosts:User[], session:Session|null){
-  if(!session) return false
-  if(session.data?.role?.canManageEvents) return true
-  if(allHosts?.map((host) => host.id).includes(session.itemId)) return true
-  return false
+function canViewHostPanel(allHosts: User[], session: Session | null) {
+	if (!session) return false
+	if (session.data?.role?.canManageEvents) return true
+	if (allHosts?.map((host) => host.id).includes(session.itemId)) return true
+	return false
 }
 
 const QUERY_EVENT = `

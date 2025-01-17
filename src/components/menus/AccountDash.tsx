@@ -16,6 +16,7 @@ import styles from "@styles/menus/dashboard.module.css"
 import { StatusBadge } from "@components/StatusBadge"
 import { EmployeeGigDecisionForm } from "@components/bookings/EmployeeGigDecisionForm"
 import { TicketList } from "@components/events/TicketList"
+import { VerifyEmailCard } from "./VerifyEmailCard"
 
 type Props = {
 	data: {
@@ -23,6 +24,7 @@ type Props = {
 		orders: Order[] | undefined
 		rentals: Rental[]
 		tickets: Ticket[] | undefined
+    sudoTicketCount: number
 		employeeGigs: {
 			gig_requests: Booking[]
 			gigs: Booking[]
@@ -34,6 +36,7 @@ export default function AccountDash({ data }: Props) {
 	const {
 		user,
 		tickets = [],
+    sudoTicketCount,
 		orders = [],
 		rentals = [],
 		employeeGigs: { gigs, gig_requests },
@@ -213,14 +216,17 @@ export default function AccountDash({ data }: Props) {
 				<Card id="tickets" marginBlock={"0"}>
 					<h3>Tickets</h3>
 
-					{tickets.length === 0 && (
-						<p>
-							{" "}
-							No upcoming event tickets. Check out all{" "}
-							<Link href={`/events`}> upcoming events</Link>{" "}
-						</p>
-					)}
 					<TicketList tickets={tickets} />
+				</Card>
+			)}
+
+			{tickets.length === 0 && sudoTicketCount > 0 && (
+				<Card id="tickets" marginBlock={"0"}>
+					<h3>Tickets</h3>
+
+          <p>You must verify your account to view purchased tickets</p>
+          
+					<VerifyEmailCard email={user.email}/>
 				</Card>
 			)}
 

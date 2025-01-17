@@ -10,6 +10,7 @@ import {
 	_1_2,
 	_2_1,
 	_1_2_1,
+  _1_4,
   grid_item,
 } from "@styles/grid.module.css"
 import { layout_site, layout_wide } from "@styles/layout.module.css"
@@ -68,6 +69,8 @@ export function Grid({
 				return _1_2_1
 			case "1_1_1_1":
 				return _1_1_1_1
+			case "1_4":
+				return _1_4
 			default:
 				return _1
 		}
@@ -97,7 +100,7 @@ export function Grid({
 		return (
 			<div id={id} className={classNms} style={inlineStyles}>
 				{children.map((child, i) => (
-					<div key={i} className={grid_item} style={{alignContent, gridColumn: i + 1}}>
+					<div key={i} className={grid_item} style={{alignContent}}>
 						{child}
 					</div>
 				))}
