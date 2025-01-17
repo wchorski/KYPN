@@ -387,6 +387,10 @@ export const rules = {
 
 		// 2. are they a host of this event, or tocket holder?
 		// ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen
+
+    // TODO if holder is querying 
+    // filter out if `status` isn't PAID and RSVP  
+    //? isn't that important as tickets cannot be taken unless paid
 		return {
 			OR: [
 				{

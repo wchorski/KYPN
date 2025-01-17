@@ -48,13 +48,15 @@ export default async function LoginPage({ searchParams }: Props) {
 			<Header widthOfContent={"layout_wide"}>
 				<h1> Login </h1>
 				{callbackUrl && (
-					<p className="error"> You must login first to access the page </p>
+					<Callout intent={"warning"}>
+						<p>You must login to access the page</p>
+					</Callout>
 				)}
 			</Header>
 			<div className={[page_content, layout_wide].join(" ")}>
 				<Flex>
 					<div>
-						<LoginForm providers={providers} />
+						<LoginForm providers={providers} callbackUrl={callbackUrl} />
 					</div>
 
 					<div>

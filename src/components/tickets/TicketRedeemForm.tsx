@@ -14,6 +14,8 @@ import {
 import { RadioField } from "@components/forms/RadioField"
 import { form } from "@styles/menus/form.module.scss"
 import { InputField } from "@components/InputField"
+import { Callout } from "@components/blocks/Callout"
+import { StatusBadge } from "@components/StatusBadge"
 
 type Props = {
 	ticketId: string
@@ -33,14 +35,13 @@ type FormState = {
 const statusOptions = [
 	{ value: "ATTENDED", label: "Redeem Ticket" },
 	{ value: "PAID", label: "Paid (Un-Redeem)" },
+	{ value: "UNPAID", label: "UNPAID (Un-Redeem)" },
 ]
 
 export function TicketRedeemForm({ ticketId, status }: Props) {
-
-	const router = useRouter()
-
 	const initState: TicketRedeemState = {
 		values: {
+			currStatus: status,
 			status,
 			ticketId,
 		},
@@ -53,31 +54,54 @@ export function TicketRedeemForm({ ticketId, status }: Props) {
 
 	const { state, action } = useForm(actionTicketRedeem, initState)
 
-  if(!state) return 
+	if (!state) return
+	// TODO maybe simplify this as a one button REDEEM. Or maybe just redeem on scan?
+	if (!["PAID", "RSVP"].includes(status))
+		return (
+			<Callout intent={"warning"}>
+				<p>ticket already claimed or invalid</p>
+			</Callout>
+		)
+
 	return (
 		<form action={action} className={form}>
-
+			<p>
+				<StatusBadge type={"ticket"} status={state.values?.status} />
+			</p>
 			<fieldset>
-        <InputField 
-          name={'ticketId'}
-          type={'hidden'}
-          required={true}
-          defaultValue={state.values?.ticketId}
-          error={state.valueErrors?.ticketId}
-        />
-        {state.values?.status}
-				<RadioField
+				<InputField
+					name={"ticketId"}
+					type={"hidden"}
+					required={true}
+					defaultValue={state.values?.ticketId}
+					error={state.valueErrors?.ticketId}
+				/>
+				<InputField
+					name={"currStatus"}
+					type={"hidden"}
+					required={true}
+					defaultValue={state.values?.currStatus}
+					error={state.valueErrors?.currStatus}
+				/>
+				<InputField
+					name={"status"}
+					type={"hidden"}
+					required={true}
+					defaultValue={"ATTENDED"}
+					error={state.valueErrors?.currStatus}
+				/>
+				{/* <RadioField
 					name={"status"}
           required={true}
 					dataId={state.values?.status}
 					options={statusOptions}
 					defaultOptionValue={state.values?.status}
           error={state.valueErrors?.status}
-				/>
+				/> */}
 			</fieldset>
 
 			{!state.success ? (
-				<SubmitButton label={"Update"} />
+				<SubmitButton label={"Redeem Ticket"} />
 			) : (
 				<p className={"success"}>{state.success}</p>
 			)}

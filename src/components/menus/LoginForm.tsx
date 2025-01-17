@@ -1,5 +1,5 @@
 "use client"
-import  { form } from "@styles/menus/form.module.scss"
+import { form } from "@styles/menus/form.module.scss"
 import {
 	FaGithub,
 	FaFacebookSquare,
@@ -8,7 +8,7 @@ import {
 	FaTwitterSquare,
 } from "react-icons/fa"
 import { useFormState, useFormStatus } from "react-dom"
-import {  useState } from "react"
+import { useState } from "react"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -30,16 +30,17 @@ type Fields = {
 
 type FormState = {
 	message: string
-	status: "success" | "error" | ""
+	status: "success" | "error" | "unknown" | ""
 	errors: Record<keyof Fields, string> | undefined
 	fieldValues: Fields
 }
 
 type Props = {
 	providers: any
+	callbackUrl?: string
 }
 
-export function LoginForm({ providers }: Props) {
+export function LoginForm({ providers, callbackUrl }: Props) {
 	const [state, setstate] = useState<State>(undefined)
 
 	const router = useRouter()
@@ -73,28 +74,36 @@ export function LoginForm({ providers }: Props) {
 				email,
 				password,
 				redirect: false,
-				callbackUrl: envs.FRONTEND_URL + "/account",
+				callbackUrl: callbackUrl || envs.FRONTEND_URL + "/account",
 			})
-			console.log({ res })
-			// @ts-ignore
-			const { error, status, ok, url } = res
 
-			if (error)
+			if (res?.error)
 				return {
 					...formState,
 					status: "error",
 					message: "Login failed. Please check credentials",
 				}
 
-			// todo but with next 14 not getting session on sudo page load
-			// router.refresh()
-			// router.push(`/account`)
-			window.location.replace("/account")
+      //? just using `res.ok` instead
+			// if (res?.status === 200)
 
+			if (res?.ok) {
+				// todo but with next 14 not getting session on sudo page load
+				// router.refresh()
+				// router.push(`/account`)
+				// window.location.replace("/account")
+
+				router.push(res?.url || '/account')
+				return {
+					...formState,
+					status: "success",
+					message: "login successful",
+				}
+			}
 			return {
 				...formState,
-				status: "success",
-				message: "login successful",
+				status: "unknown",
+				message: "login unknown",
 			}
 		} catch (error: any) {
 			console.log("!!! Login Form ERROR: ", error.message)
@@ -164,18 +173,18 @@ export function LoginForm({ providers }: Props) {
 					name={"email"}
 					type={"email"}
 					required={true}
-          autoComplete={"email"}
-          placeholder={"sam@hotmail.com"}
-          defaultValue={formState.fieldValues.email}
+					autoComplete={"email"}
+					placeholder={"sam@hotmail.com"}
+					defaultValue={formState.fieldValues.email}
 					error={formState.errors?.email}
 				/>
-        <InputField
+				<InputField
 					name={"password"}
 					type={"password"}
 					required={true}
-          autoComplete={"password"}
-          placeholder={"***"}
-          defaultValue={formState.fieldValues.password}
+					autoComplete={"password"}
+					placeholder={"***"}
+					defaultValue={formState.fieldValues.password}
 					error={formState.errors?.password}
 				/>
 
@@ -183,7 +192,7 @@ export function LoginForm({ providers }: Props) {
 
 				{formState.status !== "success" && (
 					<Flex alignItems="center">
-						<SubmitButton  label={"Login"}/>
+						<SubmitButton label={"Login"} />
 
 						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
 							password reset
@@ -212,4 +221,3 @@ export function LoginForm({ providers }: Props) {
 		</form>
 	)
 }
-

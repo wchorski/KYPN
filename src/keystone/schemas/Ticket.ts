@@ -121,7 +121,6 @@ export const Ticket: Lists.Ticket = list({
 		status: select({
 			options: [
 				{ label: "Pending", value: "PENDING" },
-				{ label: "Confirmed", value: "CONFIRMED" },
 				{ label: "Paid", value: "PAID" },
         // better way of saying `FREE`
 				{ label: "RSVP", value: "RSVP" },
@@ -177,14 +176,16 @@ export const Ticket: Lists.Ticket = list({
 					throw new Error("!!! Ticket: Event has already started")
 			}
 
-      //TODO better way of ticket updating depending on auth
-			// if (operation === "update") {
-			// 	if (item.status === "ATTENDED") {
-			// 		throw new Error(
-			// 			`!!! This ticket has already been redeemed: ${item.id}`
-			// 		)
-			// 	}
-			// }
+      // TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets
+			if (operation === "update") {
+        // console.log({item});
+        // console.log({resolvedData});
+				// if (item.status === "ATTENDED") {
+				// 	throw new Error(
+				// 		`!!! This ticket has already been redeemed: ${item.id}`
+				// 	)
+				// }
+			}
 		},
 	},
 })

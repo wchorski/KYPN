@@ -15,7 +15,7 @@ export async function actionTicketRedeem(
   // // @ts-ignore
   // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
   const { ticketId, status } = values
-  console.log({ values })
+  // console.log({ values })
 
   const valueErrors = validateValues(values)
   if (valueErrors)
@@ -41,9 +41,9 @@ export async function actionTicketRedeem(
 
 		return {
 			//@ts-ignore
-			// values: {
-			// 	status: updateTicket.status,
-			// },
+			values: {
+				status: updateTicket.status,
+			},
 			id: ticketId,
 			// url: envs.FRONTEND_URL + `/users/${data.TicketRedeem.id}`,
 			url: envs.FRONTEND_URL + `/TicketRedeem`,
@@ -56,12 +56,13 @@ export async function actionTicketRedeem(
 			error: "TicketRedeem failed: " + error,
 			success: undefined,
 		}
-	} finally {
-		if (!isErrorFlagged) redirect(`/tickets/${ticketId}`, RedirectType.push)
-	}
+	} 
+  // finally {
+	// 	if (!isErrorFlagged) redirect(`/tickets/${ticketId}`, RedirectType.push)
+	// }
 }
 
-function validateValues({ status }: TicketRedeemValues) {
+function validateValues({ status, currStatus }: TicketRedeemValues) {
 	// @ts-ignore
 	let valueErrors: TicketRedeemState["valueErrors"] = {}
 	if (!valueErrors) return undefined
@@ -71,12 +72,12 @@ function validateValues({ status }: TicketRedeemValues) {
 		"PENDING",
 		"UNPAID",
     //TODO cant set as ATTENDED and trigger error at the same time
-		// "ATTENDED",
+		"ATTENDED",
 		"CANCELED",
 		"REJECTED",
 		"PAST",
 	]
-	if (invalidStatuses.includes(status)) valueErrors.status = "Ticket is invalid"
+	if (invalidStatuses.includes(currStatus)) valueErrors.status = "Ticket is invalid"
 
 	if (Object.keys(valueErrors).length === 0) return undefined
 	return valueErrors
@@ -85,6 +86,7 @@ function validateValues({ status }: TicketRedeemValues) {
 export type TicketRedeemValues = {
 	ticketId: string
 	status: string
+	currStatus: string
 }
 
 export type TicketRedeemState = {
