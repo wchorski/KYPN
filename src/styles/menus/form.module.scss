@@ -4,7 +4,7 @@
   gap: var(--space-s);
 
   & > label {
-    display: flex;
+    display: flex !important;
     gap: var(--space-s);
     cursor: pointer;
   }

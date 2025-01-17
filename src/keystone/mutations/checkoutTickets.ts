@@ -97,7 +97,6 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					holder: userId ? { connect: { id: userId } } : null,
 					price: event.price,
 					email: customerEmail,
-					orderCount: `${index + 1} of ${quantity}`,
 				})
 			)
 

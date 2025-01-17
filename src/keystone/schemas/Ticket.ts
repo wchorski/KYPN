@@ -11,7 +11,7 @@ import {
 	virtual,
 } from "@keystone-6/core/fields"
 import { isLoggedIn, permissions, rules } from "../access"
-import { Event } from "@ks/types"
+import { Event, Order } from "@ks/types"
 import { datePrettyLocalDay } from "../../lib/dateFormatter"
 import type { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 
@@ -21,7 +21,7 @@ export const Ticket: Lists.Ticket = list({
 	access: {
 		filter: {
 			// query: () => true,
-			query: rules.canManageTickets,
+			query: rules.canViewTickets,
 			delete: rules.canManageTickets,
 			update: rules.canManageTickets,
 		},
@@ -80,7 +80,7 @@ export const Ticket: Lists.Ticket = list({
 		eventStart: virtual({
 			field: graphql.field({
 				type: graphql.DateTime,
-				async resolve(item: any, args, context) {
+				async resolve(item, args, context) {
 					const event = (await context.query.Event.findOne({
 						where: { id: item.eventId || "" },
 						query: `
@@ -93,7 +93,29 @@ export const Ticket: Lists.Ticket = list({
 		}),
 		qrcode: text(),
 		email: text(),
-		orderCount: text({ ui: { itemView: { fieldMode: "read" } } }),
+		// orderCount: text({ ui: { itemView: { fieldMode: "read" } } }),
+		orderCount: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				async resolve(item, args, context) {
+					const order = (await context.query.Order.findOne({
+						where: { id: item.orderId },
+						query: `
+              ticketItems { 
+                id
+              }
+            `,
+					})) as Order
+
+					const thisTixIndex = order.ticketItems.findIndex(
+						(tix) => tix.id === item.id
+					)
+					if (!order.ticketItems || order.ticketItems.length === 0)
+						return "not available"
+					return `${thisTixIndex} of ${order.ticketItems.length}`
+				},
+			}),
+		}),
 		price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
 		chargeId: text(),
 		status: select({
@@ -101,6 +123,8 @@ export const Ticket: Lists.Ticket = list({
 				{ label: "Pending", value: "PENDING" },
 				{ label: "Confirmed", value: "CONFIRMED" },
 				{ label: "Paid", value: "PAID" },
+        // better way of saying `FREE`
+				{ label: "RSVP", value: "RSVP" },
 				{ label: "Unpaid", value: "UNPAID" },
 				{ label: "Attended", value: "ATTENDED" },
 				{ label: "Canceled", value: "CANCELED" },
@@ -153,13 +177,14 @@ export const Ticket: Lists.Ticket = list({
 					throw new Error("!!! Ticket: Event has already started")
 			}
 
-			if (operation === "update") {
-				if (item.status === "ATTENDED") {
-					throw new Error(
-						`!!! This ticket has already been redeemed: ${item.id}`
-					)
-				}
-			}
+      //TODO better way of ticket updating depending on auth
+			// if (operation === "update") {
+			// 	if (item.status === "ATTENDED") {
+			// 		throw new Error(
+			// 			`!!! This ticket has already been redeemed: ${item.id}`
+			// 		)
+			// 	}
+			// }
 		},
 	},
 })

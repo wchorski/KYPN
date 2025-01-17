@@ -7,15 +7,15 @@ export async function actionRegisterAnAccount(
 	prevState: RegisterAnAccountState,
 	formData: FormData
 ): Promise<RegisterAnAccountState> {
-	try {
-		const values = Object.fromEntries(formData) as RegisterAnAccountValues
-		// // @ts-ignore
-		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		const { name, email, password, passwordConfirm } = values
+  const values = Object.fromEntries(formData) as RegisterAnAccountValues
+  // // @ts-ignore
+  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+  const { name, email, password, passwordConfirm } = values
 
-		const valueErrors = validateValues(values)
-		if (valueErrors)
-			return { valueErrors, values, error: "Check for errors in form fields" }
+  const valueErrors = validateValues(values)
+  if (valueErrors)
+    return { valueErrors, values, error: "Check for errors in form fields" }
+	try {
 
 		const data = (await keystoneContext.graphql.run({
 			query: `

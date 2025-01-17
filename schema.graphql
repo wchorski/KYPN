@@ -2733,7 +2733,6 @@ input TicketWhereInput {
   id: IDFilter
   qrcode: StringFilter
   email: StringFilter
-  orderCount: StringFilter
   price: IntFilter
   chargeId: StringFilter
   status: StringFilter
@@ -2749,7 +2748,6 @@ input TicketOrderByInput {
   id: OrderDirection
   qrcode: OrderDirection
   email: OrderDirection
-  orderCount: OrderDirection
   price: OrderDirection
   chargeId: OrderDirection
   status: OrderDirection
@@ -2760,7 +2758,6 @@ input TicketOrderByInput {
 input TicketUpdateInput {
   qrcode: String
   email: String
-  orderCount: String
   price: Int
   chargeId: String
   status: String
@@ -2780,7 +2777,6 @@ input TicketUpdateArgs {
 input TicketCreateInput {
   qrcode: String
   email: String
-  orderCount: String
   price: Int
   chargeId: String
   status: String

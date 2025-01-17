@@ -8,17 +8,18 @@ export async function actionEmployeeGigDecision(
 	prevState: EmployeeGigDecisionState,
 	formData: FormData
 ): Promise<EmployeeGigDecisionState> {
-	try {
-		const values = Object.fromEntries(formData) as EmployeeGigDecisionValues
-		// // @ts-ignore
-		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		const { userId, bookingId, decision } = values
-    console.log({values});
-    
+  const values = Object.fromEntries(formData) as EmployeeGigDecisionValues
+  // // @ts-ignore
+  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+  const { userId, bookingId, decision } = values
+  console.log({values});
+  
 
-		// const valueErrors = validateValues(values)
-		// if (valueErrors)
-		// 	return { valueErrors, values, error: "Check for errors in form fields" }
+  // const valueErrors = validateValues(values)
+  // if (valueErrors)
+  // 	return { valueErrors, values, error: "Check for errors in form fields" }
+  
+	try {
     const session = await getServerSession(nextAuthOptions)
 
 		const data = (await keystoneContext.withSession(session).graphql.run({

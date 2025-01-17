@@ -376,7 +376,7 @@ export const rules = {
 			},
 		}
 	},
-	canManageTickets({ session }: ListAccessArgs) {
+	canViewTickets({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 
 		// 1. has role permission?
@@ -407,6 +407,41 @@ export const rules = {
 						},
 					},
 				},
+			],
+		}
+		// return { holder: { id: { equals: session?.itemId }} }
+	},
+	canManageTickets({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+
+		// 1. has role permission?
+		if (permissions.canManageTickets({ session })) return true
+
+		if (!session) return false
+    if(session.data.role === null) return false
+
+		// 2. are they a host of this event, or tocket holder?
+		// ? WATCH YOUR OR: NESTING. lots of {} mistakes happpen
+		return {
+			OR: [
+				{
+					event: {
+						hosts: {
+							some: {
+								id: {
+									in: [session.itemId || "no_session.itemId"],
+								},
+							},
+						},
+					},
+				},
+				// {
+				// 	holder: {
+				// 		id: {
+				// 			equals: session.itemId || "no_session.itemId",
+				// 		},
+				// 	},
+				// },
 			],
 		}
 		// return { holder: { id: { equals: session?.itemId }} }

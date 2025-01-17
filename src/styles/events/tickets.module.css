@@ -35,7 +35,7 @@ ul.tickets :global {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  border-radius: var(--br-sharp);
+  border-radius: var(--br-soft);
 }
 
 .meta_short{
@@ -48,10 +48,13 @@ ul.tickets :global {
 }
 
 ul.details{
+  display: flex;
+  flex-direction: column;
   list-style: none;
   border-left: dashed 1px #e0e0e0;
   padding: 1em;
   margin: 0;
+  gap: var(--space-s);
 }
 
 .qrcode_wrap{
@@ -62,6 +65,7 @@ ul.details{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: var(--br-soft);
 
   & svg{
     width: 400px;
@@ -89,4 +93,32 @@ ul.details{
   background-position: center;
   position: relative;
 
+}
+
+.texture_cardstock {
+  /* width: min(50%, 600px);
+  height: 50%;
+  position: fixed;
+  inset: 0;
+  margin: auto; */
+
+  /* Change this value to adjust the stamp perforation size: */
+  --radius: 1px;
+
+  background-image: 
+    radial-gradient(
+      var(--radius),
+      transparent 98%,
+      white
+    ),
+    linear-gradient(rgb(236, 236, 236) 0 0);
+  background-repeat: 
+    round, 
+    no-repeat;
+  background-position:
+    calc(var(--radius) * -1.5) calc(var(--radius) * -1.5),
+    50%;
+  background-size:
+    calc(var(--radius) * 3) calc(var(--radius) * 3),
+    calc(100% - var(--radius) * 3) calc(100% - var(--radius) * 3);
 }

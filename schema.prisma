@@ -454,7 +454,6 @@ model Ticket {
   id           String    @id @default(cuid())
   qrcode       String    @default("")
   email        String    @default("")
-  orderCount   String    @default("")
   price        Int       @default(0)
   chargeId     String    @default("")
   status       String    @default("PAID")

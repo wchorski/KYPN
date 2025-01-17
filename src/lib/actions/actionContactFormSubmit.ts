@@ -7,20 +7,22 @@ export async function actionContactFormSubmit(
 	prevState: ContactState,
 	formData: FormData
 ): Promise<ContactState> {
-	try {
-		const values = Object.fromEntries(formData) as ContactValues
-		// // @ts-ignore
-		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		const { name, tel, date, time, email, notes, customerId } = values
-		values.tel = formatFlattenUSPhoneNumber(tel)
-		const valueErrors = validateForm(values)
-		if (valueErrors)
-			return { valueErrors, values, error: "Check for errors in form fields" }
+  
+  const values = Object.fromEntries(formData) as ContactValues
+  // // @ts-ignore
+  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+  const { name, tel, date, time, email, notes, customerId } = values
+  values.tel = formatFlattenUSPhoneNumber(tel)
+  const valueErrors = validateForm(values)
+  if (valueErrors)
+    return { valueErrors, values, error: "Check for errors in form fields" }
 
-		const variables = values as ContactVariables
-		delete variables.time
-		delete variables.date
-		variables.start = new Date(date + "T" + time).toISOString()
+  const variables = values as ContactVariables
+  delete variables.time
+  delete variables.date
+  variables.start = new Date(date + "T" + time).toISOString()
+  
+	try {
 
 		const data = (await keystoneContext.graphql.run({
 			query: `

@@ -1,15 +1,14 @@
 /* //todo add `@media (prefers-reduced-motion: no-preference){` for any `transform` animation */
 button,
 .button {
-  &:enabled:active {
-    transform: translateY(1px);
-  }
+	&:enabled:active {
+		transform: translateY(1px);
+	}
 
-  &.pending {
-    cursor: progress;
-  }
+	&.pending {
+		cursor: progress;
+	}
 }
-
 
 @media (prefers-reduced-motion: no-preference) {
 	html {
@@ -34,7 +33,7 @@ button,
 .anim_border_spin {
 	/* display: grid;
 	grid-template-areas: "stack"; */
-  position: relative;
+	position: relative;
 
 	/* & span {
 		grid-area: stack;
@@ -46,13 +45,13 @@ button,
 		content: "";
 		pointer-events: none;
 		/* grid-area: stack; */
-    position: absolute;
+		position: absolute;
 
 		height: 1px;
 		/* place-self: end; */
-    background-color: var(--c-txt);
-    bottom: 0;
-    left: 0;
+		background-color: var(--c-txt);
+		bottom: 0;
+		left: 0;
 		width: 100%;
 		border-radius: var(--br-dull);
 
@@ -73,7 +72,29 @@ button,
 		animation-direction: reverse;
 		animation-fill-mode: forwards;
 		animation-timing-function: linear;
+	}
+}
 
+.anim_shadow_breath {
+	/* outline-width: 3px;
+	outline-style: solid;
+	outline-color: var(--c-accent); */
+  box-shadow: 0px 0px 0px 5px var(--c-primary);
+  transition: box-shadow 0.6s linear;
+  margin: 0.5em;
+
+
+	animation-name: breath_shadow_radius;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	/* animation-fill-mode: forwards; */
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes breath_shadow_radius {
+	to {
+		box-shadow: 0px 0px 0px 10px var(--c-primary);
 	}
 }
 

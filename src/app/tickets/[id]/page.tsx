@@ -5,7 +5,7 @@ import { datePrettyLocalDay } from "@lib/dateFormatter"
 import fetchTicket from "@lib/fetchdata/fetchTicket"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import styles, { qrcode_wrap } from "@styles/events/tickets.module.css"
+import styles, { qrcode_wrap, texture_cardstock } from "@styles/events/tickets.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import {
@@ -20,6 +20,8 @@ import { StatusBadge } from "@components/StatusBadge"
 import { QRCode } from "@components/elements/QRCodeSVG"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { c_theme_light } from "@styles/colorthemes.module.css"
+import { TicketRedeemForm } from "@components/tickets/TicketRedeemForm"
 
 export const metadata: Metadata = {
 	title: "Ticket | " + envs.SITE_TITLE,
@@ -42,6 +44,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 		query,
 		session
 	)
+  // console.log({ticket});
 
 	if (error) return <ErrorMessage error={error} />
 	if (sudoTicketCount > 0 && !ticket)
@@ -64,12 +67,11 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 				<h1> Ticket </h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
-				<DialogPopup>
-					<p>redeem form</p>
-					{/* <TicketRedeemForm ticketId={id} status={status} /> */}
+				<DialogPopup buttonLabel={''}>
+					<TicketRedeemForm ticketId={id} status={status} />
 				</DialogPopup>
 
-				<article className={styles.ticket}>
+				<article className={[styles.ticket, c_theme_light, texture_cardstock].join(' ')}>
 					<div className={styles.meta_short}>
 						<strong>{datePrettyLocalDay(event.start)}</strong>
 					</div>
@@ -97,7 +99,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						</li>
 					</ul>
 
-					<div className={qrcode_wrap}>
+					<div className={[qrcode_wrap, 'anim_shadow_breath'].join(' ')}>
 						<QRCode text={envs.FRONTEND_URL + `/tickets/${id}?popup=modal`} />
 					</div>
 				</article>

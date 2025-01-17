@@ -7,19 +7,20 @@ export async function actionBookAService(
 	prevState: BookAServiceState,
 	formData: FormData
 ): Promise<BookAServiceState> {
-	try {
-		// @ts-ignore
-		const values = Object.fromEntries(formData) as BookAServiceValues
-		//? array of checkboxes w same name `addonIds`
-		values.addonIds = formData.getAll("addonIds") as string[]
-    // console.log("action: ", {values});
-		// // @ts-ignore
-		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		// const {  } = values
+  // @ts-ignore
+  const values = Object.fromEntries(formData) as BookAServiceValues
+  //? array of checkboxes w same name `addonIds`
+  values.addonIds = formData.getAll("addonIds") as string[]
+  // console.log("action: ", {values});
+  // // @ts-ignore
+  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+  // const {  } = values
 
-		const valueErrors = validateValues(values)
-		if (valueErrors)
-			return { valueErrors, values, error: "Check for errors in form fields" }
+  const valueErrors = validateValues(values)
+  if (valueErrors)
+    return { valueErrors, values, error: "Check for errors in form fields" }
+  
+	try {
 
 		// TODO left off seeing how ks catches this mutation
 		const data = (await keystoneContext.graphql.run({

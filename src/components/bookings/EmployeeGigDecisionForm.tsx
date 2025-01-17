@@ -2,7 +2,7 @@
 
 import { InputField } from "@components/InputField"
 import { StatusBadge } from "@components/StatusBadge"
-import { RadioInput } from "@components/forms/RadioInput"
+import { RadioField } from "@components/forms/RadioField"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { useForm } from "@hooks/useForm"
 import {
@@ -149,7 +149,7 @@ export function EmployeeGigDecisionForm({
 			className={mini_form}
 		>
 			<fieldset>
-        <RadioInput 
+        <RadioField 
           name={'decision'}
           dataId={bookingId}
           options={decisionOptions}

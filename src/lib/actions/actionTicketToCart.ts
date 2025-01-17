@@ -12,18 +12,18 @@ export async function actionTicketToCart(
 ): Promise<TicketCheckoutState> {
 	let isErrorFlagged = false
 
-	try {
-		// @ts-ignore
-		const values = Object.fromEntries(formData) as TicketCheckoutValues
-		values.quantity = Number(formData.get("quantity"))
-		// // @ts-ignore
-		// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-		// console.log({ values })
-		// TODO i don't need values.email if account is necessary
+  // @ts-ignore
+  const values = Object.fromEntries(formData) as TicketCheckoutValues
+  values.quantity = Number(formData.get("quantity"))
+  // // @ts-ignore
+  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+  // console.log({ values })
+  // TODO i don't need values.email if account is necessary
 
-		const valueErrors = validateValues(values)
-		if (valueErrors)
-			return { valueErrors, values, error: "Check for errors in form fields" }
+  const valueErrors = validateValues(values)
+  if (valueErrors)
+    return { valueErrors, values, error: "Check for errors in form fields" }
+	try {
 
 		const session = await getServerSession(nextAuthOptions)
 

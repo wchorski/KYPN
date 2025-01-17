@@ -63,3 +63,19 @@
 		color: var(--c-txt-rev);
 	}
 }
+
+/* look in readme to make this work for real */
+.c_theme_light {
+  color-scheme: only light;
+  color: darkslategrey;
+  background-color: white;
+
+  & :is(h1, h2, h3, h4, h5, h6) {
+		color: black;
+	}
+
+  --c-txt-bg: whitesmoke;
+  /* --c-primary: color-mix(in hsl, blue, black 1%); */
+
+  
+}

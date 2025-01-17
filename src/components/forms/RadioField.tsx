@@ -8,10 +8,11 @@ type Props = {
 	defaultOptionValue?: string | null
   //? usefull if reusing mutli forms on one page
 	dataId?: string
+  error?: string
 } & HTMLProps<HTMLInputElement>
 
-function RadioInputComponent(props: Props, ref: Ref<HTMLInputElement>) {
-	const { options, defaultOptionValue, name, dataId } = props
+function RadioFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
+	const { options, defaultOptionValue, name, dataId, error } = props
 
   const forId = (value:string) => value + (dataId ? `-${dataId}` : "")
 
@@ -35,8 +36,9 @@ function RadioInputComponent(props: Props, ref: Ref<HTMLInputElement>) {
 					)}
 				</label>
 			))}
+      <span className="error">{error}</span>
 		</ul>
 	)
 }
 //? allows ref to be passed down
-export const RadioInput = forwardRef(RadioInputComponent)
+export const RadioField = forwardRef(RadioFieldComponent)

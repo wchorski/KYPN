@@ -264,6 +264,11 @@ When initializing a fresh database or returning to development you may add/remov
 - [x] look into https://smolcss.dev/ for inspo
 - [ ] stripe returns. How to refund products, tickets, subscriptions, etc
   - [ ] automate update Orders accordingling 
+- [ ] limit / validate form inputs for things like names or text (as to not have infinite letters inputed)
+- [ ] think about setting up all colors as `hsl` and set the `lightness` according to `dark` or `light` theme
+- [ ] look into more robust light dark + other color themes
+  - https://github.com/stolinski/tolin.ski/blob/main/src/routes/(blank)/experiments/dark-light/%2Bpage.svelte
+  - https://tolin.ski/experiments/dark-light
 ---
 - [ ] add testing again
   - [ ] stripe webhook testing - https://accreditly.io/articles/test-stripe-webhooks-without-using-ngrok#content-3-local-stripe-webhook-testing-with-docker
