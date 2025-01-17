@@ -47,6 +47,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 	if (sudoTicketCount > 0 && !ticket)
 		return (
 			<ErrorPage error={{}}>
+        <h2>Ticket Not Available</h2>
         <p>Account must be verified to claim Ticket</p>
 				<VerifyEmailCard email={session.user.email} />
 			</ErrorPage>

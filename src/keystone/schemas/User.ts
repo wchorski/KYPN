@@ -146,8 +146,9 @@ export const User: Lists.User = list({
 				update: permissions.canManageUsers,
 			},
 			ui: {
-				createView: { fieldMode: "hidden" },
-				itemView: { fieldMode: "hidden" },
+        description: '🔒 Setting someone to a high permission like Admin could be a grave mistake. Be careful',
+				createView: { fieldMode: "hidden", },
+				itemView: { fieldMode: 'edit' },
 			},
 		}),
 		posts: relationship({ ref: "Post.author", many: true }),
