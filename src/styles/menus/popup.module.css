@@ -16,9 +16,10 @@ dialog.popup:modal {
   margin: 0;
   opacity: 0;
   transition: background 3s ease;
+  background-color: rgba(0, 0, 0, 0.1);
 
   &::backdrop {
-    background-color: rgba(0, 0, 0, 0.0);
+    /* background-color: rgba(0, 0, 0, 0.0); */
     backdrop-filter: blur(0) saturate(0) brightness(0);
     transition: background 3s;
   }
@@ -26,7 +27,7 @@ dialog.popup:modal {
 }
 
 .background {
-  background: transparent;
+  background-color: transparent;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -69,6 +70,7 @@ button.close {
 
   &:hover, &:active{
     background-color: var(--c-error);
+    color: white;
   }
 
   &:active{
@@ -87,13 +89,13 @@ button.close {
   }
 }
 
-/* dialog[open].open { */
-.open {
+dialog[open].open {
+/* .open { */
   /* transform: translateY(0px) skew(0, 0); */
   pointer-events: auto;
   opacity: 1;
   transition: background 3s;
-  background: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
 
   &::backdrop {
     backdrop-filter: blur(2px) saturate(20%) brightness(80%);

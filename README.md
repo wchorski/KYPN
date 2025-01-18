@@ -300,6 +300,8 @@ When initializing a fresh database or returning to development you may add/remov
 - [ ] keystone not compatible with **Node 22 LTE**
 - [ ] delete all files appened with `*OLD.*`
 - [ ] remove all commented `query.User.findOne` 
+- [ ] ks field groups
+  - [ ] add `Metadata` field group for dateCreated, dateModified, Categories, Tags to all Schema Types
 
 ### Blocks
 

@@ -72,12 +72,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 				session.data.role.canManageTickets ? (
 					<>
 						<TicketRedeemForm ticketId={id} status={status} />
-						<br />
-						<br />
-						<br />
-						<br />
-						<br />
-						<br />
+						<hr />
 						<p>
 							<Link href={envs.BACKEND_URL + `/tickets/${id}`}>
 								resolve ticket issues
@@ -124,7 +119,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						<li>{holder?.email || email}</li>
 					</ul>
 
-					<div className={[qrcode_wrap, "anim_shadow_breath"].join(" ")}>
+					<div className={[qrcode_wrap, "border-dash-march"].join(" ")}>
 						{["PAID", "RSVP"].includes(status) ? (
 							<QRCode text={envs.FRONTEND_URL + `/tickets/${id}?popup=modal`} />
 						) : (

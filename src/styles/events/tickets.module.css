@@ -26,7 +26,6 @@ ul.tickets :global {
   margin-left: auto;
   display: flex;
   gap: var(--space-ms);
-
 }
 
 .ticket :global {
@@ -61,11 +60,12 @@ ul.details{
   margin-left: auto;
   padding: 1em;
   background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   border-radius: var(--br-soft);
+  height: auto;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  flex: 1;
 
   & svg{
     width: 400px;

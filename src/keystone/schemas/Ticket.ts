@@ -116,7 +116,23 @@ export const Ticket: Lists.Ticket = list({
 				},
 			}),
 		}),
-		price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+		// price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+		price: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				async resolve(item, args, context) {
+					const event = (await context.query.Event.findOne({
+						where: { id: item.eventId },
+						query: `
+              price
+            `,
+					})) as Event
+
+          // TODO apply coupons
+					return event.price
+				},
+			}),
+		}),
 		chargeId: text(),
 		status: select({
 			options: [
@@ -146,6 +162,7 @@ export const Ticket: Lists.Ticket = list({
 				displayMode: "cards",
 				cardFields: ["id", "summary", "start", "location"],
 			},
+      
 		}),
 		holder: relationship({
 			ref: "User.tickets",
@@ -173,7 +190,7 @@ export const Ticket: Lists.Ticket = list({
 				const now = new Date()
 				const eventStart = new Date(event.start)
 				if (now > eventStart)
-					throw new Error("!!! Ticket: Event has already started")
+					throw new Error("!!! Ticket: cannot create if Event already started")
 			}
 
       // TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets

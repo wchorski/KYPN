@@ -1,9 +1,12 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import CartItem from "@components/ecommerce/CartItem"
+import { CartItemsList } from "@components/ecommerce/CartItemsList"
+import { CheckoutTicketsForm } from "@components/ecommerce/CheckoutTicketsForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
-import { useCart } from "@components/hooks/CartStateContext"
+import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
-import { Event, Product, User } from "@ks/types"
+import { type CartItem as TCartItem, User } from "@ks/types"
 import { plainObj } from "@lib/contentHelpers"
 import {
 	layout_site,
@@ -36,6 +39,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 		where: { id: session.itemId },
 		query: `
       cart {
+        id
         type
         quantity
         product {
@@ -54,12 +58,41 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
     `,
 	})) as User
 
-	const filteredTicketItems = plainObj(user.cart.filter((item) => item.event))
+	const filteredTicketItems: TCartItem[] = plainObj(
+		user.cart.filter((item) => item.event)
+	)
 	const filteredProductItems = plainObj(
 		user.cart.filter((item) => item.product)
 	)
 
-	// TODO if price total is 0 then show non stripe form
+	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
+
+	// if (!envs.STRIPE_PUBLIC_KEY)
+	if ("nostripe" === "nostripe")
+		return (
+			<main className={[page_layout].join(" ")}>
+				<header className={layout_site}>
+					<h1>Checkout</h1>
+				</header>
+				<div className={[page_content, layout_site].join(" ")}>
+					<Grid layout={'1_1'} isAuto={false}>
+						<CartItemsList />
+
+						<div>
+							{user.cart.length === 0 ? (
+								<p> No items in cart. </p>
+							) : filteredTicketItems ? (
+								<CheckoutTicketsForm />
+							) : filteredProductItems ? (
+								<p>CheckoutForm for products</p>
+							) : (
+								<p> uh..... </p>
+							)}
+						</div>
+					</Grid>
+				</div>
+			</main>
+		)
 
 	return (
 		<main className={[page_layout].join(" ")}>

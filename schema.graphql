@@ -2733,7 +2733,6 @@ input TicketWhereInput {
   id: IDFilter
   qrcode: StringFilter
   email: StringFilter
-  price: IntFilter
   chargeId: StringFilter
   status: StringFilter
   event: EventWhereInput
@@ -2748,7 +2747,6 @@ input TicketOrderByInput {
   id: OrderDirection
   qrcode: OrderDirection
   email: OrderDirection
-  price: OrderDirection
   chargeId: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
@@ -2758,7 +2756,6 @@ input TicketOrderByInput {
 input TicketUpdateInput {
   qrcode: String
   email: String
-  price: Int
   chargeId: String
   status: String
   event: EventRelateToOneForUpdateInput
@@ -2777,7 +2774,6 @@ input TicketUpdateArgs {
 input TicketCreateInput {
   qrcode: String
   email: String
-  price: Int
   chargeId: String
   status: String
   event: EventRelateToOneForCreateInput
@@ -3091,7 +3087,7 @@ type Mutation {
   verifyEmail(token: String!, email: String!): User
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
-  checkoutTickets(stripeCheckoutSessionId: String, stripePaymentIntent: String, userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
+  checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID): CartItem
 }
 

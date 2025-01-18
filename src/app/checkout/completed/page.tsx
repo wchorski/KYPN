@@ -69,6 +69,13 @@ export default async function CheckoutSuccessPage({
 							amount_total: {moneyFormatter(stripeCheckoutSession.amount_total)}
 						</li>
 						<li>
+							status:{" "}
+							<StatusBadge
+								type={"any"}
+								status={stripeCheckoutSession.status}
+							/>
+						</li>
+						<li>
 							payment_status:{" "}
 							<StatusBadge
 								type={"any"}

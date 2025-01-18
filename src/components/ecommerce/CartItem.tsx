@@ -24,12 +24,14 @@ export default function CartItem({ item, sessionId }: Props) {
 	const [error, setError] = useState<any>(undefined)
 	const { getUserCart } = useCart()
 
-  console.log(item)
+	console.log(item)
 
 	if (item.event)
 		return (
 			<li className={styles.item}>
-				<p>Ticket: {item.event.summary} x{item.quantity} </p>
+				<p>
+					Ticket: {item.event.summary} x{item.quantity} <CartRemoveItem id={item.id} />
+				</p>
 			</li>
 		)
 

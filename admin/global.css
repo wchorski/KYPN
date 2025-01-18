@@ -32,6 +32,11 @@ table td {
   border-bottom-width: 1px;
 }
 
+table td button {
+  color: black;
+  background-color: white;
+}
+
 table th {
   text-align: left;
   border-bottom-width: 4px;

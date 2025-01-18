@@ -426,7 +426,7 @@ model Post {
 
 model Event {
   id                  String     @id @default(cuid())
-  summary             String     @default("[NEW]")
+  summary             String     @default("")
   start               DateTime
   end                 DateTime?
   price               Int        @default(0)
@@ -454,7 +454,6 @@ model Ticket {
   id           String    @id @default(cuid())
   qrcode       String    @default("")
   email        String    @default("")
-  price        Int       @default(0)
   chargeId     String    @default("")
   status       String    @default("PAID")
   event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])

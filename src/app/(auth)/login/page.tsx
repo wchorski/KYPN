@@ -49,7 +49,7 @@ export default async function LoginPage({ searchParams }: Props) {
 				<h1> Login </h1>
 				{callbackUrl && (
 					<Callout intent={"warning"}>
-						<p>You must login to access the page</p>
+						<p>You will return back to the previous page after login</p>
 					</Callout>
 				)}
 			</Header>

@@ -75,14 +75,59 @@ button,
 	}
 }
 
+/* cred - https://stackoverflow.com/a/78699836/15579591 */
+.border-dash-march {
+	--bd-gap-and-dash-length: 10px;
+	--bd-border-width: 4px;
+	--bd-border-color: var(--c-primary);
+	--bd-dash-percent: 70%;
+	--bd-speed: 300px;
+
+	height: 100%;
+	background: linear-gradient(
+			90deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			90deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			0deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			0deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		);
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: var(--bd-gap-and-dash-length) var(--bd-border-width),
+		var(--bd-gap-and-dash-length) var(--bd-border-width),
+		var(--bd-border-width) var(--bd-gap-and-dash-length),
+		var(--bd-border-width) var(--bd-gap-and-dash-length);
+	background-position: 0 0, var(--bd-speed) 100%, 0 var(--bd-speed), 100% 0;
+	animation: border_march 10s infinite linear;
+}
+
+@keyframes border_march {
+	0% {
+	}
+	100% {
+		background-position: var(--bd-speed) 0, 0 100%, 0 0, 100% var(--bd-speed);
+	}
+}
+
 .anim_shadow_breath {
 	/* outline-width: 3px;
 	outline-style: solid;
 	outline-color: var(--c-accent); */
-  box-shadow: 0px 0px 0px 5px var(--c-primary);
-  transition: box-shadow 0.6s linear;
-  margin: 0.5em;
-
+	box-shadow: 0px 0px 0px 5px var(--c-primary);
+	transition: box-shadow 0.6s linear;
+	margin: 0.5em;
 
 	animation-name: breath_shadow_radius;
 	animation-duration: 2000ms;

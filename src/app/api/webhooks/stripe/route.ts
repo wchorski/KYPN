@@ -16,16 +16,12 @@ const stripe = new Stripe(envs.STRIPE_SECRET)
 export const POST = async (request: NextRequest, response: NextResponse) => {
 	const { searchParams } = new URL(request.url)
 
-	console.log("### stripe webhook checkout session ###")
-	console.log("### stripe webhook checkout session ###")
-	console.log("### stripe webhook checkout session ###")
 	const payload = await request.text()
 	const signature = request.headers.get("stripe-signature") as string
 	// console.log({payload});
 	// console.log({signature});
 	// console.log({searchParams});
 
-	console.log("### stripe webhook checkout session ###")
 	// let event: Stripe.Event | null = null;
 	const stripePayload = stripe.webhooks.constructEvent(
 		payload,
@@ -38,6 +34,9 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 		case "checkout.session.completed":
 			// console.log('💳 : stripePayload.data.object ', JSON.stringify(stripePayload.data.object, null, 2))
 			console.log("💳 Item type: ", stripePayload.data.object.metadata?.typeof)
+			// TODO checkoutSession.payment_status === "unpaid",
+			if (stripePayload.data.object.payment_status !== "paid")
+				throw new Error(`!!! 💳❌ stripe payment not recieved: ${stripePayload.data.object.id} ${stripePayload.data.object.payment_intent}`)
 
 			handleSuccessfulCheckout(stripePayload.data.object)
 
@@ -124,47 +123,48 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 
 	if (!checkoutSession || lineItems.length === 0)
 		throw new Error("!!! No checkout session or line items")
-	// console.log("### lineItems")
-	// console.log(JSON.stringify(lineItems, null, 2))
-	// TODO add to Database!!! because we were successful
-	// will need to account for different item types Ticket,Product,Subscription
 
 	if (!checkoutSession.metadata?.typeof)
 		throw new Error("!!! ❌ stripe did not have typeof in metadata")
 
-	// console.log("### 🛒 checkoutSession FULL")
-	// console.log(JSON.stringify(checkoutSession, null, 2))
-  // TODO checkoutSession.payment_status === "unpaid",
-  if(checkoutSession.payment_status !== "paid") throw new Error('!!! 💳❌ stripe payment not recieved')
-
-
+	// TODO add to Database!!! because we were successful
+	// will need to account for different item types Ticket,Product,Subscription
 	switch (checkoutSession.metadata.typeof) {
 		case "ticket":
-			// Array(lineItems[i].id) = stripeLineItemIds ?
-			// checkoutSession.id = stripeCheckoutSessionId
-      
-      //? could send stripe session to mutation if tyring to verify
+			//? could send stripe session to mutation if tyring to verify
 			// const data = (await keystoneContext.withSession({stripeMetaCustomerId: session.metadata?.customerId}).graphql.run({
-			const data = (await keystoneContext.graphql.run({
-				query: `
-          mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!, $stripeCheckoutSessionId: String, $userId: String!, $stripePaymentIntent: String) {
-            checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, stripeCheckoutSessionId: $stripeCheckoutSessionId, userId: $userId, stripePaymentIntent: $stripePaymentIntent) {
+			const data = (await keystoneContext
+				.withSession({
+					stripeSession: {
+						payment_status: checkoutSession.payment_status,
+						id: checkoutSession.id,
+						payment_intent: checkoutSession.payment_intent,
+					},
+				})
+				.graphql.run({
+					query: `
+          mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!,  $userId: String!) {
+            checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, userId: $userId) {
               id
               status
             }
           }
         `,
-				variables: {
-					stripeCheckoutSessionId: checkoutSession.id,
-					stripePaymentIntent: checkoutSession.payment_intent,
-					eventId: checkoutSession.metadata.eventId,
-					userId: checkoutSession.metadata.customerId,
-					quantity: lineItems.length,
-					customerEmail: checkoutSession.customer_email || checkoutSession.customer_details?.email || 'anonymous',
-				},
-			})) as { checkoutTickets: { id: string; status: string } }
+					variables: {
+            //? moved them to `.withSession()`
+            // stripeCheckoutSessionId
+            // stripePaymentIntent
+						eventId: checkoutSession.metadata.eventId,
+						userId: checkoutSession.metadata.customerId,
+						quantity: lineItems.length,
+						customerEmail:
+							checkoutSession.customer_email ||
+							checkoutSession.customer_details?.email ||
+							"anonymous",
+					},
+				})) as { checkoutTickets: { id: string; status: string } }
 			// console.log("### stripe webhook. checkoutTickets mutation data")
-			console.log({ data })
+			
 			break
 
 		// case "product":
@@ -189,7 +189,7 @@ type WithMetadata = Stripe.Checkout.Session &
 				metadata: {
 					typeof: "product"
 					orderId: string
-          customerId: string
+					customerId: string
 				}
 		  }
 	)

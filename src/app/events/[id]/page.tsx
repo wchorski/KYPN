@@ -2,8 +2,7 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { PageTMain } from "@components/layouts/PageTemplates"
-import { Event, Tag, User } from "@ks/types"
+import { User } from "@ks/types"
 import {
 	datePrettyLocal,
 	datePrettyLocalDay,
@@ -13,7 +12,6 @@ import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import { Metadata, ResolvingMetadata } from "next"
 import { getServerSession, Session } from "next-auth"
 import Link from "next/link"
-import { RiFileEditFill } from "react-icons/ri"
 import styleProduct from "@styles/ecommerce/productSingle.module.scss"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
@@ -32,11 +30,10 @@ import {
 import { notFound } from "next/navigation"
 import { DialogPopup } from "@components/menus/Dialog"
 import moneyFormatter from "@lib/moneyFormatter"
-import { IconEditPagePencile } from "@lib/useIcons"
 import { IconLink } from "@components/elements/IconLink"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import Flex from "@components/layouts/Flex"
-// import { AddToCalendarButton } from "add-to-calendar-button-react";
+import ErrorPage from "@components/layouts/ErrorPage"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -45,7 +42,7 @@ export async function generateMetadata(
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
-
+  
 	if (!event)
 		return {
 			title: envs.SITE_TITLE,
@@ -66,7 +63,7 @@ export async function generateMetadata(
 			url: envs.FRONTEND_URL + "/events/" + params.id,
 			type: "article",
 		},
-		keywords: tags?.map((tag: Tag) => tag.name).join(", "),
+		keywords: tags?.map((tag) => tag.name).join(", "),
 		authors: hosts?.map((host) => ({
 			name: host.name,
 			email: host.email,
@@ -90,7 +87,7 @@ export default async function EventByID({ params }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
 
-	if (error) return <ErrorMessage error={error} />
+	if (error) return <ErrorPage error={error} />
 	if (!event) return notFound()
 
 	const {
@@ -200,22 +197,23 @@ export default async function EventByID({ params }: Props) {
 							)}
 						</ul>
 					</div>
+
 					<Card>
-            
 						<Flex justifyContent={"space-between"} alignItems={"center"}>
 							{price > 0 ? (
 								<span style={{ alignContent: "center" }}>
 									{moneyFormatter(price)} per Ticket
 								</span>
 							) : (
-								<span style={{ alignContent: "center" }}> Free </span>
+								<span style={{ alignContent: "center" }}>RSVP</span>
 							)}
+              
 
 							{!session ? (
 								<Link href={"/login"} className="button medium">
 									Login to Purchase
 								</Link>
-							) : session?.data.role !== null ? (
+							) : session?.data.role === null ? (
 								<VerifyEmailCard email={session.user.email} />
 							) : (
 								<AddTicketButton date={start} />

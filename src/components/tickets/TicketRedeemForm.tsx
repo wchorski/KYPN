@@ -1,17 +1,11 @@
 "use client"
-import { useEffect, useRef, useState } from "react"
-import { useRouter } from "next/navigation"
-import { useFormState, useFormStatus } from "react-dom"
 import { Ticket } from "@ks/types"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { Button } from "@components/elements/Button"
 import { useForm } from "@hooks/useForm"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import {
 	actionTicketRedeem,
 	TicketRedeemState,
 } from "@lib/actions/actionTicketRedeem"
-import { RadioField } from "@components/forms/RadioField"
 import { form } from "@styles/menus/form.module.scss"
 import { InputField } from "@components/InputField"
 import { Callout } from "@components/blocks/Callout"
@@ -19,19 +13,8 @@ import { StatusBadge } from "@components/StatusBadge"
 
 type Props = {
 	ticketId: string
-	status: string
-}
-
-type Fields = {
 	status: Ticket["status"]
 }
-
-type FormState = {
-	message: string
-	errors: Record<keyof Fields, string> | undefined
-	fieldValues: Fields
-}
-
 const statusOptions = [
 	{ value: "ATTENDED", label: "Redeem Ticket" },
 	{ value: "PAID", label: "Paid (Un-Redeem)" },
@@ -59,6 +42,9 @@ export function TicketRedeemForm({ ticketId, status }: Props) {
 	if (!["PAID", "RSVP"].includes(status))
 		return (
 			<Callout intent={"warning"}>
+				<p>
+					<StatusBadge type={"ticket"} status={state.values?.status} />
+				</p>
 				<p>ticket already claimed or invalid</p>
 			</Callout>
 		)
@@ -103,7 +89,9 @@ export function TicketRedeemForm({ ticketId, status }: Props) {
 			{!state.success ? (
 				<SubmitButton label={"Redeem Ticket"} />
 			) : (
-				<p className={"success"}>{state.success}</p>
+				<p className={"success"}>
+					<Callout intent={"success"}>{state.success}</Callout>
+				</p>
 			)}
 			<p className={"error"}>{state.error}</p>
 		</form>

@@ -27,7 +27,6 @@ export async function actionPasswordRequest(
 			variables: values,
 		})) as { passwordRequestLink: { dateModified: string; id: string } }
 
-		console.log({ data })
 
 		return {
 			values: {

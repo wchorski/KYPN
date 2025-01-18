@@ -242,6 +242,7 @@ export type Event = Lists.Event.Item & {
 
 export type Ticket = Lists.Ticket.Item & {
 	typeof: "ticket"
+  status: "PENDING"|'PAID'|'RSVP'|'UNPAID'|'ATTENDED'|'CANCELED'|'REJECTED'|'PAST'
 	eventSummary: string
 	event: Event
 	holder: User

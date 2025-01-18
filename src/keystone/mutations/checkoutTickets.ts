@@ -1,25 +1,25 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from "@keystone-6/core"
-// @ts-ignore
 import { Context, Lists, TicketCreateInput } from ".keystone/types"
-// import { relationship } from '@keystone-6/core/fields';
-import stripeConfig from "../../lib/stripe"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 import type { Event } from "../types"
-import stripe from "../../lib/stripe"
-import { envs } from "../../../envs"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "../../../session"
+
+type StripeSession = {
+  payment_status:'paid'|'unpaid'
+  id:string
+  payment_intent: string
+}
 
 export const checkoutTickets = (base: BaseSchemaMeta) =>
 	graphql.field({
 		type: base.object("Order"),
 
 		args: {
-			stripeCheckoutSessionId: graphql.arg({ type: graphql.String }),
-			stripePaymentIntent: graphql.arg({ type: graphql.String }),
+      //TODO I'm sending over session instead. i think it's safer?
+			// stripeCheckoutSessionId: graphql.arg({ type: graphql.String }),
+			// stripePaymentIntent: graphql.arg({ type: graphql.String }),
 			userId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			eventId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 			customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
@@ -30,12 +30,11 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			//? Stripe Webhook validates payment success
 			// TODO SECURITY!!!!!
 			console.log(
-				"### !!! SECURITY ISSUE. CAN I JUST CLAIM TICKETS WITHOUT PAYMENT?"
+				"### !!! SECURITY ISSUE. Is there a way to 'unit test' this?"
 			)
-			// const session = await getServerSession(nextAuthOptions)
-			// if(!session) throw new Error('No')
 			const sudoContext = context.sudo()
 			const session = context.session
+      const stripeSession:StripeSession = session.stripeSession
 
 			// console.log(
 			// 	"### checkoutTickets session::",
@@ -44,8 +43,8 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			// if (!session) throw new Error("checkoutTicket: No Session provided")
 
 			const {
-				stripeCheckoutSessionId,
-				stripePaymentIntent,
+				// stripeCheckoutSessionId,
+				// stripePaymentIntent,
 				eventId,
 				userId,
 				quantity,
@@ -139,11 +138,11 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 					total: amountTotal,
 					ticketItems: { create: ticketItems },
 					user: userId ? { connect: { id: userId } } : null,
-					stripeCheckoutSessionId,
-					stripePaymentIntent,
+					stripeCheckoutSessionId: stripeSession.id || 'NO_STRIPE_PLUGIN',
+					stripePaymentIntent: stripeSession.payment_intent || 'FREE or NO_STRIPE_PLUGIN',
 					email: customerEmail,
 					//TODO maybe not secure
-					...(stripeCheckoutSessionId ? { status: "PAYMENT_RECIEVED" } : {}),
+					...(stripeSession.payment_status === 'paid' ? { status: "PAYMENT_RECIEVED" } : {}),
 				},
 			})
 			// console.log("### ORDER CREATED, ", {order});
