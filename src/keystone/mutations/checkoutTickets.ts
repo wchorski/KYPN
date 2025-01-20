@@ -12,6 +12,9 @@ type StripeSession = {
   payment_intent: string
 }
 
+// TODO consolidate into one checkout mutation
+// grab items from cart instead of doing all this song and dance with form input
+
 export const checkoutTickets = (base: BaseSchemaMeta) =>
 	graphql.field({
 		type: base.object("Order"),

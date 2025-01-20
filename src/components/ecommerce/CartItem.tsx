@@ -1,7 +1,6 @@
 "use client"
 import moneyFormatter from "@lib/moneyFormatter"
 import styles from "@styles/ecommerce/cart.module.scss"
-import Image from "next/image"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
@@ -21,46 +20,60 @@ type Props = {
 }
 
 export default function CartItem({ item, sessionId }: Props) {
-	const [error, setError] = useState<any>(undefined)
-	const { getUserCart } = useCart()
 
-	console.log(item)
+	if (item.event) return <TicketItem item={item}/>
+	if (item.product) return <ProductItem item={item} sessionId={sessionId} />
 
-	if (item.event)
-		return (
-			<li className={styles.item}>
-				<p>
-					Ticket: {item.event.summary} x{item.quantity} <CartRemoveItem id={item.id} />
-				</p>
-			</li>
-		)
+	return <p>no product or event associated</p>
+}
 
-	if (!item?.product)
-		return (
-			<li className={styles.item}>
-				<p>This cart item is no longer supplied by our store</p>
-			</li>
-		)
+function TicketItem({item}:{item: CartItem}) {
+
+	if (!item.event) return <p>No Event</p>
 
 	const {
-		product: { id, description, name, price, rental_price, image },
 		quantity,
-		id: cartItemId,
-		type,
-	}: CartItem = item
+		event: { id, summary, image, price },
+	} = item
+	return (
+		<li className={styles.item}>
+			<ImageDynamic
+				photoIn={{ url: image, altText: `${summary} featured image` }}
+			/>
 
-	const [quantityState, setQuantityState] = useState(quantity)
+			<div>
+				<h5>
+					<Link href={`/shop/products/${id}`}> {summary} </Link>
+				</h5>
+
+				<span>{quantity}</span>
+			</div>
+
+			<div className="perItemTotal">
+				<p>{moneyFormatter(price * quantity)}</p>
+				<em> {moneyFormatter(price)} each </em>
+			</div>
+
+			<CartRemoveItem id={item.id} />
+		</li>
+	)
+}
+
+function ProductItem({item, sessionId}:{item: CartItem, sessionId: string|undefined}) {
+	const [quantityState, setQuantityState] = useState(item.quantity)
 
 	useEffect(() => {
-		setQuantityState(quantity)
+		setQuantityState(item.quantity)
 
 		// return () =>
-	}, [quantity])
+	}, [item.quantity])
+	const [error, setError] = useState<any>(undefined)
+	const { getUserCart } = useCart()
 
 	async function updateQuantity(value: number) {
 		const variables = {
 			where: {
-				id: cartItemId,
+				id: item.id,
 			},
 			data: {
 				quantity: value,
@@ -85,6 +98,19 @@ export default function CartItem({ item, sessionId }: Props) {
 			getUserCart(sessionId)
 		}
 	}
+
+	if (!item?.product)
+		return (
+			<li className={styles.item}>
+				<p>This cart item is no longer supplied by our store</p>
+			</li>
+		)
+
+	const {
+		product: { id, name, price, rental_price, image },
+		type,
+		quantity,
+	} = item
 
 	return (
 		<>

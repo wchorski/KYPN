@@ -1,5 +1,5 @@
 .loading {
-	& > div {
+	& > span {
 		list-style: none;
 		display: flex;
 		flex-direction: row;
@@ -9,7 +9,7 @@
 		height: auto;
 		width: 100%;
 
-		& > div {
+		& > span {
 			background-color: var(--c-txt);
 			border: solid 1px rgba(61, 60, 60, 0.484);
 			height: 10px;

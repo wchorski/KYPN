@@ -30,7 +30,7 @@ export function ShoppingCart() {
         closeCart();
       }
     },
-    [isOpen]
+    [isOpen, closeCart]
   );
 
   useEffect(() => {
@@ -86,20 +86,3 @@ export function ShoppingCart() {
     </div>
   )
 }
-
-// const query = `
-//   query getUserCart($where: UserWhereUniqueInput!) {
-//     user(where: $where) {
-//       cart {
-//         id
-//         quantity
-//         product {
-//           id
-//           price
-//           name
-//           image
-//         }
-//       }
-//     }
-//   }
-// `

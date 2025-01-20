@@ -1,16 +1,12 @@
 'use client'
 import { CartItem, User } from "@ks/types";
 import { calcTotalPrice, calcCartRentalTotal, calcCartSaleTotal } from "@lib/calcTotalPrice";
-import { ReactNode, createContext, useContext, useState } from "react";
-
-type CartContext = {
-  isOpen: boolean,
-  cartTotal:number,
-}
+import { ReactNode, createContext, useCallback, useContext, useState } from "react";
 
 const defaultCtx= {
   isOpen: false,
   setIsOpen: (isOpen:boolean) => {},
+  isPending: true,
   toggleCart: () => {},
   closeCart: () => {},
   openCart: () => {},
@@ -28,6 +24,7 @@ const LocalStateContext = createContext(defaultCtx)
 function CartStateProvider ({children}:{children: ReactNode}){
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isPending, setIsPending] = useState<boolean>(true)
   const [cartTotal, setCartTotal] = useState<number>(0)
   const [cartCount, setCartCount] = useState<number>(0)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
@@ -39,12 +36,14 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
   // TODO add an updateUserCart that acts like a cache, instead of always requesting the sever the whole new cart
 
-  async function getUserCart(sessionId:string|undefined){
+  // non memoized function (caused probs with useEffect dependancies)
+  // async function getUserCart(sessionId:string|undefined){
+  const getUserCart = useCallback(async (sessionId:string|undefined) => {
 
-    if(!sessionId) return console.log('no sessionId for getUserCart context');
-    
+    // setIsPending(true) // is already set to true
+    if(!sessionId) return []
+
     try {
-      // const { user } = await client.request(query, variables) as { user:User }
       const res = await fetch(`/api/gql/protected`, {
         method: 'POST',
         body: JSON.stringify({
@@ -59,6 +58,8 @@ function CartStateProvider ({children}:{children: ReactNode}){
                   event {
                     id
                     summary
+                    price
+                    image
                   }
                   product {
                     id
@@ -87,6 +88,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
       setCartItems(user.cart)
       const total = calcCartSaleTotal(user.cart)
       setCartTotal(total)
+      setIsPending(false)
 
       return { success: true }
       
@@ -95,7 +97,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
       return { success: false, error }
     }
-  }
+  }, [isPending])
 
   function calcCartCount(items:CartItem[]){
     const accum = items.reduce((accumulator, item) => {
@@ -125,6 +127,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
     <LocalStateContext.Provider 
       value={{
         isOpen, 
+        isPending,
         setIsOpen, 
         toggleCart, 
         closeCart, 

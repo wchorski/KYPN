@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styles from '@styles/ecommerce/product.module.scss'
 import AddToCart from '@components/ecommerce/AddToCart';
 import { ImageDynamic } from '../elements/ImageDynamic';
-import { OutOfStockLabel } from '../elements/OutOfStockLabel';
+// import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { Product, Session } from '@ks/types';
 import { PriceTag } from '@components/ecommerce/PriceTag';
 import { envs } from '@/envs';
@@ -22,7 +22,7 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
 
   if(!product) return  <p> no prod </p>
 
-  const { id, name, excerpt, price, rental_price, photo, image, status, isForSale, isForRent } = product
+  const { id, name, excerpt, price, rental_price,  image, status, isForSale, isForRent } = product
 
 
   return (
@@ -31,7 +31,7 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
       {(status === 'DRAFT' || status === 'PRIVATE') && <StatusBadge type={'product'} status={status} />}
       {/* <StatusBadge type={'product'} status={status} /> */}
 
-      {status === 'OUT_OF_STOCK' && <OutOfStockLabel /> }
+      {status === 'OUT_OF_STOCK' && <p>out of stock</p> }
       <Link href={`/shop/products/${id}`} className='featured_image'>
         <ImageDynamic photoIn={image} />
       </Link>

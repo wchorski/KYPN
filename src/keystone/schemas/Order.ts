@@ -121,8 +121,10 @@ export const Order: Lists.Order = list({
 		status: select({
 			options: [
 				{ label: "started", value: "STARTED" },
+				{ label: "requested", value: "REQUESTED" },
 				{ label: "payment pending", value: "PAYMENT_PENDING" },
 				{ label: "payment recieved", value: "PAYMENT_RECIEVED" },
+				{ label: "free", value: "FREE" },
 				{ label: "processing", value: "PROCESSING" },
 				{ label: "shipped", value: "SHIPPED" },
 				{ label: "delivered", value: "DELIVERED" },
@@ -133,7 +135,7 @@ export const Order: Lists.Order = list({
 				{ label: "returned", value: "RETURNED" },
 				{ label: "failed", value: "FAILED" },
 			],
-			defaultValue: "STARTED",
+			defaultValue: "REQUESTED",
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },

@@ -1,4 +1,4 @@
-import { graphql, list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 // @ts-ignore
 import { Lists } from ".keystone/types"
 
@@ -56,12 +56,12 @@ export const Product: Lists.Product = list({
 	fields: {
 		// photo: relationship({
 		//   ref: 'ProductImage.product',
-		  // ui: {
-		  //   displayMode: 'cards',
-		  //   cardFields: ['image', 'altText', 'filename'],
-		  //   inlineCreate: { fields: ['image', 'altText', 'filename'] },
-		  //   inlineEdit: { fields: ['image', 'altText', 'filename'] }
-		  // }
+		// ui: {
+		//   displayMode: 'cards',
+		//   cardFields: ['image', 'altText', 'filename'],
+		//   inlineCreate: { fields: ['image', 'altText', 'filename'] },
+		//   inlineEdit: { fields: ['image', 'altText', 'filename'] }
+		// }
 		// }),
 		typeof: virtual({
 			field: graphql.field({
@@ -134,8 +134,6 @@ export const Product: Lists.Product = list({
 			links: true,
 			dividers: true,
 		}),
-		isForSale: checkbox({ defaultValue: true }),
-		isForRent: checkbox(),
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },
@@ -149,11 +147,25 @@ export const Product: Lists.Product = list({
 				createView: { fieldMode: "edit" },
 			},
 		}),
+		...group({
+			label: "Inventory",
+			// description: 'Group description',
 
-		price: integer({validation: {isRequired: true}, defaultValue: 0}),
-		rental_price: integer(),
+			fields: {
+				isForSale: checkbox({ defaultValue: true }),
+				isForRent: checkbox({ defaultValue: false }),
+				price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+				rental_price: integer({
+					validation: { isRequired: true },
+					defaultValue: 0,
+				}),
 
-		stockCount: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+				stockCount: integer({
+					validation: { isRequired: true },
+					defaultValue: 0,
+				}),
+			},
+		}),
 		// todo make this 'author' instead for clarity
 		author: relationship({
 			ref: "User.products",
@@ -161,16 +173,24 @@ export const Product: Lists.Product = list({
 		orderItems: relationship({ ref: "OrderItem.product", many: true }),
 		addons: relationship({ ref: "Addon.products", many: true }),
 		coupons: relationship({ ref: "Coupon.products", many: true }),
-		tags: relationship({
-			ref: "Tag.products",
-			many: true,
+    ...group({
+			label: "Metadata",
+			// description: 'Group description',
+      
+			fields: {
+				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
+				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+				categories: relationship({
+					ref: "Category.products",
+					many: true,
+				}),
+
+				tags: relationship({
+					ref: "Tag.products",
+					many: true,
+				}),
+			},
 		}),
-		categories: relationship({
-			ref: "Category.products",
-			many: true,
-		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 	},
 	hooks: {
 		// TODO use this to create a default 'slug' automatically based on product name
@@ -201,10 +221,9 @@ export const Product: Lists.Product = list({
 								envs.FRONTEND_URL + "/assets/private/placeholder.png",
 						],
 						metadata: {
-
 							category: resolvedData.categories
-              // @ts-ignore
-								? resolvedData.categories[0].name
+								? // @ts-ignore
+								  resolvedData.categories[0].name
 								: "uncategorized",
 							status: resolvedData.status || "",
 							// @ts-ignore //todo might cause problems

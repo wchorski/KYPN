@@ -16,7 +16,7 @@ button.remove {
 
 
 li.item :global{
-  padding: var(--space-m);
+  padding: var(--space-s);
   border-bottom: 1px solid rgba(43, 43, 43, 0.424);
   display: flex;
   // justify-content: space-between;
@@ -24,7 +24,7 @@ li.item :global{
   background-color: var(--c-txt-bg);
   border-radius: var(--br-dull);
   max-width: 20rem;
-  p
+  
 
   img{
     margin-inline: 1rem;

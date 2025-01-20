@@ -7,10 +7,10 @@ export function LoadingAnim ({isVisable = false}:{isVisable?:boolean}) {
   const delay = 0.3
 
   return (
-    <div className={loading} style={{visibility: isVisable ? 'visible' : 'hidden'}} aria-label={'loading animation pending'}>
-      <div>
+    <span className={loading} style={{visibility: isVisable ? 'visible' : 'hidden'}} aria-label={'loading animation pending'}>
+      <span>
         {dots.map((dot, i) => (
-          <div
+          <span
             key={i}
             style={{
               animationDuration: duration + 's',
@@ -18,10 +18,10 @@ export function LoadingAnim ({isVisable = false}:{isVisable?:boolean}) {
             }}
           >
             
-          </div>
+          </span>
         ))}
-      </div>
-    </div>
+      </span>
+    </span>
   )
 }
 

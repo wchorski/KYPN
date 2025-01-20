@@ -290,6 +290,10 @@
 			visibility: hidden;
 			display: none;
 		}
+
+    &:not(:empty){
+      margin-top: var(--space-m);
+    }
 	}
 }
 

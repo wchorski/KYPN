@@ -2,7 +2,8 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import CartItem from "@components/ecommerce/CartItem"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
-import { CheckoutTicketsForm } from "@components/ecommerce/CheckoutTicketsForm"
+import { CartTotal } from "@components/ecommerce/CartTotal"
+import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
@@ -75,14 +76,17 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 					<h1>Checkout</h1>
 				</header>
 				<div className={[page_content, layout_site].join(" ")}>
-					<Grid layout={'1_1'} isAuto={false}>
-						<CartItemsList />
-
+					<Grid layout={"1_1"} isAuto={false}>
+						<div>
+              {/* // TODO how to show tickets in a pretty manner with cart context */}
+							<CartItemsList />
+							<CartTotal />
+						</div>
 						<div>
 							{user.cart.length === 0 ? (
 								<p> No items in cart. </p>
 							) : filteredTicketItems ? (
-								<CheckoutTicketsForm />
+								<CheckoutCartForm cartItems={filteredTicketItems} />
 							) : filteredProductItems ? (
 								<p>CheckoutForm for products</p>
 							) : (

@@ -211,6 +211,7 @@ export type CartItem = Lists.CartItem.Item & {
 	product?: Product
 	event?: Event
 	user?: User
+  subTotal:number
 }
 
 export type Coupon = Lists.Coupon.Item & {
@@ -224,6 +225,7 @@ export type Coupon = Lists.Coupon.Item & {
 }
 
 export type Event = Lists.Event.Item & {
+  id:string
 	typeof: "event"
 	location: Location
   description: {

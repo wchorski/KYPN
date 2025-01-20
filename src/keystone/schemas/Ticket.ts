@@ -128,7 +128,8 @@ export const Ticket: Lists.Ticket = list({
             `,
 					})) as Event
 
-          // TODO apply coupons
+          // TODO apply coupons. 
+          //! this won't work when wrestling with % vs number coupons
 					return event.price
 				},
 			}),

@@ -1744,9 +1744,9 @@ type Product {
   slug: String
   excerpt: String
   description: Product_description_Document
+  status: String
   isForSale: Boolean
   isForRent: Boolean
-  status: String
   price: Int
   rental_price: Int
   stockCount: Int
@@ -1757,12 +1757,12 @@ type Product {
   addonsCount(where: AddonWhereInput! = {}): Int
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
   couponsCount(where: CouponWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
-  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
-  categoriesCount(where: CategoryWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
 }
 
 type Product_description_Document {
@@ -1785,20 +1785,20 @@ input ProductWhereInput {
   stripePriceId: StringFilter
   slug: StringFilter
   excerpt: StringFilter
+  status: StringNullableFilter
   isForSale: BooleanFilter
   isForRent: BooleanFilter
-  status: StringNullableFilter
   price: IntFilter
-  rental_price: IntNullableFilter
+  rental_price: IntFilter
   stockCount: IntFilter
   author: UserWhereInput
   orderItems: OrderItemManyRelationFilter
   addons: AddonManyRelationFilter
   coupons: CouponManyRelationFilter
-  tags: TagManyRelationFilter
-  categories: CategoryManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
 }
 
 input OrderItemManyRelationFilter {
@@ -1815,9 +1815,9 @@ input ProductOrderByInput {
   stripePriceId: OrderDirection
   slug: OrderDirection
   excerpt: OrderDirection
+  status: OrderDirection
   isForSale: OrderDirection
   isForRent: OrderDirection
-  status: OrderDirection
   price: OrderDirection
   rental_price: OrderDirection
   stockCount: OrderDirection
@@ -1833,9 +1833,9 @@ input ProductUpdateInput {
   slug: String
   excerpt: String
   description: JSON
+  status: String
   isForSale: Boolean
   isForRent: Boolean
-  status: String
   price: Int
   rental_price: Int
   stockCount: Int
@@ -1843,10 +1843,10 @@ input ProductUpdateInput {
   orderItems: OrderItemRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
-  tags: TagRelateToManyForUpdateInput
-  categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
 }
 
 input OrderItemRelateToManyForUpdateInput {
@@ -1869,9 +1869,9 @@ input ProductCreateInput {
   slug: String
   excerpt: String
   description: JSON
+  status: String
   isForSale: Boolean
   isForRent: Boolean
-  status: String
   price: Int
   rental_price: Int
   stockCount: Int
@@ -1879,10 +1879,10 @@ input ProductCreateInput {
   orderItems: OrderItemRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
-  tags: TagRelateToManyForCreateInput
-  categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
 }
 
 input OrderItemRelateToManyForCreateInput {
@@ -2015,6 +2015,7 @@ type CartItem {
   typeof: String
   quantity: Int
   type: String
+  subTotal: Int
   product: Product
   event: Event
   user: User
@@ -3088,6 +3089,7 @@ type Mutation {
   contact(name: String!, customerId: String, email: String!, tel: String!, start: String!, notes: String!): User
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
+  checkout: Order
   addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID): CartItem
 }
 
