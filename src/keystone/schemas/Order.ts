@@ -192,7 +192,7 @@ export const Order: Lists.Order = list({
             }
             ticketItems {
               id
-              orderCount
+              orderIndex
               event {
                 summary
                 image

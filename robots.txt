@@ -1,5 +1,11 @@
 User-Agent: *
 Allow: /
+Allow: /events
+Allow: /subscriptions
+Allow: /shop
+Allow: /book-a-service
+Allow: /blog
+Allow: /home
 Disallow: /private/
 Disallow: /admin/
 Disallow: /api/

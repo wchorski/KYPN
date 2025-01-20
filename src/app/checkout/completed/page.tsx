@@ -15,6 +15,9 @@ import ErrorPage from "@components/layouts/ErrorPage"
 import { Metadata } from "next"
 import moneyFormatter from "@lib/moneyFormatter"
 import { Callout } from "@components/blocks/Callout"
+import { fetchOrder } from "@lib/fetchdata/fetchOrder"
+import { getServerSession } from "next-auth"
+import { notFound } from "next/navigation"
 
 export const metadata: Metadata = {
 	title: `Checkout Completed | ` + envs.SITE_TITLE,
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-	searchParams: { stripeCheckoutSessionId: string }
+	searchParams: { stripeCheckoutSessionId: string, orderId:string }
 	params: { id: string }
 }
 
@@ -30,18 +33,72 @@ export default async function CheckoutSuccessPage({
 	params,
 	searchParams,
 }: Props) {
-	const { stripeCheckoutSessionId } = await searchParams
+	const { stripeCheckoutSessionId, orderId } = await searchParams
 	// const session = await getServerSession(nextAuthOptions)
 
-	// TODO account for other `checkoutSessionId` stuff
-	if (!stripeCheckoutSessionId)
-		return (
-			<NoDataFoundPage>
-				<p> no checkout session id</p>
-			</NoDataFoundPage>
-		)
+	if(stripeCheckoutSessionId) return <StripeCheckoutCheck stripeCheckoutSessionId={stripeCheckoutSessionId}/>
+  if(orderId) return <NativeCheckoutSession id={orderId}/>
 
-	const { session: stripeCheckoutSession, error } = await getCheckoutSession(
+	return (
+		<main className={[page_layout].join(" ")}>
+			<header className={layout_site}>
+				<h1>Checkout Not Found</h1>
+			</header>
+			<div className={[page_content, layout_site].join(" ")}>
+				<p>
+					No checkout session provided. View your{" "}
+					<Link href={`/account`}>account</Link> or return to{" "}
+					<Link href={`/checkout`}>checkout</Link>
+				</p>
+			</div>
+		</main>
+	)
+}
+
+const query = `
+  total
+  status
+`
+
+async function NativeCheckoutSession({id}:{id:string}){
+  const session = await getServerSession(nextAuthOptions)
+  const {order, error} = await fetchOrder({id , query, session})
+  if(error) return <ErrorPage error={error}/>
+  if(!order) return notFound()
+    
+    return (
+			<main className={[page_layout].join(" ")}>
+				<header className={layout_site}>
+					<h1>Checkout Completed</h1>
+				</header>
+				<div className={[page_content, layout_site].join(" ")}>
+					<Callout intent={"success"}>
+						<p>A reciept will be sent via email. You may also review reciepts in your account. If you do not have an account, it is recommened you <strong>print this page</strong> </p>
+					</Callout>
+					<ul>
+						<li>
+							amount_total: {moneyFormatter(order.total)}
+						</li>
+						<li>
+							status:{" "}
+							<StatusBadge
+								type={"any"}
+								status={order.status}
+							/>
+						</li>
+						<li>
+							<Link href={`/account#orders`}>My Account</Link>
+						</li>
+					</ul>
+				</div>
+			</main>
+    )
+}
+
+async function StripeCheckoutCheck({stripeCheckoutSessionId}:{stripeCheckoutSessionId:string}){
+
+
+	const { session: stripeCheckoutSession, error } = await getStripeCheckoutSession(
 		stripeCheckoutSessionId
 	)
 
@@ -85,7 +142,7 @@ export default async function CheckoutSuccessPage({
 						<li>checkout_id: {stripeCheckoutSession.id}</li>
 						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li>
 						<li>
-							<Link href={`/account?dashState=orders#orders`}>My Account</Link>
+							<Link href={`/account#orders`}>My Account</Link>
 						</li>
 					</ul>
 
@@ -117,24 +174,9 @@ export default async function CheckoutSuccessPage({
 				</div>
 			</main>
 		)
-
-	return (
-		<main className={[page_layout].join(" ")}>
-			<header className={layout_site}>
-				<h1>Checkout Return </h1>
-			</header>
-			<div className={[page_content, layout_site].join(" ")}>
-				<p>
-					No checkout session provided. View your{" "}
-					<Link href={`/account`}>account</Link> or return to{" "}
-					<Link href={`/checkout`}>checkout</Link>
-				</p>
-			</div>
-		</main>
-	)
 }
 
-const getCheckoutSession = async (sessionId: string) => {
+const getStripeCheckoutSession = async (sessionId: string) => {
 	try {
 		const session = await stripe.checkout.sessions.retrieve(sessionId)
 

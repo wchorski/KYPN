@@ -61,7 +61,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 		)
 	if (!ticket) return notFound()
 
-	const { status, event, holder, email, orderCount } = ticket
+	const { status, event, holder, email, orderIndex } = ticket
 
 	const hostIds = event.hosts.flatMap((host) => host.id)
 
@@ -112,7 +112,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 								</Link>
 							</h5>
 						</li>
-						<li>{orderCount}</li>
+						<li>{orderIndex}</li>
 						<li>
 							{holder?.name} {holder?.nameLast}
 						</li>
@@ -150,7 +150,7 @@ const query = `
   id
   status
   email
-  orderCount
+  orderIndex
   holder {
     id
     name

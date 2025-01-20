@@ -13,6 +13,9 @@ export async function fetchTicketsByUser(userId: string) {
 			.withSession(session)
 			.query.Ticket.findMany({
 				query: query,
+        orderBy: {
+          dateCreated: 'desc'
+        },
 				where: {
 					holder: { id: { equals: userId } },
 					event: {
@@ -42,9 +45,10 @@ export async function fetchTicketsByUser(userId: string) {
 }
 
 const query = `
-  
+    typeof
     id
     status
+    orderIndex
     holder{
       id
     }

@@ -153,7 +153,7 @@ const query = `
   }
   ticketItems {
     id
-    orderCount
+    orderIndex
     status
     event {
       summary

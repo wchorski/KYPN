@@ -93,26 +93,25 @@ export const Ticket: Lists.Ticket = list({
 		}),
 		qrcode: text(),
 		email: text(),
-		// orderCount: text({ ui: { itemView: { fieldMode: "read" } } }),
-		orderCount: virtual({
+		orderIndex: virtual({
 			field: graphql.field({
 				type: graphql.String,
 				async resolve(item, args, context) {
-					const order = (await context.query.Order.findOne({
-						where: { id: item.orderId },
-						query: `
-              ticketItems { 
-                id
-              }
-            `,
-					})) as Order
 
-					const thisTixIndex = order.ticketItems.findIndex(
+          if(!item.orderId) return '1 of 1'
+
+					const orderTicketItems = await context.sudo().db.Ticket.findMany({
+						where: { order: { id: { equals: item.orderId } } },
+					})
+
+					const thisTixIndex = orderTicketItems.findIndex(
 						(tix) => tix.id === item.id
 					)
-					if (!order.ticketItems || order.ticketItems.length === 0)
-						return "not available"
-					return `${thisTixIndex} of ${order.ticketItems.length}`
+
+					if (!orderTicketItems || orderTicketItems.length === 0)
+						return "1 of 1"
+          
+					return `${thisTixIndex + 1} of ${orderTicketItems.length}`
 				},
 			}),
 		}),
@@ -128,8 +127,8 @@ export const Ticket: Lists.Ticket = list({
             `,
 					})) as Event
 
-          // TODO apply coupons. 
-          //! this won't work when wrestling with % vs number coupons
+					// TODO apply coupons.
+					//! this won't work when wrestling with % vs number coupons
 					return event.price
 				},
 			}),
@@ -139,7 +138,7 @@ export const Ticket: Lists.Ticket = list({
 			options: [
 				{ label: "Pending", value: "PENDING" },
 				{ label: "Paid", value: "PAID" },
-        // better way of saying `FREE`
+				// better way of saying `FREE`
 				{ label: "RSVP", value: "RSVP" },
 				{ label: "Unpaid", value: "UNPAID" },
 				{ label: "Attended", value: "ATTENDED" },
@@ -163,7 +162,6 @@ export const Ticket: Lists.Ticket = list({
 				displayMode: "cards",
 				cardFields: ["id", "summary", "start", "location"],
 			},
-      
 		}),
 		holder: relationship({
 			ref: "User.tickets",
@@ -194,10 +192,10 @@ export const Ticket: Lists.Ticket = list({
 					throw new Error("!!! Ticket: cannot create if Event already started")
 			}
 
-      // TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets
+			// TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets
 			if (operation === "update") {
-        // console.log({item});
-        // console.log({resolvedData});
+				// console.log({item});
+				// console.log({resolvedData});
 				// if (item.status === "ATTENDED") {
 				// 	throw new Error(
 				// 		`!!! This ticket has already been redeemed: ${item.id}`

@@ -15,6 +15,7 @@ import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { MdAccountCircle, MdOutlineAccountBox, MdShop } from "react-icons/md"
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { RiFileEditFill } from "react-icons/ri"
+import { PiSpinnerThin } from "react-icons/pi";
 
 export const IconBookmark = () => <BsFillBookmarkFill />
 
@@ -34,7 +35,8 @@ export const IconShoppingBag = () => <MdShop />
 
 export const IconEditPagePencile = () => <RiFileEditFill />
 
-
+export const IconSpinnerLines = () => <PiSpinnerThin className="anim-spin-circle"/>
+ 
 
 export const IconItem = ({type}:{type: "booking" | "event" | "user" | string}) => {
 	switch (type) {

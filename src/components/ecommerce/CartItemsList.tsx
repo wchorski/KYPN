@@ -28,9 +28,13 @@ export function CartItemsList() {
 					<LoadingAnim isVisable={isPending} />
 				) : cartItems?.length <= 0 ? (
 					<p>
-						Cart is empty.{" "}
+						Cart is empty. View the {' '}
 						<Link href={`/shop`} onClick={closeCart}>
-							Go to shop
+							 Shop
+						</Link> {' '}
+            or checkout some {' '}
+            <Link href={`/events`} onClick={closeCart}>
+							 Events
 						</Link>
 					</p>
 				) : (

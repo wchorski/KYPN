@@ -17,7 +17,7 @@ export function TicketListItem({ ticket }: Props) {
 					<strong>{ticket.event?.summary}</strong>
 				</Link>
 				<br />
-				<small>{ticket.orderCount}</small>
+				<small>{ticket.orderIndex}</small>
 				<br />
 				<small>{datePrettyLocalDay(ticket.event?.start || "")}</small>
 				<br />

@@ -38,6 +38,7 @@ import {fetchTicketsByUser} from "@lib/fetchdata/fetchTicketsByUser"
 import { ReactNode } from "react"
 import { DashNavLink } from "@components/menus/DashNavLink"
 import { DashNav, DashNavData } from "@components/menus/DashNav"
+import ErrorPage from "@components/layouts/ErrorPage"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -50,14 +51,6 @@ const now = new Date().toISOString()
 export default async function AccountPage() {
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return <LoginToViewPage />
-
-	// const user = await keystoneContext.withSession(session).query.User.findOne({
-	//   // TODO have pagination in mind (or maybe by date filtering?), split this into diff queries
-	//   where: {
-	//     id: session.itemId,
-	//   },
-	//   query: USER_DASH_QUERY,
-	// }) as User
 
 	const { user, error: userError } = await fetchUser(
 		session.itemId,
@@ -162,6 +155,9 @@ export default async function AccountPage() {
         }
       `,
 		})) as { user: User }
+
+  if(userError) return <ErrorPage error={userError}/>
+
 	if (!user) return notFound()
 	const { gig_requests, gigs } = employeeGigData.user
 
@@ -263,60 +259,4 @@ const USER_DASH_QUERY = `
     }
     status
   }
-  tickets {
-    id
-    orderCount
-    status
-    event {
-      id
-      start
-      summary
-      location {
-        id
-        name
-      }
-    }
-  }
 `
-
-// clamp(1rem, 90vw, 31rem)
-
-// const USER_DASH_QUERY = `
-//   id
-//   name
-//   email
-//   phone
-//   bookings {
-//     id
-//     price
-//     start
-//     service {
-//       name
-//     }
-//     status
-//   }
-//   subscriptions{
-//     id
-//     subscriptionPlan {
-//       id
-//       name
-//     }
-//     status
-//     dateModified
-//     dateCreated
-//   }
-// tickets {
-//   id
-//   orderCount
-//   status
-//   event {
-//     id
-//     start
-//     summary
-//     location {
-//       id
-//       name
-//     }
-//   }
-// }
-// `

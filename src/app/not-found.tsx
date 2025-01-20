@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { Section } from "@components/blocks/Section"
-import styles from "../styles/elements/404.module.scss"
+import styles from "../styles/elements/404.module.css"
 import { ReactNode } from "react"
 import {
 	layout_wide,

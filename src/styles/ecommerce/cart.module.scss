@@ -1,6 +1,7 @@
 button.remove {
   font-size: 3rem;
-  background: none;
+  // background: none;
+  background-color: var(--c-txt-sub);
   border: 0;
   color: var(--c-desaturated);
   padding-inline: .4rem;
@@ -11,7 +12,8 @@ button.remove {
   filter: brightness(0.85);
 }
 .remove:hover, .remove:focus{
-  color: var(--c-error);
+  background-color: var(--c-body);
+  color: var(--c-error) !important;
 }
 
 

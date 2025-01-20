@@ -21,10 +21,10 @@ import { VerifyEmailCard } from "./VerifyEmailCard"
 type Props = {
 	data: {
 		user: User
-		orders: Order[] | undefined
+		orders: Order[]
 		rentals: Rental[]
 		tickets: Ticket[] | undefined
-    sudoTicketCount: number
+		sudoTicketCount: number
 		employeeGigs: {
 			gig_requests: Booking[]
 			gigs: Booking[]
@@ -36,7 +36,7 @@ export default function AccountDash({ data }: Props) {
 	const {
 		user,
 		tickets = [],
-    sudoTicketCount,
+		sudoTicketCount,
 		orders = [],
 		rentals = [],
 		employeeGigs: { gigs, gig_requests },
@@ -217,6 +217,10 @@ export default function AccountDash({ data }: Props) {
 					<h3>Tickets</h3>
 
 					<TicketList tickets={tickets} />
+					<hr />
+					<p>
+						<button disabled={true}>View past event tickets</button>
+					</p>
 				</Card>
 			)}
 
@@ -224,9 +228,9 @@ export default function AccountDash({ data }: Props) {
 				<Card id="tickets" marginBlock={"0"}>
 					<h3>Tickets</h3>
 
-          <p>You must verify your account to view purchased tickets</p>
-          
-					<VerifyEmailCard email={user.email}/>
+					<p>You must verify your account to view purchased tickets</p>
+
+					<VerifyEmailCard email={user.email} />
 				</Card>
 			)}
 
@@ -240,6 +244,8 @@ export default function AccountDash({ data }: Props) {
 						cells={orderCells}
 						route={`/orders`}
 					/>
+					<hr />
+					<p>{"// TODO add pagination"}</p>
 				</Card>
 			)}
 		</div>

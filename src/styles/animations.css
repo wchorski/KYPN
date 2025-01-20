@@ -8,6 +8,9 @@ button,
 	&.pending {
 		cursor: progress;
 	}
+
+  transition-property: color, background;
+  transition-duration: 0.3s;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -152,5 +155,27 @@ button,
 	} */
 	100% {
 		background-position: 100% 50%;
+	}
+}
+
+
+.anim-spin-circle {
+  animation-name: circle_spin;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: normal;
+	/* animation-fill-mode: forwards; */
+	animation-timing-function: ease-out;
+}
+
+@keyframes circle_spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	/* 10% {
+		background-position: 30% 50%;
+	} */
+	100% {
+		transform: rotate(360deg);
 	}
 }

@@ -250,6 +250,7 @@ export type Ticket = Lists.Ticket.Item & {
 	holder: User
 	order: Order
 	coupons: Coupon[]
+  orderIndex: string
 }
 
 export type Product = Lists.Product.Item & {

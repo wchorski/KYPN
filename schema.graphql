@@ -2710,7 +2710,7 @@ type Ticket {
   eventStart: DateTime
   qrcode: String
   email: String
-  orderCount: String
+  orderIndex: String
   price: Int
   chargeId: String
   status: String

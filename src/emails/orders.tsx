@@ -19,6 +19,7 @@ import {
 import * as React from 'react'
 import { datePrettyLocal } from '../lib/dateFormatter';
 import moneyFormatter from '../lib/moneyFormatter';
+import Image from 'next/image'
 
 const { main, container, heading, subheading, button, footer, hr, link, paragraph, reportLink, review, status, statusState, userImage, thumbnail } = emailStyles
 
@@ -62,7 +63,7 @@ export default function OrdersEmail({
                   <tbody>
                     <tr>
                       <td> Status: </td>
-                      <td><span style={{...status, ...statusState[order?.status]}}> {order?.status} </span></td>
+                      <td><span style={{...status, ...statusState[order.status]}}> {order?.status} </span></td>
                     </tr>
                     <tr>
                       <td> Client: </td>
@@ -108,16 +109,16 @@ export default function OrdersEmail({
                         </tr>
                       ))}
                       {order?.ticketItems?.map( ticket => (
-                        <tr style={recieptrow}>
+                        <tr style={recieptrow} key={ticket.id}>
                           <td  style={reciepcell}> 
-                            <img src={ticket?.event?.image} alt="event image" width="100" height="100" style={thumbnail} /> 
+                            <Image src={ticket?.event?.image} alt="event image" width="100" height="100" style={thumbnail} /> 
                           </td>
                           <td align="left" style={reciepcell}>
                             {ticket?.event?.summary}
                           </td>
                           <td align="right" style={reciepcell}>
                             <Button href={envs.FRONTEND_URL + `/tickets/${ticket.id}`}>
-                              {ticket?.orderCount} 🎟 
+                              {ticket?.orderIndex} 🎟 
                             </Button>
                           </td>
                           <td align="right" style={reciepcell}>
@@ -210,7 +211,7 @@ const reciepcell = {
 const testOrder = {
   id: '1234',
   dateCreated: '2023-11-23T12:00:00',
-  status: 'COMPLETE',
+  status: 'COMPLETE TEST DEBUG',
   total: 121212,
   // @ts-ignore
   user: {
@@ -248,7 +249,6 @@ const testOrder = {
         price: 2000,
       },
       id: '111',
-      orderCount: '1 of 3',
     },
     {
       // @ts-ignore
@@ -258,7 +258,6 @@ const testOrder = {
         price: 2000,
       },
       id: '222',
-      orderCount: '2 of 3',
     },
     {
       // @ts-ignore
@@ -268,7 +267,6 @@ const testOrder = {
         price: 2000,
       },
       id: '333',
-      orderCount: '3 of 3',
     },
   ]
 }
