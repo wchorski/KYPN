@@ -1,6 +1,7 @@
 import {
   Addon,
 	Booking,
+	Event,
 	Order,
 	Page,
 	Post,
@@ -20,6 +21,7 @@ export type StatusType =
 	  }
 	| { type: "product"; status?: Product["status"] | string | null | undefined }
 	| { type: "ticket"; status?: Ticket["status"] | string | null | undefined }
+	| { type: "event"; status?: Event["status"] | string | null | undefined }
 	| {
 			type: "booking"
 			status?:

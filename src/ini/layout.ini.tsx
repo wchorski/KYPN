@@ -8,6 +8,7 @@ import { envs } from "@/envs"
 import { Providers } from "./providers"
 import { Footer } from "@components/private/Footer"
 import { AnnouncementBanner } from "@components/elements/AnnouncementBanner"
+import { ShoppingCart } from "@components/ecommerce/ShoppingCart"
 
 const header_font = Inter({
 	subsets: ["latin"],
@@ -60,6 +61,9 @@ export default async function RootLayout({
 					{/* <div className="banner_wrap" >BANNER</div> */}
 
 					{/* <header>empty_hero</header> */}
+          
+          <ShoppingCart />
+
 					<AnnouncementBanner />
 					<Nav />
 

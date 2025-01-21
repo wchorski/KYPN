@@ -25,16 +25,16 @@ export default async function fetchEvents(dateSelectedString:string, query:strin
                   equals: "DRAFT"
                 }
               },
-              {
-                status: {
-                  equals: "CANCELED"
-                }
-              },
-              {
-                status: {
-                  equals: "PAST"
-                }
-              },
+              // {
+              //   status: {
+              //     equals: "CANCELED"
+              //   }
+              // },
+              // {
+              //   status: {
+              //     equals: "PAST"
+              //   }
+              // },
             ]
           }
         ]

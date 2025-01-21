@@ -1,17 +1,30 @@
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import moneyFormatter from "@lib/moneyFormatter"
+import { StatusBadge } from "@components/StatusBadge"
+import { type Event } from "@ks/types"
 import Link from "next/link"
 
 type Props = {
   date:string|undefined,
+  status:Event['status']
 }
 
 const now = new Date()
 
-export function AddTicketButton ({  date }:Props) {
+export function AddTicketButton ({ date, status }:Props) {
   const startDate = new Date(String(date))
 
-  if(now > startDate) return (
+  // if(now > startDate) return (
+  //   <button 
+  //     className={'button large'} 
+  //     disabled={true}
+  //     style={{
+  //       marginLeft: 'auto',
+  //     }}
+  //   >
+  //     Past Event
+  //   </button>
+  // )
+
+  if(now > startDate || !["ACTIVE", "POSTPONED"].includes(status)) return (
     <button 
       className={'button large'} 
       disabled={true}
@@ -19,7 +32,7 @@ export function AddTicketButton ({  date }:Props) {
         marginLeft: 'auto',
       }}
     >
-      Past Event
+      <StatusBadge status={status} type="event"/>
     </button>
   )
 

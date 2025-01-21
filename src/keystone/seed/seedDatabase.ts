@@ -8,6 +8,7 @@ import type {
 	CategoryCreateInput,
 	TagCreateInput,
 	BookingCreateInput,
+	TicketCreateInput,
 } from ".keystone/types"
 import {
 	user_seeddata,
@@ -23,7 +24,7 @@ import {
 	bookings_seedjson,
 	events_seedjson,
 } from "./seed_data"
-import { Announcement, Page, SeedPost } from "@ks/types"
+import { Announcement, Page, SeedEvent, SeedPost } from "@ks/types"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
@@ -289,7 +290,7 @@ const seedEvents = async (context: Context) => {
 	const { db: sudoDB } = context.sudo()
 	const seedJson = events_seedjson
 	const schemaType = "Event"
-  const compairKey = 'summary'
+	const compairKey = "summary"
 	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
 		where: {
 			[compairKey]: {
@@ -313,13 +314,15 @@ const seedEvents = async (context: Context) => {
 		data: itemsToCreate.map((item) => ({
 			...item,
 			location: { connect: { name: item.location?.name } },
-
+			description: item?.description?.document,
 			hosts: { connect: item.hosts?.map((user) => ({ email: user.email })) },
 			cohosts: {
 				connect: item.cohosts?.map((user) => ({ email: user.email })),
 			},
 		})),
 	})
+
+	await seedTicketOrders(itemsToCreate, context)
 }
 
 const seedLocations = async (context: Context) => {
@@ -454,6 +457,43 @@ const seedAnnouncements = async (context: Context) => {
 			content: obj?.content?.document,
 		})),
 	})
+}
+
+async function seedTicketOrders(events: SeedEvent[], context: Context) {
+  throw new Error('🐸 seedTicketOrders find out how to do this')
+	// const { db: sudoDB } = context.sudo()
+
+	// const fakeEmail = "admin@tawtaw.site"
+	// const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
+  // const tixQuantity = 2
+
+  // await Promise.all(events.map(async (event) => {
+
+  //   const tickets: TicketCreateInput[] = Array.from(
+  //     { length: tixQuantity },
+  //     (_, index) => ({
+  //       event: { connect: { id: event.summary } },
+  //       holder: { connect: { id: "admin@tawtaw.site" } },
+  //       email: "admin@tawtaw.site",
+  //     })
+  //   )
+  
+  //   const order = await sudoDB.Order.createOne({
+  //     // const order = await context.withSession(session).db.Order.createOne({
+  //     data: {
+  //       total: (event.price || 0) * tixQuantity,
+  //       ticketItems: { create: tickets },
+  //       user: { connect: { email: fakeEmail } },
+  //       stripeCheckoutSessionId: null,
+  //       stripePaymentIntent: null,
+  //       email: fakeEmail,
+  //       status: orderStatuses[0],
+  //     },
+  //   })
+
+  //   console.log(`+ Ticket Ordered for Event: ${event.summary}, total: ${order.total}`)
+  // }))
+  
 }
 
 // const seedProductImages = async (context: Context) => {

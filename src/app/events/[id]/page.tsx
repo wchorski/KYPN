@@ -43,7 +43,7 @@ export async function generateMetadata(
 	const session = await getServerSession(nextAuthOptions)
 	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
   
-	if (!event)
+	if (!event || error)
 		return {
 			title: envs.SITE_TITLE,
 			description: envs.SITE_DESC,
@@ -90,6 +90,7 @@ export default async function EventByID({ params }: Props) {
 	if (error) return <ErrorPage error={error} />
 	if (!event) return notFound()
 
+
 	const {
 		image,
 		summary,
@@ -105,7 +106,9 @@ export default async function EventByID({ params }: Props) {
 		location,
 		categories,
 		tags,
+    status
 	} = event
+  console.log({status});
 
 	async function onClose() {
 		"use server"
@@ -216,7 +219,7 @@ export default async function EventByID({ params }: Props) {
 							) : session?.data.role === null ? (
 								<VerifyEmailCard email={session.user.email} />
 							) : (
-								<AddTicketButton date={start} />
+								<AddTicketButton date={start} status={status}/>
 							)}
 						</Flex>
 					</Card>
@@ -287,13 +290,23 @@ function canViewHostPanel(allHosts: User[], session: Session | null) {
 }
 
 const QUERY_EVENT = `
+  excerpt
+  end
+  id
+  price
+  seats
+  start
+  status
+  summary
+  dateCreated
+  dateModified
+  categoriesCount
+  tagsCount
+  ticketsCount
   categories {
     id
     name
   }
-  categoriesCount
-  dateCreated
-  dateModified
   hosts {
     id
     email
@@ -308,25 +321,16 @@ const QUERY_EVENT = `
   description {
     document
   }
-  excerpt
-  end
-  id
   location {
     address
     name
     id
   }
-  price
-  seats
-  start
-  status
-  summary
   tags {
     id
     name
   }
-  tagsCount
-  ticketsCount
+  
   tickets{
     id
     status

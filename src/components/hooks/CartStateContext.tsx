@@ -97,7 +97,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
 
       return { success: false, error }
     }
-  }, [isPending])
+  }, [])
 
   function calcCartCount(items:CartItem[]){
     const accum = items.reduce((accumulator, item) => {

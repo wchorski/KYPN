@@ -88,9 +88,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 						: {}),
 					user: session.itemId ? { connect: { id: session.itemId } } : null,
 					stripeCheckoutSessionId:
-						session.stripeSession?.id || "NO_STRIPE_PLUGIN",
+						session.stripeSession?.id || null,
 					stripePaymentIntent:
-						session.stripeSession?.payment_intent || "FREE or NO_STRIPE_PLUGIN",
+						session.stripeSession?.payment_intent || null,
 					email: session.user.email || "",
 					//TODO maybe not secure
 					...(session.stripeSession?.payment_status === "paid" ||

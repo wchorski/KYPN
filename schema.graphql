@@ -2630,7 +2630,7 @@ input EventWhereInput {
   seats: IntFilter
   image: StringFilter
   excerpt: StringFilter
-  status: StringNullableFilter
+  status: StringFilter
   location: LocationWhereInput
   hosts: UserManyRelationFilter
   cohosts: UserManyRelationFilter

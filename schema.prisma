@@ -434,7 +434,7 @@ model Event {
   image               String     @default("")
   excerpt             String     @default("")
   description         Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  status              String?    @default("ACTIVE")
+  status              String     @default("DRAFT")
   location            Location?  @relation("Event_location", fields: [locationId], references: [id])
   locationId          String?    @map("location")
   hosts               User[]     @relation("Event_hosts")

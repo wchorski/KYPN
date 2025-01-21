@@ -129,13 +129,16 @@ export const Event: Lists.Event = list({
 				{ label: "Postponed", value: "POSTPONED" },
 				{ label: "Canceled", value: "CANCELED" },
 				{ label: "Past", value: "PAST" },
+				// TODO work in private events that are only viewable by authed users
+				// { label: "Private", value: "PRIVATE" },
 				{ label: "Draft", value: "DRAFT" },
 			],
-			defaultValue: "ACTIVE",
+			defaultValue: "DRAFT",
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 		location: relationship({ ref: "Location.events", many: false }),
 		hosts: relationship({ ref: "User.eventsHost", many: true }),
@@ -145,7 +148,7 @@ export const Event: Lists.Event = list({
 		...group({
 			label: "Metadata",
 			// description: 'Group description',
-      
+
 			fields: {
 				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 				dateModified: timestamp({ defaultValue: { kind: "now" } }),

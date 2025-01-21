@@ -1,8 +1,17 @@
 const dateNow = new Date()
-const todaysMonth = (dateNow.getMonth() + 1).toString().padStart(2, '0')
-const nextMonth = (dateNow.getMonth() + 2).toString().padStart(2, '0')
-const nextnextMonth = (dateNow.getMonth() + 3).toString().padStart(2, '0')
+const todaysMonth = (dateNow.getMonth() + 1).toString().padStart(2, "0")
 const todaysYear = dateNow.getFullYear().toString()
+
+function getYearMonth(pivot:number = 0) {
+  const [year, month] = `${todaysYear}-${todaysMonth}`.split('-').map(Number)
+  const date = new Date(year, month - 1) // Initialize the date with the current year and month
+  date.setMonth(date.getMonth() + pivot) // Move forward one month
+  
+  const chosenYear = date.getFullYear()
+  const chosenMonth = String(date.getMonth() + 1).padStart(2, '0') // Add 1 because getMonth() is zero-based
+  
+  return `${chosenYear}-${chosenMonth}`
+}
 
 import type {
 	UserCreateInput,
@@ -17,7 +26,7 @@ import type {
 	BookingCreateInput,
 	EventCreateInput,
 } from ".keystone/types"
-import { SeedBookings, SeedEvents, SeedPost, SeedService } from "@ks/types"
+import { SeedBookings, SeedEvent, SeedPost, SeedService } from "@ks/types"
 
 export const locations_seed: LocationCreateInput[] = [
 	{
@@ -172,15 +181,14 @@ export const user_seeddata: UserCreateInput[] = [
 		stripeCustomerId: undefined,
 		role: { connect: { name: "client" } },
 	},
-	// {
-	// 	name: "",
-	// 	email: "@tawtaw.site",
-	// 	authId: "@tawtaw.site",
-	//   image: '',
-	// 	stripeCustomerId: undefined,
-	// 	password: "@tawtaw.site",
-	// 	role: { connect: { name: "client" } },
-	// },
+	{
+		name: "Ulric the Unverified",
+		email: "ulric@tawtaw.site",
+		authId: "ulric@tawtaw.site",
+		image: "",
+		stripeCustomerId: undefined,
+		password: "ulric@tawtaw.site",
+	},
 ]
 
 export const bookings_seedjson: SeedBookings[] = [
@@ -8888,85 +8896,1652 @@ export const tags_seedjson: TagCreateInput[] = [
 	},
 ]
 
-export const events_seedjson: SeedEvents[] = [
+export const events_seedjson: SeedEvent[] = [
 	{
-		summary: "Apple Harvest Festival",
-		start: `${todaysYear}-${todaysMonth}-30T10:00:00.000Z`,
-		end: "2023-09-30T18:00:00.000Z",
-		seats: 20,
+		summary: "Citrus Yoga Retreat",
+		start: `${getYearMonth(0)}-10T08:00:00.000Z`,
+		end: `${getYearMonth(0)}-12T18:00:00.000Z`,
 		price: 100,
-		excerpt:
-			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+		seats: 20,
 		image:
-			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg",
-		location: {
-			name: "Honorary Orchards",
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg",
+		excerpt:
+			"Experience a rejuvenating retreat combining yoga, citrus-inspired refreshments, wellness workshops, and activities like meditation, citrus-picking, and aromatherapy, designed for all levels to recharge and refresh.",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Immerse yourself in a rejuvenating retreat that blends the calming practice of yoga with the vibrant zest of citrus. Perfect for anyone seeking relaxation, wellness, and a touch of sunshine.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "What’s Included",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Daily Yoga Sessions",
+										},
+										{
+											text: ": Guided classes for all skill levels, set amidst a serene citrus grove.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Citrus-Inspired Refreshments",
+										},
+										{
+											text: ": Enjoy fresh-squeezed juices, citrus-infused water, and healthy snacks.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Wellness Workshops",
+										},
+										{
+											text: ": Learn about the benefits of citrus for mind, body, and nutrition.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Activities to Enjoy",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Guided meditation in the grove",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Citrus-picking experience",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Aromatherapy sessions featuring citrus essential oils",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Who Can Attend?",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "This retreat is designed for anyone looking to recharge, from seasoned yogis to beginners seeking a fresh start.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Why Join?",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "The Citrus Yoga Retreat offers the perfect blend of relaxation, health, and the refreshing essence of citrus. Leave feeling renewed, energized, and inspired!",
+						},
+					],
+				},
+			],
 		},
-		hosts: [{ email: "admin@tawtaw.site" }, { email: "eddy@tawtaw.site" }],
-    cohosts: [],
+		status: "ACTIVE",
+		location: {
+			name: "Hidden Valley",
+		},
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-10T20:15:17.720Z",
+		dateModified: "2025-01-10T20:15:17.720Z",
+		categories: [],
+		tags: [],
 	},
 	{
 		summary: "Berrylicious Smoothie Workshop",
-		start: `${todaysYear}-${todaysMonth}-15T15:00:00.000Z`,
-		end: "2023-07-15T17:00:00.000Z",
-		seats: 20,
+		start: `${getYearMonth(0)}-15T15:00:00.000Z`,
+		end: `${getYearMonth(0)}-15T17:00:00.000Z`,
 		price: 100,
-		excerpt:
-			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+		seats: 9999,
 		image:
 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290024/cutefruit/product_images/clgu01m7x0004dwsv0b05di5c.png",
+		excerpt:
+			"Join a fun, hands-on workshop to craft delicious berry smoothies, learn tips for flavor and nutrition, and enjoy fresh ingredients, recipes, and a berry delightful experience for all ages.",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Discover the art of making delicious, healthy berry smoothies at our hands-on workshop. Whether you’re a smoothie novice or a blending pro, this event is perfect for anyone who loves berries and fun in the kitchen.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "What You’ll Learn",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "How to select the freshest berries",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Tips for balancing flavors and textures",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Creative ways to boost nutrition with add-ins",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "What’s Included",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "A variety of fresh berries and ingredients",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "All the tools you need for blending",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Take-home recipes to recreate your favorites",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Who Can Join?",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "This workshop is open to all ages and skill levels. It’s a great activity for families, friends, or anyone looking to try something new.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Why Attend?",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "The Berrylicious Smoothie Workshop is a fun and interactive way to enjoy the flavors of berries while learning how to create your own delicious and healthy smoothies. Don’t miss out on this berry delightful experience",
+						},
+					],
+				},
+			],
+		},
+		status: "ACTIVE",
 		location: {
 			name: "Zesty Lounge",
 		},
-		hosts: [{ email: "admin@tawtaw.site" }, { email: "eddy@tawtaw.site" }],
-    cohosts: [],
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-10T20:15:17.717Z",
+		dateModified: "2025-01-10T20:15:17.717Z",
+		categories: [],
+		tags: [],
 	},
 	{
-		summary: "Citrus Yoga Retreat",
-		start: `${todaysYear}-${todaysMonth}-10T08:00:00.000Z`,
-		end: "2023-06-12T18:00:00.000Z",
-		seats: 20,
+		summary: "Apple Harvest Festival",
+		start: `${getYearMonth(0)}-30T10:00:00.000Z`,
+		end: `${getYearMonth(0)}-30T18:00:00.000Z`,
 		price: 100,
-		excerpt:
-			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
-		image:
-			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg",
-		location: {
-			name: "Hidden Valley",
-		},
-		hosts: [{ email: "admin@tawtaw.site" }],
-		cohosts: [{ email: "arthur@tawtaw.site" }],
-	},
-	{
-		summary: "Tropical Fruit Tasting Tour",
-		start: `${todaysYear}-${nextMonth}-05T11:00:00.000Z`,
-		end: "2023-08-05T15:00:00.000Z",
 		seats: 20,
-		price: 100,
-		excerpt:
-			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
 		image:
-			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png",
-		location: {
-			name: "Hidden Valley",
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg",
+		excerpt:
+			"Celebrate autumn at the Apple Harvest Festival with live music, apple-inspired treats, games, orchard tours, and fun activities for all ages. Perfect for a festive fall outing!",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Join us for a day filled with apple-themed fun and festivities!\n Enjoy live music, seasonal games, and delicious treats that highlight \nthe beloved fruit of autumn.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Delicious Apple Treats",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Indulge in a variety of apple-inspired delights, including:",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Fresh apple cider",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Caramel-dipped apples",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Homemade apple pies",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Fun and Festive Activities",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Get involved in exciting activities and competitions, such as:",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Apple bobbing",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Pie-baking contest",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Orchard tours",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Perfect for All Ages",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "This\n family-friendly event offers something for everyone. Whether you’re an \napple enthusiast or simply looking for a festive fall outing, the Apple \nHarvest Festival promises a crisp and memorable experience!",
+						},
+					],
+				},
+			],
 		},
-		hosts: [{ email: "admin@tawtaw.site" }],
-		cohosts: [{ email: "arthur@tawtaw.site" }],
+		status: "ACTIVE",
+		location: {
+			name: "Honorary Orchards",
+		},
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-10T20:15:17.714Z",
+		dateModified: "2025-01-10T20:15:17.714Z",
+		categories: [],
+		tags: [],
 	},
 	{
 		summary: "Watermelon Summer Bash",
-		start: `${todaysYear}-${nextMonth}-01T16:00:00.000Z`,
-		end: "2023-07-01T20:00:00.000Z",
-		seats: 20,
+		start: `${getYearMonth(1)}-01T16:00:00.000Z`,
+		end: `${getYearMonth(1)}-01T20:00:00.000Z`,
 		price: 100,
-		excerpt:
-			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+		seats: 20,
 		image:
 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682274836/cutefruit/product_images/clgtr03ia0000gksv9qx8g9iz.jpg",
+		excerpt:
+			"Enjoy a refreshing day at the Watermelon Summer Bash with live music, watermelon treats, fun activities like eating contests and carving, perfect for all ages to celebrate summer.",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Dive into a day filled with watermelon-themed fun and festivities! Experience live music, interactive games, and delicious treats that highlight the refreshing taste of summer’s favorite fruit.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Tasty Watermelon Treats",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Savor a variety of watermelon-inspired delights, including:",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Freshly sliced watermelon",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Watermelon sorbet",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Watermelon coolers and smoothies",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Exciting Activities and Games",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Get ready for a lineup of entertaining activities, such as:",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Watermelon eating contest",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Seed-spitting competition",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Watermelon carving showcase",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Family-Friendly Fun",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Perfect for all ages, this event is designed to bring everyone together for a day of juicy fun. The Watermelon Summer Bash is your ultimate destination for a refreshing and memorable summer experience!",
+						},
+					],
+				},
+			],
+		},
+		status: "ACTIVE",
 		location: {
 			name: "Zesty Lounge",
 		},
-		hosts: [{ email: "admin@tawtaw.site" }],
-		cohosts: [{ email: "arthur@tawtaw.site" }],
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-10T20:15:17.725Z",
+		dateModified: "2025-01-10T20:15:17.725Z",
+		categories: [],
+		tags: [],
 	},
+	{
+		summary: "Tropical Fruit Tasting Tour",
+		start: `${getYearMonth(1)}-05T11:00:00.000Z`,
+		end: `${getYearMonth(1)}-05T15:00:00.000Z`,
+		price: 100,
+		seats: 20,
+		image:
+			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png",
+		excerpt:
+			"Join the Berry-Filled Festival for delicious treats, exciting competitions like pie-eating and berry-picking, live music, and family-friendly fun, promising a sweet, memorable day for all.",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Get ready for a day packed with fruity fun and berry-filled delights!",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "What to Expect",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Tasty Treats",
+										},
+										{
+											text: "\nIndulge in an array of mouthwatering goodies, including:",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Strawberry shortcakes",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Blueberry pies",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Raspberry lemonades",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Exciting Competitions",
+										},
+										{
+											text: "\nParticipate in berry-themed challenges:",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Pie-eating contest",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Berry-picking challenge",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Entertainment for All",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Enjoy live music, games, and a festive atmosphere that’s perfect for the entire family.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							bold: true,
+							text: "Why Attend?",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Whether you’re a berry enthusiast or just looking for a fun-filled day, this family-friendly event guarantees a sweet and memorable experience!",
+						},
+					],
+				},
+			],
+		},
+		status: "ACTIVE",
+		location: {
+			name: "Hidden Valley",
+		},
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-10T20:15:17.721Z",
+		dateModified: "2025-01-10T20:15:17.721Z",
+		categories: [],
+		tags: [],
+	},
+	{
+		summary: "Fruit Through the Ages",
+		start: `${getYearMonth(-1)}-08T18:00:00.000Z`,
+		end: `${getYearMonth(-1)}-08T23:00:00.000Z`,
+		price: 0,
+		seats: 100,
+		image:
+			"https://cdn.pixabay.com/photo/2016/12/10/21/28/plums-1898196_960_720.jpg",
+		excerpt:
+			"Combine the fruity fun with historical nostalgia! Each guest (or group) picks a fruit and dresses as how people in a specific time period might have celebrated or used that fruit.",
+		description: {
+			document: [
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							bold: true,
+							text: "Key Party Elements",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "🥭 ",
+						},
+						{
+							bold: true,
+							text: "Dress Code",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: 'Guests come as a "fruit with a past."',
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Examples:",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															bold: true,
+															text: "Roman Grape God/Goddess",
+														},
+														{
+															text: ": Togas with grape garlands.",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															bold: true,
+															text: "Medieval Apple Peasant",
+														},
+														{
+															text: ": Rustic clothes with apples as accessories.",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															bold: true,
+															text: "1970s Banana Boogie",
+														},
+														{
+															text: ": Disco vibes in yellow!",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															bold: true,
+															text: "Future Kiwi Warrior",
+														},
+														{
+															text: ": Silver/space-age vibes with kiwi accents.",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "divider",
+					children: [
+						{
+							text: "",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "🍉 ",
+						},
+						{
+							bold: true,
+							text: "Games & Activities",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fruit History Trivia",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: 'Fun facts about fruits (e.g., "What fruit was banned in 17th-century France?")',
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fruit Peel Art Contest",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Who can make the funniest or most intricate art from fruit peels?",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fruit Toss Relay",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Teams pass fruit items in goofy ways (spoons, elbows, etc.).",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "divider",
+					children: [
+						{
+							text: "",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "🍋 ",
+						},
+						{
+							bold: true,
+							text: "Snacks & Drinks",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: '"Historical Smoothie Bar"',
+										},
+										{
+											text: ": Drinks inspired by different eras (e.g., ancient Greek honey-and-fig smoothie, 1950s soda shop banana split milkshake).",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fruit Pizza Station",
+										},
+										{
+											text: ': Guests can make their own "historical masterpiece" on a sugar cookie crust.',
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: 'Retro-themed fruit punches, like a 90s neon-blue "Blueberry Bomb."',
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "divider",
+					children: [
+						{
+							text: "",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "🍍 ",
+						},
+						{
+							bold: true,
+							text: "Decor",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: 'Retro posters featuring fruit from famous eras (e.g., "The Great Grapefruit Gatsby").',
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Fruit-shaped balloons with vintage motifs.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Centerpieces made of fruit bowls styled like famous works of art (e.g., Renaissance still life).",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "divider",
+					children: [
+						{
+							text: "",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Funny Add-Ons",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: 'Create "fruit personas" for guests: ',
+										},
+										{
+											bold: true,
+											text: '"Detective Clementine, 1940s Noir"',
+										},
+										{
+											text: " or ",
+										},
+										{
+											bold: true,
+											text: '"80s Pineapple Rockstar"',
+										},
+										{
+											text: "!",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Hand out gag prizes like ",
+										},
+										{
+											bold: true,
+											text: '"Best Use of a Banana"',
+										},
+										{
+											text: " or ",
+										},
+										{
+											bold: true,
+											text: '"Most Historically Accurate Pear."',
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Would you like more details on any part of this? 😊",
+						},
+					],
+				},
+			],
+		},
+		status: "PAST",
+		location: {
+			name: "Live Stream",
+		},
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-20T22:50:57.604Z",
+		dateModified: "2025-01-20T22:50:57.604Z",
+		categories: [],
+		tags: [],
+	},
+	{
+		summary: "Banana Bread Bakeoff",
+		start: `${getYearMonth(1)}-25T06:00:00.000Z`,
+		end: `${getYearMonth(1)}-25T22:00:00.000Z`,
+		price: 0,
+		seats: 300,
+		image:
+			"https://cdn.pixabay.com/photo/2024/09/06/09/27/banana-9027011_1280.jpg",
+		excerpt:
+			"Think your banana bread is the best? Prove it! Join us for a fun-filled Banana Bread Bakeoff, where bakers and banana bread lovers unite for some friendly competition and delicious treats.",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Join us as a guest or as baker. Either way we all win! 🍌🍞",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Bakers",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Bake your signature banana bread and bring it to the event.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Compete in categories like:",
+										},
+									],
+								},
+								{
+									type: "unordered-list",
+									children: [
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Best Overall",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Most Creative Twist",
+														},
+													],
+												},
+											],
+										},
+										{
+											type: "list-item",
+											children: [
+												{
+													type: "list-item-content",
+													children: [
+														{
+															text: "Crowd Favorite",
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Taste, vote, and enjoy!",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 2,
+					children: [
+						{
+							text: "Guests",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "No need to slip on a peel. Enjoy the day by RSVP'ing.",
+						},
+					],
+				},
+				{
+					type: "divider",
+					children: [
+						{
+							text: "",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Prizes for winners and plenty of banana bread for everyone. Don’t miss out!",
+						},
+					],
+				},
+			],
+		},
+		status: "ACTIVE",
+		location: {
+			name: "Zesty Lounge",
+		},
+		hosts: [],
+		cohosts: [],
+		dateCreated: "2025-01-18T16:37:59.721Z",
+		dateModified: "2025-01-18T16:37:59.721Z",
+		categories: [],
+		tags: [],
+	}
 ]
+// export const events_seedjson: SeedEvents[] = [
+// 	{
+// 		summary: "Apple Harvest Festival",
+// 		start: `${todaysYear}-${todaysMonth}-30T10:00:00.000Z`,
+// 		end: "2023-09-30T18:00:00.000Z",
+// 		seats: 20,
+// 		price: 100,
+// 		excerpt:
+// 			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+// 		image:
+// 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290294/cutefruit/product_images/clgu07ezt0000jssvguqp688x.jpg",
+// 		location: {
+// 			name: "Honorary Orchards",
+// 		},
+// 		hosts: [{ email: "admin@tawtaw.site" }, { email: "eddy@tawtaw.site" }],
+//     cohosts: [],
+// 	},
+// 	{
+// 		summary: "Berrylicious Smoothie Workshop",
+// 		start: `${todaysYear}-${todaysMonth}-15T15:00:00.000Z`,
+// 		end: "2023-07-15T17:00:00.000Z",
+// 		seats: 20,
+// 		price: 100,
+// 		excerpt:
+// 			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+// 		image:
+// 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682290024/cutefruit/product_images/clgu01m7x0004dwsv0b05di5c.png",
+// 		location: {
+// 			name: "Zesty Lounge",
+// 		},
+// 		hosts: [{ email: "admin@tawtaw.site" }, { email: "eddy@tawtaw.site" }],
+//     cohosts: [],
+// 	},
+// 	{
+// 		summary: "Citrus Yoga Retreat",
+// 		start: `${todaysYear}-${todaysMonth}-10T08:00:00.000Z`,
+// 		end: "2023-06-12T18:00:00.000Z",
+// 		seats: 20,
+// 		price: 100,
+// 		excerpt:
+// 			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+// 		image:
+// 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682288910/cutefruit/product_images/clgtzdr2o0000dwsv5pe0hjiv.jpg",
+// 		location: {
+// 			name: "Hidden Valley",
+// 		},
+// 		hosts: [{ email: "admin@tawtaw.site" }],
+// 		cohosts: [{ email: "arthur@tawtaw.site" }],
+// 	},
+// 	{
+// 		summary: "Tropical Fruit Tasting Tour",
+// 		start: `${todaysYear}-${chosenMonth}-05T11:00:00.000Z`,
+// 		end: "2023-08-05T15:00:00.000Z",
+// 		seats: 20,
+// 		price: 100,
+// 		excerpt:
+// 			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+// 		image:
+// 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682275682/cutefruit/product_images/clgtri8ac00033ssve0n2do08.png",
+// 		location: {
+// 			name: "Hidden Valley",
+// 		},
+// 		hosts: [{ email: "admin@tawtaw.site" }],
+// 		cohosts: [{ email: "arthur@tawtaw.site" }],
+// 	},
+// 	{
+// 		summary: "Watermelon Summer Bash",
+// 		start: `${todaysYear}-${chosenMonth}-01T16:00:00.000Z`,
+// 		end: "2023-07-01T20:00:00.000Z",
+// 		seats: 20,
+// 		price: 100,
+// 		excerpt:
+// 			"Join us for a day of fruity fun at the Berrylicious Summer Festival! Celebrate the vibrant flavors of berries with live music, games, and mouthwatering treats. Indulge in delicious strawberry shortcakes, blueberry pies, and raspberry lemonades. Enjoy berry-themed competitions, such as a pie-eating contest and a berry picking challenge. This family-friendly event guarantees a sweet and memorable experience for all berry enthusiasts!",
+// 		image:
+// 			"https://res.cloudinary.com/dh5vxixzn/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1682274836/cutefruit/product_images/clgtr03ia0000gksv9qx8g9iz.jpg",
+// 		location: {
+// 			name: "Zesty Lounge",
+// 		},
+// 		hosts: [{ email: "admin@tawtaw.site" }],
+// 		cohosts: [{ email: "arthur@tawtaw.site" }],
+// 	},
+// ]

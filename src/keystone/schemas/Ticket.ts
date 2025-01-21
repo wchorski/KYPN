@@ -97,8 +97,7 @@ export const Ticket: Lists.Ticket = list({
 			field: graphql.field({
 				type: graphql.String,
 				async resolve(item, args, context) {
-
-          if(!item.orderId) return '1 of 1'
+					if (!item.orderId) return "1 of 1"
 
 					const orderTicketItems = await context.sudo().db.Ticket.findMany({
 						where: { order: { id: { equals: item.orderId } } },
@@ -110,7 +109,7 @@ export const Ticket: Lists.Ticket = list({
 
 					if (!orderTicketItems || orderTicketItems.length === 0)
 						return "1 of 1"
-          
+
 					return `${thisTixIndex + 1} of ${orderTicketItems.length}`
 				},
 			}),
@@ -190,6 +189,11 @@ export const Ticket: Lists.Ticket = list({
 				const eventStart = new Date(event.start)
 				if (now > eventStart)
 					throw new Error("!!! Ticket: cannot create if Event already started")
+
+				if (!["ACTIVE", "POSTPONED"].includes(event.status))
+					throw new Error(
+						"Event is not active. Tickets not available for purchase"
+					)
 			}
 
 			// TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets

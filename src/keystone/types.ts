@@ -228,6 +228,7 @@ export type Event = Lists.Event.Item & {
   id:string
 	typeof: "event"
 	location: Location
+  status: "ACTIVE"|"POSTPONED"|"CANCELED"|"PAST"|"DRAFT"
   description: {
     document: any
   }
@@ -429,7 +430,7 @@ export type SeedBookings = BookingCreateInput & {
 	}
 }
 
-export type SeedEvents = EventCreateInput & {
+export type SeedEvent = EventCreateInput & {
 	location?: {
 		name: string
 	}
@@ -445,6 +446,9 @@ export type SeedEvents = EventCreateInput & {
 	tags?: {
 		name: string
 	}[]
+  description?: {
+		document: any
+	}
 }
 
 export type SeedService = ServiceCreateInput & {

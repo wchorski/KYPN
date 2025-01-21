@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Order } from '../keystone/types';
 import { envs } from '../../envs';
 import { emailStyles } from "./emailStyes";
@@ -111,7 +112,7 @@ export default function OrdersEmail({
                       {order?.ticketItems?.map( ticket => (
                         <tr style={recieptrow} key={ticket.id}>
                           <td  style={reciepcell}> 
-                            <Image src={ticket?.event?.image} alt="event image" width="100" height="100" style={thumbnail} /> 
+                            <img src={ticket?.event?.image} alt="event image" width="100" height="100" style={thumbnail} /> 
                           </td>
                           <td align="left" style={reciepcell}>
                             {ticket?.event?.summary}

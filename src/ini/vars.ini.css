@@ -1,3 +1,45 @@
+:root {
+  color-scheme: light dark;
+  
+  --c-debug: yellow;
+  --p-sitewrapper: 1rem;
+  --p-sectionblock: 3rem;
+
+  --w-sitemax: 1600px;
+  --w-content-wide: 800px;
+  --w-content-breakout: 700px;
+  --w-contentmax: 620px;
+  --w-sidebar: 600px;
+  --w-sidebar-max: 500px;
+
+  --space: 1rem;
+  --space-0: 0;
+  --space-xxl: calc(var(--space-xl) * 1.618);
+  --space-xl: calc(var(--space-l) * 1.618);
+  --space-l: calc(var(--space-ml) * 1.618);
+  --space-ml: calc(var(--space-m) * 1.618);
+  --space-m: calc(var(--space) * 1);
+  --space-ms: calc(var(--space-m) / 1.618);
+  --space-s: calc(var(--space-ms) / 1.618);
+  --space-xs: calc(var(--space-s) / 1.618);
+  --space-xxs: calc(var(--space-xs) / 2);
+
+  --br-sharp: 2px;
+  --br-dull: 4px;
+  --br-soft: 8px;
+  --border-radius: 12px;
+  
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-size-base: 16px;
+
+  --font-size-multi: 0.55014068;
+
+  --anim-duration-fast: 0.3s;
+}
+
+
 @media (prefers-color-scheme: light) {
   :root {
     --c-body: hsl(0, 0%, 93%);
@@ -87,7 +129,8 @@
     --c-txt-sub: rgb(150, 150, 150);
     --c-tertiary: rgb(219, 129, 154);
     --c-secondary: hsl(193, 57%, 59%);
-    --c-primary: hsl(193, 57%, 79%);
+    --c-primary: #abdbe8;
+    /* --c-primary: hsl(193, 57%, 79%); */
     --c-body: hsl(193, 19%, 15%);
     --c-nav: rgba(0, 0, 0, 0.78);
     --c-footer: rgb(34, 34, 34);
@@ -143,43 +186,4 @@
     --card-rgb: 180, 185, 188;
     --card-border-rgb: 131, 134, 135;
   }
-}
-
-:root {
-  --c-debug: yellow;
-  --p-sitewrapper: 1rem;
-  --p-sectionblock: 3rem;
-
-  --w-sitemax: 1600px;
-  --w-content-wide: 800px;
-  --w-content-breakout: 700px;
-  --w-contentmax: 620px;
-  --w-sidebar: 600px;
-  --w-sidebar-max: 500px;
-
-  --space: 1rem;
-  --space-0: 0;
-  --space-xxl: calc(var(--space-xl) * 1.618);
-  --space-xl: calc(var(--space-l) * 1.618);
-  --space-l: calc(var(--space-ml) * 1.618);
-  --space-ml: calc(var(--space-m) * 1.618);
-  --space-m: calc(var(--space) * 1);
-  --space-ms: calc(var(--space-m) / 1.618);
-  --space-s: calc(var(--space-ms) / 1.618);
-  --space-xs: calc(var(--space-s) / 1.618);
-  --space-xxs: calc(var(--space-xs) / 2);
-
-  --br-sharp: 2px;
-  --br-dull: 4px;
-  --br-soft: 8px;
-  --border-radius: 12px;
-  
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
-  --font-size-base: 16px;
-
-  --font-size-multi: 0.55014068;
-
-  --anim-duration-fast: 0.3s;
 }
