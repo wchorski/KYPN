@@ -4,6 +4,7 @@ import { allowAll } from "@keystone-6/core/access";
 import { integer, relationship, select, text, } from "@keystone-6/core/fields";
 import stripeConfig, { stripeCouponCreate } from "../../lib/stripe";
 import { isLoggedIn, permissions, rules } from "../access";
+import { Duration } from "@ks/types";
 
 
 // TODO figoure out coupons
@@ -58,11 +59,8 @@ export const Coupon:Lists.Coupon = list({
 
     // todo add coupon relations
     products: relationship({ ref: 'Product.coupons', many: true }),
-    subscriptionItems: relationship({ ref: 'SubscriptionItem.coupons', many: true }),
     subscriptionPlans: relationship({ ref: 'SubscriptionPlan.coupons', many: true }),
     events: relationship({ ref: 'Event.coupons', many: true }),
-    tickets: relationship({ ref: 'Ticket.coupons', many: true }),
-    bookings: relationship({ ref: 'Booking.coupons', many: true }),
     services: relationship({ ref: 'Service.coupons', many: true }),
   },
 
@@ -75,15 +73,30 @@ export const Coupon:Lists.Coupon = list({
         if(resolvedData?.duration === 'repeating' && !resolvedData.duration_in_months) 
           throw new Error("if Duration is 'repeating', Duration in Months must be above 0 months")
         
-        const coupon = await stripeCouponCreate({
-          name: String(resolvedData.name),
-          percent_off: resolvedData.percent_off || 0,
-          // @ts-ignore
-          duration: resolvedData.duration as Duration,
-          duration_in_months: Number(resolvedData.duration_in_months),
+        // const coupon = await stripeCouponCreate({
+        //   name: String(resolvedData.name),
+        //   percent_off: resolvedData.percent_off || 0,
+        //   // @ts-ignore
+        //   duration: resolvedData.duration as Duration,
+        //   duration_in_months: Number(resolvedData.duration_in_months),
 
-        }).then(async (coupon) => {
-          if(coupon) resolvedData.stripeId = coupon.id
+        // }).then(async (coupon) => {
+        //   if(coupon) resolvedData.stripeId = coupon.id
+        // }).catch(err => console.log(err))
+      }
+    },
+    afterOperation: async ({operation, resolvedData, item, context}) => {
+      if(operation === 'create'){
+
+        await stripeCouponCreate({
+          couponId: item.id,
+          name: item.name,
+          percent_off: item.percent_off || 0,
+          duration: item.duration as Duration,
+          duration_in_months: Number(item.duration_in_months),
+
+        }).then(async (stripeCoupon) => {
+          if(stripeCoupon) resolvedData.stripeId = stripeCoupon.id
         }).catch(err => console.log(err))
       }
     }

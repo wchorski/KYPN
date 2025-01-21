@@ -1,17 +1,4 @@
 const dateNow = new Date()
-const todaysMonth = (dateNow.getMonth() + 1).toString().padStart(2, "0")
-const todaysYear = dateNow.getFullYear().toString()
-
-function getYearMonth(pivot:number = 0) {
-  const [year, month] = `${todaysYear}-${todaysMonth}`.split('-').map(Number)
-  const date = new Date(year, month - 1) // Initialize the date with the current year and month
-  date.setMonth(date.getMonth() + pivot) // Move forward one month
-  
-  const chosenYear = date.getFullYear()
-  const chosenMonth = String(date.getMonth() + 1).padStart(2, '0') // Add 1 because getMonth() is zero-based
-  
-  return `${chosenYear}-${chosenMonth}`
-}
 
 import type {
 	UserCreateInput,
@@ -26,18 +13,59 @@ import type {
 	BookingCreateInput,
 	EventCreateInput,
 } from ".keystone/types"
-import { SeedBookings, SeedEvent, SeedPost, SeedService } from "@ks/types"
+import { SeedBookings, SeedEvent, SeedLocations, SeedPost, SeedService } from "@ks/types"
+import { dateAdjuster } from "../../lib/dateCheck"
 
-export const locations_seed: LocationCreateInput[] = [
-	{
-		name: "On-Site",
-		address: "n/a",
-		rooms: 999,
-	},
+export const locations_seed: SeedLocations[] = [
 	{
 		name: "Zesty Lounge",
 		address: "123 Zelst Blvd, Chicago IL 60606",
 		rooms: 1,
+		status: "PUBLIC",
+		notes:
+			"Our Bar/Restaurant lounge area can be rented out for your next event! ",
+		tags: [],
+		categories: [],
+	},
+	{
+		name: "Live Stream",
+		address: "/live",
+		rooms: 1,
+		status: "PUBLIC",
+		notes:
+			"Broadcasting live right here on our channel. Give your event a digital edge with our live streaming options.",
+		tags: [],
+		categories: [],
+	},
+	{
+		name: "On-Site",
+		address: "n/a",
+		rooms: 999,
+		status: "PUBLIC",
+		notes:
+			"You tell us where and when and we show up with a truck load of fruit fun! *On-Site availability varies per location.",
+		tags: [],
+		categories: [],
+	},
+	{
+		name: "Honorary Orchards",
+		address: "5006 S Sylvania Ave, Sturtevant, WI 53177",
+		rooms: 3,
+		status: "PUBLIC",
+		notes:
+			"It includes a fun train ride to the orchards and has lots of family-friendly activities including a corn maze, petting zoo, slides and more",
+		tags: [],
+		categories: [],
+	},
+	{
+		name: "Hidden Valley",
+		address: "Sudden Valley Subdivision, Newport Beach, CA 92657",
+		rooms: 1,
+		status: "PRIVATE",
+		notes:
+			"Tucked away from view, this hidden gem is sure to spark curiosity and wonder as guests roam its 6,255-square-foot interior",
+		tags: [],
+		categories: [],
 	},
 ]
 
@@ -8899,8 +8927,8 @@ export const tags_seedjson: TagCreateInput[] = [
 export const events_seedjson: SeedEvent[] = [
 	{
 		summary: "Citrus Yoga Retreat",
-		start: `${getYearMonth(0)}-10T08:00:00.000Z`,
-		end: `${getYearMonth(0)}-12T18:00:00.000Z`,
+		start: dateAdjuster(dateNow, { days: 5}),
+		end: dateAdjuster(dateNow, { days: 5}),
 		price: 100,
 		seats: 20,
 		image:
@@ -9088,8 +9116,8 @@ export const events_seedjson: SeedEvent[] = [
 	},
 	{
 		summary: "Berrylicious Smoothie Workshop",
-		start: `${getYearMonth(0)}-15T15:00:00.000Z`,
-		end: `${getYearMonth(0)}-15T17:00:00.000Z`,
+		start: dateAdjuster(dateNow, { days: 10}),
+		end: dateAdjuster(dateNow, { days: 10}),
 		price: 100,
 		seats: 9999,
 		image:
@@ -9258,15 +9286,15 @@ export const events_seedjson: SeedEvent[] = [
 		},
 		hosts: [],
 		cohosts: [],
-		dateCreated: "2025-01-10T20:15:17.717Z",
-		dateModified: "2025-01-10T20:15:17.717Z",
+		dateCreated: dateAdjuster(dateNow, { months: 1}),
+		dateModified: dateAdjuster(dateNow, { months: 1}),
 		categories: [],
 		tags: [],
 	},
 	{
 		summary: "Apple Harvest Festival",
-		start: `${getYearMonth(0)}-30T10:00:00.000Z`,
-		end: `${getYearMonth(0)}-30T18:00:00.000Z`,
+		start: dateAdjuster(dateNow, { days: 15}),
+		end: dateAdjuster(dateNow, { days: 15}),
 		price: 100,
 		seats: 20,
 		image:
@@ -9440,8 +9468,8 @@ export const events_seedjson: SeedEvent[] = [
 	},
 	{
 		summary: "Watermelon Summer Bash",
-		start: `${getYearMonth(1)}-01T16:00:00.000Z`,
-		end: `${getYearMonth(1)}-01T20:00:00.000Z`,
+		start: dateAdjuster(dateNow, { months: 1}),
+		end: dateAdjuster(dateNow, { months: 1}),
 		price: 100,
 		seats: 20,
 		image:
@@ -9615,8 +9643,8 @@ export const events_seedjson: SeedEvent[] = [
 	},
 	{
 		summary: "Tropical Fruit Tasting Tour",
-		start: `${getYearMonth(1)}-05T11:00:00.000Z`,
-		end: `${getYearMonth(1)}-05T15:00:00.000Z`,
+		start: dateAdjuster(dateNow, { months: 1, days: 5}),
+		end: dateAdjuster(dateNow, { months: 1, days: 5}),
 		price: 100,
 		seats: 20,
 		image:
@@ -9807,9 +9835,9 @@ export const events_seedjson: SeedEvent[] = [
 		tags: [],
 	},
 	{
-		summary: "Fruit Through the Ages",
-		start: `${getYearMonth(-1)}-08T18:00:00.000Z`,
-		end: `${getYearMonth(-1)}-08T23:00:00.000Z`,
+		summary: "PAST: Fruit Through the Ages",
+		start: dateAdjuster(dateNow, { days: 1}),
+		end: dateAdjuster(dateNow, { days: 1}),
 		price: 0,
 		seats: 100,
 		image:
@@ -10288,7 +10316,7 @@ export const events_seedjson: SeedEvent[] = [
 				},
 			],
 		},
-		status: "PAST",
+		status: "ACTIVE",
 		location: {
 			name: "Live Stream",
 		},
@@ -10301,8 +10329,8 @@ export const events_seedjson: SeedEvent[] = [
 	},
 	{
 		summary: "Banana Bread Bakeoff",
-		start: `${getYearMonth(1)}-25T06:00:00.000Z`,
-		end: `${getYearMonth(1)}-25T22:00:00.000Z`,
+		start: dateAdjuster(dateNow, { days: 3}),
+		end: dateAdjuster(dateNow, { days: 3}),
 		price: 0,
 		seats: 300,
 		image:
@@ -10461,7 +10489,7 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-18T16:37:59.721Z",
 		categories: [],
 		tags: [],
-	}
+	},
 ]
 // export const events_seedjson: SeedEvents[] = [
 // 	{

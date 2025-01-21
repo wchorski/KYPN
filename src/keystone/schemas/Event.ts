@@ -34,16 +34,6 @@ export const Event: Lists.Event = list({
 		},
 	},
 
-	// todo hide these again
-	// ui: {
-	//   // hide backend from non admins
-	// isHidden: true,
-	//   listView: {
-	//     initialColumns: ['dateTime', 'service', 'customer', 'employees'],
-	//     initialSort: { field: 'dateTime', direction: 'DESC'}
-	//   },
-	// },
-
 	ui: {
 		// hide backend from non admins
 		listView: {
@@ -56,7 +46,10 @@ export const Event: Lists.Event = list({
 				"price",
 			],
 			initialSort: { field: "start", direction: "DESC" },
+      
 		},
+    
+    labelField: `summary`,
 	},
 
 	fields: {
@@ -73,7 +66,7 @@ export const Event: Lists.Event = list({
 		}),
 		summary: text({ validation: { isRequired: true } }),
 		start: timestamp({ validation: { isRequired: true } }),
-		end: timestamp({}),
+		end: timestamp({validation: { isRequired: true }}),
 		price: integer({ defaultValue: 0, validation: { isRequired: true } }),
 		seats: integer({ validation: { isRequired: true } }),
 		image: text(),
@@ -144,7 +137,7 @@ export const Event: Lists.Event = list({
 		hosts: relationship({ ref: "User.eventsHost", many: true }),
 		cohosts: relationship({ ref: "User.eventsCohost", many: true }),
 		tickets: relationship({ ref: "Ticket.event", many: true }),
-		coupons: relationship({ ref: "Coupon.events", many: true }),
+		coupons: relationship({ ref: "Coupon.events", many: true, ui:{ description: 'Coupons that are allowed to apply to this item during checkout'} }),
 		...group({
 			label: "Metadata",
 			// description: 'Group description',

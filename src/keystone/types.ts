@@ -470,6 +470,15 @@ export type SeedService = ServiceCreateInput & {
 }
 //** Seed mods END*/
 
+export type SeedLocations = LocationCreateInput & {
+  tags?: {
+		name: string
+	}[]
+	categories?: {
+		name: string
+	}[]
+}
+
 export type AddonCheckboxOptions = {
 	name: string
 	label: string

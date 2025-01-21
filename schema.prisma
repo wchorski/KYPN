@@ -112,7 +112,6 @@ model Booking {
   employee_requests User[]    @relation("Booking_employee_requests")
   customer          User?     @relation("Booking_customer", fields: [customerId], references: [id])
   customerId        String?   @map("customer")
-  coupons           Coupon[]  @relation("Booking_coupons")
   email             String    @default("")
   phone             String    @default("")
   name              String    @default("")
@@ -247,7 +246,6 @@ model SubscriptionItem {
   userId               String?           @map("user")
   stripeChargeId       String            @default("")
   stripeSubscriptionId String            @default("")
-  coupons              Coupon[]          @relation("Coupon_subscriptionItems")
   dateCreated          DateTime?         @default(now())
   dateModified         DateTime?         @default(now())
 
@@ -372,11 +370,8 @@ model Coupon {
   duration_in_months Int?
   duration           String
   products           Product[]          @relation("Coupon_products")
-  subscriptionItems  SubscriptionItem[] @relation("Coupon_subscriptionItems")
   subscriptionPlans  SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
   events             Event[]            @relation("Coupon_events")
-  tickets            Ticket[]           @relation("Coupon_tickets")
-  bookings           Booking[]          @relation("Booking_coupons")
   services           Service[]          @relation("Coupon_services")
 }
 
@@ -428,7 +423,7 @@ model Event {
   id                  String     @id @default(cuid())
   summary             String     @default("")
   start               DateTime
-  end                 DateTime?
+  end                 DateTime
   price               Int        @default(0)
   seats               Int
   image               String     @default("")
@@ -452,9 +447,7 @@ model Event {
 
 model Ticket {
   id           String    @id @default(cuid())
-  qrcode       String    @default("")
   email        String    @default("")
-  chargeId     String    @default("")
   status       String    @default("PAID")
   event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])
   eventId      String?   @map("event")
@@ -462,7 +455,6 @@ model Ticket {
   holderId     String?   @map("holder")
   order        Order?    @relation("Ticket_order", fields: [orderId], references: [id])
   orderId      String?   @map("order")
-  coupons      Coupon[]  @relation("Coupon_tickets")
   dateCreated  DateTime? @default(now())
   dateModified DateTime? @default(now())
 

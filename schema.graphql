@@ -824,8 +824,6 @@ type Booking {
   employee_requests(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   employee_requestsCount(where: UserWhereInput! = {}): Int
   customer: User
-  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
-  couponsCount(where: CouponWhereInput! = {}): Int
   email: String
   phone: String
   name: String
@@ -865,7 +863,6 @@ input BookingWhereInput {
   employees: UserManyRelationFilter
   employee_requests: UserManyRelationFilter
   customer: UserWhereInput
-  coupons: CouponManyRelationFilter
   email: StringFilter
   phone: StringFilter
   name: StringFilter
@@ -899,12 +896,6 @@ input IntFilter {
   not: IntFilter
 }
 
-input CouponManyRelationFilter {
-  every: CouponWhereInput
-  some: CouponWhereInput
-  none: CouponWhereInput
-}
-
 input BookingOrderByInput {
   id: OrderDirection
   start: OrderDirection
@@ -935,7 +926,6 @@ input BookingUpdateInput {
   employees: UserRelateToManyForUpdateInput
   employee_requests: UserRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
-  coupons: CouponRelateToManyForUpdateInput
   email: String
   phone: String
   name: String
@@ -967,13 +957,6 @@ input UserRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input CouponRelateToManyForUpdateInput {
-  disconnect: [CouponWhereUniqueInput!]
-  set: [CouponWhereUniqueInput!]
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
-}
-
 input BookingUpdateArgs {
   where: BookingWhereUniqueInput!
   data: BookingUpdateInput!
@@ -991,7 +974,6 @@ input BookingCreateInput {
   employees: UserRelateToManyForCreateInput
   employee_requests: UserRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
-  coupons: CouponRelateToManyForCreateInput
   email: String
   phone: String
   name: String
@@ -1018,11 +1000,6 @@ input LocationRelateToOneForCreateInput {
 input UserRelateToOneForCreateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
-}
-
-input CouponRelateToManyForCreateInput {
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
 }
 
 type Service {
@@ -1117,6 +1094,12 @@ input LocationManyRelationFilter {
   none: LocationWhereInput
 }
 
+input CouponManyRelationFilter {
+  every: CouponWhereInput
+  some: CouponWhereInput
+  none: CouponWhereInput
+}
+
 input CategoryManyRelationFilter {
   every: CategoryWhereInput
   some: CategoryWhereInput
@@ -1172,6 +1155,13 @@ input LocationRelateToManyForUpdateInput {
   connect: [LocationWhereUniqueInput!]
 }
 
+input CouponRelateToManyForUpdateInput {
+  disconnect: [CouponWhereUniqueInput!]
+  set: [CouponWhereUniqueInput!]
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
+}
+
 input CategoryRelateToManyForUpdateInput {
   disconnect: [CategoryWhereUniqueInput!]
   set: [CategoryWhereUniqueInput!]
@@ -1216,6 +1206,11 @@ input ServiceCreateInput {
 input LocationRelateToManyForCreateInput {
   create: [LocationCreateInput!]
   connect: [LocationWhereUniqueInput!]
+}
+
+input CouponRelateToManyForCreateInput {
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
 }
 
 input CategoryRelateToManyForCreateInput {
@@ -1639,8 +1634,6 @@ type SubscriptionItem {
   user: User
   stripeChargeId: String
   stripeSubscriptionId: String
-  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
-  couponsCount(where: CouponWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1665,7 +1658,6 @@ input SubscriptionItemWhereInput {
   user: UserWhereInput
   stripeChargeId: StringFilter
   stripeSubscriptionId: StringFilter
-  coupons: CouponManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -1696,7 +1688,6 @@ input SubscriptionItemUpdateInput {
   user: UserRelateToOneForUpdateInput
   stripeChargeId: String
   stripeSubscriptionId: String
-  coupons: CouponRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -1724,7 +1715,6 @@ input SubscriptionItemCreateInput {
   user: UserRelateToOneForCreateInput
   stripeChargeId: String
   stripeSubscriptionId: String
-  coupons: CouponRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -2281,16 +2271,10 @@ type Coupon {
   duration: String
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
-  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
   eventsCount(where: EventWhereInput! = {}): Int
-  tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
-  ticketsCount(where: TicketWhereInput! = {}): Int
-  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
-  bookingsCount(where: BookingWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
 }
@@ -2312,11 +2296,8 @@ input CouponWhereInput {
   duration_in_months: IntNullableFilter
   duration: StringFilter
   products: ProductManyRelationFilter
-  subscriptionItems: SubscriptionItemManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   events: EventManyRelationFilter
-  tickets: TicketManyRelationFilter
-  bookings: BookingManyRelationFilter
   services: ServiceManyRelationFilter
 }
 
@@ -2338,11 +2319,8 @@ input CouponUpdateInput {
   duration_in_months: Int
   duration: String
   products: ProductRelateToManyForUpdateInput
-  subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
-  tickets: TicketRelateToManyForUpdateInput
-  bookings: BookingRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
 }
 
@@ -2359,11 +2337,8 @@ input CouponCreateInput {
   duration_in_months: Int
   duration: String
   products: ProductRelateToManyForCreateInput
-  subscriptionItems: SubscriptionItemRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
-  tickets: TicketRelateToManyForCreateInput
-  bookings: BookingRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
 }
 
@@ -2625,7 +2600,7 @@ input EventWhereInput {
   id: IDFilter
   summary: StringFilter
   start: DateTimeFilter
-  end: DateTimeNullableFilter
+  end: DateTimeFilter
   price: IntFilter
   seats: IntFilter
   image: StringFilter
@@ -2708,17 +2683,13 @@ type Ticket {
   typeof: String
   eventSummary: String
   eventStart: DateTime
-  qrcode: String
   email: String
   orderIndex: String
   price: Int
-  chargeId: String
   status: String
   event: Event
   holder: User
   order: Order
-  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
-  couponsCount(where: CouponWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -2732,37 +2703,29 @@ input TicketWhereInput {
   OR: [TicketWhereInput!]
   NOT: [TicketWhereInput!]
   id: IDFilter
-  qrcode: StringFilter
   email: StringFilter
-  chargeId: StringFilter
   status: StringFilter
   event: EventWhereInput
   holder: UserWhereInput
   order: OrderWhereInput
-  coupons: CouponManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
 
 input TicketOrderByInput {
   id: OrderDirection
-  qrcode: OrderDirection
   email: OrderDirection
-  chargeId: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
 
 input TicketUpdateInput {
-  qrcode: String
   email: String
-  chargeId: String
   status: String
   event: EventRelateToOneForUpdateInput
   holder: UserRelateToOneForUpdateInput
   order: OrderRelateToOneForUpdateInput
-  coupons: CouponRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -2773,14 +2736,11 @@ input TicketUpdateArgs {
 }
 
 input TicketCreateInput {
-  qrcode: String
   email: String
-  chargeId: String
   status: String
   event: EventRelateToOneForCreateInput
   holder: UserRelateToOneForCreateInput
   order: OrderRelateToOneForCreateInput
-  coupons: CouponRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
 }

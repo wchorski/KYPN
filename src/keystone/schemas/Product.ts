@@ -172,7 +172,7 @@ export const Product: Lists.Product = list({
 		}),
 		orderItems: relationship({ ref: "OrderItem.product", many: true }),
 		addons: relationship({ ref: "Addon.products", many: true }),
-		coupons: relationship({ ref: "Coupon.products", many: true }),
+		coupons: relationship({ ref: "Coupon.products", many: true, ui:{ description: 'Coupons that are allowed to apply to this item during checkout'} }),
     ...group({
 			label: "Metadata",
 			// description: 'Group description',

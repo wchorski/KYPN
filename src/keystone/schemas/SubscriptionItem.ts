@@ -136,10 +136,6 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		}),
 		stripeChargeId: text(),
 		stripeSubscriptionId: text(),
-		coupons: relationship({
-			ref: "Coupon.subscriptionItems",
-			many: true,
-		}),
 		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 	},

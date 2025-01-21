@@ -46,6 +46,8 @@ export const User: Lists.User = list({
 			initialColumns: ["name", "nameLast", "email", "role"],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},
+    //? maybe I'd prefer email? idk
+    labelField: `name`,
 	},
 
 	// this is the fields for our User list

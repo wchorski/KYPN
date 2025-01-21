@@ -2,12 +2,6 @@ import type {
 	Lists,
 	Context,
 	UserCreateInput,
-	RoleCreateInput,
-	PageCreateInput,
-	PostCreateInput,
-	CategoryCreateInput,
-	TagCreateInput,
-	BookingCreateInput,
 	TicketCreateInput,
 } from ".keystone/types"
 import {
@@ -24,7 +18,8 @@ import {
 	bookings_seedjson,
 	events_seedjson,
 } from "./seed_data"
-import { Announcement, Page, SeedEvent, SeedPost } from "@ks/types"
+import { Announcement} from "../types"
+import { dateAdjuster } from "../../lib/dateCheck"
 
 const seedUsers = async (context: Context) => {
 	const { db } = context.sudo()
@@ -310,40 +305,52 @@ const seedEvents = async (context: Context) => {
 		console.log(` + ${schemaType}: ` + item[compairKey])
 	})
 
-	await sudoDB[schemaType].createMany({
+	const createdItems = await sudoDB[schemaType].createMany({
 		data: itemsToCreate.map((item) => ({
 			...item,
 			location: { connect: { name: item.location?.name } },
 			description: item?.description?.document,
 			hosts: { connect: item.hosts?.map((user) => ({ email: user.email })) },
 			cohosts: {
-				connect: item.cohosts?.map((user) => ({ email: user.email })),
+        connect: item.cohosts?.map((user) => ({ email: user.email })),
 			},
+      categories: { connect: item.categories?.map((cat) => ({ name: cat.name })) },
+      tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
 		})),
 	})
 
-	await seedTicketOrders(itemsToCreate, context)
+	await seedTicketOrders(createdItems, context)
 }
-
 const seedLocations = async (context: Context) => {
-	const { db } = context.sudo()
-
-	const objectsAlreadyInDatabase = await db.Location.findMany({
+	const { db: sudoDB } = context.sudo()
+	const seedJson = locations_seed
+	const schemaType = "Location"
+	const compairKey = "name"
+	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
 		where: {
-			name: { in: locations_seed.map((obj) => obj.name) as string[] },
+			[compairKey]: {
+				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+			},
 		},
 	})
-	const objsToCreate = locations_seed.filter(
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
+
+	const itemsToCreate = seedJson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some(
+				(prevItem) => prevItem[compairKey] === item[compairKey]
+			)
 	)
 
-	objsToCreate.map((obj) => {
-		console.log(" + Location: " + obj.name)
+	itemsToCreate.map((item) => {
+		console.log(` + ${schemaType}: ` + item[compairKey])
 	})
 
-	await db.Location.createMany({
-		data: objsToCreate.map((obj) => obj),
+	await sudoDB[schemaType].createMany({
+		data: itemsToCreate.map((item) => ({
+			...item,
+      categories: { connect: item.categories?.map((cat:{name:string}) => ({ name: cat.name })) },
+      tags: { connect: item.tags?.map((tag:{name:string}) => ({ name: tag.name })) },
+		})),
 	})
 }
 
@@ -459,40 +466,52 @@ const seedAnnouncements = async (context: Context) => {
 	})
 }
 
-async function seedTicketOrders(events: SeedEvent[], context: Context) {
-  throw new Error('🐸 seedTicketOrders find out how to do this')
-	// const { db: sudoDB } = context.sudo()
+async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
+  // throw new Error('🐸 seedTicketOrders find out how to do this')
+	const { db: sudoDB } = context.sudo()
 
-	// const fakeEmail = "admin@tawtaw.site"
-	// const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
-  // const tixQuantity = 2
+	const fakeEmail = "admin@tawtaw.site"
+	const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
+  const tixQuantity = 2
 
-  // await Promise.all(events.map(async (event) => {
+  await Promise.all(events.map(async (event) => {
 
-  //   const tickets: TicketCreateInput[] = Array.from(
-  //     { length: tixQuantity },
-  //     (_, index) => ({
-  //       event: { connect: { id: event.summary } },
-  //       holder: { connect: { id: "admin@tawtaw.site" } },
-  //       email: "admin@tawtaw.site",
-  //     })
-  //   )
+    const tickets: TicketCreateInput[] = Array.from(
+      { length: tixQuantity },
+      (_, index) => ({
+        event: { connect: { id: event.id } },
+        holder: { connect: { email: "admin@tawtaw.site" } },
+        email: "admin@tawtaw.site",
+      })
+    )
   
-  //   const order = await sudoDB.Order.createOne({
-  //     // const order = await context.withSession(session).db.Order.createOne({
-  //     data: {
-  //       total: (event.price || 0) * tixQuantity,
-  //       ticketItems: { create: tickets },
-  //       user: { connect: { email: fakeEmail } },
-  //       stripeCheckoutSessionId: null,
-  //       stripePaymentIntent: null,
-  //       email: fakeEmail,
-  //       status: orderStatuses[0],
-  //     },
-  //   })
+    const order = await sudoDB.Order.createOne({
+      // const order = await context.withSession(session).db.Order.createOne({
+      data: {
+        total: (event.price || 0) * tixQuantity,
+        // stripeCheckoutSessionId: null,
+        // stripePaymentIntent: null,
+        email: fakeEmail,
+        status: orderStatuses[0],
+        ticketItems: { create: tickets },
+        user: { connect: { email: fakeEmail } },
+      },
+    })
 
-  //   console.log(`+ Ticket Ordered for Event: ${event.summary}, total: ${order.total}`)
-  // }))
+    //? dev cheat to simulate even that becomes a past event because tickets are not allowed to be create on past events
+    if(event.summary.startsWith('PAST: ')){
+      await sudoDB.Event.updateOne({
+        where: { id: event.id},
+        data: {
+          start: dateAdjuster(event.start, {months: -1}),
+          end: dateAdjuster(event.end, {months: -1}),
+          status: "PAST"
+        }
+      })
+    }
+
+    console.log(`+ Ticket Ordered for Event: ${event.summary}, total: ${order.total}`)
+  }))
   
 }
 

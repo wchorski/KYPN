@@ -1,3 +1,10 @@
+export const dateAdjuster = (date:Date|string, { years = 0, months = 0, days = 0 }) => 
+  new Date(new Date(date).setFullYear(
+    new Date(date).getFullYear() + years,
+    new Date(date).getMonth() + months,
+    new Date(date).getDate() + days
+  )).toISOString()
+
 type BusyRange = {
 	id: string
 	start: string

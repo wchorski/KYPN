@@ -136,7 +136,6 @@ export const Booking: Lists.Booking = list({
 		}),
 		employee_requests: relationship({ ref: "User.gig_requests", many: true }),
 		customer: relationship({ ref: "User.bookings", many: false }),
-		coupons: relationship({ ref: "Coupon.bookings", many: true }),
 		email: text(),
 		phone: text(),
 		name: text(),

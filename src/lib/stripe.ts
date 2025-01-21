@@ -176,6 +176,8 @@ type Coupon = {
 }
 
 export async function stripeCouponCreate({name, amount_off, percent_off, duration, duration_in_months, couponId}:Coupon){
+  
+  if(!envs.STRIPE_PUBLIC_KEY) return 
 
   let couponParams: Stripe.CouponCreateParams = {
     name,
