@@ -18,24 +18,24 @@ import { mailOrder } from "../../lib/mail"
 import { User, Order as OrderType } from "../../keystone/types"
 
 export const Order: Lists.Order = list({
-	// access: allowAll,
-	access: {
-		filter: {
-			query: rules.canViewOrders,
-			update: rules.canManageOrders,
-			delete: rules.canManageOrders,
-		},
-		operation: {
-			// TODO battle test these access
-			// TODO maybe make Orders completely locked down and only mutations (sudo) can create them
-			create: permissions.canManageOrders,
-			query: isLoggedIn,
-			update: permissions.canManageOrders,
-			// TODO will want to switch back to false (order status canceled)
-			delete: permissions.canManageOrders,
-			// delete: () => false,
-		},
-	},
+	access: allowAll,
+	// access: {
+	// 	filter: {
+	// 		query: rules.canViewOrders,
+	// 		update: rules.canManageOrders,
+	// 		delete: rules.canManageOrders,
+	// 	},
+	// 	operation: {
+	// 		// TODO battle test these access
+	// 		// TODO maybe make Orders completely locked down and only mutations (sudo) can create them
+	// 		create: permissions.canManageOrders,
+	// 		query: isLoggedIn,
+	// 		update: permissions.canManageOrders,
+	// 		// TODO will want to switch back to false (order status canceled)
+	// 		delete: permissions.canManageOrders,
+	// 		// delete: () => false,
+	// 	},
+	// },
 
 	ui: {
 		listView: {

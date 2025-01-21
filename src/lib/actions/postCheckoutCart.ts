@@ -23,8 +23,7 @@ export async function postCheckoutCart(
 	//? use if form data needs to be modified before db query
 	// const variables = values as CheckoutCartVariables
 
-	let isErrorFlagged = false
-  let orderId = ''
+
 	try {
 		const session = await getServerSession(nextAuthOptions)
 		// console.log("postCheckoutCart: ", { session })
@@ -40,8 +39,6 @@ export async function postCheckoutCart(
       `,
 			// variables: values,
 		})) as { checkout: { id: string; status: string } }
-		
-    orderId = data.checkout.id
 
 		return {
 			//@ts-ignore
@@ -49,18 +46,20 @@ export async function postCheckoutCart(
 
 			// },
 			id: data.checkout.id,
-			url: `/checkout/completed`,
+			url: `/checkout/completed?orderId=${data.checkout.id}`,
 			success: `Success! CheckoutCart ${data.checkout.status}`,
 		}
 	} catch (error) {
 		console.log("!!! actionCheckoutCart: ", error)
-		isErrorFlagged = true
+
 		return {
 			error: "CheckoutCart failed: " + error,
 			success: undefined,
 		}
 	} finally {
-		if (!isErrorFlagged) redirect(`/checkout/completed?orderId=${orderId}`, RedirectType.push)
+    //? gotta route in the frontend because it won't clear the cart
+		// if (!isErrorFlagged)
+		// 	redirect(`/checkout/completed?orderId=${orderId}`, RedirectType.push)
 	}
 }
 

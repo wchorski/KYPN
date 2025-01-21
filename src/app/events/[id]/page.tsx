@@ -334,7 +334,6 @@ const QUERY_EVENT = `
   tickets{
     id
     status
-    qrcode
     holder {
       id
       name

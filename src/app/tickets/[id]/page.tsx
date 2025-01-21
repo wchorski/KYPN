@@ -146,7 +146,6 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 }
 
 const query = `
-  qrcode
   id
   status
   email

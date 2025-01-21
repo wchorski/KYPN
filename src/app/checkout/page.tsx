@@ -1,8 +1,6 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import CartItem from "@components/ecommerce/CartItem"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
-import { CartTotal } from "@components/ecommerce/CartTotal"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
 import { Grid } from "@components/layouts/Grid"
@@ -78,11 +76,12 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				<div className={[page_content, layout_site].join(" ")}>
 					<Grid layout={"1_1"} isAuto={false}>
 						<div>
-              {/* // TODO how to show tickets in a pretty manner with cart context */}
+							{/* // TODO how to show tickets in a pretty manner with cart context */}
+              <h2>Cart Items</h2>
 							<CartItemsList />
-							<CartTotal />
 						</div>
 						<div>
+							
 							{user.cart.length === 0 ? (
 								<p> No items in cart. </p>
 							) : filteredTicketItems ? (

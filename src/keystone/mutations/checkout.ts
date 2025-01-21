@@ -5,7 +5,6 @@ import { Context, Lists, TicketCreateInput } from ".keystone/types"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 import type { CartItem, Event } from "../types"
-import { Session } from "next-auth"
 
 type StripeSession = {
 	stripeSession?: {
@@ -87,10 +86,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 						? { ticketItems: { create: ticketsToCreate } }
 						: {}),
 					user: session.itemId ? { connect: { id: session.itemId } } : null,
-					stripeCheckoutSessionId:
-						session.stripeSession?.id || null,
-					stripePaymentIntent:
-						session.stripeSession?.payment_intent || null,
+					stripeCheckoutSessionId: session.stripeSession?.id || "",
+					stripePaymentIntent: session.stripeSession?.payment_intent || "",
 					email: session.user.email || "",
 					//TODO maybe not secure
 					...(session.stripeSession?.payment_status === "paid" ||

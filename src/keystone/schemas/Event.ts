@@ -136,7 +136,7 @@ export const Event: Lists.Event = list({
 		location: relationship({ ref: "Location.events", many: false }),
 		hosts: relationship({ ref: "User.eventsHost", many: true }),
 		cohosts: relationship({ ref: "User.eventsCohost", many: true }),
-		tickets: relationship({ ref: "Ticket.event", many: true }),
+		tickets: relationship({ ref: "Ticket.event", many: true, ui: {displayMode: 'count'} }),
 		coupons: relationship({ ref: "Coupon.events", many: true, ui:{ description: 'Coupons that are allowed to apply to this item during checkout'} }),
 		...group({
 			label: "Metadata",

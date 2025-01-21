@@ -64,7 +64,6 @@ export async function fetchEvent(
 //   tickets{
 //     id
 //     status
-//     qrcode
 //     holder {
 //       id
 //       name
