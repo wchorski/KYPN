@@ -472,6 +472,7 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 
 	const fakeEmail = "admin@tawtaw.site"
 	const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
+  // todo hook this into `tixToOrder`. not really worth it to figure out rn
   const tixQuantity = 2
 
   await Promise.all(events.map(async (event) => {

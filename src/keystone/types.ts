@@ -449,6 +449,8 @@ export type SeedEvent = EventCreateInput & {
   description?: {
 		document: any
 	}
+  // not ready yet
+  // tixToOrder: number,
 }
 
 export type SeedService = ServiceCreateInput & {

@@ -106,7 +106,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 					<ImageBlock
 						imageSrc={image}
 						alt={`Featured Image for ${name} Service`}
-						isCaption={true}
+						isCaption={false}
             isPriority={true}
 					/>
 

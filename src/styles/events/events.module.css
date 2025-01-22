@@ -12,11 +12,20 @@ ul.events_list {
 	flex-wrap: wrap;
 	padding: 1rem;
 	width: 100%;
+  gap: var(--space-ml);
+  align-items: center;
 }
 
-.event_article a.details {
+.date_start {
+  font-size: var(--space-ml);
+  min-width: 5rem;
+}
+
+.event_article .details {
   color: var(--c-txt);
   text-decoration: none;
+  display: grid;
+  gap: var(--space-ms);
 
   &:hover {
     text-decoration: revert;
@@ -47,11 +56,7 @@ article.event_article :global {
 		margin: 0;
 	}
 
-	& time {
-		padding: 0 1em;
-		width: 1em;
-		/* display: inline-table; */
-	}
+	
 
 	& svg {
 		margin-right: 0.2em;

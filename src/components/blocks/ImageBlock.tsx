@@ -1,6 +1,6 @@
 import Image from "next/image"
-import { image_caption, image_wrap } from "@styles/image.module.css";
-import { type CSSProperties } from "react";
+import { image_caption, image_wrap } from "@styles/image.module.css"
+import { type CSSProperties } from "react"
 
 type Props = {
 	color?: string
@@ -9,8 +9,9 @@ type Props = {
 	imageSrc: string
 	alt: string
 	width?: number
-  isCaption?: boolean
-  isPriority?: boolean
+	height?: number
+	isCaption?: boolean
+	isPriority?: boolean
 }
 //todo add lightbox
 export function ImageBlock({
@@ -19,27 +20,32 @@ export function ImageBlock({
 	alt,
 	padding = 0,
 	border = 0,
-	width,
-  isCaption = true,
-  isPriority = false,
+	width = 400,
+	height = 200,
+	isCaption = true,
+	isPriority = false,
 }: Props) {
 	return (
-		<figure
-			className={image_wrap}
-      style={{
-        ...(width ? {width} : {})
-      }}
-		>
+		<figure className={image_wrap}>
 			<Image
 				alt={alt}
 				src={imageSrc}
 				sizes={"100vw"}
-				width={0}
-				height={0}
-        unoptimized={true}
-        priority={isPriority}
+				width={width}
+				height={height}
+				unoptimized={true}
+				priority={isPriority}
 			/>
-			<figcaption className={[image_caption, 'subtext'].join(' ')} style={{"--display-caption": isCaption ? 'contents' : 'none'} as CSSProperties}>{alt}</figcaption>
+			<figcaption
+				className={[image_caption, "subtext"].join(" ")}
+				style={
+					{
+						"--display-caption": isCaption ? "contents" : "none",
+					} as CSSProperties
+				}
+			>
+				{alt}
+			</figcaption>
 		</figure>
 	)
 }
