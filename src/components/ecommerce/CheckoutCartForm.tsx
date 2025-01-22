@@ -10,8 +10,9 @@ import {
 import { form } from "@styles/menus/form.module.scss"
 import { useEffect } from "react"
 import { CartTotal } from "./CartTotal"
-import { useRouter } from 'next/navigation'
- 
+import { useRouter } from "next/navigation"
+import { getServerSession } from "next-auth"
+import { useSession } from "next-auth/react"
 
 type Props = {
 	cartItems: CartItem[]
@@ -28,16 +29,15 @@ const initState: CheckoutCartState = {
 
 export function CheckoutCartForm({ cartItems }: Props) {
 	const { state, action, submitCount } = useForm(postCheckoutCart, initState)
-	const { setCartItems } = useCart()
-  const router = useRouter()
- 
+	const { getUserCart } = useCart()
+	const router = useRouter()
+	const { data: session, status } = useSession()
 
 	useEffect(() => {
 		// throw new Error('How to remove cart items on successful checkout')
 		if (state.success) {
-			console.log("checkout success: ", state.success)
-			setCartItems([])
-      router.push(state.url || '/checkout/completed')
+			getUserCart(session?.itemId)
+			router.push(state.url || "/checkout/completed")
 		}
 
 		// return () =>

@@ -18,20 +18,21 @@ import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 
 export const Service: Lists.Service = list({
-	access: {
-		filter: {
-			query: rules.canViewServices,
-			update: rules.canManageServices,
-			delete: rules.canManageServices,
-		},
-		operation: {
-			create: permissions.canManageServices,
-			query: () => true,
-			// query: permissions.canViewServices,
-			update: permissions.canManageServices,
-			delete: permissions.canManageServices,
-		},
-	},
+  access: allowAll,
+	// access: {
+	// 	filter: {
+	// 		query: rules.canViewServices,
+	// 		update: rules.canManageServices,
+	// 		delete: rules.canManageServices,
+	// 	},
+	// 	operation: {
+	// 		create: permissions.canManageServices,
+	// 		query: () => true,
+	// 		// query: permissions.canViewServices,
+	// 		update: permissions.canManageServices,
+	// 		delete: permissions.canManageServices,
+	// 	},
+	// },
 
 	ui: {
 		isHidden: (args) => !permissions.canManageServices(args),

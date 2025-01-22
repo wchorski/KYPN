@@ -67,8 +67,10 @@ export function InfoCardItem({
 			</header>
 
 			<div className={content_wrap}>
-				{item.content}
-				{children}
+        <p>
+          {item.content}
+          {children}
+        </p>
 				{item.buttonLink && (
 					<Link href={item.buttonLink} className="button medium">
 						{item.buttonLabel ? item.buttonLabel : "view"}

@@ -32,7 +32,6 @@ import { findAllHeadings, isEmptyDocument } from "@lib/contentHelpers"
 import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
 import { ShareButton } from "@components/elements/ShareButton"
 import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { IconLink } from "@components/elements/IconLink"
 import { notFound } from "next/navigation"
 

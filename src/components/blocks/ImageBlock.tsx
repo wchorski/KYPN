@@ -1,6 +1,6 @@
 import Image from "next/image"
-import {layout_wide} from '@styles/layout.module.css'
-import { image_caption, image_wrap } from "@styles/image.module.scss";
+import { image_caption, image_wrap } from "@styles/image.module.css";
+import { type CSSProperties } from "react";
 
 type Props = {
 	color?: string
@@ -9,6 +9,8 @@ type Props = {
 	imageSrc: string
 	alt: string
 	width?: number
+  isCaption?: boolean
+  isPriority?: boolean
 }
 //todo add lightbox
 export function ImageBlock({
@@ -18,6 +20,8 @@ export function ImageBlock({
 	padding = 0,
 	border = 0,
 	width,
+  isCaption = true,
+  isPriority = false,
 }: Props) {
 	return (
 		<figure
@@ -33,8 +37,9 @@ export function ImageBlock({
 				width={0}
 				height={0}
         unoptimized={true}
+        priority={isPriority}
 			/>
-			<figcaption className={[image_caption, 'subtext'].join(' ')} >{alt}</figcaption>
+			<figcaption className={[image_caption, 'subtext'].join(' ')} style={{"--display-caption": isCaption ? 'contents' : 'none'} as CSSProperties}>{alt}</figcaption>
 		</figure>
 	)
 }

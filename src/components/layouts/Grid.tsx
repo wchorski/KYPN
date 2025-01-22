@@ -79,8 +79,10 @@ export function Grid({
   const layoutArray = layout.split('_')
 
 	const classNms = [
+    'grid',
 		grid,
-		isAuto ? auto : layoutStyle,
+		// isAuto ? auto : layoutStyle,
+    layoutStyle ? layoutStyle : auto,
 		layoutArray.length > 2 ? layout_site : layout_wide,
 		className,
 	].join(" ")

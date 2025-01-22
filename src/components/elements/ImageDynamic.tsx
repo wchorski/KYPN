@@ -1,6 +1,6 @@
 import Image from "next/image";
 // todo should i do a bit of styling on img here or just let parents do it?
-// import { img } from "@styles/image.module.scss";
+// import { img } from "@styles/image.module.css";
 
 type Props = {
   photoIn: {

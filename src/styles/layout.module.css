@@ -74,7 +74,9 @@
 .page_layout,
 .page_layout > .layout_full,
 .page_layout > .layout_wide {
-
+  & > :is(div:global(.flex), div:global(.grid)){
+    grid-column: layout_site;
+  }
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
 		grid-column: layout_wide;
 	}

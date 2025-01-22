@@ -1,11 +1,8 @@
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import fetchService from "@lib/fetchdata/fetchService"
-import { Service } from "@ks/types"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { Card } from "@components/layouts/Card"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import { List } from "@components/elements/List"
 import Link from "next/link"
 import { timePretty } from "@lib/dateFormatter"
 import { daysOfWeek } from "@lib/dateCheck"
@@ -23,12 +20,12 @@ import ErrorPage from "@components/layouts/ErrorPage"
 import { notFound } from "next/navigation"
 import { Grid } from "@components/layouts/Grid"
 import Flex from "@components/layouts/Flex"
+import { ImageBlock } from "@components/blocks/ImageBlock"
 
 export async function generateMetadata(
 	{ params, searchParams }: Props,
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
-
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { service, error } = await fetchService({ id, query: QUERY, session })
@@ -73,7 +70,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 	const { id } = await params
 
 	const { service, error } = await fetchService({ id, query: QUERY, session })
-	
+
 	if (error)
 		return (
 			<ErrorPage error={error}>
@@ -99,14 +96,31 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 
 	return (
 		<main className={page_layout}>
-			<header style={{marginTop: '5rem', display: 'grid'}}>
-        <Flex className={layout_wide} alignItems={'center'}>
-          <h1 style={{width: '50%'}}> Service: {name} </h1>
-          <ImageDynamic photoIn={image} />
-        </Flex>
-			</header>
-			<div className={page_content}>
-				<section className={layout_site}>
+			<Grid
+				layout={"1_2"}
+				alignContent={"start"}
+				style={{ marginTop: "var(--space-xxl)" }}
+				gap={"xl"}
+			>
+				<header>
+					<ImageBlock
+						imageSrc={image}
+						alt={`Featured Image for ${name} Service`}
+						isCaption={true}
+            isPriority={true}
+					/>
+
+					<h1> {name} </h1>
+
+					<Link
+						href={`/book-a-service?serviceId=${id}`}
+						className="button large"
+					>
+						Book this Service
+					</Link>
+				</header>
+
+				<div className={page_content}>
 					<table>
 						<tbody>
 							<tr>
@@ -129,32 +143,34 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 							</tr>
 							<tr>
 								<td> Buisness Hours: </td>
-								<td> {timePretty(buisnessHourOpen || "")} - {timePretty(buisnessHourClosed || "")}  </td>
+								<td>
+									{" "}
+									{timePretty(buisnessHourOpen || "")} -{" "}
+									{timePretty(buisnessHourClosed || "")}{" "}
+								</td>
 							</tr>
 						</tbody>
 					</table>
-
 					<Card>
 						<BlockRender document={description.document} />
 					</Card>
-
-					<Link href={`/book-a-service?serviceId=${id}`} className="button large">
-						{" "}
-						Book this Service{" "}
-					</Link>
-				</section>
-				<section className={layout_site}>
-					<h2 id="addons"> Add-Ons </h2>
-					<p> A list of add-ons available for this package </p>
-					<ul>
-						{addons?.map((ad) => (
-							<li key={ad.id}>
-								<Link href={`/addons/${ad.id}`}> {ad.name}</Link>
-							</li>
-						))}
-					</ul>
-				</section>
-			</div>
+				</div>
+			</Grid>
+			<footer className={layout_site}>
+				{addons.length > 0 && (
+					<>
+						<h2 id="addons"> Add-Ons </h2>
+						<p> A list of add-ons available for this package </p>
+						<ul>
+							{addons?.map((ad) => (
+								<li key={ad.id}>
+									<Link href={`/addons/${ad.id}`}> {ad.name}</Link>
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+			</footer>
 		</main>
 	)
 }

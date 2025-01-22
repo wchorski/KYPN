@@ -26,7 +26,6 @@ export async function postCheckoutCart(
 
 	try {
 		const session = await getServerSession(nextAuthOptions)
-		// console.log("postCheckoutCart: ", { session })
 
 		const data = (await keystoneContext.withSession(session).graphql.run({
 			query: `

@@ -29,8 +29,6 @@ export function useForm<T>(
 
 	useEffect(() => {
     setSubmitCount(prev => prev + 1)
-    console.log('useForm submitCount: ', submitCount);
-    
 
 		// return () =>
 	}, [state])
