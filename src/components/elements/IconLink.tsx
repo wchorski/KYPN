@@ -1,11 +1,11 @@
-import { IconEditPagePencile } from "@lib/useIcons"
+import { IconEditPagePencile, IconTicketOutlined } from "@lib/useIcons"
 import { linkWicon } from "@styles/nav.module.css"
 import Link from "next/link"
 import type { CSSProperties, HTMLAttributeAnchorTarget, ReactNode } from "react"
 
 type Props = {
 	label?: string
-	icon: "edit" | "none"
+	icon: "edit" | "ticket" |"none"
 	href: string
 	target?: HTMLAttributeAnchorTarget
 	children?: ReactNode
@@ -24,6 +24,8 @@ export function IconLink({
 		switch (icon) {
 			case "edit":
 				return <IconEditPagePencile />
+			case "ticket":
+				return <IconTicketOutlined />
 			default:
 				return <></>
 		}

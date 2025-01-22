@@ -17,17 +17,21 @@ import { SchedualChip } from "./SchedualChip"
 import Flex from "./layouts/Flex"
 import { NoData } from "./elements/NoData"
 import { layout_content, layout_site } from "@styles/layout.module.css"
+import { events_list } from "@styles/events/events.module.css"
+import { EventCard } from "./events/EventCard"
+import { Grid } from "./layouts/Grid"
 
 type Props = {
 	date: string
 	events?: TEvent[] | undefined
-	bookings?: Booking[] | undefined 
+	bookings?: Booking[] | undefined
+  isSearchParam?:boolean
 }
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"]
 // const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
+export function SchedualCalendar({ date, events = [], bookings = [], isSearchParam = false }: Props) {
 	function nextMonth(date: string) {
 		const curDate = new Date(date)
 		const firstOfMonth = new Date(curDate.getFullYear(), curDate.getMonth())
@@ -45,13 +49,15 @@ export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 	}
 
 	return (
-		<div className={["schedual-calendar-wrap"].join(' ')}>
+		<div className={["schedual-calendar-wrap"].join(" ")}>
 			<header className={header}>
 				<Link
 					href={`?${new URLSearchParams({
 						date: prevMonth(date),
 					})}`}
 					className="arrow left"
+					aria-label="Next Month"
+					title="Next Month"
 				>
 					<MdOutlineKeyboardArrowLeft />
 				</Link>
@@ -63,8 +69,19 @@ export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 						date: nextMonth(date),
 					})}`}
 					className="arrow right"
+					aria-label="Previous Month"
+					title="Previous Month"
 				>
 					<MdOutlineKeyboardArrowRight />
+				</Link>
+				<Link
+					href={`/events`}
+          style={{visibility: isSearchParam ? 'visible' : 'hidden'}}
+					className={["button medium"].join(' ')}
+					aria-label="Today's Month"
+					title="Today's Month"
+				>
+					Today
 				</Link>
 			</header>
 
@@ -130,9 +147,20 @@ export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 			</div>
 
 			{/* //TODO group schedual items per date (while removing empty days)  */}
-			<div className={[reveal_on_mobile, layout_content].join(' ')}>
+			<div className={[reveal_on_mobile, layout_content].join(" ")}>
 				{/* <h3> List View </h3> */}
 				{events.length > 0 && (
+					<>
+						<ul className={events_list}>
+							{events?.map((e) => (
+								<li key={e.id}>
+									<EventCard {...e} />
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+				{/* {events.length > 0 && (
 					<>
 						<h4> Events </h4>
 						<ul>
@@ -144,7 +172,7 @@ export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 							))}
 						</ul>
 					</>
-				)}
+				)} */}
 
 				{bookings.length > 0 && (
 					<>
@@ -163,9 +191,20 @@ export function SchedualCalendar({ date, events = [], bookings = [] }: Props) {
 				)}
 
 				{bookings.length === 0 && events.length === 0 && (
-					<NoData>
-						<p>No schedual items for this month</p>
-					</NoData>
+					<Grid
+						layout={"1"}
+						verticalAlign={"center"}
+						horizontalAlign={"center"}
+						style={{
+							border: "dashed 3px var(--c-seperator)",
+							// backgroundColor: 'var(--c-seperator)',
+							minHeight: "20rem",
+						}}
+					>
+						<NoData name="items">
+							<p>No schedual items for this month</p>
+						</NoData>
+					</Grid>
 				)}
 			</div>
 		</div>

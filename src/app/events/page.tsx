@@ -50,11 +50,12 @@ export default async function EventsPage({ params, searchParams }: Props) {
 				<section className={layout_site} >
           {/* //TODO delete event calendar comp */}
 					{/* <EventsCalendar date={date} events={events} /> */}
-          <SchedualCalendar date={dateString} events={events} />
+          <SchedualCalendar date={dateString} events={events} isSearchParam={date ? true : false}/>
 				</section>
-        <br />
+        {/* <br />
         <br />
 				<section>
+          <h2>Upcoming Events</h2>
 					<ul className={events_list}>
 						{events?.map((e) => (
 							<li key={e.id}>
@@ -63,7 +64,7 @@ export default async function EventsPage({ params, searchParams }: Props) {
 						))}
 					</ul>
           {events && events.length === 0 && <NoData><p>No events found for this month. Navigate the calendar to view other months </p></NoData> }
-				</section>
+				</section> */}
 			</div>
 		</main>
 	)

@@ -14,6 +14,7 @@ import { MdLocationOn } from "react-icons/md"
 import Link from "next/link"
 import { ImageDynamic } from "../elements/ImageDynamic"
 import { Event } from "@ks/types"
+import { IconLink } from "@components/elements/IconLink"
 
 export function EventCard({ image, start, summary, location, id }: Event) {
 	return (
@@ -23,7 +24,9 @@ export function EventCard({ image, start, summary, location, id }: Event) {
 			</div>
 
 			<div className={content}>
-				<time dateTime={start} className={date_start} >{datePrettyLocalDayShort(start || "")}</time>
+				<time dateTime={start} className={date_start}>
+					{datePrettyLocalDayShort(start || "")}
+				</time>
 
 				<div className={details}>
 					<Link href={`/events/${id}`}>
@@ -52,13 +55,12 @@ export function EventCard({ image, start, summary, location, id }: Event) {
 					)}
 				</div>
 
-				<a
+				<IconLink
 					href={`/events/${id}`}
-					className={["view button medium", readmore].join(" ")}
-				>
-					{" "}
-					view{" "}
-				</a>
+					label="view"
+					icon={"ticket"}
+					className={["button medium", readmore].join(" ")}
+				/>
 			</div>
 		</article>
 	)
