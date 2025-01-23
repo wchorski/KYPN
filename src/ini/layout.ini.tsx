@@ -14,14 +14,15 @@ const header_font = Inter({
 	subsets: ["latin"],
   fallback: ['verdana', 'system-ui'],
 	variable: "--font-header",
-	preload: true,
+  // https://github.com/vercel/next.js/discussions/45294
+	preload: false,
 })
 const paragraph_font = Barlow({
 	weight: ["300", "500", "800"],
 	subsets: ["latin"],
   fallback: ['verdana', 'system-ui'],
 	variable: "--font-paragraph",
-	preload: true,
+	preload: false,
 })
 
 export const metadata: Metadata = {

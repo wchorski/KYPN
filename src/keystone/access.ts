@@ -190,7 +190,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageAddons({ session })) return true // They can read everything!
-    if(!session) return false
+    // if(!session) return false
 		return {
 			OR: [
 				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },

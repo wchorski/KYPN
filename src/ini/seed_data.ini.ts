@@ -13,7 +13,14 @@ import type {
 	BookingCreateInput,
 	EventCreateInput,
 } from ".keystone/types"
-import { SeedBookings, SeedEvent, SeedLocations, SeedPost, SeedService } from "@ks/types"
+import {
+	SeedAddons,
+	SeedBookings,
+	SeedEvent,
+	SeedLocations,
+	SeedPost,
+	SeedService,
+} from "@ks/types"
 import { dateAdjuster } from "../../lib/dateCheck"
 
 export const locations_seed: SeedLocations[] = [
@@ -69,62 +76,1060 @@ export const locations_seed: SeedLocations[] = [
 	},
 ]
 
-export const addons_seed: AddonCreateInput[] = [
+export const addons_seed: SeedAddons[] = [
+	{
+		name: "Reusable Tote Bags",
+		slug: "reusable-tote-bags",
+		image:
+			"https://cdn.pixabay.com/photo/2017/08/17/19/52/basket-2652620_960_720.jpg",
+		excerpt:
+			"10 Cute FruitFruit™️ branded, eco-friendly tote bag for easy and sustainable fruit carrying for all your guests.",
+		price: 200,
+		status: "PUBLIC",
+		author: { email: "admin@tawtaw.site" },
+		services: [
+			{
+				name: "Fresh Fruit Fiesta",
+			},
+			{
+				name: "Juicing Workshops",
+			},
+		],
+		products: [],
+		subscriptionPlans: [],
+		categories: [],
+		tags: [],
+		dateCreated: "2024-12-17T21:27:14.058Z",
+		dateModified: "2024-12-17T21:27:14.058Z",
+	},
 	{
 		name: "Organic Upgrade",
 		slug: "organic-upgrade",
+		image:
+			"https://cdn.pixabay.com/photo/2016/07/08/10/34/raspberry-1503998_960_720.jpg",
 		excerpt:
 			"All fruits in your order will be certified organic, grown without synthetic pesticides or fertilizers.",
-		price: 26000,
+		price: 300,
+		status: "OUT_OF_STOCK",
+		author: { email: "admin@tawtaw.site" },
+		services: [
+			{
+				name: "Smoothie Bar Social",
+			},
+			{
+				name: "Fresh Fruit Fiesta",
+			},
+			{
+				name: "Juicing Workshops",
+			},
+		],
+		products: [],
+		subscriptionPlans: [],
+		categories: [],
+		tags: [],
+		dateCreated: "2024-12-17T21:27:14.058Z",
+		dateModified: "2024-12-17T21:27:14.058Z",
 	},
 	{
 		name: "Personalized Packaging",
 		slug: "personalized-packaging",
+		image:
+			"https://cdn.pixabay.com/photo/2015/11/06/15/31/tee-1028957_960_720.jpg",
 		excerpt:
 			"Customized packaging with handwritten notes or branding for gifting or corporate events.",
-		price: 10000,
-	},
-	{
-		name: "Reusable Tote Bags",
-		slug: "reusable-tote-bags",
-		excerpt:
-			"10 Cute FruitFruit™️ branded, eco-friendly tote bag for easy and sustainable fruit carrying for all your guests.",
-		price: 8000,
+		price: 400,
+		status: "PUBLIC",
+		author: { email: "admin@tawtaw.site" },
+		services: [
+			{
+				name: "Fresh Fruit Fiesta",
+			},
+			{
+				name: "Juicing Workshops",
+			},
+		],
+		products: [],
+		subscriptionPlans: [],
+		categories: [],
+		tags: [],
+		dateCreated: "2024-12-17T21:27:14.058Z",
+		dateModified: "2024-12-17T21:27:14.058Z",
 	},
 ]
 
 export const services_seed: SeedService[] = [
 	{
-		name: "Fresh Fruit Fiesta",
+		name: "Smoothie Bar Social",
+		image:
+			"https://cdn.pixabay.com/photo/2020/04/03/10/57/smoothie-4998381_960_720.jpg",
 		excerpt:
-			"A variety of fruit flavored spreads and fruity fun decore all provided by our friendly hosts.",
-		price: 100000,
+			"On-site smoothie bar offering customizable fruit blends for events and gatherings. Sip, Mingle, and Enjoy!",
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Sip, Mingle, and Enjoy!",
+							italic: true,
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "What Awaits You",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Custom Creations",
+										},
+										{
+											text: "\nBuild your dream smoothie with a variety of fresh ingredients.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Chill Vibes",
+										},
+										{
+											text: "\nA relaxed atmosphere perfect for socializing.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Event Highlights",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "DIY Smoothie Stations",
+										},
+										{
+											text: "\nMix and match fruits, toppings, and superfoods.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Live Demos",
+										},
+										{
+											text: "\nWatch experts craft signature smoothie blends.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Healthy Treats",
+										},
+										{
+											text: "\nEnjoy guilt-free snacks alongside your smoothie.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "Why Join Us?",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Meet like-minded smoothie lovers",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Discover new flavor combinations",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Relax and recharge with wholesome refreshments",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Blend in, sip up, and have fun!",
+							italic: true,
+						},
+					],
+				},
+			],
+		},
+		price: 15000,
+		durationInHours: "6.00",
+		buisnessHourOpen: "09:00:00",
+		buisnessHourClosed: "18:00:00",
+		buisnessDays: [0, 1, 2, 3, 4, 5, 6],
 		status: "PUBLIC",
-		addons: [
-			{ slug: "organic-upgrade" },
-			{ slug: "personalized-packaging" },
-			{ slug: "reusable-tote-bags" },
+		addons: [],
+		employees: [],
+		locations: [
+			{
+				address: "123 Zelst Blvd, Chicago IL 60606",
+			},
+			{
+				address: "n/a",
+			},
 		],
+		coupons: [],
+		categories: [
+			{
+				name: "berries",
+			},
+			{
+				name: "tropical",
+			},
+		],
+		tags: [
+			{
+				name: "red",
+			},
+			{
+				name: "leaf",
+			},
+			{
+				name: "green",
+			},
+		],
+		dateCreated: "2024-12-17T21:56:42.529Z",
+		dateModified: "2024-12-17T21:56:42.529Z",
+		author: { email: "admin@tawtaw.site" },
 	},
 	{
-		name: "Smoothie Bar Social",
+		name: "Fresh Fruit Fiesta",
+		image:
+			"https://cdn.pixabay.com/photo/2016/11/29/13/20/balloons-1869790_960_720.jpg",
 		excerpt:
-			"On-site smoothie bar offering customizable fruit blends for events and gatherings.",
-		price: 15000,
+			"A variety of fruit flavored spreads and fruity fun decore all provided by our friendly hosts. Dive into a vibrant array of the season’s finest fruits. Perfect for all ages, with activities and tastings.",
+		description: {
+			document: [
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "What It’s All About",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "A Fruit Lover’s Dream",
+										},
+										{
+											text: "\nDive into a vibrant array of the season’s finest fruits.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Fun for Everyone",
+										},
+										{
+											text: "\nPerfect for all ages, with activities and tastings.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Highlights",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Tropical Tastings",
+										},
+										{
+											text: "\nExperience exotic flavors from around the world.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Creative Workshops",
+										},
+										{
+											text: "\nLearn fruit carving, juicing, and smoothie making.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Interactive Games",
+										},
+										{
+											text: "\nFruit-themed contests and prizes to win.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "Why Attend?",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Celebrate healthy living in a fun way",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Explore new fruits and recipes",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Create lasting memories with family and friends",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Fresh, fun, and full of flavor!",
+							italic: true,
+						},
+					],
+				},
+			],
+		},
+		price: 331000,
+		durationInHours: "6.00",
+		buisnessHourOpen: "09:00:00",
+		buisnessHourClosed: "18:00:00",
+		buisnessDays: [0, 1, 2, 3, 4, 5, 6],
 		status: "PUBLIC",
-		addons: [{ slug: "organic-upgrade" }],
+		addons: [],
+		employees: [],
+		locations: [
+			{
+				address: "n/a",
+			},
+		],
+		coupons: [],
+		categories: [
+			{
+				name: "drupes",
+			},
+			{
+				name: "citrus",
+			},
+			{
+				name: "melons",
+			},
+		],
+		tags: [
+			{
+				name: "red",
+			},
+			{
+				name: "black",
+			},
+			{
+				name: "nutrition",
+			},
+		],
+		dateCreated: "2024-12-17T22:18:27.433Z",
+		dateModified: "2024-12-17T22:18:27.433Z",
+		author: { email: "admin@tawtaw.site" },
 	},
 	{
 		name: "Juicing Workshops",
+		image:
+			"https://cdn.pixabay.com/photo/2016/08/23/15/52/fresh-orange-juice-1614822_960_720.jpg",
 		excerpt:
 			"Interactive sessions teaching you how to make fresh, nutrient-packed fruit juices at home.",
-		price: 45,
+		description: {
+			document: [
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Revitalize Your Health, One Glass at a Time!",
+							italic: true,
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "What to Expect",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Hands-On Learning",
+										},
+										{
+											text: "\nMaster the art of juicing with expert guidance.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Nutritional Insights",
+										},
+										{
+											text: "\nDiscover the benefits of fresh, natural ingredients.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Key Highlights",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Beginner-Friendly Sessions",
+										},
+										{
+											text: "\nNo prior experience needed!",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Creative Recipes",
+										},
+										{
+											text: "\nLearn to craft delicious and unique juice blends.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Take-Home Tips",
+										},
+										{
+											text: "\nPractical advice for juicing at home.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "Why Join?",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Boost your energy and wellness",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Experiment with seasonal produce",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Connect with a community of health enthusiasts",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Transform your lifestyle, sip by sip!",
+							italic: true,
+						},
+					],
+				},
+			],
+		},
+		price: 45000,
+		durationInHours: "6.00",
+		buisnessHourOpen: "09:00:00",
+		buisnessHourClosed: "18:00:00",
+		buisnessDays: [0, 1, 2, 3, 4, 5, 6],
 		status: "PUBLIC",
-		addons: [
-			{ slug: "organic-upgrade" },
-			{ slug: "personalized-packaging" },
-			{ slug: "reusable-tote-bags" },
+		addons: [],
+		employees: [],
+		locations: [
+			{
+				address: "/live",
+			},
+			{
+				address: "n/a",
+			},
 		],
+		coupons: [],
+		categories: [
+			{
+				name: "pomes",
+			},
+			{
+				name: "citrus",
+			},
+			{
+				name: "melons",
+			},
+		],
+		tags: [
+			{
+				name: "white",
+			},
+			{
+				name: "nutrition",
+			},
+			{
+				name: "snack",
+			},
+			{
+				name: "yellow",
+			},
+		],
+		dateCreated: "2024-12-17T22:18:27.434Z",
+		dateModified: "2024-12-17T22:18:27.434Z",
+		author: { email: "admin@tawtaw.site" },
+	},
+	{
+		name: "Winter Holiday Exclusive",
+		image:
+			"https://cdn.pixabay.com/photo/2023/12/01/15/16/red-fruits-8423880_960_720.jpg",
+		excerpt:
+			"This holiday season, indulge in our exclusive Winter Bliss Smoothie & Fruit Experience, available only to our select customers. Choose from cozy, seasonal flavors like Spiced Apple Cinnamon, Cranberry Orange Glow, and Vanilla Chai Bliss, paired with beautifully arranged fruit platters featuring seasonal delights like persimmons, pomegranate arils, and candied citrus slices.",
+		description: {
+			document: [
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "What We Offer",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Exclusive Packages",
+										},
+										{
+											text: "\nCurated experiences tailored to your holiday needs.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Premium Quality",
+										},
+										{
+											text: "\nHandpicked items and top-notch services to ensure satisfaction.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Features",
+						},
+					],
+				},
+				{
+					type: "ordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Seasonal Delights",
+										},
+										{
+											text: "\nIndulge in limited-edition treats and products.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Customizable Options",
+										},
+										{
+											text: "\nPersonalize your package for a unique touch.",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											bold: true,
+											text: "Effortless Booking",
+										},
+										{
+											text: "\nSimple steps to secure your holiday experience.",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 4,
+					children: [
+						{
+							text: "Why Choose Us?",
+						},
+					],
+				},
+				{
+					type: "unordered-list",
+					children: [
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Exceptional customer support",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Unique, seasonal offerings",
+										},
+									],
+								},
+							],
+						},
+						{
+							type: "list-item",
+							children: [
+								{
+									type: "list-item-content",
+									children: [
+										{
+											text: "Guaranteed memorable experiences",
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "The winter holidays are a time of magic, joy, and togetherness. As the snow blankets the world in pristine white and the air fills with the scent of pine and cinnamon, there’s no better time to create memories that will last a lifetime. That’s why we’re excited to introduce our ",
+						},
+						{
+							bold: true,
+							text: "Winter Holiday Exclusive",
+						},
+						{
+							text: " – a curated service designed to make this season unforgettable for you and your loved ones.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Entertainment and Activities",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Make your event truly special with our curated entertainment options. Live music, carolers, photo booths, or even a visit from Santa – we’ve got it all. We can also organize interactive activities like gingerbread house decorating, holiday-themed games, and more.",
+						},
+					],
+				},
+				{
+					type: "heading",
+					level: 3,
+					children: [
+						{
+							text: "Book Your Winter Holiday Exclusive Today",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Spaces are limited, and the holidays are just around the corner. Don’t miss the opportunity to make this season extraordinary. Contact us today to reserve your spot and let the celebration begin!",
+						},
+					],
+				},
+				{
+					type: "paragraph",
+					children: [
+						{
+							text: "Let us make your holidays unforgettable!",
+							italic: true,
+						},
+					],
+				},
+			],
+		},
+		price: 199999,
+		durationInHours: "6.00",
+		buisnessHourOpen: "09:00:00",
+		buisnessHourClosed: "18:00:00",
+		buisnessDays: [0, 1, 2, 3, 4, 5, 6],
+		status: "PRIVATE",
+		addons: [],
+		employees: [],
+		locations: [
+			{
+				address: "n/a",
+			},
+		],
+		coupons: [],
+		categories: [
+			{
+				name: "pomes",
+			},
+			{
+				name: "citrus",
+			},
+		],
+		tags: [
+			{
+				name: "red",
+			},
+			{
+				name: "blue",
+			},
+			{
+				name: "green",
+			},
+			{
+				name: "white",
+			},
+		],
+		dateCreated: "2024-12-18T22:19:53.231Z",
+		dateModified: "2024-12-18T22:19:53.231Z",
+		author: { email: "admin@tawtaw.site" },
 	},
 ]
 
@@ -8927,8 +9932,8 @@ export const tags_seedjson: TagCreateInput[] = [
 export const events_seedjson: SeedEvent[] = [
 	{
 		summary: "Citrus Yoga Retreat",
-		start: dateAdjuster(dateNow, { days: 5}),
-		end: dateAdjuster(dateNow, { days: 5}),
+		start: dateAdjuster(dateNow, { days: 5 }),
+		end: dateAdjuster(dateNow, { days: 5 }),
 		price: 100,
 		seats: 20,
 		image:
@@ -9113,11 +10118,12 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-10T20:15:17.720Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 2,
 	},
 	{
 		summary: "Berrylicious Smoothie Workshop",
-		start: dateAdjuster(dateNow, { days: 10}),
-		end: dateAdjuster(dateNow, { days: 10}),
+		start: dateAdjuster(dateNow, { days: 10 }),
+		end: dateAdjuster(dateNow, { days: 10 }),
 		price: 100,
 		seats: 9999,
 		image:
@@ -9286,15 +10292,16 @@ export const events_seedjson: SeedEvent[] = [
 		},
 		hosts: [],
 		cohosts: [],
-		dateCreated: dateAdjuster(dateNow, { months: 1}),
-		dateModified: dateAdjuster(dateNow, { months: 1}),
+		dateCreated: dateAdjuster(dateNow, { months: 1 }),
+		dateModified: dateAdjuster(dateNow, { months: 1 }),
 		categories: [],
 		tags: [],
+		// tixToOrder: 3,
 	},
 	{
 		summary: "Apple Harvest Festival",
-		start: dateAdjuster(dateNow, { days: 15}),
-		end: dateAdjuster(dateNow, { days: 15}),
+		start: dateAdjuster(dateNow, { days: 15 }),
+		end: dateAdjuster(dateNow, { days: 15 }),
 		price: 100,
 		seats: 20,
 		image:
@@ -9465,11 +10472,12 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-10T20:15:17.714Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 1,
 	},
 	{
 		summary: "Watermelon Summer Bash",
-		start: dateAdjuster(dateNow, { months: 1}),
-		end: dateAdjuster(dateNow, { months: 1}),
+		start: dateAdjuster(dateNow, { months: 1 }),
+		end: dateAdjuster(dateNow, { months: 1 }),
 		price: 100,
 		seats: 20,
 		image:
@@ -9640,11 +10648,12 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-10T20:15:17.725Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 4,
 	},
 	{
 		summary: "Tropical Fruit Tasting Tour",
-		start: dateAdjuster(dateNow, { months: 1, days: 5}),
-		end: dateAdjuster(dateNow, { months: 1, days: 5}),
+		start: dateAdjuster(dateNow, { months: 1, days: 5 }),
+		end: dateAdjuster(dateNow, { months: 1, days: 5 }),
 		price: 100,
 		seats: 20,
 		image:
@@ -9833,11 +10842,12 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-10T20:15:17.721Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 1,
 	},
 	{
 		summary: "PAST: Fruit Through the Ages",
-		start: dateAdjuster(dateNow, { days: 1}),
-		end: dateAdjuster(dateNow, { days: 1}),
+		start: dateAdjuster(dateNow, { days: 1 }),
+		end: dateAdjuster(dateNow, { days: 1 }),
 		price: 0,
 		seats: 100,
 		image:
@@ -10326,11 +11336,12 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-20T22:50:57.604Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 2,
 	},
 	{
 		summary: "Banana Bread Bakeoff",
-		start: dateAdjuster(dateNow, { days: 3}),
-		end: dateAdjuster(dateNow, { days: 3}),
+		start: dateAdjuster(dateNow, { days: 3 }),
+		end: dateAdjuster(dateNow, { days: 3 }),
 		price: 0,
 		seats: 300,
 		image:
@@ -10489,6 +11500,7 @@ export const events_seedjson: SeedEvent[] = [
 		dateModified: "2025-01-18T16:37:59.721Z",
 		categories: [],
 		tags: [],
+		// tixToOrder: 3,
 	},
 ]
 // export const events_seedjson: SeedEvents[] = [

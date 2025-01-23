@@ -6,11 +6,12 @@ import { List } from "@components/elements/List"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
 import Flex from "@components/layouts/Flex"
+import { Grid } from "@components/layouts/Grid"
 import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { Addon } from "@ks/types"
 import fetchAddon from "@lib/fetchdata/fetchAddon"
 import {
-  layout_breakout,
+	layout_breakout,
 	layout_wide,
 	page_content,
 	page_layout,
@@ -25,8 +26,8 @@ export async function generateMetadata(
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const { id } = await params
-  const session = await getServerSession(nextAuthOptions)
-	const { addon, error } = await fetchAddon({id, session, query: QUERY})
+	const session = await getServerSession(nextAuthOptions)
+	const { addon, error } = await fetchAddon({ id, session, query: QUERY })
 
 	return {
 		title: addon?.name + " | " + envs.SITE_TITLE,
@@ -56,11 +57,14 @@ export default async function AddonByIdPage({ params, searchParams }: Props) {
 
 	return (
 		<main className={page_layout}>
-      <header style={{marginTop: '5rem', display: 'grid'}}>
-        <Flex className={layout_breakout} alignItems={'center'}>
-          <h1 style={{width: '50%'}}> Addon: {name} </h1>
-          <ImageDynamic photoIn={image} />
-        </Flex>
+			<header style={{ marginTop: "5rem", display: "grid" }}>
+				<Grid className={layout_breakout} layout={'1_1'}>
+					<div>
+						<h1> {name} </h1>
+						<p className="sub-text">add-on</p>
+					</div>
+					<ImageDynamic photoIn={image} />
+				</Grid>
 			</header>
 			<div className={page_content}>
 				<section className={layout_wide}>
@@ -73,7 +77,7 @@ export default async function AddonByIdPage({ params, searchParams }: Props) {
 						<Link href={`/services#addons`}> Other Addons </Link>
 					</p>
 				</section>
-        <hr />
+				<hr />
 				<section className={layout_wide}>
 					<h2> Related Services </h2>
 					<List>
@@ -84,7 +88,7 @@ export default async function AddonByIdPage({ params, searchParams }: Props) {
 						))}
 					</List>
 
-					<Link href={`/bookings`} className="button large">
+					<Link href={`/book-a-service`} className="button large">
 						{" "}
 						Book a Service{" "}
 					</Link>

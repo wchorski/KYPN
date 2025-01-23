@@ -10,6 +10,7 @@ import type { Permission } from "./schemas/fields"
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
 import type {
+  AddonCreateInput,
 	BookingCreateInput,
 	EventCreateInput,
 	Lists,
@@ -413,6 +414,27 @@ export type SeedPost = PostCreateInput & {
 	}
 }
 
+export type SeedAddons = AddonCreateInput & {
+  products?:{
+    name:string
+  }[]
+  subscriptionPlans?:{
+    name:string
+  }[]
+  categories?:{
+    name:string
+  }[]
+  tags?:{
+    name:string
+  }[]
+  services?:{
+    name:string
+  }[]
+  author?: {
+    email:string
+  }
+}
+
 export type SeedBookings = BookingCreateInput & {
 	service?: {
 		name: string
@@ -455,6 +477,7 @@ export type SeedEvent = EventCreateInput & {
 }
 
 export type SeedService = ServiceCreateInput & {
+  
 	description?: {
 		document: any
 	}
@@ -467,8 +490,17 @@ export type SeedService = ServiceCreateInput & {
 	author?: {
 		email: string
 	}
+	locations?: {
+		address: string
+	}[]
 	addons?: {
 		slug: string
+	}[]
+	employees?: {
+		email: string
+	}[]
+	coupons?: {
+		name: string
 	}[]
 }
 //** Seed mods END*/

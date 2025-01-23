@@ -18,7 +18,7 @@ import {
 	bookings_seedjson,
 	events_seedjson,
 } from "./seed_data"
-import { Announcement} from "../types"
+import { Announcement } from "../types"
 import { dateAdjuster } from "../../lib/dateCheck"
 
 const seedUsers = async (context: Context) => {
@@ -47,6 +47,7 @@ const seedUsers = async (context: Context) => {
 	})
 }
 
+// TODO change this as same as createTicketOrders so then I can put them possibly into the past and such
 const seedBookings = async (context: Context) => {
 	const { db: sudoDB } = context.sudo()
 	const itemsAlreadyInDatabase = await sudoDB["Booking"].findMany({
@@ -312,15 +313,18 @@ const seedEvents = async (context: Context) => {
 			description: item?.description?.document,
 			hosts: { connect: item.hosts?.map((user) => ({ email: user.email })) },
 			cohosts: {
-        connect: item.cohosts?.map((user) => ({ email: user.email })),
+				connect: item.cohosts?.map((user) => ({ email: user.email })),
 			},
-      categories: { connect: item.categories?.map((cat) => ({ name: cat.name })) },
-      tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
+			categories: {
+				connect: item.categories?.map((cat) => ({ name: cat.name })),
+			},
+			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
 		})),
 	})
 
 	await seedTicketOrders(createdItems, context)
 }
+
 const seedLocations = async (context: Context) => {
 	const { db: sudoDB } = context.sudo()
 	const seedJson = locations_seed
@@ -348,63 +352,135 @@ const seedLocations = async (context: Context) => {
 	await sudoDB[schemaType].createMany({
 		data: itemsToCreate.map((item) => ({
 			...item,
-      categories: { connect: item.categories?.map((cat:{name:string}) => ({ name: cat.name })) },
-      tags: { connect: item.tags?.map((tag:{name:string}) => ({ name: tag.name })) },
+			categories: {
+				connect: item.categories?.map((cat: { name: string }) => ({
+					name: cat.name,
+				})),
+			},
+			tags: {
+				connect: item.tags?.map((tag: { name: string }) => ({
+					name: tag.name,
+				})),
+			},
 		})),
 	})
 }
 
 const seedServices = async (context: Context) => {
-	const { db } = context.sudo()
-
-	const objectsAlreadyInDatabase = await db.Service.findMany({
+	const { db: sudoDB } = context.sudo()
+	const seedJson = services_seed
+	const schemaType = "Service"
+	const compairKey = "name"
+	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
 		where: {
-			name: { in: services_seed.map((obj) => obj.name) as string[] },
+			[compairKey]: {
+				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+			},
 		},
 	})
-	const objsToCreate = services_seed.filter(
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
+
+	const itemsToCreate = seedJson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some(
+				(prevItem) => prevItem[compairKey] === item[compairKey]
+			)
 	)
 
-	objsToCreate.map((obj) => {
-		console.log(" + Service: " + obj.name)
+	itemsToCreate.map((item) => {
+		console.log(` + ${schemaType}: ` + item[compairKey])
 	})
 
-	await db.Service.createMany({
-		data: objsToCreate.map((obj) => ({
-			...obj,
-			//? makes it easier to copy and paste res json from Apollo Sandbox
-			description: obj?.description?.document,
-			// categories: { connect: p?.categories },
-			// tags: { connect: p?.tags },
-			addons: { connect: obj?.addons },
+	await sudoDB[schemaType].createMany({
+		data: itemsToCreate.map((item) => ({
+			...item,
+
+			description: item?.description?.document,
+			locations: {
+				connect: item.locations?.map((loc) => ({ address: loc.address })),
+			},
+			addons: { connect: item.addons?.map((ad) => ({ slug: ad.slug })) },
+			employees: { connect: item.employees?.map((user) => ({ email: user.email })) },
+			coupons: { connect: item.coupons?.map((coup) => ({ name: coup.name })) },
+			author: { connect: { email: item.author?.email } },
+			categories: {
+				connect: item.categories?.map((cat) => ({ name: cat.name })),
+			},
+			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
+		})),
+	})
+
+	// TODO
+	// await seedBookings(createdItems, context)
+}
+// const seedServices = async (context: Context) => {
+// 	const { db } = context.sudo()
+
+// 	const objectsAlreadyInDatabase = await db.Service.findMany({
+// 		where: {
+// 			name: { in: services_seed.map((obj) => obj.name) as string[] },
+// 		},
+// 	})
+// 	const objsToCreate = services_seed.filter(
+// 		(seedObj) =>
+// 			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
+// 	)
+
+// 	objsToCreate.map((obj) => {
+// 		console.log(" + Service: " + obj.name)
+// 	})
+
+// await db.Service.createMany({
+// 	data: objsToCreate.map((obj) => ({
+// 		...obj,
+// 		//? makes it easier to copy and paste res json from Apollo Sandbox
+// 		description: obj?.description?.document,
+// 		// categories: { connect: p?.categories },
+// 		// tags: { connect: p?.tags },
+// 		addons: { connect: obj?.addons },
+// 	})),
+// })
+// }
+
+const seedAddons = async (context: Context) => {
+	const { db: sudoDB } = context.sudo()
+	const seedJson = addons_seed
+	const schemaType = "Service"
+	const compairKey = "name"
+	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
+		where: {
+			[compairKey]: {
+				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+			},
+		},
+	})
+
+	const itemsToCreate = seedJson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some(
+				(prevItem) => prevItem[compairKey] === item[compairKey]
+			)
+	)
+
+	itemsToCreate.map((item) => {
+		console.log(` + ${schemaType}: ` + item[compairKey])
+	})
+
+	await sudoDB[schemaType].createMany({
+		data: itemsToCreate.map((item) => ({
+			...item,
+
+			products: { connect: item.products?.map((prod) => ({ name: prod.name })) },
+			subscriptionPlans: { connect: item.subscriptionPlans?.map((sub) => ({ name: sub.name })) },
+			categories: {
+				connect: item.categories?.map((cat) => ({ name: cat.name })),
+			},
+			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
+			services: { connect: item.services?.map((serv) => ({ name: serv.name })) },
+			author: { connect: { email: item.author?.email } },
 		})),
 	})
 }
 
-const seedAddons = async (context: Context) => {
-	const { db } = context.sudo()
-
-	const objectsAlreadyInDatabase = await db.Addon.findMany({
-		where: {
-			slug: { in: addons_seed.map((obj) => obj.slug) as string[] },
-		},
-	})
-
-	const objsToCreate = addons_seed.filter(
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((obj) => obj.slug === seedObj.slug)
-	)
-
-	objsToCreate.map((obj) => {
-		console.log(" + Addon: " + obj.slug)
-	})
-
-	await db.Addon.createMany({
-		data: objsToCreate,
-	})
-}
 
 const seedPages = async (context: Context) => {
 	const { db } = context.sudo()
@@ -467,53 +543,55 @@ const seedAnnouncements = async (context: Context) => {
 }
 
 async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
-  // throw new Error('🐸 seedTicketOrders find out how to do this')
+	// throw new Error('🐸 seedTicketOrders find out how to do this')
 	const { db: sudoDB } = context.sudo()
 
 	const fakeEmail = "admin@tawtaw.site"
 	const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
-  // todo hook this into `tixToOrder`. not really worth it to figure out rn
-  const tixQuantity = 2
+	// todo hook this into `tixToOrder`. not really worth it to figure out rn
+	const tixQuantity = 2
 
-  await Promise.all(events.map(async (event) => {
+	await Promise.all(
+		events.map(async (event) => {
+			const tickets: TicketCreateInput[] = Array.from(
+				{ length: tixQuantity },
+				(_, index) => ({
+					event: { connect: { id: event.id } },
+					holder: { connect: { email: "admin@tawtaw.site" } },
+					email: "admin@tawtaw.site",
+				})
+			)
 
-    const tickets: TicketCreateInput[] = Array.from(
-      { length: tixQuantity },
-      (_, index) => ({
-        event: { connect: { id: event.id } },
-        holder: { connect: { email: "admin@tawtaw.site" } },
-        email: "admin@tawtaw.site",
-      })
-    )
-  
-    const order = await sudoDB.Order.createOne({
-      // const order = await context.withSession(session).db.Order.createOne({
-      data: {
-        total: (event.price || 0) * tixQuantity,
-        // stripeCheckoutSessionId: null,
-        // stripePaymentIntent: null,
-        email: fakeEmail,
-        status: orderStatuses[0],
-        ticketItems: { create: tickets },
-        user: { connect: { email: fakeEmail } },
-      },
-    })
+			const order = await sudoDB.Order.createOne({
+				// const order = await context.withSession(session).db.Order.createOne({
+				data: {
+					total: (event.price || 0) * tixQuantity,
+					// stripeCheckoutSessionId: null,
+					// stripePaymentIntent: null,
+					email: fakeEmail,
+					status: orderStatuses[0],
+					ticketItems: { create: tickets },
+					user: { connect: { email: fakeEmail } },
+				},
+			})
 
-    //? dev cheat to simulate even that becomes a past event because tickets are not allowed to be create on past events
-    if(event.summary.startsWith('PAST: ')){
-      await sudoDB.Event.updateOne({
-        where: { id: event.id},
-        data: {
-          start: dateAdjuster(event.start, {months: -1}),
-          end: dateAdjuster(event.end, {months: -1}),
-          status: "PAST"
-        }
-      })
-    }
+			//? dev cheat to simulate even that becomes a past event because tickets are not allowed to be create on past events
+			if (event.summary.startsWith("PAST: ")) {
+				await sudoDB.Event.updateOne({
+					where: { id: event.id },
+					data: {
+						start: dateAdjuster(event.start, { months: -1 }),
+						end: dateAdjuster(event.end, { months: -1 }),
+						status: "PAST",
+					},
+				})
+			}
 
-    console.log(`+ Ticket Ordered for Event: ${event.summary}, total: ${order.total}`)
-  }))
-  
+			console.log(
+				` + Ticket Ordered for Event: ${event.summary}, total: ${order.total}`
+			)
+		})
+	)
 }
 
 // const seedProductImages = async (context: Context) => {
@@ -568,3 +646,115 @@ export const seedDatabase = async (context: Context) => {
 	await seedEvents(context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }
+
+const QUERY_EVENTS_SEED = `
+  summary
+  start
+  end
+  price
+  seats
+  image
+  excerpt
+  description {
+    document
+  }
+  status
+  location {
+    name
+  }
+  hosts {
+    email
+  }
+  cohosts {
+    email
+  }
+  dateCreated
+  dateModified
+  categories {
+    name
+  }
+  tags {
+    name
+  }
+`
+const QUERY_SERVICES_SEED = `
+  name
+  image
+  excerpt
+  description {
+    document
+  }
+  price
+  durationInHours
+  buisnessHourOpen
+  buisnessHourClosed
+  buisnessDays
+  status
+  addons {
+    name
+  }
+  employees {
+    email
+  }
+  locations {
+    address
+  }
+  coupons {
+    name
+  }
+  categories {
+    name
+  }
+  tags {
+    name
+  }
+  dateCreated
+  dateModified
+  author {
+    email
+  }
+`
+
+
+const QUERY_ADDONS_SEED = `
+  name
+  slug
+  image
+  excerpt
+  price
+  status
+  author {
+    email
+  }
+  services {
+    name
+  }
+  products {
+    name
+  }
+  subscriptionPlans {
+    name
+  }
+  categories {
+    name
+  }
+  tags {
+    name
+  }
+  dateCreated
+  dateModified
+`
+
+const QUERY_LOCATIONS_SEED = `
+  name
+  address
+  rooms
+  status
+  notes
+  tags {
+    name
+  }
+  categories {
+    name
+  }
+`
