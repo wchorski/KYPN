@@ -1,0 +1,30 @@
+ul.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-block: var(--space-m);
+  padding-inline: 0;
+  list-style: none;
+}
+
+.link {
+  background-color: var(--c-txt-bg);
+  /* color: var(--c-txt-light); */
+  text-decoration: none;
+  border: solid 1px transparent;
+
+  border-radius: var(--br-sharp);
+  padding: 0 .3em;
+  font-size: .7rem;
+  transition: all .3s;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.active, .active:hover{
+  background-color: transparent;
+  color: var(--c-primary);
+  border: solid 1px var(--c-primary);
+}

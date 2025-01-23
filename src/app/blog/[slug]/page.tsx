@@ -197,7 +197,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
 						<Flex alignItems={"center"}>
 							<StatusBadge type={"post"} status={status} />
-							{(author?.email === session?.user.email ||
+							{(author?.id === session?.itemId ||
 								session?.data?.role?.canManagePosts) && (
 								<IconLink
 									icon={"edit"}

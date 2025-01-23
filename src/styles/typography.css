@@ -57,6 +57,13 @@ h6 {
 :is(h1,h2,h3,h4,h5,h6):has(+ hr) {
   margin-bottom: 0;
 }
+:is(h1,h2,h3,h4,h5,h6):has(+ .sub-text) {
+  margin-bottom: var(--space-s);
+}
+
+:is(h1,h2,h3,h4,h5,h6) + .sub-text {
+  margin-bottom: var(--space-ml);
+}
 
 p, ul, ol {
   margin-top: 0;

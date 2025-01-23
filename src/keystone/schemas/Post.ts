@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core"
+import { group, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import { allowAll } from "@keystone-6/core/access"
 import {
@@ -33,20 +33,21 @@ export const Post: Lists.Post = list({
 		hideCreate: (args) => !permissions.canCreatePosts(args),
 		hideDelete: (args) => !permissions.canCreatePosts(args),
 		// isHidden: (args) => !permissions.canManagePosts(args),
-    itemView: {
-      defaultFieldMode: ({session, context, item}) => {
-        if(permissions.canManagePosts({session, context, item})) return 'edit'
-        if(session.itemId === item.authorId) return 'edit'
-        return 'read'
-      },
-    },
+		itemView: {
+			defaultFieldMode: ({ session, context, item }) => {
+				if (permissions.canManagePosts({ session, context, item }))
+					return "edit"
+				if (session.itemId === item.authorId) return "edit"
+				return "read"
+			},
+		},
 		listView: {
-      // todo how to hide list items if `session.itemId` === `item.authorId`
-      // defaultFieldMode: ({session, context}) => {
-      //   // if(permissions.canManagePosts({session, context})) return 'read'
-      //   // if(session.itemId === item.authorId) return 'edit'
-      //   return 'hidden'
-      // },
+			// todo how to hide list items if `session.itemId` === `item.authorId`
+			// defaultFieldMode: ({session, context}) => {
+			//   // if(permissions.canManagePosts({session, context})) return 'read'
+			//   // if(session.itemId === item.authorId) return 'edit'
+			//   return 'hidden'
+			// },
 			initialColumns: [
 				"title",
 				"status",
@@ -74,8 +75,6 @@ export const Post: Lists.Post = list({
 					"Warning! Changing the slug will break links that were previously shared",
 			},
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },
@@ -174,13 +173,22 @@ export const Post: Lists.Post = list({
 			},
 			many: true,
 		}),
-		categories: relationship({
-			ref: "Category.posts",
-			many: true,
-		}),
-		tags: relationship({
-			ref: "Tag.posts",
-			many: true,
+		...group({
+			label: "Metadata",
+			// description: 'Group description',
+
+			fields: {
+				categories: relationship({
+					ref: "Category.posts",
+					many: true,
+				}),
+				tags: relationship({
+					ref: "Tag.posts",
+					many: true,
+				}),
+				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
+				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+			},
 		}),
 	},
 	hooks: {

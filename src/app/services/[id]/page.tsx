@@ -21,6 +21,9 @@ import { notFound } from "next/navigation"
 import { Grid } from "@components/layouts/Grid"
 import Flex from "@components/layouts/Flex"
 import { ImageBlock } from "@components/blocks/ImageBlock"
+import { StatusBadge } from "@components/StatusBadge"
+import { IconLink } from "@components/elements/IconLink"
+import { CategoriesList } from "@components/menus/CategoriesList"
 
 export async function generateMetadata(
 	{ params, searchParams }: Props,
@@ -92,6 +95,8 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 		locations,
 		categories,
 		tags,
+		author,
+		status,
 	} = service
 
 	return (
@@ -99,15 +104,15 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 			<Grid
 				layout={"1_2"}
 				alignContent={"start"}
-				style={{ marginTop: "var(--space-xxl)" }}
+				style={{ marginTop: "var(--space-xxl)", gridColumn: "layout_wide" }}
 				gap={"xl"}
 			>
-				<header>
+				<header style={{ position: "sticky", top: "var(--space-xxl)" }}>
 					<ImageBlock
 						imageSrc={image}
 						alt={`Featured Image for ${name} Service`}
 						isCaption={false}
-            isPriority={true}
+						isPriority={true}
 					/>
 
 					<h1> {name} </h1>
@@ -118,6 +123,26 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 					>
 						Book this Service
 					</Link>
+
+					{categories.length > 0 && <CategoriesList categories={categories} />}
+
+					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
+						<Card
+							direction={"row"}
+							gap={"var(--space-m)"}
+							verticleAlign={"center"}
+						>
+							<StatusBadge type={"service"} status={status} />
+							{(author?.id === session?.itemId ||
+								session?.data?.role?.canManagePosts) && (
+								<IconLink
+									icon={"edit"}
+									href={envs.BACKEND_URL + `/services/${id}`}
+									label={"edit"}
+								/>
+							)}
+						</Card>
+					)}
 				</header>
 
 				<div className={page_content}>
@@ -156,20 +181,36 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 					</Card>
 				</div>
 			</Grid>
-			<footer className={layout_site}>
-				{addons.length > 0 && (
-					<>
-						<h2 id="addons"> Add-Ons </h2>
-						<p> A list of add-ons available for this package </p>
-						<ul>
-							{addons?.map((ad) => (
-								<li key={ad.id}>
-									<Link href={`/addons/${ad.id}`}> {ad.name}</Link>
-								</li>
-							))}
-						</ul>
-					</>
-				)}
+			<footer className={layout_wide}>
+				<hr />
+				<Flex>
+					{addons.length > 0 && (
+						<Card>
+							<h2 id="addons"> Add-Ons </h2>
+							<p className="sub-text">available for this package</p>
+							<ul>
+								{addons?.map((ad) => (
+									<li key={ad.id}>
+										<Link href={`/addons/${ad.id}`}> {ad.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Card>
+					)}
+					{addons.length > 0 && (
+						<Card>
+							<h2 id="locations"> Locations </h2>
+							<p className="sub-text">available for this package</p>
+							<ul>
+								{locations?.map((item) => (
+									<li key={item.id}>
+										<Link href={`/locations/${item.id}`}> {item.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Card>
+					)}
+				</Flex>
 			</footer>
 		</main>
 	)
@@ -178,6 +219,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 const QUERY = `
   id
   name
+  status
   description {
     document
   } 
@@ -194,6 +236,10 @@ const QUERY = `
   locations {
     id
     name
+  }
+  author {
+    id
+    email
   }
   categories {
     id

@@ -89,7 +89,7 @@ export function Grid({
 	// todo trying global instead of module
 	// const stylesArr = [styleModule.section, styleModule[`grid_${layout}`] ]
 	const inlineStyles = {
-		"--col-width": colWidth,
+    "--col-width": colWidth,
 		alignItems: verticalAlign,
 		justifyItems: horizontalAlign,
 		gap: gap ? `var(--space-${gap})` : "0",

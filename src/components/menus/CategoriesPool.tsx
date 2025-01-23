@@ -1,5 +1,5 @@
 import Link from "next/link"
-import styles from '@styles/categories.module.scss'
+import styles from '@styles/categories.module.css'
 import fetchCategories from "@lib/fetchdata/fetchCats"
 import { Category } from "@ks/types"
 

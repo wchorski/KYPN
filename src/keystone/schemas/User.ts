@@ -158,6 +158,7 @@ export const User: Lists.User = list({
 		privatePagesAccess: relationship({ ref: "Page.privateAccess", many: true }),
 		privatePostsAccess: relationship({ ref: "Post.privateAccess", many: true }),
     servicesProvided: relationship({ ref: 'Service.employees', many: true }),
+    servicesAuthored: relationship({ ref: 'Service.author', many: true }),
     bookings: relationship({ ref: 'Booking.customer', many: true }),
     gigs: relationship({ ref: 'Booking.employees', many: true }),
     gig_requests: relationship({ ref: 'Booking.employee_requests', many: true }),

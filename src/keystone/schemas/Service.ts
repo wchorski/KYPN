@@ -1,4 +1,4 @@
-import { graphql, list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 // @ts-ignore
 import type { Lists } from ".keystone/types"
 import { allowAll } from "@keystone-6/core/access"
@@ -18,7 +18,7 @@ import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 
 export const Service: Lists.Service = list({
-  access: allowAll,
+	access: allowAll,
 	// access: {
 	// 	filter: {
 	// 		query: rules.canViewServices,
@@ -164,18 +164,42 @@ export const Service: Lists.Service = list({
 		employees: relationship({ ref: "User.servicesProvided", many: true }),
 		locations: relationship({ ref: "Location.services", many: true }),
 		bookings: relationship({ ref: "Booking.service", many: true }),
-		coupons: relationship({ ref: "Coupon.services", many: true, ui:{ description: 'Coupons that are allowed to apply to this item during checkout'}  }),
-
-		categories: relationship({
-			ref: "Category.services",
+		coupons: relationship({
+			ref: "Coupon.services",
 			many: true,
+			ui: {
+				description:
+					"Coupons that are allowed to apply to this item during checkout",
+			},
 		}),
+		author: relationship({
+			ref: "User.servicesAuthored",
+			ui: {
+				displayMode: "cards",
+				cardFields: ["name", "email"],
+				// inlineEdit: { fields: ["name", "email"] },
+				linkToItem: true,
+				inlineConnect: true,
+			},
+			many: false,
+		}),
+		...group({
+			label: "Metadata",
+			// description: 'Group description',
 
-		tags: relationship({
-			ref: "Tag.services",
-			many: true,
+			fields: {
+				categories: relationship({
+					ref: "Category.services",
+					many: true,
+				}),
+
+				tags: relationship({
+					ref: "Tag.services",
+					many: true,
+				}),
+				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
+				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+			},
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 	},
 })

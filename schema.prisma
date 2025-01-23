@@ -34,6 +34,7 @@ model User {
   privatePagesAccess Page[]             @relation("Page_privateAccess")
   privatePostsAccess Post[]             @relation("Post_privateAccess")
   servicesProvided   Service[]          @relation("Service_employees")
+  servicesAuthored   Service[]          @relation("Service_author")
   bookings           Booking[]          @relation("Booking_customer")
   gigs               Booking[]          @relation("Booking_employees")
   gig_requests       Booking[]          @relation("Booking_employee_requests")
@@ -146,10 +147,14 @@ model Service {
   locations          Location[] @relation("Location_services")
   bookings           Booking[]  @relation("Booking_service")
   coupons            Coupon[]   @relation("Coupon_services")
+  author             User?      @relation("Service_author", fields: [authorId], references: [id])
+  authorId           String?    @map("author")
   categories         Category[] @relation("Category_services")
   tags               Tag[]      @relation("Service_tags")
   dateCreated        DateTime?  @default(now())
   dateModified       DateTime?  @default(now())
+
+  @@index([authorId])
 }
 
 model Location {
@@ -401,8 +406,6 @@ model Post {
   id             String     @id @default(cuid())
   title          String     @default("")
   slug           String     @unique @default("")
-  dateCreated    DateTime?  @default(now())
-  dateModified   DateTime?  @default(now())
   status         String?    @default("DRAFT")
   template       String?    @default("FULLWIDTH")
   pinned         Int?       @default(0)
@@ -415,6 +418,8 @@ model Post {
   privateAccess  User[]     @relation("Post_privateAccess")
   categories     Category[] @relation("Category_posts")
   tags           Tag[]      @relation("Post_tags")
+  dateCreated    DateTime?  @default(now())
+  dateModified   DateTime?  @default(now())
 
   @@index([authorId])
 }

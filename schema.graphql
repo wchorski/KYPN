@@ -28,6 +28,8 @@ type User {
   privatePostsAccessCount(where: PostWhereInput! = {}): Int
   servicesProvided(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesProvidedCount(where: ServiceWhereInput! = {}): Int
+  servicesAuthored(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
+  servicesAuthoredCount(where: ServiceWhereInput! = {}): Int
   bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
   bookingsCount(where: BookingWhereInput! = {}): Int
   gigs(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
@@ -91,6 +93,7 @@ input UserWhereInput {
   privatePagesAccess: PageManyRelationFilter
   privatePostsAccess: PostManyRelationFilter
   servicesProvided: ServiceManyRelationFilter
+  servicesAuthored: ServiceManyRelationFilter
   bookings: BookingManyRelationFilter
   gigs: BookingManyRelationFilter
   gig_requests: BookingManyRelationFilter
@@ -311,6 +314,7 @@ input UserUpdateInput {
   privatePagesAccess: PageRelateToManyForUpdateInput
   privatePostsAccess: PostRelateToManyForUpdateInput
   servicesProvided: ServiceRelateToManyForUpdateInput
+  servicesAuthored: ServiceRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   gigs: BookingRelateToManyForUpdateInput
   gig_requests: BookingRelateToManyForUpdateInput
@@ -457,6 +461,7 @@ input UserCreateInput {
   privatePagesAccess: PageRelateToManyForCreateInput
   privatePostsAccess: PostRelateToManyForCreateInput
   servicesProvided: ServiceRelateToManyForCreateInput
+  servicesAuthored: ServiceRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   gigs: BookingRelateToManyForCreateInput
   gig_requests: BookingRelateToManyForCreateInput
@@ -1025,6 +1030,7 @@ type Service {
   bookingsCount(where: BookingWhereInput! = {}): Int
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
   couponsCount(where: CouponWhereInput! = {}): Int
+  author: User
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -1060,6 +1066,7 @@ input ServiceWhereInput {
   locations: LocationManyRelationFilter
   bookings: BookingManyRelationFilter
   coupons: CouponManyRelationFilter
+  author: UserWhereInput
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
   dateCreated: DateTimeNullableFilter
@@ -1142,6 +1149,7 @@ input ServiceUpdateInput {
   locations: LocationRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
+  author: UserRelateToOneForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -1197,6 +1205,7 @@ input ServiceCreateInput {
   locations: LocationRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
+  author: UserRelateToOneForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   dateCreated: DateTime
@@ -2453,8 +2462,6 @@ type Post {
   id: ID!
   title: String
   slug: String
-  dateCreated: DateTime
-  dateModified: DateTime
   status: String
   template: String
   pinned: Int
@@ -2469,6 +2476,8 @@ type Post {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type Post_content_Document {
@@ -2487,8 +2496,6 @@ input PostWhereInput {
   id: IDFilter
   title: StringFilter
   slug: StringFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
   status: StringNullableFilter
   template: StringNullableFilter
   pinned: IntNullableFilter
@@ -2499,27 +2506,27 @@ input PostWhereInput {
   privateAccess: UserManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
+  dateCreated: DateTimeNullableFilter
+  dateModified: DateTimeNullableFilter
 }
 
 input PostOrderByInput {
   id: OrderDirection
   title: OrderDirection
   slug: OrderDirection
-  dateCreated: OrderDirection
-  dateModified: OrderDirection
   status: OrderDirection
   template: OrderDirection
   pinned: OrderDirection
   excerpt: OrderDirection
   featured_image: OrderDirection
   featured_video: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input PostUpdateInput {
   title: String
   slug: String
-  dateCreated: DateTime
-  dateModified: DateTime
   status: String
   template: String
   pinned: Int
@@ -2531,6 +2538,8 @@ input PostUpdateInput {
   privateAccess: UserRelateToManyForUpdateInput
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input PostUpdateArgs {
@@ -2541,8 +2550,6 @@ input PostUpdateArgs {
 input PostCreateInput {
   title: String
   slug: String
-  dateCreated: DateTime
-  dateModified: DateTime
   status: String
   template: String
   pinned: Int
@@ -2554,6 +2561,8 @@ input PostCreateInput {
   privateAccess: UserRelateToManyForCreateInput
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 type Event {
