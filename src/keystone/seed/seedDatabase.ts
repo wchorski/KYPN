@@ -18,278 +18,24 @@ import {
 	bookings_seedjson,
 	events_seedjson,
 } from "./seed_data"
-import { Announcement } from "../types"
+import { Announcement, Service } from "../types"
 import { dateAdjuster } from "../../lib/dateCheck"
 
-const seedUsers = async (context: Context) => {
-	const { db } = context.sudo()
-	const seedUsers = user_seeddata
-	const usersAlreadyInDatabase = await db.User.findMany({
-		where: {
-			email: {
-				in: seedUsers.map((user) => user.email) as string[],
-			},
-		},
-	})
-	const usersToCreate = seedUsers.filter(
-		(seedUser) =>
-			!usersAlreadyInDatabase.some(
-				(u: UserCreateInput) => u.email === seedUser.email
-			)
-	)
+import allDataJson from "./extracted/extData.json"
 
-	usersToCreate.map((obj) => {
-		console.log(" + USER: " + obj.name)
-	})
-
-	await db.User.createMany({
-		data: usersToCreate,
-	})
-}
-
-// TODO change this as same as createTicketOrders so then I can put them possibly into the past and such
-const seedBookings = async (context: Context) => {
+const seedSchemaItems = async (
+	schemaType: string,
+	compairKey: string,
+	seedJson: any[],
+	context: Context
+) => {
 	const { db: sudoDB } = context.sudo()
-	const itemsAlreadyInDatabase = await sudoDB["Booking"].findMany({
-		where: {
-			start: {
-				in: bookings_seedjson.flatMap((item) => item.start) as string[],
-			},
-		},
-	})
 
-	const itemsToCreate = bookings_seedjson.filter(
-		(item) =>
-			!itemsAlreadyInDatabase.some(
-				(prevItem) => prevItem.start.toISOString() === item.start
-			)
-	)
-
-	itemsToCreate.map((item) => {
-		console.log(" + Booking: " + item.name + " | " + item.service?.name)
-	})
-
-	await sudoDB["Booking"].createMany({
-		data: itemsToCreate.map((item) => ({
-			...item,
-			service: { connect: { name: item.service?.name } },
-			location: { connect: { name: item.location?.name } },
-			customer: { connect: { email: item.customer?.email } },
-			addons: { connect: item.addons?.map((adn) => ({ slug: adn.slug })) },
-			employees: {
-				connect: item.employees?.map((emp) => ({ email: emp.email })),
-			},
-		})),
-	})
-
-	// await db.Post.createMany({
-	// 	data: postsToCreate.map((obj) => ({
-	// 		...obj,
-	// 		//? makes it easier to copy and paste res json from Apollo Sandbox
-	// 		content: obj?.content?.document,
-	// 		categories: { connect: obj?.categories },
-	// 		tags: { connect: obj?.tags },
-	// 		author: { connect: obj?.author },
-	// 	})),
-	// })
-}
-
-// const seedAvail = async (context: Context) => {
-// 	const { db } = context.sudo()
-// 	const seedObjs: any[] = avail_seedjson
-// 	const objsAlreadyInDatabase = await db.Availability.findMany({
-// 		where: {
-// 			// @ts-ignore
-// 			start: { in: seedObjs.map((obj) => obj.start) },
-// 		},
-// 	})
-// 	const objsToCreate = seedObjs.filter(
-// 		(seedObj) =>
-// 			!objsAlreadyInDatabase.some((obj: any) => obj.start === seedObj.start)
-// 	)
-
-// 	objsToCreate.map((obj) => {
-// 		console.log(" + Avail: " + obj.start)
-// 	})
-
-// 	await db.Availability.createMany({
-// 		data: objsToCreate,
-// 	})
-// }
-
-const seedRoles = async (context: Context) => {
-	const { db } = context.sudo()
-
-	const seedRoles = roles_seedjson
-
-	const objsAlreadyInDatabase = await db.Role.findMany({
-		where: {
-			name: {
-				in: seedRoles.map((i) => i.name) as
-					| string
-					| readonly string[]
-					| null
-					| undefined,
-			},
-		},
-	})
-	const itemsToCreate = seedRoles.filter(
-		(seedRole) =>
-			!objsAlreadyInDatabase.some((u: any) => u.name === seedRole.name)
-	)
-
-	itemsToCreate.map((obj) => {
-		console.log(" + Role: " + obj.name)
-	})
-
-	await db.Role.createMany({
-		data: itemsToCreate,
-	})
-}
-
-// seed posts and connect with users
-const seedPosts = async (context: Context) => {
-	const { db } = context.sudo()
-	const postsAlreadyInDatabase = await db.Post.findMany({
-		where: {
-			slug: { in: posts_seedjson.map((post) => post.slug) as string[] },
-		},
-	})
-
-	const postsToCreate = posts_seedjson.filter(
-		//? makes it easier to copy and paste res json from Apollo Sandbox
-		// @ts-ignore
-		(seedPost) => !postsAlreadyInDatabase.some((p) => p.slug === seedPost.slug)
-	)
-
-	postsToCreate.map((obj) => {
-		console.log(" + Post: " + obj.slug)
-	})
-
-	await db.Post.createMany({
-		data: postsToCreate.map((obj) => ({
-			...obj,
-			//? makes it easier to copy and paste res json from Apollo Sandbox
-			content: obj?.content?.document,
-			categories: { connect: obj?.categories },
-			tags: { connect: obj?.tags },
-			author: { connect: obj?.author },
-		})),
-	})
-}
-
-const seedTags = async (context: Context) => {
-	const { db } = context.sudo()
-	const seedObjects = tags_seedjson
-	const objectsAlreadyInDatabase = await db.Tag.findMany({
-		where: {
-			name: {
-				in: seedObjects.map((obj) => obj.name) as
-					| string
-					| readonly string[]
-					| null
-					| undefined,
-			},
-		},
-	})
-	const objsToCreate = seedObjects.filter(
-		//@ts-ignore
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((dbObj) => dbObj.name === seedObj.name)
-	)
-
-	objsToCreate.map((obj) => {
-		console.log(" + Tag: " + obj.name)
-	})
-
-	await db.Tag.createMany({
-		data: objsToCreate.map((obj) => ({ ...obj })),
-	})
-}
-
-const seedCategories = async (context: Context) => {
-	const { db } = context.sudo()
-	const seedObjects = categories_seedjson
-	const objectsAlreadyInDatabase = await db.Category.findMany({
-		where: {
-			name: {
-				in: seedObjects.map((obj) => obj.name) as
-					| string
-					| readonly string[]
-					| null
-					| undefined,
-			},
-		},
-	})
-	const objsToCreate = seedObjects.filter(
-		//? makes it easier to copy and paste req json from Apollo Sandbox
-		//@ts-ignore
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((dbObj) => dbObj.name === seedObj.name)
-	)
-
-	objsToCreate.map((obj) => {
-		console.log(" + Category: " + obj.name)
-	})
-
-	await db.Category.createMany({
-		data: objsToCreate.map((obj) => ({ ...obj })),
-	})
-}
-
-// const seedProducts = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = products_seed;
-//   const objectsAlreadyInDatabase = await db.Product.findMany({
-//     where: {
-//       slug: { in: seedObjects.map(obj => obj.slug) },
-//     },
-//   })
-
-//   const objsToCreate = seedObjects.filter(
-//     //@ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
-//   );
-
-//   objsToCreate.map(obj => {
-//     console.log(" + Product: " + obj.slug)
-//   })
-
-//   await db.Product.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
-
-// const seedSubscriptions = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = subscriptionPlans_seedjson;
-//   const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
-//     where: {
-//       slug: { in: seedObjects.map(obj => obj.slug) },
-//     },
-//   });
-//   const objsToCreate = seedObjects.filter(
-//     seedObj => !objectsAlreadyInDatabase.some((p: any) => p.slug === seedObj.slug)
-//   );
-
-//   objsToCreate.map(obj => {
-//     console.log(" + SubPlan: " + obj.slug)
-//   })
-
-//   await db.SubscriptionPlan.createMany({
-//     data: objsToCreate.map(obj => ({ ...obj })),
-//   });
-// };
-
-//TODO use this as template for other seedITEMS. maybe DRY it up
-const seedEvents = async (context: Context) => {
-	const { db: sudoDB } = context.sudo()
-	const seedJson = events_seedjson
-	const schemaType = "Event"
-	const compairKey = "summary"
+	//@ts-ignore
 	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
 		where: {
 			[compairKey]: {
+				// @ts-ignore
 				in: seedJson.flatMap((item) => item[compairKey]) as string[],
 			},
 		},
@@ -298,247 +44,185 @@ const seedEvents = async (context: Context) => {
 	const itemsToCreate = seedJson.filter(
 		(item) =>
 			!itemsAlreadyInDatabase.some(
-				(prevItem) => prevItem[compairKey] === item[compairKey]
+				(prevItem: any) => prevItem[compairKey] === item[compairKey]
 			)
 	)
 
-	itemsToCreate.map((item) => {
-		console.log(` + ${schemaType}: ` + item[compairKey])
+	//? remove id as new database will create new ids
+	itemsToCreate.forEach((item) => {
+		delete item.id
 	})
 
+	//@ts-ignore
 	const createdItems = await sudoDB[schemaType].createMany({
 		data: itemsToCreate.map((item) => ({
 			...item,
-			location: { connect: { name: item.location?.name } },
-			description: item?.description?.document,
-			hosts: { connect: item.hosts?.map((user) => ({ email: user.email })) },
-			cohosts: {
-				connect: item.cohosts?.map((user) => ({ email: user.email })),
-			},
-			categories: {
-				connect: item.categories?.map((cat) => ({ name: cat.name })),
-			},
-			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
+
+			//? DOCUMENT field Type (rich text)
+			...(item.content ? { content: item.content.document } : {}),
+			...(item.description ? { description: item.description.document } : {}),
+			...(item.details ? { description: item.description.document } : {}),
+
+			//? relation TO ONE
+			...(item.password
+				? { password: item.email + process.env.SEED_PASSWORD_SECRET }
+				: {}),
+			...(item.role ? { role: { connect: { name: item.role.name } } } : {}),
+			...(item.author
+				? {
+						author: { connect: { email: item.author.email } },
+				  }
+				: {}),
+			...(item.location
+				? {
+						location: { connect: { address: item.location.address } },
+				  }
+				: {}),
+
+			//? relation TO MANY
+			...(item.locations
+				? {
+						locations: {
+							connect: item.locations?.map((field: any) => ({
+								address: field.address,
+							})),
+						},
+				  }
+				: {}),
+			...(item.coupons
+				? {
+						coupons: {
+							connect: item.coupons?.map((field: any) => ({
+								name: field.name,
+							})),
+						},
+				  }
+				: {}),
+			...(item.addons
+				? {
+						addons: {
+							connect: item.addons?.map((field: any) => ({
+								name: field.name,
+							})),
+						},
+				  }
+				: {}),
+			//? USERS Start
+			...(item.privateAccess
+				? {
+						privateAccess: {
+							connect: item.privateAccess?.map((field: any) => ({
+								email: field.email,
+							})),
+						},
+				  }
+				: {}),
+			...(item.employees
+				? {
+						employees: {
+							connect: item.employees?.map((field: any) => ({
+								email: field.email,
+							})),
+						},
+				  }
+				: {}),
+			...(item.hosts
+				? {
+						hosts: {
+							connect: item.hosts?.map((field: any) => ({
+								email: field.email,
+							})),
+						},
+				  }
+				: {}),
+			...(item.cohosts
+				? {
+						cohosts: {
+							connect: item.cohosts?.map((field: any) => ({
+								email: field.email,
+							})),
+						},
+				  }
+				: {}),
+			// USERS End
+			...(item.categories
+				? {
+						categories: {
+							connect: item.categories?.map((field: any) => ({
+								name: field.name,
+							})),
+						},
+				  }
+				: {}),
+			...(item.tags
+				? {
+						tags: {
+							connect: item.tags?.map((field: any) => ({ name: field.name })),
+						},
+				  }
+				: {}),
 		})),
 	})
 
-	await seedTicketOrders(createdItems, context)
-}
-
-const seedLocations = async (context: Context) => {
-	const { db: sudoDB } = context.sudo()
-	const seedJson = locations_seed
-	const schemaType = "Location"
-	const compairKey = "name"
-	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
-		where: {
-			[compairKey]: {
-				in: seedJson.flatMap((item) => item[compairKey]) as string[],
-			},
-		},
-	})
-
-	const itemsToCreate = seedJson.filter(
-		(item) =>
-			!itemsAlreadyInDatabase.some(
-				(prevItem) => prevItem[compairKey] === item[compairKey]
-			)
-	)
-
-	itemsToCreate.map((item) => {
+	createdItems.map((item: any) => {
 		console.log(` + ${schemaType}: ` + item[compairKey])
 	})
 
-	await sudoDB[schemaType].createMany({
-		data: itemsToCreate.map((item) => ({
-			...item,
-			categories: {
-				connect: item.categories?.map((cat: { name: string }) => ({
-					name: cat.name,
-				})),
-			},
-			tags: {
-				connect: item.tags?.map((tag: { name: string }) => ({
-					name: tag.name,
-				})),
-			},
-		})),
-	})
+  // TODO this automates bookings, but i'd rather just save each item individually to `json` and build one at time
+	if (schemaType === "Service") seedBookings(createdItems, context)
+  //? I must auto create tickets based off events because Event and Ticket have no `unique` fields
+  if (schemaType === "Event") await seedTicketOrders(createdItems, context)
 }
 
-const seedServices = async (context: Context) => {
+export const seedDatabase = async (context: Context) => {
+	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
+	await seedSchemaItems("Role", "name", allDataJson.roles, context)
+	await seedSchemaItems("User", "name", allDataJson.users, context)
+	await seedSchemaItems("Category", "name", allDataJson.categories, context)
+	await seedSchemaItems("Tag", "name", allDataJson.tags, context)
+	await seedSchemaItems("Page", "title", allDataJson.pages, context)
+	await seedSchemaItems("Post", "title", allDataJson.posts, context)
+	await seedSchemaItems(
+		"Announcement",
+		"link",
+		allDataJson.announcements,
+		context
+	)
+
+	await seedSchemaItems("Location", "address", allDataJson.locations, context)
+	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
+	await seedSchemaItems("Service", "name", allDataJson.services, context)
+
+	await seedSchemaItems("Event", "summary", allDataJson.events, context)
+
+	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
+}
+
+async function seedBookings(services: Lists.Service.Item[], context: Context) {
 	const { db: sudoDB } = context.sudo()
-	const seedJson = services_seed
-	const schemaType = "Service"
-	const compairKey = "name"
-	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
-		where: {
-			[compairKey]: {
-				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+
+  const fakeEmployees = [
+    // {email: "eddy@tawtaw.site"},
+    {email: "admin@tawtaw.site"},
+  ]
+
+  // TODO hook this into orders like how seedTicketOrders does it
+	const itemsCreated = await sudoDB.Booking.createMany({
+		data: services.map((item) => ({
+      start: "2024-11-13T00:29:07.546Z",
+      end: "2024-11-13T05:29:07.546Z",
+			service: { connect: { id: item.id } },
+			location: { connect: { address: allDataJson.locations[0].address } },
+			customer: { connect: { email: "admin@tawtaw.site" } },
+			addons: { connect: allDataJson.addons.map((adn) => ({ name: adn.name })) },
+			employees: {
+				connect: fakeEmployees.map((emp) => ({ email: emp.email })),
 			},
-		},
-	})
-
-	const itemsToCreate = seedJson.filter(
-		(item) =>
-			!itemsAlreadyInDatabase.some(
-				(prevItem) => prevItem[compairKey] === item[compairKey]
-			)
-	)
-
-	itemsToCreate.map((item) => {
-		console.log(` + ${schemaType}: ` + item[compairKey])
-	})
-
-	await sudoDB[schemaType].createMany({
-		data: itemsToCreate.map((item) => ({
-			...item,
-
-			description: item?.description?.document,
-			locations: {
-				connect: item.locations?.map((loc) => ({ address: loc.address })),
-			},
-			addons: { connect: item.addons?.map((ad) => ({ slug: ad.slug })) },
-			employees: { connect: item.employees?.map((user) => ({ email: user.email })) },
-			coupons: { connect: item.coupons?.map((coup) => ({ name: coup.name })) },
-			author: { connect: { email: item.author?.email } },
-			categories: {
-				connect: item.categories?.map((cat) => ({ name: cat.name })),
-			},
-			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
 		})),
 	})
 
-	// TODO
-	// await seedBookings(createdItems, context)
-}
-// const seedServices = async (context: Context) => {
-// 	const { db } = context.sudo()
-
-// 	const objectsAlreadyInDatabase = await db.Service.findMany({
-// 		where: {
-// 			name: { in: services_seed.map((obj) => obj.name) as string[] },
-// 		},
-// 	})
-// 	const objsToCreate = services_seed.filter(
-// 		(seedObj) =>
-// 			!objectsAlreadyInDatabase.some((obj) => obj.name === seedObj.name)
-// 	)
-
-// 	objsToCreate.map((obj) => {
-// 		console.log(" + Service: " + obj.name)
-// 	})
-
-// await db.Service.createMany({
-// 	data: objsToCreate.map((obj) => ({
-// 		...obj,
-// 		//? makes it easier to copy and paste res json from Apollo Sandbox
-// 		description: obj?.description?.document,
-// 		// categories: { connect: p?.categories },
-// 		// tags: { connect: p?.tags },
-// 		addons: { connect: obj?.addons },
-// 	})),
-// })
-// }
-
-const seedAddons = async (context: Context) => {
-	const { db: sudoDB } = context.sudo()
-	const seedJson = addons_seed
-	const schemaType = "Service"
-	const compairKey = "name"
-	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
-		where: {
-			[compairKey]: {
-				in: seedJson.flatMap((item) => item[compairKey]) as string[],
-			},
-		},
-	})
-
-	const itemsToCreate = seedJson.filter(
-		(item) =>
-			!itemsAlreadyInDatabase.some(
-				(prevItem) => prevItem[compairKey] === item[compairKey]
-			)
-	)
-
-	itemsToCreate.map((item) => {
-		console.log(` + ${schemaType}: ` + item[compairKey])
-	})
-
-	await sudoDB[schemaType].createMany({
-		data: itemsToCreate.map((item) => ({
-			...item,
-
-			products: { connect: item.products?.map((prod) => ({ name: prod.name })) },
-			subscriptionPlans: { connect: item.subscriptionPlans?.map((sub) => ({ name: sub.name })) },
-			categories: {
-				connect: item.categories?.map((cat) => ({ name: cat.name })),
-			},
-			tags: { connect: item.tags?.map((tag) => ({ name: tag.name })) },
-			services: { connect: item.services?.map((serv) => ({ name: serv.name })) },
-			author: { connect: { email: item.author?.email } },
-		})),
-	})
-}
-
-
-const seedPages = async (context: Context) => {
-	const { db } = context.sudo()
-	const seedObjects = pages_seeddata
-	const objectsAlreadyInDatabase = await db.Page.findMany({
-		where: {
-			slug: {
-				in: seedObjects.map((obj) => obj.slug) as
-					| string
-					| readonly string[]
-					| null
-					| undefined,
-			},
-		},
-	})
-	const objsToCreate = seedObjects.filter(
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
-	)
-
-	objsToCreate.map((obj) => {
-		console.log(" + Page: " + obj.slug)
-	})
-
-	await db.Page.createMany({
-		data: objsToCreate.map((obj) => ({
-			...obj,
-			//? makes it easier to copy and paste res json from Apollo Sandbox
-			//@ts-ignore
-			content: obj?.content?.document,
-		})),
-	})
-}
-
-const seedAnnouncements = async (context: Context) => {
-	const { db } = context.sudo()
-	const seedObjects = announcements_seed
-	const objectsAlreadyInDatabase = (await db.Announcement.findMany({
-		where: {
-			link: { in: seedObjects.map((obj) => obj.link) as string[] },
-		},
-	})) as Announcement[]
-	const objsToCreate = seedObjects.filter(
-		(seedObj) =>
-			!objectsAlreadyInDatabase.some((obj) => obj.link === seedObj.link)
-	)
-
-	objsToCreate.map((obj) => {
-		console.log(" + Announcement: " + obj.link)
-	})
-
-	await db.Announcement.createMany({
-		data: objsToCreate.map((obj) => ({
-			...obj,
-			//? makes it easier to copy and paste req json from Apollo Sandbox
-			//@ts-ignore
-			content: obj?.content?.document,
-		})),
+	itemsCreated.map((item) => {
+		console.log(" + Booking: " + item.name + " | " + item.serviceId)
 	})
 }
 
@@ -593,168 +277,3 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 		})
 	)
 }
-
-// const seedProductImages = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = productImage_seedjson;
-//   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
-//     where: {
-//       // @ts-ignore
-//       filename: { in: seedObjects.map(obj => obj.filename) },
-//     },
-//   });
-
-//   const objsToCreate = seedObjects.filter(
-//     // @ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
-//   );
-
-//   await db.ProductImage.createMany({
-//     data: objsToCreate.map(obj => {
-//       // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-
-//       return ({
-//         ...obj,
-//         // image: {
-//         //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-//         //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-//         //   //   upload: prepareToUpload(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-//         // }
-//         // TODO why no seed upload files work?
-//         // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
-//       })
-//     }),
-//   });
-// };
-
-export const seedDatabase = async (context: Context) => {
-	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
-	await seedRoles(context)
-	await seedUsers(context)
-
-	await seedCategories(context)
-	await seedTags(context)
-	await seedPages(context)
-	await seedPosts(context)
-	await seedAnnouncements(context)
-
-	await seedLocations(context)
-	await seedAddons(context)
-	await seedServices(context)
-
-	await seedBookings(context)
-	await seedEvents(context)
-	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
-}
-
-const QUERY_EVENTS_SEED = `
-  summary
-  start
-  end
-  price
-  seats
-  image
-  excerpt
-  description {
-    document
-  }
-  status
-  location {
-    name
-  }
-  hosts {
-    email
-  }
-  cohosts {
-    email
-  }
-  dateCreated
-  dateModified
-  categories {
-    name
-  }
-  tags {
-    name
-  }
-`
-const QUERY_SERVICES_SEED = `
-  name
-  image
-  excerpt
-  description {
-    document
-  }
-  price
-  durationInHours
-  buisnessHourOpen
-  buisnessHourClosed
-  buisnessDays
-  status
-  addons {
-    name
-  }
-  employees {
-    email
-  }
-  locations {
-    address
-  }
-  coupons {
-    name
-  }
-  categories {
-    name
-  }
-  tags {
-    name
-  }
-  dateCreated
-  dateModified
-  author {
-    email
-  }
-`
-
-
-const QUERY_ADDONS_SEED = `
-  name
-  slug
-  image
-  excerpt
-  price
-  status
-  author {
-    email
-  }
-  services {
-    name
-  }
-  products {
-    name
-  }
-  subscriptionPlans {
-    name
-  }
-  categories {
-    name
-  }
-  tags {
-    name
-  }
-  dateCreated
-  dateModified
-`
-
-const QUERY_LOCATIONS_SEED = `
-  name
-  address
-  rooms
-  status
-  notes
-  tags {
-    name
-  }
-  categories {
-    name
-  }
-`

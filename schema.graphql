@@ -837,6 +837,9 @@ type Booking {
   notes: String
   secretNotes: String
   revision: Int
+  coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
+  couponsCount(where: CouponWhereInput! = {}): Int
+  order: Order
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -861,7 +864,6 @@ input BookingWhereInput {
   end: DateTimeFilter
   timeZone: StringFilter
   address: StringFilter
-  price: IntFilter
   service: ServiceWhereInput
   location: LocationWhereInput
   addons: AddonManyRelationFilter
@@ -871,10 +873,12 @@ input BookingWhereInput {
   email: StringFilter
   phone: StringFilter
   name: StringFilter
-  status: StringNullableFilter
+  status: StringFilter
   notes: StringFilter
   secretNotes: StringFilter
   revision: IntFilter
+  coupons: CouponManyRelationFilter
+  order: OrderWhereInput
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -901,13 +905,18 @@ input IntFilter {
   not: IntFilter
 }
 
+input CouponManyRelationFilter {
+  every: CouponWhereInput
+  some: CouponWhereInput
+  none: CouponWhereInput
+}
+
 input BookingOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
   timeZone: OrderDirection
   address: OrderDirection
-  price: OrderDirection
   email: OrderDirection
   phone: OrderDirection
   name: OrderDirection
@@ -924,7 +933,6 @@ input BookingUpdateInput {
   end: DateTime
   timeZone: String
   address: String
-  price: Int
   service: ServiceRelateToOneForUpdateInput
   location: LocationRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
@@ -939,6 +947,8 @@ input BookingUpdateInput {
   notes: String
   secretNotes: String
   revision: Int
+  coupons: CouponRelateToManyForUpdateInput
+  order: OrderRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -962,6 +972,19 @@ input UserRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input CouponRelateToManyForUpdateInput {
+  disconnect: [CouponWhereUniqueInput!]
+  set: [CouponWhereUniqueInput!]
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
+}
+
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
+}
+
 input BookingUpdateArgs {
   where: BookingWhereUniqueInput!
   data: BookingUpdateInput!
@@ -972,7 +995,6 @@ input BookingCreateInput {
   end: DateTime
   timeZone: String
   address: String
-  price: Int
   service: ServiceRelateToOneForCreateInput
   location: LocationRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
@@ -987,6 +1009,8 @@ input BookingCreateInput {
   notes: String
   secretNotes: String
   revision: Int
+  coupons: CouponRelateToManyForCreateInput
+  order: OrderRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -1005,6 +1029,16 @@ input LocationRelateToOneForCreateInput {
 input UserRelateToOneForCreateInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input CouponRelateToManyForCreateInput {
+  create: [CouponCreateInput!]
+  connect: [CouponWhereUniqueInput!]
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
 }
 
 type Service {
@@ -1056,11 +1090,11 @@ input ServiceWhereInput {
   name: StringFilter
   image: StringFilter
   excerpt: StringFilter
-  price: IntNullableFilter
+  price: IntFilter
   durationInHours: DecimalFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
-  status: StringNullableFilter
+  status: StringFilter
   addons: AddonManyRelationFilter
   employees: UserManyRelationFilter
   locations: LocationManyRelationFilter
@@ -1071,17 +1105,6 @@ input ServiceWhereInput {
   tags: TagManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
 }
 
 input DecimalFilter {
@@ -1099,12 +1122,6 @@ input LocationManyRelationFilter {
   every: LocationWhereInput
   some: LocationWhereInput
   none: LocationWhereInput
-}
-
-input CouponManyRelationFilter {
-  every: CouponWhereInput
-  some: CouponWhereInput
-  none: CouponWhereInput
 }
 
 input CategoryManyRelationFilter {
@@ -1163,13 +1180,6 @@ input LocationRelateToManyForUpdateInput {
   connect: [LocationWhereUniqueInput!]
 }
 
-input CouponRelateToManyForUpdateInput {
-  disconnect: [CouponWhereUniqueInput!]
-  set: [CouponWhereUniqueInput!]
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
-}
-
 input CategoryRelateToManyForUpdateInput {
   disconnect: [CategoryWhereUniqueInput!]
   set: [CategoryWhereUniqueInput!]
@@ -1217,11 +1227,6 @@ input LocationRelateToManyForCreateInput {
   connect: [LocationWhereUniqueInput!]
 }
 
-input CouponRelateToManyForCreateInput {
-  create: [CouponCreateInput!]
-  connect: [CouponWhereUniqueInput!]
-}
-
 input CategoryRelateToManyForCreateInput {
   create: [CategoryCreateInput!]
   connect: [CategoryWhereUniqueInput!]
@@ -1235,6 +1240,7 @@ input TagRelateToManyForCreateInput {
 type Location {
   id: ID!
   name: String
+  image: String
   address: String
   rooms: Int
   status: String
@@ -1263,6 +1269,7 @@ input LocationWhereInput {
   NOT: [LocationWhereInput!]
   id: IDFilter
   name: StringFilter
+  image: StringFilter
   address: StringFilter
   rooms: IntFilter
   status: StringNullableFilter
@@ -1277,6 +1284,7 @@ input LocationWhereInput {
 input LocationOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  image: OrderDirection
   address: OrderDirection
   rooms: OrderDirection
   status: OrderDirection
@@ -1285,6 +1293,7 @@ input LocationOrderByInput {
 
 input LocationUpdateInput {
   name: String
+  image: String
   address: String
   rooms: Int
   status: String
@@ -1303,6 +1312,7 @@ input LocationUpdateArgs {
 
 input LocationCreateInput {
   name: String
+  image: String
   address: String
   rooms: Int
   status: String
@@ -1671,6 +1681,17 @@ input SubscriptionItemWhereInput {
   dateModified: DateTimeNullableFilter
 }
 
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input SubscriptionItemOrderByInput {
   id: OrderDirection
   custom_price: OrderDirection
@@ -1974,12 +1995,6 @@ input RentalUpdateInput {
   google: JSON
 }
 
-input OrderRelateToOneForUpdateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
-  disconnect: Boolean
-}
-
 input RentalUpdateArgs {
   where: RentalWhereUniqueInput!
   data: RentalUpdateInput!
@@ -2002,11 +2017,6 @@ input RentalCreateInput {
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
-}
-
-input OrderRelateToOneForCreateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
 }
 
 type CartItem {
@@ -2180,6 +2190,8 @@ type Order {
   rental: Rental
   ticketItems(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketItemsCount(where: TicketWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
   user: User
   dateCreated: DateTime
   dateModified: DateTime
@@ -2204,6 +2216,7 @@ input OrderWhereInput {
   items: OrderItemManyRelationFilter
   rental: RentalWhereInput
   ticketItems: TicketManyRelationFilter
+  bookings: BookingManyRelationFilter
   user: UserWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
@@ -2233,6 +2246,7 @@ input OrderUpdateInput {
   items: OrderItemRelateToManyForUpdateInput
   rental: RentalRelateToOneForUpdateInput
   ticketItems: TicketRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -2260,6 +2274,7 @@ input OrderCreateInput {
   items: OrderItemRelateToManyForCreateInput
   rental: RentalRelateToOneForCreateInput
   ticketItems: TicketRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -2280,6 +2295,8 @@ type Coupon {
   duration: String
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  bookings(where: BookingWhereInput! = {}, orderBy: [BookingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: BookingWhereUniqueInput): [Booking!]
+  bookingsCount(where: BookingWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
@@ -2305,6 +2322,7 @@ input CouponWhereInput {
   duration_in_months: IntNullableFilter
   duration: StringFilter
   products: ProductManyRelationFilter
+  bookings: BookingManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   events: EventManyRelationFilter
   services: ServiceManyRelationFilter
@@ -2328,6 +2346,7 @@ input CouponUpdateInput {
   duration_in_months: Int
   duration: String
   products: ProductRelateToManyForUpdateInput
+  bookings: BookingRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
@@ -2346,6 +2365,7 @@ input CouponCreateInput {
   duration_in_months: Int
   duration: String
   products: ProductRelateToManyForCreateInput
+  bookings: BookingRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput

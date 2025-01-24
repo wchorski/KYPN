@@ -61,7 +61,8 @@ Here is a list of files you'll need to provide (there are some `*.ini` files tha
   - `cp src/ini/Nav.init.tsx src/components/private/Nav.tsx`
   - `cp src/ini/MainNavList.init.tsx src/components/private/MainNavList.tsx`
   - `cp src/ini/vars.ini.css src/styles/vars.css`
-  - `cp src/ini/seed_data.ini.ts src/keystone/seed/seed_data.ts`.
+  - `cp src/ini/seed_data.ini.ts src/keystone/seed/seed_data.ts`. (depreciated)
+  - `cp src/ini/extData.json.ini src/keystone/seed/extracted/extData.json`.
   - `cp .env.ini .env`
 
 > [!warning] .env.local
@@ -170,7 +171,9 @@ Assuming you know how to setup a [Postgres](https://www.postgresql.org/) databas
 
 #### Seed Data
 
-During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`.
+During development, if you'd like to deploy/migrate your db data to a new database (like a seperate production db), set env `SEED_EXTRACT_NONE` to `extract` and run `ks:dev`. This will create a `./src/keystone/seed/extracted/extData.json` that when flipping `SEED_EXTRACT_NONE` to `seed` will wright that data into the newley pointed database. 
+
+Also handy for develpment when you need to test CRUD operations without re-writing items by hand. 
 
 > [!info] Document
 > any field using the rich text input type (usually named `content`) will query with an extra nested `document` key. I account for this in my `seedDatabase.ts` to make it easier to copy paste without having to remove the `document` key.

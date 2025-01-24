@@ -103,7 +103,6 @@ model Booking {
   end               DateTime
   timeZone          String    @default("America/Chicago")
   address           String    @default("")
-  price             Int       @default(0)
   service           Service?  @relation("Booking_service", fields: [serviceId], references: [id])
   serviceId         String?   @map("service")
   location          Location? @relation("Booking_location", fields: [locationId], references: [id])
@@ -116,11 +115,14 @@ model Booking {
   email             String    @default("")
   phone             String    @default("")
   name              String    @default("")
-  status            String?   @default("LEAD")
+  status            String    @default("LEAD")
   details           Json      @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   notes             String    @default("")
   secretNotes       String    @default("")
   revision          Int       @default(0)
+  coupons           Coupon[]  @relation("Booking_coupons")
+  order             Order?    @relation("Booking_order", fields: [orderId], references: [id])
+  orderId           String?   @map("order")
   dateCreated       DateTime? @default(now())
   dateModified      DateTime? @default(now())
   google            Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
@@ -128,6 +130,7 @@ model Booking {
   @@index([serviceId])
   @@index([locationId])
   @@index([customerId])
+  @@index([orderId])
 }
 
 model Service {
@@ -136,12 +139,12 @@ model Service {
   image              String     @default("")
   excerpt            String     @default("")
   description        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  price              Int?       @default(0)
+  price              Int        @default(0)
   durationInHours    Decimal    @default("6") @postgresql.Decimal(5, 2)
   buisnessHourOpen   String?    @default("09:00:00")
   buisnessHourClosed String?    @default("18:00:00")
   buisnessDays       Json       @default("[0,1,2,3,4,5,6]")
-  status             String?    @default("DRAFT")
+  status             String     @default("DRAFT")
   addons             Addon[]    @relation("Addon_services")
   employees          User[]     @relation("Service_employees")
   locations          Location[] @relation("Location_services")
@@ -160,6 +163,7 @@ model Service {
 model Location {
   id         String     @id @default(cuid())
   name       String     @unique @default("")
+  image      String     @default("")
   address    String     @unique @default("")
   rooms      Int        @default(1)
   status     String?    @default("PRIVATE")
@@ -358,6 +362,7 @@ model Order {
   rental                  Rental?     @relation("Order_rental", fields: [rentalId], references: [id])
   rentalId                String?     @unique @map("rental")
   ticketItems             Ticket[]    @relation("Ticket_order")
+  bookings                Booking[]   @relation("Booking_order")
   user                    User?       @relation("Order_user", fields: [userId], references: [id])
   userId                  String?     @map("user")
   dateCreated             DateTime    @default(now())
@@ -375,6 +380,7 @@ model Coupon {
   duration_in_months Int?
   duration           String
   products           Product[]          @relation("Coupon_products")
+  bookings           Booking[]          @relation("Booking_coupons")
   subscriptionPlans  SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
   events             Event[]            @relation("Coupon_events")
   services           Service[]          @relation("Coupon_services")

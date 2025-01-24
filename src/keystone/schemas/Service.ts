@@ -1,7 +1,6 @@
 import { graphql, group, list } from "@keystone-6/core"
 // @ts-ignore
 import type { Lists } from ".keystone/types"
-import { allowAll } from "@keystone-6/core/access"
 import {
 	decimal,
 	integer,
@@ -18,21 +17,20 @@ import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 
 export const Service: Lists.Service = list({
-	access: allowAll,
-	// access: {
-	// 	filter: {
-	// 		query: rules.canViewServices,
-	// 		update: rules.canManageServices,
-	// 		delete: rules.canManageServices,
-	// 	},
-	// 	operation: {
-	// 		create: permissions.canManageServices,
-	// 		query: () => true,
-	// 		// query: permissions.canViewServices,
-	// 		update: permissions.canManageServices,
-	// 		delete: permissions.canManageServices,
-	// 	},
-	// },
+	access: {
+		filter: {
+			query: rules.canViewServices,
+			update: rules.canManageServices,
+			delete: rules.canManageServices,
+		},
+		operation: {
+			create: permissions.canManageServices,
+			query: () => true,
+			// query: permissions.canViewServices,
+			update: permissions.canManageServices,
+			delete: permissions.canManageServices,
+		},
+	},
 
 	ui: {
 		isHidden: (args) => !permissions.canManageServices(args),
@@ -108,7 +106,7 @@ export const Service: Lists.Service = list({
 			links: true,
 			dividers: true,
 		}),
-		price: integer({ defaultValue: 0 }),
+		price: integer({ defaultValue: 0, validation: {isRequired: true} }),
 		durationInHours: decimal({
 			defaultValue: "6",
 			precision: 5,
@@ -159,6 +157,7 @@ export const Service: Lists.Service = list({
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 		addons: relationship({ ref: "Addon.services", many: true }),
 		employees: relationship({ ref: "User.servicesProvided", many: true }),

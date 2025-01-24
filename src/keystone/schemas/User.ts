@@ -6,7 +6,6 @@ import {
 	select,
 	text,
 	timestamp,
-  
 } from "@keystone-6/core/fields"
 // import { permissions, rules } from "../access";
 // import stripeConfig, { stripeCustomerCreate, stripeCustomerDelete } from "../../lib/stripe";
@@ -39,15 +38,15 @@ export const User: Lists.User = list({
 	ui: {
 		//? filter handles ui filtering
 		// hideCreate: args => !permissions.canManageUsers(args),
-    // hideCreate: (args) => !permissions.canManageUsers(args),
+		// hideCreate: (args) => !permissions.canManageUsers(args),
 		// hideDelete: (args) => !permissions.canManageUsers(args),
 		// isHidden: (args) => !permissions.canManageUsers(args),
 		listView: {
 			initialColumns: ["name", "nameLast", "email", "role"],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},
-    //? maybe I'd prefer email? idk
-    labelField: `name`,
+		//? maybe I'd prefer email? idk
+		labelField: `name`,
 	},
 
 	// this is the fields for our User list
@@ -56,30 +55,38 @@ export const User: Lists.User = list({
 		//   if no name is provided, an error will be displayed
 		name: text({ validation: { isRequired: true } }),
 		nameLast: text(),
-		authId: text({ isIndexed: "unique", validation: { isRequired: true }, ui: {description: `!!! Register users through this link ${envs.FRONTEND_URL}/register.`} }),
+		authId: text({
+			isIndexed: "unique",
+			validation: { isRequired: true },
+			ui: {
+				description: `!!! Register users through this link ${envs.FRONTEND_URL}/register.`,
+			},
+		}),
 		image: text({}),
 		phone: text({}),
-    //TODO trim any white space around this address before saving to db
+		//TODO trim any white space around this address before saving to db
 		email: text({
 			validation: { isRequired: true },
-      
+
 			// by adding isIndexed: 'unique', we're saying that no user can have the same
 			// email as another user - this may or may not be a good idea for your project
 			isIndexed: "unique",
-      //? was thinking of lower caps all saved data, but would cause problems down the road
-      // hooks:{
-      //   beforeOperation(){
+			//? was thinking of lower caps all saved data, but would cause problems down the road
+			// hooks:{
+			//   beforeOperation(){
 
-      //   }
-      // }
+			//   }
+			// }
 		}),
 
 		password: text({
+			//TODO may not work for OAuth, but not worrying about right now
+			validation: { isRequired: true },
 			ui: {
 				description:
 					"Can only be changed via `passwordReset` mutation + access to owner's email",
 				itemView: {
-					fieldMode: 'hidden'
+					fieldMode: "hidden",
 				},
 				// itemView: {
 				// 	fieldMode: ({ session, context, item }) =>
@@ -114,32 +121,28 @@ export const User: Lists.User = list({
 			defaultValue: { kind: "now" },
 			hooks: {
 				beforeOperation({ resolvedData, operation }) {
-					console.log("### dateMod beforeOperation")
-
+					
 					if (operation === "create" || operation === "update") {
-						console.log("### WE updating")
-						console.log({ resolvedData })
-
 						resolvedData.dateModified = new Date().toISOString()
 					}
 				},
 			},
 		}),
-    buisnessHourOpen: select({
-      options: timesArray(),
-      defaultValue: '09:00:00',
-      ui: {
-        displayMode: 'select',
-        createView: { fieldMode: 'edit' }
-      }
-    }),
-    buisnessHourClosed: select({
-      options: timesArray(),
-      defaultValue: '18:00:00',
-      ui: {
-        displayMode: 'select',
-      }
-    }),
+		buisnessHourOpen: select({
+			options: timesArray(),
+			defaultValue: "09:00:00",
+			ui: {
+				displayMode: "select",
+				createView: { fieldMode: "edit" },
+			},
+		}),
+		buisnessHourClosed: select({
+			options: timesArray(),
+			defaultValue: "18:00:00",
+			ui: {
+				displayMode: "select",
+			},
+		}),
 		role: relationship({
 			ref: "Role.assignedTo",
 			// todo add access control
@@ -148,45 +151,52 @@ export const User: Lists.User = list({
 				update: permissions.canManageUsers,
 			},
 			ui: {
-        description: '🔒 Setting someone to a high permission like Admin could be a grave mistake. Be careful',
-				createView: { fieldMode: "hidden", },
-				itemView: { fieldMode: 'edit' },
+				description:
+					"🔒 Setting someone to a high permission like Admin could be a grave mistake. Be careful",
+				createView: { fieldMode: "hidden" },
+				itemView: { fieldMode: "edit" },
 			},
 		}),
 		posts: relationship({ ref: "Post.author", many: true }),
 		pages: relationship({ ref: "Page.author", many: true }),
 		privatePagesAccess: relationship({ ref: "Page.privateAccess", many: true }),
 		privatePostsAccess: relationship({ ref: "Post.privateAccess", many: true }),
-    servicesProvided: relationship({ ref: 'Service.employees', many: true }),
-    servicesAuthored: relationship({ ref: 'Service.author', many: true }),
-    bookings: relationship({ ref: 'Booking.customer', many: true }),
-    gigs: relationship({ ref: 'Booking.employees', many: true }),
-    gig_requests: relationship({ ref: 'Booking.employee_requests', many: true }),
-    eventsHost: relationship({ ref: 'Event.hosts', many: true }),
-    eventsCohost: relationship({ ref: 'Event.cohosts', many: true }),
-    availability: relationship({ ref: 'Availability.employee', many: true }),
-    cart: relationship({
-      ref: 'CartItem.user',
-      many: true,
-      ui: {
-        createView: { fieldMode: 'hidden' },
-        itemView: { fieldMode: 'hidden' }
-      }
-    }),
+		servicesProvided: relationship({ ref: "Service.employees", many: true }),
+		servicesAuthored: relationship({ ref: "Service.author", many: true }),
+		bookings: relationship({ ref: "Booking.customer", many: true }),
+		gigs: relationship({ ref: "Booking.employees", many: true }),
+		gig_requests: relationship({
+			ref: "Booking.employee_requests",
+			many: true,
+		}),
+		eventsHost: relationship({ ref: "Event.hosts", many: true }),
+		eventsCohost: relationship({ ref: "Event.cohosts", many: true }),
+		availability: relationship({ ref: "Availability.employee", many: true }),
+		cart: relationship({
+			ref: "CartItem.user",
+			many: true,
+			ui: {
+				createView: { fieldMode: "hidden" },
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
 
-    products: relationship({ ref: 'Product.author', many: true }),
-    addons: relationship({ ref: 'Addon.author', many: true }),
-    rentals: relationship({ ref: 'Rental.customer', many: true }),
-    subscriptionPlans: relationship({ ref: 'SubscriptionPlan.author', many: true }),
-    subscriptions: relationship({ ref: 'SubscriptionItem.user', many: true }),
-    orders: relationship({
-      ref: 'Order.user',
-      many: true,
-    }),
-    tickets: relationship({
-      ref: 'Ticket.holder',
-      many: true,
-    }),
+		products: relationship({ ref: "Product.author", many: true }),
+		addons: relationship({ ref: "Addon.author", many: true }),
+		rentals: relationship({ ref: "Rental.customer", many: true }),
+		subscriptionPlans: relationship({
+			ref: "SubscriptionPlan.author",
+			many: true,
+		}),
+		subscriptions: relationship({ ref: "SubscriptionItem.user", many: true }),
+		orders: relationship({
+			ref: "Order.user",
+			many: true,
+		}),
+		tickets: relationship({
+			ref: "Ticket.holder",
+			many: true,
+		}),
 	},
 	hooks: {
 		async beforeOperation({ operation, resolvedData }) {
@@ -210,7 +220,9 @@ export const User: Lists.User = list({
 							email: item.email,
 						},
 					})
-					.catch((err) => console.log(`!!! verify email did not send: ${item.email}`))) as object
+					.catch((err) =>
+						console.log(`!!! verify email did not send: ${item.email}`)
+					)) as object
 			}
 		},
 	},

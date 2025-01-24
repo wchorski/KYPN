@@ -19,6 +19,8 @@ keystone.db
 compose.yml
 seed_data*.ts
 !seed_data.ini.ts
+**/seed/extracted/*
+!**/seed/extracted/README.md
 
 # pages, components, styles
 src/styles/vars.css

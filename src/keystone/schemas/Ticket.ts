@@ -33,7 +33,6 @@ export const Ticket: Lists.Ticket = list({
 			update: permissions.canManageTickets,
 			delete: permissions.canManageTickets,
 		},
-    
 	},
 
 	// todo hide these again
@@ -50,8 +49,8 @@ export const Ticket: Lists.Ticket = list({
 			],
 			// initialSort: { field: 'eventStart', direction: 'ASC'}
 		},
-    //? can't get holderId to work
-    // labelField: `email`,
+		//? can't get holderId to work
+		// labelField: `email`,
 	},
 
 	fields: {
@@ -157,27 +156,29 @@ export const Ticket: Lists.Ticket = list({
 			ref: "Event.tickets",
 			many: false,
 			ui: {
-        
 				// itemView: { fieldMode: permissions.canManageTickets ? "edit": "read" },
 				inlineConnect: true,
 				displayMode: "cards",
 				cardFields: ["summary", "start", "location"],
-        
 			},
-      
 		}),
 		holder: relationship({
 			ref: "User.tickets",
 			many: false,
 		}),
 		order: relationship({ ref: "Order.ticketItems" }),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, ui: {itemView: {fieldMode: 'read'}} }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, ui: {itemView: {fieldMode: 'read'}} }),
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			ui: { itemView: { fieldMode: "read" } },
+		}),
+		dateModified: timestamp({
+			defaultValue: { kind: "now" },
+			ui: { itemView: { fieldMode: "read" } },
+		}),
 	},
 
 	hooks: {
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-
 			if (operation === "create") {
 				// if event has started, don't allow purchase of ticket
 
@@ -188,42 +189,45 @@ export const Ticket: Lists.Ticket = list({
 					where: { id: resolvedData.event.connect.id },
 				})
 
-        validateTicketEvent(event)
-
+				validateTicketEvent(event)
 			}
 
 			// TODO prob don't need to worry. canManageTickets only allows hosts or admin to update tickets
 			if (operation === "update") {
-        //? causes probs. So i only allow hosts and admin to update tickets
+				//? causes probs. So i only allow hosts and admin to update tickets
 				// if (item.status === "ATTENDED") {
 				// 	throw new Error(
 				// 		`!!! This ticket has already been redeemed: ${item.id}`
 				// 	)
 				// }
 
-        if (!resolvedData.event?.connect?.id || item.eventId)
+				if (!resolvedData.event?.connect?.id || item.eventId)
 					throw new Error("!!! No Event selected for ticket")
 
 				const event = await context.db.Event.findOne({
 					where: { id: resolvedData.event.connect.id || item.eventId },
 				})
 
-        validateTicketEvent(event)
+				validateTicketEvent(event)
 			}
 		},
 	},
 })
 
+function validateTicketEvent(event: Lists.Event.Item | null) {
+	if (!event) throw new Error("!!! Event not found for Ticket")
 
-function validateTicketEvent(event:Lists.Event.Item|null){
-  if (!event) throw new Error("!!! Event not found for Ticket")
-  const now = new Date()
-  const eventStart = new Date(event.start)
-  if (now > eventStart)
-    throw new Error("!!! Ticket: cannot create if Event already started")
+	if (
+		process.env.SEED_EXTRACT_NONE === "seed" &&
+		process.env.NODE_ENV === "development"
+	)
+		return
 
-  if (!["ACTIVE", "POSTPONED"].includes(event.status))
-    throw new Error(
-      "Event is not active. Tickets not available for purchase"
-    )
+	const now = new Date()
+	const eventStart = new Date(event.start)
+	if (now > eventStart)
+		throw new Error("!!! Ticket: cannot create if Event already started")
+
+	if (!["ACTIVE", "POSTPONED"].includes(event.status))
+		throw new Error("Event is not active. Tickets not available for purchase")
 }

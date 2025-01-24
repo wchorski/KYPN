@@ -415,19 +415,19 @@ export type SeedPost = PostCreateInput & {
 }
 
 export type SeedAddons = AddonCreateInput & {
-  products?:{
-    name:string
-  }[]
-  subscriptionPlans?:{
-    name:string
-  }[]
+  // products?:{
+  //   name:string
+  // }[]
+  // subscriptionPlans?:{
+  //   name:string
+  // }[]
+  // services?:{
+  //   name:string
+  // }[]
   categories?:{
     name:string
   }[]
   tags?:{
-    name:string
-  }[]
-  services?:{
     name:string
   }[]
   author?: {
@@ -494,7 +494,7 @@ export type SeedService = ServiceCreateInput & {
 		address: string
 	}[]
 	addons?: {
-		slug: string
+		name: string
 	}[]
 	employees?: {
 		email: string
@@ -534,3 +534,4 @@ export type StringRange = {
 	start: string
 	end: string
 }
+

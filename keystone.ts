@@ -4,6 +4,7 @@ import { extendGraphqlSchema, lists } from "./src/keystone/schema"
 import type { Context } from ".keystone/types"
 import { seedDatabase } from "./src/keystone/seed/seedDatabase"
 import { nextAuthSessionStrategy } from "./session"
+import { extractDBData } from "./src/keystone/seed/extractDBData"
 
 const FRONTEND_URL =
 	process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"
@@ -29,46 +30,50 @@ const DB_ENDPOINT =
 	"?connect_timeout=300"
 // console.log('🔌 DB_ENDPOINT: ', DB_ENDPOINT);
 
-
 export default config({
 	db: {
-
 		provider: "postgresql",
-    //? makes `email` or other options not case sensative when searching or filtering
-    // cred - https://github.com/keystonejs/keystone/discussions/8963#discussioncomment-8211316
-    //TODO how to "enable the citext type with CREATE EXTENSION "citext"; on the relevant database. for postgres"
-    // extendPrismaSchema(schema) {
-    //   return schema
-    //     .split('\n')
-    //     .map(line => {
-    //       if (line.includes('email') || line.includes('clientEmail')) {
-    //         return line + ' @postgresql.Citext'
-    //       }
-    //       return line
-    //     })
-    //     .join('\n')
-    //  },
+		//? makes `email` or other options not case sensative when searching or filtering
+		// cred - https://github.com/keystonejs/keystone/discussions/8963#discussioncomment-8211316
+		//TODO how to "enable the citext type with CREATE EXTENSION "citext"; on the relevant database. for postgres"
+		// extendPrismaSchema(schema) {
+		//   return schema
+		//     .split('\n')
+		//     .map(line => {
+		//       if (line.includes('email') || line.includes('clientEmail')) {
+		//         return line + ' @postgresql.Citext'
+		//       }
+		//       return line
+		//     })
+		//     .join('\n')
+		//  },
 		url: DB_ENDPOINT,
 		onConnect: async (context: Context) => {
-      console.log(`💾✅ Database Connected`); 
+			console.log(`💾✅ Database Connected`)
 			// TODO why argv doesn't work?
-			if (process.env.SEED_ME === "true") {
-      //todo would like to have this as an arg instead of env var
+			if (
+				process.env.SEED_EXTRACT_NONE === "seed" &&
+				process.env.NODE_ENV === "development"
+			) {
+				//todo would like to have this as an arg instead of env var
 				// if (process.argv.includes('--seed-database')) {
 				await seedDatabase(context)
-				// await seedDemoData(context)
+			} else if (
+				process.env.SEED_EXTRACT_NONE === "extract" &&
+				process.env.NODE_ENV === "development"
+			) {
+				await extractDBData(context)
 			}
 		},
-    
 	},
 	server: {
 		port: Number(process.env.BACKEND_PORT) || 3001,
 		cors: { origin: [FRONTEND_URL], credentials: true },
 	},
 	lists,
-  graphql:{
-    extendGraphqlSchema,
-  },
+	graphql: {
+		extendGraphqlSchema,
+	},
 	ui: {
 		// the following api routes are required for nextauth.js
 		publicPages: [

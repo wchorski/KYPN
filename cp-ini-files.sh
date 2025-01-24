@@ -13,6 +13,7 @@ cp "./src/styles/vars.css" "./src/ini/vars.ini.css"
 
 ## keystone
 cp "src/keystone/seed/seed_data.ts" "src/ini/seed_data.ini.ts"
+cp "src/keystone/seed/extracted/extData.json" "src/ini/extData.json.ini"
 
 ## Global don't forget to update .env file if any changes
 # cp ".env" ".env.dev"

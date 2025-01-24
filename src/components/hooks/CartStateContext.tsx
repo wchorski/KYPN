@@ -6,7 +6,7 @@ import { ReactNode, createContext, useCallback, useContext, useState } from "rea
 const defaultCtx= {
   isOpen: false,
   setIsOpen: (isOpen:boolean) => {},
-  isPending: true,
+  isPending: false,
   toggleCart: () => {},
   closeCart: () => {},
   openCart: () => {},
@@ -40,8 +40,8 @@ function CartStateProvider ({children}:{children: ReactNode}){
   // async function getUserCart(sessionId:string|undefined){
   const getUserCart = useCallback(async (sessionId:string|undefined) => {
 
-    // setIsPending(true) // is already set to true
     if(!sessionId) return []
+    setIsPending(true)
 
     try {
       const res = await fetch(`/api/gql/protected`, {

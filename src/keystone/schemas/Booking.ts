@@ -43,11 +43,11 @@ export const Booking: Lists.Booking = list({
 			create: permissions.canManageBookings,
 			query: isLoggedIn,
 			// query: permissions.canManageBookings,
-      //? seems sketchy, but the filter handles security
+			//? seems sketchy, but the filter handles security
 			update: isLoggedIn,
 			// update: permissions.canManageBookings,
 			// delete: () => false,
-      // TODO find a way where only Admin can delete (not customer or employee)
+			// TODO find a way where only Admin can delete (not customer or employee)
 			delete: permissions.canManageBookings,
 		},
 	},
@@ -126,7 +126,74 @@ export const Booking: Lists.Booking = list({
 			}),
 		}),
 
-		price: integer({ defaultValue: 0, validation: { isRequired: true } }),
+		// price: integer({ defaultValue: 0, validation: { isRequired: true } }),
+		price: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				async resolve(item, args, context) {
+					// if(!item.serviceId) return item.name
+					const service = (await context.query.Service.findOne({
+						where: { id: item.serviceId || "null" },
+						query: `
+              price
+            `,
+					})) as Service
+
+					if (!service.price) return 0
+
+					const addons = await context.query.Addon.findMany({
+						where: {
+							bookings: {
+								every: {
+									id: {
+										equals: item.id,
+									},
+								},
+							},
+						},
+						query: `
+              price
+            `,
+					})
+
+					if (!addons) return 0
+					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+
+					const subTotal = addonsPrice + service.price
+
+					const coupons = await context.query.Coupon.findMany({
+						where: {
+							bookings: {
+								every: {
+									id: {
+										equals: item.id,
+									},
+								},
+							},
+						},
+						query: `
+              amount_off
+              percent_off
+            `,
+					})
+
+					const discount = coupons.reduce(
+						(acc, coupon) => {
+							if ("amount_off" in coupon) {
+								acc.amountOff += coupon.amount_off
+							} else if ("percent_off" in coupon) {
+								acc.percentOff += coupon.percent_off
+							}
+
+							return acc
+						},
+						{ amountOff: 0, percentOff: 0 }
+					)
+
+					return (subTotal - discount.amount_off) * discount.percent_off
+				},
+			}),
+		}),
 		service: relationship({ ref: "Service.bookings", many: false }),
 		location: relationship({ ref: "Location.bookings", many: false }),
 		addons: relationship({ ref: "Addon.bookings", many: true }),
@@ -156,6 +223,7 @@ export const Booking: Lists.Booking = list({
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 		details: document({
 			componentBlocks,
@@ -219,15 +287,21 @@ export const Booking: Lists.Booking = list({
 					permissions.canManageBookings({ session }),
 			},
 		}),
-    revision: integer({
+		revision: integer({
 			defaultValue: 0,
 			validation: { isRequired: true },
 			ui: {
 				createView: {
-					fieldMode: 'hidden',
+					fieldMode: "hidden",
 				},
 			},
 		}),
+		coupons: relationship({
+			ref: "Coupon.bookings",
+			many: true,
+			ui: { description: "currently applied to this Booking" },
+		}),
+		order: relationship({ ref: "Order.bookings", many: false }),
 		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 		dateModified: timestamp({ defaultValue: { kind: "now" } }),
 		google: json({
@@ -241,9 +315,29 @@ export const Booking: Lists.Booking = list({
 	},
 	hooks: {
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-			// if (operation === 'create') {
+			if (operation === "create") {
+				// if (!resolvedData.service?.connect?.id || !resolvedData.service?.connect?.name)
+				// 	throw new Error("!!! No Service selected for booking")
 
-			// }
+        if(resolvedData.service?.connect?.id){
+          const service = await context.db.Service.findOne({
+            where: { id: resolvedData.service.connect.id },
+          })
+
+          //@ts-ignore
+          validateServiceStatusAndTime(resolvedData.start, service)
+        }
+
+        if(resolvedData.service?.connect?.name){
+          const service = await context.db.Service.findOne({
+            where: { name: resolvedData.service.connect.name },
+          })
+
+          //@ts-ignore
+          validateServiceStatusAndTime(resolvedData.start, service)
+        }
+
+			}
 
 			if (operation === "update") {
 				resolvedData.dateModified = new Date()
@@ -447,7 +541,8 @@ async function handleCalendarDetails(item: any, context: any) {
 		"\n"
 	calDescription += "STATUS: " + selectedBooking.status + " \n"
 	calDescription +=
-		"SERVICE: " + selectedBooking.service?.name || "No Service Selected" + " \n\n"
+		"SERVICE: " + selectedBooking.service?.name ||
+		"No Service Selected" + " \n\n"
 	calDescription +=
 		"ADDONS: \n" +
 		selectedBooking?.addons
@@ -479,4 +574,25 @@ async function handleCalendarDetails(item: any, context: any) {
 		calStart: selectedBooking.start,
 		calEnd: selectedBooking.end || calcEnd,
 	}
+}
+
+function validateServiceStatusAndTime(
+	start: string,
+	service: Lists.Service.Item | null
+) {
+	if (!service) throw new Error("!!! Service not found for Booking")
+
+	if (
+		process.env.SEED_EXTRACT_NONE === "seed" &&
+		process.env.NODE_ENV === "development"
+	)
+		return
+
+	const now = new Date()
+	const bookingStart = new Date(start)
+	if (bookingStart < now)
+		throw new Error("!!! Booking: cannot create if a booking in the past")
+
+	if (!["PUBLIC", "PRIVATE"].includes(service.status))
+		throw new Error(`!!! Service is not active. Booking is not allowed`)
 }
