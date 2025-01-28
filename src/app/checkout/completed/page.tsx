@@ -61,10 +61,23 @@ export default async function CheckoutSuccessPage({
 const query = `
   total
   status
-  bookings {
-    id
-    summary
-    status
+  items {
+    quantity
+    booking {
+      id
+      summary
+      status
+    }
+    tickets {
+      id
+      eventSummary
+      status
+    }
+    product {
+      id
+      name
+      status
+    }
   }
 `
 
@@ -92,17 +105,34 @@ async function NativeCheckoutSession({ id }: { id: string }) {
 					<li>
 						Order status: <StatusBadge type={"any"} status={order.status} />
 					</li>
-					{order.bookings &&
-						order.bookings.map((book) => (
-							<li key={book.id}>
-								{book.summary}:{" "}
-								<StatusBadge type={"any"} status={book.status} />
+					{order.items
+						.filter((it) => it.booking)
+						.map(({ booking }) => (
+							<li key={booking.id}>
+								<Link href={`/bookings/${booking.id}`}>{booking.summary}</Link>
+								:: <StatusBadge type={"booking"} status={booking.status} />
 							</li>
 						))}
-					<li>
-						<Link href={`/account#orders`}>My Account</Link>
-					</li>
+					{order.items
+						.filter((it) => it.product)
+						.map(({ product }) => (
+							<li key={product.id}>
+								<Link href={`/products/${product.id}`}>{product.name}</Link>
+								:: <StatusBadge type={"product"} status={product.status} />
+							</li>
+						))}
+					{order.items
+						.filter((it) => it.tickets)
+						.map(({ tickets }) => tickets.map(tix => (
+              <li key={tix.id}>
+								<Link href={`/tickets/${tix.id}`}>{tix.eventSummary}</Link>
+								:: <StatusBadge type={"ticket"} status={tix.status} />
+							</li>
+            ))
+							
+						)}
 				</ul>
+        <Link className={'button medium'}  href={`/account#orders`}>My Account Orders</Link>
 			</div>
 		</main>
 	)

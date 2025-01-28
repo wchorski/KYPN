@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core"
+import { graphql, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import {
 	checkbox,
@@ -6,6 +6,7 @@ import {
 	select,
 	text,
 	timestamp,
+	virtual,
 } from "@keystone-6/core/fields"
 // import { permissions, rules } from "../access";
 // import stripeConfig, { stripeCustomerCreate, stripeCustomerDelete } from "../../lib/stripe";
@@ -15,6 +16,8 @@ import { envs } from "../../../envs"
 // import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
 import { timesArray } from "../../lib/timeArrayCreator"
+import { calcTotalPrice } from "../../lib/calcTotalPrice"
+import { CartItem } from "../types"
 // import { mailVerifyUser } from "../../lib/mail";
 // import { tokenEmailVerify } from "../../lib/tokenEmailVerify";
 
@@ -53,6 +56,17 @@ export const User: Lists.User = list({
 	fields: {
 		// by adding isRequired, we enforce that every User should have a name
 		//   if no name is provided, an error will be displayed
+		typeof: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				resolve() {
+					return "user"
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
 		name: text({ validation: { isRequired: true } }),
 		nameLast: text(),
 		authId: text({
@@ -121,7 +135,6 @@ export const User: Lists.User = list({
 			defaultValue: { kind: "now" },
 			hooks: {
 				beforeOperation({ resolvedData, operation }) {
-					
 					if (operation === "create" || operation === "update") {
 						resolvedData.dateModified = new Date().toISOString()
 					}
@@ -179,6 +192,25 @@ export const User: Lists.User = list({
 				createView: { fieldMode: "hidden" },
 				itemView: { fieldMode: "hidden" },
 			},
+		}),
+		cartTotalPrice: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				async resolve(item, args, context) {
+					// if(!item.serviceId) return item.name
+					const userCartItems = await context.query.CartItem.findMany({
+						where: { user: { id: { equals: item.id } } },
+            query: `
+              id
+              quantity
+              type
+              subTotal
+            `
+					}) as CartItem[]
+
+					return calcTotalPrice(userCartItems)
+				},
+			}),
 		}),
 
 		products: relationship({ ref: "Product.author", many: true }),

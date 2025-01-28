@@ -51,6 +51,7 @@ export function CheckoutCartForm({ cartItems }: Props) {
 			<h3>
 				<CartTotal />
 			</h3>
+      <p className={'debug'} >DEBUG: stripeCreateInstallmentPayment selections if total is above x amount. set in searchParams</p>
 			<hr />
 			{!state.success ? (
 				<SubmitButton label="Checkout" />

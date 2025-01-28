@@ -133,7 +133,6 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						session.data.role.canManageTickets) && (
 						<Link
 							className={"button large"}
-							style={{ margin: "0 1rem" }}
 							href={`?${new URLSearchParams({ popup: "modal" })}`}
 						>
 							Redeem Ticket

@@ -34,7 +34,7 @@ export const CartItem: Lists.CartItem = list({
 		}),
 		quantity: integer({
 			defaultValue: 1,
-			validation: { isRequired: true },
+			validation: { isRequired: true, min: 1 },
 		}),
 		type: select({
 			options: [
@@ -81,6 +81,7 @@ export const CartItem: Lists.CartItem = list({
 				},
 			}),
 		}),
+		coupon: relationship({ ref: "Coupon" }),
 		product: relationship({ ref: "Product" }),
 		booking: relationship({ ref: "Booking" }),
 		event: relationship({ ref: "Event" }),
@@ -95,10 +96,11 @@ export const CartItem: Lists.CartItem = list({
 					"product",
 					"event",
 					"booking",
+					"coupon",
 				])
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking"] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "coupon"] set'
 					)
 			}
 

@@ -355,4 +355,57 @@ export async function stripeSubscriptionUpdate({
 	}
 }
 
+type StripePayInInstallments = Stripe.SubscriptionScheduleCreateParams & {
+	product: string
+	interval: "day" | "week" | "month" | "year"
+	iterations: number
+	totalPrice: number
+  type: 'products'|'services'
+  id: string
+}
+
+// https://docs.stripe.com/api/subscription_schedules/create
+// https://docs.stripe.com/billing/subscriptions/subscription-schedules/use-cases#installment-plans
+export async function stripeCreateInstallmentPayment({
+	customer,
+	start_date = "now",
+	end_behavior = "cancel",
+	product,
+	interval = "month",
+	iterations,
+	totalPrice,
+  type,
+  id,
+}: StripePayInInstallments) {
+	const stripePaymentPlan = await stripeConfig.subscriptionSchedules.create({
+		customer,
+		start_date,
+		end_behavior,
+    metadata: {
+      type,
+      url: envs.BACKEND_URL + `/${type}/${id}`
+    },
+		phases: [
+			{
+				items: [
+					{
+						price_data: {
+							currency: "usd",
+							product,
+							recurring: {
+								interval,
+							},
+							unit_amount: totalPrice / iterations,
+						},
+						quantity: 1,
+					},
+				],
+				iterations,
+			},
+		],
+	})
+
+	console.log({ stripePaymentPlan })
+}
+
 export default stripeConfig

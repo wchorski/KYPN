@@ -51,6 +51,7 @@ function CartStateProvider ({children}:{children: ReactNode}){
           query: `
             query getUserCart($where: UserWhereUniqueInput!) {
               user(where: $where) {
+                cartTotalPrice
                 cart {
                   id
                   type
@@ -73,12 +74,19 @@ function CartStateProvider ({children}:{children: ReactNode}){
                     price
                     summary
                   }
+                  coupon {
+                    id
+                    name
+                    amount_off
+                    percent_off
+                  }
                 }
               }
             }
           `, 
         })
       }) 
+
       const data = await res.json()
       
       const { user }:{user:User} = data 
@@ -91,8 +99,9 @@ function CartStateProvider ({children}:{children: ReactNode}){
       });
 
       setCartItems(user.cart)
-      const total = calcCartSaleTotal(user.cart)
-      setCartTotal(total)
+      //? moved to ks virtual field
+      // const total = calcCartSaleTotal(user.cart)
+      setCartTotal(user.cartTotalPrice)
       setIsPending(false)
 
       return { success: true }

@@ -157,44 +157,8 @@ export const Booking: Lists.Booking = list({
 					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
 					const subTotal = addonsPrice + service.price
 
-					if (subTotal === 0) return 0
-
-					const coupons = (await context.query.Coupon.findMany({
-						where: {
-							bookings: {
-								every: {
-									id: {
-										equals: item.id,
-									},
-								},
-							},
-						},
-						query: `
-              amount_off
-              percent_off
-            `,
-					})) as Coupon[]
-
-					const discount = coupons.reduce(
-						(acc, coupon) => {
-							// one coupon is only allowed to have one positive value in `amount_off` or `percent_off`
-							if (coupon.amount_off) {
-								acc.amount_off += coupon.amount_off
-							} else if (coupon.percent_off) {
-								acc.percent_off += coupon.percent_off
-							}
-
-							return acc
-						},
-						{ amount_off: 0, percent_off: 0 }
-					)
-
-					const totalAfterAmountOff = subTotal - discount.amount_off
-
-					return (
-						totalAfterAmountOff -
-						(totalAfterAmountOff * discount.percent_off) / 100
-					)
+          return subTotal
+          
 				},
 			}),
 		}),
@@ -217,6 +181,7 @@ export const Booking: Lists.Booking = list({
 				{ label: "Canceled", value: "CANCELED" },
 				{ label: "Lead", value: "LEAD" },
 				{ label: "Paid", value: "PAID" },
+				{ label: "RSVP", value: "RSVP" },
 				{ label: "Down Payment", value: "DOWNPAYMENT" },
 				{ label: "Holding", value: "HOLDING" },
 				{ label: "Requested", value: "REQUESTED" },
@@ -300,22 +265,19 @@ export const Booking: Lists.Booking = list({
 				},
 			},
 		}),
-		coupons: relationship({
-			ref: "Coupon.bookings",
-			many: true,
-			ui: { description: "currently applied to this Booking" },
-		}),
-		order: relationship({ ref: "Order.bookings", many: false }),
+		orderItem: relationship({ ref: "OrderItem.booking", many: false }),
 		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
 		dateModified: timestamp({ defaultValue: { kind: "now" } }),
-		google: json({
-			defaultValue: {
-				id: "",
-				status: "",
-				kind: "",
-				htmlLink: "",
-			},
-		}),
+		google:
+			json(),
+			//   {
+			// 	defaultValue: {
+			// 		id: "",
+			// 		status: "",
+			// 		kind: "",
+			// 		htmlLink: "",
+			// 	},
+			// }
 	},
 	hooks: {
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {

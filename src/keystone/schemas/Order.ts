@@ -77,27 +77,15 @@ export const Order: Lists.Order = list({
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
-					const {
-						order: { ticketItemsCount, bookingsCount },
-					} = (await context.graphql.run({
-						query: `
-              query Order($where: OrderWhereUniqueInput!) {
-                order(where: $where) {
-                  ticketItemsCount
-                  bookingsCount
-                }
+          const order = await context.sudo().query.Order.findOne({
+            where: { id: item.id },
+            query: `
+              items {
+                quantity
               }
-            `,
-						variables: {
-							where: { id: item.id },
-						},
-					})) as { order: { ticketItemsCount: number, bookingsCount:number } }
-
-          //? this does same as above gql.run. but it is less performant?
-					// const tixsCount = await context.query.Ticket.count({
-					// 	where: { order: { id: { equals: item.id } } },
-					// })
-
+            `
+          })
+					
 					const orderItems = await context.query.OrderItem.findMany({
 						where: { order: { id: { equals: item.id } } },
 						query: `quantity`,
@@ -107,7 +95,7 @@ export const Order: Lists.Order = list({
 						return accumulator + it.quantity
 					}, 0)
 
-					return itemsCount + ticketItemsCount + bookingsCount
+					return itemsCount
 				},
 			}),
 		}),
@@ -143,8 +131,9 @@ export const Order: Lists.Order = list({
 		}),
 		items: relationship({ ref: "OrderItem.order", many: true }),
 		rental: relationship({ ref: "Rental.order", many: false }),
-		ticketItems: relationship({ ref: "Ticket.order", many: true }),
-		bookings: relationship({ ref: "Booking.order", many: true }),
+		// ticketItems: relationship({ ref: "Ticket.order", many: true }),
+    //? moved to OrderItem
+		// bookings: relationship({ ref: "Booking.order", many: true }),
 		user: relationship({ ref: "User.orders" }),
 		// todo move this all under 'status'
 		// payment_status: select({
@@ -186,24 +175,24 @@ export const Order: Lists.Order = list({
               email
             }
             items {
-              image
-              name
               quantity
-              price
-            }
-            ticketItems {
-              id
-              orderIndex
-              event {
+              booking {
+                id
                 summary
-                image
-                price
+              }
+              tickets {
+                id
+                eventSummary
+              }
+              product {
+                id
+                name
               }
             }
           `,
 				})) as OrderType
 
-				const mail = await mailOrder({
+				await mailOrder({
 					to: [envs.ADMIN_EMAIL_ADDRESS, item.email || order.user?.email || ""],
 					operation,
 					order,

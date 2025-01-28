@@ -128,6 +128,7 @@ export type User = Lists.User.Item & {
 	gig_requests: Booking[]
 	availability: Availability[]
 	cart: CartItem[]
+	cartTotalPrice: number
 	tickets: Ticket[]
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
@@ -214,6 +215,7 @@ export type CartItem = Lists.CartItem.Item & {
 	product?: Product
 	event?: Event
 	booking?: Booking
+	coupon?: Coupon
 	user?: User
 	subTotal: number
 }
@@ -319,14 +321,14 @@ export type Order = Lists.Order.Item & {
 	user: User
 	items: OrderItem[]
 	rental: Rental
-	bookings: Booking[]
-	ticketItems: Ticket[]
 	dateCreated: string
 	dateModified: string
 }
 
 export type OrderItem = Lists.OrderItem.Item & {
 	product: Product
+	booking: Booking
+  tickets: Ticket[]
 	dateCreated: string
 	dateModified: string
 	order: Order

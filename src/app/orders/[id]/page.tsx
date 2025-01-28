@@ -1,6 +1,5 @@
 import { nextAuthOptions } from "@/session"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { OrderItem } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { getServerSession } from "next-auth"
@@ -99,7 +98,7 @@ export default async function OrderByIdPage({ params }: Props) {
 				<section>
 					<h3> Items: </h3>
 					<ul className="orderItems">
-						{order?.items.map((item: OrderItem) => (
+						{order?.items.map((item) => (
 							<li key={item.id} className={styles.item}>
 								<ImageDynamic photoIn={item.image} />
 

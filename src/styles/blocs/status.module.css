@@ -5,7 +5,7 @@
   border-style: solid;
   border-width: 1px;
   border-left-width: 10px;
-  display: grid;
+  display: inline-grid;
   align-content: center;
   width: fit-content;
   z-index: 2;

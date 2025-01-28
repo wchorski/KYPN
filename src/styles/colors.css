@@ -1,4 +1,11 @@
 
+.debug {
+  border-color: yellow;
+  border-style: dashed;
+  border-width: var(--space-xxs);
+  padding: var(--space-xxs);
+  background: color-mix(in srgb, yellow 20%, transparent 60%);
+}
 .success, .error {
   border-width: var(--space-xxs);
   border-left-width: var(--space-s);

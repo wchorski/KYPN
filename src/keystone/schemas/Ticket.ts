@@ -98,20 +98,20 @@ export const Ticket: Lists.Ticket = list({
 			field: graphql.field({
 				type: graphql.String,
 				async resolve(item, args, context) {
-					if (!item.orderId) return "1 of 1"
+					if (!item.orderItemId) return "1 of 1"
 
-					const orderTicketItems = await context.sudo().db.Ticket.findMany({
-						where: { order: { id: { equals: item.orderId } } },
+					const orderItemTickets = await context.sudo().db.Ticket.findMany({
+						where: { orderItem: { id: { equals: item.orderItemId } } },
 					})
 
-					const thisTixIndex = orderTicketItems.findIndex(
+					const thisTixIndex = orderItemTickets.findIndex(
 						(tix) => tix.id === item.id
 					)
 
-					if (!orderTicketItems || orderTicketItems.length === 0)
+					if (!orderItemTickets || orderItemTickets.length === 0)
 						return "1 of 1"
 
-					return `${thisTixIndex + 1} of ${orderTicketItems.length}`
+					return `${thisTixIndex + 1} of ${orderItemTickets.length}`
 				},
 			}),
 		}),
@@ -145,7 +145,7 @@ export const Ticket: Lists.Ticket = list({
 				{ label: "Rejected", value: "REJECTED" },
 				{ label: "Past", value: "PAST" },
 			],
-			defaultValue: "PAID",
+			defaultValue: "PENDING",
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
@@ -166,7 +166,8 @@ export const Ticket: Lists.Ticket = list({
 			ref: "User.tickets",
 			many: false,
 		}),
-		order: relationship({ ref: "Order.ticketItems" }),
+		// order: relationship({ ref: "Order.ticketItems" }),
+		orderItem: relationship({ ref: "OrderItem.tickets", many: false }),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },
 			ui: { itemView: { fieldMode: "read" } },
@@ -200,12 +201,14 @@ export const Ticket: Lists.Ticket = list({
 				// 		`!!! This ticket has already been redeemed: ${item.id}`
 				// 	)
 				// }
+				console.log({ resolvedData })
+				console.log({ item })
 
-				if (!resolvedData.event?.connect?.id || item.eventId)
+				if (!resolvedData.event?.connect?.id && !item.eventId)
 					throw new Error("!!! No Event selected for ticket")
 
 				const event = await context.db.Event.findOne({
-					where: { id: resolvedData.event.connect.id || item.eventId },
+					where: { id: resolvedData.event?.connect?.id || item.eventId },
 				})
 
 				validateTicketEvent(event)

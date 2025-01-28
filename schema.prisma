@@ -120,18 +120,16 @@ model Booking {
   notes                 String     @default("")
   secretNotes           String     @default("")
   revision              Int        @default(0)
-  coupons               Coupon[]   @relation("Booking_coupons")
-  order                 Order?     @relation("Booking_order", fields: [orderId], references: [id])
-  orderId               String?    @map("order")
+  orderItem             OrderItem? @relation("Booking_orderItem", fields: [orderItemId], references: [id])
+  orderItemId           String?    @unique @map("orderItem")
   dateCreated           DateTime?  @default(now())
   dateModified          DateTime?  @default(now())
-  google                Json?      @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
+  google                Json?
   from_CartItem_booking CartItem[] @relation("CartItem_booking")
 
   @@index([serviceId])
   @@index([locationId])
   @@index([customerId])
-  @@index([orderId])
 }
 
 model Service {
@@ -321,6 +319,8 @@ model CartItem {
   id        String   @id @default(cuid())
   quantity  Int      @default(1)
   type      String
+  coupon    Coupon?  @relation("CartItem_coupon", fields: [couponId], references: [id])
+  couponId  String?  @map("coupon")
   product   Product? @relation("CartItem_product", fields: [productId], references: [id])
   productId String?  @map("product")
   booking   Booking? @relation("CartItem_booking", fields: [bookingId], references: [id])
@@ -330,6 +330,7 @@ model CartItem {
   user      User?    @relation("CartItem_user", fields: [userId], references: [id])
   userId    String?  @map("user")
 
+  @@index([couponId])
   @@index([productId])
   @@index([bookingId])
   @@index([eventId])
@@ -338,21 +339,19 @@ model CartItem {
 
 model OrderItem {
   id           String   @id @default(cuid())
-  name         String   @default("")
-  description  String   @default("")
-  image        String   @default("")
   type         String
-  price        Int
   quantity     Int
-  order        Order?   @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId      String?  @map("order")
   product      Product? @relation("OrderItem_product", fields: [productId], references: [id])
   productId    String?  @map("product")
+  booking      Booking? @relation("Booking_orderItem")
+  tickets      Ticket[] @relation("Ticket_orderItem")
+  order        Order?   @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId      String?  @map("order")
   dateCreated  DateTime @default(now())
   dateModified DateTime @default(now())
 
-  @@index([orderId])
   @@index([productId])
+  @@index([orderId])
 }
 
 model Order {
@@ -367,8 +366,6 @@ model Order {
   items                   OrderItem[] @relation("OrderItem_order")
   rental                  Rental?     @relation("Order_rental", fields: [rentalId], references: [id])
   rentalId                String?     @unique @map("rental")
-  ticketItems             Ticket[]    @relation("Ticket_order")
-  bookings                Booking[]   @relation("Booking_order")
   user                    User?       @relation("Order_user", fields: [userId], references: [id])
   userId                  String?     @map("user")
   dateCreated             DateTime    @default(now())
@@ -378,18 +375,18 @@ model Order {
 }
 
 model Coupon {
-  id                 String             @id @default(cuid())
-  name               String             @unique @default("")
-  stripeId           String             @default("")
-  amount_off         Int?
-  percent_off        Int?
-  duration_in_months Int?
-  duration           String
-  products           Product[]          @relation("Coupon_products")
-  bookings           Booking[]          @relation("Booking_coupons")
-  subscriptionPlans  SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
-  events             Event[]            @relation("Coupon_events")
-  services           Service[]          @relation("Coupon_services")
+  id                   String             @id @default(cuid())
+  name                 String             @unique @default("")
+  stripeId             String             @default("")
+  amount_off           Int?
+  percent_off          Int?
+  duration_in_months   Int?
+  duration             String
+  products             Product[]          @relation("Coupon_products")
+  subscriptionPlans    SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
+  events               Event[]            @relation("Coupon_events")
+  services             Service[]          @relation("Coupon_services")
+  from_CartItem_coupon CartItem[]         @relation("CartItem_coupon")
 }
 
 model Page {
@@ -463,21 +460,21 @@ model Event {
 }
 
 model Ticket {
-  id           String    @id @default(cuid())
-  email        String    @default("")
-  status       String    @default("PAID")
-  event        Event?    @relation("Ticket_event", fields: [eventId], references: [id])
-  eventId      String?   @map("event")
-  holder       User?     @relation("Ticket_holder", fields: [holderId], references: [id])
-  holderId     String?   @map("holder")
-  order        Order?    @relation("Ticket_order", fields: [orderId], references: [id])
-  orderId      String?   @map("order")
-  dateCreated  DateTime? @default(now())
-  dateModified DateTime? @default(now())
+  id           String     @id @default(cuid())
+  email        String     @default("")
+  status       String     @default("PENDING")
+  event        Event?     @relation("Ticket_event", fields: [eventId], references: [id])
+  eventId      String?    @map("event")
+  holder       User?      @relation("Ticket_holder", fields: [holderId], references: [id])
+  holderId     String?    @map("holder")
+  orderItem    OrderItem? @relation("Ticket_orderItem", fields: [orderItemId], references: [id])
+  orderItemId  String?    @map("orderItem")
+  dateCreated  DateTime?  @default(now())
+  dateModified DateTime?  @default(now())
 
   @@index([eventId])
   @@index([holderId])
-  @@index([orderId])
+  @@index([orderItemId])
 }
 
 model Category {
