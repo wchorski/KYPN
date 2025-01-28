@@ -10,7 +10,9 @@ import {
 	dayOfWeek,
 } from "../../lib/dateCheck"
 import { Location, User, Addon } from "../types"
-import { datePrettyLocal, dateToISOTimezone } from "../../lib/dateFormatter"
+import { dateToISOTimezone } from "../../lib/dateFormatter"
+import { getServerSession } from "next-auth"
+import { nextAuthOptions } from "../../../session"
 
 const now = new Date().toISOString()
 
@@ -37,12 +39,8 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			amount_total: graphql.arg({ type: graphql.Int }),
 		},
 
-		async resolve(
-			source,
-			variables,
-			context: Context
-		) {
-      const {
+		async resolve(source, variables, context: Context) {
+			const {
 				serviceId,
 				locationId,
 				addonIds,
@@ -57,22 +55,19 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				time,
 				timeZone,
 				address,
-				amount_total,
 			} = variables
+			
+
+			const session = await getServerSession(nextAuthOptions)
 
 			const sudoContext = context.sudo()
 			let description = ""
 			// const start = new Date(date + "T" + time).toISOString()
 
 			const start = dateToISOTimezone(date, time, timeZone)
-      // console.log("mutation: ", {variables});
-			// console.log({ date, time })
-			// console.log({ start })
-      // console.log(datePrettyLocal(start, 'full'));
-      
 
 			// SERVICE
-			const service = await context.query.Service.findOne({
+			const service = await context.withSession(session).query.Service.findOne({
 				where: { id: serviceId },
 				query: `
           id
@@ -82,6 +77,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
           buisnessDays
         `,
 			})
+
 			if (!service) throw Error("!!! bookAService: No service found")
 
 			description += "SERVICE: " + service?.name + " \n"
@@ -98,13 +94,13 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				const selectedLocation = (await sudoContext.query.Location.findOne({
 					where: { id: locationId },
 					query: `
-            name
-            rooms
-            bookings {
-              start
-              end
-            }
-          `,
+			      name
+			      rooms
+			      bookings {
+			        start
+			        end
+			      }
+			    `,
 				})) as Location
 				if (selectedLocation) {
 					// check to see if this booking's start/end lands on any of the gig's start/end
@@ -134,28 +130,28 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				// todo just run a graphql query?
 				const employeesThatHaveCurrentGigs = (await sudoContext.graphql.run({
 					query: `
-          query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
-            users(where: $where) {
-              id 
-              name
-              email
-              availability(where: $availWhere) {
+            query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
+              users(where: $where) {
                 id
-                start
-                end
-                type
-                status
-                durationInHours
-              }
-              gigs(where: $gigsWhere) {
-                id
-                start
-                end
-                durationInHours
+                name
+                email
+                availability(where: $availWhere) {
+                  id
+                  start
+                  end
+                  type
+                  status
+                  durationInHours
+                }
+                gigs(where: $gigsWhere) {
+                  id
+                  start
+                  end
+                  durationInHours
+                }
               }
             }
-          }
-        `,
+          `,
 					variables: {
 						where: {
 							id: {
@@ -204,22 +200,20 @@ export const bookAService = (base: BaseSchemaMeta) =>
 					OR: addonIds?.map((id) => ({ id: { equals: id } })),
 				},
 				query: `
-        price
-      `,
+			  price
+			`,
 			})
 
+      // //TODO prices are virtual fields to service/event/product prices 
 			// PRICING
-			const addonsCombinedPrice = pickedAddons.reduce(
-				// @ts-ignore
-				(accumulator: number, currentValue: Addon) =>
-					accumulator + currentValue.price,
-				0
-			)
-			const priceTotal = service.price + addonsCombinedPrice
+			// const addonsCombinedPrice = pickedAddons.reduce(
+			// 	// @ts-ignore
+			// 	(accumulator: number, currentValue: Addon) =>
+			// 		accumulator + currentValue.price,
+			// 	0
+			// )
+			// const priceTotal = service.price + addonsCombinedPrice
 
-      console.log({start});
-      console.log('bookAServiceMutation: ', datePrettyLocal(start.toISOString(), 'full'));
-      
 			// BOOKING
 			const booking = await sudoContext.db.Booking.createOne({
 				data: {
@@ -243,11 +237,19 @@ export const bookAService = (base: BaseSchemaMeta) =>
 					email,
 					phone,
 					notes,
-					price: priceTotal,
 					status: serviceId && employeeId ? "REQUESTED" : "LEAD",
 					address,
 					timeZone,
 					// google: calRes,
+				},
+			})
+
+			await sudoContext.db.CartItem.createOne({
+				data: {
+					type: "SALE",
+					user: { connect: { id: customerId } },
+					quantity: 1,
+					booking: { connect: { id: booking.id } },
 				},
 			})
 
@@ -256,6 +258,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// TODO i don't think it returns all this data? remove other stuff
 			return {
 				id: booking.id,
+        status: booking.status,
 			}
 		},
 	})

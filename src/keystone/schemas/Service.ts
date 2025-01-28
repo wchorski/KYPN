@@ -15,6 +15,8 @@ import { document } from "@keystone-6/fields-document"
 import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
+import { envs } from "../../../envs"
+import { stripeServiceCreate } from "../../lib/stripe"
 
 export const Service: Lists.Service = list({
 	access: {
@@ -106,7 +108,10 @@ export const Service: Lists.Service = list({
 			links: true,
 			dividers: true,
 		}),
-		price: integer({ defaultValue: 0, validation: {isRequired: true} }),
+		price: integer({
+			defaultValue: 0,
+			validation: { isRequired: true, min: 0 },
+		}),
 		durationInHours: decimal({
 			defaultValue: "6",
 			precision: 5,
@@ -182,6 +187,8 @@ export const Service: Lists.Service = list({
 			},
 			many: false,
 		}),
+		stripeProductId: text(),
+		stripePriceId: text(),
 		...group({
 			label: "Metadata",
 			// description: 'Group description',
@@ -200,5 +207,34 @@ export const Service: Lists.Service = list({
 				dateModified: timestamp({ defaultValue: { kind: "now" } }),
 			},
 		}),
+	},
+	hooks: {
+		// beforeOperation: async ({ operation, item, resolvedData }) => {
+		// },
+		async afterOperation({ operation, item, resolvedData }) {
+			if (operation === "create") {
+				const { id, price, name, excerpt, status, authorId, image } = item
+				await stripeServiceCreate({
+					id,
+					name,
+					excerpt,
+					category: "unknown",
+					status,
+					authorEmail: authorId || "",
+					type: "service",
+					image,
+					price,
+					//TODO if incremental payment split price over x months
+					// billing_interval: "month",
+					url: envs.FRONTEND_URL + `/services/${id}`,
+				}).then((stripeRes) => {
+          if(!stripeRes) return
+					resolvedData.stripeProductId = stripeRes.id
+					resolvedData.stripePriceId = String(stripeRes.default_price)
+				}).catch((error) => {
+          throw new Error('!!! Service.ts: Stripe Create Product, ', error)
+        })
+			}
+		},
 	},
 })

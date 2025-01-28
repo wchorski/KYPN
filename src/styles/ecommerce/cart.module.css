@@ -1,6 +1,5 @@
 button.remove {
   font-size: 3rem;
-  // background: none;
   background-color: var(--c-txt-sub);
   border: 0;
   color: var(--c-desaturated);
@@ -21,45 +20,48 @@ li.item :global{
   padding: var(--space-s);
   border-bottom: 1px solid rgba(43, 43, 43, 0.424);
   display: flex;
-  // justify-content: space-between;
   grid-template-columns: auto 1fr auto;
   background-color: var(--c-txt-bg);
   border-radius: var(--br-dull);
   max-width: 20rem;
+  gap: var(--space-ms);
   
+  & div {
+    align-self: center;
+  }
 
-  img{
+  & img{
     margin-inline: 1rem;
     width: 50px;
     height: auto;
     object-fit: contain;
   }
 
-  h5, p{
+  & h5, & p{
     margin: 0;
   }
 
-  p {
+  & p {
     font-size: 1.5rem;
     font-weight: bold;
   }
 
-  em{
+  & em{
     font-size: 1rem;
     color: var(--c-txt-sub);
   }
 
-  h5{
+  & h5{
     margin-right: auto;
     font-size: 1rem;
   }
 
-  .perItemTotal{
+  & .perItemTotal{
     padding: 0 1em;
     margin-left: auto;
   }
 
-  input{
+  & input{
     text-align: right;
     width: 5em;
   }
@@ -68,7 +70,7 @@ li.item :global{
 .carticon {
   position: relative;
 
-  svg.cart{
+  & svg.cart{
     color: var(--c-primary);
   }
 }
@@ -91,7 +93,7 @@ li.item :global{
   align-items: center;
   overflow: hidden;
 
-  span {
+  & span {
     transition: all .3s;
     animation: bigSmall .3s;
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -115,8 +117,6 @@ li.item :global{
   height: 100%;
   top: 0;
   right: 0;
-  // width: 40%;
-  // min-width: 500px;
   bottom: 0;
   transform: translateX(100%);
   grid-column: 2/4;
@@ -129,18 +129,18 @@ li.item :global{
   display: grid;
   align-content: start;
 
-  header {
+  & header {
     border-bottom: 5px solid black;
     margin-bottom: 2rem;
     padding-bottom: 2rem;
   }
 
-  .cartCount{
+  & .cartCount{
     position: absolute;
     top: 0;
     right: 0;
   }
-  footer {
+  & footer {
     border-top: 2px dashed black;
     margin-top: 2rem;
     padding-top: 2rem;
@@ -149,13 +149,13 @@ li.item :global{
     align-items: center;
     font-size: 3rem;
     font-weight: 900;
-    p {
+    & p {
       margin: 0;
       font-size: 2rem;
     }
   }
   
-  ul {
+  & ul {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -165,7 +165,7 @@ li.item :global{
     gap: .3rem;
   }
 
-  .close:hover, .close:focus{
+  & .close:hover, & .close:focus{
     color: var(--c-txt);
   }
   
@@ -204,7 +204,7 @@ button.open{
 }
 
 button.addtocart {
-  svg {
+  & svg {
     font-size: 1.3rem;
     margin-left: .3rem;
   }
@@ -213,18 +213,15 @@ button.addtocart {
 footer.footer {
   text-align: right;
 
-  p{
+  & p{
     font-size: 3rem;
   }
-  // p, button {
-  //   margin-left: auto;
-  // }
 }
 
 .badge {
   position: relative;
 
-  > span {
+  & > span {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -232,7 +229,7 @@ footer.footer {
     transform: translate(-50%, -15%)
   }
 
-  > svg {
+  & > svg {
     font-size: 3rem !important;
   }
 }

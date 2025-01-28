@@ -1065,6 +1065,8 @@ type Service {
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
   couponsCount(where: CouponWhereInput! = {}): Int
   author: User
+  stripeProductId: String
+  stripePriceId: String
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
@@ -1101,6 +1103,8 @@ input ServiceWhereInput {
   bookings: BookingManyRelationFilter
   coupons: CouponManyRelationFilter
   author: UserWhereInput
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
   dateCreated: DateTimeNullableFilter
@@ -1146,6 +1150,8 @@ input ServiceOrderByInput {
   buisnessHourOpen: OrderDirection
   buisnessHourClosed: OrderDirection
   status: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -1167,6 +1173,8 @@ input ServiceUpdateInput {
   bookings: BookingRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
   author: UserRelateToOneForUpdateInput
+  stripeProductId: String
+  stripePriceId: String
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -1216,6 +1224,8 @@ input ServiceCreateInput {
   bookings: BookingRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
   author: UserRelateToOneForCreateInput
+  stripeProductId: String
+  stripePriceId: String
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
   dateCreated: DateTime
@@ -2026,6 +2036,7 @@ type CartItem {
   type: String
   subTotal: Int
   product: Product
+  booking: Booking
   event: Event
   user: User
 }
@@ -2042,6 +2053,7 @@ input CartItemWhereInput {
   quantity: IntFilter
   type: StringFilter
   product: ProductWhereInput
+  booking: BookingWhereInput
   event: EventWhereInput
   user: UserWhereInput
 }
@@ -2056,6 +2068,7 @@ input CartItemUpdateInput {
   quantity: Int
   type: String
   product: ProductRelateToOneForUpdateInput
+  booking: BookingRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
@@ -2063,6 +2076,12 @@ input CartItemUpdateInput {
 input ProductRelateToOneForUpdateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
+input BookingRelateToOneForUpdateInput {
+  create: BookingCreateInput
+  connect: BookingWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -2081,6 +2100,7 @@ input CartItemCreateInput {
   quantity: Int
   type: String
   product: ProductRelateToOneForCreateInput
+  booking: BookingRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
@@ -2088,6 +2108,11 @@ input CartItemCreateInput {
 input ProductRelateToOneForCreateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
+}
+
+input BookingRelateToOneForCreateInput {
+  create: BookingCreateInput
+  connect: BookingWhereUniqueInput
 }
 
 input EventRelateToOneForCreateInput {

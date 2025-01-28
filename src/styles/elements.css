@@ -47,8 +47,8 @@ button:disabled {
 	border: solid 1px var(--c-primary);
 	padding-inline: 1rem;
 	transition: all 0.3s;
-	display: grid;
-	justify-content: space-evenly;
+	display: inline-flex;
+	justify-content: space-between;
 	align-content: center;
 
 	& span {

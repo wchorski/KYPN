@@ -1,6 +1,6 @@
 "use client"
 import moneyFormatter from "@lib/moneyFormatter"
-import styles from "@styles/ecommerce/cart.module.scss"
+import styles from "@styles/ecommerce/cart.module.css"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
@@ -23,8 +23,40 @@ export default function CartItem({ item, sessionId }: Props) {
 
 	if (item.event) return <TicketItem item={item}/>
 	if (item.product) return <ProductItem item={item} sessionId={sessionId} />
+	if (item.booking) return <BookingItem item={item} />
 
 	return <p>no product or event associated</p>
+}
+
+function BookingItem({item}:{item: CartItem}) {
+
+	if (!item.booking) return <p>Booking Not Found</p>
+
+	const {
+		quantity,
+		booking: { id, summary, price },
+	} = item
+	return (
+		<li className={styles.item}>
+			{/* <ImageDynamic
+				photoIn={{ url: image, altText: `${summary} featured image` }}
+			/> */}
+
+			<div>
+				<h5>
+					<Link href={`/bookings/${id}`}> {summary} </Link>
+				</h5>
+        
+        <span className="sub-text">booking</span>
+			</div>
+
+			<div className="perItemTotal">
+				<p>{moneyFormatter(price * quantity)}</p>
+			</div>
+
+			<CartRemoveItem id={item.id} />
+		</li>
+	)
 }
 
 function TicketItem({item}:{item: CartItem}) {

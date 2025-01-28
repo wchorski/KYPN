@@ -31,7 +31,9 @@ const NEXTAUTH_URL = process.env.NEXTAUTH_URL
 const BACKEND_URL =
 	String(process.env.NEXT_PUBLIC_BACKEND_URL) || "no_backend_URL_set"
 const BACKEND_PORT = process.env.BACKEND_PORT || "no_backend_port"
-const SEED_ME = process.env.SEED_ME
+const SEED_EXTRACT_NONE = process.env.SEED_EXTRACT_NONE! as "seed"|"extract"|"none"
+const SEED_RANDOM_RELATIVE_DATES = process.env.SEED_RANDOM_RELATIVE_DATES! as "true"|"false"
+const SEED_PASSWORD_SECRET = process.env.SEED_PASSWORD_SECRET!
 const BASIC_USER_ROLE_NAME = process.env.BASIC_USER_ROLE_NAME!
 const NEXT_PUBLIC_COPYWRITE = process.env.NEXT_PUBLIC_COPYWRITE
 
@@ -104,7 +106,9 @@ export const envs = {
 	NEXTAUTH_URL,
 	BACKEND_URL,
 	BACKEND_PORT,
-	SEED_ME,
+	SEED_EXTRACT_NONE,
+  SEED_PASSWORD_SECRET,
+  SEED_RANDOM_RELATIVE_DATES,
 	GOOGLE_PRIVATE_KEY,
 	GOOGLE_CLIENT_EMAIL,
 	GOOGLE_CAL_ID,

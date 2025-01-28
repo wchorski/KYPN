@@ -4,14 +4,9 @@ import type {
 	UserCreateInput,
 	RoleCreateInput,
 	PageCreateInput,
-	PostCreateInput,
 	CategoryCreateInput,
 	TagCreateInput,
 	AnnouncementCreateInput,
-	AddonCreateInput,
-	LocationCreateInput,
-	BookingCreateInput,
-	EventCreateInput,
 } from ".keystone/types"
 import {
 	SeedAddons,
@@ -87,16 +82,6 @@ export const addons_seed: SeedAddons[] = [
 		price: 200,
 		status: "PUBLIC",
 		author: { email: "admin@tawtaw.site" },
-		services: [
-			{
-				name: "Fresh Fruit Fiesta",
-			},
-			{
-				name: "Juicing Workshops",
-			},
-		],
-		products: [],
-		subscriptionPlans: [],
 		categories: [],
 		tags: [],
 		dateCreated: "2024-12-17T21:27:14.058Z",
@@ -112,19 +97,6 @@ export const addons_seed: SeedAddons[] = [
 		price: 300,
 		status: "OUT_OF_STOCK",
 		author: { email: "admin@tawtaw.site" },
-		services: [
-			{
-				name: "Smoothie Bar Social",
-			},
-			{
-				name: "Fresh Fruit Fiesta",
-			},
-			{
-				name: "Juicing Workshops",
-			},
-		],
-		products: [],
-		subscriptionPlans: [],
 		categories: [],
 		tags: [],
 		dateCreated: "2024-12-17T21:27:14.058Z",
@@ -140,16 +112,6 @@ export const addons_seed: SeedAddons[] = [
 		price: 400,
 		status: "PUBLIC",
 		author: { email: "admin@tawtaw.site" },
-		services: [
-			{
-				name: "Fresh Fruit Fiesta",
-			},
-			{
-				name: "Juicing Workshops",
-			},
-		],
-		products: [],
-		subscriptionPlans: [],
 		categories: [],
 		tags: [],
 		dateCreated: "2024-12-17T21:27:14.058Z",

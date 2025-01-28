@@ -10,7 +10,7 @@ import type { Permission } from "./schemas/fields"
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498
 import type {
-  AddonCreateInput,
+	AddonCreateInput,
 	BookingCreateInput,
 	EventCreateInput,
 	Lists,
@@ -127,9 +127,9 @@ export type User = Lists.User.Item & {
 	gigs: Booking[]
 	gig_requests: Booking[]
 	availability: Availability[]
-  cart: CartItem[]
-  tickets: Ticket[]
-  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	cart: CartItem[]
+	tickets: Ticket[]
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
 }
@@ -141,6 +141,8 @@ export type Tag = Lists.Tag.Item
 export type Booking = Lists.Booking.Item & {
 	typeof: "booking"
 	author: User
+	//? virtual
+	price: number
 	details: { document: any }
 	service?: Service
 	location: Location
@@ -163,7 +165,7 @@ export type Page = Lists.Page.Item & {
 	tags: Tag[]
 	author: User
 	content: { document: any }
-  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
 }
@@ -172,7 +174,7 @@ export type Post = Lists.Post.Item & {
 	tags: Tag[]
 	author: User
 	content: { document: any }
-  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
 }
@@ -208,11 +210,12 @@ export type ListAccessArgs = {
 
 export type CartItem = Lists.CartItem.Item & {
 	typeof: "cartitem"
-  type: 'SALE'|'RENTAL'
+	type: "SALE" | "RENTAL"
 	product?: Product
 	event?: Event
+	booking?: Booking
 	user?: User
-  subTotal:number
+	subTotal: number
 }
 
 export type Coupon = Lists.Coupon.Item & {
@@ -226,33 +229,41 @@ export type Coupon = Lists.Coupon.Item & {
 }
 
 export type Event = Lists.Event.Item & {
-  id:string
+	id: string
 	typeof: "event"
 	location: Location
-  status: "ACTIVE"|"POSTPONED"|"CANCELED"|"PAST"|"DRAFT"
-  description: {
-    document: any
-  }
+	status: "ACTIVE" | "POSTPONED" | "CANCELED" | "PAST" | "DRAFT"
+	description: {
+		document: any
+	}
 	hosts: User[]
 	cohosts: User[]
 	tickets: Ticket[]
 	coupons: Coupon[]
 	categories: Category[]
 	tags: Tag[]
-  //? ks types as date but api gives string
+	//? ks types as date but api gives string
 	start: string
 	end: string
 }
 
 export type Ticket = Lists.Ticket.Item & {
 	typeof: "ticket"
-  status: "PENDING"|'PAID'|'RSVP'|'UNPAID'|'ATTENDED'|'CANCELED'|'REJECTED'|'PAST'
+	status:
+		| "PENDING"
+		| "PAID"
+		| "RSVP"
+		| "UNPAID"
+		| "ATTENDED"
+		| "CANCELED"
+		| "REJECTED"
+		| "PAST"
 	eventSummary: string
 	event: Event
 	holder: User
 	order: Order
 	coupons: Coupon[]
-  orderIndex: string
+	orderIndex: string
 }
 
 export type Product = Lists.Product.Item & {
@@ -302,16 +313,16 @@ export type Rental = Lists.Rental.Item & {
 // 	}
 // }
 
-
 export type Order = Lists.Order.Item & {
-  typeof: 'order',
-  count: number,
+	typeof: "order"
+	count: number
 	user: User
 	items: OrderItem[]
 	rental: Rental
+	bookings: Booking[]
 	ticketItems: Ticket[]
-  dateCreated:string
-  dateModified:string
+	dateCreated: string
+	dateModified: string
 }
 
 export type OrderItem = Lists.OrderItem.Item & {
@@ -352,7 +363,7 @@ export type Service = Lists.Service.Item & {
 	locations: Location[]
 	addons: Addon[]
 	buisnessDays: number[]
-  author: User
+	author: User
 }
 
 export type Location = Lists.Location.Item & {
@@ -415,24 +426,24 @@ export type SeedPost = PostCreateInput & {
 }
 
 export type SeedAddons = AddonCreateInput & {
-  // products?:{
-  //   name:string
-  // }[]
-  // subscriptionPlans?:{
-  //   name:string
-  // }[]
-  // services?:{
-  //   name:string
-  // }[]
-  categories?:{
-    name:string
-  }[]
-  tags?:{
-    name:string
-  }[]
-  author?: {
-    email:string
-  }
+	// products?:{
+	//   name:string
+	// }[]
+	// subscriptionPlans?:{
+	//   name:string
+	// }[]
+	// services?:{
+	//   name:string
+	// }[]
+	categories?: {
+		name: string
+	}[]
+	tags?: {
+		name: string
+	}[]
+	author?: {
+		email: string
+	}
 }
 
 export type SeedBookings = BookingCreateInput & {
@@ -469,15 +480,14 @@ export type SeedEvent = EventCreateInput & {
 	tags?: {
 		name: string
 	}[]
-  description?: {
+	description?: {
 		document: any
 	}
-  // not ready yet
-  // tixToOrder: number,
+	// not ready yet
+	// tixToOrder: number,
 }
 
 export type SeedService = ServiceCreateInput & {
-  
 	description?: {
 		document: any
 	}
@@ -506,7 +516,7 @@ export type SeedService = ServiceCreateInput & {
 //** Seed mods END*/
 
 export type SeedLocations = LocationCreateInput & {
-  tags?: {
+	tags?: {
 		name: string
 	}[]
 	categories?: {
@@ -534,4 +544,3 @@ export type StringRange = {
 	start: string
 	end: string
 }
-

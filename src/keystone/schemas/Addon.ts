@@ -59,7 +59,7 @@ export const Addon: Lists.Addon = list({
 				displayMode: "textarea",
 			},
 		}),
-		price: integer({ defaultValue: 0, validation: { isRequired: true } }),
+		price: integer({ defaultValue: 0, validation: { isRequired: true, min: 0 } }),
 		stripeProductId: text(),
 		// TODO instead of "out of stock" add `stockCount` as to not run into privacy issues
 		status: select({

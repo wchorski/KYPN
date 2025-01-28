@@ -67,7 +67,7 @@ export const Event: Lists.Event = list({
 		summary: text({ validation: { isRequired: true } }),
 		start: timestamp({ validation: { isRequired: true } }),
 		end: timestamp({validation: { isRequired: true }}),
-		price: integer({ defaultValue: 0, validation: { isRequired: true } }),
+		price: integer({ defaultValue: 0, validation: { isRequired: true, min: 0 },  }),
 		seats: integer({ validation: { isRequired: true } }),
 		image: text(),
 		excerpt: text({

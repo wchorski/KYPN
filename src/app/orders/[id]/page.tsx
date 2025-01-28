@@ -5,7 +5,7 @@ import { datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import styles from "@styles/ecommerce/cart.module.scss"
+import styles from "@styles/ecommerce/cart.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
@@ -113,12 +113,24 @@ export default async function OrderByIdPage({ params }: Props) {
 								</div>
 							</li>
 						))}
+						{order.bookings.map((book) => (
+							<li key={book.id}>
+								<Link href={`/bookings/${book.id}`}>{book.summary}</Link>
+							</li>
+						))}
+						{order.ticketItems.map((tix) => (
+							<li key={tix.id}>
+								<Link href={`/tickets/${tix.id}`}>
+									<h5>{tix.eventSummary}</h5>
+								</Link>
+							</li>
+						))}
 					</ul>
 				</section>
 
 				<TicketList tickets={order?.ticketItems || []} />
 			</div>
-			<footer className={''}>
+			<footer>
 				<table style={{ fontSize: "var(--space-ms)" }}>
 					<tbody>
 						<tr>
@@ -155,11 +167,17 @@ const query = `
     id
     orderIndex
     status
+    eventSummary
     event {
       summary
       start
       price
     }
+  }
+  bookings {
+    id
+    summary
+    price
   }
   user{
     id

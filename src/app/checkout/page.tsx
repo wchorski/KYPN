@@ -26,6 +26,8 @@ type Props = {
 	params: { id: string }
 }
 
+// throw new Error('("nostripe" === "nostripe")')
+
 export default async function CheckoutPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	// const { data, error } = await fetch()
@@ -67,11 +69,13 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
 
 	// if (!envs.STRIPE_PUBLIC_KEY)
+
 	if ("nostripe" === "nostripe")
 		return (
 			<main className={[page_layout].join(" ")}>
 				<header className={layout_site}>
 					<h1>Checkout</h1>
+          <p className="error">{`DEBUG "nostripe" === "nostripe" for native form`}</p>
 				</header>
 				<div className={[page_content, layout_site].join(" ")}>
 					<Grid layout={"1_1"} isAuto={false}>
@@ -81,15 +85,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							<CartItemsList />
 						</div>
 						<div>
-							
 							{user.cart.length === 0 ? (
-								<p> No items in cart. </p>
+								<p>No items in cart.</p>
 							) : filteredTicketItems ? (
 								<CheckoutCartForm cartItems={filteredTicketItems} />
 							) : filteredProductItems ? (
 								<p>CheckoutForm for products</p>
 							) : (
-								<p> uh..... </p>
+								<p>uh.....</p>
 							)}
 						</div>
 					</Grid>

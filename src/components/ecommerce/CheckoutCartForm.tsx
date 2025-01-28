@@ -13,6 +13,7 @@ import { CartTotal } from "./CartTotal"
 import { useRouter } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { useSession } from "next-auth/react"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 
 type Props = {
 	cartItems: CartItem[]
@@ -41,9 +42,10 @@ export function CheckoutCartForm({ cartItems }: Props) {
 		}
 
 		// return () =>
-	}, [state.success])
+	}, [state.success, getUserCart, session?.itemId, router, state.url])
 
-	return (
+  if(status === 'loading') return <LoadingAnim />
+	if(status === 'authenticated') return (
 		<form action={action} className={form}>
 			{/* <InputField /> */}
 			<h3>
@@ -58,4 +60,7 @@ export function CheckoutCartForm({ cartItems }: Props) {
 			<p className={"error"}>{state.error}</p>
 		</form>
 	)
+
+  if(status === 'unauthenticated') return <p className={'sub-text'} >unauthenticated</p>
+  return null
 }

@@ -78,19 +78,20 @@ export const Order: Lists.Order = list({
 				type: graphql.Int,
 				async resolve(item, args, context) {
 					const {
-						order: { ticketItemsCount },
+						order: { ticketItemsCount, bookingsCount },
 					} = (await context.graphql.run({
 						query: `
               query Order($where: OrderWhereUniqueInput!) {
                 order(where: $where) {
                   ticketItemsCount
+                  bookingsCount
                 }
               }
             `,
 						variables: {
 							where: { id: item.id },
 						},
-					})) as { order: { ticketItemsCount: number } }
+					})) as { order: { ticketItemsCount: number, bookingsCount:number } }
 
           //? this does same as above gql.run. but it is less performant?
 					// const tixsCount = await context.query.Ticket.count({
@@ -106,7 +107,7 @@ export const Order: Lists.Order = list({
 						return accumulator + it.quantity
 					}, 0)
 
-					return itemsCount + ticketItemsCount
+					return itemsCount + ticketItemsCount + bookingsCount
 				},
 			}),
 		}),

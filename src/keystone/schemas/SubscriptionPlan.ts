@@ -132,7 +132,7 @@ export const SubscriptionPlan:Lists.SubscriptionPlan = list({
       }
     }),
 
-    price: integer({validation: {isRequired: true}}),
+    price: integer({validation: { isRequired: true, min: 0 }}),
     stripeProductId: text(),
     stripePriceId: text(),
     billing_interval: select({

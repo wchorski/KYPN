@@ -27,7 +27,8 @@ export function calcCartSaleTotal(cartItems:CartItem[]){
   const saleItems = cartItems.filter(item => item.type === 'SALE')
 
   const total_accumulated = saleItems.reduce((accumulator, item) => {
-    return accumulator + (item.product?.price || 0 * item.quantity)
+    const itemPrice = item.product?.price || item.event?.price || item.booking?.price || 0
+    return accumulator + (itemPrice || 0 * item.quantity)
   }, 0)
 
   return total_accumulated

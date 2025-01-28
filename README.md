@@ -254,6 +254,7 @@ When initializing a fresh database or returning to development you may add/remov
 <details>
 <summary>view</summary>
 
+#todo
 - [ ] WHY IS NEXTJS terminal constantly logging `GET /_next/static/chunks/... 404`??? This i need to do before moving back to main branch
 - [ ] make cute hover/click animation on powered by `www.tawtaw.site` link
 - [ ] get rid of all `BlockLayout` files in favor of `Grid` or `Flex`
@@ -272,6 +273,7 @@ When initializing a fresh database or returning to development you may add/remov
 - [ ] look into more robust light dark + other color themes
   - https://github.com/stolinski/tolin.ski/blob/main/src/routes/(blank)/experiments/dark-light/%2Bpage.svelte
   - https://tolin.ski/experiments/dark-light
+- [ ] WARNING. look out for any ecommerce schema that takes a price. don't let client footgun themselves with ecommerce being listed as 'more than free' negative numbers
 ---
 - [ ] add testing again
   - [ ] stripe webhook testing - https://accreditly.io/articles/test-stripe-webhooks-without-using-ngrok#content-3-local-stripe-webhook-testing-with-docker
@@ -309,8 +311,11 @@ When initializing a fresh database or returning to development you may add/remov
 ### Blocks
 
 #todo
-
 - [ ] Gallery: better editor preview
+- [ ] ticket checkout flow. (confirm ticket/seat as they enter cart)
+  1. event page 
+  2. ticket to cart creates ticket (ticket status === HOLD)
+  3. checkout confirms status === PAYMENT_RECIEVED
 
 - Announcements
   - create dynamic announcements that are private, members only, etc.

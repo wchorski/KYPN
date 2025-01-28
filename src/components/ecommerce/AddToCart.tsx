@@ -4,7 +4,7 @@ import { TbCheck, TbExclamationCircle, TbLoader  } from 'react-icons/tb';
 
 import { useState } from 'react';
 import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
-import styles from '@styles/ecommerce/cart.module.scss'
+import styles from '@styles/ecommerce/cart.module.css'
 import { useCart } from '@components/hooks/CartStateContext';
 
 function plainJSON(json:any) {

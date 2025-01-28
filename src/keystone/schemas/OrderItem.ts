@@ -39,7 +39,7 @@ export const OrderItem:Lists.OrderItem = list({
         createView: { fieldMode: 'edit' }
       }
     }),
-    price: integer({validation: {isRequired: true}}),
+    price: integer({validation: {isRequired: true, min: 0}}),
     quantity: integer({validation: {isRequired: true}}),
     order: relationship({ ref: 'Order.items' }),
     product: relationship({ref: 'Product.orderItems', many: false}),

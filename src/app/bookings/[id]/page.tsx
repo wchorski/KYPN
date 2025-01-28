@@ -1,21 +1,16 @@
 import ErrorMessage from "@components/ErrorMessage"
 import { DayMonthTime } from "@components/blocks/DayMonthTime"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
 import { UserBadge } from "@components/menus/UserBadge"
-import { Booking } from "@ks/types"
-import {
-	dateInputFormat,
-	datePrettyLocal,
-	timeInputFormat,
-} from "@lib/dateFormatter"
+
+import { datePrettyLocal } from "@lib/dateFormatter"
 import fetchBooking from "@lib/fetchdata/fetchBooking"
 import moneyFormatter from "@lib/moneyFormatter"
 import Link from "next/link"
 import { FiEdit } from "react-icons/fi"
 import { CgExternal } from "react-icons/cg"
-import DialogPopup from "@components/menus/Dialog"
+import { DialogPopup } from "@components/menus/Dialog"
 import { StatusBadge } from "@components/StatusBadge"
-import styles, { booking_single } from "@styles/booking.module.css"
+import { booking_single } from "@styles/booking.module.css"
 import { Metadata, ResolvingMetadata } from "next"
 import { envs } from "@/envs"
 import { getServerSession } from "next-auth"
@@ -24,20 +19,22 @@ import { BlockRender } from "@components/blocks/BlockRender"
 import {
 	layout_breakout,
 	layout_content,
-	layout_wide,
 	page_layout,
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import Flex from "@components/layouts/Flex"
-import { session_image } from "@styles/menus/session.module.css"
 import { IconUserAccountAvatar } from "@lib/useIcons"
 import { Card } from "@components/layouts/Card"
 import { NoData } from "@components/elements/NoData"
+import Image from "next/image"
+import { Callout } from "@components/blocks/Callout"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
 //   description: envs.SITE_DESC,
 // }
+
+// throw new Error('Bookings: cartItem -> checkout -> orderItem ')
 
 export async function generateMetadata(
 	{ params, searchParams }: Props,
@@ -59,6 +56,7 @@ export async function generateMetadata(
 
 	return {
 		title: booking.summary,
+		description: envs.SITE_DESC,
 	}
 }
 
@@ -74,7 +72,7 @@ export default async function BookingSinglePage({
 	const session = await getServerSession(nextAuthOptions)
 	const { id } = await params
 
-	const { booking, error } = await fetchBooking({
+	const { booking, cartItemCount, error } = await fetchBooking({
 		id,
 		session,
 		query: QUERY_BOOKING_RECIEPT,
@@ -132,10 +130,15 @@ export default async function BookingSinglePage({
             <FiEdit /> Edit 
           </Link> */}
 					{customer && (
-						<Card direction={'row'} gap={'var(--space-m)'} paddingBlock={'s'} marginBlock={'0'}>
-							<figure style={{margin: '0'}}>
+						<Card
+							direction={"row"}
+							gap={"var(--space-m)"}
+							paddingBlock={"s"}
+							marginBlock={"0"}
+						>
+							<figure style={{ margin: "0" }}>
 								{customer.image ? (
-									<img
+									<Image
 										src={customer.image}
 										alt={"user avatar"}
 										width={20}
@@ -147,7 +150,7 @@ export default async function BookingSinglePage({
 							</figure>
 							<span>
 								<Link href={`/users/${customer.id}`}>
-									{customer?.name + ' | ' + customer.email}
+									{customer?.name + " | " + customer.email}
 								</Link>
 							</span>
 						</Card>
@@ -159,6 +162,14 @@ export default async function BookingSinglePage({
 			</header>
 
 			<div className={layout_content}>
+				{cartItemCount > 0 && (
+					<Callout intent={"info"}>
+						<p>
+							Item is in shopping cart. Continue with{" "}
+							<Link className={'button'}  href={`/checkout`}>checkout</Link>
+						</p>
+					</Callout>
+				)}
 				<div className={booking_single}>
 					<table>
 						<tbody>
@@ -167,9 +178,12 @@ export default async function BookingSinglePage({
 									<label>Client: </label>
 								</td>
 								<td>
+									<span>
+										{" "}
+										{name}{" "}
+										{customer.email !== email ? " (Unregistered User)" : ""}{" "}
+									</span>
 
-                  <span> {name} {customer.email !== email ? ' (Unregistered User)' : ''} </span>
-	
 									<br />
 									<span>{email}</span>
 									<br />
@@ -275,64 +289,54 @@ export default async function BookingSinglePage({
 				buttonLabel="Ok"
 			>
 				<p>
-					{" "}
 					Updating a booking is almost ready. For now, create a new booking and
 					we will cancel the previous booking
 				</p>
 				<Link href={`/bookings`}> Create new booking </Link>
 				{/* <BookingFormUpdate /> */}
+				<Link href={envs.BACKEND_URL + `/bookings/${id}`}>booking</Link>
 			</DialogPopup>
 		</main>
 	)
 }
 
 const QUERY_BOOKING_RECIEPT = `
-  id
-  email
-  phone
-  name
-  dateCreated
-  dateModified
-  addonsCount
-  end
-  google
-  start
-  status
-  summary
-  notes
-  price
-  address
-  revision
-  details {
-    document
-  }
-  addons {
-    id
-    excerpt
-    name
-    price
-  }
-  customer {
-    id
-    email
-    phone
-    name
-    nameLast
-    image
-  }
-  employees {
-    id
-    name
-    email
-    image
-  }
-  location {
-    id
-    name
-    address
-  }
-  service {
-    id
-    name
-  }
-`
+    summary
+		details {
+      document
+    }
+		status
+		email
+		phone
+		name
+		location {
+      id
+      name
+      address
+    }
+		address
+		service {
+      id
+      name
+    }
+		price
+		notes
+		addons {
+      id
+      name
+    }
+		employees {
+      id
+      name
+      email
+    }
+		customer {
+      id
+      name
+      email
+    }
+		dateModified
+		start
+		end
+		revision
+  `

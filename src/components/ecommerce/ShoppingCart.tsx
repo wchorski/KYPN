@@ -2,7 +2,7 @@
 import { calcTotalPrice } from '@lib/calcTotalPrice'
 import { useCart } from '@components/hooks/CartStateContext'
 import moneyFormatter from '@lib/moneyFormatter'
-import styles from '@styles/ecommerce/cart.module.scss'
+import styles from '@styles/ecommerce/cart.module.css'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import CartItem from './CartItem'
 import { TbArrowBarToRight } from "react-icons/tb";

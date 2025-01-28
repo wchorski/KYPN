@@ -20,11 +20,12 @@ export function CartItemsList() {
 
 	const ticketCartItems = cartItems.filter((item) => item.event?.id)
 	const filteredProductItems = cartItems.filter((item) => item.product?.id)
+	const filteredBookingItems = cartItems.filter((item) => item.booking?.id)
 
 	return (
 		<>
 			<ul style={{ padding: "0" }}>
-				{isPending ? (
+				{!session || isPending ? (
 					<LoadingAnim isVisable={isPending} />
 				) : cartItems?.length <= 0 ? (
 					<p>
@@ -43,6 +44,9 @@ export function CartItemsList() {
 							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
 						))}
 						{filteredProductItems?.map((item: any) => (
+							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+						))}
+						{filteredBookingItems?.map((item: any) => (
 							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
 						))}
 					</>

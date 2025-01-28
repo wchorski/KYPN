@@ -24,7 +24,7 @@ const LocalStateContext = createContext(defaultCtx)
 function CartStateProvider ({children}:{children: ReactNode}){
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [isPending, setIsPending] = useState<boolean>(true)
+  const [isPending, setIsPending] = useState<boolean>(false)
   const [cartTotal, setCartTotal] = useState<number>(0)
   const [cartCount, setCartCount] = useState<number>(0)
   const [cartItems, setCartItems] = useState<CartItem[]>([])
@@ -67,6 +67,11 @@ function CartStateProvider ({children}:{children: ReactNode}){
                     rental_price
                     name
                     image
+                  }
+                  booking {
+                    id
+                    price
+                    summary
                   }
                 }
               }

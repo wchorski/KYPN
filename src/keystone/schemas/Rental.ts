@@ -98,7 +98,7 @@ export const Rental:Lists.Rental = list({
     // }),
     location: text({validation: { isRequired: true }}),
     delivery: checkbox(),
-    price: integer({ defaultValue: 0, validation: { isRequired: true } }),
+    price: integer({ defaultValue: 0, validation: { isRequired: true, min: 0 } }),
     email: text(),
     phone: text(),
     name: text(),

@@ -76,8 +76,8 @@ export const Product: Lists.Product = list({
 		}),
 		image: text(),
 		name: text({ validation: { isRequired: true } }),
-		stripeProductId: text({ defaultValue: "NO_PROD_ID" }),
-		stripePriceId: text({ defaultValue: "NO_PRICE_ID" }),
+		stripeProductId: text(),
+		stripePriceId: text(),
 		slug: text({
 			validation: { isRequired: true },
 			isIndexed: "unique",
@@ -154,7 +154,7 @@ export const Product: Lists.Product = list({
 			fields: {
 				isForSale: checkbox({ defaultValue: true }),
 				isForRent: checkbox({ defaultValue: false }),
-				price: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+				price: integer({ validation: { isRequired: true, min: 0 }}),
 				rental_price: integer({
 					validation: { isRequired: true },
 					defaultValue: 0,
@@ -254,8 +254,7 @@ export const Product: Lists.Product = list({
 						// @ts-ignore //todo might cause problems
 						if (resolvedData && !resolvedData.product) {
 							resolvedData.stripeProductId = res.id
-							// @ts-ignore //todo might cause problems
-							resolvedData.stripePriceId = res.default_price
+							resolvedData.stripePriceId = String(res.default_price)
 						}
 					})
 					.catch((err) => {

@@ -4,7 +4,7 @@ import { graphql } from "@keystone-6/core"
 import { Context, Lists, TicketCreateInput } from ".keystone/types"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
-import type { CartItem, Event } from "../types"
+import type { Booking, CartItem, Event } from "../types"
 
 type StripeSession = {
 	stripeSession?: {
@@ -26,7 +26,6 @@ type SessionWStripe = {
 export const checkout = (base: BaseSchemaMeta) =>
 	graphql.field({
 		type: base.object("Order"),
-		// args: {},
 		async resolve(source, variables, context: Context) {
 			// const {} = variables
 
@@ -38,7 +37,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 			// 	user: { email: "debug@debug" },
 			// }
 			const session: SessionWStripe = context.session
-			if (!session) throw new Error("Session not available")
+			if (!session)
+				throw new Error("!!! mutation.checkout: Session not available")
 
 			const cartItems = (await sudoContext.query.CartItem.findMany({
 				where: { user: { id: { equals: session.itemId } } },
@@ -49,10 +49,15 @@ export const checkout = (base: BaseSchemaMeta) =>
           subTotal
           product {
             id
+            price
           }
           event {
             id
             seats
+            price
+          }
+          booking {
+            id
             price
           }
         `,
@@ -62,10 +67,13 @@ export const checkout = (base: BaseSchemaMeta) =>
 				(item) => item.event?.id
 			) as unknown as TicketCartItem[]
 
+			const bookingCartItems = cartItems.filter(
+				(item) => item.booking?.id
+			) as unknown as BookingCartItem[]
+
 			// TODO don't forget about products (rentals)
 			const filteredProductItems = cartItems.filter((item) => item.product?.id)
 
-			// TODO why is it returning promises and not array of objs?
 			const ticketsToCreate = await createTicketItems(
 				ticketCartItems,
 				context,
@@ -77,6 +85,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 			}, 0)
 			// TODO perform any coupons here
 			const amountTotal = subTotals
+			console.log({ bookingCartItems })
 
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
@@ -94,11 +103,28 @@ export const checkout = (base: BaseSchemaMeta) =>
 					amountTotal === 0
 						? { status: "PAYMENT_RECIEVED" }
 						: { status: "REQUESTED" }),
+					bookings:
+						bookingCartItems.length > 0
+							? {
+									connect: bookingCartItems.map((cartItem) => ({ id: cartItem.booking.id })),
+							  }
+							: null,
 				},
 			})
 
+			if (!order) throw new Error("!!! mutation.checkout: order not created")
+
+			
+
 			await sudoContext.db.CartItem.deleteMany({
 				where: cartItems.map((item) => ({ id: item.id })),
+			})
+
+      await sudoContext.db.Booking.updateMany({
+				data: bookingCartItems.map((cartItem) => ({
+					where: { id: cartItem.booking.id },
+					data: { status: "HOLDING" },
+				})),
 			})
 
 			//? email sent with Order afterOperation
@@ -117,7 +143,7 @@ async function createTicketItems(
 ) {
 	const ticketsToCreate = await Promise.all(
 		ticketCartItems.map(async ({ event, quantity }) => {
-			if (!event) throw new Error("No Event Found")
+			if (!event) throw new Error("!!! mutation.checkout: No Event Found")
 
 			const seatsTaken = await countAvailableSeats({
 				context,
@@ -126,7 +152,7 @@ async function createTicketItems(
 			//? if (# of seats customer is requesting + already taken seats) is over event.seats max
 			if (quantity + seatsTaken > event.seats)
 				throw new Error(
-					`Not enough seats available for event. ${
+					`!!! mutation.checkout: Not enough seats available for event. ${
 						event.seats - seatsTaken
 					} seats left.`
 				)
@@ -174,9 +200,19 @@ type TicketCartItem = {
 	quantity: number
 	type: "SALE"
 	productId: null
+	bookingId: null
 	event: {
 		id: string
 		seats: number
 		price: number
 	}
+}
+
+type BookingCartItem = {
+	id: string
+	quantity: 1
+	type: "SALE"
+	productId: null
+	eventId: null
+	booking: Booking
 }

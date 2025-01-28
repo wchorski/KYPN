@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-	searchParams: { stripeCheckoutSessionId: string, orderId:string }
+	searchParams: { stripeCheckoutSessionId: string; orderId: string }
 	params: { id: string }
 }
 
@@ -36,8 +36,11 @@ export default async function CheckoutSuccessPage({
 	const { stripeCheckoutSessionId, orderId } = await searchParams
 	// const session = await getServerSession(nextAuthOptions)
 
-	if(stripeCheckoutSessionId) return <StripeCheckoutCheck stripeCheckoutSessionId={stripeCheckoutSessionId}/>
-  if(orderId) return <NativeCheckoutSession id={orderId}/>
+	if (stripeCheckoutSessionId)
+		return (
+			<StripeCheckoutCheck stripeCheckoutSessionId={stripeCheckoutSessionId} />
+		)
+	if (orderId) return <NativeCheckoutSession id={orderId} />
 
 	return (
 		<main className={[page_layout].join(" ")}>
@@ -58,49 +61,60 @@ export default async function CheckoutSuccessPage({
 const query = `
   total
   status
+  bookings {
+    id
+    summary
+    status
+  }
 `
 
-async function NativeCheckoutSession({id}:{id:string}){
-  const session = await getServerSession(nextAuthOptions)
-  const {order, error} = await fetchOrder({id , query, session})
-  if(error) return <ErrorPage error={error}/>
-  if(!order) return notFound()
-    
-    return (
-			<main className={[page_layout].join(" ")}>
-				<header className={layout_site}>
-					<h1>Checkout Completed</h1>
-				</header>
-				<div className={[page_content, layout_site].join(" ")}>
-					<Callout intent={"success"}>
-						<p>A reciept will be sent via email. You may also review reciepts in your account. If you do not have an account, it is recommened you <strong>print this page</strong> </p>
-					</Callout>
-					<ul>
-						<li>
-							amount_total: {moneyFormatter(order.total)}
-						</li>
-						<li>
-							status:{" "}
-							<StatusBadge
-								type={"any"}
-								status={order.status}
-							/>
-						</li>
-						<li>
-							<Link href={`/account#orders`}>My Account</Link>
-						</li>
-					</ul>
-				</div>
-			</main>
-    )
+async function NativeCheckoutSession({ id }: { id: string }) {
+	const session = await getServerSession(nextAuthOptions)
+	const { order, error } = await fetchOrder({ id, query, session })
+	if (error) return <ErrorPage error={error} />
+	if (!order) return notFound()
+
+	return (
+		<main className={[page_layout].join(" ")}>
+			<header className={layout_site}>
+				<h1>Checkout Completed</h1>
+			</header>
+			<div className={[page_content, layout_site].join(" ")}>
+				<Callout intent={"success"}>
+					<p>
+						A reciept will be sent via email. You may also review reciepts in
+						your account. If you do not have an account, it is recommened you{" "}
+						<strong>print this page</strong>{" "}
+					</p>
+				</Callout>
+				<ul>
+					<li>amount_total: {moneyFormatter(order.total)}</li>
+					<li>
+						Order status: <StatusBadge type={"any"} status={order.status} />
+					</li>
+					{order.bookings &&
+						order.bookings.map((book) => (
+							<li key={book.id}>
+								{book.summary}:{" "}
+								<StatusBadge type={"any"} status={book.status} />
+							</li>
+						))}
+					<li>
+						<Link href={`/account#orders`}>My Account</Link>
+					</li>
+				</ul>
+			</div>
+		</main>
+	)
 }
 
-async function StripeCheckoutCheck({stripeCheckoutSessionId}:{stripeCheckoutSessionId:string}){
-
-
-	const { session: stripeCheckoutSession, error } = await getStripeCheckoutSession(
-		stripeCheckoutSessionId
-	)
+async function StripeCheckoutCheck({
+	stripeCheckoutSessionId,
+}: {
+	stripeCheckoutSessionId: string
+}) {
+	const { session: stripeCheckoutSession, error } =
+		await getStripeCheckoutSession(stripeCheckoutSessionId)
 
 	if (error)
 		return (
@@ -126,11 +140,8 @@ async function StripeCheckoutCheck({stripeCheckoutSessionId}:{stripeCheckoutSess
 							amount_total: {moneyFormatter(stripeCheckoutSession.amount_total)}
 						</li>
 						<li>
-							status:{" "}
-							<StatusBadge
-								type={"any"}
-								status={stripeCheckoutSession.status}
-							/>
+							Order status:{" "}
+							<StatusBadge type={"any"} status={stripeCheckoutSession.status} />
 						</li>
 						<li>
 							payment_status:{" "}

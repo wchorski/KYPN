@@ -16,7 +16,7 @@ import {
 import { document } from "@keystone-6/fields-document"
 import { componentBlocks } from "../blocks"
 import { mailBooking } from "../../lib/mail"
-import { User, Addon, Service } from "../types"
+import { User, Addon, Service, Coupon } from "../types"
 import { calcDurationInHours, calcEndTime } from "../../lib/dateCheck"
 import {
 	createCalendarEvent,
@@ -133,13 +133,11 @@ export const Booking: Lists.Booking = list({
 				async resolve(item, args, context) {
 					// if(!item.serviceId) return item.name
 					const service = (await context.query.Service.findOne({
-						where: { id: item.serviceId || "null" },
+						where: { id: item.serviceId },
 						query: `
               price
             `,
 					})) as Service
-
-					if (!service.price) return 0
 
 					const addons = await context.query.Addon.findMany({
 						where: {
@@ -156,12 +154,12 @@ export const Booking: Lists.Booking = list({
             `,
 					})
 
-					if (!addons) return 0
 					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-
 					const subTotal = addonsPrice + service.price
 
-					const coupons = await context.query.Coupon.findMany({
+					if (subTotal === 0) return 0
+
+					const coupons = (await context.query.Coupon.findMany({
 						where: {
 							bookings: {
 								every: {
@@ -175,22 +173,28 @@ export const Booking: Lists.Booking = list({
               amount_off
               percent_off
             `,
-					})
+					})) as Coupon[]
 
 					const discount = coupons.reduce(
 						(acc, coupon) => {
-							if ("amount_off" in coupon) {
-								acc.amountOff += coupon.amount_off
-							} else if ("percent_off" in coupon) {
-								acc.percentOff += coupon.percent_off
+							// one coupon is only allowed to have one positive value in `amount_off` or `percent_off`
+							if (coupon.amount_off) {
+								acc.amount_off += coupon.amount_off
+							} else if (coupon.percent_off) {
+								acc.percent_off += coupon.percent_off
 							}
 
 							return acc
 						},
-						{ amountOff: 0, percentOff: 0 }
+						{ amount_off: 0, percent_off: 0 }
 					)
 
-					return (subTotal - discount.amount_off) * discount.percent_off
+					const totalAfterAmountOff = subTotal - discount.amount_off
+
+					return (
+						totalAfterAmountOff -
+						(totalAfterAmountOff * discount.percent_off) / 100
+					)
 				},
 			}),
 		}),
@@ -319,24 +323,23 @@ export const Booking: Lists.Booking = list({
 				// if (!resolvedData.service?.connect?.id || !resolvedData.service?.connect?.name)
 				// 	throw new Error("!!! No Service selected for booking")
 
-        if(resolvedData.service?.connect?.id){
-          const service = await context.db.Service.findOne({
-            where: { id: resolvedData.service.connect.id },
-          })
+				if (resolvedData.service?.connect?.id) {
+					const service = await context.db.Service.findOne({
+						where: { id: resolvedData.service.connect.id },
+					})
 
-          //@ts-ignore
-          validateServiceStatusAndTime(resolvedData.start, service)
-        }
+					//@ts-ignore
+					validateServiceStatusAndTime(resolvedData.start, service)
+				}
 
-        if(resolvedData.service?.connect?.name){
-          const service = await context.db.Service.findOne({
-            where: { name: resolvedData.service.connect.name },
-          })
+				if (resolvedData.service?.connect?.name) {
+					const service = await context.db.Service.findOne({
+						where: { name: resolvedData.service.connect.name },
+					})
 
-          //@ts-ignore
-          validateServiceStatusAndTime(resolvedData.start, service)
-        }
-
+					//@ts-ignore
+					validateServiceStatusAndTime(resolvedData.start, service)
+				}
 			}
 
 			if (operation === "update") {
