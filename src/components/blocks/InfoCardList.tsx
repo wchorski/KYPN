@@ -1,13 +1,12 @@
 import Link from "next/link"
 import { ReactNode } from "react"
-import styles, {
+import  {
 	carditem,
 	cardlist,
 	content_wrap,
 	statusBadge,
 } from "@styles/blocs/infocard.module.css"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { SubscriptionItem } from "@ks/types"
 import { StatusBadge, StatusType } from "@components/StatusBadge"
 import { featured_image } from "@styles/articles.module.scss"
 
