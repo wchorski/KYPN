@@ -5,7 +5,7 @@ import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
-import { type CartItem as TCartItem, User } from "@ks/types"
+import type { User } from "@ks/types"
 import { plainObj } from "@lib/contentHelpers"
 import {
 	layout_site,
@@ -14,6 +14,7 @@ import {
 } from "@styles/layout.module.css"
 import { Metadata } from "next"
 import { getServerSession } from "next-auth"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
@@ -58,6 +59,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
           image
           price
         }
+        booking {
+          id
+          summary
+          price
+          service {
+            image
+          }
+        }
       }
     `,
 	})) as User
@@ -71,8 +80,8 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
 	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
 
-	// if (!envs.STRIPE_PUBLIC_KEY)
-	if ("nostripe" === "nostripe")
+	if (!envs.STRIPE_PUBLIC_KEY)
+		// if ("nostripe" === "nostripe")
 		return (
 			<main className={[page_layout].join(" ")}>
 				<header className={layout_site}>
@@ -82,6 +91,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				<div className={[page_content, layout_site].join(" ")}>
 					<Grid layout={"1_1"} isAuto={false}>
 						<div>
+
 							{/* // TODO how to show tickets in a pretty manner with cart context */}
 							<h2>Cart Items</h2>
 							<CartItemsList />
@@ -114,6 +124,16 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				{user.cart.length === 0 ? (
+					<CartEmptyMessage />
+				) : (
+					<StripeCheckoutForm
+						// itemType={"ticket"}
+						cartItems={plainObj(user.cart)}
+						email={session.user.email}
+						user={session.user as User}
+					/>
+				)}
+				{/* {user.cart.length === 0 ? (
 					<p> No items in cart. </p>
 				) : filteredTicketItems ? (
 					<StripeCheckoutForm
@@ -130,8 +150,23 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 					/>
 				) : (
 					<p> uh..... </p>
-				)}
+				)} */}
 			</div>
 		</main>
+	)
+}
+
+export function CartEmptyMessage() {
+	return (
+		<p>
+			Cart is empty. View the{" "}
+			<Link href={`/shop`}>
+				Shop
+			</Link>{" "}
+			or checkout some{" "}
+			<Link href={`/events`}>
+				Events
+			</Link>
+		</p>
 	)
 }

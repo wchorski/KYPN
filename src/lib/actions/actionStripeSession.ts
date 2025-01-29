@@ -13,8 +13,8 @@ export type StripeCheckoutSessionAction = {
 	user: User
 	email?: string
 	cartItems: CartItem[]
-  // TODO this is here for my peace of mind, but prob can omit
-	itemType: "ticket" | "product"
+	// TODO this is here for my peace of mind, but prob can omit
+	// itemType: "ticket" | "product" | "booking"
 }
 // & (
 // 	| {
@@ -28,21 +28,45 @@ export type StripeCheckoutSessionAction = {
 //   )
 
 export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
-	const { itemType, cartItems, email, user } = props
+	const { cartItems, email, user } = props
+
+	// const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined =
+	// 	(() => {
+
+	// 		switch (itemType) {
+	// 			case "product":
+	// 				return createProductLineItems(cartItems)
+
+	// 			case "ticket":
+	// 				return createTicketLineItems(cartItems, user)
+
+	// 			case "booking":
+	// 				return createBookingLineItems(cartItems)
+
+	// 			default:
+	// 				return undefined
+	// 		}
+	// 	})()
 
 	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined =
 		(() => {
+			const theseCartItems = cartItems.map((item) => {
+				switch (true) {
+					case item.booking !== null:
+						return createBookingLineItems(item)
 
-			switch (itemType) {
-				case "product":
-					return createProductLineItems(cartItems)
+					case item.product !== null:
+						return createProductLineItem(item)
 
-				case "ticket":
-					return createTicketLineItems(cartItems, user)
+					case item.event !== null:
+						return createTicketLineItem(item, user)
 
-				default:
-					return undefined
-			}
+					default:
+						return undefined
+				}
+			})
+
+			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
 
 	//TODO maybe will be different between item types?
@@ -56,35 +80,16 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
 		metadata: {
-			typeof: itemType,
+			// typesof: ,
 			customerId: user.id,
-			...(itemType === "ticket"
-				? { eventId: props.cartItems[0].event?.id }
-				: {}),
+			// ...(itemType === "ticket"
+			// 	? { eventId: props.cartItems.map((it) => it.event?.id).join(", ") }
+			// 	: {}),
 			orderId: null,
 		},
 	})
 
 	if (!session.client_secret) throw new Error("Error initiating Stripe session")
-
-	// TODO can i set this here instead of stripe dashboard?
-	// if(envs.NODE_ENV === 'production') {
-	//   // TODO will this cause problems? idk
-	//   // look into `src/app/api/webhooks/stripe` `switch (event?.type)`
-	//   const endpoint = await stripe.webhookEndpoints.create({
-	//     url: envs.FRONTEND_URL + '/api/webhooks/stripe',
-	//     enabled_events: [
-	//       "payment_intent.payment_failed",
-	//       "payment_intent.succeeded",
-	//       "payment_intent.canceled",
-	//       "checkout.session.completed",
-	//       "product.updated",
-	//       "invoice.paid",
-	//       "invoice.payment_failed",
-	//     ],
-	//   })
-	//   console.log({endpoint});
-	// }
 
 	return {
 		clientSecret: session.client_secret,
@@ -94,57 +99,134 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 //* Line Item helpers
 //* Line Item helpers
 //* Line Item helpers
-function createProductLineItems(cartItems: CartItem[]) {
-	return cartItems.flatMap(({product, quantity}): Stripe.Checkout.SessionCreateParams.LineItem[] => {
-		if (!product) return []
-		return [{
-			price_data: {
-				// TODO make this part of CartItem schema item.currency, not hard coded
-				currency: "usd",
-				product_data: {
-					name: product.name,
-					images: [product?.image || ""],
-					metadata: {
-						productId: product.id,
-						typeof: "product",
-					},
+function createBookingLineItems(
+	cartItem: CartItem
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.booking) return undefined
+	const { booking, quantity } = cartItem
+	return {
+		price_data: {
+			// TODO make this part of CartItem schema item.currency, not hard coded
+			currency: "usd",
+			product_data: {
+				name: booking.summary,
+				images: [booking.service?.image || ""],
+				metadata: {
+					bookingId: booking.id,
+					typeof: "booking",
 				},
-
-				unit_amount: product.price,
 			},
-			quantity,
-		}]
-	})
+
+			unit_amount: booking.price,
+		},
+		quantity,
+	}
 }
 
-function createTicketLineItems(cartItems: CartItem[], user?: User) {
-	return cartItems.flatMap(({event, quantity}) => {
-		if (!event) return []
-		return Array.from(
-			{ length: quantity },
-			(_, i: number): Stripe.Checkout.SessionCreateParams.LineItem => {
-				return {
-					price_data: {
-						// TODO make this part of CartItem schema item.currency, not hard coded
-						currency: "usd",
-						product_data: {
-							name: `Ticket to ${event.summary} (${i + 1} of ${
-								quantity
-							})`,
-							images: [event?.image || ""],
-							metadata: {
-								eventId: event.id,
-								ticketIndex: `${i + 1} of ${quantity}`,
-								typeof: "ticket",
-								holderId: user?.id || "anonymous",
-							},
-						},
+function createProductLineItem(
+	cartItem: CartItem
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.product) return undefined
+	const { product, quantity } = cartItem
+	return {
+		price_data: {
+			// TODO make this part of CartItem schema item.currency, not hard coded
+			currency: "usd",
+			product_data: {
+				name: product.name,
+				images: [product?.image || ""],
+				metadata: {
+					productId: product.id,
+					typeof: "product",
+				},
+			},
 
-						unit_amount: event.price,
-					},
-					quantity: 1,
-				}
-			}
-		)
-	})
+			unit_amount: product.price,
+		},
+		quantity,
+	}
 }
+
+function createTicketLineItem(
+	cartItem: CartItem,
+	user?: User
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.event) return undefined
+	const { event, quantity } = cartItem
+	return {
+		price_data: {
+			// TODO make this part of CartItem schema item.currency, not hard coded
+			currency: "usd",
+			product_data: {
+				name: `Ticket to ${event.summary} (x${quantity})`,
+				images: [event?.image || ""],
+				metadata: {
+					eventId: event.id,
+					typeof: "ticket",
+					holderId: user?.id || "anonymous",
+				},
+			},
+
+			unit_amount: event.price,
+		},
+		quantity,
+	}
+}
+//! creating seperate line item per ticket is a bit too complicated
+// function createTicketLineItems(cartItems: CartItem[], user?: User) {
+// 	return cartItems.flatMap(({ event, quantity }) => {
+// 		if (!event) return []
+// 		return Array.from(
+// 			{ length: quantity },
+// 			(_, i: number): Stripe.Checkout.SessionCreateParams.LineItem => {
+// 				return {
+// 					price_data: {
+// 						// TODO make this part of CartItem schema item.currency, not hard coded
+// 						currency: "usd",
+// 						product_data: {
+// 							name: `Ticket to ${event.summary} (${i + 1} of ${quantity})`,
+// 							images: [event?.image || ""],
+// 							metadata: {
+// 								eventId: event.id,
+// 								ticketIndex: `${i + 1} of ${quantity}`,
+// 								typeof: "ticket",
+// 								holderId: user?.id || "anonymous",
+// 							},
+// 						},
+
+// 						unit_amount: event.price,
+// 					},
+// 					quantity: 1,
+// 				}
+// 			}
+// 		)
+// 	})
+// }
+
+//! moving to single item creator
+// function createProductLineItems(cartItems: CartItem[]) {
+// 	return cartItems.flatMap(
+// 		({ product, quantity }): Stripe.Checkout.SessionCreateParams.LineItem[] => {
+// 			if (!product) return []
+// 			return [
+// 				{
+// 					price_data: {
+// 						// TODO make this part of CartItem schema item.currency, not hard coded
+// 						currency: "usd",
+// 						product_data: {
+// 							name: product.name,
+// 							images: [product?.image || ""],
+// 							metadata: {
+// 								productId: product.id,
+// 								typeof: "product",
+// 							},
+// 						},
+
+// 						unit_amount: product.price,
+// 					},
+// 					quantity,
+// 				},
+// 			]
+// 		}
+// 	)
+// }

@@ -1,22 +1,14 @@
-import Link from "next/link"
-import {
-	MdAutorenew,
-	MdOutlineAccountBox,
-	MdOutlineDownload,
-	MdShop,
-} from "react-icons/md"
-import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
+
+
 import AccountDash from "@components/menus/AccountDash"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
 import { Order, Rental, User } from "@ks/types"
 import { LoginToViewPage } from "@components/menus/LoginToViewPage"
-import styles from "@styles/menus/dashboard.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { BsSignpost } from "react-icons/bs"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
 import {
 	layout_site,
@@ -35,8 +27,6 @@ import {
 	IconTicketOutlined,
 } from "@lib/useIcons"
 import {fetchTicketsByUser} from "@lib/fetchdata/fetchTicketsByUser"
-import { ReactNode } from "react"
-import { DashNavLink } from "@components/menus/DashNavLink"
 import { DashNav, DashNavData } from "@components/menus/DashNav"
 import ErrorPage from "@components/layouts/ErrorPage"
 

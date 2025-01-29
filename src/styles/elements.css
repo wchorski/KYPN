@@ -185,10 +185,40 @@ blockquote {
 }
 
 .sticky {
-  position: sticky;
-  top: var(--space-ml);
+	position: sticky;
+	top: var(--space-ml);
 }
 
 .thick-underline-text {
-  border-bottom: solid var(--space-s) var(--c-seperator);
+	border-bottom: solid var(--space-s) var(--c-seperator);
+}
+
+.grid {
+	display: grid;
+}
+
+.gap-s {
+	gap: var(--space-s);
+}
+.gap-ms {
+	gap: var(--space-ms);
+}
+.gap-m {
+	gap: var(--space-m);
+}
+.gap-ml {
+	gap: var(--space-ml);
+}
+.gap-l {
+	gap: var(--space-l);
+}
+
+#stripe-checkout,
+#stripe-checkout iframe {
+	background-color: var(--c-body);
+	& iframe,
+	& iframe #root,
+	& .App-Background {
+		background-color: var(--c-body);
+	}
 }

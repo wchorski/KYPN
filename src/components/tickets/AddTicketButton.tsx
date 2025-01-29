@@ -32,7 +32,8 @@ export function AddTicketButton ({ date, status }:Props) {
         marginLeft: 'auto',
       }}
     >
-      <StatusBadge status={status} type="event"/>
+      <span>Past</span>
+      {/* <StatusBadge status={status} type="event"/> */}
     </button>
   )
 

@@ -98,20 +98,28 @@ export const Ticket: Lists.Ticket = list({
 			field: graphql.field({
 				type: graphql.String,
 				async resolve(item, args, context) {
-					if (!item.orderItemId) return "1 of 1"
+					// if (!item.orderItemId) return "1 of 1"
 
-					const orderItemTickets = await context.sudo().db.Ticket.findMany({
-						where: { orderItem: { id: { equals: item.orderItemId } } },
+					//? doesn't account for tickets that are spread over multi orders
+					// const orderItemTickets = await context.sudo().db.Ticket.findMany({
+					// 	where: { orderItem: { id: { equals: item.orderItemId } } },
+					// })
+
+					//? guarentiees to show all user's tickets purchased for event reguardless of diff orders
+					const userTicketsByEvent = await context.sudo().db.Ticket.findMany({
+						where: {
+							holder: { id: { equals: item.holderId } },
+							event: { id: { equals: item.eventId } },
+						},
 					})
 
-					const thisTixIndex = orderItemTickets.findIndex(
+					const thisTixIndex = userTicketsByEvent.findIndex(
 						(tix) => tix.id === item.id
 					)
 
-					if (!orderItemTickets || orderItemTickets.length === 0)
-						return "1 of 1"
+					if (!userTicketsByEvent) return "1 of 1"
 
-					return `${thisTixIndex + 1} of ${orderItemTickets.length}`
+					return `${thisTixIndex + 1} of ${userTicketsByEvent.length}`
 				},
 			}),
 		}),

@@ -17,6 +17,7 @@ type StripeSession = {
 		payment_status: "paid" | "unpaid"
 		id: string
 		payment_intent: string
+		customerId: string
 	}
 }
 
@@ -42,9 +43,14 @@ export const checkout = (base: BaseSchemaMeta) =>
 				throw new Error("!!! mutation.checkout: Session not available")
 
 			const paymentStatus = session.stripeSession?.payment_status || "unpaid"
+      const customerId = session.itemId || session.stripeSession?.customerId
 
 			const cartItems = (await sudoContext.query.CartItem.findMany({
-				where: { user: { id: { equals: session.itemId } } },
+				where: {
+					user: {
+						id: { equals: customerId },
+					},
+				},
 				query: `
           id
           quantity
@@ -100,7 +106,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 								case item.event !== null:
 									const tixs = await createTicketItemsPerEvent(
 										item,
-										session,
+                    paymentStatus,
+										customerId,
 										context
 									)
 									if (!tixs) return undefined
@@ -130,7 +137,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 				data: {
 					total: amountTotal,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
-					user: { connect: { id: session.itemId } },
+					user: { connect: { id: customerId} },
 					stripeCheckoutSessionId: session.stripeSession?.id || "",
 					stripePaymentIntent: session.stripeSession?.payment_intent || "",
 					//TODO maybe not secure
@@ -175,7 +182,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 
 async function createTicketItemsPerEvent(
 	cartItem: CartItem,
-	session: SessionWStripe,
+  payment_status: 'paid'|'unpaid',
+  customerId:string|undefined,
 	context: Context
 ) {
 	if (!cartItem.event) return
@@ -195,19 +203,17 @@ async function createTicketItemsPerEvent(
 			} seats left.`
 		)
 
-	const paymentStatus = session.stripeSession?.payment_status || "unpaid"
-
 	const tickets: TicketCreateInput[] = Array.from(
 		{ length: quantity },
 		(_, index) => ({
 			status:
 				event.price === 0
 					? "RSVP"
-					: paymentStatus === "paid"
+					: payment_status === "paid"
 					? "PAID"
 					: "PENDING",
 			event: { connect: { id: event.id } },
-			holder: session.itemId ? { connect: { id: session.itemId } } : null,
+			holder: customerId ? { connect: { id: customerId } } : null,
 		})
 	)
 

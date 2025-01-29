@@ -2,6 +2,7 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
+import { checkout } from "@ks/mutations/checkout"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
@@ -14,7 +15,7 @@ const stripe = new Stripe(envs.STRIPE_SECRET)
 // stripe listen --forward-to http://localhost:3000/api/checkout/webhook
 
 export const POST = async (request: NextRequest, response: NextResponse) => {
-	const { searchParams } = new URL(request.url)
+	// const { searchParams } = new URL(request.url)
 
 	const payload = await request.text()
 	const signature = request.headers.get("stripe-signature") as string
@@ -36,7 +37,9 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			console.log("💳 Item type: ", stripePayload.data.object.metadata?.typeof)
 			// TODO checkoutSession.payment_status === "unpaid",
 			if (stripePayload.data.object.payment_status !== "paid")
-				throw new Error(`!!! 💳❌ stripe payment not recieved: ${stripePayload.data.object.id} ${stripePayload.data.object.payment_intent}`)
+				throw new Error(
+					`!!! 💳❌ stripe payment not recieved: ${stripePayload.data.object.id} ${stripePayload.data.object.payment_intent}`
+				)
 
 			handleSuccessfulCheckout(stripePayload.data.object)
 
@@ -124,55 +127,90 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	if (!checkoutSession || lineItems.length === 0)
 		throw new Error("!!! No checkout session or line items")
 
-	if (!checkoutSession.metadata?.typeof)
-		throw new Error("!!! ❌ stripe did not have typeof in metadata")
+	if (!checkoutSession.metadata?.customerId)
+		throw new Error("!!! ❌ stripe did not have customerId in metadata")
+	// if (!checkoutSession.metadata?.typeof)
+	// 	throw new Error("!!! ❌ stripe did not have typeof in metadata")
 
 	// TODO add to Database!!! because we were successful
 	// will need to account for different item types Ticket,Product,Subscription
-	switch (checkoutSession.metadata.typeof) {
-		case "ticket":
-			//? could send stripe session to mutation if tyring to verify
-			// const data = (await keystoneContext.withSession({stripeMetaCustomerId: session.metadata?.customerId}).graphql.run({
-			const data = (await keystoneContext
-				.withSession({
-					stripeSession: {
-						payment_status: checkoutSession.payment_status,
-						id: checkoutSession.id,
-						payment_intent: checkoutSession.payment_intent,
-					},
-				})
-				.graphql.run({
-					query: `
-          mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!,  $userId: String!) {
-            checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, userId: $userId) {
-              id
-              status
-            }
-          }
-        `,
-					variables: {
-            //? moved them to `.withSession()`
-            // stripeCheckoutSessionId
-            // stripePaymentIntent
-						eventId: checkoutSession.metadata.eventId,
-						userId: checkoutSession.metadata.customerId,
-						quantity: lineItems.length,
-						customerEmail:
-							checkoutSession.customer_email ||
-							checkoutSession.customer_details?.email ||
-							"anonymous",
-					},
-				})) as { checkoutTickets: { id: string; status: string } }
-			// console.log("### stripe webhook. checkoutTickets mutation data")
-			
-			break
 
-		// case "product":
-		// 	break
+	const data = (await keystoneContext
+		.withSession({
+			stripeSession: {
+				payment_status: checkoutSession.payment_status,
+				id: checkoutSession.id,
+				payment_intent: checkoutSession.payment_intent,
+        customerId: checkoutSession.metadata.customerId
+			},
+		})
+		.graphql.run({
+			query: `
+      mutation Checkout {
+        checkout {
+          id
+          status
+        }
+      }
+    `,
+			// variables: values,
+		})) as { checkout: { id: string; status: string } }
 
-		default:
-			break
-	}
+	console.log("### stripe webhook. checkoutTickets mutation data")
+	console.log("🐸🐸🐸 Remove items from CART 🐸🐸🐸")
+	console.log({ data })
+  if(data.checkout.status === 'PAYMENT_RECIEVED') {
+    
+  }
+
+  // return {
+  //   checkout: data.checkout
+  // }
+
+
+	// switch (checkoutSession.metadata.typeof) {
+	// 	case "ticket":
+	// 		//? could send stripe session to mutation if tyring to verify
+	// 		// const data = (await keystoneContext.withSession({stripeMetaCustomerId: session.metadata?.customerId}).graphql.run({
+	// 		const data = (await keystoneContext
+	// 			.withSession({
+	// 				stripeSession: {
+	// 					payment_status: checkoutSession.payment_status,
+	// 					id: checkoutSession.id,
+	// 					payment_intent: checkoutSession.payment_intent,
+	// 				},
+	// 			})
+	// 			.graphql.run({
+	// 				query: `
+	//         mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!,  $userId: String!) {
+	//           checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, userId: $userId) {
+	//             id
+	//             status
+	//           }
+	//         }
+	//       `,
+	// 				variables: {
+	// 					//? moved them to `.withSession()`
+	// 					// stripeCheckoutSessionId
+	// 					// stripePaymentIntent
+	// 					eventId: checkoutSession.metadata.eventId,
+	// 					userId: checkoutSession.metadata.customerId,
+	// 					quantity: lineItems.length,
+	// 					customerEmail:
+	// 						checkoutSession.customer_email ||
+	// 						checkoutSession.customer_details?.email ||
+	// 						"anonymous",
+	// 				},
+	// 			})) as { checkoutTickets: { id: string; status: string } }
+
+	// 		break
+
+	// 	// case "product":
+	// 	// 	break
+
+	// 	default:
+	// 		break
+	// }
 }
 
 type WithMetadata = Stripe.Checkout.Session &

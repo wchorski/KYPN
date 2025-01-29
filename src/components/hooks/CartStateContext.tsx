@@ -73,6 +73,9 @@ function CartStateProvider ({children}:{children: ReactNode}){
                     id
                     price
                     summary
+                    service {
+                      image
+                    }
                   }
                   coupon {
                     id

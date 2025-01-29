@@ -9,9 +9,11 @@ type Props = {
   }|string | null | undefined,
   className?:string,
   alt?:string,
+  width?:number
+  height?:number
 }
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn, className, alt }: Props) {
+export function ImageDynamic({ photoIn, className, alt, width = 300, height = 300 }: Props) {
   
   // console.log(photoIn);
   
@@ -24,8 +26,8 @@ export function ImageDynamic({ photoIn, className, alt }: Props) {
       // src={'/assets/question.png'}
       src={state.image.url}
       alt={state.altText}
-      width={state.image.width}
-      height={state.image.height}
+      width={width}
+      height={height}
       className={className}
       //TODO how to gracefully show 'loading' image'
       // placeholder={'blur'}
@@ -51,8 +53,6 @@ function handlePhoto(photo: any, alt?:string) {
       altText: alt || '',
       image: {
         url: `/assets/placeholder.png`,
-        width: 300,
-        height: 300,
       }
     }
   }
@@ -66,8 +66,6 @@ function handlePhoto(photo: any, alt?:string) {
       altText: photo.altText,
       image: {
         url: photo.image.publicUrlTransformed,
-        width: 300,
-        height: 300,
       },
     }
   }
@@ -78,8 +76,6 @@ function handlePhoto(photo: any, alt?:string) {
       altText: photo.altText,
       image: {
         url: `/assets/placeholder.png`,
-        width: 300,
-        height: 300,
       }
     }
   }
@@ -90,8 +86,6 @@ function handlePhoto(photo: any, alt?:string) {
       altText: photo.altText,
       image: {
         url: photo.url,
-        width: 300,
-        height: 300,
       }
     }
   }
@@ -101,8 +95,6 @@ function handlePhoto(photo: any, alt?:string) {
       altText: '',
       image: {
         url: photo,
-        width: 300,
-        height: 300,
       }
     }
   }

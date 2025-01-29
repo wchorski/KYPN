@@ -4,7 +4,7 @@ import { datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import styles from "@styles/ecommerce/cart.module.css"
+import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
@@ -18,6 +18,8 @@ import {
 import { fetchOrder } from "@lib/fetchdata/fetchOrder"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { notFound } from "next/navigation"
+import { OrderItem } from "@ks/types"
+import { NoData } from "@components/elements/NoData"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
@@ -51,7 +53,6 @@ export default async function OrderByIdPage({ params }: Props) {
 		stripeCheckoutSessionId,
 		stripePaymentIntent,
 		items,
-		ticketItems,
 		count,
 		dateCreated,
 		dateModified,
@@ -97,37 +98,29 @@ export default async function OrderByIdPage({ params }: Props) {
 
 				<section>
 					<h3> Items: </h3>
-					<ul className="orderItems">
-						{order?.items.map((item) => (
-							<li key={item.id} className={styles.item}>
-								<ImageDynamic photoIn={item.image} />
-
-								<h5>{item.name}</h5>
-								<div className="perItemTotal">
-									<p>{moneyFormatter(item.price * item.quantity)}</p>
-									<br />
-									<em>
-										{item.quantity} &times; {moneyFormatter(item.price)} each
-									</em>
-								</div>
-							</li>
-						))}
-						{order.bookings.map((book) => (
-							<li key={book.id}>
-								<Link href={`/bookings/${book.id}`}>{book.summary}</Link>
-							</li>
-						))}
-						{order.ticketItems.map((tix) => (
-							<li key={tix.id}>
-								<Link href={`/tickets/${tix.id}`}>
-									<h5>{tix.eventSummary}</h5>
-								</Link>
-							</li>
-						))}
-					</ul>
+					{order.items.length > 0 ? (
+						<ul className="orderItems unstyled grid gap-m">
+							{order.items.flatMap((it) =>
+								[
+									it.booking && (
+										<BookingOrderItem item={it} key={`booking-${it.id}`} />
+									),
+									it.tickets && (
+										<TicketList
+											tickets={it.tickets || []}
+											key={`tickets-${it.id}`}
+										/>
+									),
+									it.product && (
+										<ProductOrderItem item={it} key={`product-${it.id}`} />
+									),
+								].filter(Boolean)
+							)}
+						</ul>
+					) : (
+						<NoData name={"order items"} />
+					)}
 				</section>
-
-				<TicketList tickets={order?.ticketItems || []} />
 			</div>
 			<footer>
 				<table style={{ fontSize: "var(--space-ms)" }}>
@@ -147,42 +140,101 @@ export default async function OrderByIdPage({ params }: Props) {
 	)
 }
 
+// function TicketOrderItem({ item }: { item: OrderItem }) {
+// 	const tickets = item.tickets
+// 	return (
+// 		<>
+// 			{tickets.map((tix) => (
+// 				<li className={styles.item} key={tix.id}>
+// 					<ImageDynamic photoIn={tix?.event.image} />
+
+// 					<h5>{tix.eventSummary}</h5>
+// 					<div className="perItemTotal">
+// 						<p>{moneyFormatter(tix.event.price * item.quantity)}</p>
+// 						<br />
+// 						{item.quantity} &times; {moneyFormatter(tix.event.price)} each
+// 					</div>
+// 				</li>
+// 			))}
+// 		</>
+// 	)
+// }
+
+function BookingOrderItem({ item }: { item: OrderItem }) {
+	const { summary, price, service, id } = item.booking
+	return (
+		<li className={styles.item}>
+			<ImageDynamic photoIn={service?.image} />
+
+			<Link href={`/bookings/${id}`}>
+				<h5>{summary}</h5>
+			</Link>
+			<div className={perItemTotal}>
+				<p>{moneyFormatter(price * item.quantity)}</p>
+				<em>Booking</em>
+			</div>
+		</li>
+	)
+}
+function ProductOrderItem({ item }: { item: OrderItem }) {
+	const { name, price, image } = item.product
+	return (
+		<li className={styles.item}>
+			<ImageDynamic photoIn={image} />
+
+			<h5>{name}</h5>
+			<div className={perItemTotal}>
+				<p>{moneyFormatter(price * item.quantity)}</p>
+				<em>
+					{item.quantity} &times; {moneyFormatter(price)} each
+				</em>
+			</div>
+		</li>
+	)
+}
 const query = `
+  id
+  label
+  total
   stripeCheckoutSessionId
   stripePaymentIntent
   status
   count
   dateCreated
   dateModified
-  id
   items {
     id
-    name
-    price
     quantity
-    image
-  }
-  ticketItems {
-    id
-    orderIndex
-    status
-    eventSummary
-    event {
+    booking {
+      id
       summary
-      start
       price
+      service {
+        image
+      }
     }
-  }
-  bookings {
-    id
-    summary
-    price
-  }
+    tickets {
+      id
+      orderIndex
+      status
+      eventSummary
+      event {
+        id
+        summary
+        start
+        price
+        image
+      }
+    }
+    product {
+      id
+      name
+      price
+      image
+    }
+  }  
   user{
     id
     email
   }
-  itemsCount
-  label
-  total
 `

@@ -91,6 +91,7 @@ async function NativeCheckoutSession({ id }: { id: string }) {
 		<main className={[page_layout].join(" ")}>
 			<header className={layout_site}>
 				<h1>Checkout Completed</h1>
+        <p className="debug">REMOVE CART ITEMS IF CHECKOUT COMPLETED</p>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<Callout intent={"success"}>

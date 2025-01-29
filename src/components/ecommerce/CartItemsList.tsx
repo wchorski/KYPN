@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import CartItem from "./CartItem"
+import { Callout } from "@components/blocks/Callout"
 
 export function CartItemsList() {
 	// const [isPending, setIsPending] = useState(true)
@@ -40,6 +41,7 @@ export function CartItemsList() {
 					</p>
 				) : (
 					<>
+            {ticketCartItems.length > 0 && <li><TicketAvailabilityMessage /></li>}
 						{ticketCartItems?.map((item: any) => (
 							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
 						))}
@@ -54,4 +56,10 @@ export function CartItemsList() {
 			</ul>
 		</>
 	)
+}
+
+function TicketAvailabilityMessage(){
+  return (
+    <Callout intent={'warning'}><p>Tickets added to cart are not guaranteed. Proceed with checkout to secure available tickets.</p></Callout>
+  )
 }

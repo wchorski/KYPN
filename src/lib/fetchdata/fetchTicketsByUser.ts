@@ -57,6 +57,7 @@ const query = `
       id
       start
       end
+      image
       location {
         name
         id

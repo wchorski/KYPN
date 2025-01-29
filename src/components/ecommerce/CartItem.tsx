@@ -1,6 +1,6 @@
 "use client"
 import moneyFormatter from "@lib/moneyFormatter"
-import styles from "@styles/ecommerce/cart.module.css"
+import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
 import CartRemoveItem from "./CartRemoveItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useEffect, useState } from "react"
@@ -34,13 +34,13 @@ function BookingItem({item}:{item: CartItem}) {
 
 	const {
 		quantity,
-		booking: { id, summary, price },
+		booking: { id, summary, price, service },
 	} = item
 	return (
 		<li className={styles.item}>
-			{/* <ImageDynamic
-				photoIn={{ url: image, altText: `${summary} featured image` }}
-			/> */}
+			<ImageDynamic
+				photoIn={{ url: service?.image || '', altText: `${summary} featured image` }}
+			/>
 
 			<div>
 				<h5>
@@ -50,7 +50,7 @@ function BookingItem({item}:{item: CartItem}) {
         <span className="sub-text">booking</span>
 			</div>
 
-			<div className="perItemTotal">
+			<div className={perItemTotal}>
 				<p>{moneyFormatter(price * quantity)}</p>
 			</div>
 
@@ -81,7 +81,7 @@ function TicketItem({item}:{item: CartItem}) {
 				<span>{quantity}</span>
 			</div>
 
-			<div className="perItemTotal">
+			<div className={perItemTotal}>
 				<p>{moneyFormatter(price * quantity)}</p>
 				<em> {moneyFormatter(price)} each </em>
 			</div>
@@ -166,7 +166,7 @@ function ProductItem({item, sessionId}:{item: CartItem, sessionId: string|undefi
 					/>
 				</div>
 
-				<div className="perItemTotal">
+				<div className={perItemTotal}>
 					{type === "RENTAL" && rental_price ? (
 						<>
 							<p>

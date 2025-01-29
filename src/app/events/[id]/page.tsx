@@ -108,7 +108,6 @@ export default async function EventByID({ params }: Props) {
 		tags,
     status
 	} = event
-  console.log({status});
 
 	async function onClose() {
 		"use server"
