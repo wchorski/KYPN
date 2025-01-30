@@ -60,11 +60,11 @@ const seedSchemaItems = async (
 			...(item.content ? { content: item.content.document } : {}),
 			...(item.description ? { description: item.description.document } : {}),
 			...(item.details ? { description: item.description.document } : {}),
-
-			//? relation TO ONE
 			...(item.password
 				? { password: item.email + envs.SEED_PASSWORD_SECRET }
 				: {}),
+
+			//? relation TO ONE
 			...(item.role ? { role: { connect: { name: item.role.name } } } : {}),
 			...(item.author
 				? {
@@ -96,7 +96,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { locations: null }),
 			...(item.coupons
 				? {
 						coupons: {
@@ -105,7 +105,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { coupons: null }),
 			...(item.addons && item.addons.length > 0
 				? {
 						addons: {
@@ -114,7 +114,8 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { addons: null }),
+			// addons:null,
 			//? USERS Start
 			...(item.privateAccess
 				? {
@@ -124,7 +125,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { privateAccess: null }),
 			...(item.employees
 				? {
 						employees: {
@@ -133,7 +134,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { employees: null }),
 			...(item.hosts
 				? {
 						hosts: {
@@ -142,7 +143,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { hosts: null }),
 			...(item.cohosts
 				? {
 						cohosts: {
@@ -151,7 +152,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { cohosts: null }),
 			// USERS End
 			...(item.categories
 				? {
@@ -161,14 +162,14 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: {}),
+				: { categories: null }),
 			...(item.tags
 				? {
 						tags: {
 							connect: item.tags?.map((field: any) => ({ name: field.name })),
 						},
 				  }
-				: {}),
+				: { tags: null }),
 		})),
 	})
 
@@ -204,7 +205,7 @@ export const seedDatabase = async (context: Context) => {
 	await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
 
 	await seedSchemaItems("Event", "summary", allDataJson.events, context)
-  // seedTicketOrders creates "Ticket" items after Events are created
+	// seedTicketOrders creates "Ticket" items after Events are created
 
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }
@@ -268,7 +269,15 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 					// stripePaymentIntent: null,
 					email: fakeEmail,
 					status: orderStatuses[0],
-					ticketItems: { create: tickets },
+					// ticketItems: { create: tickets },
+					items: {
+						create: [
+							{
+								quantity: tixQuantity,
+								tickets: { create: tickets },
+							},
+						],
+					},
 					user: { connect: { email: fakeEmail } },
 				},
 			})

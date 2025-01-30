@@ -15,12 +15,13 @@ type StripeProduct = {
 	excerpt: string
 	category: string
 	status: string
-	authorEmail: string
+	authorId: string
 	type: "subscription" | "product" | "addon" | "service"
 	image: string
 	price: number
 	billing_interval?: Billing_Interval
 	url: string
+	stripeProductId: string | undefined
 }
 
 export async function stripeProductCreate({
@@ -29,24 +30,27 @@ export async function stripeProductCreate({
 	excerpt,
 	category,
 	status,
-	authorEmail,
+	authorId,
 	type,
 	image,
 	price,
 	billing_interval,
 	url,
+	stripeProductId,
 }: StripeProduct) {
-	if (!envs.STRIPE_SECRET) return
+	console.log("### stripeProductCreate ###")
+	if (!envs.STRIPE_SECRET || stripeProductId) return
+	console.log("### stripeProductCreate continued ###")
 
 	let stripeCreateParams: Stripe.ProductCreateParams = {
-		name: name || "",
+		name,
 		active: true,
 		description: excerpt || "no_description",
 		metadata: {
 			productId: id,
 			category: category,
-			status: status || "",
-			author: authorEmail,
+			status,
+			authorId,
 			type,
 		},
 		// attributes: [
@@ -58,24 +62,26 @@ export async function stripeProductCreate({
 		default_price_data: {
 			currency: "usd",
 			unit_amount: price,
+			...(billing_interval
+				? { recurring: { interval: billing_interval } }
+				: {}),
 		},
 		url: url,
+		...(image ? { images: [image] } : {}),
 	}
 
-	if (image) {
-		stripeCreateParams = { ...stripeCreateParams, images: [image] }
-	}
-	if (billing_interval) {
-		const default_price_data = {
-			currency: "usd",
-			unit_amount: price,
-			recurring: { interval: billing_interval },
-		}
-		stripeCreateParams = { ...stripeCreateParams, default_price_data }
-	}
-
-	const res = await stripeConfig.products.create(stripeCreateParams)
-
+	const res = await stripeConfig.products
+		.create(stripeCreateParams)
+		// .then((res) => {
+		// 	if (!res) return
+		// 	resolvedData.stripeProductId = res.id
+		// 	resolvedData.stripePriceId = String(res.default_price)
+		// 	console.log({ res })
+		// 	console.log({ resolvedData })
+		// })
+		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+	//TODO why is this returning `undefined`?
+	// console.log({ res })
 	return res
 }
 
@@ -85,7 +91,7 @@ export async function stripeServiceCreate({
 	excerpt,
 	category,
 	status,
-	authorEmail,
+	authorId,
 	type,
 	image,
 	price,
@@ -95,14 +101,14 @@ export async function stripeServiceCreate({
 	if (!envs.STRIPE_SECRET) return
 
 	let stripeCreateParams: Stripe.ProductCreateParams = {
-		name: name || "",
+		name,
 		active: true,
 		description: excerpt || "no_description",
 		metadata: {
 			serviceId: id,
 			category: category,
-			status: status || "",
-			author: authorEmail,
+			status,
+			authorId,
 			type,
 		},
 		// attributes: [
@@ -155,8 +161,17 @@ export async function stripeCustomerCreate({
 	return customer
 }
 
+export async function stripeProductDelete(id: string | undefined) {
+	if (!envs.STRIPE_PUBLIC_KEY || !id) return
+	await stripeConfig.products
+		.del(id)
+		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+}
+
 export async function stripeCustomerDelete(id: string) {
-	const deleted = await stripeConfig.customers.del(id)
+	const deleted = await stripeConfig.customers
+		.del(id)
+		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
 
 	return deleted
 }
@@ -172,16 +187,31 @@ type Price = {
 	status: string
 	category: string
 	excerpt: string
-	authorEmail: string
+	authorId: string
 	billing_interval: Billing_Interval
 }
 
+type ProductUpdate = {
+	stripeProductId: string
+	stripePriceId: string | undefined
+	currency: "usd" | string | undefined
+	productId: string | undefined
+	price: number | undefined
+	image: string | undefined
+	name: string | undefined
+	status: string | undefined
+	category: string | undefined
+	excerpt: string | undefined
+	authorId: string | undefined
+	billing_interval: Billing_Interval | undefined
+}
+
 export async function stripeProductUpdate({
-	currency,
+	currency = "usd",
 	productId,
 	image,
 	status,
-	authorEmail,
+	authorId,
 	category,
 	name,
 	excerpt,
@@ -189,36 +219,35 @@ export async function stripeProductUpdate({
 	stripeProductId,
 	stripePriceId,
 	billing_interval,
-}: Price) {
-	if (!envs.STRIPE_SECRET || !stripeProductId || stripeProductId !== undefined)
-		return
-
-	const currPrice = await stripeConfig.prices.retrieve(stripePriceId)
+}: ProductUpdate) {
+	if (!envs.STRIPE_SECRET || !stripeProductId) return
 
 	let stripeUpdateParams: Stripe.ProductUpdateParams = {
 		name,
 		description: excerpt,
 		// default_price: newPrice.id,
-		images: [image],
+		...(image ? { images: [image] } : {}),
 		metadata: {
-			category,
-			status,
-			author: authorEmail,
-			productId,
+			...(category ? { category } : {}),
+			...(status ? { status } : {}),
+			...(authorId ? { authorId } : {}),
+			...(productId ? { productId } : {}),
 		},
 	}
 
-	if (price && currPrice.unit_amount !== price) {
+	if (price && stripePriceId) {
 		const newPrice = await stripeConfig.prices.create({
 			unit_amount: price,
 			currency,
 			product: stripeProductId,
-			recurring: {
-				interval: billing_interval,
-			},
+			...(billing_interval
+				? {
+						recurring: {
+							interval: billing_interval,
+						},
+				  }
+				: {}),
 		})
-
-		// resolvedData.stripePriceId = newPrice.id
 		stripeUpdateParams = { ...stripeUpdateParams, default_price: newPrice.id }
 	}
 
@@ -360,8 +389,8 @@ type StripePayInInstallments = Stripe.SubscriptionScheduleCreateParams & {
 	interval: "day" | "week" | "month" | "year"
 	iterations: number
 	totalPrice: number
-  type: 'products'|'services'
-  id: string
+	type: "products" | "services"
+	id: string
 }
 
 // https://docs.stripe.com/api/subscription_schedules/create
@@ -374,17 +403,17 @@ export async function stripeCreateInstallmentPayment({
 	interval = "month",
 	iterations,
 	totalPrice,
-  type,
-  id,
+	type,
+	id,
 }: StripePayInInstallments) {
 	const stripePaymentPlan = await stripeConfig.subscriptionSchedules.create({
 		customer,
 		start_date,
 		end_behavior,
-    metadata: {
-      type,
-      url: envs.BACKEND_URL + `/${type}/${id}`
-    },
+		metadata: {
+			type,
+			url: envs.BACKEND_URL + `/${type}/${id}`,
+		},
 		phases: [
 			{
 				items: [

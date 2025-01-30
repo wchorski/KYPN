@@ -1766,20 +1766,16 @@ type Product {
   typeof: String
   image: String
   name: String
-  stripeProductId: String
-  stripePriceId: String
   slug: String
   excerpt: String
   description: Product_description_Document
   status: String
   isForSale: Boolean
-  isForRent: Boolean
   price: Int
+  isForRent: Boolean
   rental_price: Int
   stockCount: Int
   author: User
-  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
-  orderItemsCount(where: OrderItemWhereInput! = {}): Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
@@ -1790,6 +1786,10 @@ type Product {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  stripeProductId: String
+  stripePriceId: String
+  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
 }
 
 type Product_description_Document {
@@ -1798,6 +1798,7 @@ type Product_description_Document {
 
 input ProductWhereUniqueInput {
   id: ID
+  name: String
   slug: String
 }
 
@@ -1808,24 +1809,24 @@ input ProductWhereInput {
   id: IDFilter
   image: StringFilter
   name: StringFilter
-  stripeProductId: StringFilter
-  stripePriceId: StringFilter
   slug: StringFilter
   excerpt: StringFilter
-  status: StringNullableFilter
+  status: StringFilter
   isForSale: BooleanFilter
-  isForRent: BooleanFilter
   price: IntFilter
+  isForRent: BooleanFilter
   rental_price: IntFilter
   stockCount: IntFilter
   author: UserWhereInput
-  orderItems: OrderItemManyRelationFilter
   addons: AddonManyRelationFilter
   coupons: CouponManyRelationFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
+  orderItems: OrderItemManyRelationFilter
 }
 
 input OrderItemManyRelationFilter {
@@ -1838,42 +1839,42 @@ input ProductOrderByInput {
   id: OrderDirection
   image: OrderDirection
   name: OrderDirection
-  stripeProductId: OrderDirection
-  stripePriceId: OrderDirection
   slug: OrderDirection
   excerpt: OrderDirection
   status: OrderDirection
   isForSale: OrderDirection
-  isForRent: OrderDirection
   price: OrderDirection
+  isForRent: OrderDirection
   rental_price: OrderDirection
   stockCount: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
 }
 
 input ProductUpdateInput {
   image: String
   name: String
-  stripeProductId: String
-  stripePriceId: String
   slug: String
   excerpt: String
   description: JSON
   status: String
   isForSale: Boolean
-  isForRent: Boolean
   price: Int
+  isForRent: Boolean
   rental_price: Int
   stockCount: Int
   author: UserRelateToOneForUpdateInput
-  orderItems: OrderItemRelateToManyForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
   categories: CategoryRelateToManyForUpdateInput
   tags: TagRelateToManyForUpdateInput
+  stripeProductId: String
+  stripePriceId: String
+  orderItems: OrderItemRelateToManyForUpdateInput
 }
 
 input OrderItemRelateToManyForUpdateInput {
@@ -1891,25 +1892,25 @@ input ProductUpdateArgs {
 input ProductCreateInput {
   image: String
   name: String
-  stripeProductId: String
-  stripePriceId: String
   slug: String
   excerpt: String
   description: JSON
   status: String
   isForSale: Boolean
-  isForRent: Boolean
   price: Int
+  isForRent: Boolean
   rental_price: Int
   stockCount: Int
   author: UserRelateToOneForCreateInput
-  orderItems: OrderItemRelateToManyForCreateInput
   addons: AddonRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
   categories: CategoryRelateToManyForCreateInput
   tags: TagRelateToManyForCreateInput
+  stripeProductId: String
+  stripePriceId: String
+  orderItems: OrderItemRelateToManyForCreateInput
 }
 
 input OrderItemRelateToManyForCreateInput {
@@ -2740,9 +2741,9 @@ type Ticket {
   status: String
   event: Event
   holder: User
-  orderItem: OrderItem
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItem
 }
 
 input TicketWhereUniqueInput {
@@ -2758,9 +2759,9 @@ input TicketWhereInput {
   status: StringFilter
   event: EventWhereInput
   holder: UserWhereInput
-  orderItem: OrderItemWhereInput
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
+  orderItem: OrderItemWhereInput
 }
 
 input TicketOrderByInput {
@@ -2776,9 +2777,9 @@ input TicketUpdateInput {
   status: String
   event: EventRelateToOneForUpdateInput
   holder: UserRelateToOneForUpdateInput
-  orderItem: OrderItemRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItemRelateToOneForUpdateInput
 }
 
 input TicketUpdateArgs {
@@ -2791,9 +2792,9 @@ input TicketCreateInput {
   status: String
   event: EventRelateToOneForCreateInput
   holder: UserRelateToOneForCreateInput
-  orderItem: OrderItemRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItemRelateToOneForCreateInput
 }
 
 type Category {

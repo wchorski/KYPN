@@ -175,15 +175,15 @@ export const Ticket: Lists.Ticket = list({
 			many: false,
 		}),
 		// order: relationship({ ref: "Order.ticketItems" }),
-		orderItem: relationship({ ref: "OrderItem.tickets", many: false }),
 		dateCreated: timestamp({
-			defaultValue: { kind: "now" },
+      defaultValue: { kind: "now" },
 			ui: { itemView: { fieldMode: "read" } },
 		}),
 		dateModified: timestamp({
-			defaultValue: { kind: "now" },
+      defaultValue: { kind: "now" },
 			ui: { itemView: { fieldMode: "read" } },
 		}),
+    orderItem: relationship({ ref: "OrderItem.tickets", many: false, ui: {itemView: { fieldMode: 'read'}} }),
 	},
 
 	hooks: {

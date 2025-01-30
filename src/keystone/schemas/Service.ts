@@ -16,7 +16,7 @@ import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 import { envs } from "../../../envs"
-import { stripeServiceCreate } from "../../lib/stripe"
+import { stripeProductDelete, stripeServiceCreate } from "../../lib/stripe"
 
 export const Service: Lists.Service = list({
 	access: {
@@ -219,20 +219,29 @@ export const Service: Lists.Service = list({
 					excerpt,
 					category: "unknown",
 					status,
-					authorEmail: authorId || "",
+					authorId: authorId || "no_author_id",
 					type: "service",
 					image,
 					price,
 					//TODO if incremental payment split price over x months
 					// billing_interval: "month",
 					url: envs.FRONTEND_URL + `/services/${id}`,
-				}).then((stripeRes) => {
-          if(!stripeRes) return
-					resolvedData.stripeProductId = stripeRes.id
-					resolvedData.stripePriceId = String(stripeRes.default_price)
-				}).catch((error) => {
-          throw new Error('!!! Service.ts: Stripe Create Product, ', error)
-        })
+				})
+					.then((stripeRes) => {
+						if (!stripeRes) return
+						resolvedData.stripeProductId = stripeRes.id
+						resolvedData.stripePriceId = String(stripeRes.default_price)
+					})
+					.catch((error) => {
+						throw new Error("!!! Service.ts: Stripe Create Product, ", error)
+					})
+			}
+			if (operation === "update") {
+				console.log("🐸🐸🐸 update stripe service product")
+			}
+			if (operation === "delete") {
+				//@ts-ignore
+				await stripeProductDelete(item.stripeProductId)
 			}
 		},
 	},

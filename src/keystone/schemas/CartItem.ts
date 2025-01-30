@@ -88,9 +88,10 @@ export const CartItem: Lists.CartItem = list({
 		user: relationship({ ref: "User.cart" }),
 	},
 	hooks: {
-		beforeOperation: async ({ operation, resolvedData, item, context }) => {
-			if (operation === "create") {
-				console.log({ resolvedData })
+    validate: {
+      create: ({resolvedData}) => {
+        console.log('🐸🐸🐸 CartItem: use hooks.validate instead of hooks.beforeOperation 🐸🐸🐸');
+        console.log({ resolvedData })
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
@@ -101,10 +102,9 @@ export const CartItem: Lists.CartItem = list({
 					throw new Error(
 						'!!! Cart Item can only have one of ["product", "event", "booking", "coupon"] set'
 					) 
-			}
-
-			if (operation === "update") {
-				const thisNewCombinedData = { ...item, ...resolvedData }
+      },
+      update: ({resolvedData, item}) => {
+        const thisNewCombinedData = { ...item, ...resolvedData }
 
 				// console.log({ thisNewCombinedData })
         //? check that no other cartItem type is being connected or disconnected
@@ -126,7 +126,46 @@ export const CartItem: Lists.CartItem = list({
 					throw new Error(
 						'!!! Cart Item can only have one of ["product", "event", "booking", "coupon", + itemId(s)] set'
 					)
-			}
+      }
+    },  
+		beforeOperation: async ({ operation, resolvedData, item, context }) => {
+			// if (operation === "create") {
+			// 	const hasOnlyOne = hasOnlyOneValue(resolvedData, [
+			// 		"product",
+			// 		"event",
+			// 		"booking",
+			// 		"coupon",
+			// 	])
+			// 	if (!hasOnlyOne)
+			// 		throw new Error(
+			// 			'!!! Cart Item can only have one of ["product", "event", "booking", "coupon"] set'
+			// 		) 
+			// }
+
+			// if (operation === "update") {
+			// 	const thisNewCombinedData = { ...item, ...resolvedData }
+
+			// 	// console.log({ thisNewCombinedData })
+      //   //? check that no other cartItem type is being connected or disconnected
+			// 	const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, [
+			// 		"productId",
+			// 		"eventId",
+			// 		"bookingId",
+			// 		"couponId",
+      //     "product",
+			// 		"event",
+			// 		"booking",
+			// 		"coupon",
+			// 	])
+			// 	console.log(
+			// 		"🐸🐸🐸 check that cartItem can only have one of item type 🐸🐸🐸"
+			// 	)
+			// 	console.log({ hasOnlyOne })
+			// 	if (!hasOnlyOne)
+			// 		throw new Error(
+			// 			'!!! Cart Item can only have one of ["product", "event", "booking", "coupon", + itemId(s)] set'
+			// 		)
+			// }
 
 			if (operation === "delete") {
 				//TODO mutation `checkout` makes booking CANCELED to HOLDING. not exactly logical but it works for now
