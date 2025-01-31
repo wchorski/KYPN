@@ -2,6 +2,7 @@ import Stripe from "stripe"
 import "dotenv/config"
 import { envs } from "../../envs"
 import { Billing_Interval, Duration, SubscriptionItem } from "../keystone/types"
+import { active } from "@styles/nav.module.css"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! STRIP_SECRET is missing.")
 
@@ -161,11 +162,22 @@ export async function stripeCustomerCreate({
 	return customer
 }
 
+//? stripe. deleting product is not recommended
+// as product history will also be erased
 export async function stripeProductDelete(id: string | undefined) {
 	if (!envs.STRIPE_PUBLIC_KEY || !id) return
 	await stripeConfig.products
 		.del(id)
 		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+}
+
+export async function stripeArchiveProduct(id: string | undefined) {
+	if (!envs.STRIPE_PUBLIC_KEY || !id) return
+	const product = await stripeConfig.products.update(id, {
+		active: false,
+	})
+
+	return product
 }
 
 export async function stripeCustomerDelete(id: string) {
@@ -193,9 +205,7 @@ type Price = {
 
 type ProductUpdate = {
 	stripeProductId: string
-	stripePriceId: string | undefined
-	currency: "usd" | string | undefined
-	productId: string | undefined
+	currency?: "usd" | string
 	price: number | undefined
 	image: string | undefined
 	name: string | undefined
@@ -208,7 +218,6 @@ type ProductUpdate = {
 
 export async function stripeProductUpdate({
 	currency = "usd",
-	productId,
 	image,
 	status,
 	authorId,
@@ -217,7 +226,6 @@ export async function stripeProductUpdate({
 	excerpt,
 	price,
 	stripeProductId,
-	stripePriceId,
 	billing_interval,
 }: ProductUpdate) {
 	if (!envs.STRIPE_SECRET || !stripeProductId) return
@@ -231,11 +239,10 @@ export async function stripeProductUpdate({
 			...(category ? { category } : {}),
 			...(status ? { status } : {}),
 			...(authorId ? { authorId } : {}),
-			...(productId ? { productId } : {}),
 		},
 	}
 
-	if (price && stripePriceId) {
+	if (price) {
 		const newPrice = await stripeConfig.prices.create({
 			unit_amount: price,
 			currency,

@@ -15,6 +15,7 @@ import {
 } from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
 import stripeConfig, {
+	stripeArchiveProduct,
 	stripeProductCreate,
 	stripeProductDelete,
 	stripeProductUpdate,
@@ -81,35 +82,20 @@ export const Product: Lists.Product = list({
 		image: text(),
 		name: text({ validation: { isRequired: true }, isIndexed: "unique" }),
 		slug: text({
-			// validation: { isRequired: true },
+			validation: { isRequired: true },
 			isIndexed: "unique",
 			ui: { description: "shortened, url friendly name" },
 			hooks: {
-				validate: {
-					create: ({ resolvedData }) => {
-						if (resolvedData.slug) {
-							resolvedData.slug = slugFormat(String(resolvedData.slug))
-						} else {
-							resolvedData.slug = slugFormat(String(resolvedData.name))
+				resolveInput: ({ inputData, operation }) => {
+          
+          if (operation === "create") {          
+						if (inputData.slug) {
+							return slugFormat(inputData.slug)
+						} else if (inputData.name) {
+							return slugFormat(inputData.name)
 						}
-					},
-					update: ({ resolvedData }) => {
-						if (resolvedData.slug) {
-							resolvedData.slug = slugFormat(String(resolvedData.slug))
-						} else {
-							resolvedData.slug = slugFormat(String(resolvedData.name))
-						}
-					},
+					}
 				},
-				// beforeOperation({ resolvedData, operation }) {
-				// 	if (operation === "create" || operation === "update") {
-				// 		if (resolvedData.slug) {
-				// 			resolvedData.slug = slugFormat(String(resolvedData.slug))
-				// 		} else if (resolvedData.name) {
-				// 			resolvedData.slug = slugFormat(String(resolvedData.name))
-				// 		}
-				// 	}
-				// },
 			},
 		}),
 		excerpt: text({
@@ -164,6 +150,7 @@ export const Product: Lists.Product = list({
 				{ label: "Private", value: "PRIVATE" },
 				{ label: "Public", value: "PUBLIC" },
 				{ label: "Out of Stock", value: "OUT_OF_STOCK" },
+				{ label: "Archived", value: "ARCHIVED" },
 			],
 			defaultValue: "DRAFT",
 			ui: {
@@ -228,22 +215,30 @@ export const Product: Lists.Product = list({
 		}),
 	},
 	hooks: {
+		// resolveInput: {
+		//   create: async ({ listKey, operation, resolvedData }) => {
+		//     return { ...resolvedData, id: 'test' }
+		//   },
+		// },
+
 		validate: {
-			create: async ({ resolvedData, context }) => {
+			create: async ({ resolvedData, context, inputData }) => {
 				if (!resolvedData.author) {
 					const currentUserId = await context.session.itemId
 					resolvedData.author = { connect: { id: currentUserId } }
 				}
 			},
 		},
-		// beforeOperation: {
-		// 	create: async ({ item, resolvedData, context }) => {},
-		// },
+		beforeOperation: {
+			// create: async ({ item, resolvedData, context }) => {},
+			update: ({ resolvedData }) => {
+				resolvedData.dateModified = new Date().toISOString()
+			},
+		},
 		afterOperation: {
 			create: async ({ item, context }) => {
-
-        //? if error happens item is now an error object
-				if (!item.id) return 
+				//? if error happens item is now an error object
+				if (!item.id) return
 
 				const { id, name, excerpt, status, authorId, price, stripeProductId } =
 					item
@@ -273,16 +268,41 @@ export const Product: Lists.Product = list({
 					})
 				})
 			},
-			update: async ({ resolvedData }) => {
-				console.log("🐸🐸🐸 update stripe product")
-				console.log({ resolvedData })
+			update: async ({ resolvedData, item, context }) => {
+				console.log("🐸🐸🐸 UPDATE stripe product")
+
 				// await stripeProductUpdate({stripeProductId: item.stripeProductId, ...resolvedData})
-				// await stripeProductUpdate({
-				//   productId: item.stripeProductId
-				// })
+				await stripeProductUpdate({
+					stripeProductId: item.stripeProductId,
+					image: resolvedData.image as string | undefined,
+					price: resolvedData.price as number | undefined,
+					name: resolvedData.name as string | undefined,
+					status: resolvedData.status as string | undefined,
+					// category: resolvedData.category,
+					category: "product",
+					excerpt: resolvedData.excerpt as string | undefined,
+					authorId: resolvedData.author?.connect?.id,
+					billing_interval: undefined,
+				}).then(async (res) => {
+					if (!res) return
+					// item.stripeProductId = res.id
+					item.stripePriceId = String(res.default_price)
+					//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
+
+					// await context.db.Product.updateOne({
+					// 	where: { id: item.id },
+					// 	data: {
+					// 		// stripeProductId: res.id,
+					// 		stripePriceId: String(res.default_price),
+					// 	},
+					// })
+				})
 			},
 			delete: async ({ originalItem }) => {
-				await stripeProductDelete(originalItem.stripeProductId)
+				//? stripe. deleting product is not recommended
+				// as product history will also be erased
+				// await stripeProductDelete(originalItem.stripeProductId)
+				await stripeArchiveProduct(originalItem.stripeProductId)
 			},
 		},
 	},

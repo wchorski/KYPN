@@ -16,7 +16,7 @@ import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 import { envs } from "../../../envs"
-import { stripeProductDelete, stripeServiceCreate } from "../../lib/stripe"
+import { stripeArchiveProduct, stripeProductDelete, stripeServiceCreate } from "../../lib/stripe"
 
 export const Service: Lists.Service = list({
 	access: {
@@ -210,7 +210,7 @@ export const Service: Lists.Service = list({
 	hooks: {
 		// beforeOperation: async ({ operation, item, resolvedData }) => {
 		// },
-		async afterOperation({ operation, item, resolvedData }) {
+		async afterOperation({ operation, item, resolvedData, originalItem }) {
 			if (operation === "create") {
 				const { id, price, name, excerpt, status, authorId, image } = item
 				await stripeServiceCreate({
@@ -240,8 +240,11 @@ export const Service: Lists.Service = list({
 				console.log("🐸🐸🐸 update stripe service product")
 			}
 			if (operation === "delete") {
-				//@ts-ignore
-				await stripeProductDelete(item.stripeProductId)
+				
+				//? stripe. deleting product is not recommended
+				// as product history will also be erased
+				// await stripeProductDelete(originalItem.stripeProductId)
+				await stripeArchiveProduct(originalItem.stripeProductId)
 			}
 		},
 	},

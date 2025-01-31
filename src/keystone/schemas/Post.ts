@@ -65,9 +65,14 @@ export const Post: Lists.Post = list({
 			isIndexed: "unique",
 			validation: { isRequired: true },
 			hooks: {
-				beforeOperation({ resolvedData }) {
-					if (!resolvedData?.slug) return console.log("Post: no slug")
-					resolvedData.slug = slugFormat(String(resolvedData.slug))
+				resolveInput: ({ inputData, operation }) => {
+					if (operation === "create") {
+						if (inputData.slug) {
+							return slugFormat(inputData.slug)
+						} else if (inputData.title) {
+							return slugFormat(inputData.title)
+						}
+					}
 				},
 			},
 			ui: {

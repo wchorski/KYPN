@@ -45,11 +45,15 @@ export const Addon: Lists.Addon = list({
 			isIndexed: "unique",
 			validation: { isRequired: true },
 			hooks: {
-				beforeOperation({ resolvedData }) {
-					if (!resolvedData) return
-					resolvedData.slug
-						? (resolvedData.slug = slugFormat(String(resolvedData.slug)))
-						: (resolvedData.slug = slugFormat(String(resolvedData.name)))
+				resolveInput: ({ inputData, operation }) => {
+          
+          if (operation === "create") {          
+						if (inputData.slug) {
+							return slugFormat(inputData.slug)
+						} else if (inputData.name) {
+							return slugFormat(inputData.name)
+						}
+					}
 				},
 			},
 		}),

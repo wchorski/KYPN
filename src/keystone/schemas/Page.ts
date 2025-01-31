@@ -42,10 +42,15 @@ export const Page: Lists.Page = list({
 			isIndexed: "unique",
 			validation: { isRequired: true },
 			hooks: {
-				beforeOperation({ resolvedData }) {
-					//?" Page: no slug"
-					if (!resolvedData?.slug) return undefined
-					resolvedData.slug = slugFormat(String(resolvedData.slug))
+				resolveInput: ({ inputData, operation }) => {
+          
+          if (operation === "create") {          
+						if (inputData.slug) {
+							return slugFormat(inputData.slug)
+						} else if (inputData.title) {
+							return slugFormat(inputData.title)
+						}
+					}
 				},
 			},
 			ui: {
