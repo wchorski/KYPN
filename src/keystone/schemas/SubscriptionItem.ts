@@ -136,8 +136,8 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		}),
 		stripeChargeId: text(),
 		stripeSubscriptionId: text(),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 	},
 
 	hooks: {

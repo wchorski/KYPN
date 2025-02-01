@@ -72,3 +72,12 @@ article.post_card {
 .featured_image img:hover {
   filter: contrast(1.2);
 }
+
+p.excerpt{
+  flex-grow: 1;
+  word-wrap: break-word;
+  overflow: hidden;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}

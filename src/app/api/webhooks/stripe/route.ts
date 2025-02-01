@@ -16,10 +16,14 @@ const stripe = new Stripe(envs.STRIPE_SECRET)
 
 export const POST = async (request: NextRequest, response: NextResponse) => {
 	// const { searchParams } = new URL(request.url)
+	if (!envs.STRIPE_WEBHOOK_SECRET || !envs.STRIPE_PUBLIC_KEY)
+		return NextResponse.json(
+			{ message: "Stripe integration is not setup", recieved: false },
+			{ status: 500 }
+		)
 
 	const payload = await request.text()
 	const signature = request.headers.get("stripe-signature") as string
-	// console.log({payload});
 	// console.log({signature});
 	// console.log({searchParams});
 
@@ -27,7 +31,7 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 	const stripePayload = stripe.webhooks.constructEvent(
 		payload,
 		signature!,
-		envs.STRIPE_WEBHOOK_SECRET as string
+		envs.STRIPE_WEBHOOK_SECRET
 	)
 	console.log("💳 STRIPE WEBHOOK: ", stripePayload?.type)
 
@@ -51,10 +55,6 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			//TODO add back orderId from ks
 			break
 
-		case "product.updated":
-			// handle other type of stripe events
-			break
-
 		case "invoice.paid":
 			// Continue to provision the subscription as payments continue to be made.
 			// Store the status in your database and check when a user accesses your service.
@@ -68,6 +68,20 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			// console.log(JSON.stringify(event.data.object, null, 2))
 
 			// afterFailure(event.data.object as Charge, event.data.object.metadata?.type)
+			break
+
+		case "product.created":
+			console.log("🐸 product.created")
+			break
+
+		case "price.created":
+			console.log("🐸 price.created")
+      // JSON.stringify(stripePayload.data, null, 2)
+			break
+
+		case "product.updated":
+			console.log("🐸 product.updated")
+      // JSON.stringify(stripePayload.data, null, 2)
 			break
 
 		default:
@@ -102,6 +116,10 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 	// 	return redirect(`/checkout?stripeStatus=open`)
 	// }
 
+	NextResponse.json(
+		{ recieved: true, message: "stripe integration is connected" },
+		{ status: 200 }
+	)
 	return redirect("/shop")
 }
 
@@ -141,7 +159,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 				payment_status: checkoutSession.payment_status,
 				id: checkoutSession.id,
 				payment_intent: checkoutSession.payment_intent,
-        customerId: checkoutSession.metadata.customerId
+				customerId: checkoutSession.metadata.customerId,
 			},
 		})
 		.graphql.run({
@@ -159,14 +177,12 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	console.log("### stripe webhook. checkoutTickets mutation data")
 	console.log("🐸🐸🐸 Remove items from CART 🐸🐸🐸")
 	console.log({ data })
-  if(data.checkout.status === 'PAYMENT_RECIEVED') {
-    
-  }
+	if (data.checkout.status === "PAYMENT_RECIEVED") {
+	}
 
-  // return {
-  //   checkout: data.checkout
-  // }
-
+	// return {
+	//   checkout: data.checkout
+	// }
 
 	// switch (checkoutSession.metadata.typeof) {
 	// 	case "ticket":

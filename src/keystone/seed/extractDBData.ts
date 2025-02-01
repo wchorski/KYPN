@@ -315,7 +315,7 @@ const query = `
         id
         email
       }
-      order {
+      orderItem {
         id
       }
       dateCreated
@@ -368,6 +368,45 @@ const query = `
       dateModified
       google
       price
+    }
+    products {
+      image
+      name
+      slug
+      excerpt
+      description {
+        document
+      }
+      status
+      isForSale
+      price
+      isForRent
+      rental_price
+      stockCount
+      author {
+        id
+        email
+      }
+      addons {
+        id
+        name
+      }
+      coupons {
+        id
+        name
+      }
+      dateCreated
+      dateModified
+      categories {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      stripeProductId
+      stripePriceId
     }
   }
 `

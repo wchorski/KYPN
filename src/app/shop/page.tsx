@@ -2,7 +2,10 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { InfoCard, InfoCardList } from "@components/blocks/InfoCardList"
 import { NoData } from "@components/elements/NoData"
+import { ArticleList } from "@components/layouts/ArticleList"
+import ErrorPage from "@components/layouts/ErrorPage"
 import { Addon, Product, Service } from "@ks/types"
+import fetchProducts from "@lib/fetchdata/fetchProducts"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import { layout_site, page_layout } from "@styles/layout.module.css"
 import { Metadata } from "next"
@@ -21,14 +24,20 @@ type Props = {
 export default async function ShopPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { services, addons, error } = await fetchServicesAndAddons({ session })
+	const { products, error: errorProducts } = await fetchProducts({
+		session,
+		query,
+	})
 
+	if (error || errorProducts)
+		return <ErrorPage error={error || errorProducts} />
 	return (
 		<main className={page_layout}>
 			<header className={layout_site}>
 				<h1> Shop </h1>
 			</header>
 			<div className={layout_site}>
-				<Content services={services} addons={addons} products={[]}/>
+				<Content services={services} addons={addons} products={products} />
 			</div>
 		</main>
 	)
@@ -87,13 +96,15 @@ function Content({ services = [], addons = [], products = [] }: Content) {
 			{products.length > 0 && (
 				<>
 					<h2 id="products">Products</h2>
-					<InfoCardList items={infocardProducts || []} />
+					{/* <InfoCardList items={infocardProducts || []} /> */}
+          <ArticleList items={products} type={'product'}/>
 				</>
 			)}
 			{services.length > 0 && (
 				<>
 					<h2 id="services">Services</h2>
-					<InfoCardList items={infocardServices || []} />
+          <ArticleList items={services} type={'service'}/>
+					{/* <InfoCardList items={infocardServices || []} /> */}
 				</>
 			)}
 			{addons.length > 0 && (
@@ -106,3 +117,20 @@ function Content({ services = [], addons = [], products = [] }: Content) {
 		</>
 	)
 }
+
+const query = `
+  id
+  typeof
+  image
+  name
+  slug
+  excerpt
+  status
+  isForSale
+  price
+  isForRent
+  rental_price
+  stockCount
+  dateCreated
+  dateModified
+`

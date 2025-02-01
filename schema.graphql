@@ -85,7 +85,7 @@ input UserWhereInput {
   url: StringFilter
   isActive: BooleanFilter
   stripeCustomerId: StringFilter
-  dateCreated: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
   dateModified: DateTimeNullableFilter
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
@@ -160,6 +160,17 @@ input NestedStringFilter {
 input BooleanFilter {
   equals: Boolean
   not: BooleanFilter
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: DateTimeFilter
 }
 
 input DateTimeNullableFilter {
@@ -878,19 +889,8 @@ input BookingWhereInput {
   secretNotes: StringFilter
   revision: IntFilter
   orderItem: OrderItemWhereInput
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
-}
-
-input DateTimeFilter {
-  equals: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  lt: DateTime
-  lte: DateTime
-  gt: DateTime
-  gte: DateTime
-  not: DateTimeFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input IntFilter {
@@ -1086,8 +1086,8 @@ input ServiceWhereInput {
   stripePriceId: StringFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input DecimalFilter {
@@ -1388,8 +1388,8 @@ input AddonWhereInput {
   subscriptionItems: SubscriptionItemManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input AddonOrderByInput {
@@ -1576,8 +1576,8 @@ input SubscriptionPlanWhereInput {
   items: SubscriptionItemManyRelationFilter
   tags: TagManyRelationFilter
   categories: CategoryManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input SubscriptionPlanOrderByInput {
@@ -1684,8 +1684,8 @@ input SubscriptionItemWhereInput {
   user: UserWhereInput
   stripeChargeId: StringFilter
   stripeSubscriptionId: StringFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input IntNullableFilter {
@@ -1820,8 +1820,8 @@ input ProductWhereInput {
   author: UserWhereInput
   addons: AddonManyRelationFilter
   coupons: CouponManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
   stripeProductId: StringFilter
@@ -2432,8 +2432,8 @@ input PageWhereInput {
   id: IDFilter
   title: StringFilter
   slug: StringFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
   status: StringNullableFilter
   template: StringNullableFilter
   pinned: IntNullableFilter
@@ -2503,6 +2503,7 @@ input PageCreateInput {
 
 type Post {
   id: ID!
+  typeof: String
   title: String
   slug: String
   status: String
@@ -2549,8 +2550,8 @@ input PostWhereInput {
   privateAccess: UserManyRelationFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input PostOrderByInput {
@@ -2663,8 +2664,8 @@ input EventWhereInput {
   cohosts: UserManyRelationFilter
   tickets: TicketManyRelationFilter
   coupons: CouponManyRelationFilter
-  dateCreated: DateTimeNullableFilter
-  dateModified: DateTimeNullableFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
 }

@@ -1,4 +1,4 @@
-import { group, list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import { allowAll } from "@keystone-6/core/access"
 import {
@@ -8,6 +8,7 @@ import {
 	timestamp,
 	integer,
 	checkbox,
+	virtual,
 } from "@keystone-6/core/fields"
 import { document } from "@keystone-6/fields-document"
 import { componentBlocks } from "../blocks"
@@ -60,6 +61,17 @@ export const Post: Lists.Post = list({
 	},
 
 	fields: {
+		typeof: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				resolve() {
+					return "post"
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
 		title: text({ validation: { isRequired: true } }),
 		slug: text({
 			isIndexed: "unique",
@@ -191,8 +203,14 @@ export const Post: Lists.Post = list({
 					ref: "Tag.posts",
 					many: true,
 				}),
-				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
 			},
 		}),
 	},

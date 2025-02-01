@@ -10,6 +10,9 @@ const seedSchemaItems = async (
 	seedJson: any[],
 	context: Context
 ) => {
+	// console.log("### seedSchemaItems ###")
+	// console.log({ schemaType })
+	// console.log({ seedJson })
 	const { db: sudoDB } = context.sudo()
 
 	//@ts-ignore
@@ -96,7 +99,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { locations: null }),
+				: {}),
 			...(item.coupons
 				? {
 						coupons: {
@@ -105,7 +108,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { coupons: null }),
+				: {}),
 			...(item.addons && item.addons.length > 0
 				? {
 						addons: {
@@ -114,6 +117,8 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
+          //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
+          //! will this cause problems for other schemas?
 				: { addons: null }),
 			// addons:null,
 			//? USERS Start
@@ -125,7 +130,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { privateAccess: null }),
+				: {}),
 			...(item.employees
 				? {
 						employees: {
@@ -134,7 +139,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { employees: null }),
+				: {}),
 			...(item.hosts
 				? {
 						hosts: {
@@ -143,7 +148,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { hosts: null }),
+				: {}),
 			...(item.cohosts
 				? {
 						cohosts: {
@@ -152,7 +157,7 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { cohosts: null }),
+				: {}),
 			// USERS End
 			...(item.categories
 				? {
@@ -162,14 +167,14 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-				: { categories: null }),
+				: {}),
 			...(item.tags
 				? {
 						tags: {
 							connect: item.tags?.map((field: any) => ({ name: field.name })),
 						},
 				  }
-				: { tags: null }),
+				: {}),
 		})),
 	})
 
@@ -207,6 +212,7 @@ export const seedDatabase = async (context: Context) => {
 	await seedSchemaItems("Event", "summary", allDataJson.events, context)
 	// seedTicketOrders creates "Ticket" items after Events are created
 
+	await seedSchemaItems("Product", "name", allDataJson.products, context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }
 

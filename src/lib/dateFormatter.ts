@@ -123,9 +123,9 @@ export function timePrettyTo12HourFormat(timeString: string) {
 	return prettyTime
 }
 
-export function datePrettyLocal(date: string, option: "day" | "time" | "full") {
+export function datePrettyLocal(date: string|Date, option: "day" | "time" | "full") {
 	// console.log('pretty date input, ', date);
-	if (!date) return "n/a"
+	if (!date) return ''
 
 	let options = {}
 	switch (option) {

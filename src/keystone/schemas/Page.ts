@@ -58,8 +58,8 @@ export const Page: Lists.Page = list({
 					"Warning! Changing the slug will break links that were previously shared",
 			},
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },

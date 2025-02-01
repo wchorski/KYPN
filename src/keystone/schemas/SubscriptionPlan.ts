@@ -185,8 +185,8 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 			many: true,
 		}),
 
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 	},
 
 	hooks: {

@@ -20,28 +20,28 @@ type StripeProduct = {
 	type: "subscription" | "product" | "addon" | "service"
 	image: string
 	price: number
-	billing_interval?: Billing_Interval
+	billing_interval: Billing_Interval|undefined
 	url: string
 	stripeProductId: string | undefined
 }
 
-export async function stripeProductCreate({
-	id,
-	name,
-	excerpt,
-	category,
-	status,
-	authorId,
-	type,
-	image,
-	price,
-	billing_interval,
-	url,
-	stripeProductId,
-}: StripeProduct) {
-	console.log("### stripeProductCreate ###")
-	if (!envs.STRIPE_SECRET || stripeProductId) return
-	console.log("### stripeProductCreate continued ###")
+export async function stripeProductCreate(props: StripeProduct) {
+	if (!envs.STRIPE_SECRET) return
+  //? if product has stripeId then find and update existing product
+	if (props.stripeProductId) stripeProductUpdate(props)
+	const {
+		id,
+		name,
+		excerpt,
+		category,
+		status,
+		authorId,
+		type,
+		image,
+		price,
+		billing_interval,
+		url,
+	} = props
 
 	let stripeCreateParams: Stripe.ProductCreateParams = {
 		name,
@@ -204,7 +204,7 @@ type Price = {
 }
 
 type ProductUpdate = {
-	stripeProductId: string
+	stripeProductId: string|undefined
 	currency?: "usd" | string
 	price: number | undefined
 	image: string | undefined
@@ -228,7 +228,7 @@ export async function stripeProductUpdate({
 	stripeProductId,
 	billing_interval,
 }: ProductUpdate) {
-	if (!envs.STRIPE_SECRET || !stripeProductId) return
+	if (!envs.STRIPE_PUBLIC_KEY || !stripeProductId) return
 
 	let stripeUpdateParams: Stripe.ProductUpdateParams = {
 		name,

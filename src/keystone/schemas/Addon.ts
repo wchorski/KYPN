@@ -98,8 +98,8 @@ export const Addon: Lists.Addon = list({
 			ref: "Tag.addons",
 			many: true,
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 	},
 	hooks: {
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {

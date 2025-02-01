@@ -1,6 +1,6 @@
 import { graphql, group, list } from "@keystone-6/core"
 // @ts-ignore
-import { Lists } from ".keystone/types"
+import { Lists, ProductCreateInput } from ".keystone/types"
 
 import { allowAll } from "@keystone-6/core/access"
 import {
@@ -87,8 +87,7 @@ export const Product: Lists.Product = list({
 			ui: { description: "shortened, url friendly name" },
 			hooks: {
 				resolveInput: ({ inputData, operation }) => {
-          
-          if (operation === "create") {          
+					if (operation === "create") {
 						if (inputData.slug) {
 							return slugFormat(inputData.slug)
 						} else if (inputData.name) {
@@ -193,8 +192,14 @@ export const Product: Lists.Product = list({
 			// description: 'Group description',
 
 			fields: {
-				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
 				categories: relationship({
 					ref: "Category.products",
 					many: true,
@@ -231,12 +236,32 @@ export const Product: Lists.Product = list({
 		},
 		beforeOperation: {
 			// create: async ({ item, resolvedData, context }) => {},
-			update: ({ resolvedData }) => {
+			update: async ({ resolvedData, context, item }) => {
+				//? item.stripeProductId will be undefined on first creation
+				await stripeProductUpdate({
+					stripeProductId: item.stripeProductId,
+					image: resolvedData.image as string | undefined,
+					price: resolvedData.price as number | undefined,
+					name: resolvedData.name as string | undefined,
+					status: resolvedData.status as string | undefined,
+					// category: resolvedData.category,
+					category: "product",
+					excerpt: resolvedData.excerpt as string | undefined,
+					authorId: resolvedData.author?.connect?.id,
+					billing_interval: undefined,
+				}).then(async (res) => {
+					if (!res) return
+
+					if (res.default_price) {
+						resolvedData.stripePriceId = String(res.default_price)
+					}
+				})
+
 				resolvedData.dateModified = new Date().toISOString()
 			},
 		},
 		afterOperation: {
-			create: async ({ item, context }) => {
+			create: async ({ resolvedData, item, context }) => {
 				//? if error happens item is now an error object
 				if (!item.id) return
 
@@ -254,11 +279,15 @@ export const Product: Lists.Product = list({
 					image: item.image,
 					url: envs.FRONTEND_URL + `/products/${id}`,
 					stripeProductId,
+					billing_interval: undefined,
 				}).then(async (res) => {
 					if (!res) return
 					item.stripeProductId = res.id
 					item.stripePriceId = String(res.default_price)
+					resolvedData.stripeProductId = res.id
+					resolvedData.stripePriceId = String(res.default_price)
 					//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
+					//TODO this is causing endless loop
 					await context.db.Product.updateOne({
 						where: { id: item.id },
 						data: {
@@ -268,36 +297,7 @@ export const Product: Lists.Product = list({
 					})
 				})
 			},
-			update: async ({ resolvedData, item, context }) => {
-				console.log("🐸🐸🐸 UPDATE stripe product")
-
-				// await stripeProductUpdate({stripeProductId: item.stripeProductId, ...resolvedData})
-				await stripeProductUpdate({
-					stripeProductId: item.stripeProductId,
-					image: resolvedData.image as string | undefined,
-					price: resolvedData.price as number | undefined,
-					name: resolvedData.name as string | undefined,
-					status: resolvedData.status as string | undefined,
-					// category: resolvedData.category,
-					category: "product",
-					excerpt: resolvedData.excerpt as string | undefined,
-					authorId: resolvedData.author?.connect?.id,
-					billing_interval: undefined,
-				}).then(async (res) => {
-					if (!res) return
-					// item.stripeProductId = res.id
-					item.stripePriceId = String(res.default_price)
-					//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
-
-					// await context.db.Product.updateOne({
-					// 	where: { id: item.id },
-					// 	data: {
-					// 		// stripeProductId: res.id,
-					// 		stripePriceId: String(res.default_price),
-					// 	},
-					// })
-				})
-			},
+			// update: async ({ resolvedData, item, context }) => {},
 			delete: async ({ originalItem }) => {
 				//? stripe. deleting product is not recommended
 				// as product history will also be erased

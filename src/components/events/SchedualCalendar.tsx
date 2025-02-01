@@ -121,10 +121,10 @@ function SchedualChip({date, day, data}:TSchedualChip){
   }
 
   const hrefPre = (() => {
-    switch (true) {
-    case (data.typeof === 'booking'):
+    switch (data.typeof) {
+    case ('booking'):
       return 'bookings'
-    case (data.typeof === 'event'):
+    case ('event'):
       return 'events'
   
     default:

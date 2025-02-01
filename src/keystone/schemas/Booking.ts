@@ -266,8 +266,8 @@ export const Booking: Lists.Booking = list({
 			},
 		}),
 		orderItem: relationship({ ref: "OrderItem.booking", many: false }),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-		dateModified: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 		google:
 			json(),
 			//   {

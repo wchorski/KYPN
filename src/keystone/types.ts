@@ -171,6 +171,7 @@ export type Page = Lists.Page.Item & {
 	dateModified: string
 }
 export type Post = Lists.Post.Item & {
+  typeof: 'post'
 	categories: Category[]
 	tags: Tag[]
 	author: User

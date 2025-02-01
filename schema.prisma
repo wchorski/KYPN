@@ -23,7 +23,7 @@ model User {
   url                String             @default("")
   isActive           Boolean            @default(true)
   stripeCustomerId   String             @default("")
-  dateCreated        DateTime?          @default(now())
+  dateCreated        DateTime           @default(now())
   dateModified       DateTime?          @default(now())
   buisnessHourOpen   String?            @default("09:00:00")
   buisnessHourClosed String?            @default("18:00:00")
@@ -122,8 +122,8 @@ model Booking {
   revision              Int        @default(0)
   orderItem             OrderItem? @relation("Booking_orderItem", fields: [orderItemId], references: [id])
   orderItemId           String?    @unique @map("orderItem")
-  dateCreated           DateTime?  @default(now())
-  dateModified          DateTime?  @default(now())
+  dateCreated           DateTime   @default(now())
+  dateModified          DateTime   @default(now())
   google                Json?
   from_CartItem_booking CartItem[] @relation("CartItem_booking")
 
@@ -155,8 +155,8 @@ model Service {
   stripePriceId      String     @default("")
   categories         Category[] @relation("Category_services")
   tags               Tag[]      @relation("Service_tags")
-  dateCreated        DateTime?  @default(now())
-  dateModified       DateTime?  @default(now())
+  dateCreated        DateTime   @default(now())
+  dateModified       DateTime   @default(now())
 
   @@index([authorId])
 }
@@ -195,8 +195,8 @@ model Addon {
   subscriptionItems SubscriptionItem[] @relation("Addon_subscriptionItems")
   categories        Category[]         @relation("Addon_categories")
   tags              Tag[]              @relation("Addon_tags")
-  dateCreated       DateTime?          @default(now())
-  dateModified      DateTime?          @default(now())
+  dateCreated       DateTime           @default(now())
+  dateModified      DateTime           @default(now())
 
   @@index([authorId])
 }
@@ -235,8 +235,8 @@ model SubscriptionPlan {
   items            SubscriptionItem[] @relation("SubscriptionItem_subscriptionPlan")
   tags             Tag[]              @relation("SubscriptionPlan_tags")
   categories       Category[]         @relation("Category_subscriptions")
-  dateCreated      DateTime?          @default(now())
-  dateModified     DateTime?          @default(now())
+  dateCreated      DateTime           @default(now())
+  dateModified     DateTime           @default(now())
 
   @@index([authorId])
 }
@@ -256,8 +256,8 @@ model SubscriptionItem {
   userId               String?           @map("user")
   stripeChargeId       String            @default("")
   stripeSubscriptionId String            @default("")
-  dateCreated          DateTime?         @default(now())
-  dateModified         DateTime?         @default(now())
+  dateCreated          DateTime          @default(now())
+  dateModified         DateTime          @default(now())
 
   @@index([subscriptionPlanId])
   @@index([userId])
@@ -280,8 +280,8 @@ model Product {
   authorId              String?     @map("author")
   addons                Addon[]     @relation("Addon_products")
   coupons               Coupon[]    @relation("Coupon_products")
-  dateCreated           DateTime?   @default(now())
-  dateModified          DateTime?   @default(now())
+  dateCreated           DateTime    @default(now())
+  dateModified          DateTime    @default(now())
   categories            Category[]  @relation("Category_products")
   tags                  Tag[]       @relation("Product_tags")
   stripeProductId       String      @default("")
@@ -393,8 +393,8 @@ model Page {
   id             String     @id @default(cuid())
   title          String     @default("")
   slug           String     @unique @default("")
-  dateCreated    DateTime?  @default(now())
-  dateModified   DateTime?  @default(now())
+  dateCreated    DateTime   @default(now())
+  dateModified   DateTime   @default(now())
   status         String?    @default("DRAFT")
   template       String?    @default("FULLWIDTH")
   pinned         Int?       @default(0)
@@ -427,8 +427,8 @@ model Post {
   privateAccess  User[]     @relation("Post_privateAccess")
   categories     Category[] @relation("Category_posts")
   tags           Tag[]      @relation("Post_tags")
-  dateCreated    DateTime?  @default(now())
-  dateModified   DateTime?  @default(now())
+  dateCreated    DateTime   @default(now())
+  dateModified   DateTime   @default(now())
 
   @@index([authorId])
 }
@@ -450,8 +450,8 @@ model Event {
   cohosts             User[]     @relation("Event_cohosts")
   tickets             Ticket[]   @relation("Ticket_event")
   coupons             Coupon[]   @relation("Coupon_events")
-  dateCreated         DateTime?  @default(now())
-  dateModified        DateTime?  @default(now())
+  dateCreated         DateTime   @default(now())
+  dateModified        DateTime   @default(now())
   categories          Category[] @relation("Category_events")
   tags                Tag[]      @relation("Event_tags")
   from_CartItem_event CartItem[] @relation("CartItem_event")

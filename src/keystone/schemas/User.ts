@@ -130,7 +130,7 @@ export const User: Lists.User = list({
 			isIndexed: true,
 			validation: { isRequired: false },
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" } }),
+		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 		dateModified: timestamp({
 			defaultValue: { kind: "now" },
 			hooks: {

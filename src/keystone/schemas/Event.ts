@@ -143,8 +143,8 @@ export const Event: Lists.Event = list({
 			// description: 'Group description',
 
 			fields: {
-				dateCreated: timestamp({ defaultValue: { kind: "now" } }),
-				dateModified: timestamp({ defaultValue: { kind: "now" } }),
+				dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+				dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
 				categories: relationship({
 					ref: "Category.events",
 					many: true,
