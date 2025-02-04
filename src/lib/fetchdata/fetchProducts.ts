@@ -1,23 +1,24 @@
 import { Addon, Product, Service } from "@ks/types"
 import { keystoneContext } from "@ks/context"
 import { Session } from "next-auth"
+import { envs } from "@/envs"
+
+const perPage = envs.PERPAGE
 
 type Props = {
 	query: string
+  page?: number
 	session: Session | null
 }
 
-export default async function fetchProducts({
-	query,
-	session,
-}: Props) {
+export default async function fetchProducts({ query, session, page = 1, }: Props) {
 	try {
 		const products = (await keystoneContext
 			.withSession(session)
 			.query.Product.findMany({
-				// where: {
-
-				// },
+				
+        skip: page * perPage - perPage,
+			take: perPage,
 				orderBy: [
 					{
 						dateCreated: "desc",
@@ -25,6 +26,10 @@ export default async function fetchProducts({
 				],
 				query,
 			})) as Product[]
+
+		const count = (await keystoneContext
+			.withSession(session)
+			.query.Product.count()) as number
 
 		// const addons = (await keystoneContext
 		//   .withSession(session)
@@ -44,7 +49,7 @@ export default async function fetchProducts({
 		//     query: queryAddons,
 		//   })) as Addon[]
 
-		return { products }
+		return { products, count }
 	} catch (error) {
 		console.log("!!! fetchProducts: ", error)
 		return { error }

@@ -22,11 +22,10 @@ import { AsideBar } from "@components/layouts/AsideBar"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { ArticleList } from "@components/layouts/ArticleList"
+import fetchProducts from "@lib/fetchdata/fetchProducts"
 
 type Props = {
-	params: {
-		page: string | string[] | undefined
-	}
+
 	searchParams: {
 		[key: string]: string | string[] | undefined
 		categories: string | undefined
@@ -35,22 +34,21 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-	title: `Blog | ` + envs.SITE_TITLE,
+	title: `Products | ` + envs.SITE_TITLE,
 	description: envs.SITE_DESC,
 }
 
-export default async function BlogFeedPage({ params, searchParams }: Props) {
+export default async function ProductsPage({ searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { page, categories } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = categories?.split(",") || []
 
-	const { posts, count, error } = await fetchPosts({
-		query: QUERY_POSTS_ARTICLES,
-		page: currPage,
-		categoryIds,
-		session,
-	})
+	const { products, error, count } = await fetchProducts({
+      session,
+      query,
+      page: currPage,
+    })
 
 	if (error)
 		return (
@@ -58,10 +56,10 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!posts)
+	if (!products)
 		return (
 			<NoDataFoundPage>
-				<p>No posts found</p>
+				<p>No products found</p>
 			</NoDataFoundPage>
 		)
 
@@ -80,7 +78,7 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 		>
 			<header className={layout_full} style={{ marginTop: "3rem" }}>
 				<div className={layout_wide}>
-					<h1 style={{ textAlign: "center" }}> Blog </h1>
+					<h1 style={{ textAlign: "center" }}> Products </h1>
 					<hr className={layout_full} />
 				</div>
 			</header>
@@ -88,15 +86,15 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 			<div className={[page_content, layout_site_to_wide].join(" ")}>
 				{/* <Pagination route="/blog" page={currPage} count={count} /> */}
 
-				{posts?.length > 0 ? (
-					<ArticleList items={posts} type={"post"} />
+				{products?.length > 0 ? (
+					<ArticleList items={products} type={"product"} />
 				) : (
-					<NoData name="posts" />
+					<NoData name="products" />
 				)}
 
-				<Pagination route="/blog" page={currPage} count={count} />
+				<Pagination route="/products" page={currPage} count={count} />
 			</div>
-			<AsideBar aria_label="Blog List Sidebar">
+			<AsideBar aria_label="Products List Sidebar">
 				<Flex
 					flexDirection={"column"}
 					alignItems="flex-start"
@@ -122,28 +120,19 @@ const styleHeader: CSSProperties = {
 	marginBottom: 0,
 }
 
-const QUERY_POSTS_ARTICLES = `
+const query = `
   id
-  title
-  featured_image
-  featured_video
-  author {
-    id
-    name
-    nameLast
-  }
-  dateModified
-  excerpt
-  pinned
+  typeof
+  image
+  name
   slug
+  excerpt
   status
-  template
-  tags {
-    id
-    name
-  }
-  categories {
-    id
-    name
-  }
+  isForSale
+  price
+  isForRent
+  rental_price
+  stockCount
+  dateCreated
+  dateModified
 `

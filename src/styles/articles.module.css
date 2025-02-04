@@ -1,0 +1,117 @@
+.row_graphic {
+	grid-row-start: graphic-start;
+	grid-row-end: graphic-end;
+	margin-bottom: calc(var(--space-m) * -1);
+}
+
+article.post_card {
+	background-color: var(--c-txt-bg);
+	padding: var(--space-m);
+	border: solid 1px var(--c-seperator);
+	height: 100%;
+	box-sizing: border-box;
+	max-width: 50rem;
+	position: relative;
+	display: grid;
+	align-items: stretch;
+	gap: var(--space-ms);
+	grid-template-rows:
+		[graphic-start] minmax(10rem, 15rem)
+		[graphic-end header-start] minmax(auto, 1fr)
+		[header-end excerpt-start] minmax(0, 8rem)
+		[excerpt-end footer-start] minmax(1rem, auto)
+		[footer-end];
+
+	& header {
+		grid-row-start: header-start;
+		grid-row-end: header-end;
+		display: flex;
+		justify-content: end;
+		flex-direction: column;
+	}
+	& p {
+		grid-row-start: excerpt-start;
+		grid-row-end: excerpt-end;
+	}
+	& footer {
+		grid-row-start: footer-start;
+		grid-row-end: footer-end;
+		display: flex;
+		justify-content: end;
+		flex-direction: column;
+	}
+
+	& figure {
+		padding: 0;
+		margin: 0;
+		aspect-ratio: 1/1;
+		overflow: hidden;
+		height: 100%;
+		width: calc(100% + calc(var(--space-m) * 2));
+		margin-inline: calc(var(--space-m) * -1);
+		margin-top: calc(var(--space-m) * -1);
+		margin-bottom: calc(var(--space-m) * -1);
+
+		& img {
+			width: 100%;
+			height: 100%;
+			max-width: 100%;
+			object-fit: cover;
+			box-sizing: border-box;
+		}
+	}
+
+	& a:has(h3) {
+		text-decoration: none;
+	}
+
+	& h3 {
+		margin-top: 0;
+		color: inherit;
+		word-wrap: break-word;
+		overflow: hidden;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		-webkit-box-orient: vertical;
+		display: -webkit-box;
+		/* font-size: clamp(
+			1rem * (var(--font-size-multi) * 2),
+			1rem + 0.7vw,
+			1rem * (var(--font-size-multi) * 3)
+		); */
+	}
+}
+
+.meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-ms);
+	color: var(--c-txt-sub);
+
+	& span {
+		display: flex;
+		align-items: center;
+	}
+
+	& li {
+		display: flex;
+		align-items: center;
+	}
+}
+.featured_image img {
+	transition-duration: var(--anim-duration-fast);
+	transition-property: filter;
+}
+.featured_image img:hover {
+	filter: contrast(1.2);
+}
+
+.excerpt {
+	flex-grow: 1;
+	word-wrap: break-word;
+	overflow: hidden;
+	-webkit-line-clamp: 4;
+  line-clamp: 4;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+}

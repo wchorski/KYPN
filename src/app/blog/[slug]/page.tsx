@@ -19,7 +19,7 @@ import {
 	page_layout,
 	page_title,
 } from "@styles/layout.module.css"
-import sArticles from "@styles/articles.module.scss"
+import sArticles from "@styles/articles.module.css"
 import { StatusBadge } from "@components/StatusBadge"
 import { CgProfile } from "react-icons/cg"
 import { Header } from "@components/elements/Header"

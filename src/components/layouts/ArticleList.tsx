@@ -1,4 +1,4 @@
-import styles, { post_card } from "@styles/articles.module.scss"
+import styles, { post_card, row_graphic } from "@styles/articles.module.css"
 import { Post, Product, Service } from "@ks/types"
 import { GridList } from "@components/layouts/GridList"
 import { NoDataFoundPage } from "./NoDataFoundPage"
@@ -109,21 +109,21 @@ export function ArticleItem({
 			)}
 
 			{type === "post" && item.featured_video ? (
-				<figure className={styles.featured_image}>
+				<figure className={[styles.featured_image, row_graphic].join(' ')}>
 					<YouTubeVideo
 						altText={`${title}'s featured video`}
 						url={item.featured_video}
 					/>
 				</figure>
 			) : (
-				<Link href={link}>
-					<figure className={styles.featured_image}>
+				<Link href={link} className={row_graphic} >
+					<figure className={[styles.featured_image, row_graphic].join(' ')}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 					</figure>
 				</Link>
 			)}
 
-			<div className="wrapper">
+			{/* <div className="wrapper"> */}
 				<header style={{ position: "relative" }}>
 					<Link href={`/${item.typeof + "s"}/${id}`} className="title">
 						<h3> {title} </h3>
@@ -134,7 +134,6 @@ export function ArticleItem({
 							<Link className="author" href={`/users/${author?.id}`}>
 								<span className="sub-text">
 									<IconUserAccountAvatar />
-									{/* <CgProfile /> */}
 									{author?.name}
 								</span>
 							</Link>
@@ -145,27 +144,27 @@ export function ArticleItem({
 							title="Publication update date"
 						>
 							<span className="sub-text">
-								{/* <FiCalendar /> */}
 								<IconCalendar />
-								{datePrettyLocal(dateModified, "day")}
+								{datePrettyLocal(String(dateModified), "day")}
 							</span>
 						</time>
 					</div>
 				</header>
 
-				<p className={styles.excerpt}>
-					{excerpt}{" "}
+				<p className={styles.excerpt}>{excerpt}</p>
+
+				<footer>
 					<Link className="readmore" href={link}>
 						<em>{buttonText}</em>
 					</Link>
-				</p>
+				</footer>
 
 				{/* <div className="menu admin">
 	        <Link href={{ pathname: '/shop/products/update', query: { id: id }, }}> Edit ✏️ </Link>
 	        <AddToCart id={id} />
 	        <ProductDelete id={id}> Delete </ProductDelete>
 	      </div> */}
-			</div>
+			{/* </div> */}
 		</article>
 	)
 }
