@@ -1,7 +1,7 @@
 
 import React, { ReactElement } from 'react'
 import Link from 'next/link';
-import styles from '@styles/ecommerce/product.module.scss'
+import styles from '@styles/ecommerce/product.module.css'
 import { ImageDynamic } from '../elements/ImageDynamic';
 import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { SubscriptionPlan, Session } from '@ks/types';

@@ -30,6 +30,8 @@ type Props = {
 	marginInline?: string
 	verticleAlign?: "start" | "center" | "end"
 	maxWidth?: string
+  justifyContent?: CSSProperties['justifyContent']
+  alignItems?: CSSProperties['alignItems']
 	// layout?: 'default'|'center',
 }
 
@@ -49,6 +51,8 @@ export function Card({
 	marginInline,
 	verticleAlign,
 	maxWidth,
+  justifyContent,
+  alignItems,
 }: Props) {
 	const clrTheme = getColorTheme(colorTheme)
 
@@ -61,6 +65,8 @@ export function Card({
 			style={{
 				// ...(backgroundColor ? {backgroundColor: backgroundColor} : {}),
 				flexDirection: direction,
+        justifyContent,
+        alignItems,
 				gap: gap,
 				...(marginBlock ? { marginBlock } : {}),
 				...(marginInline ? { marginInline } : {}),

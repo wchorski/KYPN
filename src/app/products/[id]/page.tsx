@@ -12,7 +12,6 @@ import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import { Metadata, ResolvingMetadata } from "next"
 import { getServerSession, Session } from "next-auth"
 import Link from "next/link"
-import styleProduct from "@styles/ecommerce/productSingle.module.scss"
 import { BlockRender } from "@components/blocks/BlockRender"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
@@ -37,6 +36,11 @@ import fetchProduct from "@lib/fetchdata/fetchProduct"
 import { CallbackLink } from "@components/menus/CallbackLink"
 import AddToCartForm from "@components/ecommerce/AddToCartForm"
 import { StatusBadge } from "@components/StatusBadge"
+import {
+	product_page,
+	price_text,
+	featured_img,
+} from "@styles/ecommerce/product.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -99,7 +103,8 @@ export default async function ProductById({ params }: Props) {
 		name,
 		description,
 		price,
-
+		isForSale,
+		isForRent,
 		stockCount,
 		author,
 		categories,
@@ -109,15 +114,17 @@ export default async function ProductById({ params }: Props) {
 
 	return (
 		<main className={page_layout}>
-			<article
-				className={[styleProduct.product, page_content, layout_site].join(" ")}
-			>
+			<article className={[product_page, page_content, layout_site].join(" ")}>
 				<header className={"sticky"}>
-					<div className="container">
-						<picture className={styles.featured}>
-							<ImageDynamic photoIn={image} priority={true}/>
-						</picture>
-						<Card direction={"row"} gap={"var(--space-m)"}>
+					<figure className={featured_img}>
+						{/* <figcaption>
+							<StatusBadge type={"product"} status={status} />
+						</figcaption> */}
+						<ImageDynamic photoIn={image} priority={true} />
+					</figure>
+
+					{canEdit(author, session) && (
+						<Card direction={"row"} gap={"var(--space-m)"} >
 							<StatusBadge status={status} type={"product"} />
 							<IconLink
 								icon={"edit"}
@@ -127,74 +134,89 @@ export default async function ProductById({ params }: Props) {
 								<span>Edit Product Details</span>
 							</IconLink>
 						</Card>
+					)}
 
-						<hr />
+					<hr />
 
-						<ul className="categories">
-							{categories?.map((cat) => (
-								<li key={cat.id}>
-									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
-								</li>
-							))}
-						</ul>
+					<ul className="categories">
+						{categories?.map((cat) => (
+							<li key={cat.id}>
+								<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
+							</li>
+						))}
+					</ul>
 
-						<ul className="tags">
-							{tags?.map((tag) => (
-								<li key={tag.id}>
-									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
-								</li>
-							))}
-						</ul>
-					</div>
+					<ul className="tags">
+						{tags?.map((tag) => (
+							<li key={tag.id}>
+								<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+							</li>
+						))}
+					</ul>
 				</header>
 
 				<div>
 					<h1>{name}</h1>
 
-					<div
-						className="info-cont"
-						style={{
-							display: "grid",
-							alignContent: "center",
-							height: "100%",
-						}}
-					>
-						{/* <ul className="meta unstyled padding-0">
-						</ul> */}
-					</div>
+					{!session ? (
+						<CallbackLink>Login to Purchase</CallbackLink>
+					) : session?.data.role === null ? (
+						<VerifyEmailCard email={session.user.email} />
+					) : !["PUBLIC"].includes(status) ? (
+						<Card>
+							<StatusBadge type={"product"} status={status} />
+						</Card>
+					) : (
+						<>
+							{isForSale && (
+								<Card
+									direction={"row"}
+									verticleAlign={"center"}
+									gap={"var(--space-m)"}
+									justifyContent={"space-between"}
+									alignItems={"center"}
+								>
+									{/* <Flex justifyContent={"space-between"} alignItems={"center"}> */}
+									<span className={price_text}>
+										{price > 0 ? moneyFormatter(price) : "FREE"}
+									</span>
 
-					<Card>
-						<Flex justifyContent={"space-between"} alignItems={"center"}>
-							{/* {price > 0 ? (
-								<span style={{ alignContent: "center" }}>
-									{moneyFormatter(price)} per Ticket
-								</span>
-							) : (
-								<span style={{ alignContent: "center" }}>RSVP</span>
-							)} */}
-
-							{!session ? (
-								<CallbackLink>Login to Purchase</CallbackLink>
-							) : session?.data.role === null ? (
-								<VerifyEmailCard email={session.user.email} />
-							) : (
-								<>
 									<AddToCartForm
 										productId={id}
-										sessionId={session.itemId}
-                    eventId={undefined}
-										type={"RENTAL"}
-									/>
-									<AddToCartForm
-										productId={id}
-                    eventId={undefined}
+										eventId={undefined}
 										sessionId={session.itemId}
 										type={"SALE"}
 									/>
-								</>
+									{/* </Flex> */}
+								</Card>
 							)}
-						</Flex>
-					</Card>
+							{isForRent && (
+								<Card
+									direction={"row"}
+									verticleAlign={"center"}
+									gap={"var(--space-m)"}
+									justifyContent={"space-between"}
+									alignItems={"center"}
+								>
+									<span className={price_text}>
+										{price > 0 ? (
+											<span className={price_text}>
+												{moneyFormatter(price)} <small>/hour</small>
+											</span>
+										) : (
+											<span className={price_text}>FREE</span>
+										)}
+									</span>
+									<AddToCartForm
+										productId={id}
+										sessionId={session.itemId}
+										eventId={undefined}
+										type={"RENTAL"}
+									/>
+								</Card>
+							)}
+						</>
+					)}
 					{!isEmptyDocument(description?.document) && (
 						<>
 							<br />
