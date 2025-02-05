@@ -135,10 +135,8 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 	}, [])
 
 	function calcCartCount(items: CartItem[]) {
-		const accum = items.reduce((accumulator, item) => {
-			return 1 * item.quantity
-		}, 0)
-		setCartCount(accum)
+    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
+		setCartCount(totalQuantity)
 	}
 
 	function removeFromCart(id: string) {

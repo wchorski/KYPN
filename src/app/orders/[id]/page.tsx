@@ -10,6 +10,7 @@ import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
 import { StatusBadge } from "@components/StatusBadge"
 import {
+  layout_breakout,
 	layout_content,
 	layout_site,
 	page_content,
@@ -61,10 +62,10 @@ export default async function OrderByIdPage({ params }: Props) {
 
 	return (
 		<main className={page_layout}>
-			<header className={layout_site}>
+			<header className={layout_content}>
 				<h1> Order Receipt </h1>
 			</header>
-			<div className={page_content}>
+			<div className={[page_content, layout_content].join(' ')}>
 				<section>
 					<table>
 						<tbody>
@@ -99,7 +100,7 @@ export default async function OrderByIdPage({ params }: Props) {
 				<section>
 					<h3> Items: </h3>
 					{order.items.length > 0 ? (
-						<ul className="orderItems unstyled grid gap-m">
+						<ul className="orderItems unstyled grid gap-s">
 							{order.items.flatMap((it) =>
 								[
 									it.booking && (
@@ -122,7 +123,7 @@ export default async function OrderByIdPage({ params }: Props) {
 					)}
 				</section>
 			</div>
-			<footer>
+			<footer className={layout_content} >
 				<table style={{ fontSize: "var(--space-ms)" }}>
 					<tbody>
 						<tr>
@@ -177,12 +178,14 @@ function BookingOrderItem({ item }: { item: OrderItem }) {
 	)
 }
 function ProductOrderItem({ item }: { item: OrderItem }) {
-	const { name, price, image } = item.product
+	const { name, price, image, id } = item.product
 	return (
 		<li className={styles.item}>
 			<ImageDynamic photoIn={image} />
 
-			<h5>{name}</h5>
+			<Link href={`/products/${id}`}>
+				<h5>{name}</h5>
+			</Link>
 			<div className={perItemTotal}>
 				<p>{moneyFormatter(price * item.quantity)}</p>
 				<em>
