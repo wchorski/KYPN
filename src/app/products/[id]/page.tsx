@@ -1,28 +1,16 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import ErrorMessage from "@components/ErrorMessage"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { User } from "@ks/types"
-import {
-	datePrettyLocal,
-	datePrettyLocalDay,
-	datePrettyLocalTime,
-} from "@lib/dateFormatter"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import { Metadata, ResolvingMetadata } from "next"
 import { getServerSession, Session } from "next-auth"
 import Link from "next/link"
 import { BlockRender } from "@components/blocks/BlockRender"
-import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { Card } from "@components/layouts/Card"
-import { TicketForm } from "@components/tickets/TicketForm"
-import styles from "@styles/events/event.module.css"
-import { AddToCalendar } from "@components/widgets/AddToCalendar"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { plainObj } from "@lib/utils"
 import {
 	layout_site,
-	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
@@ -30,7 +18,6 @@ import { notFound } from "next/navigation"
 import moneyFormatter from "@lib/moneyFormatter"
 import { IconLink } from "@components/elements/IconLink"
 import { isEmptyDocument } from "@lib/contentHelpers"
-import Flex from "@components/layouts/Flex"
 import ErrorPage from "@components/layouts/ErrorPage"
 import fetchProduct from "@lib/fetchdata/fetchProduct"
 import { CallbackLink } from "@components/menus/CallbackLink"
@@ -124,7 +111,7 @@ export default async function ProductById({ params }: Props) {
 					</figure>
 
 					{canEdit(author, session) && (
-						<Card direction={"row"} gap={"var(--space-m)"} >
+						<Card direction={"row"} gap={"var(--space-m)"}>
 							<StatusBadge status={status} type={"product"} />
 							<IconLink
 								icon={"edit"}
@@ -135,8 +122,6 @@ export default async function ProductById({ params }: Props) {
 							</IconLink>
 						</Card>
 					)}
-
-					<hr />
 
 					<ul className="categories">
 						{categories?.map((cat) => (
@@ -162,7 +147,7 @@ export default async function ProductById({ params }: Props) {
 						<CallbackLink>Login to Purchase</CallbackLink>
 					) : session?.data.role === null ? (
 						<VerifyEmailCard email={session.user.email} />
-					) : !["PUBLIC"].includes(status) ? (
+					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
 						<Card>
 							<StatusBadge type={"product"} status={status} />
 						</Card>
@@ -176,7 +161,6 @@ export default async function ProductById({ params }: Props) {
 									justifyContent={"space-between"}
 									alignItems={"center"}
 								>
-									{/* <Flex justifyContent={"space-between"} alignItems={"center"}> */}
 									<span className={price_text}>
 										{price > 0 ? moneyFormatter(price) : "FREE"}
 									</span>
@@ -187,7 +171,6 @@ export default async function ProductById({ params }: Props) {
 										sessionId={session.itemId}
 										type={"SALE"}
 									/>
-									{/* </Flex> */}
 								</Card>
 							)}
 							{isForRent && (

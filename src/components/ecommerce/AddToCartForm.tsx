@@ -99,12 +99,8 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			await delay(600)
 			setInlineIconState(<IconShoppingBag />)
 
-			const newCartItem = {
-				...data.addToCart,
-				quantity: state.values?.quantity,
-			} as CartItem
-
-			addToCart(newCartItem)
+			addToCart(data.addToCart)
+      
 			return {
 				...state,
 				// data,
@@ -149,7 +145,7 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			<SubmitButtonInlineIcons
 				icon={inlineIconState}
 				className={"button medium"}
-        label={type === 'SALE' ? 'Buy' : 'Rent'}
+        label={'Add to Cart'}
 			/>
 		</form>
 	)
@@ -159,6 +155,7 @@ const query = `
   id
   type
   quantity
+  subTotal
   event {
     id
     summary

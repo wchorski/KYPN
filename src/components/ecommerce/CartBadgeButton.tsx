@@ -10,13 +10,13 @@ type Props = {
 	prop?: string
 }
 
-export function CartButton({ prop }: Props) {
-	const { isOpen, openCart, cartItems, isPending } = useCart()
+export function CartBadgeButton({ prop }: Props) {
+	const { isOpen, openCart, isPending, cartCount } = useCart()
 
-	const count = cartItems?.reduce(
-		(tally: any, cartItem: any) => tally + cartItem.quantity,
-		0
-	)
+	// const count = cartItems?.reduce(
+	// 	(tally: any, cartItem: any) => tally + cartItem.quantity,
+	// 	0
+	// )
 
 	return (
 		<button
@@ -25,7 +25,7 @@ export function CartButton({ prop }: Props) {
 			data-tooltip="cart"
 			title="shopping cart"
 		>
-			<span key={count} className="count tick-down-flick">{isPending ? <IconSpinnerLines /> : count}</span>
+			<span key={cartCount} className="count tick-down-flick">{isPending ? <IconSpinnerLines /> : cartCount}</span>
 			<MdShoppingBag className="cart" />
 		</button>
 	)

@@ -10,23 +10,24 @@ import {
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useState,
 } from "react"
 
 const defaultCtx = {
+	cartTotal: 0,
+	cartCount: 0,
 	isOpen: false,
 	setIsOpen: (isOpen: boolean) => {},
 	isPending: false,
 	toggleCart: () => {},
 	closeCart: () => {},
 	openCart: () => {},
-
 	cartItems: [] as CartItem[],
 	setCartItems: (cartItems: CartItem[]) => [],
 	addToCart: (cartItem: CartItem) => {},
 	removeFromCart: (id: string) => {},
 	getUserCart: (sessionId: string | undefined) => {},
-	cartTotal: 0,
 }
 
 const LocalStateContext = createContext(defaultCtx)
@@ -39,8 +40,17 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 	const [cartItems, setCartItems] = useState<CartItem[]>([])
 
 	function addToCart(cartItem: CartItem) {
-		setCartItems((prev) => [...prev, cartItem])
-		calcCartCount
+
+		setCartItems((prev) => {
+			const exists = prev.some((item) => item.id === cartItem.id)
+			return exists
+				? prev.map((item) =>
+						item.id === cartItem.id
+							? cartItem
+							: item
+				  )
+				: [...prev, cartItem]
+		})
 	}
 
 	// TODO add an updateUserCart that acts like a cache, instead of always requesting the sever the whole new cart
@@ -64,6 +74,7 @@ function CartStateProvider({ children }: { children: ReactNode }) {
                   id
                   type
                   quantity
+                  subTotal
                   event {
                     id
                     summary
@@ -112,7 +123,7 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 			setCartItems(user.cart)
 			//? moved to ks virtual field
 			// const total = calcCartSaleTotal(user.cart)
-			setCartTotal(user.cartTotalPrice)
+			// setCartTotal(user.cartTotalPrice)
 			setIsPending(false)
 
 			return { success: true }
@@ -133,8 +144,8 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 	function removeFromCart(id: string) {
 		const updatedItems = cartItems.filter((item) => item.id !== id)
 		setCartItems(updatedItems)
-		const total = calcTotalPrice(updatedItems)
-		setCartTotal(total)
+		// const total = calcTotalPrice(updatedItems)
+		// setCartTotal(total)
 	}
 
 	function toggleCart() {
@@ -146,6 +157,14 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 	function openCart() {
 		setIsOpen(true)
 	}
+
+  useEffect(() => {
+    calcCartCount(cartItems)
+    setCartTotal(calcTotalPrice(cartItems))
+  
+    // return () => 
+  }, [cartItems])
+  
 
 	return (
 		<LocalStateContext.Provider

@@ -19,8 +19,15 @@ export function CartItemsList() {
 	}, [session, getUserCart])
 
 	const ticketCartItems = cartItems.filter((item) => item.event?.id)
-	const filteredProductItems = cartItems.filter((item) => item.product?.id)
-	const filteredBookingItems = cartItems.filter((item) => item.booking?.id)
+	// const filteredProductItems = cartItems.filter((item) => item.product?.id)
+	// const filteredBookingItems = cartItems.filter((item) => item.booking?.id)
+
+	const sortedCartItems = cartItems.sort((a, b) => {
+		const getTypePriority = (item: any) =>
+			item.event ? 0 : item.product ? 1 : item.booking ? 2 : 3
+
+		return getTypePriority(a) - getTypePriority(b)
+	})
 
 	return (
 		<>
@@ -46,7 +53,10 @@ export function CartItemsList() {
 								<TicketAvailabilityMessage />
 							</li>
 						)}
-						{ticketCartItems?.map((item, i) => (
+						{sortedCartItems.map((item, i) => (
+							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+						))}
+						{/* {ticketCartItems?.map((item, i) => (
 							<CartItem key={i} item={item} sessionId={session?.itemId} />
 						))}
 						{filteredProductItems?.map((item, i) => (
@@ -54,7 +64,7 @@ export function CartItemsList() {
 						))}
 						{filteredBookingItems?.map((item, i) => (
 							<CartItem key={i} item={item} sessionId={session?.itemId} />
-						))}
+						))} */}
 					</>
 				)}
 			</ul>

@@ -4,7 +4,7 @@ import { SessionBadge } from "../menus/Session"
 import { MainNavList } from "./MainNavList"
 import { layout_site, page_layout } from "@styles/layout.module.css"
 import Flex from "@components/layouts/Flex"
-import { CartButton } from "@components/ecommerce/CartButton"
+import { CartBadgeButton } from "@components/ecommerce/CartBadgeButton"
 
 export function Nav() {
 	// const { isNavOpen, toggleNav } = useNavControl()
@@ -23,7 +23,7 @@ export function Nav() {
 
 				<ul className={utility}>
 					<li>
-            <CartButton />
+            <CartBadgeButton />
           </li>
 					<li>
 						<SessionBadge label="account" />
