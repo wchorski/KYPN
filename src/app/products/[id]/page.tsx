@@ -28,13 +28,15 @@ import {
 	page_layout,
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
-import { DialogPopup } from "@components/menus/Dialog"
 import moneyFormatter from "@lib/moneyFormatter"
 import { IconLink } from "@components/elements/IconLink"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import Flex from "@components/layouts/Flex"
 import ErrorPage from "@components/layouts/ErrorPage"
+import fetchProduct from "@lib/fetchdata/fetchProduct"
 import { CallbackLink } from "@components/menus/CallbackLink"
+import AddToCartForm from "@components/ecommerce/AddToCartForm"
+import { StatusBadge } from "@components/StatusBadge"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -42,8 +44,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
-	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
-  
+	const { event, error } = await fetchEvent(id, query, session)
+
 	if (!event || error)
 		return {
 			title: envs.SITE_TITLE,
@@ -83,59 +85,30 @@ type Props = {
 	}
 }
 
-export default async function EventByID({ params }: Props) {
+export default async function ProductById({ params }: Props) {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
-	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
+
+	const { product, error } = await fetchProduct({ id, query, session })
 
 	if (error) return <ErrorPage error={error} />
-	if (!event) return notFound()
-
+	if (!product) return notFound()
 
 	const {
 		image,
-		summary,
-		excerpt,
+		name,
 		description,
-		tickets = [],
 		price,
-		start,
-		end,
-		seats,
-		hosts,
-		cohosts,
-		location,
+
+		stockCount,
+		author,
 		categories,
 		tags,
-    status
-	} = event
-
-	async function onClose() {
-		"use server"
-		console.log("modal closed")
-	}
-
-	async function onOk() {
-		"use server"
-		console.log("ok clicked closed")
-	}
+		status,
+	} = product
 
 	return (
 		<main className={page_layout}>
-			<DialogPopup title={summary} onClose={onClose} onOk={onOk} buttonLabel="">
-				<p>{datePrettyLocal(start, "full")}</p>
-				{session ? (
-					<TicketForm event={plainObj(event)} user={session.user as User} />
-				) : (
-					// <p>debug form</p>
-					<p>
-						must have an account to order tickets and redeem tickets.
-						<CallbackLink>Login</CallbackLink>or{" "}
-						<Link href={`/register`}> Create an Account </Link>
-					</p>
-				)}
-			</DialogPopup>
-
 			<article
 				className={[styleProduct.product, page_content, layout_site].join(" ")}
 			>
@@ -144,17 +117,23 @@ export default async function EventByID({ params }: Props) {
 						<picture className={styles.featured}>
 							<ImageDynamic photoIn={image} priority={true}/>
 						</picture>
-
-						<AddToCalendar summary={summary} start={start} end={end} />
+						<Card direction={"row"} gap={"var(--space-m)"}>
+							<StatusBadge status={status} type={"product"} />
+							<IconLink
+								icon={"edit"}
+								label={"Edit"}
+								href={envs.BACKEND_URL + `/products/${id}`}
+							>
+								<span>Edit Product Details</span>
+							</IconLink>
+						</Card>
 
 						<hr />
+
 						<ul className="categories">
 							{categories?.map((cat) => (
 								<li key={cat.id}>
-									<Link href={`/posts/search?categories=${cat.id}`}>
-										{" "}
-										{cat.name}{" "}
-									</Link>
+									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
 								</li>
 							))}
 						</ul>
@@ -162,18 +141,15 @@ export default async function EventByID({ params }: Props) {
 						<ul className="tags">
 							{tags?.map((tag) => (
 								<li key={tag.id}>
-									<Link href={`/posts/search?tags=${tag.id}`}>
-										{" "}
-										{tag.name}{" "}
-									</Link>
+									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
 								</li>
 							))}
 						</ul>
 					</div>
 				</header>
 
-				<div className={""}>
-					<h1>{summary}</h1>
+				<div>
+					<h1>{name}</h1>
 
 					<div
 						className="info-cont"
@@ -183,41 +159,39 @@ export default async function EventByID({ params }: Props) {
 							height: "100%",
 						}}
 					>
-						<ul className="meta unstyled padding-0">
-							<li>{datePrettyLocalDay(start || "")}</li>
-							<li>{datePrettyLocalTime(start || "")}</li>
-							{/* <li> capacity: {seats}</li> */}
-							{location && (
-								<li>
-									<Link href={`/locations/${location.id}`}>
-										<address>
-											{location?.name}
-											<br />
-											{location?.address}
-										</address>
-									</Link>
-								</li>
-							)}
-						</ul>
+						{/* <ul className="meta unstyled padding-0">
+						</ul> */}
 					</div>
 
 					<Card>
 						<Flex justifyContent={"space-between"} alignItems={"center"}>
-							{price > 0 ? (
+							{/* {price > 0 ? (
 								<span style={{ alignContent: "center" }}>
 									{moneyFormatter(price)} per Ticket
 								</span>
 							) : (
 								<span style={{ alignContent: "center" }}>RSVP</span>
-							)}
-              
+							)} */}
 
 							{!session ? (
 								<CallbackLink>Login to Purchase</CallbackLink>
 							) : session?.data.role === null ? (
 								<VerifyEmailCard email={session.user.email} />
 							) : (
-								<AddTicketButton date={start} status={status}/>
+								<>
+									<AddToCartForm
+										productId={id}
+										sessionId={session.itemId}
+                    eventId={undefined}
+										type={"RENTAL"}
+									/>
+									<AddToCartForm
+										productId={id}
+                    eventId={undefined}
+										sessionId={session.itemId}
+										type={"SALE"}
+									/>
+								</>
 							)}
 						</Flex>
 					</Card>
@@ -232,114 +206,65 @@ export default async function EventByID({ params }: Props) {
 					)}
 				</div>
 			</article>
-			<footer>
-				{/* //todo have multiple hosts */}
-				{/* {session && (host?.id === session.id || session.isAdmin) && ( */}
-				{canViewHostPanel([...hosts, ...cohosts], session) && (
+			{/* <footer>
+				{canEdit(author, session) && (
 					<section className={layout_wide}>
 						<Card>
-							<h2> Host Panel </h2>
-
-							<h3>Hosts</h3>
-							<ul>
-								{hosts?.map((host) => (
-									<li key={host?.id}>
-										<Link href={`/users/${host?.id}`}>
-											{" "}
-											{host?.name} | {host?.email}{" "}
-										</Link>
-									</li>
-								))}
-							</ul>
+							<h2> Author Panel </h2>
 
 							<IconLink
 								icon={"edit"}
-								href={envs.BACKEND_URL + `/events/${id}`}
-								className="button medium"
+								label={"Edit"}
+								href={envs.BACKEND_URL + `/products/${id}`}
+								className={"button medium"}
 							>
-								<span>Edit Event Details</span>
+								<span>Edit Product Details</span>
 							</IconLink>
-
-							<hr />
-
-							<h3>Edit Attendees</h3>
-							<div style={{ position: "relative" }}>
-								<p> feature coming soon...</p>
-								{/* <SearchUserTicket  eventId={id} setIsPopup={setIsPopup} setPickedUser={setPickedUser} setTicketPopupData={setTicketPopupData}/> */}
-							</div>
-
-							<h3>All Ticket Holders</h3>
-							<p> feature coming soon...</p>
-							{/* <AttendeeTable event={data.event} className="display-none" /> */}
-							{/* <TicketsList tickets={tickets} key={animTrig} setPopupData={setTicketPopupData}/> */}
 						</Card>
 					</section>
 				)}
-			</footer>
+			</footer> */}
 		</main>
 	)
 }
 
-function canViewHostPanel(allHosts: User[], session: Session | null) {
+function canEdit(author: User, session: Session | null) {
 	if (!session) return false
-	if (session.data?.role?.canManageEvents) return true
-	if (allHosts?.map((host) => host.id).includes(session.itemId)) return true
+	if (session.data?.role?.canManageProducts) return true
+	if (author.id === session.itemId) return true
 	return false
 }
 
-const QUERY_EVENT = `
-  excerpt
-  end
-  id
-  price
-  seats
-  start
+const query = `
+  image
+  name
+  slug
+  description {
+    document
+  }
   status
-  summary
+  isForSale
+  price
+  isForRent
+  rental_price
+  stockCount
+  author {
+    id
+    name
+    email
+  }
+  addons {
+    id
+    name
+  }
   dateCreated
   dateModified
-  categoriesCount
-  tagsCount
-  ticketsCount
   categories {
     id
     name
   }
-  hosts {
-    id
-    email
-    name
-  }
-  cohosts {
-    id
-    email
-    name
-  }
-  image
-  description {
-    document
-  }
-  location {
-    address
-    name
-    id
-  }
   tags {
     id
     name
-  }
-  
-  tickets{
-    id
-    status
-    holder {
-      id
-      name
-      email
-    }
-    event{
-      id
-      summary
-    }
   }
 `

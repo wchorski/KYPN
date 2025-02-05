@@ -69,7 +69,7 @@ export const addToCart = (base: BaseSchemaMeta) =>
 					},
 				})
 
-				return { quantity: cartItemUpdate.quantity }
+				return cartItemUpdate
 			} else {
 				const cartItemAdded = await sudoContext().db.CartItem.createOne({
 					data: {
@@ -77,11 +77,11 @@ export const addToCart = (base: BaseSchemaMeta) =>
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
 						user: { connect: { id: session?.itemId } },
-            quantity
+						quantity,
 					},
 				})
 
-				return { quantity: cartItemAdded.quantity }
+				return cartItemAdded
 			}
 		},
 	})

@@ -75,7 +75,7 @@ export async function generateMetadata(
 			title: title,
 			// @ts-ignore
 			description: excerpt,
-			url: envs.FRONTEND_URL + "/blog/" + slug,
+			url: envs.FRONTEND_URL + "/posts/" + slug,
 			type: "article",
 		},
 		// @ts-ignore
@@ -191,7 +191,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 							</li>
 						)}
 						<li>
-							<ShareButton textToCopy={envs.FRONTEND_URL + `/blog/id/${id}`} />
+							<ShareButton textToCopy={envs.FRONTEND_URL + `/posts/id/${id}`} />
 						</li>
 					</ul>
 					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (

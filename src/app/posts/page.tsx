@@ -1,5 +1,4 @@
 import { Pagination } from "@components/Pagination"
-import { BlogList } from "@components/blog/BlogList"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { TagsPool } from "@components/menus/TagsPool"
 import { envs } from "@/envs"
@@ -94,7 +93,7 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 					<NoData name="posts" />
 				)}
 
-				<Pagination route="/blog" page={currPage} count={count} />
+				<Pagination route="/posts" page={currPage} count={count} />
 			</div>
 			<AsideBar aria_label="Blog List Sidebar">
 				<Flex

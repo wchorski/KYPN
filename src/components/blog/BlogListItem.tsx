@@ -60,7 +60,7 @@ export const BlogListItem = ({
 					/>
 				</figure>
 			) : (
-				<Link href={`/blog/${slug}`}>
+				<Link href={`/posts/${slug}`}>
 					<figure className={styles.featured_image}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 						{/* <Image
@@ -75,7 +75,7 @@ export const BlogListItem = ({
 
 			<div className="wrapper">
 				<header style={{ position: "relative" }}>
-					<Link href={`/blog/${slug}`} className="title">
+					<Link href={`/posts/${slug}`} className="title">
 						<h3> {title} </h3>
 					</Link>
 
@@ -100,7 +100,7 @@ export const BlogListItem = ({
 
 				<p className="excerpt">
 					{excerpt}{" "}
-					<Link className="readmore" href={`/blog/${slug}`}>
+					<Link className="readmore" href={`/posts/${slug}`}>
 						<em>{buttonText}</em>
 					</Link>{" "}
 				</p>

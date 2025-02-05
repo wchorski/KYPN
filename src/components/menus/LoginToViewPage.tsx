@@ -1,8 +1,8 @@
 import { page_content, page_layout } from "@styles/layout.module.css"
 import { ReactNode } from "react"
-import { BiLock } from "react-icons/bi"
 import { CallbackLink } from "./CallbackLink"
 import { envs } from "@/envs"
+import { IconPadLock } from "@lib/useIcons"
 
 type Props = {
 	children?: ReactNode | ReactNode[]
@@ -14,7 +14,7 @@ export function LoginToViewPage({ children }: Props) {
 			<header></header>
 			<div className={page_content}>
 				<p style={{ fontSize: "2rem" }}>
-					<BiLock />
+					<IconPadLock />
 				</p>
 
 				<p>

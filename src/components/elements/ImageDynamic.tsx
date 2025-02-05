@@ -11,9 +11,10 @@ type Props = {
   alt?:string,
   width?:number
   height?:number
+  priority?:boolean
 }
 // todo idk, just gonna not use the 'optimized' version on production for now
-export function ImageDynamic({ photoIn, className, alt, width = 300, height = 300 }: Props) {
+export function ImageDynamic({ photoIn, className, alt, width = 300, height = 300, priority = false}: Props) {
   
   // console.log(photoIn);
   
@@ -29,6 +30,7 @@ export function ImageDynamic({ photoIn, className, alt, width = 300, height = 30
       width={width}
       height={height}
       className={className}
+      priority={priority}
       //TODO how to gracefully show 'loading' image'
       // placeholder={'blur'}
       // blurDataURL={'/assets/placeholder.png'}

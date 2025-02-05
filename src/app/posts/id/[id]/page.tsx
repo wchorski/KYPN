@@ -30,7 +30,7 @@ export default async function Page({ params, searchParams }: Props) {
 			<main className={[page_layout, layout_content].join(" ")}>
 				<header></header>
 				<p>
-					<Link href={`/blog/${post.slug}`}> view post </Link>
+					<Link href={`/posts/${post.slug}`}> view post </Link>
 				</p>
 			</main>
 		</>

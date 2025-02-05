@@ -81,6 +81,8 @@ const queryServices = `
   buisnessDays
   durationInHours
   status
+  dateModified
+  dateCreated
   locations {
     id
     name

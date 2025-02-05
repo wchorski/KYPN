@@ -5,6 +5,7 @@ Allow: /subscriptions
 Allow: /shop
 Allow: /book-a-service
 Allow: /blog
+Allow: /posts
 Allow: /home
 Disallow: /private/
 Disallow: /admin/

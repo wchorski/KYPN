@@ -12,12 +12,17 @@ import {
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { MdAccountCircle, MdOutlineAccountBox, MdShop } from "react-icons/md"
+import { MdAccountCircle, MdOutlineAccountBox, MdShop, MdShoppingBag } from "react-icons/md"
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { RiFileEditFill } from "react-icons/ri"
 import { PiSpinnerThin } from "react-icons/pi";
+import { BiLock } from "react-icons/bi"
+import { TbCheck, TbExclamationCircle } from "react-icons/tb"
 
 export const IconBookmark = () => <BsFillBookmarkFill />
+export const IconPadLock = () => <BiLock />
+export const IconCheckMark = () => <TbCheck />
+export const IconExclamationCircle = () => <TbExclamationCircle />
 
 export const IconEventTicket = () =>  <BsFillTicketPerforatedFill />
 
@@ -31,7 +36,7 @@ export const IconUserAccountAvatar = () =>  <MdAccountCircle />
 export const IconCalendarOutlined = () =>  <HiOutlineCalendar/>
 export const IconCalendar = () =>  <HiCalendar/>
 
-export const IconShoppingBag = () => <MdShop />
+export const IconShoppingBag = () => <MdShoppingBag />
 
 export const IconEditPagePencile = () => <RiFileEditFill />
 

@@ -19,3 +19,5 @@ export const hasOnlyOneValue = (
 	)
 	return nonNullKeys.length === 1
 }
+
+export const delay = (ms:number) => new Promise(res => setTimeout(res, ms));

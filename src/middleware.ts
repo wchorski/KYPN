@@ -9,11 +9,11 @@ export async function middleware(request: NextRequest) {
 
   //todo set user chosen theme here? from cookies
 
-  if (request.nextUrl.pathname.startsWith('/blog/id')) {
+  if (request.nextUrl.pathname.startsWith('/posts/id')) {
 
     try {
       const url = new URL(request.url)
-      const postId = url.pathname.split('/blog/id/')[1]
+      const postId = url.pathname.split('/posts/id/')[1]
 
       const res = await fetch( url.origin + `/api/gql/noauth`, {
         method: 'POST',
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
       const {post} = await res.json() as {post: Post}
       if(!post.slug) return console.log('no post:slug found');
       
-      return NextResponse.redirect(new URL(`/blog/${post?.slug}`, request.url))
+      return NextResponse.redirect(new URL(`/posts/${post?.slug}`, request.url))
       
     } catch (error) {
       return new Response('Error processing request', { status: 500 });
@@ -48,5 +48,5 @@ export async function middleware(request: NextRequest) {
  
 // See "Matching Paths" https://nextjs.org/docs/app/building-your-application/routing/middleware#matching-paths
 export const config = {
-  matcher:[ '/blog/id/:id*'],
+  matcher:[ '/posts/id/:id*'],
 }

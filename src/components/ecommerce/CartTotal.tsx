@@ -12,7 +12,7 @@ export function CartTotal () {
   if(cartItems.length <= 0) return 
   return (
     <strong>
-      Total: {moneyFormatter(cartTotal)}
+      {moneyFormatter(cartTotal)}
     </strong>
   )
 }

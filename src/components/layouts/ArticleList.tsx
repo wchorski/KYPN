@@ -14,15 +14,16 @@ export const revalidate = 5
 type Props = {
 	type: "post" | "product" | "service"
 	items: Post[] | Product[] | Service[] | undefined
+  buttonText?:string
 }
 
-export function ArticleList({ items = [], type }: Props) {
+export function ArticleList({ items = [], type, buttonText }: Props) {
 	if (!items) return <NoData name={type} />
 	// return <pre>{JSON.stringify(/{ items }, null, 2)}</pre>
 	return (
-		<GridList gap="1rem" paddingInline="1rem">
+		<GridList gap="1rem" >
 			{items.map((item: any, i: number) => (
-				<ArticleItem item={item} key={i} type={type} />
+				<ArticleItem item={item} key={i} type={type} buttonText={buttonText}/>
 			))}
 		</GridList>
 	)
@@ -83,7 +84,7 @@ export function ArticleItem({
 	const link = (() => {
 		switch (type) {
 			case "post":
-				return `/blog/${item.slug}`
+				return `/${type + "s"}/${item.slug}`
 			case "product":
 			case "service":
 				return `/${type + "s"}/${id}`
@@ -125,7 +126,7 @@ export function ArticleItem({
 
 			{/* <div className="wrapper"> */}
 				<header style={{ position: "relative" }}>
-					<Link href={`/${item.typeof + "s"}/${id}`} className="title">
+					<Link href={link} className="title">
 						<h3> {title} </h3>
 					</Link>
 

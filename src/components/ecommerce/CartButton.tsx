@@ -25,7 +25,7 @@ export function CartButton({ prop }: Props) {
 			data-tooltip="cart"
 			title="shopping cart"
 		>
-			<span className="count">{isPending ? <IconSpinnerLines /> : count}</span>
+			<span key={count} className="count tick-down-flick">{isPending ? <IconSpinnerLines /> : count}</span>
 			<MdShoppingBag className="cart" />
 		</button>
 	)

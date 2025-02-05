@@ -2,7 +2,7 @@
 import React, { ReactElement } from 'react'
 import Link from 'next/link';
 import styles from '@styles/ecommerce/product.module.scss'
-import AddToCart from '@components/ecommerce/AddToCart';
+import AddToCartForm from '@components/ecommerce/AddToCartForm';
 import { ImageDynamic } from '../elements/ImageDynamic';
 // import { OutOfStockLabel } from '../elements/OutOfStockLabel';
 import { Product, Session } from '@ks/types';
@@ -50,11 +50,11 @@ export async function ProductThumbnail({product, session}: Props):ReactElement<a
             ? status !== 'OUT_OF_STOCK' 
               ? <>
                 {isForSale && <div className='addtocart_wrap'>
-                  <AddToCart productId={id} sessionId={session.itemId} type={'SALE'}/>
+                  <AddToCartForm productId={id} sessionId={session.itemId} type={'SALE'}/>
                   <PriceTag price={price} />
                 </div>}
                 {isForRent && <div className='addtocart_wrap'>
-                  <AddToCart productId={id} sessionId={session.itemId} type={'RENTAL'}/>
+                  <AddToCartForm productId={id} sessionId={session.itemId} type={'RENTAL'}/>
                   <PriceTag price={rental_price} subtext={'/hour'}/>
                 </div>}
               </>

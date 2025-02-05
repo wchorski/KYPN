@@ -16,7 +16,6 @@ export function CartItemsList() {
 		if (!session?.itemId) return
 
 		getUserCart(session?.itemId)
-
 	}, [session, getUserCart])
 
 	const ticketCartItems = cartItems.filter((item) => item.event?.id)
@@ -30,26 +29,31 @@ export function CartItemsList() {
 					<LoadingAnim isVisable={isPending} />
 				) : cartItems?.length <= 0 ? (
 					<p>
-						Cart is empty. View the {' '}
+						Cart is empty. View the{" "}
 						<Link href={`/shop`} onClick={closeCart}>
-							 Shop
-						</Link> {' '}
-            or checkout some {' '}
-            <Link href={`/events`} onClick={closeCart}>
-							 Events
+							Shop
+						</Link>{" "}
+						or checkout some{" "}
+						<Link href={`/events`} onClick={closeCart}>
+							Events
 						</Link>
 					</p>
 				) : (
 					<>
-            {ticketCartItems.length > 0 && <li><TicketAvailabilityMessage /></li>}
-						{ticketCartItems?.map((item: any) => (
-							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+						{/* //TODO could just do sort instead of multi maps */}
+						{ticketCartItems.length > 0 && (
+							<li>
+								<TicketAvailabilityMessage />
+							</li>
+						)}
+						{ticketCartItems?.map((item, i) => (
+							<CartItem key={i} item={item} sessionId={session?.itemId} />
 						))}
-						{filteredProductItems?.map((item: any) => (
-							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+						{filteredProductItems?.map((item, i) => (
+							<CartItem key={i} item={item} sessionId={session?.itemId} />
 						))}
-						{filteredBookingItems?.map((item: any) => (
-							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+						{filteredBookingItems?.map((item, i) => (
+							<CartItem key={i} item={item} sessionId={session?.itemId} />
 						))}
 					</>
 				)}
@@ -58,8 +62,13 @@ export function CartItemsList() {
 	)
 }
 
-function TicketAvailabilityMessage(){
-  return (
-    <Callout intent={'warning'}><p>Tickets added to cart are not guaranteed. Proceed with checkout to secure available tickets.</p></Callout>
-  )
+function TicketAvailabilityMessage() {
+	return (
+		<Callout intent={"warning"}>
+			<p>
+				Tickets added to cart are not guaranteed. Proceed with checkout to
+				secure available tickets.
+			</p>
+		</Callout>
+	)
 }

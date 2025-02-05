@@ -1,9 +1,7 @@
 import { BlogListItem } from "./BlogListItem"
-// import styles from "@styles/blog/blog.module.scss";
-import styles from "@styles/articles.module.css"
-import { Post, WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
+import { Post } from "@ks/types"
 import { ReactElement } from "react"
-import sLayout, {grid, auto} from '@styles/layout.module.css'
+import {grid, auto} from '@styles/layout.module.css'
 import { GridList } from "@components/layouts/GridList"
 export const revalidate = 5
 

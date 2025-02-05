@@ -1,13 +1,14 @@
 // cred = https://medium.com/@omril_15649/replacing-react-hook-form-in-react-19-dd069f29d505
 // cred - https://aurorascharff.no/posts/handling-form-validation-errors-and-resets-with-useactionstate/
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { HTMLInputTypeAttribute, HTMLProps, useEffect, useState } from "react"
+
+import { useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
 
 type FormProps<T> = {
 	action: () => void
 	state: T
 	submitCount: number
+  // inlineIcon:ReactNode
 }
 
 export function useForm<T>(
@@ -19,6 +20,9 @@ export function useForm<T>(
 	// const [state, action] = useFormState<T, FormData>(submitAction, initState)
 	const [state, action] = useFormState<T, FormData>(submitAction, initState)
 	const [submitCount, setSubmitCount] = useState(0)
+  
+  //TODO doesn't update properly 
+	// const [inlineIcon, setInlineIcon] = useState(<IconShoppingBag />)
 
 	// async function submitAction(previousState: T, formData: FormData): Promise<T> {
 	// 	setSubmitCount((count) => count + 1)
@@ -27,8 +31,18 @@ export function useForm<T>(
 	// 	return fieldValues
 	// }
 
+	// async function handleInlineIcon() {
+  //   console.log("handleInlineIcon");
+	// 	setInlineIcon(<IconSpinnerLines />)
+	// 	await delay(500)
+	// 	setInlineIcon(<IconCheckMark />)
+	// 	await delay(500)
+	// 	setInlineIcon(<IconShoppingBag />)
+	// }
+
 	useEffect(() => {
-    setSubmitCount(prev => prev + 1)
+    // handleInlineIcon()
+		setSubmitCount((prev) => prev + 1)
 
 		// return () =>
 	}, [state])
@@ -37,6 +51,7 @@ export function useForm<T>(
 		action,
 		state,
 		submitCount,
+    // inlineIcon,
 	}
 }
 
@@ -59,5 +74,3 @@ export function useForm<T>(
 // 		</button>
 // 	)
 // }
-
-

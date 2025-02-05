@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const session = await getServerSession(nextAuthOptions)
 
-		// todo figure out raw graphql queries through context
 		const data = (await keystoneContext.withSession(session).graphql.run({
 			query: query,
 			variables: variables,

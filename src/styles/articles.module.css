@@ -74,6 +74,7 @@ article.post_card {
 		line-clamp: 3;
 		-webkit-box-orient: vertical;
 		display: -webkit-box;
+    padding-bottom: var(--space-xxs);
 		/* font-size: clamp(
 			1rem * (var(--font-size-multi) * 2),
 			1rem + 0.7vw,

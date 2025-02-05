@@ -9,8 +9,8 @@ button,
 		cursor: progress;
 	}
 
-  transition-property: color, background;
-  transition-duration: 0.3s;
+	transition-property: color, background;
+	transition-duration: 0.3s;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -158,9 +158,8 @@ button,
 	}
 }
 
-
 .anim-spin-circle {
-  animation-name: circle_spin;
+	animation-name: circle_spin;
 	animation-duration: 2000ms;
 	animation-iteration-count: infinite;
 	animation-direction: normal;
@@ -177,5 +176,25 @@ button,
 	} */
 	100% {
 		transform: rotate(360deg);
+	}
+}
+
+.tick-down-flick {
+	animation-name: trans_down_flick;
+	animation-duration: 1000ms;
+	animation-iteration-count: 1;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+@keyframes trans_down_flick {
+	0% {
+    transform: translate(-50%, 100%);
+    opacity: 0.1;
+	}
+	100% {
+    transform: translate(-50%, -8%);
+    opacity: 1;
 	}
 }

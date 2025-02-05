@@ -85,7 +85,7 @@ function Content({ services = [], addons = [], products = [], productsCount: pro
 				<>
 					<h2 id="products">Products</h2>
 					{/* <InfoCardList items={infocardProducts || []} /> */}
-          <ArticleList items={products} type={'product'}/>
+          <ArticleList items={products} type={'product'} buttonText={"view"}/>
           <Pagination route="/products" page={currPage} count={productsCount} />
 				</>
 			)}
