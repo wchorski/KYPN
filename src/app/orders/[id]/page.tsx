@@ -10,7 +10,7 @@ import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
 import { StatusBadge } from "@components/StatusBadge"
 import {
-  layout_breakout,
+	layout_breakout,
 	layout_content,
 	layout_site,
 	page_content,
@@ -21,6 +21,7 @@ import ErrorPage from "@components/layouts/ErrorPage"
 import { notFound } from "next/navigation"
 import { OrderItem } from "@ks/types"
 import { NoData } from "@components/elements/NoData"
+import { PriceTag } from "@components/ecommerce/PriceTag"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
@@ -65,7 +66,7 @@ export default async function OrderByIdPage({ params }: Props) {
 			<header className={layout_content}>
 				<h1> Order Receipt </h1>
 			</header>
-			<div className={[page_content, layout_content].join(' ')}>
+			<div className={[page_content, layout_content].join(" ")}>
 				<section>
 					<table>
 						<tbody>
@@ -91,7 +92,9 @@ export default async function OrderByIdPage({ params }: Props) {
 							</tr>
 							<tr>
 								<td> Total: </td>
-								<td>{moneyFormatter(total)}</td>
+								<td>
+									<PriceTag price={total} style={{ fontSize: "1.5rem" }} />
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -123,7 +126,7 @@ export default async function OrderByIdPage({ params }: Props) {
 					)}
 				</section>
 			</div>
-			<footer className={layout_content} >
+			<footer className={layout_content}>
 				<table style={{ fontSize: "var(--space-ms)" }}>
 					<tbody>
 						<tr>
@@ -187,7 +190,8 @@ function ProductOrderItem({ item }: { item: OrderItem }) {
 				<h5>{name}</h5>
 			</Link>
 			<div className={perItemTotal}>
-				<p>{moneyFormatter(price * item.quantity)}</p>
+				<PriceTag price={price * item.quantity} />
+				{/* <p>{moneyFormatter(price * item.quantity)}</p> */}
 				<em>
 					{item.quantity} &times; {moneyFormatter(price)} each
 				</em>

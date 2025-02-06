@@ -64,8 +64,14 @@ li.item :global {
 }
 
 .perItemTotal {
+  display: grid;
 	margin-left: auto;
 	min-width: var(--space-xl);
+  text-align: right;
+
+  & data {
+    font-size: 1.5rem;
+  }
 }
 
 .carticon {

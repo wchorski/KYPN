@@ -4,12 +4,12 @@
   font-weight: 600;
   padding: 5px;
   line-height: 1;
-  font-size: 2rem;
+  /* font-size: 2rem; */
   display: inline-block;
 
   & sup {
     /* vertical-align: top; */
-    font-size: 1.6rem;
+    /* font-size: 1.6rem; */
     font-weight: lighter;
   }
 
@@ -17,7 +17,7 @@
     font-weight: bold;
   }
 
-  & span.cents{
+  /* & span.cents{
     font-size: 1.7rem;
-  }
+  } */
 }
