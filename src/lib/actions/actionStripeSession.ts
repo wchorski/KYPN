@@ -129,6 +129,7 @@ function createProductLineItem(
 	if (!cartItem.product) return undefined
 	const { product, quantity } = cartItem
 	return {
+    price: product.stripePriceId,
 		price_data: {
 			// TODO make this part of CartItem schema item.currency, not hard coded
 			currency: "usd",

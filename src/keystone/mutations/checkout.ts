@@ -18,6 +18,7 @@ type StripeSession = {
 		id: string
 		payment_intent: string
 		customerId: string
+    amount_total:number
 	}
 }
 
@@ -82,7 +83,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 			// 	session
 			// )
 
-			const amountTotal = calcTotalPrice(cartItems)
+			const amountTotal = calcTotalPrice(cartItems) 
+      const transactionFees = (session.stripeSession?.amount_total || amountTotal) - amountTotal
 
 			const newOrderItems: OrderItemCreateInput[] = await (async () => {
 				const theseOrderItems = await Promise.all(
@@ -135,7 +137,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					total: amountTotal,
+					subTotal: amountTotal,
+          fees: transactionFees,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
 					user: { connect: { id: customerId} },
 					stripeCheckoutSessionId: session.stripeSession?.id || "",

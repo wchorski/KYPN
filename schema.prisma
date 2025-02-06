@@ -358,7 +358,8 @@ model Order {
   id                      String      @id @default(cuid())
   email                   String      @default("")
   notes                   String      @default("")
-  total                   Int
+  subTotal                Int
+  fees                    Int
   stripeCheckoutSessionId String      @default("")
   stripePaymentIntent     String      @default("")
   shipping_address        String      @default("")

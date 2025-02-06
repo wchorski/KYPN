@@ -2218,6 +2218,8 @@ type Order {
   email: String
   notes: String
   total: Int
+  subTotal: Int
+  fees: Int
   count: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
@@ -2242,7 +2244,8 @@ input OrderWhereInput {
   id: IDFilter
   email: StringFilter
   notes: StringFilter
-  total: IntFilter
+  subTotal: IntFilter
+  fees: IntFilter
   stripeCheckoutSessionId: StringFilter
   stripePaymentIntent: StringFilter
   shipping_address: StringFilter
@@ -2258,7 +2261,8 @@ input OrderOrderByInput {
   id: OrderDirection
   email: OrderDirection
   notes: OrderDirection
-  total: OrderDirection
+  subTotal: OrderDirection
+  fees: OrderDirection
   stripeCheckoutSessionId: OrderDirection
   stripePaymentIntent: OrderDirection
   shipping_address: OrderDirection
@@ -2270,7 +2274,8 @@ input OrderOrderByInput {
 input OrderUpdateInput {
   email: String
   notes: String
-  total: Int
+  subTotal: Int
+  fees: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String
@@ -2296,7 +2301,8 @@ input OrderUpdateArgs {
 input OrderCreateInput {
   email: String
   notes: String
-  total: Int
+  subTotal: Int
+  fees: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String

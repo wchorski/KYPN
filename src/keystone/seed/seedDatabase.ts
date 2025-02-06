@@ -42,6 +42,8 @@ const seedSchemaItems = async (
 		itemsToCreate.forEach((item) => {
 			//? virtual field
 			delete item.summary
+			delete item.durationInHours
+			delete item.price
 		})
 
 		if (process.env.SEED_RANDOM_RELATIVE_DATES === "true") {
@@ -62,7 +64,7 @@ const seedSchemaItems = async (
 			//? DOCUMENT field Type (rich text)
 			...(item.content ? { content: item.content.document } : {}),
 			...(item.description ? { description: item.description.document } : {}),
-			...(item.details ? { description: item.description.document } : {}),
+			...(item.details ? { details: item.details.document } : {}),
 			...(item.password
 				? { password: item.email + envs.SEED_PASSWORD_SECRET }
 				: {}),
@@ -109,7 +111,7 @@ const seedSchemaItems = async (
 						},
 				  }
 				: {}),
-			...(item.addons && item.addons.length > 0
+			...(item.addons?.length > 0
 				? {
 						addons: {
 							connect: item.addons?.map((field: any) => ({
@@ -117,9 +119,11 @@ const seedSchemaItems = async (
 							})),
 						},
 				  }
-          //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
-          //! will this cause problems for other schemas?
-				: { addons: null }),
+				: //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
+				//! will this cause problems for other schemas?
+				item.addons?.length === 0
+				? { addons: null }
+				: {}),
 			// addons:null,
 			//? USERS Start
 			...(item.privateAccess
@@ -135,6 +139,15 @@ const seedSchemaItems = async (
 				? {
 						employees: {
 							connect: item.employees?.map((field: any) => ({
+								email: field.email,
+							})),
+						},
+				  }
+				: {}),
+			...(item.employee_requests
+				? {
+						employee_requests: {
+							connect: item.employee_requests?.map((field: any) => ({
 								email: field.email,
 							})),
 						},
@@ -270,7 +283,7 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 			const order = await sudoDB.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					total: (event.price || 0) * tixQuantity,
+					subTotal: (event.price || 0) * tixQuantity,
 					// stripeCheckoutSessionId: null,
 					// stripePaymentIntent: null,
 					email: fakeEmail,

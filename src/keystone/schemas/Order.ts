@@ -72,7 +72,19 @@ export const Order: Lists.Order = list({
 				displayMode: "textarea",
 			},
 		}),
-		total: integer({ validation: { isRequired: true } }),
+    total: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				resolve(item) {
+					return item.subTotal + fees
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
+		subTotal: integer({ validation: { isRequired: true, min: 0 } }),
+		fees: integer({ validation: { isRequired: true, min: 0 } }),
 		count: virtual({
 			field: graphql.field({
 				type: graphql.Int,

@@ -160,6 +160,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 				id: checkoutSession.id,
 				payment_intent: checkoutSession.payment_intent,
 				customerId: checkoutSession.metadata.customerId,
+        amount_total: checkoutSession.amount_total
 			},
 		})
 		.graphql.run({

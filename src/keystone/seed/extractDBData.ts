@@ -327,7 +327,6 @@ const query = `
       end
       timeZone
       address
-      durationInHours
       service {
         id
         name
@@ -367,7 +366,6 @@ const query = `
       dateCreated
       dateModified
       google
-      price
     }
     products {
       image
