@@ -1,10 +1,8 @@
 "use client"
 
 import { useCart } from "@components/hooks/CartStateContext"
-import { MdShoppingBag } from "react-icons/md"
-import styles from "@styles/ecommerce/cart.module.css"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { IconSpinnerLines } from "@lib/useIcons"
+import styles, { badge } from "@styles/ecommerce/cart.module.css"
+import { IconShoppingBag, IconSpinnerLines } from "@lib/useIcons"
 
 type Props = {
 	prop?: string
@@ -21,12 +19,14 @@ export function CartBadgeButton({ prop }: Props) {
 	return (
 		<button
 			onClick={openCart}
-			className={isOpen ? ["open", styles.badge].join(" ") : styles.badge}
+			className={[isOpen ? "open" : "", badge].join(" ")}
 			data-tooltip="cart"
 			title="shopping cart"
 		>
-			<span key={cartCount} className="count tick-down-flick">{isPending ? <IconSpinnerLines /> : cartCount}</span>
-			<MdShoppingBag className="cart" />
+			<span key={cartCount} className="count tick-down-flick">
+				{isPending ? <IconSpinnerLines /> : cartCount}
+			</span>
+			<IconShoppingBag />
 		</button>
 	)
 }

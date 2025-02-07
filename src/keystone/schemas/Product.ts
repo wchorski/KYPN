@@ -17,7 +17,7 @@ import { permissions, rules } from "../access"
 import stripeConfig, {
 	stripeArchiveProduct,
 	stripeProductCreate,
-	stripeProductDelete,
+	stripeProductRetrieve,
 	stripeProductUpdate,
 } from "../../lib/stripe"
 import { document } from "@keystone-6/fields-document"
@@ -235,7 +235,42 @@ export const Product: Lists.Product = list({
 			},
 		},
 		beforeOperation: {
-			// create: async ({ item, resolvedData, context }) => {},
+			create: async ({ item, resolvedData, context }) => {
+				const {
+					id,
+					name,
+					excerpt,
+					status,
+					author,
+					price,
+					stripeProductId,
+					image,
+				} = resolvedData
+
+				try {
+					const createdProduct = await stripeProductCreate({
+						// id,
+						name: String(name),
+						price: Number(price),
+						excerpt,
+						category: "product",
+						status,
+						authorId: author?.connect?.id || "no_author_id",
+						type: "product",
+						image,
+						url: envs.FRONTEND_URL + `/products/${id}`,
+						stripeProductId,
+						billing_interval: undefined,
+					})
+
+					if (createdProduct) {
+						resolvedData.stripeProductId = createdProduct.id
+						resolvedData.stripePriceId = String(createdProduct.default_price)
+					}
+				} catch (error) {
+					console.log("!!! 💳 STRIPE:: ", error)
+				}
+			},
 			update: async ({ resolvedData, context, item }) => {
 				//? item.stripeProductId will be undefined on first creation
 				await stripeProductUpdate({
@@ -265,37 +300,110 @@ export const Product: Lists.Product = list({
 				//? if error happens item is now an error object
 				if (!item.id) return
 
-				const { id, name, excerpt, status, authorId, price, stripeProductId } =
-					item
-				await stripeProductCreate({
-					id,
-					name,
-					price,
-					excerpt,
-					category: "product",
-					status,
-					authorId: authorId || "no_author_id",
-					type: "product",
-					image: item.image,
-					url: envs.FRONTEND_URL + `/products/${id}`,
-					stripeProductId,
-					billing_interval: undefined,
-				}).then(async (res) => {
-					if (!res) return
-					item.stripeProductId = res.id
-					item.stripePriceId = String(res.default_price)
-					resolvedData.stripeProductId = res.id
-					resolvedData.stripePriceId = String(res.default_price)
-					//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
-					//TODO this is causing endless loop
-					await context.db.Product.updateOne({
-						where: { id: item.id },
-						data: {
-							stripeProductId: res.id,
-							stripePriceId: String(res.default_price),
-						},
-					})
-				})
+				// const { id, name, excerpt, status, authorId, price, stripeProductId } =
+				// 	item
+
+				// await stripeProductCreate({
+				// 	// id,
+				// 	name,
+				// 	price,
+				// 	excerpt,
+				// 	category: "product",
+				// 	status,
+				// 	authorId: authorId || "no_author_id",
+				// 	type: "product",
+				// 	image: item.image,
+				// 	url: envs.FRONTEND_URL + `/products/${id}`,
+				// 	stripeProductId,
+				// 	billing_interval: undefined,
+				// }).then(async (res) => {
+				// 	if (!res) return
+				// 	console.log({ res })
+				// 	item.stripeProductId = res.id
+				// 	item.stripePriceId = String(res.default_price)
+				// 	resolvedData.stripeProductId = res.id
+				// 	resolvedData.stripePriceId = String(res.default_price)
+				// 	//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
+				// 	//TODO this is causing endless loop
+				// 	await context.db.Product.updateOne({
+				// 		where: { id: item.id },
+				// 		data: {
+				// 			stripeProductId: res.id,
+				// 			stripePriceId: String(res.default_price),
+				// 		},
+				// 	})
+				// })
+
+				// const product = await stripeProductRetrieve(item.stripeProductId).catch(
+				// 	(error: any) => {
+				// 		// console.log("!!! 💳 STRIPE:: ", error)
+				// 		console.log("!!! 💳 STRIPE:: ", {
+				// 			code: error.code,
+				// 			message: error.raw.message,
+				// 		})
+				// 	}
+				// )
+				// console.log({ product })
+
+				// if (product) {
+				// 	await stripeProductUpdate({
+				// 		stripeProductId: item.stripeProductId,
+				// 		image: resolvedData.image as string | undefined,
+				// 		price: resolvedData.price as number | undefined,
+				// 		name: resolvedData.name as string | undefined,
+				// 		status: resolvedData.status as string | undefined,
+				// 		// category: resolvedData.category,
+				// 		category: "product",
+				// 		excerpt: resolvedData.excerpt as string | undefined,
+				// 		authorId: resolvedData.author?.connect?.id,
+				// 		billing_interval: undefined,
+				// 	}).then(async (res) => {
+				// 		if (!res) return
+
+				// 		if (res.default_price) {
+				// 			resolvedData.stripePriceId = String(res.default_price)
+				// 		}
+				// 	})
+				// } else {
+				// 	const {
+				// 		id,
+				// 		name,
+				// 		excerpt,
+				// 		status,
+				// 		authorId,
+				// 		price,
+				// 		stripeProductId,
+				// 	} = item
+				// 	await stripeProductCreate({
+				// 		id,
+				// 		name,
+				// 		price,
+				// 		excerpt,
+				// 		category: "product",
+				// 		status,
+				// 		authorId: authorId || "no_author_id",
+				// 		type: "product",
+				// 		image: item.image,
+				// 		url: envs.FRONTEND_URL + `/products/${id}`,
+				// 		stripeProductId,
+				// 		billing_interval: undefined,
+				// 	}).then(async (res) => {
+				// 		if (!res) return
+				// 		item.stripeProductId = res.id
+				// 		item.stripePriceId = String(res.default_price)
+				// 		resolvedData.stripeProductId = res.id
+				// 		resolvedData.stripePriceId = String(res.default_price)
+				// 		//? `item.FIELD = NEWDATA` in afterOperation doesn't save it to the db (but I still set it for return on this op)
+				// 		//TODO this is causing endless loop
+				// 		await context.db.Product.updateOne({
+				// 			where: { id: item.id },
+				// 			data: {
+				// 				stripeProductId: res.id,
+				// 				stripePriceId: String(res.default_price),
+				// 			},
+				// 		})
+				// 	})
+				// }
 			},
 			// update: async ({ resolvedData, item, context }) => {},
 			delete: async ({ originalItem }) => {

@@ -52,15 +52,12 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		(() => {
 			const theseCartItems = cartItems.map((item) => {
 				switch (true) {
-					case item.booking !== null:
-						return createBookingLineItems(item)
-
-					case item.product !== null:
+					case !!item.product:
 						return createProductLineItem(item)
-
-					case item.event !== null:
+					case !!item.booking:
+						return createBookingLineItems(item)
+					case !!item.event:
 						return createTicketLineItem(item, user)
-
 					default:
 						return undefined
 				}
@@ -68,6 +65,8 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 
 			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
+
+	console.log({ line_items })
 
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
@@ -129,22 +128,26 @@ function createProductLineItem(
 	if (!cartItem.product) return undefined
 	const { product, quantity } = cartItem
 	return {
-    price: product.stripePriceId,
-		price_data: {
-			// TODO make this part of CartItem schema item.currency, not hard coded
-			currency: "usd",
-			product_data: {
-				name: product.name,
-				images: [product?.image || ""],
-				metadata: {
-					productId: product.id,
-					typeof: "product",
-				},
-			},
-
-			unit_amount: product.price,
-		},
 		quantity,
+		// price: product.stripePriceId,
+		...(product.stripePriceId
+			? { price: product.stripePriceId }
+			: {
+					price_data: {
+						// TODO make this part of CartItem schema item.currency, not hard coded
+						currency: "usd",
+						product_data: {
+							name: product.name,
+							images: [product?.image || ""],
+							metadata: {
+								productId: product.id,
+								typeof: "product",
+							},
+						},
+
+						unit_amount: product.price,
+					},
+			  }),
 	}
 }
 

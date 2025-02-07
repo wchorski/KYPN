@@ -154,6 +154,10 @@ export const Event: Lists.Event = list({
 					ref: "Tag.events",
 					many: true,
 				}),
+
+        // TODO add as stripe product
+        // stripeProductId: text(),
+				// stripePriceId: text(),
 			},
 		}),
 	},

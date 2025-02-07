@@ -52,12 +52,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
           name
           image
           price
+          stripePriceId
         }
         event {
           id
           summary
           image
           price
+          
         }
         booking {
           id
@@ -65,6 +67,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
           price
           service {
             image
+            stripePriceId
           }
         }
       }

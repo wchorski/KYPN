@@ -230,7 +230,7 @@ footer.footer {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		color: var(--c-txt-rev);
+		/* color: var(--c-txt-rev); */
 		transform: translate(-50%, -15%);
 	}
 

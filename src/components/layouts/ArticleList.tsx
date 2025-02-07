@@ -9,21 +9,23 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { NoData } from "@components/elements/NoData"
+import AddToCartForm from "@components/ecommerce/AddToCartForm"
+import { PriceTag } from "@components/ecommerce/PriceTag"
 export const revalidate = 5
 
 type Props = {
 	type: "post" | "product" | "service"
 	items: Post[] | Product[] | Service[] | undefined
-  buttonText?:string
+	buttonText?: string
 }
 
 export function ArticleList({ items = [], type, buttonText }: Props) {
 	if (!items) return <NoData name={type} />
 	// return <pre>{JSON.stringify(/{ items }, null, 2)}</pre>
 	return (
-		<GridList gap="1rem" >
+		<GridList gap="1rem">
 			{items.map((item: any, i: number) => (
-				<ArticleItem item={item} key={i} type={type} buttonText={buttonText}/>
+				<ArticleItem item={item} key={i} type={type} buttonText={buttonText} />
 			))}
 		</GridList>
 	)
@@ -110,26 +112,26 @@ export function ArticleItem({
 			)}
 
 			{type === "post" && item.featured_video ? (
-				<figure className={[styles.featured_image, row_graphic].join(' ')}>
+				<figure className={[styles.featured_image, row_graphic].join(" ")}>
 					<YouTubeVideo
 						altText={`${title}'s featured video`}
 						url={item.featured_video}
 					/>
 				</figure>
 			) : (
-				<Link href={link} className={row_graphic} >
-					<figure className={[styles.featured_image, row_graphic].join(' ')}>
+				<Link href={link} className={row_graphic}>
+					<figure className={[styles.featured_image, row_graphic].join(" ")}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 					</figure>
 				</Link>
 			)}
 
-			{/* <div className="wrapper"> */}
-				<header style={{ position: "relative" }}>
-					<Link href={link} className="title">
-						<h3> {title} </h3>
-					</Link>
+			<header style={{ position: "relative" }}>
+				<Link href={link} className="title">
+					<h3> {title} </h3>
+				</Link>
 
+				{type === "post" && (
 					<div className={styles.meta}>
 						{author && (
 							<Link className="author" href={`/users/${author?.id}`}>
@@ -150,22 +152,36 @@ export function ArticleItem({
 							</span>
 						</time>
 					</div>
-				</header>
+				)}
+			</header>
 
-				<p className={styles.excerpt}>{excerpt}</p>
+			<p className={styles.excerpt}>{excerpt}</p>
 
-				<footer>
+			<footer>
+				{type === "product" ? (
+					<>
+						<PriceTag price={item.price} hideZeroCents={true} />
+						<AddToCartForm
+							type={
+								item.isForSale ? "SALE" : item.isForRent ? "RENTAL" : "SALE"
+							}
+							eventId={undefined}
+							productId={item.id}
+							sessionId={"session.itemId"}
+						/>
+					</>
+				) : (
 					<Link className="readmore" href={link}>
 						<em>{buttonText}</em>
 					</Link>
-				</footer>
+				)}
+			</footer>
 
-				{/* <div className="menu admin">
+			{/* <div className="menu admin">
 	        <Link href={{ pathname: '/shop/products/update', query: { id: id }, }}> Edit ✏️ </Link>
 	        <AddToCart id={id} />
 	        <ProductDelete id={id}> Delete </ProductDelete>
 	      </div> */}
-			{/* </div> */}
 		</article>
 	)
 }

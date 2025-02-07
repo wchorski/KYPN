@@ -314,7 +314,9 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 			}
 
 			console.log(
-				` + Ticket Ordered for Event: ${event.summary}, total: ${order.total}`
+				` + Ticket Ordered for Event: ${event.summary}, total: ${
+					order.subTotal + order.fees
+				} `
 			)
 		})
 	)

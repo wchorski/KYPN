@@ -186,15 +186,23 @@ function ProductOrderItem({ item }: { item: OrderItem }) {
 		<li className={styles.item}>
 			<ImageDynamic photoIn={image} />
 
-			<Link href={`/products/${id}`}>
-				<h5>{name}</h5>
-			</Link>
+			<div>
+				<Link href={`/products/${id}`}>
+					<h5>{name}</h5>
+				</Link>
+				{/* <em>
+					<abbr title="quantity" style={{textDecoration: 'none'}}>qty </abbr>
+					{item.quantity}
+				</em> */}
+				<em>
+					<abbr title="quantity" style={{textDecoration: 'none'}}>&times; </abbr>
+					{item.quantity}
+				</em>
+			</div>
 			<div className={perItemTotal}>
 				<PriceTag price={price * item.quantity} />
 				{/* <p>{moneyFormatter(price * item.quantity)}</p> */}
-				<em>
-					{item.quantity} &times; {moneyFormatter(price)} each
-				</em>
+				<em>{moneyFormatter(price)} each</em>
 			</div>
 		</li>
 	)

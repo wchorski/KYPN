@@ -91,10 +91,7 @@ export const CartItem: Lists.CartItem = list({
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
-				console.log(
-					"🐸🐸🐸 CartItem: use hooks.validate instead of hooks.beforeOperation 🐸🐸🐸"
-				)
-				console.log({ resolvedData })
+
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",

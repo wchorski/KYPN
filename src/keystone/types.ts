@@ -318,6 +318,8 @@ export type Rental = Lists.Rental.Item & {
 
 export type Order = Lists.Order.Item & {
 	typeof: "order"
+  //? virtual
+  total:number
 	count: number
 	user: User
 	items: OrderItem[]

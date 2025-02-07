@@ -14,7 +14,7 @@ import { InputField } from "@components/InputField"
 import { delay } from "@lib/utils"
 import { ReactNode, useState } from "react"
 import { CartItem } from "@ks/types"
-import { IconCheckMark, IconShoppingBag, IconSpinnerLines } from "@lib/useIcons"
+import { IconCheckMark, IconShoppingBagAdd, IconSpinnerLines } from "@lib/useIcons"
 import { one_click_form } from "@styles/menus/form.module.scss"
 
 type State =
@@ -48,7 +48,7 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 		data: undefined,
 	}
 	const { state, action, } = useForm(onSubmit, initState)
-	const [inlineIconState, setInlineIconState] = useState<ReactNode>(<IconShoppingBag />)
+	const [inlineIconState, setInlineIconState] = useState<ReactNode>(<IconShoppingBagAdd />)
 	const { addToCart } = useCart()
 
 	// async function onSubmit(
@@ -97,7 +97,7 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			await delay(800)
 			setInlineIconState(<IconCheckMark />)
 			await delay(600)
-			setInlineIconState(<IconShoppingBag />)
+			setInlineIconState(<IconShoppingBagAdd />)
 
 			addToCart(data.addToCart)
       
@@ -145,7 +145,8 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			<SubmitButtonInlineIcons
 				icon={inlineIconState}
 				className={"button medium"}
-        label={'Add to Cart'}
+        title="add to cart"
+        label={''}
 			/>
 		</form>
 	)

@@ -44,12 +44,14 @@ type SubmitButtonsInlineIconsProps = {
 	label?: string
 	className?: string
 	icon:ReactNode
+  title?:string
 }
 
 export function SubmitButtonInlineIcons({
 	label,
 	className,
   icon,
+  title = 'submit',
 }: SubmitButtonsInlineIconsProps) {
 	const { pending } = useFormStatus()
 
@@ -80,6 +82,7 @@ export function SubmitButtonInlineIcons({
 
 	return (
 		<button
+      title={title}
 			type={"submit"}
 			disabled={pending}
 			className={[
@@ -88,7 +91,7 @@ export function SubmitButtonInlineIcons({
 				pending ? "anim_border_spin pending" : "",
 			].join(" ")}
 		>
-			<span>{btnText}</span>
+      {label && <span>{label}</span>}
 			{icon}
 		</button>
 	)

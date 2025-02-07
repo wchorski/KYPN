@@ -6,12 +6,17 @@ type Props = {
 	price: number | null
 	subtext?: string
 	hideZeroCents?: boolean
-  style?:CSSProperties
+	style?: CSSProperties
 }
 
 // todo this is a very short list of currencies but should cover anything relevant to me
 
-export function PriceTag({ price, subtext, hideZeroCents = false, style }: Props) {
+export function PriceTag({
+	price,
+	subtext,
+	hideZeroCents = false,
+	style,
+}: Props) {
 	const money = moneyFormatter(price || 0)
 	let currency = "$"
 	const dollars = money.replace(currency, "").split(".")[0]
@@ -37,14 +42,22 @@ export function PriceTag({ price, subtext, hideZeroCents = false, style }: Props
 
 				return (
 					<>
-						<data className={className} value={dollars + "." + cents} style={style}>
+						<data
+							className={className}
+							value={dollars + "." + cents}
+							style={style}
+						>
 							<sup className="currency" title={"USD"}>
 								{currency}
 							</sup>
 							<span className="amount">
 								{dollars}
 								<small>
-									{hideZeroCents && Number(cents) > 0 ? `.${cents}` : `.00`}
+									{Number(cents) > 0
+										? `.${cents}`
+										: hideZeroCents
+										? null
+										: `.00`}
 								</small>
 							</span>
 

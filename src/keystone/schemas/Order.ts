@@ -76,7 +76,7 @@ export const Order: Lists.Order = list({
 			field: graphql.field({
 				type: graphql.Int,
 				resolve(item) {
-					return item.subTotal + fees
+					return item.subTotal + item.fees
 				},
 			}),
 			ui: {

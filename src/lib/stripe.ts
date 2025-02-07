@@ -10,27 +10,50 @@ const stripeConfig = new Stripe(envs.STRIPE_SECRET, {
 	apiVersion: "2024-12-18.acacia; custom_checkout_beta=v1" as any,
 })
 
-type StripeProduct = {
-	id: string
+type StripeProductCreate = {
+	// id: string
 	name: string
-	excerpt: string
-	category: string
-	status: string
+	excerpt: string | undefined
+	category: string | undefined
+	status: string | undefined
 	authorId: string
 	type: "subscription" | "product" | "addon" | "service"
-	image: string
+	image: string | undefined
 	price: number
-	billing_interval: Billing_Interval|undefined
+	billing_interval: Billing_Interval | undefined
 	url: string
 	stripeProductId: string | undefined
 }
 
-export async function stripeProductCreate(props: StripeProduct) {
+export async function stripeProductRetrieve(id: string) {
+	if (!id) return
+	// const products = await stripeConfig.products.search({
+	//   query: 'active:\'true\' AND metadata[\'order_id\']:\'6735\'',
+	// });
+	const product = await stripeConfig.products.retrieve(id)
+	return product
+}
+
+export async function stripeProductCreate(props: StripeProductCreate) {
 	if (!envs.STRIPE_SECRET) return
-  //? if product has stripeId then find and update existing product
-	if (props.stripeProductId) stripeProductUpdate(props)
+	//? if product has stripeId then find and update existing product
+	// if (props.stripeProductId) stripeProductUpdate(props)
+	if (props.stripeProductId) {
+		try {
+			const product = await stripeProductRetrieve(props.stripeProductId)
+
+			if (product) return await stripeProductUpdate(props)
+		} catch (error: any) {
+			console.log("!!! 💳 STRIPE:: ", {
+				type: error.type,
+				code: error.code,
+				message: error.raw.message,
+			})
+		}
+	}
+  console.log('🐸 SHOULD NOT GET PAST THIS. SHOULD BE UPDATING EXISING');
 	const {
-		id,
+		// id,
 		name,
 		excerpt,
 		category,
@@ -43,14 +66,14 @@ export async function stripeProductCreate(props: StripeProduct) {
 		url,
 	} = props
 
-	let stripeCreateParams: Stripe.ProductCreateParams = {
+	const stripeCreateParams: Stripe.ProductCreateParams = {
 		name,
 		active: true,
 		description: excerpt || "no_description",
 		metadata: {
-			productId: id,
-			category: category,
-			status,
+			// productId: id,
+			category: category || "no_category",
+			status: status || "no_status",
 			authorId,
 			type,
 		},
@@ -87,7 +110,7 @@ export async function stripeProductCreate(props: StripeProduct) {
 }
 
 export async function stripeServiceCreate({
-	id,
+	// id,
 	name,
 	excerpt,
 	category,
@@ -98,7 +121,7 @@ export async function stripeServiceCreate({
 	price,
 	billing_interval,
 	url,
-}: StripeProduct) {
+}: StripeProductCreate) {
 	if (!envs.STRIPE_SECRET) return
 
 	let stripeCreateParams: Stripe.ProductCreateParams = {
@@ -106,9 +129,9 @@ export async function stripeServiceCreate({
 		active: true,
 		description: excerpt || "no_description",
 		metadata: {
-			serviceId: id,
-			category: category,
-			status,
+			// serviceId: id,
+			category: category || "no_category",
+			status: status || "no_status",
 			authorId,
 			type,
 		},
@@ -173,9 +196,16 @@ export async function stripeProductDelete(id: string | undefined) {
 
 export async function stripeArchiveProduct(id: string | undefined) {
 	if (!envs.STRIPE_PUBLIC_KEY || !id) return
-	const product = await stripeConfig.products.update(id, {
-		active: false,
-	})
+	const product = await stripeConfig.products
+		.update(id, {
+			active: false,
+		})
+		.catch((error) =>
+			console.log("!!! 💳 STRIPE::", {
+				type: error.type,
+				message: error.raw.message,
+			})
+		)
 
 	return product
 }
@@ -204,7 +234,7 @@ type Price = {
 }
 
 type ProductUpdate = {
-	stripeProductId: string|undefined
+	stripeProductId: string | undefined
 	currency?: "usd" | string
 	price: number | undefined
 	image: string | undefined
@@ -242,6 +272,7 @@ export async function stripeProductUpdate({
 		},
 	}
 
+  //TODO check if stripePriceId exists. Is it the same amount, billing_interval, etc? then just link existing
 	if (price) {
 		const newPrice = await stripeConfig.prices.create({
 			unit_amount: price,
@@ -255,7 +286,11 @@ export async function stripeProductUpdate({
 				  }
 				: {}),
 		})
-		stripeUpdateParams = { ...stripeUpdateParams, default_price: newPrice.id }
+		stripeUpdateParams = {
+			...stripeUpdateParams,
+			default_price: newPrice.id,
+			active: !["ARCHIVED"].includes(String(status)),
+		}
 	}
 
 	const product = await stripeConfig.products.update(

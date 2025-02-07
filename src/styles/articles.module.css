@@ -38,7 +38,15 @@ article.post_card {
 		grid-row-end: footer-end;
 		display: flex;
 		justify-content: end;
-		flex-direction: column;
+		/* flex-direction: column; */
+    flex-wrap: wrap;
+    gap: var(--space-ms);
+    justify-content: space-between;
+    align-items: center;
+
+    & data {
+      font-size: 2rem;
+    }
 	}
 
 	& figure {
