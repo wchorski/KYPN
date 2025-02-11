@@ -1,5 +1,3 @@
-
-
 import AccountDash from "@components/menus/AccountDash"
 import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
@@ -24,9 +22,10 @@ import {
 	IconCalendar,
 	IconCalendarOutlined,
 	IconShoppingBag,
+	IconSubRepeat,
 	IconTicketOutlined,
 } from "@lib/useIcons"
-import {fetchTicketsByUser} from "@lib/fetchdata/fetchTicketsByUser"
+import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
 import { DashNav, DashNavData } from "@components/menus/DashNav"
 import ErrorPage from "@components/layouts/ErrorPage"
 
@@ -146,12 +145,16 @@ export default async function AccountPage() {
       `,
 		})) as { user: User }
 
-  if(userError) return <ErrorPage error={userError}/>
+	if (userError) return <ErrorPage error={userError} />
 
 	if (!user) return notFound()
 	const { gig_requests, gigs } = employeeGigData.user
 
-	const { tickets, sudoTicketCount = 0, error: errorTickets } = await fetchTicketsByUser(user.id)
+	const {
+		tickets,
+		sudoTicketCount = 0,
+		error: errorTickets,
+	} = await fetchTicketsByUser(user.id)
 
 	const dashNavData: DashNavData = [
 		{
@@ -166,8 +169,14 @@ export default async function AccountPage() {
 			icon: <IconBookmark />,
 		},
 		{
+			slug: "subscriptions",
+			isCount: user.subscriptions.length > 0,
+			icon: <IconSubRepeat />,
+		},
+		{
 			slug: "tickets",
-			isCount: sudoTicketCount > 0 || tickets && tickets.length > 0 ? true : false,
+			isCount:
+				sudoTicketCount > 0 || (tickets && tickets.length > 0) ? true : false,
 			icon: <IconTicketOutlined />,
 		},
 		{
@@ -193,12 +202,6 @@ export default async function AccountPage() {
 			icon: <></>,
 		},
 		{
-			slug: "subscriptions",
-			isCount: false,
-			// count: subscriptions.length > 0,
-			icon: <></>,
-		},
-		{
 			slug: "downloads",
 			isCount: false,
 			// count: downloads.length > 0,
@@ -210,7 +213,7 @@ export default async function AccountPage() {
 		user,
 		orders,
 		tickets,
-    sudoTicketCount,
+		sudoTicketCount,
 		rentals: [],
 		downloads: [],
 		employeeGigs: { gigs, gig_requests },
@@ -245,8 +248,20 @@ const USER_DASH_QUERY = `
     price
     start
     service {
+      id
       name
     }
     status
+  }
+  subscriptions {
+    id
+    dateCreated
+    status
+    subscriptionPlan {
+      id
+      name
+      status
+      billing_interval
+    }
   }
 `

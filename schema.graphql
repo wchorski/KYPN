@@ -1650,6 +1650,7 @@ type SubscriptionItem {
   id: ID!
   typeof: String
   custom_price: Int
+  price: Int
   subscriptionPlan: SubscriptionPlan
   isActive: Boolean
   isDelinquent: Boolean

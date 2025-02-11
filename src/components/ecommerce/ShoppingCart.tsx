@@ -81,7 +81,16 @@ export function ShoppingCart() {
 							<em className={"sub-text"}> + rental </em>
 						)}
 						{cartItems.some((i) => i.type === "SUBSCRIPTION") && (
-							<em className="sub-text"> + subscription </em>
+							<em className="sub-text">
+								{` + ${moneyFormatter(
+									cartItems
+										.filter((item) => item.subscriptionPlan !== null)
+										.reduce(
+											(acc, item) => acc + (item.subscriptionPlan?.price || 0),
+											0
+										)
+								)} subscription`}
+							</em>
 						)}
 					</p>
 				</div>

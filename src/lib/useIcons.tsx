@@ -17,7 +17,8 @@ import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { RiFileEditFill } from "react-icons/ri"
 import { PiSpinnerThin } from "react-icons/pi";
 import { BiLock } from "react-icons/bi"
-import { TbCheck, TbExclamationCircle, TbShoppingBagPlus, TbShoppingBag } from "react-icons/tb"
+import { TbCheck, TbExclamationCircle, TbShoppingBagPlus, TbShoppingBag, TbCalendarRepeat } from "react-icons/tb"
+import { FaRepeat } from "react-icons/fa6"
 
 
 export const IconBookmark = () => <BsFillBookmarkFill />
@@ -40,11 +41,13 @@ export const IconCalendar = () =>  <HiCalendar/>
 // export const IconShoppingBag = () => <MdShoppingBag />
 export const IconShoppingBag = () => <TbShoppingBag />
 export const IconShoppingBagAdd = () => <TbShoppingBagPlus />
+export const IconSubRepeat = () => <FaRepeat />
 
 
 export const IconEditPagePencile = () => <RiFileEditFill />
 
 export const IconSpinnerLines = () => <PiSpinnerThin className="anim-spin-circle"/>
+export const IconCalRepeate = () => <TbCalendarRepeat />
  
 
 export const IconItem = ({type}:{type: "booking" | "event" | "user" | string}) => {

@@ -81,9 +81,9 @@ export const addToCart = (base: BaseSchemaMeta) =>
 						type,
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
-            ...(subscriptionPlanId
-              ? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
-              : {}),
+						...(subscriptionPlanId
+							? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
+							: {}),
 						user: { connect: { id: session?.itemId } },
 						quantity,
 					},

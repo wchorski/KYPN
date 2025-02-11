@@ -35,6 +35,7 @@ function InputFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
       {/* //TODO prob can remove all `input` props that dont have custom logic */}
 			<input
         {...props}
+        dir={'rtl'}
         // max={props.max || 9999}
         maxLength={props.maxLength || 200}
 				placeholder={placeholder || `${label || name}...`}

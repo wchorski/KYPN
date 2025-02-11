@@ -123,6 +123,7 @@ export type User = Lists.User.Item & {
 	privatePagesAccess: Page[]
 	privatePostsAccess: Post[]
 	servicesProvided: Service[]
+  subscriptions: SubscriptionItem[]
 	bookings: Booking[]
 	gigs: Booking[]
 	gig_requests: Booking[]
@@ -401,6 +402,9 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	subscriptionPlan: SubscriptionPlan
 	billing_interval: Billing_Interval
 	user: User
+  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	dateCreated: string
+	dateModified: string
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User

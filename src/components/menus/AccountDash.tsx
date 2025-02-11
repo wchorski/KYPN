@@ -1,5 +1,4 @@
 import { Table } from "@components/elements/Table"
-// import { TicketList } from "@components/events/TicketList";
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import {
@@ -11,7 +10,6 @@ import {
 	User,
 } from "@ks/types"
 import { Card } from "@components/layouts/Card"
-import Link from "next/link"
 import styles from "@styles/menus/dashboard.module.css"
 import { StatusBadge } from "@components/StatusBadge"
 import { EmployeeGigDecisionForm } from "@components/bookings/EmployeeGigDecisionForm"
@@ -62,14 +60,14 @@ export default function AccountDash({ data }: Props) {
 		details: order.id,
 	}))
 
-	// const subscriptionCells = user.subscriptions?.map(
-	//   (sub: SubscriptionItem) => ({
-	//     started: datePrettyLocalDay(sub.dateCreated || ""),
-	//     plan: sub.subscriptionPlan.name,
-	//     status: <StatusBadge type={"subscriptionItem"} status={sub.status} />,
-	//     details: sub.id,
-	//   })
-	// );
+	const subscriptionCells = user.subscriptions?.map(
+		(sub: SubscriptionItem) => ({
+			started: datePrettyLocalDay(sub.dateCreated || ""),
+			plan: sub.subscriptionPlan.name,
+			status: <StatusBadge type={"subscriptionItem"} status={sub.status} />,
+			details: sub.id,
+		})
+	)
 
 	// const rentalCells = rentals?.map((item) => ({
 	//   start: datePrettyLocalDay(item.start || ""),
@@ -184,22 +182,18 @@ export default function AccountDash({ data }: Props) {
         </Card>
       )} */}
 
-			{/* {user.subscriptions.length > 0 && (
-        <Card id="subscriptions" marginBlock={'0'}>
-          <h3
+			{user.subscriptions.length > 0 && (
+				<Card id="subscriptions" marginBlock={"0"}>
+					<h3>Subscriptions</h3>
 
-          >
-            Subscriptions
-          </h3>
-
-          <Table
-            caption=""
-            headers={["started", "plan", "status", "details"]}
-            cells={subscriptionCells}
-            route={`/subscriptions`}
-          />
-        </Card>
-      )} */}
+					<Table
+						caption=""
+						headers={["started", "plan", "status", "details"]}
+						cells={subscriptionCells}
+						route={`/subscription-items`}
+					/>
+				</Card>
+			)}
 
 			{/* // todo when download link is added to product */}
 			{/* {downloads && (

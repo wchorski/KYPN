@@ -225,6 +225,13 @@ const query = `
       image
     }
   }
+  subscriptionPlan {
+    id
+    name
+    price
+    image
+    billing_interval
+  }
   coupon {
     id
     name

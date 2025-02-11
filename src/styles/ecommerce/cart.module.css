@@ -240,6 +240,7 @@ footer.footer {
 }
 
 input[type="number"].quantity {
-  padding: 0;
+  padding: var(--space-xs);
+  padding-right: var(--space-ms);
   height: fit-content;
 }

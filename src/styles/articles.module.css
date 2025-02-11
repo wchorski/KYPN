@@ -37,7 +37,7 @@ article.post_card {
 		grid-row-start: footer-start;
 		grid-row-end: footer-end;
 		display: flex;
-		justify-content: end;
+		justify-content: flex-end;
 		/* flex-direction: column; */
     flex-wrap: wrap;
     gap: var(--space-ms);

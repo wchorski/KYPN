@@ -27,7 +27,7 @@ export default function CartItem({ item, sessionId }: Props) {
 		return <SubscriptionPlanItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
 
-	return <p>no product or event associated</p>
+	return <p>no item associated</p>
 }
 
 function BookingItem({ item }: { item: CartItem }) {
@@ -173,6 +173,9 @@ function ProductItem({
 						className={styles.quantity}
 						type="number"
 						value={quantityState}
+						dir={"rtl"}
+            min={1}
+            max={999}
 						// defaultValue={quantity}
 						onChange={(e) => updateQuantity(Number(e.target.value))}
 						// todo only update once input is unselected
@@ -282,6 +285,9 @@ function SubscriptionPlanItem({
 					</h5>
 
 					<input
+            dir={"rtl"}
+            min={1}
+            max={999}
 						className={styles.quantity}
 						type="number"
 						value={quantityState}

@@ -1,6 +1,6 @@
 import "dotenv/config"
 import type { Lists } from ".keystone/types"
-import type { SubscriptionItem as TypeSubsItem, User } from "../types"
+import type { SubscriptionPlan, SubscriptionItem as TypeSubsItem, User } from "../types"
 import { graphql, list, group } from "@keystone-6/core"
 import {
 	checkbox,
@@ -65,6 +65,42 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		}),
 
 		custom_price: integer(),
+    price: virtual({
+          field: graphql.field({
+            type: graphql.Int,
+            async resolve(item, args, context) {
+              // if(!item.serviceId) return item.name
+              const service = (await context.query.SubscriptionPlan.findOne({
+                where: { id: item.subscriptionPlanId || "no_service" },
+                query: `
+                  price
+                `,
+              })) as SubscriptionPlan
+    
+              console.log(service);
+    
+              const addons = await context.query.Addon.findMany({
+                where: {
+                  subscriptionItems: {
+                    every: {
+                      id: {
+                        equals: item.id,
+                      },
+                    },
+                  },
+                },
+                query: `
+                  price
+                `,
+              })
+    
+              const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+              const subTotal = (service?.price || 0) + addonsPrice
+    
+              return subTotal
+            },
+          }),
+        }),
 
 		subscriptionPlan: relationship({
 			ref: "SubscriptionPlan.items",

@@ -133,11 +133,13 @@ export const Booking: Lists.Booking = list({
 				async resolve(item, args, context) {
 					// if(!item.serviceId) return item.name
 					const service = (await context.query.Service.findOne({
-						where: { id: item.serviceId },
+						where: { id: item.serviceId || "no_service" },
 						query: `
               price
             `,
 					})) as Service
+
+          console.log(service);
 
 					const addons = await context.query.Addon.findMany({
 						where: {
@@ -155,10 +157,9 @@ export const Booking: Lists.Booking = list({
 					})
 
 					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-					const subTotal = addonsPrice + service.price
+					const subTotal = (service?.price || 0) + addonsPrice
 
-          return subTotal
-          
+					return subTotal
 				},
 			}),
 		}),
@@ -266,18 +267,23 @@ export const Booking: Lists.Booking = list({
 			},
 		}),
 		orderItem: relationship({ ref: "OrderItem.booking", many: false }),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		google:
-			json(),
-			//   {
-			// 	defaultValue: {
-			// 		id: "",
-			// 		status: "",
-			// 		kind: "",
-			// 		htmlLink: "",
-			// 	},
-			// }
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		dateModified: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		google: json(),
+		//   {
+		// 	defaultValue: {
+		// 		id: "",
+		// 		status: "",
+		// 		kind: "",
+		// 		htmlLink: "",
+		// 	},
+		// }
 	},
 	hooks: {
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {
