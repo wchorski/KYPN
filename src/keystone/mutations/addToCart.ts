@@ -14,9 +14,11 @@ export const addToCart = (base: BaseSchemaMeta) =>
 			quantity: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
 			productId: graphql.arg({ type: graphql.ID }),
 			eventId: graphql.arg({ type: graphql.ID }),
+			subscriptionPlanId: graphql.arg({ type: graphql.ID }),
 		},
 		async resolve(source, variables, context: Context) {
-			const { productId, type, eventId, quantity } = variables
+			const { productId, type, eventId, subscriptionPlanId, quantity } =
+				variables
 			// const session = await getServerSession(nextAuthOptions)
 			//? prob should use the included ks context
 			const session = await context.session
@@ -56,6 +58,9 @@ export const addToCart = (base: BaseSchemaMeta) =>
 					user: { id: { equals: session.itemId } },
 					...(productId ? { product: { id: { equals: productId } } } : {}),
 					...(eventId ? { event: { id: { equals: eventId } } } : {}),
+					...(subscriptionPlanId
+						? { subscriptionPlan: { id: { equals: subscriptionPlanId } } }
+						: {}),
 					type: { equals: type },
 				},
 			})
@@ -76,6 +81,9 @@ export const addToCart = (base: BaseSchemaMeta) =>
 						type,
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
+            ...(subscriptionPlanId
+              ? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
+              : {}),
 						user: { connect: { id: session?.itemId } },
 						quantity,
 					},

@@ -76,13 +76,17 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 		case "price.created":
 			console.log("🐸 price.created")
-      // JSON.stringify(stripePayload.data, null, 2)
+			// JSON.stringify(stripePayload.data, null, 2)
 			break
 
 		case "product.updated":
 			console.log("🐸 product.updated")
-      // JSON.stringify(stripePayload.data, null, 2)
+			// JSON.stringify(stripePayload.data, null, 2)
 			break
+
+		case "customer.subscription.created":
+			console.log("🐸 customer.subscription.created")
+			throw new Error("🐸🐸🐸 🐸🐸🐸 CREATE A SubscriptionItem")
 
 		default:
 			// other events that we don't handle
@@ -150,8 +154,9 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	// if (!checkoutSession.metadata?.typeof)
 	// 	throw new Error("!!! ❌ stripe did not have typeof in metadata")
 
-	// TODO add to Database!!! because we were successful
-	// will need to account for different item types Ticket,Product,Subscription
+	console.log({ checkoutSession })
+	console.log({ lineItems })
+  
 
 	const data = (await keystoneContext
 		.withSession({
@@ -160,7 +165,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 				id: checkoutSession.id,
 				payment_intent: checkoutSession.payment_intent,
 				customerId: checkoutSession.metadata.customerId,
-        amount_total: checkoutSession.amount_total
+				amount_total: checkoutSession.amount_total,
 			},
 		})
 		.graphql.run({
@@ -175,59 +180,15 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 			// variables: values,
 		})) as { checkout: { id: string; status: string } }
 
-	console.log("### stripe webhook. checkoutTickets mutation data")
+	console.log("### stripe webhook")
 	console.log("🐸🐸🐸 Remove items from CART 🐸🐸🐸")
 	console.log({ data })
-	if (data.checkout.status === "PAYMENT_RECIEVED") {
+	// if (data.checkout.status === "PAYMENT_RECIEVED") {
+	// }
+
+	return {
+		checkout: data.checkout,
 	}
-
-	// return {
-	//   checkout: data.checkout
-	// }
-
-	// switch (checkoutSession.metadata.typeof) {
-	// 	case "ticket":
-	// 		//? could send stripe session to mutation if tyring to verify
-	// 		// const data = (await keystoneContext.withSession({stripeMetaCustomerId: session.metadata?.customerId}).graphql.run({
-	// 		const data = (await keystoneContext
-	// 			.withSession({
-	// 				stripeSession: {
-	// 					payment_status: checkoutSession.payment_status,
-	// 					id: checkoutSession.id,
-	// 					payment_intent: checkoutSession.payment_intent,
-	// 				},
-	// 			})
-	// 			.graphql.run({
-	// 				query: `
-	//         mutation CheckoutTickets($eventId: String!, $customerEmail: String!, $quantity: Int!,  $userId: String!) {
-	//           checkoutTickets(eventId: $eventId, customerEmail: $customerEmail, quantity: $quantity, userId: $userId) {
-	//             id
-	//             status
-	//           }
-	//         }
-	//       `,
-	// 				variables: {
-	// 					//? moved them to `.withSession()`
-	// 					// stripeCheckoutSessionId
-	// 					// stripePaymentIntent
-	// 					eventId: checkoutSession.metadata.eventId,
-	// 					userId: checkoutSession.metadata.customerId,
-	// 					quantity: lineItems.length,
-	// 					customerEmail:
-	// 						checkoutSession.customer_email ||
-	// 						checkoutSession.customer_details?.email ||
-	// 						"anonymous",
-	// 				},
-	// 			})) as { checkoutTickets: { id: string; status: string } }
-
-	// 		break
-
-	// 	// case "product":
-	// 	// 	break
-
-	// 	default:
-	// 		break
-	// }
 }
 
 type WithMetadata = Stripe.Checkout.Session &
@@ -243,6 +204,14 @@ type WithMetadata = Stripe.Checkout.Session &
 		| {
 				metadata: {
 					typeof: "product"
+					orderId: string
+					customerId: string
+				}
+		  }
+		| {
+				metadata: {
+					typeof: "subscriptionPlan"
+					subscriptionPlanId: string
 					orderId: string
 					customerId: string
 				}

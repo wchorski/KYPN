@@ -20,7 +20,7 @@ import { AsideBar } from "@components/layouts/AsideBar"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { ArticleList } from "@components/layouts/ArticleList"
-import fetchProducts from "@lib/fetchdata/fetchProducts"
+import fetchSubscriptonPlans from "@lib/fetchdata/fetchSubscriptonPlans"
 import { notFound } from "next/navigation"
 
 type Props = {
@@ -32,17 +32,17 @@ type Props = {
 }
 
 export const metadata: Metadata = {
-	title: `Products | ` + envs.SITE_TITLE,
+	title: `Subscription Plans | ` + envs.SITE_TITLE,
 	description: envs.SITE_DESC,
 }
 
-export default async function ProductsPage({ searchParams }: Props) {
+export default async function SubscriptionPlansPage({ searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { page, categories } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = categories?.split(",") || []
 
-	const { products, error, count } = await fetchProducts({
+	const { subscriptionPlans, error, count } = await fetchSubscriptonPlans({
 		session,
 		query,
 		page: currPage,
@@ -54,7 +54,7 @@ export default async function ProductsPage({ searchParams }: Props) {
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
-	if (!products) return notFound()
+	if (!subscriptionPlans) return notFound()
 
 	return (
 		<main
@@ -71,7 +71,7 @@ export default async function ProductsPage({ searchParams }: Props) {
 		>
 			<header className={layout_full} style={{ marginTop: "3rem" }}>
 				<div className={layout_wide}>
-					<h1 style={{ textAlign: "center" }}> Products </h1>
+					<h1 style={{ textAlign: "center" }}> Subscription Plans </h1>
 					<hr className={layout_full} />
 				</div>
 			</header>
@@ -79,15 +79,15 @@ export default async function ProductsPage({ searchParams }: Props) {
 			<div className={[page_content, layout_site_to_wide].join(" ")}>
 				{/* <Pagination route="/blog" page={currPage} count={count} /> */}
 
-				{products?.length > 0 ? (
-					<ArticleList items={products} type={"product"} />
+				{subscriptionPlans?.length > 0 ? (
+					<ArticleList items={subscriptionPlans} type={'subscriptionPlan'} buttonText="view more"/>
 				) : (
-					<NoData name="products" />
+					<NoData name="Subscription Plans" />
 				)}
 
-				<Pagination route="/products" page={currPage} count={count} />
+				<Pagination route="/subscription-plans" page={currPage} count={count} />
 			</div>
-			<AsideBar aria_label="Products List Sidebar">
+			<AsideBar aria_label="Subscription Plans List Sidebar">
 				<Flex
 					flexDirection={"column"}
 					alignItems="flex-start"
@@ -121,11 +121,9 @@ const query = `
   slug
   excerpt
   status
-  isForSale
   price
-  isForRent
-  rental_price
-  stockCount
+  billing_interval
+  stockMax
   dateCreated
   dateModified
 `

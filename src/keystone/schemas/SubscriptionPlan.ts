@@ -1,18 +1,16 @@
-import { list } from "@keystone-6/core"
-// @ts-ignore
+import { graphql, group, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
-import { allowAll } from "@keystone-6/core/access"
 import {
-	image,
 	integer,
 	relationship,
 	select,
 	text,
 	timestamp,
+  virtual,
 } from "@keystone-6/core/fields"
 import { document } from "@keystone-6/fields-document"
 import { permissions, rules } from "../access"
-import { stripeProductCreate, stripeProductUpdate } from "../../lib/stripe"
+import { stripeArchiveProduct, stripeProductCreate, stripeProductUpdate } from "../../lib/stripe"
 import "dotenv/config"
 import { componentBlocks } from "../blocks"
 import { slugFormat } from "../../lib/slugFormat"
@@ -27,10 +25,10 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 	// access: allowAll,
 	access: {
 		filter: {
-			// query: rules.canReadProducts,
-			query: () => true,
-			// delete: rules.canManageSubscriptionPlans,
+			
+			query: rules.canViewSubscriptionPlans,
 			update: rules.canManageSubscriptionPlans,
+      delete: rules.canManageSubscriptionPlans,
 		},
 		operation: {
 			query: () => true,
@@ -41,15 +39,17 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 	},
 
 	fields: {
-		// photo: relationship({
-		//   ref: 'ProductImage.subscription',
-		//   ui: {
-		//     displayMode: 'cards',
-		//     cardFields: ['image', 'altText', 'filename'],
-		//     inlineCreate: { fields: ['image', 'altText', 'filename'] },
-		//     inlineEdit: { fields: ['image', 'altText', 'filename'] }
-		//   }
-		// }),
+    typeof: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				resolve() {
+					return "subscriptionPlan"
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
 		image: text(),
 
 		// todo does this need to be?
@@ -133,20 +133,20 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },
-				{ label: "Available", value: "AVAILABLE" },
-				{ label: "Out of Stock", value: "OUT_OF_STOCK" },
+				{ label: "Public", value: "PUBLIC" },
 				{ label: "Private", value: "PRIVATE" },
+				{ label: "Out of Stock", value: "OUT_OF_STOCK" },
+				{ label: "Arcived", value: "ARCIVED" },
 			],
 			defaultValue: "DRAFT",
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 
 		price: integer({ validation: { isRequired: true, min: 0 } }),
-		stripeProductId: text(),
-		stripePriceId: text(),
 		billing_interval: select({
 			options: [
 				{ label: "Daily", value: "day" },
@@ -159,9 +159,10 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
+			validation: { isRequired: true },
 		}),
 
-		stockMax: integer({ validation: { isRequired: true }, defaultValue: 0 }),
+		stockMax: integer({ validation: { isRequired: true, min: 0 } }),
 
 		addons: relationship({ ref: "Addon.subscriptionPlans", many: true }),
 		coupons: relationship({
@@ -176,93 +177,120 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 			ref: "SubscriptionItem.subscriptionPlan",
 			many: true,
 		}),
-		tags: relationship({
-			ref: "Tag.subscriptions",
-			many: true,
-		}),
-		categories: relationship({
-			ref: "Category.subscriptions",
-			many: true,
-		}),
+		...group({
+			label: "Metadata",
+			// description: 'Group description',
 
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+			fields: {
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				categories: relationship({
+					ref: "Category.subscriptionPlans",
+					many: true,
+				}),
+
+				tags: relationship({
+					ref: "Tag.subscriptionPlans",
+					many: true,
+				}),
+				stripeProductId: text(),
+				stripePriceId: text(),
+			},
+		}),
 	},
 
 	hooks: {
-		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-			if (operation === "create") {
-				try {
-					if (resolvedData && !resolvedData.author) {
-						const currentUserId = await context.session?.itemId
-						resolvedData.author = { connect: { id: currentUserId } }
-					}
-				} catch (err) {
-					console.warn(err)
+    validate: {
+			create: async ({ resolvedData, context, inputData }) => {
+				if (!resolvedData.author) {
+					const currentUserId = await context.session.itemId
+					resolvedData.author = { connect: { id: currentUserId } }
 				}
-
-				const res = await stripeProductCreate({
-					id: resolvedData.id || "",
-					name: resolvedData.name || "",
-					description: resolvedData.excerpt || "",
-					// category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-					category: "uncategorized",
-					status: resolvedData.status || "",
-					type: "subscription",
-					image: resolvedData.image || "",
-					price: Number(resolvedData.price),
-					billing_interval: resolvedData.billing_interval as Billing_Interval,
-					url: envs.FRONTEND_URL + "/shop/subscriptionplans/" + resolvedData.id,
-					// authorEmail: resolvedData.author || 'no_author',
-					authorEmail: "no_author",
-				})
-					.then(async (res) => {
-						// @ts-ignore //todo might cause problems
-						if (res && resolvedData && !resolvedData.product) {
-							resolvedData.stripeProductId = res.id
-							// @ts-ignore //todo might cause problems
-							resolvedData.stripePriceId = res.default_price
-						}
-					})
-					.catch((err) => {
-						console.log(err)
-						throw new Error(
-							"subplan create err: " + "haha uh oh::" + err.message
-						)
-					})
-			}
-
-			if (operation === "update") {
-				const product = await stripeProductUpdate({
-					currency: "usd",
-					productId: item.id,
-					stripeProductId:
-						String(resolvedData.stripePriceId) || item.stripeProductId,
-					stripePriceId: item.stripePriceId,
-					price: Number(resolvedData.price) || Number(item.price),
-					image: String(resolvedData.image) || item.image || "",
-					name: String(resolvedData.name) || item.name,
-					status: String(resolvedData.status) || item.name,
-					category: "",
-					excerpt: String(resolvedData.excerpt) || item.excerpt || "",
-					authorEmail: "",
-					billing_interval:
-						(resolvedData.billing_interval as Billing_Interval) ||
-						item.billing_interval,
-				})
-					.then(async (product) => {
-						if (!product) return
-						// @ts-ignore
-						resolvedData.stripePriceId = product.default_price || ""
-					})
-					.catch((err) => {
-						console.log(err)
-						throw new Error(err)
-					})
-			}
+			},
 		},
-		// afterOperation: async ({ operation, resolvedData, item, context }: { operation: any, resolvedData: any, item: any, context: any }) => {
-
-		// },
+		beforeOperation: {
+          create: async ({ item, resolvedData, context }) => {
+            const {
+              id,
+              name,
+              excerpt,
+              status,
+              author,
+              price,
+              stripeProductId,
+              stripePriceId,
+              image,
+              billing_interval,
+            } = resolvedData
+    
+            try {
+              const createdProduct = await stripeProductCreate({
+                // id,
+                name: String(name),
+                price: Number(price),
+                excerpt,
+                category: "subscriptionPlan",
+                status,
+                authorId: author?.connect?.id || "no_author_id",
+                type: "subscriptionPlan",
+                image,
+                url: envs.FRONTEND_URL + `/subscription-plans/${id}`,
+                stripeProductId,
+                stripePriceId,
+                billing_interval: billing_interval as Billing_Interval,
+              })
+    
+              if (createdProduct) {
+                resolvedData.stripeProductId = createdProduct.id
+                resolvedData.stripePriceId = String(createdProduct.default_price)
+              }
+            } catch (error: any) {
+              console.log("!!! 💳 STRIPE:: ", {
+                code: error.code,
+                message: error.raw.message,
+              })
+            }
+          },
+          update: async ({ resolvedData, context, item }) => {
+            //? item.stripeProductId will be undefined on first creation
+            await stripeProductUpdate({
+              stripeProductId: item.stripeProductId,
+              stripePriceId: item.stripePriceId,
+              image: resolvedData.image as string | undefined,
+              price: resolvedData.price as number | undefined,
+              name: resolvedData.name as string | undefined,
+              status: resolvedData.status as string | undefined,
+              // category: resolvedData.category,
+              category: "product",
+              excerpt: resolvedData.excerpt as string | undefined,
+              authorId: resolvedData.author?.connect?.id,
+              billing_interval: resolvedData.billing_interval as Billing_Interval,
+            }).then(async (res) => {
+              if (!res) return
+    
+              if (res.default_price) {
+                resolvedData.stripePriceId = String(res.default_price)
+              }
+            })
+    
+            resolvedData.dateModified = new Date().toISOString()
+          },
+        },
+        afterOperation: {
+          // create: async ({ resolvedData, item, context }) => {},
+          // update: async ({ resolvedData, item, context }) => {},
+          delete: async ({ originalItem }) => {
+            //? stripe. deleting product is not recommended
+            // as product history will also be erased
+            // await stripeProductDelete(originalItem.stripeProductId)
+            await stripeArchiveProduct(originalItem.stripeProductId)
+          },
+        },
 	},
 })

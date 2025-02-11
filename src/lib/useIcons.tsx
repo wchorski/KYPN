@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa"
 import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { MdAccountCircle, MdOutlineAccountBox, MdShop, MdShoppingBag } from "react-icons/md"
+import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { RiFileEditFill } from "react-icons/ri"
 import { PiSpinnerThin } from "react-icons/pi";

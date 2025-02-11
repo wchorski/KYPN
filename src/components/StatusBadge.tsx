@@ -9,12 +9,17 @@ import {
 	Rental,
 	Service,
 	SubscriptionItem,
+	SubscriptionPlan,
 	Ticket,
 } from "@ks/types"
 import { stringCapFirstLetter } from "@lib/slugFormat"
 import styles from "@styles/blocs/status.module.css"
 
 export type StatusType =
+	| {
+			type: "subscriptionPlan"
+			status?: SubscriptionPlan["status"] | string | null | undefined
+	  }
 	| {
 			type: "subscriptionItem"
 			status?: SubscriptionItem["status"] | string | null | undefined

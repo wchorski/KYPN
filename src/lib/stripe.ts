@@ -17,7 +17,7 @@ type StripeProductCreate = {
 	category: string | undefined
 	status: string | undefined
 	authorId: string
-	type: "subscription" | "product" | "addon" | "service"
+	type: "subscriptionPlan" | "product" | "addon" | "service"
 	image: string | undefined
 	price: number
 	billing_interval: Billing_Interval | undefined
@@ -239,21 +239,6 @@ export async function stripeCustomerDelete(id: string) {
 	return deleted
 }
 
-type Price = {
-	currency: "usd" | string
-	productId: string
-	stripeProductId: string
-	stripePriceId: string
-	price: number
-	image: string
-	name: string
-	status: string
-	category: string
-	excerpt: string
-	authorId: string
-	billing_interval: Billing_Interval
-}
-
 type ProductUpdate = {
 	stripeProductId: string | undefined
 	stripePriceId: string | undefined
@@ -372,39 +357,40 @@ export async function stripeCouponCreate({
 	return coupon
 }
 
-//? handeled by /api/checkout/subscriptionplan/route.ts
-// type SubscriptionCreate = {
-//   stripeCustomerId:string,
-//   stripeProductId:string,
-//   billing_interval:Billing_Interval,
-//   // stripePriceId:string,
-// }
 
-// export async function stripeSubscriptionCreate({stripeCustomerId, stripeProductId, billing_interval}:SubscriptionCreate){
+type SubscriptionCreate = {
+  stripeCustomerId:string,
+  stripePriceId:string,
+}
 
-//   if(!envs.STRIPE_SECRET) return
+export async function stripeSubscriptionCreate({stripeCustomerId, stripePriceId}:SubscriptionCreate){
+  if(!envs.STRIPE_PUBLIC_KEY) return
+  
+  try {
+    
+    const subscription = await stripeConfig.subscriptions.create({
+      customer: stripeCustomerId,
+      items: [
+        {
+          price: stripePriceId,
+        },
+      ],
+      metadata: {
+        type: 'subscriptionItem'
+      }
+    });
+  
+    return subscription
 
-//   const subscription = await stripeConfig.subscriptions.create({
-//     customer: 'cus_Na6dX7aXxi11N4',
-//     items: [
-//       {
-//         // price: 'price_1MowQULkdIwHu7ixraBm864M',
-//         price_data: {
-//           currency: 'usd',
-//           product: stripeProductId,
-//           recurring: {
-//             interval: billing_interval,
-
-//           },
-//           unit_amount: price,
-//         }
-//       },
-//     ],
-//     metadata: {
-//       subscriptionId: id,
-//     }
-//   });
-// }
+  } catch (error:any) {
+    console.log("!!! 💳 STRIPE:: ", {
+      type: error.type,
+      code: error.code,
+      message: error.raw.message,
+      log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID"
+    })
+  }
+}
 
 type SubscriptionUpdate = {
 	status: SubscriptionItem["status"]

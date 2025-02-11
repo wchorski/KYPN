@@ -61,7 +61,7 @@ export const Category: Lists.Category = list({
     services: relationship({ ref: 'Service.categories', many: true }),
     locations: relationship({ ref: 'Location.categories', many: true }),
     products: relationship({ ref: 'Product.categories', many: true }),
-    subscriptions: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
+    subscriptionPlans: relationship({ ref: 'SubscriptionPlan.categories', many: true }),
     events: relationship({ ref: 'Event.categories', many: true }),
 	},
 })

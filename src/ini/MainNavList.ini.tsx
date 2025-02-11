@@ -20,8 +20,11 @@ export function MainNavList() {
 				<NavLink href={`/posts`}>Blog</NavLink>
 			</li>
 			<li>
-				<NavLink href={`/services`}>Services</NavLink>
+				<NavLink href={`/shop`}>Shop</NavLink>
 			</li>
+			{/* <li>
+				<NavLink href={`/services`}>Services</NavLink>
+			</li> */}
 			<li>
 				<NavLink href={`/book-a-service`}>Book a Service</NavLink>
 			</li>

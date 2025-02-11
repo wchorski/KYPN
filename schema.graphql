@@ -1520,6 +1520,7 @@ input AvailabilityCreateInput {
 
 type SubscriptionPlan {
   id: ID!
+  typeof: String
   image: String
   author: User
   name: String
@@ -1528,8 +1529,6 @@ type SubscriptionPlan {
   description: SubscriptionPlan_description_Document
   status: String
   price: Int
-  stripeProductId: String
-  stripePriceId: String
   billing_interval: String
   stockMax: Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
@@ -1538,12 +1537,14 @@ type SubscriptionPlan {
   couponsCount(where: CouponWhereInput! = {}): Int
   items(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
   itemsCount(where: SubscriptionItemWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
-  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
-  categoriesCount(where: CategoryWhereInput! = {}): Int
   dateCreated: DateTime
   dateModified: DateTime
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+  stripeProductId: String
+  stripePriceId: String
 }
 
 type SubscriptionPlan_description_Document {
@@ -1565,19 +1566,19 @@ input SubscriptionPlanWhereInput {
   name: StringFilter
   slug: StringFilter
   excerpt: StringFilter
-  status: StringNullableFilter
+  status: StringFilter
   price: IntFilter
-  stripeProductId: StringFilter
-  stripePriceId: StringFilter
-  billing_interval: StringNullableFilter
+  billing_interval: StringFilter
   stockMax: IntFilter
   addons: AddonManyRelationFilter
   coupons: CouponManyRelationFilter
   items: SubscriptionItemManyRelationFilter
-  tags: TagManyRelationFilter
-  categories: CategoryManyRelationFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
+  categories: CategoryManyRelationFilter
+  tags: TagManyRelationFilter
+  stripeProductId: StringFilter
+  stripePriceId: StringFilter
 }
 
 input SubscriptionPlanOrderByInput {
@@ -1588,12 +1589,12 @@ input SubscriptionPlanOrderByInput {
   excerpt: OrderDirection
   status: OrderDirection
   price: OrderDirection
-  stripeProductId: OrderDirection
-  stripePriceId: OrderDirection
   billing_interval: OrderDirection
   stockMax: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
+  stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
 }
 
 input SubscriptionPlanUpdateInput {
@@ -1605,17 +1606,17 @@ input SubscriptionPlanUpdateInput {
   description: JSON
   status: String
   price: Int
-  stripeProductId: String
-  stripePriceId: String
   billing_interval: String
   stockMax: Int
   addons: AddonRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
   items: SubscriptionItemRelateToManyForUpdateInput
-  tags: TagRelateToManyForUpdateInput
-  categories: CategoryRelateToManyForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+  categories: CategoryRelateToManyForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+  stripeProductId: String
+  stripePriceId: String
 }
 
 input SubscriptionPlanUpdateArgs {
@@ -1632,17 +1633,17 @@ input SubscriptionPlanCreateInput {
   description: JSON
   status: String
   price: Int
-  stripeProductId: String
-  stripePriceId: String
   billing_interval: String
   stockMax: Int
   addons: AddonRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
   items: SubscriptionItemRelateToManyForCreateInput
-  tags: TagRelateToManyForCreateInput
-  categories: CategoryRelateToManyForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+  categories: CategoryRelateToManyForCreateInput
+  tags: TagRelateToManyForCreateInput
+  stripeProductId: String
+  stripePriceId: String
 }
 
 type SubscriptionItem {
@@ -1662,6 +1663,7 @@ type SubscriptionItem {
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItem
 }
 
 input SubscriptionItemWhereUniqueInput {
@@ -1686,6 +1688,7 @@ input SubscriptionItemWhereInput {
   stripeSubscriptionId: StringFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
+  orderItem: OrderItemWhereInput
 }
 
 input IntNullableFilter {
@@ -1727,6 +1730,7 @@ input SubscriptionItemUpdateInput {
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItemRelateToOneForUpdateInput
 }
 
 input SubscriptionPlanRelateToOneForUpdateInput {
@@ -1754,6 +1758,7 @@ input SubscriptionItemCreateInput {
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
+  orderItem: OrderItemRelateToOneForCreateInput
 }
 
 input SubscriptionPlanRelateToOneForCreateInput {
@@ -2048,6 +2053,7 @@ type CartItem {
   product: Product
   booking: Booking
   event: Event
+  subscriptionPlan: SubscriptionPlan
   user: User
 }
 
@@ -2066,6 +2072,7 @@ input CartItemWhereInput {
   product: ProductWhereInput
   booking: BookingWhereInput
   event: EventWhereInput
+  subscriptionPlan: SubscriptionPlanWhereInput
   user: UserWhereInput
 }
 
@@ -2082,6 +2089,7 @@ input CartItemUpdateInput {
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
+  subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -2121,6 +2129,7 @@ input CartItemCreateInput {
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
+  subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
@@ -2152,6 +2161,7 @@ type OrderItem {
   booking: Booking
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketsCount(where: TicketWhereInput! = {}): Int
+  subscriptionItem: SubscriptionItem
   order: Order
   dateCreated: DateTime
   dateModified: DateTime
@@ -2171,6 +2181,7 @@ input OrderItemWhereInput {
   product: ProductWhereInput
   booking: BookingWhereInput
   tickets: TicketManyRelationFilter
+  subscriptionItem: SubscriptionItemWhereInput
   order: OrderWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
@@ -2190,9 +2201,16 @@ input OrderItemUpdateInput {
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
+  subscriptionItem: SubscriptionItemRelateToOneForUpdateInput
   order: OrderRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input SubscriptionItemRelateToOneForUpdateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
+  disconnect: Boolean
 }
 
 input OrderItemUpdateArgs {
@@ -2206,9 +2224,15 @@ input OrderItemCreateInput {
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
   tickets: TicketRelateToManyForCreateInput
+  subscriptionItem: SubscriptionItemRelateToOneForCreateInput
   order: OrderRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input SubscriptionItemRelateToOneForCreateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
 }
 
 type Order {
@@ -2820,8 +2844,8 @@ type Category {
   locationsCount(where: LocationWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
-  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
   eventsCount(where: EventWhereInput! = {}): Int
 }
@@ -2844,7 +2868,7 @@ input CategoryWhereInput {
   services: ServiceManyRelationFilter
   locations: LocationManyRelationFilter
   products: ProductManyRelationFilter
-  subscriptions: SubscriptionPlanManyRelationFilter
+  subscriptionPlans: SubscriptionPlanManyRelationFilter
   events: EventManyRelationFilter
 }
 
@@ -2863,7 +2887,7 @@ input CategoryUpdateInput {
   services: ServiceRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
-  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
 }
 
@@ -2881,7 +2905,7 @@ input CategoryCreateInput {
   services: ServiceRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
-  subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
 }
 
@@ -2900,8 +2924,8 @@ type Tag {
   locationsCount(where: LocationWhereInput! = {}): Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
-  subscriptions(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
-  subscriptionsCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
+  subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
   events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
   eventsCount(where: EventWhereInput! = {}): Int
 }
@@ -2923,7 +2947,7 @@ input TagWhereInput {
   services: ServiceManyRelationFilter
   locations: LocationManyRelationFilter
   products: ProductManyRelationFilter
-  subscriptions: SubscriptionPlanManyRelationFilter
+  subscriptionPlans: SubscriptionPlanManyRelationFilter
   events: EventManyRelationFilter
 }
 
@@ -2940,7 +2964,7 @@ input TagUpdateInput {
   services: ServiceRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
   products: ProductRelateToManyForUpdateInput
-  subscriptions: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
 }
 
@@ -2957,7 +2981,7 @@ input TagCreateInput {
   services: ServiceRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput
   products: ProductRelateToManyForCreateInput
-  subscriptions: SubscriptionPlanRelateToManyForCreateInput
+  subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
 }
 
@@ -3109,7 +3133,7 @@ type Mutation {
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   checkout: Order
-  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID): CartItem
+  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, subscriptionPlanId: ID): CartItem
 }
 
 type Query {

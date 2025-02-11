@@ -40,6 +40,7 @@ export const OrderItem: Lists.OrderItem = list({
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
 		tickets: relationship({ ref: "Ticket.orderItem", many: true }),
+		subscriptionItem: relationship({ ref: "SubscriptionItem.orderItem", many: false }),
 		order: relationship({ ref: "Order.items" }),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },

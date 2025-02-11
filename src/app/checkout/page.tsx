@@ -70,6 +70,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
             stripePriceId
           }
         }
+        subscriptionPlan {
+          id
+          name
+          image
+          price
+          stripePriceId
+          billing_interval
+        }
       }
     `,
 	})) as User

@@ -494,6 +494,28 @@ export const rules = {
 			},
 		}
 	},
+  canViewSubscriptionPlans({ session }: ListAccessArgs) {
+		// if (!isLoggedIn({ session })) return false;
+
+		if (permissions.canManageSubscriptionPlans({ session })) return true // They can read everything!
+		if (!session) return false
+		// if(session) return {
+		//   OR: [
+		//     { author: { id: { equals: session.itemId } } },
+		//     { status: { equals: "AVAILABLE" } },
+		//     { status: { equals: "PUBLIC" } },
+		//     { status: { equals: "OUT_OF_STOCK" } },
+		//   ],
+		// };
+		// ? if anonymous user
+		return {
+			OR: [
+				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
+				{ status: { equals: "PUBLIC" } },
+				{ status: { equals: "OUT_OF_STOCK" } },
+			],
+		}
+	},
 	canManageSubscriptionPlans({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 

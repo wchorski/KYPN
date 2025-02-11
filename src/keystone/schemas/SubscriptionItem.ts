@@ -136,11 +136,23 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		}),
 		stripeChargeId: text(),
 		stripeSubscriptionId: text(),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		dateModified: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		orderItem: relationship({ ref: "OrderItem.subscriptionItem", many: false }),
 	},
 
 	hooks: {
+    validate: {
+			create: async ({ resolvedData, context, inputData }) => {
+				if (!resolvedData.subscriptionPlan) throw new Error('!!! SubscriptionItem must have SubscriptionPlan')
+			},
+		},
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {
 			// if (operation === 'create') {
 			//? checkout is handles w /app/api/checkout/subscriptionplan & /app/keystone/mutations/checkoutSubscripiton

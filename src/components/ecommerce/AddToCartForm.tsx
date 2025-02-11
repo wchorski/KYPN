@@ -14,29 +14,33 @@ import { InputField } from "@components/InputField"
 import { delay } from "@lib/utils"
 import { ReactNode, useState } from "react"
 import { CartItem } from "@ks/types"
-import { IconCheckMark, IconShoppingBagAdd, IconSpinnerLines } from "@lib/useIcons"
+import {
+	IconCheckMark,
+	IconExclamationCircle,
+	IconShoppingBagAdd,
+	IconSpinnerLines,
+} from "@lib/useIcons"
 import { one_click_form } from "@styles/menus/form.module.scss"
-
-type State =
-	| "loading"
-	| "pending"
-	| "error"
-	| "out_of_stock"
-	| "success"
-	| undefined
 
 type Props = {
 	productId: string | undefined
 	eventId: string | undefined
+	subscriptionPlanId: string | undefined
 	sessionId: string
-	type: "SALE" | "RENTAL"
+	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
 }
 
-export default function AddToCartForm({ eventId, productId, type }: Props) {
+export default function AddToCartForm({
+	eventId,
+	productId,
+	subscriptionPlanId,
+	type,
+}: Props) {
 	const initState: AddToCartState = {
 		values: {
 			eventId,
 			productId,
+			subscriptionPlanId,
 			quantity: 1,
 			type,
 		},
@@ -47,8 +51,11 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 		id: undefined,
 		data: undefined,
 	}
-	const { state, action, } = useForm(onSubmit, initState)
-	const [inlineIconState, setInlineIconState] = useState<ReactNode>(<IconShoppingBagAdd />)
+	const { state, action } = useForm(onSubmit, initState)
+	const [inlineIconState, setInlineIconState] = useState<ReactNode>(
+		<IconShoppingBagAdd />
+	)
+	const [isPending, setIsPending] = useState(false)
 	const { addToCart } = useCart()
 
 	// async function onSubmit(
@@ -56,20 +63,19 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 	// 	data: FormData
 	// ): Promise<AddToCartState> {
 
-	async function onSubmit(
-		e: React.FormEvent
-	): Promise<AddToCartState>  {
-    e.preventDefault()
+	async function onSubmit(e: React.FormEvent): Promise<AddToCartState> {
+		e.preventDefault()
 		// if (!session) return router.push(`/auth`)
 
 		try {
-      setInlineIconState(<IconSpinnerLines />)
+			setIsPending(true)
+			setInlineIconState(<IconSpinnerLines />)
 			const res = await fetch(`/api/gql/protected`, {
 				method: "POST",
 				body: JSON.stringify({
 					query: `
-            mutation AddToCart($type: String!, $quantity: Int!, $productId: ID, $eventId: ID) {
-              addToCart(type: $type, quantity: $quantity, productId: $productId, eventId: $eventId) {
+            mutation AddToCart($type: String!, $quantity: Int!, $productId: ID, $eventId: ID, $subscriptionPlanId: ID) {
+              addToCart(type: $type, quantity: $quantity, productId: $productId, eventId: $eventId, subscriptionPlanId: $subscriptionPlanId) {
                 ${query}
               }
             }
@@ -79,6 +85,7 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 						// ...state.values,
 						type: state.values?.type,
 						productId: state.values?.productId,
+						subscriptionPlanId: state.values?.subscriptionPlanId,
 						eventId: state.values?.eventId,
 						quantity: Number(state.values?.quantity),
 					},
@@ -87,28 +94,32 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			const data = (await res.json()) as {
 				addToCart: CartItem
 			}
-			
-			if (!data.addToCart)
+
+			if (!data.addToCart) {
+				setIsPending(false)
+				setInlineIconState(<IconExclamationCircle />)
 				return {
 					...state,
 					error: "No Data",
 				}
+			}
 
 			await delay(800)
 			setInlineIconState(<IconCheckMark />)
 			await delay(600)
 			setInlineIconState(<IconShoppingBagAdd />)
-
+			setIsPending(false)
 			addToCart(data.addToCart)
-      
+
 			return {
 				...state,
 				// data,
 				success: "added to cart",
 			}
-
 		} catch (error: any) {
+			setIsPending(false)
 			setInlineIconState("error")
+			setInlineIconState(<IconExclamationCircle />)
 			console.log("!!! addtocart error: ", error)
 			return {
 				...state,
@@ -121,13 +132,19 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 		<form
 			// action={action}
 			onSubmit={onSubmit}
-      className={one_click_form} 
+			className={one_click_form}
 		>
 			<InputField
 				type={"hidden"}
 				defaultValue={state.values?.productId}
 				name={"productId"}
 				error={state.valueErrors?.productId}
+			/>
+			<InputField
+				type={"hidden"}
+				defaultValue={state.values?.subscriptionPlanId}
+				name={"subscriptionPlanId"}
+				error={state.valueErrors?.subscriptionPlanId}
 			/>
 			<InputField
 				type={"hidden"}
@@ -145,8 +162,9 @@ export default function AddToCartForm({ eventId, productId, type }: Props) {
 			<SubmitButtonInlineIcons
 				icon={inlineIconState}
 				className={"button medium"}
-        title="add to cart"
-        label={''}
+				title="add to cart"
+				label={""}
+				isPending={isPending}
 			/>
 		</form>
 	)

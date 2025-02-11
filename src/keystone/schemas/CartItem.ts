@@ -40,6 +40,7 @@ export const CartItem: Lists.CartItem = list({
 			options: [
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
+				{ label: "Subscription", value: "SUBSCRIPTION" },
 			],
 			validation: { isRequired: true },
 			ui: {
@@ -69,7 +70,7 @@ export const CartItem: Lists.CartItem = list({
 						return product.price * item.quantity
 					}
 
-          // TODO does this take into account addons added to booking?
+					// TODO does this take into account addons added to booking?
 					if (item.bookingId) {
 						const booking = await context.query.Booking.findOne({
 							where: { id: item.bookingId || "no_product" },
@@ -86,21 +87,22 @@ export const CartItem: Lists.CartItem = list({
 		product: relationship({ ref: "Product" }),
 		booking: relationship({ ref: "Booking" }),
 		event: relationship({ ref: "Event" }),
+		subscriptionPlan: relationship({ ref: "SubscriptionPlan" }),
 		user: relationship({ ref: "User.cart" }),
 	},
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
-
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
 					"booking",
 					"coupon",
+					"subscriptionPlan",
 				])
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking", "coupon"] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "subscriptionPlan", "coupon"] set'
 					)
 			},
 			update: ({ resolvedData, item }) => {
@@ -109,14 +111,16 @@ export const CartItem: Lists.CartItem = list({
 				// console.log({ thisNewCombinedData })
 				//? check that no other cartItem type is being connected or disconnected
 				const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, [
-					"productId",
-					"eventId",
-					"bookingId",
-					"couponId",
 					"product",
+					"productId",
 					"event",
+					"eventId",
 					"booking",
+					"bookingId",
+					"subscriptionPlanId",
+					"subscriptionPlan",
 					"coupon",
+					"couponId",
 				])
 				console.log(
 					"🐸🐸🐸 check that cartItem can only have one of item type 🐸🐸🐸"

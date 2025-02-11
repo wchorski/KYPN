@@ -8,6 +8,7 @@ import type { CartItem } from "@ks/types"
 import ErrorMessage from "../ErrorMessage"
 import { useCart } from "@components/hooks/CartStateContext"
 import Link from "next/link"
+import Flex from "@components/layouts/Flex"
 
 type UpdateCartItem = {
 	id: string
@@ -20,16 +21,16 @@ type Props = {
 }
 
 export default function CartItem({ item, sessionId }: Props) {
-
-	if (item.event) return <TicketItem item={item}/>
+	if (item.event) return <TicketItem item={item} />
 	if (item.product) return <ProductItem item={item} sessionId={sessionId} />
+	if (item.subscriptionPlan)
+		return <SubscriptionPlanItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
 
 	return <p>no product or event associated</p>
 }
 
-function BookingItem({item}:{item: CartItem}) {
-
+function BookingItem({ item }: { item: CartItem }) {
 	if (!item.booking) return <p>Booking Not Found</p>
 
 	const {
@@ -39,15 +40,18 @@ function BookingItem({item}:{item: CartItem}) {
 	return (
 		<li className={styles.item}>
 			<ImageDynamic
-				photoIn={{ url: service?.image || '', altText: `${summary} featured image` }}
+				photoIn={{
+					url: service?.image || "",
+					altText: `${summary} featured image`,
+				}}
 			/>
 
 			<div>
 				<h5>
 					<Link href={`/bookings/${id}`}> {summary} </Link>
 				</h5>
-        
-        <span className="sub-text">booking</span>
+
+				<span className="sub-text">booking</span>
 			</div>
 
 			<div className={perItemTotal}>
@@ -59,8 +63,7 @@ function BookingItem({item}:{item: CartItem}) {
 	)
 }
 
-function TicketItem({item}:{item: CartItem}) {
-
+function TicketItem({ item }: { item: CartItem }) {
 	if (!item.event) return <p>No Event</p>
 
 	const {
@@ -91,7 +94,13 @@ function TicketItem({item}:{item: CartItem}) {
 	)
 }
 
-function ProductItem({item, sessionId}:{item: CartItem, sessionId: string|undefined}) {
+function ProductItem({
+	item,
+	sessionId,
+}: {
+	item: CartItem
+	sessionId: string | undefined
+}) {
 	const [quantityState, setQuantityState] = useState(item.quantity)
 
 	useEffect(() => {
@@ -182,6 +191,100 @@ function ProductItem({item, sessionId}:{item: CartItem, sessionId: string|undefi
 					) : (
 						<></>
 					)}
+				</div>
+
+				<CartRemoveItem id={item.id} />
+			</li>
+
+			<ErrorMessage error={error} />
+		</>
+	)
+}
+
+function SubscriptionPlanItem({
+	item,
+	sessionId,
+}: {
+	item: CartItem
+	sessionId: string | undefined
+}) {
+	const [quantityState, setQuantityState] = useState(item.quantity)
+
+	useEffect(() => {
+		setQuantityState(item.quantity)
+
+		// return () =>
+	}, [item.quantity])
+	const [error, setError] = useState<any>(undefined)
+	const { getUserCart } = useCart()
+
+	async function updateQuantity(value: number) {
+		const variables = {
+			where: {
+				id: item.id,
+			},
+			data: {
+				quantity: value,
+			},
+		}
+
+		try {
+			// const { user } = await client.request(query, variables) as { user:User }
+			const res = await fetch(`/api/gql/protected`, {
+				method: "POST",
+				body: JSON.stringify({ query, variables }),
+			})
+
+			const { updateCartItem } = (await res.json()) as {
+				updateCartItem: UpdateCartItem
+			}
+			setQuantityState(updateCartItem.quantity)
+		} catch (error) {
+			console.warn("cart item udate error: ", error)
+			setError(error)
+		} finally {
+			getUserCart(sessionId)
+		}
+	}
+
+	if (!item?.subscriptionPlan)
+		return (
+			<li className={styles.item}>
+				<p>This cart item is no longer supplied by our store</p>
+			</li>
+		)
+
+	const {
+		subscriptionPlan: { id, name, price, billing_interval, image },
+		type,
+		quantity,
+	} = item
+
+	return (
+		<>
+			<li className={styles.item}>
+				<ImageDynamic
+					photoIn={{ url: image, altText: `${name} featured image` }}
+				/>
+
+				<Flex flexDirection={'column'}>
+					<h5>
+						<Link href={`/shop/subscription-plans/${id}`}>{name}</Link>
+					</h5>
+
+					<input
+						type="number"
+						value={quantityState}
+						// defaultValue={quantity}
+						onChange={(e) => updateQuantity(Number(e.target.value))}
+						// todo only update once input is unselected
+						// onBlur={e => updateQuantity(Number(e.target.value))}
+					/>
+				</Flex>
+
+				<div className={perItemTotal}>
+					<p>{moneyFormatter(price * quantity)}</p>
+					<em>{billing_interval} subscription</em>
 				</div>
 
 				<CartRemoveItem id={item.id} />

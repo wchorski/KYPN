@@ -1,5 +1,4 @@
 import { graphql, group, list } from "@keystone-6/core"
-// @ts-ignore
 import type { Lists } from ".keystone/types"
 import {
 	decimal,
@@ -16,7 +15,13 @@ import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"
 import { componentBlocks } from "../../keystone/blocks"
 import { envs } from "../../../envs"
-import { stripeArchiveProduct, stripeProductDelete, stripeServiceCreate } from "../../lib/stripe"
+import {
+	stripeArchiveProduct,
+	stripeProductCreate,
+	stripeProductDelete,
+	stripeProductUpdate,
+	stripeServiceCreate,
+} from "../../lib/stripe"
 
 export const Service: Lists.Service = list({
 	access: {
@@ -202,50 +207,89 @@ export const Service: Lists.Service = list({
 					ref: "Tag.services",
 					many: true,
 				}),
-				dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-				dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
 			},
 		}),
 	},
 	hooks: {
-		// beforeOperation: async ({ operation, item, resolvedData }) => {
-		// },
-		async afterOperation({ operation, item, resolvedData, originalItem }) {
-			if (operation === "create") {
-				const { id, price, name, excerpt, status, authorId, image } = item
-				await stripeServiceCreate({
+		beforeOperation: {
+			create: async ({ item, resolvedData, context }) => {
+				const {
 					id,
 					name,
 					excerpt,
-					category: "unknown",
 					status,
-					authorId: authorId || "no_author_id",
-					type: "service",
-					image,
+					author,
 					price,
-					//TODO if incremental payment split price over x months
-					// billing_interval: "month",
-					url: envs.FRONTEND_URL + `/services/${id}`,
+					stripeProductId,
+					stripePriceId,
+					image,
+				} = resolvedData
+
+				try {
+					const createdProduct = await stripeProductCreate({
+						// id,
+						name: String(name),
+						price: Number(price),
+						excerpt,
+						category: "product",
+						status,
+						authorId: author?.connect?.id || "no_author_id",
+						type: "product",
+						image,
+						url: envs.FRONTEND_URL + `/products/${id}`,
+						stripeProductId,
+						stripePriceId,
+						billing_interval: undefined,
+					})
+
+					if (createdProduct) {
+						resolvedData.stripeProductId = createdProduct.id
+						resolvedData.stripePriceId = String(createdProduct.default_price)
+					}
+				} catch (error: any) {
+					console.log("!!! 💳 STRIPE:: ", {
+						code: error.code,
+						message: error.raw.message,
+					})
+				}
+			},
+			update: async ({ resolvedData, context, item }) => {
+				//? item.stripeProductId will be undefined on first creation
+				await stripeProductUpdate({
+					stripeProductId: item.stripeProductId,
+					stripePriceId: item.stripePriceId,
+					image: resolvedData.image as string | undefined,
+					price: resolvedData.price as number | undefined,
+					name: resolvedData.name as string | undefined,
+					status: resolvedData.status as string | undefined,
+					// category: resolvedData.category,
+					category: "product",
+					excerpt: resolvedData.excerpt as string | undefined,
+					authorId: resolvedData.author?.connect?.id,
+					billing_interval: undefined,
+				}).then(async (res) => {
+					if (!res) return
+
+					if (res.default_price) {
+						resolvedData.stripePriceId = String(res.default_price)
+					}
 				})
-					.then((stripeRes) => {
-						if (!stripeRes) return
-						resolvedData.stripeProductId = stripeRes.id
-						resolvedData.stripePriceId = String(stripeRes.default_price)
-					})
-					.catch((error) => {
-						throw new Error("!!! Service.ts: Stripe Create Product, ", error)
-					})
-			}
-			if (operation === "update") {
-				console.log("🐸🐸🐸 update stripe service product")
-			}
-			if (operation === "delete") {
-				
-				//? stripe. deleting product is not recommended
-				// as product history will also be erased
-				// await stripeProductDelete(originalItem.stripeProductId)
+
+				resolvedData.dateModified = new Date().toISOString()
+			},
+		},
+		afterOperation: {
+			delete: async ({ originalItem }) => {
 				await stripeArchiveProduct(originalItem.stripeProductId)
-			}
+			},
 		},
 	},
 })

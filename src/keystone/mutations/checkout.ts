@@ -18,7 +18,7 @@ type StripeSession = {
 		id: string
 		payment_intent: string
 		customerId: string
-    amount_total:number
+		amount_total: number
 	}
 }
 
@@ -44,7 +44,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 				throw new Error("!!! mutation.checkout: Session not available")
 
 			const paymentStatus = session.stripeSession?.payment_status || "unpaid"
-      const customerId = session.itemId || session.stripeSession?.customerId
+			const customerId = session.itemId || session.stripeSession?.customerId
 
 			const cartItems = (await sudoContext.query.CartItem.findMany({
 				where: {
@@ -67,6 +67,9 @@ export const checkout = (base: BaseSchemaMeta) =>
           booking {
             id
           }
+          subscriptionPlan {
+            id
+          }
         `,
 			})) as CartItem[]
 
@@ -83,8 +86,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 			// 	session
 			// )
 
-			const amountTotal = calcTotalPrice(cartItems) 
-      const transactionFees = (session.stripeSession?.amount_total || amountTotal) - amountTotal
+			const amountTotal = calcTotalPrice(cartItems)
+			const transactionFees =
+				(session.stripeSession?.amount_total || amountTotal) - amountTotal
 
 			const newOrderItems: OrderItemCreateInput[] = await (async () => {
 				const theseOrderItems = await Promise.all(
@@ -108,7 +112,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 								case item.event !== null:
 									const tixs = await createTicketItemsPerEvent(
 										item,
-                    paymentStatus,
+										paymentStatus,
 										customerId,
 										context
 									)
@@ -119,6 +123,27 @@ export const checkout = (base: BaseSchemaMeta) =>
 										quantity: item.quantity,
 										tickets: {
 											create: tixs,
+										},
+									}
+
+								case item.subscriptionPlan !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subscriptionItem: {
+											create: {
+												subscriptionPlan: {
+													connect: { id: item.subscriptionPlan.id },
+												},
+												status:
+													session.stripeSession?.payment_status === "paid"
+														? "ACTIVE"
+														: "TRIAL",
+												billing_interval:
+													item.subscriptionPlan?.billing_interval,
+												user: { connect: { id: session.itemId } },
+                        stripeSubscriptionId: session.stripeSession?.id + 'sub_🐸🐸🐸🐸🐸🐸🐸???'
+											},
 										},
 									}
 
@@ -138,9 +163,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
 					subTotal: amountTotal,
-          fees: transactionFees,
+					fees: transactionFees,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
-					user: { connect: { id: customerId} },
+					user: { connect: { id: customerId } },
 					stripeCheckoutSessionId: session.stripeSession?.id || "",
 					stripePaymentIntent: session.stripeSession?.payment_intent || "",
 					//TODO maybe not secure
@@ -185,8 +210,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 
 async function createTicketItemsPerEvent(
 	cartItem: CartItem,
-  payment_status: 'paid'|'unpaid',
-  customerId:string|undefined,
+	payment_status: "paid" | "unpaid",
+	customerId: string | undefined,
 	context: Context
 ) {
 	if (!cartItem.event) return

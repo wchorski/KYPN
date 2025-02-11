@@ -96,6 +96,18 @@ function CartStateProvider({ children }: { children: ReactNode }) {
                       image
                     }
                   }
+                  subscriptionPlan {
+                    id
+                    typeof
+                    image
+                    name
+                    slug
+                    excerpt
+                    status
+                    price
+                    billing_interval
+                    stockMax
+                  }
                   coupon {
                     id
                     name

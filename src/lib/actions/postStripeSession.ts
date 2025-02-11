@@ -54,6 +54,8 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 				switch (true) {
 					case !!item.product:
 						return createProductLineItem(item)
+					case !!item.subscriptionPlan:
+						return createSubscriptionLineItem(item)
 					case !!item.booking:
 						return createBookingLineItems(item)
 					case !!item.event:
@@ -66,15 +68,15 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
 
-	console.log({ line_items })
-
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 
+	const hasSubscription = cartItems.some((obj) => obj.subscriptionPlan !== null)
+	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",
 		line_items,
-		mode: "payment",
+		mode: hasSubscription ? "subscription" : "payment",
 		return_url: returnUrl,
 		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
@@ -146,6 +148,38 @@ function createProductLineItem(
 						},
 
 						unit_amount: product.price,
+					},
+			  }),
+	}
+}
+
+function createSubscriptionLineItem(
+	cartItem: CartItem
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.subscriptionPlan) return undefined
+	const { subscriptionPlan, quantity } = cartItem
+	return {
+		quantity,
+		// price: product.stripePriceId,
+		...(subscriptionPlan.stripePriceId
+			? { price: subscriptionPlan.stripePriceId }
+			: {
+					price_data: {
+						// TODO make this part of CartItem schema item.currency, not hard coded
+						currency: "usd",
+						recurring: {
+							interval: subscriptionPlan.billing_interval,
+						},
+						product_data: {
+							name: subscriptionPlan.name,
+							images: [subscriptionPlan?.image || ""],
+							metadata: {
+								subscriptionPlanId: subscriptionPlan.id,
+								typeof: "subscriptionPlan",
+							},
+						},
+
+						unit_amount: subscriptionPlan.price,
 					},
 			  }),
 	}

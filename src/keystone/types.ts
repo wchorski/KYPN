@@ -216,6 +216,7 @@ export type CartItem = Lists.CartItem.Item & {
 	product?: Product
 	event?: Event
 	booking?: Booking
+	subscriptionPlan?: SubscriptionPlan
 	coupon?: Coupon
 	user?: User
 	subTotal: number

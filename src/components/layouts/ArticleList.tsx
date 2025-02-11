@@ -1,5 +1,5 @@
 import styles, { post_card, row_graphic } from "@styles/articles.module.css"
-import { Post, Product, Service } from "@ks/types"
+import { Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { GridList } from "@components/layouts/GridList"
 import { NoDataFoundPage } from "./NoDataFoundPage"
 import { StatusBadge } from "@components/StatusBadge"
@@ -14,8 +14,8 @@ import { PriceTag } from "@components/ecommerce/PriceTag"
 export const revalidate = 5
 
 type Props = {
-	type: "post" | "product" | "service"
-	items: Post[] | Product[] | Service[] | undefined
+	type: "post" | "product" | "service" | "subscriptionPlan"
+	items: Post[] | Product[] | Service[] | SubscriptionPlan[] | undefined
 	buttonText?: string
 }
 
@@ -46,6 +46,10 @@ type ArticleItem = {
 			type: "service"
 			item: Service
 	  }
+	| {
+			type: "subscriptionPlan"
+			item: SubscriptionPlan
+	  }
 )
 
 export function ArticleItem({
@@ -63,6 +67,7 @@ export function ArticleItem({
 				return item.featured_image
 			case "product":
 			case "service":
+			case "subscriptionPlan":
 				return item.image
 
 			default:
@@ -76,6 +81,7 @@ export function ArticleItem({
 				return item.title
 			case "product":
 			case "service":
+			case "subscriptionPlan":
 				return item.name
 
 			default:
@@ -90,6 +96,8 @@ export function ArticleItem({
 			case "product":
 			case "service":
 				return `/${type + "s"}/${id}`
+			case "subscriptionPlan":
+				return `/subscription-plans/${item.id}`
 
 			default:
 				return ""
@@ -167,6 +175,22 @@ export function ArticleItem({
 							}
 							eventId={undefined}
 							productId={item.id}
+							subscriptionPlanId={undefined}
+							sessionId={"session.itemId"}
+						/>
+					</>
+				) : type === "subscriptionPlan" ? (
+					<>
+						<PriceTag
+							price={item.price}
+							hideZeroCents={true}
+							billing_interval={item.billing_interval}
+						/>{" "}
+						<AddToCartForm
+							type={"SUBSCRIPTION"}
+							eventId={undefined}
+							productId={undefined}
+							subscriptionPlanId={item.id}
 							sessionId={"session.itemId"}
 						/>
 					</>

@@ -10,8 +10,8 @@ import { PiUsersThreeFill } from "react-icons/pi"
 import { BsFilePostFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { IoBookmarks } from "react-icons/io5"
 import { FaTags } from "react-icons/fa6"
-import { TiShoppingCart } from "react-icons/ti";
-import { MdOutlineInventory2 } from "react-icons/md";
+import { TiShoppingCart } from "react-icons/ti"
+import { MdOutlineInventory2 } from "react-icons/md"
 import type { CSSProperties } from "react"
 
 export function CustomNavigation({
@@ -20,13 +20,15 @@ export function CustomNavigation({
 }: NavigationProps) {
 	const { data: session, status } = useSession()
 
-  const styleBorder = {
-    borderLeft: "solid 5px #3b82f6",
-    paddingInline: "1rem",
-    display: "flex",
-    gap: ".3rem",
-    flexDirection: "column",
-  } as CSSProperties
+	const styleBorder = {
+		borderLeft: "solid 5px #3b82f6",
+		paddingInline: "1rem",
+		display: "flex",
+		gap: ".3rem",
+		flexDirection: "column",
+	} as CSSProperties
+
+	const lineSeperator = { border: "solid 1px #9999991f" } as CSSProperties
 
 	return (
 		<NavigationContainer authenticatedItem={authenticatedItem}>
@@ -34,9 +36,7 @@ export function CustomNavigation({
 				<p style={styleBorder}>Loading...</p>
 			) : (
 				session?.user && (
-					<div
-						style={styleBorder}
-					>
+					<div style={styleBorder}>
 						<small> logged in as </small>
 
 						<strong>{session.user.name}</strong>
@@ -57,14 +57,14 @@ export function CustomNavigation({
 				)
 			)}
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<PiUsersThreeFill />
 				<NavItem href="/">Dashboard</NavItem>
 				<ListNavItems lists={lists} include={["User", "Role"]} />
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<BsFilePostFill />
 				<ListNavItems
@@ -73,43 +73,45 @@ export function CustomNavigation({
 				/>
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<IoBookmarks />
 				<ListNavItems
 					lists={lists}
-					include={["Booking", "Service", "Rental", "Addon", "Availability", "Location"]}
+					include={["Booking", "Rental", "Availability", "SubscriptionItem"]}
 				/>
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
-        <MdOutlineInventory2 />
+				<MdOutlineInventory2 />
 				<ListNavItems
 					lists={lists}
-					include={["Product", "SubscriptionPlan", "", "Coupon"]}
+					include={[
+						"Product",
+						"Service",
+						"Location",
+						"Addon",
+						"SubscriptionPlan",
+						"",
+						"Coupon",
+					]}
 				/>
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<TiShoppingCart />
-				<ListNavItems
-					lists={lists}
-					include={["Order", "SubscriptionItem"]}
-				/>
+				<ListNavItems lists={lists} include={["Order"]} />
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<BsFillTicketPerforatedFill />
-				<ListNavItems
-					lists={lists}
-					include={["Event", "Ticket"]}
-				/>
+				<ListNavItems lists={lists} include={["Event", "Ticket"]} />
 			</div>
 
-			<hr style={{ border: "solid 1px #9999991f" }} />
+			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<FaTags />
 				<ListNavItems lists={lists} include={["Category", "Tag"]} />
