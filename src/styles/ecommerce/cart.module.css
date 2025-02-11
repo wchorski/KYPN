@@ -238,3 +238,8 @@ footer.footer {
 		font-size: 3rem !important;
 	}
 }
+
+input[type="number"].quantity {
+  padding: 0;
+  height: fit-content;
+}

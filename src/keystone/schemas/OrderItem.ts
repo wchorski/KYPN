@@ -29,6 +29,7 @@ export const OrderItem: Lists.OrderItem = list({
 			options: [
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
+				{ label: "Subscription", value: "SUBSCRIPTION" },
 			],
 			validation: { isRequired: true },
 			ui: {
@@ -40,7 +41,11 @@ export const OrderItem: Lists.OrderItem = list({
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
 		tickets: relationship({ ref: "Ticket.orderItem", many: true }),
-		subscriptionItem: relationship({ ref: "SubscriptionItem.orderItem", many: false }),
+		subscriptionItem: relationship({
+			ref: "SubscriptionItem.orderItem",
+			many: false,
+		}),
+		coupon: relationship({ ref: "Coupon" }),
 		order: relationship({ ref: "Order.items" }),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },
@@ -53,36 +58,70 @@ export const OrderItem: Lists.OrderItem = list({
 	},
 
 	hooks: {
-		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-			// const contextSudo = context.sudo()
+		validate: {
+			create: ({ resolvedData }) => {
+				console.log({ resolvedData })
 
-			if (operation === "create" || operation === "update") {
-				const thisNewCombinedData = { ...item, ...resolvedData }
-
-				const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, [
+				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
+					"event",
 					"booking",
-					"tickets",
+					"coupon",
+					"subscriptionItem",
 				])
+				console.log("!!! hasOnlyOne:: ", hasOnlyOne)
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "booking"] set'
+						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionPlan", "coupon"] set'
 					)
-			}
+			},
+			update: ({ resolvedData, item }) => {
+				const thisNewCombinedData = { ...item, ...resolvedData }
+
+				// console.log({ thisNewCombinedData })
+				//? check that no other cartItem type is being connected or disconnected
+				const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, [
+					"product",
+					"productId",
+					"event",
+					"eventId",
+					"booking",
+					"bookingId",
+					"subscriptionItemId",
+					"subscriptionItem",
+					"coupon",
+					"couponId",
+				])
+
+				console.log({ hasOnlyOne })
+				if (!hasOnlyOne)
+					throw new Error(
+						'!!! Order Item can only have one of ["product", "event", "booking", "coupon", + itemId(s)] set'
+					)
+			},
+		},
+		beforeOperation: {
+			// const contextSudo = context.sudo()
+
+			delete: async ({ item, context }) => {
+				if (item.bookingId) {
+					await context.sudo().db.Booking.updateOne({
+						where: { id: item.bookingId },
+						data: {
+							status: "CANCELED",
+						},
+					})
+				}
+
+				if (item.subscriptionItemId) {
+					await context.sudo().db.SubscriptionItem.updateOne({
+						where: { id: item.subscriptionItemId },
+						data: {
+							status: "CANCELED",
+						},
+					})
+				}
+			},
 		},
 	},
 })
-
-// const currData:Product = {
-//   stockCount: item.product.stockCount - item.quantity,
-// }
-
-// if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
-
-// const product = await context.db.Product.updateOne({
-//   where: {id: item.product.id},
-//   // @ts-ignore
-//   data: currData
-// })
-
-// return product

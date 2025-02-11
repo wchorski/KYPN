@@ -91,14 +91,14 @@ async function NativeCheckoutSession({ id }: { id: string }) {
 		<main className={[page_layout].join(" ")}>
 			<header className={layout_site}>
 				<h1>Checkout Completed</h1>
-        <p className="debug">REMOVE CART ITEMS IF CHECKOUT COMPLETED</p>
+				<p className="debug">REMOVE CART ITEMS IF CHECKOUT COMPLETED</p>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<Callout intent={"success"}>
 					<p>
 						A reciept will be sent via email. You may also review reciepts in
-						your account. If you do not have an account, it is recommened you{" "}
-						<strong>print this page</strong>{" "}
+						your <Link href={`/account`}>account</Link>. If you do not have an
+						account, it is recommened you <strong>print this page</strong>
 					</p>
 				</Callout>
 				<ul>
@@ -124,16 +124,18 @@ async function NativeCheckoutSession({ id }: { id: string }) {
 						))}
 					{order.items
 						.filter((it) => it.tickets)
-						.map(({ tickets }) => tickets.map(tix => (
-              <li key={tix.id}>
-								<Link href={`/tickets/${tix.id}`}>{tix.eventSummary}</Link>
-								:: <StatusBadge type={"ticket"} status={tix.status} />
-							</li>
-            ))
-							
+						.map(({ tickets }) =>
+							tickets.map((tix) => (
+								<li key={tix.id}>
+									<Link href={`/tickets/${tix.id}`}>{tix.eventSummary}</Link>
+									:: <StatusBadge type={"ticket"} status={tix.status} />
+								</li>
+							))
 						)}
 				</ul>
-        <Link className={'button medium'}  href={`/account#orders`}>My Account Orders</Link>
+				<Link className={"button medium"} href={`/account#orders`}>
+					My Account Orders
+				</Link>
 			</div>
 		</main>
 	)
@@ -164,7 +166,11 @@ async function StripeCheckoutCheck({
 				</header>
 				<div className={[page_content, layout_site].join(" ")}>
 					<Callout intent={"success"}>
-						<p>Print this page</p>
+						<p>
+							A reciept will be sent via email. You may also review reciepts in
+							your <Link href={`/account`}>account</Link>. If you do not have an
+							account, it is recommened you <strong>print this page</strong>
+						</p>
 					</Callout>
 					<ul>
 						<li>

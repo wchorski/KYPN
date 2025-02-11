@@ -1,7 +1,7 @@
 import "dotenv/config"
 import type { Lists } from ".keystone/types"
 import type { SubscriptionItem as TypeSubsItem, User } from "../types"
-import { graphql, list } from "@keystone-6/core"
+import { graphql, list, group } from "@keystone-6/core"
 import {
 	checkbox,
 	image,
@@ -13,7 +13,6 @@ import {
 	virtual,
 } from "@keystone-6/core/fields"
 import { isLoggedIn, permissions, rules } from "../access"
-
 import { stripeSubscriptionUpdate } from "../../lib/stripe"
 import { mailSubscription } from "../../lib/mail"
 import { envs } from "../../../envs"
@@ -24,14 +23,14 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		filter: {
 			// todo throwing strange error in keystone main dash
 			// query: rules.canManageOrderItems,
-			query: () => true,
+			query: isLoggedIn,
 			update: rules.canManageSubscriptionItems,
 		},
 		operation: {
-			create: isLoggedIn,
-			query: () => true,
-			update: isLoggedIn,
-			delete: isLoggedIn,
+			create: permissions.canManageSubscriptionItems,
+			query: isLoggedIn,
+			update: permissions.canManageSubscriptionItems,
+			delete: permissions.canManageSubscriptionItems,
 		},
 	},
 
@@ -91,6 +90,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				{ label: "Delinquent", value: "DELINQUENT" },
 			],
 			defaultValue: "ACTIVE",
+			validation: { isRequired: true },
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
@@ -134,24 +134,33 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			//   },
 			// }
 		}),
-		stripeChargeId: text(),
-		stripeSubscriptionId: text(),
-		dateCreated: timestamp({
-			defaultValue: { kind: "now" },
-			validation: { isRequired: true },
-		}),
-		dateModified: timestamp({
-			defaultValue: { kind: "now" },
-			validation: { isRequired: true },
+		...group({
+			label: "Metadata",
+			fields: {
+				stripeSubscriptionId: text(),
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+			},
 		}),
 		orderItem: relationship({ ref: "OrderItem.subscriptionItem", many: false }),
 	},
 
 	hooks: {
-    validate: {
-			create: async ({ resolvedData, context, inputData }) => {
-				if (!resolvedData.subscriptionPlan) throw new Error('!!! SubscriptionItem must have SubscriptionPlan')
+		validate: {
+			create: async ({ resolvedData }) => {
+				if (!resolvedData.subscriptionPlan)
+					throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
 			},
+			// update: async ({ resolvedData }) => {
+			// 	if (!resolvedData.subscriptionPlan)
+			// 		throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
+			// },
 		},
 		beforeOperation: async ({ operation, resolvedData, context, item }) => {
 			// if (operation === 'create') {

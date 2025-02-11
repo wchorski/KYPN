@@ -249,13 +249,12 @@ model SubscriptionItem {
   subscriptionPlanId   String?           @map("subscriptionPlan")
   isActive             Boolean           @default(true)
   isDelinquent         Boolean           @default(false)
-  status               String?           @default("ACTIVE")
+  status               String            @default("ACTIVE")
   billing_interval     String            @default("month")
   notes                String            @default("")
   addons               Addon[]           @relation("Addon_subscriptionItems")
   user                 User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId               String?           @map("user")
-  stripeChargeId       String            @default("")
   stripeSubscriptionId String            @default("")
   dateCreated          DateTime          @default(now())
   dateModified         DateTime          @default(now())
@@ -352,12 +351,15 @@ model OrderItem {
   tickets            Ticket[]          @relation("Ticket_orderItem")
   subscriptionItem   SubscriptionItem? @relation("OrderItem_subscriptionItem", fields: [subscriptionItemId], references: [id])
   subscriptionItemId String?           @unique @map("subscriptionItem")
+  coupon             Coupon?           @relation("OrderItem_coupon", fields: [couponId], references: [id])
+  couponId           String?           @map("coupon")
   order              Order?            @relation("OrderItem_order", fields: [orderId], references: [id])
   orderId            String?           @map("order")
   dateCreated        DateTime          @default(now())
   dateModified       DateTime          @default(now())
 
   @@index([productId])
+  @@index([couponId])
   @@index([orderId])
 }
 
@@ -383,18 +385,19 @@ model Order {
 }
 
 model Coupon {
-  id                   String             @id @default(cuid())
-  name                 String             @unique @default("")
-  stripeId             String             @default("")
-  amount_off           Int?
-  percent_off          Int?
-  duration_in_months   Int?
-  duration             String
-  products             Product[]          @relation("Coupon_products")
-  subscriptionPlans    SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
-  events               Event[]            @relation("Coupon_events")
-  services             Service[]          @relation("Coupon_services")
-  from_CartItem_coupon CartItem[]         @relation("CartItem_coupon")
+  id                    String             @id @default(cuid())
+  name                  String             @unique @default("")
+  stripeId              String             @default("")
+  amount_off            Int?
+  percent_off           Int?
+  duration_in_months    Int?
+  duration              String
+  products              Product[]          @relation("Coupon_products")
+  subscriptionPlans     SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
+  events                Event[]            @relation("Coupon_events")
+  services              Service[]          @relation("Coupon_services")
+  from_CartItem_coupon  CartItem[]         @relation("CartItem_coupon")
+  from_OrderItem_coupon OrderItem[]        @relation("OrderItem_coupon")
 }
 
 model Page {

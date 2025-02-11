@@ -160,12 +160,17 @@ function ProductItem({
 					photoIn={{ url: image, altText: `${name} featured image` }}
 				/>
 
-				<div>
+				<Flex
+					flexDirection={"column"}
+					gap={"ms"}
+					justifyContent={"space-between"}
+				>
 					<h5>
 						<Link href={`/shop/products/${id}`}> {name} </Link>
 					</h5>
 
 					<input
+						className={styles.quantity}
 						type="number"
 						value={quantityState}
 						// defaultValue={quantity}
@@ -173,7 +178,7 @@ function ProductItem({
 						// todo only update once input is unselected
 						// onBlur={e => updateQuantity(Number(e.target.value))}
 					/>
-				</div>
+				</Flex>
 
 				<div className={perItemTotal}>
 					{type === "RENTAL" && rental_price ? (
@@ -267,12 +272,17 @@ function SubscriptionPlanItem({
 					photoIn={{ url: image, altText: `${name} featured image` }}
 				/>
 
-				<Flex flexDirection={'column'}>
+				<Flex
+					flexDirection={"column"}
+					gap={"ms"}
+					justifyContent={"space-between"}
+				>
 					<h5>
 						<Link href={`/shop/subscription-plans/${id}`}>{name}</Link>
 					</h5>
 
 					<input
+						className={styles.quantity}
 						type="number"
 						value={quantityState}
 						// defaultValue={quantity}

@@ -2,8 +2,6 @@
 import { CartItem, User } from "@ks/types"
 import {
 	calcTotalPrice,
-	calcCartRentalTotal,
-	calcCartSaleTotal,
 } from "@lib/calcTotalPrice"
 import {
 	ReactNode,

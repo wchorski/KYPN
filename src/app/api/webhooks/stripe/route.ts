@@ -1,9 +1,6 @@
 // cred - https://stackoverflow.com/questions/71352151/how-to-access-items-metadata-in-stripe-checkout-session/71352601#71352601
 import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
-import { checkout } from "@ks/mutations/checkout"
-import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
@@ -86,7 +83,7 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 		case "customer.subscription.created":
 			console.log("🐸 customer.subscription.created")
-			throw new Error("🐸🐸🐸 🐸🐸🐸 CREATE A SubscriptionItem")
+		// throw new Error("🐸🐸🐸 🐸🐸🐸 CREATE A SubscriptionItem")
 
 		default:
 			// other events that we don't handle
@@ -154,10 +151,6 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	// if (!checkoutSession.metadata?.typeof)
 	// 	throw new Error("!!! ❌ stripe did not have typeof in metadata")
 
-	console.log({ checkoutSession })
-	console.log({ lineItems })
-  
-
 	const data = (await keystoneContext
 		.withSession({
 			stripeSession: {
@@ -166,6 +159,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 				payment_intent: checkoutSession.payment_intent,
 				customerId: checkoutSession.metadata.customerId,
 				amount_total: checkoutSession.amount_total,
+				subscriptionId: checkoutSession.subscription,
 			},
 		})
 		.graphql.run({

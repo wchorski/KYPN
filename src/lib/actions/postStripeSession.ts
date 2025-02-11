@@ -88,6 +88,14 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			// 	: {}),
 			orderId: null,
 		},
+    // https://docs.stripe.com/payments/checkout/free-trials
+		...(hasSubscription
+			? {
+					subscription_data: {
+						trial_period_days: envs.STRIPE_SUB_TRIAL_PERIOD_DAYS,
+					},
+			  }
+			: {}),
 	})
 
 	if (!session.client_secret) throw new Error("Error initiating Stripe session")

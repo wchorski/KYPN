@@ -73,13 +73,18 @@ export function ShoppingCart() {
 			<CartItemsList />
 
 			<footer>
-				<h3>Total: </h3>
-				<p>
-					<CartTotal />
-					{cartItems.filter((i) => i.type === "RENTAL").length > 0 && (
-						<em> + rental </em>
-					)}
-				</p>
+				<div className="flex" style={{ alignItems: "baseline" }}>
+					<h3>Total: </h3>
+					<p>
+						<CartTotal />
+						{cartItems.some((i) => i.type === "RENTAL") && (
+							<em className={"sub-text"}> + rental </em>
+						)}
+						{cartItems.some((i) => i.type === "SUBSCRIPTION") && (
+							<em className="sub-text"> + subscription </em>
+						)}
+					</p>
+				</div>
 				<Link
 					href={"/checkout"}
 					onClick={() => closeCart()}

@@ -19,6 +19,7 @@ type StripeSession = {
 		payment_intent: string
 		customerId: string
 		amount_total: number
+		subscriptionId: string
 	}
 }
 
@@ -69,6 +70,7 @@ export const checkout = (base: BaseSchemaMeta) =>
           }
           subscriptionPlan {
             id
+            billing_interval
           }
         `,
 			})) as CartItem[]
@@ -133,7 +135,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 										subscriptionItem: {
 											create: {
 												subscriptionPlan: {
-													connect: { id: item.subscriptionPlan.id },
+													connect: { id: item.subscriptionPlan?.id },
 												},
 												status:
 													session.stripeSession?.payment_status === "paid"
@@ -141,8 +143,15 @@ export const checkout = (base: BaseSchemaMeta) =>
 														: "TRIAL",
 												billing_interval:
 													item.subscriptionPlan?.billing_interval,
-												user: { connect: { id: session.itemId } },
-                        stripeSubscriptionId: session.stripeSession?.id + 'sub_🐸🐸🐸🐸🐸🐸🐸???'
+												user: {
+													connect: {
+														id:
+															session.itemId ||
+															session.stripeSession?.customerId,
+													},
+												},
+												stripeSubscriptionId:
+													session.stripeSession?.subscriptionId,
 											},
 										},
 									}
@@ -158,6 +167,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 
 			if (!newOrderItems)
 				throw new Error("!!! mutation.checkout: no newOrderItems ")
+
+			JSON.stringify({ newOrderItems }, null, 2)
 
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({

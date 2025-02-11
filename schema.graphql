@@ -1659,7 +1659,6 @@ type SubscriptionItem {
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   user: User
-  stripeChargeId: String
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -1679,12 +1678,11 @@ input SubscriptionItemWhereInput {
   subscriptionPlan: SubscriptionPlanWhereInput
   isActive: BooleanFilter
   isDelinquent: BooleanFilter
-  status: StringNullableFilter
+  status: StringFilter
   billing_interval: StringFilter
   notes: StringFilter
   addons: AddonManyRelationFilter
   user: UserWhereInput
-  stripeChargeId: StringFilter
   stripeSubscriptionId: StringFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
@@ -1710,7 +1708,6 @@ input SubscriptionItemOrderByInput {
   status: OrderDirection
   billing_interval: OrderDirection
   notes: OrderDirection
-  stripeChargeId: OrderDirection
   stripeSubscriptionId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -1726,7 +1723,6 @@ input SubscriptionItemUpdateInput {
   notes: String
   addons: AddonRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
-  stripeChargeId: String
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -1754,7 +1750,6 @@ input SubscriptionItemCreateInput {
   notes: String
   addons: AddonRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
-  stripeChargeId: String
   stripeSubscriptionId: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2162,6 +2157,7 @@ type OrderItem {
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketsCount(where: TicketWhereInput! = {}): Int
   subscriptionItem: SubscriptionItem
+  coupon: Coupon
   order: Order
   dateCreated: DateTime
   dateModified: DateTime
@@ -2182,6 +2178,7 @@ input OrderItemWhereInput {
   booking: BookingWhereInput
   tickets: TicketManyRelationFilter
   subscriptionItem: SubscriptionItemWhereInput
+  coupon: CouponWhereInput
   order: OrderWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
@@ -2202,6 +2199,7 @@ input OrderItemUpdateInput {
   booking: BookingRelateToOneForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
   subscriptionItem: SubscriptionItemRelateToOneForUpdateInput
+  coupon: CouponRelateToOneForUpdateInput
   order: OrderRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -2225,6 +2223,7 @@ input OrderItemCreateInput {
   booking: BookingRelateToOneForCreateInput
   tickets: TicketRelateToManyForCreateInput
   subscriptionItem: SubscriptionItemRelateToOneForCreateInput
+  coupon: CouponRelateToOneForCreateInput
   order: OrderRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
