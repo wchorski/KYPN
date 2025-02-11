@@ -244,6 +244,7 @@ export const Product: Lists.Product = list({
 					author,
 					price,
 					stripeProductId,
+          stripePriceId,
 					image,
 				} = resolvedData
 
@@ -260,6 +261,7 @@ export const Product: Lists.Product = list({
 						image,
 						url: envs.FRONTEND_URL + `/products/${id}`,
 						stripeProductId,
+            stripePriceId,
 						billing_interval: undefined,
 					})
 
@@ -267,14 +269,18 @@ export const Product: Lists.Product = list({
 						resolvedData.stripeProductId = createdProduct.id
 						resolvedData.stripePriceId = String(createdProduct.default_price)
 					}
-				} catch (error) {
-					console.log("!!! 💳 STRIPE:: ", error)
+				} catch (error: any) {
+					console.log("!!! 💳 STRIPE:: ", {
+						code: error.code,
+						message: error.raw.message,
+					})
 				}
 			},
 			update: async ({ resolvedData, context, item }) => {
 				//? item.stripeProductId will be undefined on first creation
 				await stripeProductUpdate({
 					stripeProductId: item.stripeProductId,
+					stripePriceId: item.stripePriceId,
 					image: resolvedData.image as string | undefined,
 					price: resolvedData.price as number | undefined,
 					name: resolvedData.name as string | undefined,

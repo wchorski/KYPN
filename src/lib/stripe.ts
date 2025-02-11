@@ -23,15 +23,24 @@ type StripeProductCreate = {
 	billing_interval: Billing_Interval | undefined
 	url: string
 	stripeProductId: string | undefined
+	stripePriceId: string | undefined
 }
 
-export async function stripeProductRetrieve(id: string) {
+export async function stripeProductRetrieve(id: string | undefined) {
 	if (!id) return
 	// const products = await stripeConfig.products.search({
 	//   query: 'active:\'true\' AND metadata[\'order_id\']:\'6735\'',
 	// });
 	const product = await stripeConfig.products.retrieve(id)
 	return product
+}
+export async function stripePriceRetrieve(id: string | undefined) {
+	if (!id) return
+	// const products = await stripeConfig.products.search({
+	//   query: 'active:\'true\' AND metadata[\'order_id\']:\'6735\'',
+	// });
+	const price = await stripeConfig.prices.retrieve(id)
+	return price
 }
 
 export async function stripeProductCreate(props: StripeProductCreate) {
@@ -48,10 +57,11 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 				type: error.type,
 				code: error.code,
 				message: error.raw.message,
+        log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID"
 			})
 		}
 	}
-  console.log('🐸 SHOULD NOT GET PAST THIS. SHOULD BE UPDATING EXISING');
+
 	const {
 		// id,
 		name,
@@ -68,7 +78,7 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 
 	const stripeCreateParams: Stripe.ProductCreateParams = {
 		name,
-		active: true,
+		active: !["ARCHIVED", "DRAFT"].includes(String(status)),
 		description: excerpt || "no_description",
 		metadata: {
 			// productId: id,
@@ -103,7 +113,12 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 		// 	console.log({ res })
 		// 	console.log({ resolvedData })
 		// })
-		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+		.catch((error) =>
+			console.log("!!! 💳 STRIPE:: ", {
+				code: error.code,
+				message: error.raw.message,
+			})
+		)
 	//TODO why is this returning `undefined`?
 	// console.log({ res })
 	return res
@@ -189,9 +204,12 @@ export async function stripeCustomerCreate({
 // as product history will also be erased
 export async function stripeProductDelete(id: string | undefined) {
 	if (!envs.STRIPE_PUBLIC_KEY || !id) return
-	await stripeConfig.products
-		.del(id)
-		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+	await stripeConfig.products.del(id).catch((error) =>
+		console.log("!!! 💳 STRIPE:: ", {
+			code: error.code,
+			message: error.raw.message,
+		})
+	)
 }
 
 export async function stripeArchiveProduct(id: string | undefined) {
@@ -211,9 +229,12 @@ export async function stripeArchiveProduct(id: string | undefined) {
 }
 
 export async function stripeCustomerDelete(id: string) {
-	const deleted = await stripeConfig.customers
-		.del(id)
-		.catch((error) => console.log("!!! ❌💳 STRIPE: ", error))
+	const deleted = await stripeConfig.customers.del(id).catch((error) =>
+		console.log("!!! 💳 STRIPE:: ", {
+			code: error.code,
+			message: error.raw.message,
+		})
+	)
 
 	return deleted
 }
@@ -235,6 +256,7 @@ type Price = {
 
 type ProductUpdate = {
 	stripeProductId: string | undefined
+	stripePriceId: string | undefined
 	currency?: "usd" | string
 	price: number | undefined
 	image: string | undefined
@@ -256,6 +278,7 @@ export async function stripeProductUpdate({
 	excerpt,
 	price,
 	stripeProductId,
+	stripePriceId,
 	billing_interval,
 }: ProductUpdate) {
 	if (!envs.STRIPE_PUBLIC_KEY || !stripeProductId) return
@@ -263,6 +286,9 @@ export async function stripeProductUpdate({
 	let stripeUpdateParams: Stripe.ProductUpdateParams = {
 		name,
 		description: excerpt,
+		...(status
+			? { active: !["ARCHIVED", "DRAFT"].includes(String(status)) }
+			: {}),
 		// default_price: newPrice.id,
 		...(image ? { images: [image] } : {}),
 		metadata: {
@@ -272,24 +298,32 @@ export async function stripeProductUpdate({
 		},
 	}
 
-  //TODO check if stripePriceId exists. Is it the same amount, billing_interval, etc? then just link existing
+	//TODO check if stripePriceId exists. Is it the same amount, billing_interval, etc? then just link existing
 	if (price) {
-		const newPrice = await stripeConfig.prices.create({
-			unit_amount: price,
-			currency,
-			product: stripeProductId,
-			...(billing_interval
-				? {
-						recurring: {
-							interval: billing_interval,
-						},
-				  }
-				: {}),
-		})
-		stripeUpdateParams = {
-			...stripeUpdateParams,
-			default_price: newPrice.id,
-			active: !["ARCHIVED"].includes(String(status)),
+		// check if stripePriceId exists?
+
+		const retrievedPrice = await stripePriceRetrieve(stripePriceId)
+		// if it exists then set .default_price to ID
+		if (retrievedPrice) {
+      // retrievedPrice.unit_amount
+      // retrievedPrice.billing_scheme
+			stripeUpdateParams.default_price = stripePriceId
+		} else {
+			// if not create new
+			const newPrice = await stripeConfig.prices.create({
+				unit_amount: price,
+				currency,
+				product: stripeProductId,
+				...(billing_interval
+					? {
+							recurring: {
+								interval: billing_interval,
+							},
+					  }
+					: {}),
+			})
+
+			stripeUpdateParams.default_price = newPrice.id
 		}
 	}
 
