@@ -118,14 +118,14 @@ function TicketItem({ item }: { item: CartItem }) {
 
 			<div>
 				<h5>
-					<Link href={`/shop/products/${id}`}> {summary} </Link>
+					<Link href={`/events/${id}`}> {summary} </Link>
 				</h5>
 
 				<span>{quantity}</span>
 			</div>
 
 			<div className={perItemTotal}>
-				<p>{moneyFormatter(price * quantity)}</p>
+				<p>{moneyFormatter(( price) * quantity)}</p>
 				<em> {moneyFormatter(price)} each </em>
 			</div>
 
@@ -206,7 +206,7 @@ function ProductItem({
 					justifyContent={"space-between"}
 				>
 					<h5>
-						<Link href={`/shop/products/${id}`}> {name} </Link>
+						<Link href={`/products/${id}`}> {name} </Link>
 					</h5>
 
 					<input
@@ -229,7 +229,7 @@ function ProductItem({
 							<p>
 								{moneyFormatter(rental_price * quantity)} <small>/day</small>{" "}
 							</p>
-							<em> {moneyFormatter(rental_price)} /day each </em>
+							<em> {moneyFormatter(rental_price)} each </em>
 						</>
 					) : price ? (
 						<>

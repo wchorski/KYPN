@@ -1,6 +1,6 @@
 "use server"
 import { envs } from "@/envs"
-import type { CartItem, User } from "@ks/types"
+import type { CartItem, Product, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -33,12 +33,19 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		(() => {
 			const theseCartItems = cartItems.map((item) => {
 				switch (true) {
-					case !!item.product:
+					case !!item.product && item.type === "SALE":
 						return createProductLineItem(item)
 					case !!item.subscriptionPlan:
 						return createSubscriptionLineItem(item)
 					case !!item.booking:
 						return createBookingLineItems(item)
+					case !!item.rental:
+						return createRentalLineItem(
+							item,
+							cartItems
+								.filter((item) => item.type === "RENTAL")
+								.map((item) => item.product)
+						)
 					case !!item.event:
 						return createTicketLineItem(item, user)
 					default:
@@ -68,10 +75,9 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			// 	? { eventId: props.cartItems.map((it) => it.event?.id).join(", ") }
 			// 	: {}),
 			orderId: null,
-      rentalId: '',
-
+			rentalId: "",
 		},
-    // https://docs.stripe.com/payments/checkout/free-trials
+		// https://docs.stripe.com/payments/checkout/free-trials
 		...(hasSubscription
 			? {
 					subscription_data: {
@@ -91,6 +97,34 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 //* Line Item helpers
 //* Line Item helpers
 //* Line Item helpers
+function createRentalLineItem(
+	cartItem: CartItem,
+	rentalProducts: (Product | undefined)[]
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.rental) return undefined
+	const { rental, quantity, subTotal } = cartItem
+
+  console.log('postStripe:: ', {rental});
+	return {
+		price_data: {
+			// TODO make this part of CartItem schema item.currency, not hard coded
+			currency: "usd",
+			product_data: {
+				name: rental.summary,
+				images: [envs.FRONTEND_URL + `/assets/placeholder.png`],
+				metadata: {
+					rentalId: rental.id,
+					typeof: "rental",
+					productIds: rentalProducts.flatMap((prod) => prod?.id).join(", "),
+				},
+			},
+
+			unit_amount: subTotal
+		},
+		quantity,
+	}
+}
+
 function createBookingLineItems(
 	cartItem: CartItem
 ): Stripe.Checkout.SessionCreateParams.LineItem | undefined {

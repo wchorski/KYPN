@@ -1,10 +1,12 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
+import { CartTotal } from "@components/ecommerce/CartTotal"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
 import { RentalForm } from "@components/ecommerce/RentalForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
 import { QUERY_USER_CART } from "@components/hooks/CartStateContext"
+import Flex from "@components/layouts/Flex"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
 import type { User } from "@ks/types"
@@ -64,16 +66,24 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 						{/* // TODO how to show tickets in a pretty manner with cart context */}
 						<h2>Cart Items</h2>
 						<CartItemsList />
+						<Flex alignItems="baseline">
+							<h2>Total: </h2>
+							<p style={{ fontSize: "4rem" }}>
+								<CartTotal />
+							</p>
+						</Flex>
 					</div>
 					<div>
 						{!user.cart.some((item) => item.type === "RENTAL") ? (
 							<div></div>
 						) : (
 							<>
-								<p>
-									Your cart contains rental items. Please fill out rental
-									details first before checking out
-								</p>
+								{!user.cart.some((item) => item.rental) && (
+									<p>
+										Your cart contains rental items. Please fill out rental
+										details first before checking out
+									</p>
+								) }
 								<RentalForm
 									currRental={cartRental ? plainObj(cartRental) : undefined}
 									customerId={session.itemId}

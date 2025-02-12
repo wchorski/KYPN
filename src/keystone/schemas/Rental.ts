@@ -63,7 +63,7 @@ export const Rental: Lists.Rental = list({
 	ui: {
 		// hide backend from non admins
 		listView: {
-			initialColumns: ["start", "end", "customer", "status", "address"],
+			initialColumns: ["start", "days", "customer", "status", "address"],
 			initialSort: { field: "start", direction: "DESC" },
 		},
 	},
@@ -96,14 +96,14 @@ export const Rental: Lists.Rental = list({
 		summary: virtual({
 			field: graphql.field({
 				type: graphql.String,
-				async resolve(item: any, args, context) {
+				async resolve(item, args, context) {
 					const customer = (await context.query.User.findOne({
 						where: { id: item.customerId || "" },
 						query: `
               name
             `,
 					})) as User
-					return customer.name + " | " + item.start
+					return customer.name + " | " + item.start + " | " + calcDaysBetweenTimestamps(item.start, item.end)
 				},
 			}),
 		}),
@@ -133,6 +133,17 @@ export const Rental: Lists.Rental = list({
         min: 0 
       },
 		}),
+    // price: virtual({
+		// 	field: graphql.field({
+		// 		type: graphql.Int,
+		// 		async resolve(item, context) {
+    //       const orderItems = await context.db.OrderItems.query({
+    //         where: 
+    //       })
+		// 			return 0
+		// 		},
+		// 	}),
+		// }),
 		email: text(),
 		phone: text(),
 		name: text(),

@@ -2,7 +2,7 @@ import { graphql, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import { integer, relationship, select, virtual } from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
-import { type Event } from "../types"
+import type { Rental, Event, CartItem as TCartItem } from "../types"
 import { hasOnlyOneValue } from "../../lib/utils"
 
 export const CartItem: Lists.CartItem = list({
@@ -65,10 +65,42 @@ export const CartItem: Lists.CartItem = list({
 					if (item.productId) {
 						const product = await context.query.Product.findOne({
 							where: { id: item.productId || "no_product" },
-							query: `price`,
+							query: `price rental_price`,
 						})
 
+						// if(item.type === 'RENTAL') product.rental_price * item.quantity
+						if (item.type === "RENTAL") return 0
 						return product.price * item.quantity
+					}
+
+					if (item.rentalId) {
+						const rental = (await context.query.Rental.findOne({
+							where: { id: item.rentalId || "no_rental" },
+							query: `days`,
+						})) as Rental
+						const rentalCartItems = (await context.query.CartItem.findMany({
+							where: {
+								user: { id: { equals: item.userId } },
+								type: { equals: "RENTAL" },
+							},
+							query: `
+                quantity
+                product {
+                  name
+                  rental_price
+                }
+              `,
+						})) as TCartItem[]
+
+						const subTotal = rentalCartItems.reduce((accumulator, item) => {
+							if (!item.product?.rental_price)
+								throw new Error(
+									`!!! rental price was not set for Product: ${item.product?.name}`
+								)
+							return accumulator + item.product.rental_price * item.quantity
+						}, 0)
+
+						return subTotal * rental.days
 					}
 
 					// TODO does this take into account addons added to booking?
@@ -95,8 +127,8 @@ export const CartItem: Lists.CartItem = list({
 	hooks: {
 		validate: {
 			create: async ({ resolvedData, context }) => {
-
-        if(!resolvedData?.user?.connect?.id) throw new Error("!!! CartItem must have connected user")
+				if (!resolvedData?.user?.connect?.id)
+					throw new Error("!!! CartItem must have connected user")
 
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
@@ -115,7 +147,13 @@ export const CartItem: Lists.CartItem = list({
 					where: { user: { id: { equals: resolvedData.user.connect.id } } },
 				})
 
-        if(cartItemsByUser.some(item => item.rentalId)) throw new Error('!!! CartItems may only have one Rental item per user session')
+				if (
+					resolvedData?.rental?.connect?.id &&
+					cartItemsByUser.some((item) => item.rentalId)
+				)
+					throw new Error(
+						"!!! CartItems may only have one Rental item per user session"
+					)
 			},
 			update: ({ resolvedData, item }) => {
 				const thisNewCombinedData = { ...item, ...resolvedData }
@@ -131,8 +169,8 @@ export const CartItem: Lists.CartItem = list({
 					"bookingId",
 					"subscriptionPlanId",
 					"subscriptionPlan",
-          "rental",
-          "rentalId",
+					"rental",
+					"rentalId",
 					"coupon",
 					"couponId",
 				])
