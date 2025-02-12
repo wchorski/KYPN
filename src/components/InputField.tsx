@@ -31,16 +31,19 @@ function InputFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
 			className={input_label}
 			title={required ? `${label || name} is required` : label || name}
 		>
-			<span>{label || name}</span>
-      {/* //TODO prob can remove all `input` props that dont have custom logic */}
+			{type !== "checkbox" && <span>{label || name}</span>}
+
+			{/* //TODO prob can remove all `input` props that dont have custom logic */}
 			<input
-        {...props}
-        dir={'rtl'}
-        // max={props.max || 9999}
-        maxLength={props.maxLength || 200}
+				{...props}
+				dir={type === "number" ? "rtl" : ""}
+				// max={props.max || 9999}
+				maxLength={props.maxLength || 200}
 				placeholder={placeholder || `${label || name}...`}
 				ref={ref}
 			/>
+
+			{type === "checkbox" && <span>{label || name}</span>}
 			<span className="error">{error}</span>
 		</label>
 	)

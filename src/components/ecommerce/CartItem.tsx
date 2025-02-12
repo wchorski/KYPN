@@ -26,10 +26,50 @@ export default function CartItem({ item, sessionId }: Props) {
 	if (item.subscriptionPlan)
 		return <SubscriptionPlanItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
+	if (item.rental) return <RentalItem item={item} />
 
 	return <p>no item associated</p>
 }
 
+function RentalItem({ item }: { item: CartItem }) {
+	if (!item.rental) return <p>Rental Not Found</p>
+
+	// TODO add rest of data to the cartItem component
+	const {
+		quantity,
+		rental: { id, summary, price, start, end, address, delivery, days },
+	} = item
+	return (
+		<li
+			className={styles.item}
+			style={{ backgroundColor: "var(--c-txt-bg-darker)" }}
+		>
+			<ImageDynamic
+				photoIn={{
+					url: "",
+					altText: `${summary} featured image`,
+				}}
+			/>
+
+			<div>
+				<h5>
+					<Link href={`/rentals/${id}`}> {summary} </Link>
+				</h5>
+
+				<span className="sub-text">rental</span>
+			</div>
+
+			<div className={perItemTotal}>
+				<p>
+					{days}
+					<small className="sub-text">/days</small>
+				</p>
+			</div>
+
+			<CartRemoveItem id={item.id} />
+		</li>
+	)
+}
 function BookingItem({ item }: { item: CartItem }) {
 	if (!item.booking) return <p>Booking Not Found</p>
 
@@ -174,8 +214,8 @@ function ProductItem({
 						type="number"
 						value={quantityState}
 						dir={"rtl"}
-            min={1}
-            max={999}
+						min={1}
+						max={999}
 						// defaultValue={quantity}
 						onChange={(e) => updateQuantity(Number(e.target.value))}
 						// todo only update once input is unselected
@@ -187,9 +227,9 @@ function ProductItem({
 					{type === "RENTAL" && rental_price ? (
 						<>
 							<p>
-								{moneyFormatter(rental_price * quantity)} <small>/hour</small>{" "}
+								{moneyFormatter(rental_price * quantity)} <small>/day</small>{" "}
 							</p>
-							<em> {moneyFormatter(rental_price)} /hour each </em>
+							<em> {moneyFormatter(rental_price)} /day each </em>
 						</>
 					) : price ? (
 						<>
@@ -285,9 +325,9 @@ function SubscriptionPlanItem({
 					</h5>
 
 					<input
-            dir={"rtl"}
-            min={1}
-            max={999}
+						dir={"rtl"}
+						min={1}
+						max={999}
 						className={styles.quantity}
 						type="number"
 						value={quantityState}

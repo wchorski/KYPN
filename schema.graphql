@@ -1649,6 +1649,7 @@ input SubscriptionPlanCreateInput {
 type SubscriptionItem {
   id: ID!
   typeof: String
+  summary: String
   custom_price: Int
   price: Int
   subscriptionPlan: SubscriptionPlan
@@ -1924,9 +1925,11 @@ type Rental {
   typeof: String
   start: DateTime
   end: DateTime
+  timeZone: String
   summary: String
   durationInHours: Decimal
-  location: String
+  days: Int
+  address: String
   delivery: Boolean
   price: Int
   email: String
@@ -1954,9 +1957,10 @@ input RentalWhereInput {
   id: IDFilter
   start: DateTimeFilter
   end: DateTimeFilter
-  location: StringFilter
+  timeZone: StringFilter
+  address: StringFilter
   delivery: BooleanFilter
-  price: IntFilter
+  price: IntNullableFilter
   email: StringFilter
   phone: StringFilter
   name: StringFilter
@@ -1964,7 +1968,7 @@ input RentalWhereInput {
   order: OrderWhereInput
   addons: AddonManyRelationFilter
   customer: UserWhereInput
-  status: StringNullableFilter
+  status: StringFilter
   dateCreated: DateTimeNullableFilter
   dateModified: DateTimeNullableFilter
 }
@@ -1973,7 +1977,8 @@ input RentalOrderByInput {
   id: OrderDirection
   start: OrderDirection
   end: OrderDirection
-  location: OrderDirection
+  timeZone: OrderDirection
+  address: OrderDirection
   delivery: OrderDirection
   price: OrderDirection
   email: OrderDirection
@@ -1988,7 +1993,8 @@ input RentalOrderByInput {
 input RentalUpdateInput {
   start: DateTime
   end: DateTime
-  location: String
+  timeZone: String
+  address: String
   delivery: Boolean
   price: Int
   email: String
@@ -2018,7 +2024,8 @@ input RentalUpdateArgs {
 input RentalCreateInput {
   start: DateTime
   end: DateTime
-  location: String
+  timeZone: String
+  address: String
   delivery: Boolean
   price: Int
   email: String
@@ -2048,6 +2055,7 @@ type CartItem {
   coupon: Coupon
   product: Product
   booking: Booking
+  rental: Rental
   event: Event
   subscriptionPlan: SubscriptionPlan
   user: User
@@ -2067,6 +2075,7 @@ input CartItemWhereInput {
   coupon: CouponWhereInput
   product: ProductWhereInput
   booking: BookingWhereInput
+  rental: RentalWhereInput
   event: EventWhereInput
   subscriptionPlan: SubscriptionPlanWhereInput
   user: UserWhereInput
@@ -2084,6 +2093,7 @@ input CartItemUpdateInput {
   coupon: CouponRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
+  rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
   subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
@@ -2107,6 +2117,12 @@ input BookingRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input RentalRelateToOneForUpdateInput {
+  create: RentalCreateInput
+  connect: RentalWhereUniqueInput
+  disconnect: Boolean
+}
+
 input EventRelateToOneForUpdateInput {
   create: EventCreateInput
   connect: EventWhereUniqueInput
@@ -2124,6 +2140,7 @@ input CartItemCreateInput {
   coupon: CouponRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
+  rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
   subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
@@ -2142,6 +2159,11 @@ input ProductRelateToOneForCreateInput {
 input BookingRelateToOneForCreateInput {
   create: BookingCreateInput
   connect: BookingWhereUniqueInput
+}
+
+input RentalRelateToOneForCreateInput {
+  create: RentalCreateInput
+  connect: RentalWhereUniqueInput
 }
 
 input EventRelateToOneForCreateInput {
@@ -2311,12 +2333,6 @@ input OrderUpdateInput {
   dateModified: DateTime
 }
 
-input RentalRelateToOneForUpdateInput {
-  create: RentalCreateInput
-  connect: RentalWhereUniqueInput
-  disconnect: Boolean
-}
-
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
@@ -2336,11 +2352,6 @@ input OrderCreateInput {
   user: UserRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input RentalRelateToOneForCreateInput {
-  create: RentalCreateInput
-  connect: RentalWhereUniqueInput
 }
 
 type Coupon {
@@ -3133,7 +3144,7 @@ type Mutation {
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   checkout: Order
-  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, subscriptionPlanId: ID): CartItem
+  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, subscriptionPlanId: ID): CartItem
 }
 
 type Query {

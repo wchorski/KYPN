@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import { MdShoppingBag } from "react-icons/md"
 import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
@@ -28,6 +29,7 @@ type Props = {
 	subscriptionPlanId: string | undefined
 	sessionId: string
 	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
+  buttonText?:string
 }
 
 export default function AddToCartForm({
@@ -35,6 +37,7 @@ export default function AddToCartForm({
 	productId,
 	subscriptionPlanId,
 	type,
+  buttonText,
 }: Props) {
 	const initState: AddToCartState = {
 		values: {
@@ -163,7 +166,7 @@ export default function AddToCartForm({
 				icon={inlineIconState}
 				className={"button medium"}
 				title="add to cart"
-				label={""}
+				label={buttonText}
 				isPending={isPending}
 			/>
 		</form>
@@ -201,9 +204,7 @@ const query = `
     name
     amount_off
     percent_off
-  }id
-  type
-  quantity
+  }
   event {
     id
     summary
@@ -231,6 +232,14 @@ const query = `
     price
     image
     billing_interval
+  }
+  rental {
+    id
+    summary
+    start
+    end
+    days
+    price
   }
   coupon {
     id

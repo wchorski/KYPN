@@ -12,7 +12,6 @@ export async function actionEmployeeGigDecision(
   // // @ts-ignore
   // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
   const { userId, bookingId, decision } = values
-  console.log({values});
   
 
   // const valueErrors = validateValues(values)

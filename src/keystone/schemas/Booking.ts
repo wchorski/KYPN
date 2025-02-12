@@ -102,7 +102,7 @@ export const Booking: Lists.Booking = list({
 		summary: virtual({
 			field: graphql.field({
 				type: graphql.String,
-				async resolve(item: any, args, context) {
+				async resolve(item, args, context) {
 					// if(!item.serviceId) return item.name
 					const service = (await context.query.Service.findOne({
 						where: { id: item.serviceId || "null" },
@@ -120,7 +120,7 @@ export const Booking: Lists.Booking = list({
 		durationInHours: virtual({
 			field: graphql.field({
 				type: graphql.Decimal,
-				async resolve(item: any, args, context) {
+				async resolve(item, args, context) {
 					return new Decimal(calcDurationInHours(item.start, item.end))
 				},
 			}),
@@ -291,6 +291,7 @@ export const Booking: Lists.Booking = list({
 				// if (!resolvedData.service?.connect?.id || !resolvedData.service?.connect?.name)
 				// 	throw new Error("!!! No Service selected for booking")
 
+        // TODO move this to hooks:validate
 				if (resolvedData.service?.connect?.id) {
 					const service = await context.db.Service.findOne({
 						where: { id: resolvedData.service.connect.id },

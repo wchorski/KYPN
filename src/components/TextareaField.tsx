@@ -22,7 +22,7 @@ export function TextareaField(props: Props) {
 			htmlFor={name}
 			className={input_label}
 			title={required ? `${label || name} is required` : label || name}
-      style={{display: hidden ? 'contents' : 'none'}}
+      // style={{display: !hidden ? 'grid' : 'none'}}
 		>
 			<span>{label || name}</span>
 			<textarea

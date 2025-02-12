@@ -21,6 +21,13 @@ type Range = {
 
 // }
 
+export const calcDaysBetweenTimestamps = (startISO:string|Date, endISO:string|Date) => {
+  const start = new Date(startISO).getTime()
+  const end = new Date(endISO).getTime()
+  
+  return Math.floor((end - start) / (1000 * 60 * 60 * 24))
+}
+
 export function dateOverlapCount(gig: Range, busyRanges: BusyRange[]) {
 	const count = busyRanges.reduce(
 		(n, busy) => (isRangesOverlap(gig, busy) ? n + 1 : n),
@@ -90,7 +97,7 @@ export function calcEndTime(
 	return date.toISOString()
 }
 
-export function calcDurationInHours(dateString1: string, dateString2: string) {
+export function calcDurationInHours(dateString1: string|Date, dateString2: string|Date) {
 	const date1 = new Date(dateString1)
 	const date2 = new Date(dateString2)
 

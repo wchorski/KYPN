@@ -11,6 +11,7 @@ import { datePrettyLocal } from "@lib/dateFormatter"
 import { NoData } from "@components/elements/NoData"
 import AddToCartForm from "@components/ecommerce/AddToCartForm"
 import { PriceTag } from "@components/ecommerce/PriceTag"
+import Flex from "./Flex"
 export const revalidate = 5
 
 type Props = {
@@ -168,16 +169,32 @@ export function ArticleItem({
 			<footer>
 				{type === "product" ? (
 					<>
-						<PriceTag price={item.price} hideZeroCents={true} />
-						<AddToCartForm
-							type={
-								item.isForSale ? "SALE" : item.isForRent ? "RENTAL" : "SALE"
-							}
-							eventId={undefined}
-							productId={item.id}
-							subscriptionPlanId={undefined}
-							sessionId={"session.itemId"}
-						/>
+						{item.isForSale && (
+							<Flex justifyContent={"space-between"} alignItems={"center"}>
+								<PriceTag price={item.price} hideZeroCents={true} />
+								<AddToCartForm
+									type={"SALE"}
+									eventId={undefined}
+									productId={item.id}
+									subscriptionPlanId={undefined}
+									sessionId={"session.itemId"}
+									buttonText={"Buy"}
+								/>
+							</Flex>
+						)}
+						{item.isForRent && (
+							<Flex justifyContent={"space-between"} alignItems={"center"}>
+								<PriceTag price={item.rental_price} hideZeroCents={true} billing_interval="hour"/>
+								<AddToCartForm
+									productId={item.id}
+									sessionId={"session.itemId"}
+									eventId={undefined}
+									subscriptionPlanId={undefined}
+									type={"RENTAL"}
+									buttonText={"Rent"}
+								/>
+							</Flex>
+						)}
 					</>
 				) : type === "subscriptionPlan" ? (
 					<>

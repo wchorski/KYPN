@@ -1,7 +1,6 @@
 "use server"
 import { envs } from "@/envs"
-import { keystoneContext } from "@ks/context"
-import type { CartItem, Event, Product, Ticket, User } from "@ks/types"
+import type { CartItem, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -29,24 +28,6 @@ export type StripeCheckoutSessionAction = {
 
 export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 	const { cartItems, email, user } = props
-
-	// const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined =
-	// 	(() => {
-
-	// 		switch (itemType) {
-	// 			case "product":
-	// 				return createProductLineItems(cartItems)
-
-	// 			case "ticket":
-	// 				return createTicketLineItems(cartItems, user)
-
-	// 			case "booking":
-	// 				return createBookingLineItems(cartItems)
-
-	// 			default:
-	// 				return undefined
-	// 		}
-	// 	})()
 
 	const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined =
 		(() => {
@@ -87,6 +68,8 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			// 	? { eventId: props.cartItems.map((it) => it.event?.id).join(", ") }
 			// 	: {}),
 			orderId: null,
+      rentalId: '',
+
 		},
     // https://docs.stripe.com/payments/checkout/free-trials
 		...(hasSubscription

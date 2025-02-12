@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import CartItem from "./CartItem"
+import { CartItem as TCartItem } from "@ks/types"
 import { Callout } from "@components/blocks/Callout"
 
 export function CartItemsList() {
@@ -22,10 +23,31 @@ export function CartItemsList() {
 	// const filteredProductItems = cartItems.filter((item) => item.product?.id)
 	// const filteredBookingItems = cartItems.filter((item) => item.booking?.id)
 
-	const sortedCartItems = cartItems.sort((a, b) => {
-		const getTypePriority = (item: any) =>
-			item.event ? 0 : item.product ? 1 : item.booking ? 2 : 3
+	const typeOrder: Record<string, number> = {
+		SALE: 0,
+		SUBSCRIPTION: 1,
+		RENTAL: 2,
+		RENT_RESERVATION: 3,
+	}
 
+	const sortedCartItems = cartItems.sort((a, b) => {
+		const getTypePriority = (item: typeof a) =>
+			item.event
+				? 0
+				: item.product
+				? 1
+				: item.booking
+				? 2
+				: item.subscriptionPlan
+				? 3
+				: item.rental
+				? 4
+				: item.coupon
+				? 5
+				: 6
+		const typeDiff = (typeOrder[a.type] ?? 99) - (typeOrder[b.type] ?? 99)
+
+		if (typeDiff !== 0) return typeDiff
 		return getTypePriority(a) - getTypePriority(b)
 	})
 

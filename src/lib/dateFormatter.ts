@@ -1,3 +1,15 @@
+export function dateFormatLocalDateTime(isoString:string) {
+  const date = new Date(isoString)
+
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 export function dateToISOTimezone(
 	date: string,
 	time: string,
@@ -19,14 +31,28 @@ export function dateToISOTimezone(
 	)
 
 	return dateInTimezone
+}
 
-	//   const isoString = new Date(
-	//     dateInTimezone.getTime() + dateInTimezone.getTimezoneOffset() * 60 * 1000
-	// 	).toISOString()
+export function dateTimeToISOTimezone(
+	datetime: string,
+	timeZone: string
+) {
+	const localTimestamp = new Date(datetime)
 
-	// console.log(datePrettyLocal(isoString, 'full'));
+	const dateInTimezone = new Date(
+		new Intl.DateTimeFormat("en-US", {
+			timeZone,
+			year: "numeric",
+			month: "2-digit",
+			day: "2-digit",
+			hour: "2-digit",
+			minute: "2-digit",
+			second: "2-digit",
+			hour12: false,
+		}).format(localTimestamp)
+	)
 
-	// 	return isoString
+	return dateInTimezone.toISOString()
 }
 
 //? does what above does but i think it's written better

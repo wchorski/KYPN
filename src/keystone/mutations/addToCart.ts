@@ -14,11 +14,18 @@ export const addToCart = (base: BaseSchemaMeta) =>
 			quantity: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
 			productId: graphql.arg({ type: graphql.ID }),
 			eventId: graphql.arg({ type: graphql.ID }),
+			rentalId: graphql.arg({ type: graphql.ID }),
 			subscriptionPlanId: graphql.arg({ type: graphql.ID }),
 		},
 		async resolve(source, variables, context: Context) {
-			const { productId, type, eventId, subscriptionPlanId, quantity } =
-				variables
+			const {
+				productId,
+				type,
+				eventId,
+				subscriptionPlanId,
+				quantity,
+				rentalId,
+			} = variables
 			// const session = await getServerSession(nextAuthOptions)
 			//? prob should use the included ks context
 			const session = await context.session
@@ -64,9 +71,13 @@ export const addToCart = (base: BaseSchemaMeta) =>
 					type: { equals: type },
 				},
 			})
+
 			const [exisitingItem] = allCartItems
 
 			if (exisitingItem) {
+
+        if(exisitingItem.rentalId) throw new Error("!!! Cart can only have one Rental Item")
+
 				const cartItemUpdate = await sudoContext().db.CartItem.updateOne({
 					where: { id: exisitingItem.id },
 					data: {
@@ -81,6 +92,7 @@ export const addToCart = (base: BaseSchemaMeta) =>
 						type,
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
+						...(rentalId ? { rental: { connect: { id: rentalId } } } : {}),
 						...(subscriptionPlanId
 							? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
 							: {}),

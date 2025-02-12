@@ -13,13 +13,14 @@ import type { CartItem } from "../types"
 import { calcTotalPrice } from "../../lib/calcTotalPrice"
 
 type StripeSession = {
-	stripeSession?: {
+	stripe?: {
 		payment_status: "paid" | "unpaid"
 		id: string
 		payment_intent: string
 		customerId: string
 		amount_total: number
-		subscriptionId: string
+		subscriptionId: string | undefined
+		rentalId: string | undefined
 	}
 }
 
@@ -44,8 +45,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 			if (!session)
 				throw new Error("!!! mutation.checkout: Session not available")
 
-			const paymentStatus = session.stripeSession?.payment_status || "unpaid"
-			const customerId = session.itemId || session.stripeSession?.customerId
+			const paymentStatus = session.stripe?.payment_status || "unpaid"
+			const customerId = session.itemId || session.stripe?.customerId
 
 			const cartItems = (await sudoContext.query.CartItem.findMany({
 				where: {
@@ -75,22 +76,9 @@ export const checkout = (base: BaseSchemaMeta) =>
         `,
 			})) as CartItem[]
 
-			// const ticketCartItems = cartItems.filter(
-			// 	(item) => item.event?.id
-			// ) as unknown as TicketCartItem[]
-
-			// TODO don't forget about products (rentals)
-			// const filteredProductItems = cartItems.filter((item) => item.product?.id)
-
-			// const ticketsToCreate = await createTicketItemsMultiEvents(
-			// 	ticketCartItems,
-			// 	context,
-			// 	session
-			// )
-
 			const amountTotal = calcTotalPrice(cartItems)
 			const transactionFees =
-				(session.stripeSession?.amount_total || amountTotal) - amountTotal
+				(session.stripe?.amount_total || amountTotal) - amountTotal
 
 			const newOrderItems: OrderItemCreateInput[] = await (async () => {
 				const theseOrderItems = await Promise.all(
@@ -138,7 +126,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 													connect: { id: item.subscriptionPlan?.id },
 												},
 												status:
-													session.stripeSession?.payment_status === "paid"
+													session.stripe?.payment_status === "paid"
 														? "ACTIVE"
 														: "TRIAL",
 												billing_interval:
@@ -147,11 +135,11 @@ export const checkout = (base: BaseSchemaMeta) =>
 													connect: {
 														id:
 															session.itemId ||
-															session.stripeSession?.customerId,
+															session.stripe?.customerId,
 													},
 												},
 												stripeSubscriptionId:
-													session.stripeSession?.subscriptionId,
+													session.stripe?.subscriptionId,
 											},
 										},
 									}
@@ -177,14 +165,27 @@ export const checkout = (base: BaseSchemaMeta) =>
 					fees: transactionFees,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
 					user: { connect: { id: customerId } },
-					stripeCheckoutSessionId: session.stripeSession?.id || "",
-					stripePaymentIntent: session.stripeSession?.payment_intent || "",
+					stripeCheckoutSessionId: session.stripe?.id || "",
+					stripePaymentIntent: session.stripe?.payment_intent || "",
 					//TODO maybe not secure
-					...(session.stripeSession?.payment_status === "paid" ||
+					...(session.stripe?.payment_status === "paid" ||
 					amountTotal === 0
 						? { status: "PAYMENT_RECIEVED" }
 						: { status: "REQUESTED" }),
 				},
+				...(cartItems.some((item) => item.type === "RENTAL")
+					? {
+							rental: {
+								create: {
+									start: "",
+									end: "",
+                  status: 'REQUESTED',
+									location: { connect: { id: "" } },
+									customer: { connect: { id: customerId } },
+								},
+							},
+					  }
+					: {}),
 			})
 
 			if (!order) throw new Error("!!! mutation.checkout: order not created")

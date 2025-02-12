@@ -68,51 +68,7 @@ function CartStateProvider({ children }: { children: ReactNode }) {
             query getUserCart($where: UserWhereUniqueInput!) {
               user(where: $where) {
                 cartTotalPrice
-                cart {
-                  id
-                  type
-                  quantity
-                  subTotal
-                  event {
-                    id
-                    summary
-                    price
-                    image
-                  }
-                  product {
-                    id
-                    price
-                    rental_price
-                    name
-                    image
-                  }
-                  booking {
-                    id
-                    price
-                    summary
-                    service {
-                      image
-                    }
-                  }
-                  subscriptionPlan {
-                    id
-                    typeof
-                    image
-                    name
-                    slug
-                    excerpt
-                    status
-                    price
-                    billing_interval
-                    stockMax
-                  }
-                  coupon {
-                    id
-                    name
-                    amount_off
-                    percent_off
-                  }
-                }
+                ${QUERY_USER_CART}
               }
             }
           `,
@@ -203,3 +159,61 @@ function useCart() {
 	return all
 }
 export { CartStateProvider, useCart }
+
+export const QUERY_USER_CART = `
+  cart {
+    id
+    type
+    quantity
+    subTotal
+    event {
+      id
+      summary
+      price
+      image
+    }
+    product {
+      id
+      price
+      rental_price
+      name
+      image
+    }
+    booking {
+      id
+      price
+      summary
+      service {
+        image
+      }
+    }
+    subscriptionPlan {
+      id
+      typeof
+      image
+      name
+      slug
+      excerpt
+      status
+      price
+      billing_interval
+      stockMax
+    }
+    rental {
+      id
+      summary
+      start
+      end
+      days
+      address
+      delivery
+      timeZone
+    }
+    coupon {
+      id
+      name
+      amount_off
+      percent_off
+    }
+  }
+`

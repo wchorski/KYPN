@@ -405,6 +405,8 @@ export async function stripeSubscriptionUpdate({
 }: SubscriptionUpdate) {
 	if (!envs.STRIPE_SECRET) return
 
+  console.log('🐸 stripeSubscriptionUpdate. DOES THIS WORK w STRIPE???');
+
 	try {
 		switch (status) {
 			case "PAUSED":

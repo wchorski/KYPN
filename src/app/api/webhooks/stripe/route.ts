@@ -153,13 +153,14 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 
 	const data = (await keystoneContext
 		.withSession({
-			stripeSession: {
+			stripe: {
 				payment_status: checkoutSession.payment_status,
 				id: checkoutSession.id,
 				payment_intent: checkoutSession.payment_intent,
 				customerId: checkoutSession.metadata.customerId,
 				amount_total: checkoutSession.amount_total,
 				subscriptionId: checkoutSession.subscription,
+        rentalId: checkoutSession.metadata.rentalId,
 			},
 		})
 		.graphql.run({

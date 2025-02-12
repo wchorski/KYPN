@@ -123,7 +123,7 @@ export type User = Lists.User.Item & {
 	privatePagesAccess: Page[]
 	privatePostsAccess: Post[]
 	servicesProvided: Service[]
-  subscriptions: SubscriptionItem[]
+	subscriptions: SubscriptionItem[]
 	bookings: Booking[]
 	gigs: Booking[]
 	gig_requests: Booking[]
@@ -172,7 +172,7 @@ export type Page = Lists.Page.Item & {
 	dateModified: string
 }
 export type Post = Lists.Post.Item & {
-  typeof: 'post'
+	typeof: "post"
 	categories: Category[]
 	tags: Tag[]
 	author: User
@@ -217,6 +217,7 @@ export type CartItem = Lists.CartItem.Item & {
 	product?: Product
 	event?: Event
 	booking?: Booking
+	rental?: Rental
 	subscriptionPlan?: SubscriptionPlan
 	coupon?: Coupon
 	user?: User
@@ -284,6 +285,9 @@ export type Product = Lists.Product.Item & {
 
 export type Rental = Lists.Rental.Item & {
 	typeof: "rental"
+  days:number
+  start:string
+  end:string
 	summary: string
 	order: Order
 	// employees: User[],
@@ -292,6 +296,7 @@ export type Rental = Lists.Rental.Item & {
 	dateCreated?: string
 	dateModified?: string
 	delivery: boolean
+  
 	google?: {
 		id?: string
 		kind?: string
@@ -320,8 +325,8 @@ export type Rental = Lists.Rental.Item & {
 
 export type Order = Lists.Order.Item & {
 	typeof: "order"
-  //? virtual
-  total:number
+	//? virtual
+	total: number
 	count: number
 	user: User
 	items: OrderItem[]
@@ -333,7 +338,7 @@ export type Order = Lists.Order.Item & {
 export type OrderItem = Lists.OrderItem.Item & {
 	product: Product
 	booking: Booking
-  tickets: Ticket[]
+	tickets: Ticket[]
 	dateCreated: string
 	dateModified: string
 	order: Order
@@ -381,7 +386,8 @@ export type Location = Lists.Location.Item & {
 	bookings: Booking[]
 }
 
-export type Billing_Interval = "day" | "week" | "month" | "year"
+export type Billing_Interval = "hour" | "day" | "week" | "month" | "year"
+export type Stripe_Billing_Interval = "day" | "week" | "month" | "year"
 export type Duration = "forever" | "once" | "repeating"
 
 export type SubscriptionPlan = Lists.SubscriptionPlan.Item & {
@@ -389,7 +395,7 @@ export type SubscriptionPlan = Lists.SubscriptionPlan.Item & {
 	description: {
 		document: any
 	}
-	billing_interval: Billing_Interval
+	billing_interval: Stripe_Billing_Interval
 	items: SubscriptionItem[]
 	tags: Tag[]
 	categories: Category[]
@@ -399,12 +405,16 @@ export type SubscriptionPlan = Lists.SubscriptionPlan.Item & {
 
 export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	typeof: "subscriptionitem"
+	//? virtual
+	summary: string
+	price: number
 	subscriptionPlan: SubscriptionPlan
 	billing_interval: Billing_Interval
-	user: User
-  //? these are redefined because ks sees them as `Date` but really it's just ISO string
+	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
+	user: User
+	addons: Addon[]
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User

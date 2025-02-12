@@ -41,6 +41,7 @@ export const CartItem: Lists.CartItem = list({
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
 				{ label: "Subscription", value: "SUBSCRIPTION" },
+				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
 			validation: { isRequired: true },
 			ui: {
@@ -86,24 +87,35 @@ export const CartItem: Lists.CartItem = list({
 		coupon: relationship({ ref: "Coupon" }),
 		product: relationship({ ref: "Product" }),
 		booking: relationship({ ref: "Booking" }),
+		rental: relationship({ ref: "Rental" }),
 		event: relationship({ ref: "Event" }),
 		subscriptionPlan: relationship({ ref: "SubscriptionPlan" }),
 		user: relationship({ ref: "User.cart" }),
 	},
 	hooks: {
 		validate: {
-			create: ({ resolvedData }) => {
+			create: async ({ resolvedData, context }) => {
+
+        if(!resolvedData?.user?.connect?.id) throw new Error("!!! CartItem must have connected user")
+
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
-					"booking",
-					"coupon",
 					"subscriptionPlan",
+					"booking",
+					"rental",
+					"coupon",
 				])
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking", "subscriptionPlan", "coupon"] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "subscriptionPlan", "rental", "coupon"] set'
 					)
+
+				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
+					where: { user: { id: { equals: resolvedData.user.connect.id } } },
+				})
+
+        if(cartItemsByUser.some(item => item.rentalId)) throw new Error('!!! CartItems may only have one Rental item per user session')
 			},
 			update: ({ resolvedData, item }) => {
 				const thisNewCombinedData = { ...item, ...resolvedData }
@@ -119,6 +131,8 @@ export const CartItem: Lists.CartItem = list({
 					"bookingId",
 					"subscriptionPlanId",
 					"subscriptionPlan",
+          "rental",
+          "rentalId",
 					"coupon",
 					"couponId",
 				])
@@ -128,7 +142,7 @@ export const CartItem: Lists.CartItem = list({
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking", "coupon", + itemId(s)] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "subscription", "rental",  "coupon", + itemId(s)] set'
 					)
 			},
 		},
@@ -137,6 +151,14 @@ export const CartItem: Lists.CartItem = list({
 				if (item.bookingId) {
 					await context.sudo().db.Booking.updateOne({
 						where: { id: item.bookingId },
+						data: {
+							status: "CANCELED",
+						},
+					})
+				}
+				if (item.rentalId) {
+					await context.sudo().db.Rental.updateOne({
+						where: { id: item.rentalId },
 						data: {
 							status: "CANCELED",
 						},

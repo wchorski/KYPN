@@ -65,14 +65,15 @@ export const OrderItem: Lists.OrderItem = list({
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
-					"booking",
-					"coupon",
 					"subscriptionItem",
+					"booking",
+          "rental",
+					"coupon",
 				])
 				console.log("!!! hasOnlyOne:: ", hasOnlyOne)
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionPlan", "coupon"] set'
+						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionPlan", "rental",  "coupon"] set'
 					)
 			},
 			update: ({ resolvedData, item }) => {
@@ -89,6 +90,8 @@ export const OrderItem: Lists.OrderItem = list({
 					"bookingId",
 					"subscriptionItemId",
 					"subscriptionItem",
+          "rental",
+          "rentalId",
 					"coupon",
 					"couponId",
 				])
@@ -96,7 +99,7 @@ export const OrderItem: Lists.OrderItem = list({
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "coupon", + itemId(s)] set'
+						'!!! Order Item can only have one of ["product", "event", "booking", "subscription", "rental", "coupon", + itemId(s)] set'
 					)
 			},
 		},

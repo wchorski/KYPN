@@ -294,24 +294,26 @@ model Product {
 }
 
 model Rental {
-  id           String    @id @default(cuid())
-  start        DateTime
-  end          DateTime
-  location     String    @default("")
-  delivery     Boolean   @default(false)
-  price        Int       @default(0)
-  email        String    @default("")
-  phone        String    @default("")
-  name         String    @default("")
-  notes        String    @default("")
-  order        Order?    @relation("Order_rental")
-  addons       Addon[]   @relation("Addon_rentals")
-  customer     User?     @relation("Rental_customer", fields: [customerId], references: [id])
-  customerId   String?   @map("customer")
-  status       String?   @default("LEAD")
-  dateCreated  DateTime? @default(now())
-  dateModified DateTime? @default(now())
-  google       Json?     @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
+  id                   String     @id @default(cuid())
+  start                DateTime
+  end                  DateTime
+  timeZone             String     @default("America/Chicago")
+  address              String     @default("")
+  delivery             Boolean    @default(false)
+  price                Int?       @default(0)
+  email                String     @default("")
+  phone                String     @default("")
+  name                 String     @default("")
+  notes                String     @default("")
+  order                Order?     @relation("Order_rental")
+  addons               Addon[]    @relation("Addon_rentals")
+  customer             User?      @relation("Rental_customer", fields: [customerId], references: [id])
+  customerId           String?    @map("customer")
+  status               String     @default("LEAD")
+  dateCreated          DateTime?  @default(now())
+  dateModified         DateTime?  @default(now())
+  google               Json?      @default("{\"id\":\"\",\"status\":\"\",\"kind\":\"\",\"htmlLink\":\"\"}")
+  from_CartItem_rental CartItem[] @relation("CartItem_rental")
 
   @@index([customerId])
 }
@@ -326,6 +328,8 @@ model CartItem {
   productId          String?           @map("product")
   booking            Booking?          @relation("CartItem_booking", fields: [bookingId], references: [id])
   bookingId          String?           @map("booking")
+  rental             Rental?           @relation("CartItem_rental", fields: [rentalId], references: [id])
+  rentalId           String?           @map("rental")
   event              Event?            @relation("CartItem_event", fields: [eventId], references: [id])
   eventId            String?           @map("event")
   subscriptionPlan   SubscriptionPlan? @relation("CartItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
@@ -336,6 +340,7 @@ model CartItem {
   @@index([couponId])
   @@index([productId])
   @@index([bookingId])
+  @@index([rentalId])
   @@index([eventId])
   @@index([subscriptionPlanId])
   @@index([userId])

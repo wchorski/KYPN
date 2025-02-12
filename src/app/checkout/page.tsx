@@ -2,7 +2,9 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
+import { RentalForm } from "@components/ecommerce/RentalForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
+import { QUERY_USER_CART } from "@components/hooks/CartStateContext"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
 import type { User } from "@ks/types"
@@ -42,91 +44,14 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
 	const user = (await keystoneContext.withSession(session).query.User.findOne({
 		where: { id: session.itemId },
-		query: `
-      cart {
-        id
-        type
-        quantity
-        product {
-          id
-          name
-          image
-          price
-          stripePriceId
-        }
-        event {
-          id
-          summary
-          image
-          price
-          
-        }
-        booking {
-          id
-          summary
-          price
-          service {
-            image
-            stripePriceId
-          }
-        }
-        subscriptionPlan {
-          id
-          name
-          image
-          price
-          stripePriceId
-          billing_interval
-        }
-      }
-    `,
+		//! Error: Syntax Error: Expected Name, found "[". for below
+		// query: QUERY_USER_CART,
+		query,
 	})) as User
 
-	// const filteredTicketItems: TCartItem[] = plainObj(
-	// 	user.cart.filter((item) => item.event)
-	// )
-	// const filteredProductItems = plainObj(
-	// 	user.cart.filter((item) => item.product)
-	// )
+	const cartRental = user.cart.find((item) => item.rental)?.rental
 
 	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
-
-	if (!envs.STRIPE_PUBLIC_KEY)
-		// if ("nostripe" === "nostripe")
-		return (
-			<main className={[page_layout].join(" ")}>
-				<header className={layout_site}>
-					<h1>Checkout</h1>
-					<p className="error">{`DEBUG "nostripe" === "nostripe" for native form`}</p>
-				</header>
-				<div className={[page_content, layout_site].join(" ")}>
-					<Grid layout={"1_1"} isAuto={false}>
-						<div>
-
-							{/* // TODO how to show tickets in a pretty manner with cart context */}
-							<h2>Cart Items</h2>
-							<CartItemsList />
-						</div>
-						<div>
-							{user.cart.length === 0 ? (
-								<p>No items in cart.</p>
-							) : (
-								<CheckoutCartForm cartItems={plainObj(user.cart)} />
-							)}
-							{/* {user.cart.length === 0 ? (
-								<p>No items in cart.</p>
-							) : filteredTicketItems ? (
-								<CheckoutCartForm cartItems={filteredTicketItems} />
-							) : filteredProductItems ? (
-								<p>CheckoutForm for products</p>
-							) : (
-								<p>uh.....</p>
-							)} */}
-						</div>
-					</Grid>
-				</div>
-			</main>
-		)
 
 	return (
 		<main className={[page_layout].join(" ")}>
@@ -134,8 +59,39 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				<h1>Checkout</h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
+				<Grid layout={"1_1"} isAuto={false}>
+					<div>
+						{/* // TODO how to show tickets in a pretty manner with cart context */}
+						<h2>Cart Items</h2>
+						<CartItemsList />
+					</div>
+					<div>
+						{!user.cart.some((item) => item.type === "RENTAL") ? (
+							<div></div>
+						) : (
+							<>
+								<p>
+									Your cart contains rental items. Please fill out rental
+									details first before checking out
+								</p>
+								<RentalForm
+									currRental={cartRental ? plainObj(cartRental) : undefined}
+									customerId={session.itemId}
+									timeZoneOptions={envs.TIMEZONES.map((tz) => ({
+										label: tz,
+										value: tz,
+									}))}
+								/>
+							</>
+						)}
+					</div>
+				</Grid>
+
+				<hr />
 				{user.cart.length === 0 ? (
 					<CartEmptyMessage />
+				) : !envs.STRIPE_PUBLIC_KEY ? (
+					<CheckoutCartForm cartItems={plainObj(user.cart)} />
 				) : (
 					<StripeCheckoutForm
 						// itemType={"ticket"}
@@ -144,24 +100,6 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 						user={session.user as User}
 					/>
 				)}
-				{/* {user.cart.length === 0 ? (
-					<p> No items in cart. </p>
-				) : filteredTicketItems ? (
-					<StripeCheckoutForm
-						itemType={"ticket"}
-						cartItems={filteredTicketItems}
-						email={session.user.email}
-						user={session.user as User}
-					/>
-				) : filteredProductItems ? (
-					<StripeCheckoutForm
-						itemType={"product"}
-						cartItems={filteredProductItems}
-						user={session.user as User}
-					/>
-				) : (
-					<p> uh..... </p>
-				)} */}
 			</div>
 		</main>
 	)
@@ -170,14 +108,66 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 export function CartEmptyMessage() {
 	return (
 		<p>
-			Cart is empty. View the{" "}
-			<Link href={`/shop`}>
-				Shop
-			</Link>{" "}
-			or checkout some{" "}
-			<Link href={`/events`}>
-				Events
-			</Link>
+			Cart is empty. View the <Link href={`/shop`}>Shop</Link> or checkout some{" "}
+			<Link href={`/events`}>Events</Link>
 		</p>
 	)
 }
+
+const query = `
+  cart {
+    id
+    type
+    quantity
+    subTotal
+    event {
+      id
+      summary
+      price
+      image
+    }
+    product {
+      id
+      price
+      rental_price
+      name
+      image
+    }
+    booking {
+      id
+      price
+      summary
+      service {
+        image
+      }
+    }
+    subscriptionPlan {
+      id
+      typeof
+      image
+      name
+      slug
+      excerpt
+      status
+      price
+      billing_interval
+      stockMax
+    }
+    rental {
+      id
+      summary
+      start
+      end
+      days
+      address
+      delivery
+      timeZone
+    }
+    coupon {
+      id
+      name
+      amount_off
+      percent_off
+    }
+  }
+`

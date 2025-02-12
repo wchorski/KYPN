@@ -159,6 +159,12 @@ input[type="radio"] {
 	display: inline;
 }
 
+label:has(input[type="checkbox"]) {
+  display: flex;
+  gap: var(--space-ms);
+  flex-wrap: wrap;
+}
+
 blockquote {
 	display: grid;
 	align-items: center;

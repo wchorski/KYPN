@@ -169,6 +169,7 @@ export default async function ProductById({ params }: Props) {
 										productId={id}
 										eventId={undefined}
 										sessionId={session.itemId}
+                    subscriptionPlanId={undefined}
 										type={"SALE"}
 									/>
 								</Card>
@@ -184,7 +185,8 @@ export default async function ProductById({ params }: Props) {
 									<span className={price_text}>
 										{price > 0 ? (
 											<span className={price_text}>
-												{moneyFormatter(price)} <small>/hour</small>
+                        {/* //TODO don't hardcode `day` */}
+												{moneyFormatter(price)} <small>/day</small>
 											</span>
 										) : (
 											<span className={price_text}>FREE</span>
@@ -194,6 +196,7 @@ export default async function ProductById({ params }: Props) {
 										productId={id}
 										sessionId={session.itemId}
 										eventId={undefined}
+                    subscriptionPlanId={undefined}
 										type={"RENTAL"}
 									/>
 								</Card>

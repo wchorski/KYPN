@@ -1,8 +1,5 @@
 import { graphql, group, list } from "@keystone-6/core"
-// @ts-ignore
-import { Lists, ProductCreateInput } from ".keystone/types"
-
-import { allowAll } from "@keystone-6/core/access"
+import { Lists } from ".keystone/types"
 import {
 	checkbox,
 	image,
@@ -14,10 +11,9 @@ import {
 	virtual,
 } from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
-import stripeConfig, {
+import {
 	stripeArchiveProduct,
 	stripeProductCreate,
-	stripeProductRetrieve,
 	stripeProductUpdate,
 } from "../../lib/stripe"
 import { document } from "@keystone-6/fields-document"
@@ -52,7 +48,8 @@ export const Product: Lists.Product = list({
 				"status",
 				"dateModified",
 				"author",
-				"categories",
+				"isForSale",
+				"isForRent",
 			],
 			initialSort: { field: "dateModified", direction: "DESC" },
 		},
@@ -158,6 +155,7 @@ export const Product: Lists.Product = list({
 				price: integer({ validation: { isRequired: true, min: 0 } }),
 				isForRent: checkbox({ defaultValue: false }),
 				rental_price: integer({
+					ui: { description: "cost per day used" },
 					validation: { isRequired: true, min: 0 },
 				}),
 				stockCount: integer({

@@ -1,19 +1,19 @@
 .one_click_form {
-  label {
-    display: none;
-  }
+	label {
+		display: none;
+	}
 }
 
 .radio {
-  padding: 0;
-  display: grid;
-  gap: var(--space-s);
+	padding: 0;
+	display: grid;
+	gap: var(--space-s);
 
-  & > label {
-    display: flex !important;
-    gap: var(--space-s);
-    cursor: pointer;
-  }
+	& > label {
+		display: flex !important;
+		gap: var(--space-s);
+		cursor: pointer;
+	}
 }
 
 .grid_wrap {
@@ -45,8 +45,8 @@
 }
 
 .mini_form {
-  background-color: var(--c-seperator);
-  padding: var(--space-s);
+	background-color: var(--c-seperator);
+	padding: var(--space-s);
 }
 
 .mini_form :global,
@@ -135,7 +135,7 @@
 	legend {
 		margin-top: 1rem;
 		font-weight: bold;
-		font-size: 2rem;
+		font-size: 1.8rem;
 	}
 
 	legend::after {
@@ -144,6 +144,10 @@
 		display: block;
 		border-bottom: solid 1px var(--c-seperator);
 		margin-bottom: 1em;
+	}
+
+	fieldset > legend {
+		font-size: 1.5rem;
 	}
 
 	input,
@@ -297,9 +301,9 @@
 			display: none;
 		}
 
-    &:not(:empty){
-      margin-top: var(--space-m);
-    }
+		&:not(:empty) {
+			margin-top: var(--space-m);
+		}
 	}
 }
 

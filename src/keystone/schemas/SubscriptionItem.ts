@@ -1,6 +1,10 @@
 import "dotenv/config"
 import type { Lists } from ".keystone/types"
-import type { SubscriptionPlan, SubscriptionItem as TypeSubsItem, User } from "../types"
+import type {
+	SubscriptionPlan,
+	SubscriptionItem as TypeSubsItem,
+	User,
+} from "../types"
 import { graphql, list, group } from "@keystone-6/core"
 import {
 	checkbox,
@@ -56,51 +60,75 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			field: graphql.field({
 				type: graphql.String,
 				resolve() {
-					return "subscriptionitem"
+					return "subscriptionItem"
 				},
 			}),
 			ui: {
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
+		summary: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				async resolve(item, args, context) {
+					// if(!item.serviceId) return item.name
+					const subPlan = (await context.query.SubscriptionPlan.findOne({
+						where: { id: item.subscriptionPlanId || "null" },
+						query: `
+              name
+            `,
+					})) as SubscriptionPlan
 
+					const customer = await context.query.User.findOne({
+						where: { id: item.userId },
+						query: `
+              name
+            `,
+					})
+
+					return `${customer?.name || "Anonymous"} | ${
+						subPlan?.name || "No Service Selected"
+					}`
+				},
+			}),
+		}),
 		custom_price: integer(),
-    price: virtual({
-          field: graphql.field({
-            type: graphql.Int,
-            async resolve(item, args, context) {
-              // if(!item.serviceId) return item.name
-              const service = (await context.query.SubscriptionPlan.findOne({
-                where: { id: item.subscriptionPlanId || "no_service" },
-                query: `
+		price: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				async resolve(item, args, context) {
+					// if(!item.serviceId) return item.name
+					const service = (await context.query.SubscriptionPlan.findOne({
+						where: { id: item.subscriptionPlanId || "no_service" },
+						query: `
                   price
                 `,
-              })) as SubscriptionPlan
-    
-              console.log(service);
-    
-              const addons = await context.query.Addon.findMany({
-                where: {
-                  subscriptionItems: {
-                    every: {
-                      id: {
-                        equals: item.id,
-                      },
-                    },
-                  },
-                },
-                query: `
+					})) as SubscriptionPlan
+
+					console.log(service)
+
+					const addons = await context.query.Addon.findMany({
+						where: {
+							subscriptionItems: {
+								every: {
+									id: {
+										equals: item.id,
+									},
+								},
+							},
+						},
+						query: `
                   price
                 `,
-              })
-    
-              const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-              const subTotal = (service?.price || 0) + addonsPrice
-    
-              return subTotal
-            },
-          }),
-        }),
+					})
+
+					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+					const subTotal = (service?.price || 0) + addonsPrice
+
+					return subTotal
+				},
+			}),
+		}),
 
 		subscriptionPlan: relationship({
 			ref: "SubscriptionPlan.items",
@@ -198,12 +226,8 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			// 		throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
 			// },
 		},
-		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-			// if (operation === 'create') {
-			//? checkout is handles w /app/api/checkout/subscriptionplan & /app/keystone/mutations/checkoutSubscripiton
-			// }
-
-			if (operation === "update") {
+		beforeOperation: {
+			update: async ({ resolvedData, item }) => {
 				const now = new Date()
 				resolvedData.dateModified = now
 
@@ -217,12 +241,12 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				}
 
 				if (resolvedData.status)
-					stripeSubscriptionUpdate({
+					await stripeSubscriptionUpdate({
 						subItemId: item.id,
 						stripeSubscriptionId: item.stripeSubscriptionId,
 						status: resolvedData.status as TypeSubsItem["status"],
 					})
-			}
+			},
 		},
 		afterOperation: async ({ operation, resolvedData, item, context }) => {
 			if (operation === "create" || operation === "update") {

@@ -47,6 +47,10 @@ article.post_card {
     & data {
       font-size: 2rem;
     }
+
+    & > div {
+      width: 100%;
+    }
 	}
 
 	& figure {
