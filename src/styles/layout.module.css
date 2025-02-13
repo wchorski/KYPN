@@ -43,9 +43,19 @@
 	grid-column: layout_wide;
 }
 
+/* how am i gonna fix this? */
+/* .page_content {
+  & > :is(ul, nav, div){
+    grid-column: layout_site;
+  }
+} */
+
 .page_layout > .page_content {
 	grid-row: 2;
 	grid-column: layout_breakout;
+  /* //TODO why does this break a lot of the layouts? */
+  /* grid-template-columns: inherit;
+  display: grid; */
 }
 
 .page_layout > aside,

@@ -110,7 +110,7 @@ function createRentalLineItem(
 			// TODO make this part of CartItem schema item.currency, not hard coded
 			currency: "usd",
 			product_data: {
-				name: rental.summary,
+				name: `RENTAL: ${rental.summary}`,
 				images: [envs.FRONTEND_URL + `/assets/placeholder.png`],
 				metadata: {
 					rentalId: rental.id,

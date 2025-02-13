@@ -90,6 +90,7 @@ export async function postRentalToCart(
                 end
                 days
                 price
+                notes
               }
             }
           }

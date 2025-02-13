@@ -1,18 +1,16 @@
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { CartItemsList } from "@components/ecommerce/CartItemsList"
-import { CartTotal } from "@components/ecommerce/CartTotal"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
-import { RentalForm } from "@components/ecommerce/RentalForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
-import { QUERY_USER_CART } from "@components/hooks/CartStateContext"
-import Flex from "@components/layouts/Flex"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
+import CartItem from "@components/ecommerce/CartItem"
 import type { User } from "@ks/types"
 import { plainObj } from "@lib/contentHelpers"
 import {
+	layout_content,
 	layout_site,
+	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
@@ -20,6 +18,7 @@ import { Metadata } from "next"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { Card } from "@components/layouts/Card"
 
 export const metadata: Metadata = {
 	title: `Checkout | ` + envs.SITE_TITLE,
@@ -52,64 +51,65 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 	})) as User
 
 	const cartRental = user.cart.find((item) => item.rental)?.rental
+	const someRentalItems = user.cart.some((item) => item.type === "RENTAL")
+	const cartRentalItems = user.cart.filter((item) => item.type === "RENTAL")
 
+	if (someRentalItems && !cartRental) return redirect(`/checkout/rental`)
 	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
 
 	return (
 		<main className={[page_layout].join(" ")}>
-			<header className={layout_site}>
+			<header className={layout_content}>
 				<h1>Checkout</h1>
 			</header>
-			<div className={[page_content, layout_site].join(" ")}>
-				<Grid layout={"1_1"} isAuto={false}>
-					<div>
-						{/* // TODO how to show tickets in a pretty manner with cart context */}
-						<h2>Cart Items</h2>
-						<CartItemsList />
-						<Flex alignItems="baseline">
-							<h2>Total: </h2>
-							<p style={{ fontSize: "4rem" }}>
-								<CartTotal />
-							</p>
-						</Flex>
-					</div>
-					<div>
-						{!user.cart.some((item) => item.type === "RENTAL") ? (
-							<div></div>
-						) : (
-							<>
-								{!user.cart.some((item) => item.rental) && (
-									<p>
-										Your cart contains rental items. Please fill out rental
-										details first before checking out
-									</p>
-								) }
-								<RentalForm
-									currRental={cartRental ? plainObj(cartRental) : undefined}
-									customerId={session.itemId}
-									timeZoneOptions={envs.TIMEZONES.map((tz) => ({
-										label: tz,
-										value: tz,
-									}))}
+			<div
+				className={[page_content, layout_site, "grid"].join(" ")}
+				style={{ gridTemplateColumns: "inherit" }}
+			>
+				<section className={layout_content}>
+					{someRentalItems && user.cart.find((item) => item.rental) && (
+						<>
+							<h2>Rental Items</h2>
+							<ul className={"unstyled grid gap-m"}>
+								{cartRentalItems.map((item) => (
+									<CartItem
+										key={item.id}
+										item={plainObj(item)}
+										sessionId={session.itemId}
+									/>
+								))}
+								<CartItem
+									item={plainObj(user.cart.find((item) => item.rental))}
+									sessionId={session.itemId}
 								/>
-							</>
-						)}
-					</div>
-				</Grid>
+							</ul>
+							<Card>
+								<h4>Notes</h4>
+								<p>{cartRental?.notes}</p>
+							</Card>
+
+							<Link className={"button medium"} href={`/checkout/rental`}>
+								Update Rental Details
+							</Link>
+						</>
+					)}
+				</section>
 
 				<hr />
-				{user.cart.length === 0 ? (
-					<CartEmptyMessage />
-				) : !envs.STRIPE_PUBLIC_KEY ? (
-					<CheckoutCartForm cartItems={plainObj(user.cart)} />
-				) : (
-					<StripeCheckoutForm
-						// itemType={"ticket"}
-						cartItems={plainObj(user.cart)}
-						email={session.user.email}
-						user={session.user as User}
-					/>
-				)}
+				<section className={layout_site}>
+					{user.cart.length === 0 ? (
+						<CartEmptyMessage />
+					) : !envs.STRIPE_PUBLIC_KEY ? (
+						<CheckoutCartForm cartItems={plainObj(user.cart)} />
+					) : (
+						<StripeCheckoutForm
+							// itemType={"ticket"}
+							cartItems={plainObj(user.cart)}
+							email={session.user.email}
+							user={session.user as User}
+						/>
+					)}
+				</section>
 			</div>
 		</main>
 	)
@@ -172,6 +172,7 @@ const query = `
       address
       delivery
       timeZone
+      notes
     }
     coupon {
       id

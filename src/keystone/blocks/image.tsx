@@ -27,6 +27,7 @@ export const image = component({
     }),
     width: fields.text({
       label: 'Frame Width',
+      defaultValue: '400'
     }),
   },
   preview: function Quote(props) {

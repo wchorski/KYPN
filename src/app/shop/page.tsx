@@ -111,14 +111,14 @@ function Content({
 	return (
 		<>
 			{products.length > 0 && (
-				<>
+				<section style={{marginBottom: '20vh'}}>
 					<h2 id="products">Products</h2>
 					<ArticleList items={products} type={"product"} buttonText={"view"} />
 					<Pagination route="/products" page={currPage} count={productsCount} />
-				</>
+				</section>
 			)}
 			{subscriptionPlans.length > 0 && (
-				<>
+				<section style={{marginBottom: '20vh'}}>
 					<h2 id="subscription-plans">Subscription Plans</h2>
 					<ArticleList
 						items={subscriptionPlans}
@@ -130,11 +130,11 @@ function Content({
 						page={currPage}
 						count={subsCount}
 					/>
-				</>
+				</section>
 			)}
 
 			{services.length > 0 && (
-				<>
+				<section style={{marginBottom: '20vh'}}>
 					<h2 id="services">Services</h2>
 					<ArticleList items={services} type={"service"} />
 					<Pagination
@@ -142,15 +142,15 @@ function Content({
 						page={currPage}
 						count={services.length}
 					/>
-				</>
+				</section>
 			)}
 			{addons.length > 0 && (
-				<>
+				<section className={'mvh-m'}>
 					<hr />
 					<h2 id="addons">Add-Ons</h2>
 					<InfoCardList items={infocardAddons || []} />
 					<Pagination route="/addons" page={currPage} count={addons.length} />
-				</>
+				</section>
 			)}
 		</>
 	)

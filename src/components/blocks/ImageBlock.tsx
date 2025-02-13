@@ -8,8 +8,8 @@ type Props = {
 	border?: number
 	imageSrc: string
 	alt: string
-	width?: number
-	height?: number
+	width?: number|`${number}`
+	height?: number|`${number}`
 	isCaption?: boolean
 	isPriority?: boolean
 }

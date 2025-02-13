@@ -15,6 +15,7 @@ import { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
 import { dateFormatLocalDateTime } from "@lib/dateFormatter"
 import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
+import { useRouter } from "next/navigation"
 
 type Props = {
 	customerId: string
@@ -25,7 +26,7 @@ type Props = {
 const today = new Date()
 
 export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
-
+	const router = useRouter()
 	const { addToCart } = useCart()
 
 	const initState: RentalToCartState = {
@@ -46,12 +47,21 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 		id: undefined,
 	}
 
-  // TODO make `days` reactive number that updates on field change (start, end)
+	// TODO make `days` reactive number that updates on field change (start, end)
 	// const { state, action, submitCount } = useForm(postRentalToCart, initState)
 	const [state, action] = useFormState(async (state: any, formData: any) => {
-		const resData = await postRentalToCart(initState, formData)
-		if (resData.cartItem) addToCart(resData.cartItem) // Update React Context
-		return resData
+		let isError = false
+		try {
+			const resData = await postRentalToCart(initState, formData)
+			if (resData.cartItem) addToCart(resData.cartItem) // Update React Context
+			return resData
+		} catch (error) {
+			console.log(error)
+			isError = true
+			return state
+		} finally {
+			if (!isError) router.push("/checkout")
+		}
 	}, initState)
 
 	return (
@@ -75,7 +85,10 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 					name="end"
 					error={state?.valueErrors?.end}
 					required={true}
-					min={state?.values?.start || today.toISOString().split("T")[0] + "T00:00:00"}
+					min={
+						state?.values?.start ||
+						today.toISOString().split("T")[0] + "T00:00:00"
+					}
 					defaultValue={
 						dateFormatLocalDateTime(currRental?.end || "") || state?.values?.end
 					}
@@ -119,7 +132,11 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 				<small>Check yes if requesting delivery to the above address</small>
 			</fieldset>
 			<fieldset>
-				<TextareaField name={"notes"} error={state?.valueErrors?.notes} />
+				<TextareaField
+					name={"notes"}
+					defaultValue={currRental?.notes || state.values.notes}
+					error={state?.valueErrors?.notes}
+				/>
 				<InputField
 					type="hidden"
 					name={"customerId"}
@@ -136,7 +153,7 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 				/>
 			</fieldset>
 
-			<SubmitButton label={currRental ? 'Update' : 'Reserve'} />
+			<SubmitButton label={currRental ? "Update" : "Reserve"} />
 			{!state?.success ? (
 				<></>
 			) : (

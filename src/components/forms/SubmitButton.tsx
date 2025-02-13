@@ -48,6 +48,11 @@ type SubmitButtonsInlineIconsProps = {
   isPending:boolean
 }
 
+// TODO instead of manipulating dom via JS 
+// use css animations and hide/visible 
+// as to not use timeouts 
+// try doing a carosel and animate transform position
+// cancel out of animation if error occurs?
 export function SubmitButtonInlineIcons({
 	label,
 	className,

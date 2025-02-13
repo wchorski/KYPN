@@ -225,6 +225,20 @@ blockquote {
 	gap: var(--space-l);
 }
 
+.mvh-s {
+  min-height: 30vh;
+}
+.mvh-m {
+  min-height: 50vh;
+}
+.mvh-l {
+  min-height: 80vh;
+}
+.mvh-xl {
+  min-height: 100vh;
+}
+
+
 #stripe-checkout,
 #stripe-checkout iframe {
 	background-color: var(--c-body);
