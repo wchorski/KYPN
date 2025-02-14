@@ -76,6 +76,8 @@ export const checkout = (base: BaseSchemaMeta) =>
         `,
 			})) as CartItem[]
 
+      const rentalItem = cartItems.find(item => item.rental)?.rental
+
 			const amountTotal = calcTotalPrice(cartItems)
 			const transactionFees =
 				(session.stripe?.amount_total || amountTotal) - amountTotal
@@ -90,6 +92,13 @@ export const checkout = (base: BaseSchemaMeta) =>
 										type: item.type,
 										quantity: item.quantity,
 										booking: { connect: { id: item.booking?.id } },
+									}
+
+								case item.rental !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										rental: { connect: { id: item.rental?.id } },
 									}
 
 								case item.product !== null:
@@ -133,13 +142,10 @@ export const checkout = (base: BaseSchemaMeta) =>
 													item.subscriptionPlan?.billing_interval,
 												user: {
 													connect: {
-														id:
-															session.itemId ||
-															session.stripe?.customerId,
+														id: session.itemId || session.stripe?.customerId,
 													},
 												},
-												stripeSubscriptionId:
-													session.stripe?.subscriptionId,
+												stripeSubscriptionId: session.stripe?.subscriptionId,
 											},
 										},
 									}
@@ -168,24 +174,10 @@ export const checkout = (base: BaseSchemaMeta) =>
 					stripeCheckoutSessionId: session.stripe?.id || "",
 					stripePaymentIntent: session.stripe?.payment_intent || "",
 					//TODO maybe not secure
-					...(session.stripe?.payment_status === "paid" ||
-					amountTotal === 0
+					...(session.stripe?.payment_status === "paid" || amountTotal === 0
 						? { status: "PAYMENT_RECIEVED" }
 						: { status: "REQUESTED" }),
 				},
-				...(cartItems.some((item) => item.type === "RENTAL")
-					? {
-							rental: {
-								create: {
-									start: "",
-									end: "",
-                  status: 'REQUESTED',
-									location: { connect: { id: "" } },
-									customer: { connect: { id: customerId } },
-								},
-							},
-					  }
-					: {}),
 			})
 
 			if (!order) throw new Error("!!! mutation.checkout: order not created")
@@ -193,6 +185,15 @@ export const checkout = (base: BaseSchemaMeta) =>
 			await sudoContext.db.CartItem.deleteMany({
 				where: cartItems.map((item) => ({ id: item.id })),
 			})
+
+      if(rentalItem){
+        await sudoContext.db.Rental.updateOne({
+          where: {id: rentalItem.id},
+          data:{
+            status: session.stripe?.payment_status === 'paid' ? "PAYMENT_RECIEVED" : "REQUESTED"
+          }
+        })
+      }
 
 			await sudoContext.db.Booking.updateMany({
 				data: cartItems

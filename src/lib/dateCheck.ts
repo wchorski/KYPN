@@ -1,9 +1,14 @@
-export const dateAdjuster = (date:Date|string, { years = 0, months = 0, days = 0 }) => 
-  new Date(new Date(date).setFullYear(
-    new Date(date).getFullYear() + years,
-    new Date(date).getMonth() + months,
-    new Date(date).getDate() + days
-  )).toISOString()
+export const dateAdjuster = (
+	date: Date | string,
+	{ years = 0, months = 0, days = 0 }
+) =>
+	new Date(
+		new Date(date).setFullYear(
+			new Date(date).getFullYear() + years,
+			new Date(date).getMonth() + months,
+			new Date(date).getDate() + days
+		)
+	).toISOString()
 
 type BusyRange = {
 	id: string
@@ -21,11 +26,16 @@ type Range = {
 
 // }
 
-export const calcDaysBetweenTimestamps = (startISO:string|Date, endISO:string|Date) => {
-  const start = new Date(startISO).getTime()
-  const end = new Date(endISO).getTime()
-  
-  return Math.floor((end - start) / (1000 * 60 * 60 * 24))
+const todayISO = new Date().toISOString()
+
+export const calcDaysBetweenTimestamps = (
+	startISO: string | Date | undefined,
+	endISO: string | Date | undefined
+) => {
+	const start = new Date(startISO || todayISO).getTime()
+	const end = new Date(endISO || todayISO).getTime()
+
+	return Math.floor((end - start) / (1000 * 60 * 60 * 24))
 }
 
 export function dateOverlapCount(gig: Range, busyRanges: BusyRange[]) {
@@ -97,7 +107,10 @@ export function calcEndTime(
 	return date.toISOString()
 }
 
-export function calcDurationInHours(dateString1: string|Date, dateString2: string|Date) {
+export function calcDurationInHours(
+	dateString1: string | Date,
+	dateString2: string | Date
+) {
 	const date1 = new Date(dateString1)
 	const date2 = new Date(dateString2)
 

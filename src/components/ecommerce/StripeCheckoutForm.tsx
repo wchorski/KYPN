@@ -13,15 +13,28 @@ import {
 	StripeCheckoutSessionAction,
 } from "@lib/actions/postStripeSession"
 import { envs } from "@/envs"
+import { useCart } from "@components/hooks/CartStateContext"
+import { User } from "@ks/types"
 if (!envs.STRIPE_PUBLIC_KEY)
 	throw new Error("!!! envs.STRIPE_PUBLIC_KEY not set")
 const stripePromise = loadStripe(envs.STRIPE_PUBLIC_KEY)
 
-export function StripeCheckoutForm(props: StripeCheckoutSessionAction) {
+export type Props = {
+	user: User
+	email?: string
+	// TODO this is here for my peace of mind, but prob can omit
+	// itemType: "ticket" | "product" | "booking"
+}
+
+export function StripeCheckoutForm({ user, email }: Props) {
+	const { cartItems, cartTotal } = useCart()
+
 	const fetchClientSecret = useCallback(async () => {
-		const stripeResponse = await postStripeSession(props)
+		// if (cartItems.length <= 0) return console.log("!!! cartItems.length <= 0")
+    console.log('StripeCheckoutForm - fetchClientSecret');
+		const stripeResponse = await postStripeSession({ cartItems, user, email })
 		return stripeResponse.clientSecret
-	}, [props])
+	}, [cartItems, user, email])
 
 	// https://docs.stripe.com/payments/checkout/customization/appearance?payment-ui=embedded-components
 	const options = {
@@ -44,8 +57,9 @@ export function StripeCheckoutForm(props: StripeCheckoutSessionAction) {
 		// }
 	}
 
+  // if (cartItems.length <= 0) return null
 	return (
-		<div id="stripe-checkout">
+		<div id="stripe-checkout" key={cartTotal}>
 			<EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
 				<EmbeddedCheckout />
 			</EmbeddedCheckoutProvider>

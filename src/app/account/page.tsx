@@ -21,6 +21,8 @@ import {
 	IconBookmark,
 	IconCalendar,
 	IconCalendarOutlined,
+	IconDownload,
+	IconFlagRent,
 	IconShoppingBag,
 	IconSubRepeat,
 	IconTicketOutlined,
@@ -197,15 +199,14 @@ export default async function AccountPage() {
 		},
 		{
 			slug: "rentals",
-			isCount: false,
-			// count: rentals.length > 0,
-			icon: <></>,
+			isCount: user.rentals.length > 0,
+			icon: <IconFlagRent />,
 		},
 		{
 			slug: "downloads",
 			isCount: false,
 			// count: downloads.length > 0,
-			icon: <></>,
+			icon: <IconDownload />,
 		},
 	]
 
@@ -262,6 +263,17 @@ const USER_DASH_QUERY = `
       name
       status
       billing_interval
+    }
+    rentals {
+      id
+      summary
+      start
+      end
+      timeZone
+      days
+      address
+      delivery
+      status
     }
   }
 `

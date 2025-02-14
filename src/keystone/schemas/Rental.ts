@@ -19,7 +19,7 @@ import {
 import { mailBooking } from "../../lib/mail"
 import { User, Addon, Service, Location } from "../types"
 import {
-  calcDaysBetweenTimestamps,
+	calcDaysBetweenTimestamps,
 	calcDurationInHours,
 	calcEndTime,
 	dateCheckAvail,
@@ -82,7 +82,7 @@ export const Rental: Lists.Rental = list({
 		}),
 		start: timestamp({ validation: { isRequired: true } }),
 		end: timestamp({ validation: { isRequired: true } }),
-    timeZone: select({
+		timeZone: select({
 			validation: { isRequired: true },
 			options: envs.TIMEZONES.map((tz) => ({ label: tz, value: tz })),
 			defaultValue: envs.TIMEZONES[0],
@@ -103,7 +103,13 @@ export const Rental: Lists.Rental = list({
               name
             `,
 					})) as User
-					return customer.name + " | " + item.start + " | " + calcDaysBetweenTimestamps(item.start, item.end)
+					return (
+						customer.name +
+						" | " +
+						item.start +
+						" | " +
+						calcDaysBetweenTimestamps(item.start, item.end)
+					)
 				},
 			}),
 		}),
@@ -119,7 +125,9 @@ export const Rental: Lists.Rental = list({
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item) {
-					return calcDaysBetweenTimestamps(item.start, item.end)
+					const days = calcDaysBetweenTimestamps(item.start, item.end)
+          //? rental days cannot be lower than 1 day
+					return days > 0 ? days : 1
 				},
 			}),
 		}),
@@ -128,18 +136,18 @@ export const Rental: Lists.Rental = list({
 		// TODO, make this a virtual and .reduce `orderItems` that are Rentals
 		price: integer({
 			defaultValue: 0,
-			validation: { 
-        // isRequired: true, 
-        min: 0 
-      },
+			validation: {
+				// isRequired: true,
+				min: 0,
+			},
 		}),
-    // price: virtual({
+		// price: virtual({
 		// 	field: graphql.field({
 		// 		type: graphql.Int,
 		// 		async resolve(item, context) {
-    //       const orderItems = await context.db.OrderItems.query({
-    //         where: 
-    //       })
+		//       const orderItems = await context.db.OrderItems.query({
+		//         where:
+		//       })
 		// 			return 0
 		// 		},
 		// 	}),
@@ -153,7 +161,7 @@ export const Rental: Lists.Rental = list({
 			},
 		}),
 		// cartItems: relationship({ ref: 'CartItem.rentals', many: true }),
-		order: relationship({ ref: "Order.rental", many: false }),
+		orderItem: relationship({ ref: "OrderItem.rental", many: false }),
 		addons: relationship({ ref: "Addon.rentals", many: true }),
 		// employees: relationship({ ref: 'User.gigs', many: true }),
 		customer: relationship({ ref: "User.rentals", many: false }),
@@ -192,11 +200,12 @@ export const Rental: Lists.Rental = list({
 			},
 		}),
 	},
-  hooks: {
-    validate: {
-      create: async({resolvedData}) => {
-        if(!resolvedData.customer?.connect?.id) throw new Error('!!! Rental must have connected Customer')
-      }
-    }
-  }
+	hooks: {
+		validate: {
+			create: async ({ resolvedData }) => {
+				if (!resolvedData.customer?.connect?.id)
+					throw new Error("!!! Rental must have connected Customer")
+			},
+		},
+	},
 })

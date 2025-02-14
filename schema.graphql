@@ -1936,7 +1936,7 @@ type Rental {
   phone: String
   name: String
   notes: String
-  order: Order
+  orderItem: OrderItem
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   customer: User
@@ -1965,7 +1965,7 @@ input RentalWhereInput {
   phone: StringFilter
   name: StringFilter
   notes: StringFilter
-  order: OrderWhereInput
+  orderItem: OrderItemWhereInput
   addons: AddonManyRelationFilter
   customer: UserWhereInput
   status: StringFilter
@@ -2001,19 +2001,13 @@ input RentalUpdateInput {
   phone: String
   name: String
   notes: String
-  order: OrderRelateToOneForUpdateInput
+  orderItem: OrderItemRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   customer: UserRelateToOneForUpdateInput
   status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
-}
-
-input OrderRelateToOneForUpdateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
-  disconnect: Boolean
 }
 
 input RentalUpdateArgs {
@@ -2032,18 +2026,13 @@ input RentalCreateInput {
   phone: String
   name: String
   notes: String
-  order: OrderRelateToOneForCreateInput
+  orderItem: OrderItemRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
   customer: UserRelateToOneForCreateInput
   status: String
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
-}
-
-input OrderRelateToOneForCreateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
 }
 
 type CartItem {
@@ -2177,6 +2166,7 @@ type OrderItem {
   quantity: Int
   product: Product
   booking: Booking
+  rental: Rental
   tickets(where: TicketWhereInput! = {}, orderBy: [TicketOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TicketWhereUniqueInput): [Ticket!]
   ticketsCount(where: TicketWhereInput! = {}): Int
   subscriptionItem: SubscriptionItem
@@ -2199,6 +2189,7 @@ input OrderItemWhereInput {
   quantity: IntFilter
   product: ProductWhereInput
   booking: BookingWhereInput
+  rental: RentalWhereInput
   tickets: TicketManyRelationFilter
   subscriptionItem: SubscriptionItemWhereInput
   coupon: CouponWhereInput
@@ -2220,6 +2211,7 @@ input OrderItemUpdateInput {
   quantity: Int
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
+  rental: RentalRelateToOneForUpdateInput
   tickets: TicketRelateToManyForUpdateInput
   subscriptionItem: SubscriptionItemRelateToOneForUpdateInput
   coupon: CouponRelateToOneForUpdateInput
@@ -2234,6 +2226,12 @@ input SubscriptionItemRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
+}
+
 input OrderItemUpdateArgs {
   where: OrderItemWhereUniqueInput!
   data: OrderItemUpdateInput!
@@ -2244,6 +2242,7 @@ input OrderItemCreateInput {
   quantity: Int
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
+  rental: RentalRelateToOneForCreateInput
   tickets: TicketRelateToManyForCreateInput
   subscriptionItem: SubscriptionItemRelateToOneForCreateInput
   coupon: CouponRelateToOneForCreateInput
@@ -2255,6 +2254,11 @@ input OrderItemCreateInput {
 input SubscriptionItemRelateToOneForCreateInput {
   create: SubscriptionItemCreateInput
   connect: SubscriptionItemWhereUniqueInput
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
 }
 
 type Order {
@@ -2273,7 +2277,6 @@ type Order {
   status: String
   items(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   itemsCount(where: OrderItemWhereInput! = {}): Int
-  rental: Rental
   user: User
   dateCreated: DateTime
   dateModified: DateTime
@@ -2297,7 +2300,6 @@ input OrderWhereInput {
   shipping_address: StringFilter
   status: StringNullableFilter
   items: OrderItemManyRelationFilter
-  rental: RentalWhereInput
   user: UserWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
@@ -2327,7 +2329,6 @@ input OrderUpdateInput {
   shipping_address: String
   status: String
   items: OrderItemRelateToManyForUpdateInput
-  rental: RentalRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
@@ -2348,7 +2349,6 @@ input OrderCreateInput {
   shipping_address: String
   status: String
   items: OrderItemRelateToManyForCreateInput
-  rental: RentalRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime

@@ -1,6 +1,7 @@
 import { CartItem } from "@ks/types"
 
 export function calcTotalPrice(cart: CartItem[]) {
+  //? Cartitem.ts set's rental products subTotal to 0
 	const subTotal = cart.reduce((accumulator, item) => {
 		return accumulator + item.subTotal
 	}, 0)

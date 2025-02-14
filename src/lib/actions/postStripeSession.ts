@@ -56,6 +56,8 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
 
+	console.log(JSON.stringify({ line_items }, null, 2))
+
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 
@@ -74,8 +76,8 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			// ...(itemType === "ticket"
 			// 	? { eventId: props.cartItems.map((it) => it.event?.id).join(", ") }
 			// 	: {}),
-			orderId: null,
-			rentalId: "",
+			orderId: "",
+			rentalId: cartItems.find((item) => item.rental)?.rental?.id || "",
 		},
 		// https://docs.stripe.com/payments/checkout/free-trials
 		...(hasSubscription
@@ -104,7 +106,6 @@ function createRentalLineItem(
 	if (!cartItem.rental) return undefined
 	const { rental, quantity, subTotal } = cartItem
 
-  console.log('postStripe:: ', {rental});
 	return {
 		price_data: {
 			// TODO make this part of CartItem schema item.currency, not hard coded
@@ -119,7 +120,7 @@ function createRentalLineItem(
 				},
 			},
 
-			unit_amount: subTotal
+			unit_amount: subTotal,
 		},
 		quantity,
 	}
@@ -135,7 +136,7 @@ function createBookingLineItems(
 			// TODO make this part of CartItem schema item.currency, not hard coded
 			currency: "usd",
 			product_data: {
-				name: booking.summary,
+				name: `BOOKING: ${booking.summary}`,
 				images: [booking.service?.image || ""],
 				metadata: {
 					bookingId: booking.id,

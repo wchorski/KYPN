@@ -42,7 +42,7 @@ export default async function RentalPage({ params, searchParams }: Props) {
 	return (
 		<main className={[page_layout].join(" ")}>
 			<header className={layout_site}>
-				<h1>RentalPage</h1>
+				<h1>Edit Rental</h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<Grid layout={"1_1"} isAuto={false}>
@@ -57,7 +57,8 @@ export default async function RentalPage({ params, searchParams }: Props) {
 							</Callout>
 						)}
 						<h2>Cart Items</h2>
-						<ul className={"unstyled grid gap-m"}>
+            <CartItemsList />
+						{/* <ul className={"unstyled grid gap-m"}>
 							{sorteCartItems.map((item) => (
 								<CartItem
 									key={item.id}
@@ -65,14 +66,15 @@ export default async function RentalPage({ params, searchParams }: Props) {
 									sessionId={session.itemId}
 								/>
 							))}
-						</ul>
+						</ul> */}
 
-						<Flex alignItems="baseline">
+            {/* // TODO add back in if you make it reactive with RentalForm */}
+						{/* <Flex alignItems="baseline">
 							<h2>Total: </h2>
 							<p style={{ fontSize: "4rem" }}>
 								<CartTotal />
 							</p>
-						</Flex>
+						</Flex> */}
 					</div>
 					<div>
 						{!user.cart.some((item) => item.type === "RENTAL") ? (

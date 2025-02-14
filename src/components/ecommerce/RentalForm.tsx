@@ -16,6 +16,7 @@ import Link from "next/link"
 import { dateFormatLocalDateTime } from "@lib/dateFormatter"
 import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 type Props = {
 	customerId: string
@@ -49,6 +50,9 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 
 	// TODO make `days` reactive number that updates on field change (start, end)
 	// const { state, action, submitCount } = useForm(postRentalToCart, initState)
+	const [days, setDays] = useState(
+		currRental ? calcDaysBetweenTimestamps(currRental.start, currRental.end) : 1
+	)
 	const [state, action] = useFormState(async (state: any, formData: any) => {
 		let isError = false
 		try {
@@ -60,9 +64,16 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 			isError = true
 			return state
 		} finally {
-			if (!isError) router.push("/checkout")
+			if (!isError){ 
+        router.push("/checkout")
+        // router.refresh()
+      }
 		}
 	}, initState)
+
+	function handleDaysUpdate(start: string, end: string) {
+		setDays(calcDaysBetweenTimestamps(start, end))
+	}
 
 	return (
 		<form className={form} action={action}>
@@ -79,6 +90,9 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 						dateFormatLocalDateTime(currRental?.start || "") ||
 						state?.values?.start
 					}
+					onChange={(e) =>
+						handleDaysUpdate(e.currentTarget.value, state.values.end)
+					}
 				/>
 				<InputField
 					type={"datetime-local"}
@@ -91,6 +105,9 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 					}
 					defaultValue={
 						dateFormatLocalDateTime(currRental?.end || "") || state?.values?.end
+					}
+					onChange={(e) =>
+						handleDaysUpdate(state.values.start, e.currentTarget.value)
 					}
 				/>
 				<SelectField
@@ -105,13 +122,7 @@ export function RentalForm({ customerId, currRental, timeZoneOptions }: Props) {
 					error={state?.valueErrors?.timeZone}
 				/>
 
-				<p>
-					Days:{" "}
-					{calcDaysBetweenTimestamps(
-						state.values?.start || "",
-						state.values?.end || ""
-					)}
-				</p>
+				<p>Days: {days}</p>
 			</fieldset>
 			<fieldset>
 				<legend>Location</legend>

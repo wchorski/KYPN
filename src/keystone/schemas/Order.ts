@@ -142,7 +142,8 @@ export const Order: Lists.Order = list({
 			},
 		}),
 		items: relationship({ ref: "OrderItem.order", many: true }),
-		rental: relationship({ ref: "Rental.order", many: false }),
+    //? moved to OrderItem
+		// rental: relationship({ ref: "Rental.order", many: false }),
 		// ticketItems: relationship({ ref: "Ticket.order", many: true }),
     //? moved to OrderItem
 		// bookings: relationship({ ref: "Booking.order", many: true }),

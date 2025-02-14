@@ -19,6 +19,8 @@ import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { Card } from "@components/layouts/Card"
+import { CartItemsList } from "@components/ecommerce/CartItemsList"
+import { CartTotal } from "@components/ecommerce/CartTotal"
 
 export const metadata: Metadata = {
 	title: `Checkout | ` + envs.SITE_TITLE,
@@ -69,8 +71,8 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 				<section className={layout_content}>
 					{someRentalItems && user.cart.find((item) => item.rental) && (
 						<>
-							<h2>Rental Items</h2>
-							<ul className={"unstyled grid gap-m"}>
+							<h2>Cart Items</h2>
+							{/* <ul className={"unstyled grid gap-m"}>
 								{cartRentalItems.map((item) => (
 									<CartItem
 										key={item.id}
@@ -82,7 +84,8 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 									item={plainObj(user.cart.find((item) => item.rental))}
 									sessionId={session.itemId}
 								/>
-							</ul>
+							</ul> */}
+							<CartItemsList />
 							<Card>
 								<h4>Notes</h4>
 								<p>{cartRental?.notes}</p>
@@ -91,6 +94,11 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							<Link className={"button medium"} href={`/checkout/rental`}>
 								Update Rental Details
 							</Link>
+              <br />
+              <br />
+							<p>
+								Total: <CartTotal />
+							</p>
 						</>
 					)}
 				</section>
@@ -104,7 +112,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 					) : (
 						<StripeCheckoutForm
 							// itemType={"ticket"}
-							cartItems={plainObj(user.cart)}
+							// cartItems={plainObj(user.cart)}
 							email={session.user.email}
 							user={session.user as User}
 						/>

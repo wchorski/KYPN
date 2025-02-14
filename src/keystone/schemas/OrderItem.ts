@@ -40,6 +40,7 @@ export const OrderItem: Lists.OrderItem = list({
 		quantity: integer({ validation: { isRequired: true, min: 1 } }),
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
+		rental: relationship({ ref: "Rental.orderItem", many: false }),
 		tickets: relationship({ ref: "Ticket.orderItem", many: true }),
 		subscriptionItem: relationship({
 			ref: "SubscriptionItem.orderItem",
@@ -55,6 +56,7 @@ export const OrderItem: Lists.OrderItem = list({
 			defaultValue: { kind: "now" },
 			validation: { isRequired: true },
 		}),
+    //TODO some total or subTotal or price that is hard written upon checkout
 	},
 
 	hooks: {

@@ -69,15 +69,14 @@ export default function AccountDash({ data }: Props) {
 		})
 	)
 
-	// const rentalCells = rentals?.map((item) => ({
-	//   start: datePrettyLocalDay(item.start || ""),
-	//   end: datePrettyLocalDay(item.end || ""),
-	//   hours: item.durationInHours,
-	//   status: <StatusBadge type={"rental"} status={item.status} />,
-	//   location: item.location,
-	//   delivery: item.delivery ? "Delivery" : "Pickup",
-	//   details: item.id,
-	// }));
+	const rentalCells = rentals?.map((item) => ({
+	  start: datePrettyLocalDay(item.start),
+	  days: item.days,
+	  status: <StatusBadge type={"rental"} status={item.status} />,
+	  address: item.address,
+	  delivery: item.delivery ? "Delivery" : "Pickup",
+	  details: item.id,
+	}));
 
 	// todo add employee gig to table. try to make both gigs and requests into one table, but may just split to make it easiuer
 	const gigCells = gigs.map((gig) => ({
@@ -157,7 +156,7 @@ export default function AccountDash({ data }: Props) {
 					/>
 				</Card>
 			)}
-			{/* {rentals.length > 0 && (
+			{rentals.length > 0 && (
         <Card id="rentals" marginBlock={'0'}>
           <h3
 
@@ -169,10 +168,9 @@ export default function AccountDash({ data }: Props) {
             caption=""
             headers={[
               "start",
-              "end",
-              "hours",
+              "days",
               "status",
-              "location",
+              "address",
               "delivery",
               "details",
             ]}
@@ -180,7 +178,7 @@ export default function AccountDash({ data }: Props) {
             route={`/rentals`}
           />
         </Card>
-      )} */}
+      )}
 
 			{user.subscriptions.length > 0 && (
 				<Card id="subscriptions" marginBlock={"0"}>

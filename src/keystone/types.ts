@@ -125,6 +125,7 @@ export type User = Lists.User.Item & {
 	servicesProvided: Service[]
 	subscriptions: SubscriptionItem[]
 	bookings: Booking[]
+	rentals: Rental[]
 	gigs: Booking[]
 	gig_requests: Booking[]
 	availability: Availability[]
