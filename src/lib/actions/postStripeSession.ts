@@ -56,8 +56,6 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
 
-	console.log(JSON.stringify({ line_items }, null, 2))
-
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 

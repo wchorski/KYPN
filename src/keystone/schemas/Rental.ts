@@ -45,6 +45,7 @@ const today = `${year}-${month < 10 ? "0" + month : month}-${
 }`
 
 export const Rental: Lists.Rental = list({
+  // TODO set permissions on rentals!!!!!!!!!
 	access: allowAll,
 	// access: {
 	//   filter: {
@@ -80,7 +81,9 @@ export const Rental: Lists.Rental = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
+    // TODO input validate that it is before end
 		start: timestamp({ validation: { isRequired: true } }),
+    // TODO input validate that it is after start
 		end: timestamp({ validation: { isRequired: true } }),
 		timeZone: select({
 			validation: { isRequired: true },

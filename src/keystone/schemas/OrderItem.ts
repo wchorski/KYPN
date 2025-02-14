@@ -30,6 +30,7 @@ export const OrderItem: Lists.OrderItem = list({
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
 				{ label: "Subscription", value: "SUBSCRIPTION" },
+        { label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
 			validation: { isRequired: true },
 			ui: {

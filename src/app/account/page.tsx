@@ -30,6 +30,7 @@ import {
 import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
 import { DashNav, DashNavData } from "@components/menus/DashNav"
 import ErrorPage from "@components/layouts/ErrorPage"
+import fetchRentals from "@lib/fetchdata/fetchRentals"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
 		"dashboard for orders, subscriptions, bookings, tickets, downloads",
 }
 
-const now = new Date().toISOString()
+const today = new Date().toISOString()
 
 export default async function AccountPage() {
 	const session = await getServerSession(nextAuthOptions)
@@ -71,28 +72,6 @@ export default async function AccountPage() {
       `,
 		})) as Order[]
 
-	// const rentals = await keystoneContext.withSession(session).query.Rental.findMany({
-	//   where: {
-	//     customer: {
-	//       id: { equals: session.itemId },
-	//     }
-	//   },
-	//   orderBy: [
-	//     {
-	//       start: "desc"
-	//     }
-	//   ],
-	//   query: `
-	//     id
-	//     start
-	//     end
-	//     durationInHours
-	//     location
-	//     delivery
-	//     status
-	//   `,
-	// }) as Rental[]
-
 	// TODO move this to a `fetchDATA` function
 	const employeeGigData = (await keystoneContext
 		.withSession(session)
@@ -104,12 +83,12 @@ export default async function AccountPage() {
 				},
 				gigsWhere: {
 					end: {
-						gt: now,
+						gt: today,
 					},
 				},
 				gigRequestsWhere: {
 					end: {
-						gt: now,
+						gt: today,
 					},
 				},
 				orderBy: [
@@ -146,6 +125,24 @@ export default async function AccountPage() {
         }
       `,
 		})) as { user: User }
+
+	const QUERY_USER_RENTALS = `
+    id
+    summary
+    start
+    end
+    timeZone
+    days
+    address
+    delivery
+    status
+  `
+
+	const { rentals, error } = await fetchRentals({
+		query: QUERY_USER_RENTALS,
+		session,
+		dateSelectedString: today,
+	})
 
 	if (userError) return <ErrorPage error={userError} />
 
@@ -199,7 +196,7 @@ export default async function AccountPage() {
 		},
 		{
 			slug: "rentals",
-			isCount: user.rentals.length > 0,
+			isCount: rentals ? rentals.length > 0 : false,
 			icon: <IconFlagRent />,
 		},
 		{
@@ -209,13 +206,13 @@ export default async function AccountPage() {
 			icon: <IconDownload />,
 		},
 	]
-
+  
 	const data = {
 		user,
 		orders,
 		tickets,
 		sudoTicketCount,
-		rentals: [],
+		rentals: rentals ? rentals : [],
 		downloads: [],
 		employeeGigs: { gigs, gig_requests },
 	}
@@ -263,17 +260,6 @@ const USER_DASH_QUERY = `
       name
       status
       billing_interval
-    }
-    rentals {
-      id
-      summary
-      start
-      end
-      timeZone
-      days
-      address
-      delivery
-      status
     }
   }
 `

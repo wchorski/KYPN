@@ -45,6 +45,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 			if (!session)
 				throw new Error("!!! mutation.checkout: Session not available")
 
+      console.log('### mutation/checkout');
+			console.log({ session })
+
 			const paymentStatus = session.stripe?.payment_status || "unpaid"
 			const customerId = session.itemId || session.stripe?.customerId
 
@@ -73,10 +76,16 @@ export const checkout = (base: BaseSchemaMeta) =>
             id
             billing_interval
           }
+          rental {
+            id
+          }
+          coupon {
+            id
+          }
         `,
 			})) as CartItem[]
 
-      const rentalItem = cartItems.find(item => item.rental)?.rental
+			const rentalItem = cartItems.find((item) => item.rental)?.rental
 
 			const amountTotal = calcTotalPrice(cartItems)
 			const transactionFees =
@@ -186,14 +195,17 @@ export const checkout = (base: BaseSchemaMeta) =>
 				where: cartItems.map((item) => ({ id: item.id })),
 			})
 
-      if(rentalItem){
-        await sudoContext.db.Rental.updateOne({
-          where: {id: rentalItem.id},
-          data:{
-            status: session.stripe?.payment_status === 'paid' ? "PAYMENT_RECIEVED" : "REQUESTED"
-          }
-        })
-      }
+			if (rentalItem) {
+				await sudoContext.db.Rental.updateOne({
+					where: { id: rentalItem.id },
+					data: {
+						status:
+							session.stripe?.payment_status === "paid"
+								? "PAYMENT_RECIEVED"
+								: "REQUESTED",
+					},
+				})
+			}
 
 			await sudoContext.db.Booking.updateMany({
 				data: cartItems
