@@ -63,6 +63,7 @@ const userQuery = `
       canManageSubscriptionPlans
       canManageSubscriptionItems
       canManageCoupons
+      canManageRentals
     }
   `
 async function getKeystoneContext() {

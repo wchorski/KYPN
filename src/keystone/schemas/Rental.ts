@@ -2,9 +2,7 @@
 // docs - https://github.com/keystonejs/keystone/blob/333152e620183f310be892f1c82fbf847b47ecae/examples/framework-nextjs-pages-directory/src/pages/index.tsx
 
 import { graphql, list } from "@keystone-6/core"
-// @ts-ignore
 import type { Lists } from ".keystone/types"
-import { allowAll } from "@keystone-6/core/access"
 import {
 	checkbox,
 	decimal,
@@ -45,24 +43,24 @@ const today = `${year}-${month < 10 ? "0" + month : month}-${
 }`
 
 export const Rental: Lists.Rental = list({
-  // TODO set permissions on rentals!!!!!!!!!
-	access: allowAll,
-	// access: {
-	//   filter: {
-	//     query: () => true,
-	//     update: rules.canManageBookings,
-	//     delete: rules.canManageBookings,
-	//   },
-	//   operation: {
-	//     create: () => true,
-	//     query: () => true,
-	//     update: isLoggedIn,
-	//     delete: isLoggedIn,
-	//   }
-	// },
+
+	access: {
+	  filter: {
+	    query: rules.canViewRentals,
+	    update: rules.canManageRentals,
+	    delete: rules.canManageRentals,
+	  },
+	  operation: {
+	    create: permissions.canManageRentals,
+	    query: () => true,
+	    update: permissions.canManageRentals,
+	    delete: permissions.canManageRentals,
+	  }
+	},
 
 	ui: {
 		// hide backend from non admins
+    // isHidden: (args) => !permissions.canManageRentals(args),
 		listView: {
 			initialColumns: ["start", "days", "customer", "status", "address"],
 			initialSort: { field: "start", direction: "DESC" },
@@ -111,7 +109,7 @@ export const Rental: Lists.Rental = list({
 						" | " +
 						item.start +
 						" | " +
-						calcDaysBetweenTimestamps(item.start, item.end)
+						calcDaysBetweenTimestamps(item.start, item.end) + ' days'
 					)
 				},
 			}),

@@ -286,18 +286,19 @@ export type Product = Lists.Product.Item & {
 
 export type Rental = Lists.Rental.Item & {
 	typeof: "rental"
-  days:number
-  start:string
-  end:string
+	days: number
+	start: string
+	end: string
 	summary: string
 	order: Order
 	// employees: User[],
 	addons?: Addon[]
-	customer?: User
+	customer: User
 	dateCreated?: string
 	dateModified?: string
 	delivery: boolean
-  
+	orderItem: OrderItem
+
 	google?: {
 		id?: string
 		kind?: string
@@ -339,6 +340,9 @@ export type Order = Lists.Order.Item & {
 export type OrderItem = Lists.OrderItem.Item & {
 	product: Product
 	booking: Booking
+	rental: Rental
+	coupon: Coupon
+	subscriptionItem: SubscriptionItem
 	tickets: Ticket[]
 	dateCreated: string
 	dateModified: string

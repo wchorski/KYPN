@@ -22,6 +22,7 @@ import { notFound } from "next/navigation"
 import { OrderItem } from "@ks/types"
 import { NoData } from "@components/elements/NoData"
 import { PriceTag } from "@components/ecommerce/PriceTag"
+import { ProductOrderItem } from "@components/ecommerce/ProductOrderItem"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
@@ -118,6 +119,34 @@ export default async function OrderByIdPage({ params }: Props) {
 									it.product && (
 										<ProductOrderItem item={it} key={`product-${it.id}`} />
 									),
+                  // TODO make these look nicer later
+									it.rental && (
+										<li key={`rental-${it.id}`}>
+											<Link href={`/rentals/${it.rental.id}`}>
+												Rental: {it.rental.summary}
+											</Link>
+										</li>
+									),
+									it.subscriptionItem && (
+										<li key={`subscriptionItem-${it.id}`}>
+											<Link
+												href={`/subscription-items/${it.subscriptionItem.id}`}
+												key={`subscriptionItem-${it.id}`}
+											>
+												Subscription: {it.subscriptionItem.summary}
+											</Link>
+										</li>
+									),
+									it.coupon && (
+										<li key={`coupon-${it.id}`}>
+											<h5>Coupon: {it.coupon.name}</h5>
+											{it.coupon.amount_off ? (
+												<p>-{moneyFormatter(it.coupon.amount_off)}</p>
+											) : (
+												<p>{it.coupon.percent_off}%</p>
+											)}
+										</li>
+									),
 								].filter(Boolean)
 							)}
 						</ul>
@@ -180,33 +209,7 @@ function BookingOrderItem({ item }: { item: OrderItem }) {
 		</li>
 	)
 }
-function ProductOrderItem({ item }: { item: OrderItem }) {
-	const { name, price, image, id } = item.product
-	return (
-		<li className={styles.item}>
-			<ImageDynamic photoIn={image} />
 
-			<div>
-				<Link href={`/products/${id}`}>
-					<h5>{name}</h5>
-				</Link>
-				{/* <em>
-					<abbr title="quantity" style={{textDecoration: 'none'}}>qty </abbr>
-					{item.quantity}
-				</em> */}
-				<em>
-					<abbr title="quantity" style={{textDecoration: 'none'}}>&times; </abbr>
-					{item.quantity}
-				</em>
-			</div>
-			<div className={perItemTotal}>
-				<PriceTag price={price * item.quantity} />
-				{/* <p>{moneyFormatter(price * item.quantity)}</p> */}
-				<em>{moneyFormatter(price)} each</em>
-			</div>
-		</li>
-	)
-}
 const query = `
   id
   label
@@ -220,6 +223,7 @@ const query = `
   items {
     id
     quantity
+    type
     booking {
       id
       summary
@@ -227,6 +231,10 @@ const query = `
       service {
         image
       }
+    }
+    rental {
+      id
+      summary
     }
     tickets {
       id
@@ -245,7 +253,18 @@ const query = `
       id
       name
       price
+      rental_price
       image
+    }
+    subscriptionItem {
+      id
+      summary
+    }
+    coupon {
+      id
+      name
+      amount_off
+      percent_off
     }
   }  
   user{

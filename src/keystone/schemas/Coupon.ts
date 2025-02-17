@@ -34,7 +34,7 @@ export const Coupon: Lists.Coupon = list({
 			label: "Discount",
 			description: "may only choose one. Leave other blank",
 			fields: {
-				amount_off: integer(),
+				amount_off: integer({ validation: { min: 0 } }),
 				percent_off: integer({
 					validation: {
 						min: 1,
@@ -60,18 +60,34 @@ export const Coupon: Lists.Coupon = list({
 		// this can be helpful to find out all the Posts associated with a Tag
 
 		// todo add coupon relations
-		products: relationship({ ref: "Product.coupons", many: true, ui: {description: 'available coupons before purchase'} }),
+		products: relationship({
+			ref: "Product.coupons",
+			many: true,
+			ui: { description: "available coupons before purchase" },
+		}),
 		subscriptionPlans: relationship({
 			ref: "SubscriptionPlan.coupons",
 			many: true,
 		}),
-		events: relationship({ ref: "Event.coupons", many: true, ui: {description: 'available coupons before purchase'} }),
-		services: relationship({ ref: "Service.coupons", many: true, ui: {description: 'available coupons before purchase'} }),
+		events: relationship({
+			ref: "Event.coupons",
+			many: true,
+			ui: { description: "available coupons before purchase" },
+		}),
+		services: relationship({
+			ref: "Service.coupons",
+			many: true,
+			ui: { description: "available coupons before purchase" },
+		}),
 	},
 
 	hooks: {
+		// validate: {
+		//   create: ({}) => {}
+		// },
 		beforeOperation: async ({ operation, resolvedData, item, context }) => {
 			if (operation === "create") {
+				// TODO move to validate hook
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
 						"Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank"

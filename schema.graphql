@@ -577,25 +577,26 @@ type Role {
   canManagePages: Boolean
   canManagePosts: Boolean
   canCreatePosts: Boolean
-  canManageCategories: Boolean
-  canManageTags: Boolean
   canManageAnnouncements: Boolean
   canManageProducts: Boolean
   canViewProducts: Boolean
   canManageAddons: Boolean
   canManageBookings: Boolean
-  canManageAvailability: Boolean
-  canCreateAvailability: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
-  canManageLocations: Boolean
-  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
   canManageCoupons: Boolean
+  canManageRentals: Boolean
+  canManageAvailability: Boolean
+  canCreateAvailability: Boolean
+  canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   assignedToCount(where: UserWhereInput! = {}): Int
 }
@@ -620,25 +621,26 @@ input RoleWhereInput {
   canManagePages: BooleanFilter
   canManagePosts: BooleanFilter
   canCreatePosts: BooleanFilter
-  canManageCategories: BooleanFilter
-  canManageTags: BooleanFilter
   canManageAnnouncements: BooleanFilter
   canManageProducts: BooleanFilter
   canViewProducts: BooleanFilter
   canManageAddons: BooleanFilter
   canManageBookings: BooleanFilter
-  canManageAvailability: BooleanFilter
-  canCreateAvailability: BooleanFilter
   canManageEvents: BooleanFilter
   canManageTickets: BooleanFilter
   canManageCart: BooleanFilter
   canManageOrders: BooleanFilter
-  canManageLocations: BooleanFilter
-  canViewPrivateLocations: BooleanFilter
   canManageServices: BooleanFilter
   canManageSubscriptionPlans: BooleanFilter
   canManageSubscriptionItems: BooleanFilter
   canManageCoupons: BooleanFilter
+  canManageRentals: BooleanFilter
+  canManageAvailability: BooleanFilter
+  canCreateAvailability: BooleanFilter
+  canManageLocations: BooleanFilter
+  canViewPrivateLocations: BooleanFilter
+  canManageCategories: BooleanFilter
+  canManageTags: BooleanFilter
   assignedTo: UserManyRelationFilter
 }
 
@@ -659,25 +661,26 @@ input RoleOrderByInput {
   canManagePages: OrderDirection
   canManagePosts: OrderDirection
   canCreatePosts: OrderDirection
-  canManageCategories: OrderDirection
-  canManageTags: OrderDirection
   canManageAnnouncements: OrderDirection
   canManageProducts: OrderDirection
   canViewProducts: OrderDirection
   canManageAddons: OrderDirection
   canManageBookings: OrderDirection
-  canManageAvailability: OrderDirection
-  canCreateAvailability: OrderDirection
   canManageEvents: OrderDirection
   canManageTickets: OrderDirection
   canManageCart: OrderDirection
   canManageOrders: OrderDirection
-  canManageLocations: OrderDirection
-  canViewPrivateLocations: OrderDirection
   canManageServices: OrderDirection
   canManageSubscriptionPlans: OrderDirection
   canManageSubscriptionItems: OrderDirection
   canManageCoupons: OrderDirection
+  canManageRentals: OrderDirection
+  canManageAvailability: OrderDirection
+  canCreateAvailability: OrderDirection
+  canManageLocations: OrderDirection
+  canViewPrivateLocations: OrderDirection
+  canManageCategories: OrderDirection
+  canManageTags: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -690,25 +693,26 @@ input RoleUpdateInput {
   canManagePages: Boolean
   canManagePosts: Boolean
   canCreatePosts: Boolean
-  canManageCategories: Boolean
-  canManageTags: Boolean
   canManageAnnouncements: Boolean
   canManageProducts: Boolean
   canViewProducts: Boolean
   canManageAddons: Boolean
   canManageBookings: Boolean
-  canManageAvailability: Boolean
-  canCreateAvailability: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
-  canManageLocations: Boolean
-  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
   canManageCoupons: Boolean
+  canManageRentals: Boolean
+  canManageAvailability: Boolean
+  canCreateAvailability: Boolean
+  canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo: UserRelateToManyForUpdateInput
 }
 
@@ -734,25 +738,26 @@ input RoleCreateInput {
   canManagePages: Boolean
   canManagePosts: Boolean
   canCreatePosts: Boolean
-  canManageCategories: Boolean
-  canManageTags: Boolean
   canManageAnnouncements: Boolean
   canManageProducts: Boolean
   canViewProducts: Boolean
   canManageAddons: Boolean
   canManageBookings: Boolean
-  canManageAvailability: Boolean
-  canCreateAvailability: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
   canManageCart: Boolean
   canManageOrders: Boolean
-  canManageLocations: Boolean
-  canViewPrivateLocations: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
   canManageSubscriptionItems: Boolean
   canManageCoupons: Boolean
+  canManageRentals: Boolean
+  canManageAvailability: Boolean
+  canCreateAvailability: Boolean
+  canManageLocations: Boolean
+  canViewPrivateLocations: Boolean
+  canManageCategories: Boolean
+  canManageTags: Boolean
   assignedTo: UserRelateToManyForCreateInput
 }
 

@@ -268,6 +268,26 @@ export const rules = {
 		return false
 	},
 
+  canViewRentals({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageRentals) return true
+		if (session)
+			return {
+				customer: { id: { equals: session.itemId || "no_session_id" } },
+			}
+		return false
+	},
+	canManageRentals({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageRentals) return true
+    //? don't allow customers to update to 'PAID'
+		// if (session)
+		// 	return {
+		// 		customer: { id: { equals: session.itemId || "no_session_id" } },
+		// 	}
+		return false
+	},
+
 	canManageBookings({ session }: ListAccessArgs) {
 		// anonymous users can create bookings
 		if (!isLoggedIn({ session })) return false
@@ -494,7 +514,7 @@ export const rules = {
 			},
 		}
 	},
-  canViewSubscriptionPlans({ session }: ListAccessArgs) {
+	canViewSubscriptionPlans({ session }: ListAccessArgs) {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageSubscriptionPlans({ session })) return true // They can read everything!
