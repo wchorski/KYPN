@@ -45,9 +45,6 @@ export const checkout = (base: BaseSchemaMeta) =>
 			if (!session)
 				throw new Error("!!! mutation.checkout: Session not available")
 
-      console.log('### mutation/checkout');
-			console.log({ session })
-
 			const paymentStatus = session.stripe?.payment_status || "unpaid"
 			const customerId = session.itemId || session.stripe?.customerId
 
@@ -134,30 +131,31 @@ export const checkout = (base: BaseSchemaMeta) =>
 										},
 									}
 
-								case item.subscriptionPlan !== null:
-									return {
-										type: item.type,
-										quantity: item.quantity,
-										subscriptionItem: {
-											create: {
-												subscriptionPlan: {
-													connect: { id: item.subscriptionPlan?.id },
-												},
-												status:
-													session.stripe?.payment_status === "paid"
-														? "ACTIVE"
-														: "TRIAL",
-												billing_interval:
-													item.subscriptionPlan?.billing_interval,
-												user: {
-													connect: {
-														id: session.itemId || session.stripe?.customerId,
-													},
-												},
-												stripeSubscriptionId: session.stripe?.subscriptionId,
-											},
-										},
-									}
+								// case item.subscriptionPlan !== null:
+								// 	return {
+								// 		type: item.type,
+								// 		quantity: item.quantity,
+								// 		subscriptionItem: {
+								// 			create: {
+								// 				subscriptionPlan: {
+								// 					connect: { id: item.subscriptionPlan?.id },
+								// 				},
+								// 				status:
+								// 					session.stripe?.payment_status === "paid"
+								// 						? "ACTIVE"
+								// 						: "TRIAL",
+								// 				billing_interval:
+								// 					item.subscriptionPlan?.billing_interval,
+								// 				user: {
+								// 					connect: {
+								// 						id: session.itemId || session.stripe?.customerId,
+								// 					},
+								// 				},
+                //         // TODO this is combined `sub_***` checkout. we want single `si_***` saved here
+								// 				stripeSubscriptionId: session.stripe?.subscriptionId,
+								// 			},
+								// 		},
+								// 	}
 
 								default:
 									return undefined
@@ -330,17 +328,4 @@ export async function countAvailableSeats({
 	})) as number
 
 	return seatsTaken
-}
-
-type TicketCartItem = {
-	id: string
-	quantity: number
-	type: "SALE"
-	productId: null
-	bookingId: null
-	event: {
-		id: string
-		seats: number
-		price: number
-	}
 }

@@ -40,7 +40,7 @@ export const CartItem: Lists.CartItem = list({
 			options: [
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
-				{ label: "Subscription", value: "SUBSCRIPTION" },
+				// { label: "Subscription", value: "SUBSCRIPTION" },
 				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
 			validation: { isRequired: true },
@@ -121,7 +121,7 @@ export const CartItem: Lists.CartItem = list({
 		booking: relationship({ ref: "Booking" }),
 		rental: relationship({ ref: "Rental" }),
 		event: relationship({ ref: "Event" }),
-		subscriptionPlan: relationship({ ref: "SubscriptionPlan" }),
+		// subscriptionPlan: relationship({ ref: "SubscriptionPlan" }),
 		user: relationship({ ref: "User.cart" }),
 	},
 	hooks: {
@@ -133,14 +133,14 @@ export const CartItem: Lists.CartItem = list({
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
-					"subscriptionPlan",
+					// "subscriptionPlan",
 					"booking",
 					"rental",
 					"coupon",
 				])
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking", "subscriptionPlan", "rental", "coupon"] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "rental", "coupon"] set'
 					)
 
 				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
@@ -167,8 +167,8 @@ export const CartItem: Lists.CartItem = list({
 					"eventId",
 					"booking",
 					"bookingId",
-					"subscriptionPlanId",
-					"subscriptionPlan",
+					// "subscriptionPlanId",
+					// "subscriptionPlan",
 					"rental",
 					"rentalId",
 					"coupon",
@@ -180,7 +180,7 @@ export const CartItem: Lists.CartItem = list({
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Cart Item can only have one of ["product", "event", "booking", "subscription", "rental",  "coupon", + itemId(s)] set'
+						'!!! Cart Item can only have one of ["product", "event", "booking", "rental",  "coupon", + itemId(s)] set'
 					)
 			},
 		},

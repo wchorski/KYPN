@@ -27,8 +27,9 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		filter: {
 			// todo throwing strange error in keystone main dash
 			// query: rules.canManageOrderItems,
-			query: isLoggedIn,
+			query: rules.canViewSubscriptionItems,
 			update: rules.canManageSubscriptionItems,
+			delete: rules.canManageSubscriptionItems,
 		},
 		operation: {
 			create: permissions.canManageSubscriptionItems,
@@ -93,39 +94,42 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			}),
 		}),
 		custom_price: integer(),
+
 		price: virtual({
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
-					// if(!item.serviceId) return item.name
-					const service = (await context.query.SubscriptionPlan.findOne({
-						where: { id: item.subscriptionPlanId || "no_service" },
-						query: `
-                  price
-                `,
-					})) as SubscriptionPlan
+          const orderItem = await context.query.OrderItem.findOne({
+            where: { id: item.}
+          })
+          throw new Error('get subTotal from OrderItem ')
+					// // if(!item.serviceId) return item.name
+					// const subPlan = (await context.query.SubscriptionPlan.findOne({
+					// 	where: { id: item.subscriptionPlanId || "no_service" },
+					// 	query: `
+          //     price
+          //   `,
+					// })) as SubscriptionPlan
 
-					console.log(service)
+					// const addons = await context.query.Addon.findMany({
+					// 	where: {
+					// 		subscriptionItems: {
+					// 			every: {
+					// 				id: {
+					// 					equals: item.id,
+					// 				},
+					// 			},
+					// 		},
+					// 	},
+					// 	query: `
+          //     price
+          //   `,
+					// })
+					// console.log({ addons })
+					// const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+					// const subTotal = subPlan.price + addonsPrice
 
-					const addons = await context.query.Addon.findMany({
-						where: {
-							subscriptionItems: {
-								every: {
-									id: {
-										equals: item.id,
-									},
-								},
-							},
-						},
-						query: `
-                  price
-                `,
-					})
-
-					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-					const subTotal = (service?.price || 0) + addonsPrice
-
-					return subTotal
+					// return subTotal
 				},
 			}),
 		}),
@@ -152,8 +156,9 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				{ label: "Suspended", value: "SUSPENDED" },
 				{ label: "Paused", value: "PAUSED" },
 				{ label: "Delinquent", value: "DELINQUENT" },
+				{ label: "Requested", value: "REQUESTED" },
 			],
-			defaultValue: "ACTIVE",
+			defaultValue: "REQUESTED",
 			validation: { isRequired: true },
 			ui: {
 				displayMode: "segmented-control",
@@ -221,24 +226,20 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				if (!resolvedData.subscriptionPlan)
 					throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
 			},
-			// update: async ({ resolvedData }) => {
-			// 	if (!resolvedData.subscriptionPlan)
-			// 		throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
-			// },
+			update: async ({ resolvedData, item }) => {
+				if (resolvedData.subscriptionPlan)
+					throw new Error(
+						"!!! SubscriptionItem: SubscriptionPlan cannot be changed on update"
+					)
+				if (item.status === "CANCELED" && resolvedData.status !== "CANCELED") {
+					throw new Error("!!! sub item is canceled and cannot be re-activated")
+				}
+			},
 		},
 		beforeOperation: {
 			update: async ({ resolvedData, item }) => {
 				const now = new Date()
 				resolvedData.dateModified = now
-
-				if (item.status === "CANCELED") {
-					console.log(
-						"!!!!!!!! sub item is canceled and cannot be re-activated"
-					)
-					throw new Error(
-						"!!!!!!!! sub item is canceled and cannot be re-activated"
-					)
-				}
 
 				if (resolvedData.status)
 					await stripeSubscriptionUpdate({
@@ -246,6 +247,13 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 						stripeSubscriptionId: item.stripeSubscriptionId,
 						status: resolvedData.status as TypeSubsItem["status"],
 					})
+			},
+			delete: async ({ item }) => {
+				await stripeSubscriptionUpdate({
+					subItemId: item.id,
+					stripeSubscriptionId: item.stripeSubscriptionId,
+					status: "CANCELED",
+				})
 			},
 		},
 		afterOperation: async ({ operation, resolvedData, item, context }) => {

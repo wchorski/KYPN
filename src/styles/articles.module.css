@@ -26,7 +26,7 @@ article.post_card {
 		grid-row-start: header-start;
 		grid-row-end: header-end;
 		display: flex;
-		justify-content: end;
+		justify-content: flex-end;
 		flex-direction: column;
 	}
 	& p {

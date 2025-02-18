@@ -14,22 +14,12 @@ import {
 	timestamp,
 	virtual,
 } from "@keystone-6/core/fields"
-import { mailBooking } from "../../lib/mail"
 import { User, Addon, Service, Location } from "../types"
 import {
 	calcDaysBetweenTimestamps,
 	calcDurationInHours,
-	calcEndTime,
-	dateCheckAvail,
-	dateOverlapCount,
-	dayOfWeek,
 } from "../../lib/dateCheck"
-import {
-	createCalendarEvent,
-	deleteCalendarEvent,
-	updateCalendarEvent,
-} from "../../lib/googleapi/calCreate"
-import { datePrettyLocal } from "../../lib/dateFormatter"
+
 import { isLoggedIn, permissions, rules } from "../access"
 import { envs } from "../../../envs"
 import { Decimal } from "@keystone-6/core/types"
@@ -52,7 +42,7 @@ export const Rental: Lists.Rental = list({
 	  },
 	  operation: {
 	    create: permissions.canManageRentals,
-	    query: () => true,
+	    query: isLoggedIn,
 	    update: permissions.canManageRentals,
 	    delete: permissions.canManageRentals,
 	  }

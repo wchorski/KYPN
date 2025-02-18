@@ -1,7 +1,7 @@
 .cardlist {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: start;
+	justify-content: flex-start;
 	align-items: stretch;
 	gap: 1rem;
 	padding-inline: 0;
@@ -63,13 +63,13 @@
 }
 
 .vAlign_start {
-	align-content: start;
+	align-content: flex-start;
 }
 .vAlign_center {
 	align-content: center;
 }
 .vAlign_end {
-	align-content: end;
+	align-content: flex-end;
 }
 
 .content_wrap {

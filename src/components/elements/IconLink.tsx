@@ -1,11 +1,12 @@
-import { IconEditPagePencile, IconTicketOutlined } from "@lib/useIcons"
+import { IconEditPagePencile, IconSubRepeat, IconTicketOutlined } from "@lib/useIcons"
 import { linkWicon } from "@styles/nav.module.css"
 import Link from "next/link"
 import type { CSSProperties, HTMLAttributeAnchorTarget, ReactNode } from "react"
 
 type Props = {
 	label?: string
-	icon: "edit" | "ticket" |"none"
+	title?: string
+	icon: "edit" | "ticket" | "subscription" | "none"
 	href: string
 	target?: HTMLAttributeAnchorTarget
 	children?: ReactNode
@@ -15,6 +16,7 @@ type Props = {
 export function IconLink({
 	icon,
 	label,
+  title,
 	href,
 	target = undefined,
 	children,
@@ -26,13 +28,20 @@ export function IconLink({
 				return <IconEditPagePencile />
 			case "ticket":
 				return <IconTicketOutlined />
+			case "subscription":
+				return <IconSubRepeat />
 			default:
 				return <></>
 		}
 	})()
 
 	return (
-		<Link href={href} target={target} className={[className, linkWicon].join(' ')} >
+		<Link
+      title={title || label}
+			href={href}
+			target={target}
+			className={[className, linkWicon].join(" ")}
+		>
 			{iconSVG}
 			{label ? <span>{label}</span> : children}
 		</Link>

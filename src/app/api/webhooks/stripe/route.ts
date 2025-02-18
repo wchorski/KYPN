@@ -1,6 +1,7 @@
 // cred - https://stackoverflow.com/questions/71352151/how-to-access-items-metadata-in-stripe-checkout-session/71352601#71352601
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
+import { stripeSubscriptionUpdate } from "@lib/stripe"
 import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
@@ -37,6 +38,7 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			// console.log('💳 : stripePayload.data.object ', JSON.stringify(stripePayload.data.object, null, 2))
 			console.log("💳 Item type: ", stripePayload.data.object.metadata?.typeof)
 			// TODO checkoutSession.payment_status === "unpaid",
+			//? free items are marked as "paid"
 			if (stripePayload.data.object.payment_status !== "paid")
 				throw new Error(
 					`!!! 💳❌ stripe payment not recieved: ${stripePayload.data.object.id} ${stripePayload.data.object.payment_intent}`
@@ -82,40 +84,28 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			break
 
 		case "customer.subscription.created":
+			//? handled with `checkout.session.completed`
 			console.log("🐸 customer.subscription.created")
-		// throw new Error("🐸🐸🐸 🐸🐸🐸 CREATE A SubscriptionItem")
+		// if (!["trialing", "active"].includes(stripePayload.data.object.status))
+		// 	throw new Error(
+		// 		`!!! 💳❌ stripe subscription not "trialing" or "active": ${stripePayload.data.object.id} ${stripePayload.data.object.status}`
+		// 	)
+		// handleSubscriptionCreate(stripePayload.data.object)
+
+		case "customer.subscription.updated":
+			console.log("🐸 customer.subscription.created")
+			// TODO is it possible to update KS database if subscription is edited from stripe?
+			// console.log(JSON.stringify(stripePayload.data.object, null, 2))
+
+		case "customer.subscription.deleted":
+			console.log("🐸 customer.subscription.deleted")
+			// TODO is it possible to update KS database if subscription is edited from stripe?
+			// console.log(JSON.stringify(stripePayload.data.object, null, 2))
 
 		default:
 			// other events that we don't handle
 			break
 	}
-
-	//? old forget about it
-	//? is there some easier way to do this? where did i get this block?
-	// const stripeCheckoutSessionId = searchParams.get("stripeCheckoutSessionId")
-	// if (!stripeCheckoutSessionId?.length) return redirect("/shop")
-	// const session = await stripe.checkout.sessions.retrieve(
-	// 	stripeCheckoutSessionId
-	// )
-	// console.log({session});
-
-	// if (session.status === "complete") {
-	// 	// Go to a success page!
-
-	// 	// TODO if no errors then create Order with KS
-	// 	// TODO convert line_items for stripe to KS OrderItems type
-	// 	// const order = await keystoneContext.db.Order.createOne({})
-	//   console.log('### Stripe COMPLETED ###');
-	//   console.log({session});
-	//   console.log('### CREATE ORDER AND TICKETS IN KS');
-	// 	return redirect(`/checkout/completed`)
-	// }
-
-	// if (session.status === "open") {
-	// 	// Here you'll likely want to head back to some pre-payment page in your checkout
-	// 	// so the user can try again
-	// 	return redirect(`/checkout?stripeStatus=open`)
-	// }
 
 	NextResponse.json(
 		{ recieved: true, message: "stripe integration is connected" },
@@ -124,9 +114,57 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 	return redirect("/shop")
 }
 
+// async function handleSubscriptionCreate(subscription: Stripe.Subscription) {
+// 	console.log("webhook handleSubscriptionCreate session::: ", { session: subscription })
+
+// 	if (!subscription)
+// 		throw new Error("!!! No stripe subscription")
+
+// 	if (!subscription.metadata?.customerId)
+// 		throw new Error("!!! ❌ stripe did not have customerId in metadata")
+
+// 	if (!subscription.metadata?.subscriptionPlanId)
+// 		throw new Error("!!! ❌ stripe did not have subscriptionPlanId in metadata")
+
+// 	const data = (await keystoneContext
+// 		.withSession({
+// 			session: {
+// 				itemId: subscription.metadata.customerId,
+// 			},
+// 			stripe: {
+// 				payment_status: subscription.payment_status,
+// 				id: subscription.id,
+// 				payment_intent: subscription.payment_intent,
+// 				customerId: subscription.metadata.customerId,
+// 				amount_total: subscription.amount_total,
+// 				subscriptionId: subscription.subscription,
+// 				rentalId: subscription.metadata.rentalId,
+// 			},
+// 		})
+// 		.graphql.run({
+// 			query: `
+//         mutation CheckoutSubscription {
+//           checkoutSubscription {
+//             id
+//             status
+//           }
+//         }
+//       `,
+// 			variables: {
+// 				subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
+// 				addonIds: [],
+// 				couponIds: [],
+// 			},
+// 		})) as { checkoutSubscription: { id: string; status: string } }
+
+// 	return {
+// 		checkout: data.checkoutSubscription,
+// 	}
+// }
+
 async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
-	//@ts-ignore
-	const checkoutSession: WithMetadata = await stripe.checkout.sessions
+	// console.log("webhook handleSuccessfulCheckout session::: ", { session })
+	const checkoutSession = await stripe.checkout.sessions
 		.retrieve(session.id, {
 			// expand: ["line_items"],
 		})
@@ -150,39 +188,75 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		throw new Error("!!! ❌ stripe did not have customerId in metadata")
 	// if (!checkoutSession.metadata?.typeof)
 	// 	throw new Error("!!! ❌ stripe did not have typeof in metadata")
-
-	const data = (await keystoneContext
-		.withSession({
-			stripe: {
-				payment_status: checkoutSession.payment_status,
-				id: checkoutSession.id,
-				payment_intent: checkoutSession.payment_intent,
-				customerId: checkoutSession.metadata.customerId,
-				amount_total: checkoutSession.amount_total,
-				subscriptionId: checkoutSession.subscription,
-        rentalId: checkoutSession.metadata.rentalId,
-			},
-		})
-		.graphql.run({
-			query: `
-      mutation Checkout {
-        checkout {
-          id
-          status
+	if (
+		checkoutSession.mode === "payment" &&
+		checkoutSession.metadata?.typeof !== "subscription-item"
+	) {
+		const data = (await keystoneContext
+			.withSession({
+				session: {
+					itemId: checkoutSession.metadata.customerId,
+				},
+				stripe: {
+					payment_status: checkoutSession.payment_status,
+					id: checkoutSession.id,
+					payment_intent: checkoutSession.payment_intent,
+					customerId: checkoutSession.metadata.customerId,
+					amount_total: checkoutSession.amount_total,
+					subscriptionId: checkoutSession.subscription,
+					rentalId: checkoutSession.metadata.rentalId,
+				},
+			})
+			.graphql.run({
+				query: `
+        mutation Checkout {
+          checkout {
+            id
+            status
+          }
         }
-      }
-    `,
-			// variables: values,
-		})) as { checkout: { id: string; status: string } }
+      `,
+				// variables: values,
+			})) as { checkout: { id: string; status: string } }
 
-	console.log("### stripe webhook")
-	console.log("🐸🐸🐸 Remove items from CART 🐸🐸🐸")
-	console.log({ data })
-	// if (data.checkout.status === "PAYMENT_RECIEVED") {
-	// }
+		return {
+			checkout: data.checkout,
+		}
+	} else if (checkoutSession.mode === "subscription") {
+		const data = (await keystoneContext
+			.withSession({
+				session: {
+					itemId: checkoutSession.metadata.customerId,
+				},
+				stripe: {
+					payment_status: checkoutSession.payment_status,
+					id: checkoutSession.id,
+					payment_intent: checkoutSession.payment_intent,
+					customerId: checkoutSession.metadata.customerId,
+					amount_total: checkoutSession.amount_total,
+					subscriptionId: checkoutSession.subscription,
+					rentalId: checkoutSession.metadata.rentalId,
+				},
+			})
+			.graphql.run({
+				query: `
+          mutation CheckoutSubscription($subscriptionPlanId: String!, $addonIds: [String], $couponIds: [String]) {
+            checkoutSubscription(subscriptionPlanId: $subscriptionPlanId, addonIds: $addonIds, couponIds: $couponIds) {
+              id
+              status
+            }
+          }
+        `,
+				variables: {
+					subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
+					addonIds: [],
+					couponIds: [],
+				},
+			})) as { checkoutSubscription: { id: string; status: string } }
 
-	return {
-		checkout: data.checkout,
+		return {
+			checkout: data.checkoutSubscription,
+		}
 	}
 }
 
@@ -206,6 +280,14 @@ type WithMetadata = Stripe.Checkout.Session &
 		| {
 				metadata: {
 					typeof: "subscriptionPlan"
+					subscriptionPlanId: string
+					orderId: string
+					customerId: string
+				}
+		  }
+		| {
+				metadata: {
+					typeof: "subscription-item"
 					subscriptionPlanId: string
 					orderId: string
 					customerId: string

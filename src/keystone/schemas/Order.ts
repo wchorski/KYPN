@@ -83,6 +83,7 @@ export const Order: Lists.Order = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
+    //TODO make this virtual, grab from OrderItems subTotal
 		subTotal: integer({ validation: { isRequired: true, min: 0 } }),
 		fees: integer({ validation: { isRequired: true, min: 0 } }),
 		count: virtual({

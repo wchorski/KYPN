@@ -30,7 +30,7 @@ export const OrderItem: Lists.OrderItem = list({
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
 				{ label: "Subscription", value: "SUBSCRIPTION" },
-        { label: "Rent Reservation", value: "RENT_RESERVATION" },
+				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
 			validation: { isRequired: true },
 			ui: {
@@ -38,6 +38,7 @@ export const OrderItem: Lists.OrderItem = list({
 				createView: { fieldMode: "edit" },
 			},
 		}),
+		subTotal: integer({ validation: { isRequired: true, min: 0 } }),
 		quantity: integer({ validation: { isRequired: true, min: 1 } }),
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
@@ -57,26 +58,24 @@ export const OrderItem: Lists.OrderItem = list({
 			defaultValue: { kind: "now" },
 			validation: { isRequired: true },
 		}),
-    //TODO some total or subTotal or price that is hard written upon checkout
+		//TODO some total or subTotal or price that is hard written upon checkout
 	},
 
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
-				console.log({ resolvedData })
-
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
 					"product",
 					"event",
 					"subscriptionItem",
 					"booking",
-          "rental",
+					"rental",
 					"coupon",
 				])
 				console.log("!!! hasOnlyOne:: ", hasOnlyOne)
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionPlan", "rental",  "coupon"] set'
+						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionItem", "rental",  "coupon"] set'
 					)
 			},
 			update: ({ resolvedData, item }) => {
@@ -93,8 +92,8 @@ export const OrderItem: Lists.OrderItem = list({
 					"bookingId",
 					"subscriptionItemId",
 					"subscriptionItem",
-          "rental",
-          "rentalId",
+					"rental",
+					"rentalId",
 					"coupon",
 					"couponId",
 				])
@@ -102,7 +101,7 @@ export const OrderItem: Lists.OrderItem = list({
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "subscription", "rental", "coupon", + itemId(s)] set'
+						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionItem", "rental", "coupon", + itemId(s)] set'
 					)
 			},
 		},

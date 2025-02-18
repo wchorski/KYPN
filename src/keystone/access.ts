@@ -518,15 +518,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageSubscriptionPlans({ session })) return true // They can read everything!
-		if (!session) return false
-		// if(session) return {
-		//   OR: [
-		//     { author: { id: { equals: session.itemId } } },
-		//     { status: { equals: "AVAILABLE" } },
-		//     { status: { equals: "PUBLIC" } },
-		//     { status: { equals: "OUT_OF_STOCK" } },
-		//   ],
-		// };
+
 		// ? if anonymous user
 		return {
 			OR: [
@@ -545,12 +537,21 @@ export const rules = {
 		// 2. If not, do they own this item?
 		return false
 	},
+  // todo this is the same as manager access....
+  canViewSubscriptionItems({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+		if (permissions.canManageSubscriptionItems) return true
+		if (session)
+			return {
+				user: { id: { equals: session.itemId || "no_session_id" } },
+			}
+		return false
+	},
 	canManageSubscriptionItems({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 
 		// 1. Do they have the permission
-		if (permissions.canManageSubscriptionPlans({ session })) return true
-		if (!session) return false
+		if (permissions.canManageSubscriptionItems({ session })) return true
 		// do they own?
 		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
 	},

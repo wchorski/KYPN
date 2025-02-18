@@ -235,7 +235,7 @@ export default async function AccountPage() {
 		</main>
 	)
 }
-
+// todo move subscriptions to seperate fetch so i can order them by date
 const USER_DASH_QUERY = `
   id
   name

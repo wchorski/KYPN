@@ -391,7 +391,7 @@ export type Location = Lists.Location.Item & {
 	bookings: Booking[]
 }
 
-export type Billing_Interval = "hour" | "day" | "week" | "month" | "year"
+export type Billing_Interval = "day" | "week" | "month" | "year"
 export type Stripe_Billing_Interval = "day" | "week" | "month" | "year"
 export type Duration = "forever" | "once" | "repeating"
 
@@ -420,6 +420,15 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	dateModified: string
 	user: User
 	addons: Addon[]
+	status:
+		| "ACTIVE"
+		| "TRIAL"
+		| "EXPIRED"
+		| "CANCELED"
+		| "SUSPENDED"
+		| "PAUSED"
+		| "DELINQUENT"
+		| "REQUESTED"
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User

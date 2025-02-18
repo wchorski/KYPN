@@ -178,6 +178,8 @@ export const QUERY_USER_CART = `
       rental_price
       name
       image
+      stripePriceId
+      stripeProductId
     }
     booking {
       id
@@ -186,18 +188,6 @@ export const QUERY_USER_CART = `
       service {
         image
       }
-    }
-    subscriptionPlan {
-      id
-      typeof
-      image
-      name
-      slug
-      excerpt
-      status
-      price
-      billing_interval
-      stockMax
     }
     rental {
       id
@@ -214,6 +204,7 @@ export const QUERY_USER_CART = `
       name
       amount_off
       percent_off
+      stripeId
     }
   }
 `

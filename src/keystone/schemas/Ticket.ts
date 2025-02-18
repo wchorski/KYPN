@@ -209,8 +209,6 @@ export const Ticket: Lists.Ticket = list({
 				// 		`!!! This ticket has already been redeemed: ${item.id}`
 				// 	)
 				// }
-				console.log({ resolvedData })
-				console.log({ item })
 
 				if (!resolvedData.event?.connect?.id && !item.eventId)
 					throw new Error("!!! No Event selected for ticket")

@@ -406,6 +406,44 @@ const query = `
       stripeProductId
       stripePriceId
     }
+    subscriptionPlans {
+      id
+      name
+      slug
+      image
+      excerpt
+      status
+      price
+      billing_interval
+      stockMax
+      dateCreated
+      dateModified
+      stripeProductId
+      stripePriceId
+      description {
+        document
+      }
+      author {
+        id
+        email
+      }
+      addons {
+        id
+        name
+      }
+      coupons {
+        id
+        name
+      }
+      categories {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+    }
   }
 `
 

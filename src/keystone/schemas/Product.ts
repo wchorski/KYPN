@@ -237,6 +237,8 @@ export const Product: Lists.Product = list({
 					image,
 				} = resolvedData
 
+        //? this does not account for rental price. which is ok i guess because that
+        // is handled purely by this app
 				try {
 					const createdProduct = await stripeProductCreate({
 						// id,

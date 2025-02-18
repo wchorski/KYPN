@@ -12,6 +12,7 @@ import { NoData } from "@components/elements/NoData"
 import AddToCartForm from "@components/ecommerce/AddToCartForm"
 import { PriceTag } from "@components/ecommerce/PriceTag"
 import Flex from "./Flex"
+import { IconLink } from "@components/elements/IconLink"
 export const revalidate = 5
 
 type Props = {
@@ -184,7 +185,11 @@ export function ArticleItem({
 						)}
 						{item.isForRent && (
 							<Flex justifyContent={"space-between"} alignItems={"center"}>
-								<PriceTag price={item.rental_price} hideZeroCents={true} billing_interval="hour"/>
+								<PriceTag
+									price={item.rental_price}
+									hideZeroCents={true}
+									billing_interval={'day'}
+								/>
 								<AddToCartForm
 									productId={item.id}
 									sessionId={"session.itemId"}
@@ -203,13 +208,7 @@ export function ArticleItem({
 							hideZeroCents={true}
 							billing_interval={item.billing_interval}
 						/>{" "}
-						<AddToCartForm
-							type={"SUBSCRIPTION"}
-							eventId={undefined}
-							productId={undefined}
-							subscriptionPlanId={item.id}
-							sessionId={"session.itemId"}
-						/>
+            <IconLink icon={'subscription'} title="subscribe" className="readmore button medium" href={`/subscription-plans/${item.id}`}/>
 					</>
 				) : (
 					<Link className="readmore" href={link}>

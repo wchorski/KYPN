@@ -93,6 +93,7 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 		// ],
 		shippable: false,
 		unit_label: "units",
+    
 		default_price_data: {
 			currency: "usd",
 			unit_amount: price,
@@ -410,7 +411,7 @@ export async function stripeSubscriptionUpdate({
 	try {
 		switch (status) {
 			case "PAUSED":
-				const resPause = await stripeConfig.subscriptions.update(
+				await stripeConfig.subscriptions.update(
 					stripeSubscriptionId,
 					{
 						pause_collection: {
@@ -424,16 +425,19 @@ export async function stripeSubscriptionUpdate({
 				break
 
 			case "ACTIVE":
-				const resActive = await stripeConfig.subscriptions.update(
+				await stripeConfig.subscriptions.update(
 					stripeSubscriptionId,
 					{
 						pause_collection: "",
+            metadata: {
+							subscriptionItemId: subItemId,
+						},
 					}
 				)
 				break
 
 			case "CANCELED":
-				const resCancle = await stripeConfig.subscriptions.cancel(
+				await stripeConfig.subscriptions.cancel(
 					stripeSubscriptionId
 				)
 
@@ -441,10 +445,10 @@ export async function stripeSubscriptionUpdate({
 				console.log("### SubscriptionItem Schema. status not supported")
 				break
 		}
-	} catch (error) {
+	} catch (error:any) {
 		console.log("sub item update error: ", error)
-		// @ts-ignore
-		throw new Error("Sub Item Status Change Error: ", error.message)
+
+		throw new Error("💳❌ Subscription Item Status Change Error: ", error.message)
 	}
 }
 

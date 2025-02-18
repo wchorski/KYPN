@@ -30,6 +30,8 @@ import Image from "next/image"
 import { Callout } from "@components/blocks/Callout"
 import fetchSubscriptionItem from "@lib/fetchdata/fetchSubscriptionItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
+import { IconLink } from "@components/elements/IconLink"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -103,12 +105,11 @@ export default async function SubscriptionItemByIdPage({
 				<h1>{summary}</h1>
 				<Flex alignItems={"center"}>
 					<StatusBadge type={"subscriptionItem"} status={status} />{" "}
-					<Link
-						className="edit"
+					<IconLink
+						icon={"edit"}
+						label="Edit"
 						href={`?${new URLSearchParams({ popup: "modal" })}`}
-					>
-						<FiEdit /> Edit
-					</Link>
+					/>
 					{user && (
 						<Card
 							direction={"row"}
@@ -150,7 +151,7 @@ export default async function SubscriptionItemByIdPage({
 										<Link href={`/subscription-plans/${subscriptionPlan.id}`}>
 											{subscriptionPlan.name}
 										</Link>
-										
+
 										<ImageDynamic
 											photoIn={subscriptionPlan.image}
 											alt={"Subscription Plan Featured Image"}
@@ -227,16 +228,12 @@ export default async function SubscriptionItemByIdPage({
 			</div>
 
 			<DialogPopup
-				title={`Feature Not Yet Ready`}
+				title={`Update Subscription`}
 				// onClose={() => null}
 				// onOk={() => null}
-				buttonLabel="Ok"
+				buttonLabel=""
 			>
-				<p>
-					Updating a subscriptionItem is almost ready. For now, create a new
-					subscriptionItem and we will cancel the previous subscriptionItem
-				</p>
-				<Link href={`/subscription-plans`}>Shop new subscriptions</Link>
+				<SubscriptionUpdateForm status={status} subscriptionItemId={id} />
 				<br />
 				<br />
 				<Link href={envs.BACKEND_URL + `/subscription-items/${id}`}>

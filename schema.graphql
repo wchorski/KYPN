@@ -2051,7 +2051,6 @@ type CartItem {
   booking: Booking
   rental: Rental
   event: Event
-  subscriptionPlan: SubscriptionPlan
   user: User
 }
 
@@ -2071,7 +2070,6 @@ input CartItemWhereInput {
   booking: BookingWhereInput
   rental: RentalWhereInput
   event: EventWhereInput
-  subscriptionPlan: SubscriptionPlanWhereInput
   user: UserWhereInput
 }
 
@@ -2089,7 +2087,6 @@ input CartItemUpdateInput {
   booking: BookingRelateToOneForUpdateInput
   rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
-  subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -2136,7 +2133,6 @@ input CartItemCreateInput {
   booking: BookingRelateToOneForCreateInput
   rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
-  subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
@@ -2168,6 +2164,7 @@ input EventRelateToOneForCreateInput {
 type OrderItem {
   id: ID!
   type: String
+  subTotal: Int
   quantity: Int
   product: Product
   booking: Booking
@@ -2191,6 +2188,7 @@ input OrderItemWhereInput {
   NOT: [OrderItemWhereInput!]
   id: IDFilter
   type: StringFilter
+  subTotal: IntFilter
   quantity: IntFilter
   product: ProductWhereInput
   booking: BookingWhereInput
@@ -2206,6 +2204,7 @@ input OrderItemWhereInput {
 input OrderItemOrderByInput {
   id: OrderDirection
   type: OrderDirection
+  subTotal: OrderDirection
   quantity: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -2213,6 +2212,7 @@ input OrderItemOrderByInput {
 
 input OrderItemUpdateInput {
   type: String
+  subTotal: Int
   quantity: Int
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
@@ -2244,6 +2244,7 @@ input OrderItemUpdateArgs {
 
 input OrderItemCreateInput {
   type: String
+  subTotal: Int
   quantity: Int
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
@@ -3149,6 +3150,7 @@ type Mutation {
   bookAService(serviceId: String!, locationId: String, addonIds: [String], employeeId: String, customerId: String, date: String!, time: String!, timeZone: String!, address: String, name: String, email: String!, phone: String, notes: String, amount_total: Int): Booking
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   checkout: Order
+  checkoutSubscription(subscriptionPlanId: String!, addonIds: [String], couponIds: [String]): Order
   addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, subscriptionPlanId: ID): CartItem
 }
 

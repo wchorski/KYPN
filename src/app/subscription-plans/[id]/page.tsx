@@ -37,7 +37,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
-	const { subscriptionPlan, error } = await fetchSubscriptionPlan({id, query, session})
+	const { subscriptionPlan, error } = await fetchSubscriptionPlan({
+		id,
+		query,
+		session,
+	})
 
 	if (!subscriptionPlan || error)
 		return {
@@ -50,7 +54,7 @@ export async function generateMetadata(
 	const previousImages = (await parent).openGraph?.images || []
 
 	return {
-		title: name,
+		title: name + " | " + envs.SITE_TITLE,
 		description: String(excerpt),
 		openGraph: {
 			images: [String(image), ...previousImages],
@@ -65,10 +69,10 @@ export async function generateMetadata(
 		// 	email: host.email,
 		// 	url: host.email,
 		// })),
-    authors: {
-      name: author.name,
-      url: author.email,
-    }
+		authors: {
+			name: author.name,
+			url: author.email,
+		},
 	}
 }
 
@@ -174,20 +178,24 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									price={price}
 									billing_interval={billing_interval}
 									hideZeroCents={true}
-                  // subtext={'billed ' + billing_interval}
+									// subtext={'billed ' + billing_interval}
 								/>
-                
 							</span>
 
-							<AddToCartForm
+							{/* <AddToCartForm
                 subscriptionPlanId={id}
 								productId={undefined}
 								eventId={undefined}
 								sessionId={session.itemId}
 								type={"SUBSCRIPTION"}
-							/>
+							/> */}
+              
+							<Link href={`/checkout/subscription?id=${id}`} className="button medium">Checkout</Link>
 						</Card>
 					)}
+
+          <p className={'debug'}>Pre Checkout form in popup (addons, coupons)</p>
+
 					{!isEmptyDocument(description?.document) && (
 						<>
 							<br />

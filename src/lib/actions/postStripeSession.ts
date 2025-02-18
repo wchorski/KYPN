@@ -35,8 +35,12 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 				switch (true) {
 					case !!item.product && item.type === "SALE":
 						return createProductLineItem(item)
-					case !!item.subscriptionPlan:
-						return createSubscriptionLineItem(item)
+					//? made seperate <StripeSubscriptonCheckout />
+					// this creates ugly subs that are combined and cannot have
+					// different billing cycles.
+					// subscriptionPlans should never end up in a cart.
+					// case !!item.subscriptionPlan:
+					// 	return createSubscriptionLineItem(item)
 					case !!item.booking:
 						return createBookingLineItems(item)
 					case !!item.rental:
@@ -59,12 +63,16 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 
-	const hasSubscription = cartItems.some((obj) => obj.subscriptionPlan !== null)
+	// const hasSubscription = cartItems.some((obj) => obj.subscriptionPlan !== null)
+
+	if (!line_items) throw new Error("!!! stripe no line_items")
+	console.log({ line_items })
 	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",
-		line_items,
-		mode: hasSubscription ? "subscription" : "payment",
+		line_items: line_items,
+		// mode: hasSubscription ? "subscription" : "payment",
+		mode: "payment",
 		return_url: returnUrl,
 		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
@@ -78,13 +86,13 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			rentalId: cartItems.find((item) => item.rental)?.rental?.id || "",
 		},
 		// https://docs.stripe.com/payments/checkout/free-trials
-		...(hasSubscription
-			? {
-					subscription_data: {
-						trial_period_days: envs.STRIPE_SUB_TRIAL_PERIOD_DAYS,
-					},
-			  }
-			: {}),
+		// ...(hasSubscription
+		// 	? {
+		// 			subscription_data: {
+		// 				trial_period_days: envs.STRIPE_SUB_TRIAL_PERIOD_DAYS,
+		// 			},
+		// 	  }
+		// 	: {}),
 	})
 
 	if (!session.client_secret) throw new Error("Error initiating Stripe session")
@@ -177,37 +185,37 @@ function createProductLineItem(
 	}
 }
 
-function createSubscriptionLineItem(
-	cartItem: CartItem
-): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
-	if (!cartItem.subscriptionPlan) return undefined
-	const { subscriptionPlan, quantity } = cartItem
-	return {
-		quantity,
-		// price: product.stripePriceId,
-		...(subscriptionPlan.stripePriceId
-			? { price: subscriptionPlan.stripePriceId }
-			: {
-					price_data: {
-						// TODO make this part of CartItem schema item.currency, not hard coded
-						currency: "usd",
-						recurring: {
-							interval: subscriptionPlan.billing_interval,
-						},
-						product_data: {
-							name: subscriptionPlan.name,
-							images: [subscriptionPlan?.image || ""],
-							metadata: {
-								subscriptionPlanId: subscriptionPlan.id,
-								typeof: "subscriptionPlan",
-							},
-						},
+// function createSubscriptionLineItem(
+// 	cartItem: CartItem
+// ): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+// 	if (!cartItem.subscriptionPlan) return undefined
+// 	const { subscriptionPlan, quantity } = cartItem
+// 	return {
+// 		quantity,
+// 		// price: product.stripePriceId,
+// 		...(subscriptionPlan.stripePriceId
+// 			? { price: subscriptionPlan.stripePriceId }
+// 			: {
+// 					price_data: {
+// 						// TODO make this part of CartItem schema item.currency, not hard coded
+// 						currency: "usd",
+// 						recurring: {
+// 							interval: subscriptionPlan.billing_interval,
+// 						},
+// 						product_data: {
+// 							name: subscriptionPlan.name,
+// 							images: [subscriptionPlan?.image || ""],
+// 							metadata: {
+// 								subscriptionPlanId: subscriptionPlan.id,
+// 								typeof: "subscriptionPlan",
+// 							},
+// 						},
 
-						unit_amount: subscriptionPlan.price,
-					},
-			  }),
-	}
-}
+// 						unit_amount: subscriptionPlan.price,
+// 					},
+// 			  }),
+// 	}
+// }
 
 function createTicketLineItem(
 	cartItem: CartItem,

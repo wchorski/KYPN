@@ -226,6 +226,7 @@ export const seedDatabase = async (context: Context) => {
 	// seedTicketOrders creates "Ticket" items after Events are created
 
 	await seedSchemaItems("Product", "name", allDataJson.products, context)
+	await seedSchemaItems("SubscriptionPlan", "name", allDataJson.subscriptionPlans, context)
 	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
 }
 
