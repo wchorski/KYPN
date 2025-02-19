@@ -15,7 +15,7 @@ import { isLoggedIn, permissions, rules } from "../access"
 import moneyFormatter from "../../lib/moneyFormatter"
 import { envs } from "../../../envs"
 import { mailOrder } from "../../lib/mail"
-import { User, Order as OrderType } from "../../keystone/types"
+import { User, Order as TOrder, OrderItem } from "../../keystone/types"
 
 export const Order: Lists.Order = list({
 	access: {
@@ -72,33 +72,117 @@ export const Order: Lists.Order = list({
 				displayMode: "textarea",
 			},
 		}),
-    total: virtual({
+		// total: virtual({
+		// 	field: graphql.field({
+		// 		type: graphql.Int,
+		// 		resolve(item) {
+		// 			return item.subTotal + item.fees
+		// 		},
+		// 	}),
+		// 	ui: {
+		// 		itemView: { fieldMode: "hidden" },
+		// 	},
+		// }),
+		//TODO make this virtual, grab from OrderItems subTotal
+		// subTotal: integer({ validation: { isRequired: true, min: 0 } }),
+		total: virtual({
 			field: graphql.field({
 				type: graphql.Int,
-				resolve(item) {
-					return item.subTotal + item.fees
+				async resolve(item, context) {
+					const orderItems = (await context.query.OrderItem.findMany({
+						where: { order: { id: item.id } },
+						query: `
+              type
+              quantity
+              subTotal
+              total
+              product {
+                id
+              }
+              booking {
+                id
+              }
+              rental {
+                id
+                days
+              }
+              tickets {
+                id
+              }
+              subscriptionItem {
+                id
+              }
+              coupon {
+                id
+              }
+            `,
+					})) as OrderItem[]
+
+					const salesTotal = orderItems
+						.filter((item) => item.type === "SALE")
+						.reduce((sum, item) => sum + item.total, 0)
+
+					const rentalsSubTotal = orderItems
+						.filter((item) => item.type === "RENTAL")
+						.reduce((sum, item) => sum + item.total, 0)
+
+					const rentalDays =
+						orderItems.find((item) => item.type === "RENT_RESERVATION")
+							?.rentalDays || 0
+
+					const rentalTotal = rentalsSubTotal * rentalDays
+					// const discountAmountOffTotal = orderItems
+					// 	.filter((item) => item.type === "DISCOUNT")
+					// 	.reduce((sum, item) => sum + item.amount_off, 0)
+
+					// const discountPercentOffTotal = orderItems
+					// 	.filter((item) => item.type === "DISCOUNT")
+					// 	.reduce((sum, item) => sum + item.percent_off, 0)
+
+					const discount = orderItems
+						.filter((item) => item.type === "DISCOUNT")
+						.reduce(
+							(acc, item) => {
+								// one coupon is only allowed to have one positive value in `amount_off` or `percent_off`
+								if (item?.amount_off) {
+									acc.amount_off += item.amount_off
+								} else if (item?.percent_off) {
+									acc.percent_off += item.percent_off
+								}
+
+								return acc
+							},
+							{ amount_off: 0, percent_off: 0 }
+						)
+
+					const totalAfterAmountOff =
+						salesTotal + rentalTotal + item.fees - discount.amount_off
+					const percentToDecimal = discount.percent_off / 100
+
+					return totalAfterAmountOff - totalAfterAmountOff * percentToDecimal
 				},
 			}),
 			ui: {
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-    //TODO make this virtual, grab from OrderItems subTotal
-		subTotal: integer({ validation: { isRequired: true, min: 0 } }),
-		fees: integer({ validation: { isRequired: true, min: 0 } }),
+		fees: integer({
+			validation: { isRequired: true, min: 0 },
+			defaultValue: 0,
+		}),
 		count: virtual({
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
-          const order = await context.sudo().query.Order.findOne({
-            where: { id: item.id },
-            query: `
+					const order = await context.sudo().query.Order.findOne({
+						where: { id: item.id },
+						query: `
               items {
                 quantity
               }
-            `
-          })
-					
+            `,
+					})
+
 					const orderItems = await context.query.OrderItem.findMany({
 						where: { order: { id: { equals: item.id } } },
 						query: `quantity`,
@@ -143,10 +227,10 @@ export const Order: Lists.Order = list({
 			},
 		}),
 		items: relationship({ ref: "OrderItem.order", many: true }),
-    //? moved to OrderItem
+		//? moved to OrderItem
 		// rental: relationship({ ref: "Rental.order", many: false }),
 		// ticketItems: relationship({ ref: "Ticket.order", many: true }),
-    //? moved to OrderItem
+		//? moved to OrderItem
 		// bookings: relationship({ ref: "Booking.order", many: true }),
 		user: relationship({ ref: "User.orders" }),
 		// todo move this all under 'status'
@@ -174,44 +258,90 @@ export const Order: Lists.Order = list({
 	},
 
 	hooks: {
-		afterOperation: async ({ operation, resolvedData, item, context }) => {
-			if (operation === "create" || operation === "update") {
-				const order = (await context.sudo().query.Order.findOne({
-					where: { id: item.id },
-					query: `
-            id
-            dateCreated
-            status
-            total
-            email
-            user {
-              name
-              email
-            }
-            items {
-              quantity
-              booking {
-                id
-                summary
-              }
-              tickets {
-                id
-                eventSummary
-              }
-              product {
-                id
-                name
-              }
-            }
-          `,
-				})) as OrderType
+		afterOperation: {
+			create: async ({ item, context }) => {
+        console.log('✉️ 🐸 send mail when order is updated... ')
+        console.log('❌ why does below hook code cause an error?')
+				// const order = (await context.sudo().query.Order.findOne({
+				// 	where: { id: item.id },
+				// 	query: `
+        //     id
+        //     dateCreated
+        //     status
+        //     total
+        //     email
+        //     user {
+        //       name
+        //       email
+        //     }
+        //     items {
+        //       quantity
+        //       booking {
+        //         id
+        //         summary
+        //       }
+        //       tickets {
+        //         id
+        //         eventSummary
+        //       }
+        //       product {
+        //         id
+        //         name
+        //       }
+        //     }
+        //   `,
+				// })) as TOrder
 
-				await mailOrder({
-					to: [envs.ADMIN_EMAIL_ADDRESS, item.email || order.user?.email || ""],
-					operation,
-					order,
-				})
-			}
+				// console.log({ order })
+
+				// await mailOrder({
+				// 	to: [envs.ADMIN_EMAIL_ADDRESS, item.email || order.user?.email || ""],
+				// 	operation: "create",
+				// 	order,
+				// })
+			},
+			update: async ({ item }) => {
+        console.log('🐸 send mail when order is updated... but maybe i should even have orders be updateable?');
+      },
 		},
+		// afterOperation: async ({ operation, resolvedData, item, context }) => {
+		// 	if (operation === "create" || operation === "update") {
+		// 		const order = (await context.sudo().query.Order.findOne({
+		// 			where: { id: item.id },
+		// 			query: `
+		//         id
+		//         dateCreated
+		//         status
+		//         total
+		//         email
+		//         user {
+		//           name
+		//           email
+		//         }
+		//         items {
+		//           quantity
+		//           booking {
+		//             id
+		//             summary
+		//           }
+		//           tickets {
+		//             id
+		//             eventSummary
+		//           }
+		//           product {
+		//             id
+		//             name
+		//           }
+		//         }
+		//       `,
+		// 		})) as TOrder
+
+		// 		await mailOrder({
+		// 			to: [envs.ADMIN_EMAIL_ADDRESS, item.email || order.user?.email || ""],
+		// 			operation,
+		// 			order,
+		// 		})
+		// 	}
+		// },
 	},
 })

@@ -99,37 +99,38 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
-          const orderItem = await context.query.OrderItem.findOne({
-            where: { id: item.}
-          })
-          throw new Error('get subTotal from OrderItem ')
-					// // if(!item.serviceId) return item.name
-					// const subPlan = (await context.query.SubscriptionPlan.findOne({
-					// 	where: { id: item.subscriptionPlanId || "no_service" },
-					// 	query: `
-          //     price
-          //   `,
-					// })) as SubscriptionPlan
-
-					// const addons = await context.query.Addon.findMany({
-					// 	where: {
-					// 		subscriptionItems: {
-					// 			every: {
-					// 				id: {
-					// 					equals: item.id,
-					// 				},
-					// 			},
-					// 		},
-					// 	},
-					// 	query: `
-          //     price
-          //   `,
+					// const orderItem = await context.query.OrderItem.findOne({
+					//   where: { id: item.}
 					// })
-					// console.log({ addons })
-					// const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-					// const subTotal = subPlan.price + addonsPrice
+					// throw new Error('get subTotal from OrderItem ')
+					// // if(!item.serviceId) return item.name
+					const subPlan = (await context.query.SubscriptionPlan.findOne({
+						where: { id: item.subscriptionPlanId || "no_service" },
+						query: `
+              price
+            `,
+					})) as SubscriptionPlan
 
-					// return subTotal
+					const addons = await context.query.Addon.findMany({
+						where: {
+							subscriptionItems: {
+								every: {
+									id: {
+										equals: item.id,
+									},
+								},
+							},
+						},
+						query: `
+              price
+            `,
+					})
+					console.log({ addons })
+					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+					console.log({ addonsPrice })
+					const subTotal = subPlan.price + addonsPrice
+
+					return subTotal
 				},
 			}),
 		}),
@@ -172,12 +173,27 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				{ label: "Monthly", value: "month" },
 				{ label: "Yearly", value: "year" },
 			],
-			defaultValue: "month",
+			// defaultValue: "month",
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
 			},
 			validation: { isRequired: true },
+			hooks: {
+				resolveInput: async ({ inputData, operation, context }) => {
+					if (operation === "create") {
+						const subPlan = await context.query.SubscriptionPlan.findOne({
+							where: {
+								id: inputData.subscriptionPlan?.connect?.id,
+							},
+							query: `
+                billing_interval
+              `,
+						})
+						return subPlan.billing_interval
+					}
+				},
+			},
 		}),
 		notes: text({
 			ui: {
@@ -233,6 +249,11 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 					)
 				if (item.status === "CANCELED" && resolvedData.status !== "CANCELED") {
 					throw new Error("!!! sub item is canceled and cannot be re-activated")
+				}
+				if (resolvedData.billing_interval) {
+					throw new Error(
+						"!!! sub item's billing_interval cannot be updated. Create new subscription instead"
+					)
 				}
 			},
 		},

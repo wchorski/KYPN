@@ -219,7 +219,7 @@ export type CartItem = Lists.CartItem.Item & {
 	event?: Event
 	booking?: Booking
 	rental?: Rental
-	subscriptionPlan?: SubscriptionPlan
+	subscriptionItem?: SubscriptionItem
 	coupon?: Coupon
 	user?: User
 	subTotal: number
@@ -347,6 +347,8 @@ export type OrderItem = Lists.OrderItem.Item & {
 	dateCreated: string
 	dateModified: string
 	order: Order
+  //? virtual subTotal * quantity
+  total: number
 }
 
 export type Availability = Lists.Availability.Item & {

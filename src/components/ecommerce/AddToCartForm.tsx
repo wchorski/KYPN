@@ -1,43 +1,42 @@
-// @ts-nocheck
 "use client"
-import { MdShoppingBag } from "react-icons/md"
-import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
-import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
-import styles from "@styles/ecommerce/cart.module.css"
 import { useCart } from "@components/hooks/CartStateContext"
 import { useForm } from "@hooks/useForm"
 import { AddToCartState, postAddToCart } from "@lib/actions/postAddToCart"
 import {
 	SubmitButtonInlineIcons,
-	SubmitButtonState,
 } from "@components/forms/SubmitButton"
 import { InputField } from "@components/InputField"
 import { delay } from "@lib/utils"
 import { ReactNode, useState } from "react"
-import { CartItem } from "@ks/types"
+import { AddonCheckboxOptions, CartItem } from "@ks/types"
 import {
 	IconCheckMark,
 	IconExclamationCircle,
 	IconShoppingBagAdd,
 	IconSpinnerLines,
 } from "@lib/useIcons"
-import { one_click_form } from "@styles/menus/form.module.scss"
+import { one_click_form, form, addons_wrap } from "@styles/menus/form.module.scss"
+import moneyFormatter from "@lib/moneyFormatter"
 
 type Props = {
 	productId: string | undefined
 	eventId: string | undefined
 	subscriptionPlanId: string | undefined
+	addonOptions?: AddonCheckboxOptions[]
 	sessionId: string
 	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
-  buttonText?:string
+	buttonText?: string
 }
+
+// throw new Error('!!! mutation/addToCart')
 
 export default function AddToCartForm({
 	eventId,
 	productId,
 	subscriptionPlanId,
 	type,
-  buttonText,
+	buttonText,
+  addonOptions = []
 }: Props) {
 	const initState: AddToCartState = {
 		values: {
@@ -135,7 +134,7 @@ export default function AddToCartForm({
 		<form
 			// action={action}
 			onSubmit={onSubmit}
-			className={one_click_form}
+			className={addonOptions.length > 0 ? form : one_click_form}
 		>
 			<InputField
 				type={"hidden"}
@@ -162,6 +161,39 @@ export default function AddToCartForm({
 				error={state.valueErrors?.type}
 			/>
 
+			{addonOptions.length > 0 && (
+				<fieldset>
+					<legend>Add-Ons</legend>
+
+					<div className={addons_wrap}>
+						{addonOptions.map((addon) => (
+							<label key={addon.id} htmlFor={addon.id} className={"checkbox"}>
+								<input
+									name={"addonIds"}
+									value={addon.id}
+									type={"checkbox"}
+									readOnly={false}
+									defaultChecked={addon.isChecked}
+									// onChange={(e) => {
+									// 	dispatchRed({
+									// 		type: "ADDON_CHECKBOX",
+									// 		payload: {
+									// 			value: e.currentTarget.value,
+									// 			isChecked: e.currentTarget.checked,
+									// 		},
+									// 	})
+									// }}
+								/>
+								<span>
+									<strong> {moneyFormatter(addon.price || 0)} </strong>
+									{addon.name}
+								</span>
+							</label>
+						))}
+					</div>
+				</fieldset>
+			)}
+
 			<SubmitButtonInlineIcons
 				icon={inlineIconState}
 				className={"button medium"}
@@ -173,78 +205,4 @@ export default function AddToCartForm({
 	)
 }
 
-const query = `
-  id
-  type
-  quantity
-  subTotal
-  event {
-    id
-    summary
-    price
-    image
-  }
-  product {
-    id
-    price
-    rental_price
-    name
-    image
-  }
-  booking {
-    id
-    price
-    summary
-    service {
-      image
-    }
-  }
-  coupon {
-    id
-    name
-    amount_off
-    percent_off
-  }
-  event {
-    id
-    summary
-    price
-    image
-  }
-  product {
-    id
-    price
-    rental_price
-    name
-    image
-  }
-  booking {
-    id
-    price
-    summary
-    service {
-      image
-    }
-  }
-  subscriptionPlan {
-    id
-    name
-    price
-    image
-    billing_interval
-  }
-  rental {
-    id
-    summary
-    start
-    end
-    days
-    price
-  }
-  coupon {
-    id
-    name
-    amount_off
-    percent_off
-  }
-`
+

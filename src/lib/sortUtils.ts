@@ -13,7 +13,7 @@ export const sortedCartItems = (cartItems:CartItem[]) => cartItems.sort((a, b) =
       ? 1
       : item.booking
       ? 2
-      : item.subscriptionPlan
+      : item.subscriptionItem
       ? 3
       : item.rental
       ? 4

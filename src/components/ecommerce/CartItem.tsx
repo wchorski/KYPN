@@ -23,8 +23,8 @@ type Props = {
 export default function CartItem({ item, sessionId }: Props) {
 	if (item.event) return <TicketItem item={item} />
 	if (item.product) return <ProductItem item={item} sessionId={sessionId} />
-	if (item.subscriptionPlan)
-		return <SubscriptionPlanItem item={item} sessionId={sessionId} />
+	if (item.subscriptionItem)
+		return <SubscriptionItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
 	if (item.rental) return <RentalItem item={item} />
 
@@ -249,7 +249,7 @@ function ProductItem({
 	)
 }
 
-function SubscriptionPlanItem({
+function SubscriptionItem({
 	item,
 	sessionId,
 }: {
@@ -295,7 +295,7 @@ function SubscriptionPlanItem({
 		}
 	}
 
-	if (!item?.subscriptionPlan)
+	if (!item?.subscriptionItem)
 		return (
 			<li className={styles.item}>
 				<p>This cart item is no longer supplied by our store</p>
@@ -303,7 +303,7 @@ function SubscriptionPlanItem({
 		)
 
 	const {
-		subscriptionPlan: { id, name, price, billing_interval, image },
+		subscriptionItem: { id, subscriptionPlan, price, billing_interval },
 		type,
 		quantity,
 	} = item
@@ -312,7 +312,7 @@ function SubscriptionPlanItem({
 		<>
 			<li className={styles.item}>
 				<ImageDynamic
-					photoIn={{ url: image, altText: `${name} featured image` }}
+					photoIn={{ url: subscriptionPlan.image, altText: `${name} featured image` }}
 				/>
 
 				<Flex
@@ -321,7 +321,7 @@ function SubscriptionPlanItem({
 					justifyContent={"space-between"}
 				>
 					<h5>
-						<Link href={`/shop/subscription-plans/${id}`}>{name}</Link>
+						<Link href={`/shop/subscription-items/${id}`}>{subscriptionPlan.name}</Link>
 					</h5>
 
 					<input

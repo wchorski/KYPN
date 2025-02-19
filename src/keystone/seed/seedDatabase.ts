@@ -4,6 +4,39 @@ import { dateAdjuster } from "../../lib/dateCheck"
 import allDataJson from "./extracted/extData.json"
 import { envs } from "../../../envs"
 
+export const seedDatabase = async (context: Context) => {
+	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
+	await seedSchemaItems("Role", "name", allDataJson.roles, context)
+	await seedSchemaItems("User", "name", allDataJson.users, context)
+	await seedSchemaItems("Category", "name", allDataJson.categories, context)
+	await seedSchemaItems("Tag", "name", allDataJson.tags, context)
+	await seedSchemaItems("Page", "title", allDataJson.pages, context)
+	await seedSchemaItems("Post", "title", allDataJson.posts, context)
+	await seedSchemaItems(
+		"Announcement",
+		"link",
+		allDataJson.announcements,
+		context
+	)
+
+	await seedSchemaItems("Location", "address", allDataJson.locations, context)
+	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
+	await seedSchemaItems("Service", "name", allDataJson.services, context)
+	await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
+
+	await seedSchemaItems("Event", "summary", allDataJson.events, context)
+	// seedTicketOrders creates "Ticket" items after Events are created
+
+	await seedSchemaItems("Product", "name", allDataJson.products, context)
+	await seedSchemaItems(
+		"SubscriptionPlan",
+		"name",
+		allDataJson.subscriptionPlans,
+		context
+	)
+	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
+}
+
 const seedSchemaItems = async (
 	schemaType: string,
 	compairKey: string,
@@ -202,34 +235,6 @@ const seedSchemaItems = async (
 
 // ---
 
-export const seedDatabase = async (context: Context) => {
-	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
-	await seedSchemaItems("Role", "name", allDataJson.roles, context)
-	await seedSchemaItems("User", "name", allDataJson.users, context)
-	await seedSchemaItems("Category", "name", allDataJson.categories, context)
-	await seedSchemaItems("Tag", "name", allDataJson.tags, context)
-	await seedSchemaItems("Page", "title", allDataJson.pages, context)
-	await seedSchemaItems("Post", "title", allDataJson.posts, context)
-	await seedSchemaItems(
-		"Announcement",
-		"link",
-		allDataJson.announcements,
-		context
-	)
-
-	await seedSchemaItems("Location", "address", allDataJson.locations, context)
-	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
-	await seedSchemaItems("Service", "name", allDataJson.services, context)
-	await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
-
-	await seedSchemaItems("Event", "summary", allDataJson.events, context)
-	// seedTicketOrders creates "Ticket" items after Events are created
-
-	await seedSchemaItems("Product", "name", allDataJson.products, context)
-	await seedSchemaItems("SubscriptionPlan", "name", allDataJson.subscriptionPlans, context)
-	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
-}
-
 //? it works but for now I'm setting bookings strait from json
 // async function seedBookings(services: Lists.Service.Item[], context: Context) {
 // 	const { db: sudoDB } = context.sudo()
@@ -284,7 +289,6 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 			const order = await sudoDB.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					subTotal: (event.price || 0) * tixQuantity,
 					// stripeCheckoutSessionId: null,
 					// stripePaymentIntent: null,
 					email: fakeEmail,
@@ -294,6 +298,8 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 						create: [
 							{
 								quantity: tixQuantity,
+								type: "SALE",
+								subTotal: event.price,
 								tickets: { create: tickets },
 							},
 						],
@@ -314,11 +320,7 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 				})
 			}
 
-			console.log(
-				` + Ticket Ordered for Event: ${event.summary}, total: ${
-					order.subTotal + order.fees
-				} `
-			)
+			console.log(` + Ticket Ordered for Event: ${event.summary}`)
 		})
 	)
 }

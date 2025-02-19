@@ -110,7 +110,16 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 		tags,
 		status,
 		billing_interval,
+		addons,
 	} = subscriptionPlan
+
+	const addonOptions = addons.map((ad) => ({
+		name: ad.name,
+		label: ad.name,
+		id: ad.id,
+		isChecked: false,
+		price: ad.price,
+	}))
 
 	return (
 		<main className={page_layout}>
@@ -181,20 +190,37 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									// subtext={'billed ' + billing_interval}
 								/>
 							</span>
-
-							{/* <AddToCartForm
-                subscriptionPlanId={id}
-								productId={undefined}
-								eventId={undefined}
-								sessionId={session.itemId}
-								type={"SUBSCRIPTION"}
-							/> */}
-              
-							<Link href={`/checkout/subscription?id=${id}`} className="button medium">Checkout</Link>
+							<p className={"debug"}>moving back singular addToCart Button</p>
+							<Link
+								href={`/checkout/subscription?id=${id}`}
+								className="button medium"
+							>
+								Checkout
+							</Link>
 						</Card>
 					)}
+					{!session ? (
+						<CallbackLink>Login to Purchase</CallbackLink>
+					) : session?.data.role === null ? (
+						<VerifyEmailCard email={session.user.email} />
+					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
+						<Card>
+							<StatusBadge type={"product"} status={status} />
+						</Card>
+					) : (
+						<AddToCartForm
+							subscriptionPlanId={id}
+							productId={undefined}
+							eventId={undefined}
+							sessionId={session.itemId}
+							type={"SUBSCRIPTION"}
+							addonOptions={addonOptions}
+						/>
+					)}
 
-          <p className={'debug'}>Pre Checkout form in popup (addons, coupons)</p>
+					<p className={"debug"}>
+						Pre Checkout form in popup (addons, coupons)
+					</p>
 
 					{!isEmptyDocument(description?.document) && (
 						<>
@@ -255,6 +281,7 @@ const query = `
   addons {
     id
     name
+    price
   }
   dateCreated
   dateModified

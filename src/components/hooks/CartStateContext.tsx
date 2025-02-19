@@ -189,6 +189,15 @@ export const QUERY_USER_CART = `
         image
       }
     }
+    subscriptionItem {
+      id
+      price
+      billing_interval
+      subscriptionPlan {
+        name
+        image
+      }
+    }
     rental {
       id
       summary

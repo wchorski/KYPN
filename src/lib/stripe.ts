@@ -57,7 +57,7 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 				type: error.type,
 				code: error.code,
 				message: error.raw.message,
-        log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID"
+				log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID",
 			})
 		}
 	}
@@ -93,7 +93,7 @@ export async function stripeProductCreate(props: StripeProductCreate) {
 		// ],
 		shippable: false,
 		unit_label: "units",
-    
+
 		default_price_data: {
 			currency: "usd",
 			unit_amount: price,
@@ -291,8 +291,8 @@ export async function stripeProductUpdate({
 		const retrievedPrice = await stripePriceRetrieve(stripePriceId)
 		// if it exists then set .default_price to ID
 		if (retrievedPrice) {
-      // retrievedPrice.unit_amount
-      // retrievedPrice.billing_scheme
+			// retrievedPrice.unit_amount
+			// retrievedPrice.billing_scheme
 			stripeUpdateParams.default_price = stripePriceId
 		} else {
 			// if not create new
@@ -322,15 +322,17 @@ export async function stripeProductUpdate({
 }
 
 type Coupon = {
+	stripeId?: string
 	name: string
-	couponId: string
+	couponId?: string
 	percent_off?: number
 	amount_off?: number
 	duration: Duration
-	duration_in_months: number
+	duration_in_months?: number
 }
 
 export async function stripeCouponCreate({
+	stripeId,
 	name,
 	amount_off,
 	percent_off,
@@ -339,58 +341,78 @@ export async function stripeCouponCreate({
 	couponId,
 }: Coupon) {
 	if (!envs.STRIPE_PUBLIC_KEY) return
+	//? if product has stripeId then find and update existing product
+	// if (props.stripeProductId) stripeProductUpdate(props)
+	if (stripeId) {
+		try {
+			const coupon = await stripeConfig.coupons.retrieve(stripeId)
+
+			if (coupon) {
+				return await stripeConfig.coupons.update(stripeId, {
+					name,
+					metadata: {
+						couponId: couponId || "",
+					},
+				})
+			}
+		} catch (error: any) {
+			console.log("!!! 💳 STRIPE:: ", {
+				type: error.type,
+				code: error.code,
+				message: error.raw.message,
+				log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID",
+			})
+		}
+	}
 
 	let couponParams: Stripe.CouponCreateParams = {
 		name,
 		duration,
+		...(duration === "repeating" ? { duration_in_months } : {}),
+		...(amount_off ? { amount_off } : {}),
+		...(percent_off ? { percent_off } : {}),
 		metadata: {
-			couponId,
+			couponId: couponId || "",
 		},
 	}
-
-	if (duration === "repeating") {
-		couponParams = { ...couponParams, duration_in_months }
-	}
-	if (amount_off) couponParams = { ...couponParams, amount_off }
-	if (percent_off) couponParams = { ...couponParams, percent_off }
 
 	const coupon = await stripeConfig.coupons.create(couponParams)
 	return coupon
 }
 
-
 type SubscriptionCreate = {
-  stripeCustomerId:string,
-  stripePriceId:string,
+	stripeCustomerId: string
+	stripePriceId: string
 }
 
-export async function stripeSubscriptionCreate({stripeCustomerId, stripePriceId}:SubscriptionCreate){
-  if(!envs.STRIPE_PUBLIC_KEY) return
-  
-  try {
-    
-    const subscription = await stripeConfig.subscriptions.create({
-      customer: stripeCustomerId,
-      items: [
-        {
-          price: stripePriceId,
-        },
-      ],
-      metadata: {
-        type: 'subscriptionItem'
-      }
-    });
-  
-    return subscription
+export async function stripeSubscriptionCreate({
+	stripeCustomerId,
+	stripePriceId,
+}: SubscriptionCreate) {
+	if (!envs.STRIPE_PUBLIC_KEY) return
 
-  } catch (error:any) {
-    console.log("!!! 💳 STRIPE:: ", {
-      type: error.type,
-      code: error.code,
-      message: error.raw.message,
-      log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID"
-    })
-  }
+	try {
+		const subscription = await stripeConfig.subscriptions.create({
+			customer: stripeCustomerId,
+			items: [
+				{
+					price: stripePriceId,
+				},
+			],
+			metadata: {
+				type: "subscriptionItem",
+			},
+		})
+
+		return subscription
+	} catch (error: any) {
+		console.log("!!! 💳 STRIPE:: ", {
+			type: error.type,
+			code: error.code,
+			message: error.raw.message,
+			log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID",
+		})
+	}
 }
 
 type SubscriptionUpdate = {
@@ -406,49 +428,44 @@ export async function stripeSubscriptionUpdate({
 }: SubscriptionUpdate) {
 	if (!envs.STRIPE_SECRET) return
 
-  console.log('🐸 stripeSubscriptionUpdate. DOES THIS WORK w STRIPE???');
+	console.log("🐸 stripeSubscriptionUpdate. DOES THIS WORK w STRIPE???")
 
 	try {
 		switch (status) {
 			case "PAUSED":
-				await stripeConfig.subscriptions.update(
-					stripeSubscriptionId,
-					{
-						pause_collection: {
-							behavior: "void",
-						},
-						metadata: {
-							subscriptionItemId: subItemId,
-						},
-					}
-				)
+				await stripeConfig.subscriptions.update(stripeSubscriptionId, {
+					pause_collection: {
+						behavior: "void",
+					},
+					metadata: {
+						subscriptionItemId: subItemId,
+					},
+				})
 				break
 
 			case "ACTIVE":
-				await stripeConfig.subscriptions.update(
-					stripeSubscriptionId,
-					{
-						pause_collection: "",
-            metadata: {
-							subscriptionItemId: subItemId,
-						},
-					}
-				)
+				await stripeConfig.subscriptions.update(stripeSubscriptionId, {
+					pause_collection: "",
+					metadata: {
+						subscriptionItemId: subItemId,
+					},
+				})
 				break
 
 			case "CANCELED":
-				await stripeConfig.subscriptions.cancel(
-					stripeSubscriptionId
-				)
+				await stripeConfig.subscriptions.cancel(stripeSubscriptionId)
 
 			default:
 				console.log("### SubscriptionItem Schema. status not supported")
 				break
 		}
-	} catch (error:any) {
+	} catch (error: any) {
 		console.log("sub item update error: ", error)
 
-		throw new Error("💳❌ Subscription Item Status Change Error: ", error.message)
+		throw new Error(
+			"💳❌ Subscription Item Status Change Error: ",
+			error.message
+		)
 	}
 }
 

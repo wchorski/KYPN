@@ -2,6 +2,7 @@
 //! trying to fit this all into `addToCart.ts`
 import { graphql } from "@keystone-6/core"
 import {
+  CartItemCreateInput,
 	Context,
 	Lists,
 	OrderItemCreateInput,
@@ -30,9 +31,9 @@ type SessionWStripe = {
 // TODO consolidate into one checkout mutation
 // grab items from cart instead of doing all this song and dance with form input
 
-export const checkoutSubscription = (base: BaseSchemaMeta) =>
+export const bookASubscription = (base: BaseSchemaMeta) =>
 	graphql.field({
-		type: base.object("Order"),
+		type: base.object("SubscriptionItem"),
 		args: {
 			subscriptionPlanId: graphql.arg({
 				type: graphql.nonNull(graphql.String),
@@ -85,7 +86,7 @@ export const checkoutSubscription = (base: BaseSchemaMeta) =>
 			// const transactionFees =
 			// 	(session.stripe?.amount_total || amountTotal) - amountTotal
 
-			const newOrderItem = {
+			const newCartItem = {
 				type: "SUBSCRIPTION",
 				quantity: 1,
 				subscriptionItem: {
@@ -104,31 +105,26 @@ export const checkoutSubscription = (base: BaseSchemaMeta) =>
 						stripeSubscriptionId: session.stripe?.subscriptionId,
 					},
 				},
-			} as OrderItemCreateInput
+			} as CartItemCreateInput
 
-			const order = await sudoContext.db.Order.createOne({
+			const cartItem = await sudoContext.db.CartItem.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					subTotal: subscriptionPlan.price,
+					// subTotal: subscriptionPlan.price,
 					// fees: transactionFees,
-					...(newOrderItem ? { items: { create: newOrderItem } } : {}),
+					...(newCartItem ? { items: { create: newCartItem } } : {}),
 					user: { connect: { id: customerId } },
-					stripeCheckoutSessionId: session.stripe?.id || "",
-					stripePaymentIntent: session.stripe?.payment_intent || "",
-					//TODO maybe not secure
-					...(session.stripe?.payment_status === "paid" || subscriptionPlan.price === 0
-						? { status: "PAYMENT_RECIEVED" }
-						: { status: "REQUESTED" }),
+					// stripeCheckoutSessionId: session.stripe?.id || "",
+					// stripePaymentIntent: session.stripe?.payment_intent || "",
 				},
 			})
 
-			if (!order) throw new Error("!!! mutation.checkout: order not created")
-			console.log({ order })
+			if (!cartItem) throw new Error("!!! mutation.checkout: order not created")
+			console.log({ order: cartItem })
 			//? email sent with Order afterOperation
 
 			return {
-				status: order.status,
-				id: order.id,
+				id: cartItem.id,
 			}
 		},
 	})

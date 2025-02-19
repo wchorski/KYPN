@@ -41,21 +41,21 @@ export const Coupon: Lists.Coupon = list({
 						max: 100,
 					},
 				}),
+        duration_in_months: integer({ validation: { min: 1 } }),
+        duration: select({
+          options: [
+            { label: "once", value: "once" },
+            { label: "repeating", value: "repeating" },
+            { label: "forever", value: "forever" },
+          ],
+          // defaultValue: 'once',
+          ui: {
+            displayMode: "segmented-control",
+            createView: { fieldMode: "edit" },
+          },
+          validation: { isRequired: true },
+        }),
 			},
-		}),
-		duration_in_months: integer({}),
-		duration: select({
-			options: [
-				{ label: "once", value: "once" },
-				{ label: "repeating", value: "repeating" },
-				{ label: "forever", value: "forever" },
-			],
-			// defaultValue: 'once',
-			ui: {
-				displayMode: "segmented-control",
-				createView: { fieldMode: "edit" },
-			},
-			validation: { isRequired: true },
 		}),
 		// this can be helpful to find out all the Posts associated with a Tag
 
@@ -82,36 +82,49 @@ export const Coupon: Lists.Coupon = list({
 	},
 
 	hooks: {
-		// validate: {
-		//   create: ({}) => {}
-		// },
-		beforeOperation: async ({ operation, resolvedData, item, context }) => {
-			if (operation === "create") {
-				// TODO move to validate hook
+		validate: {
+			create: ({ resolvedData }) => {
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
 						"Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank"
 					)
 
 				if (
-					resolvedData?.duration === "repeating" &&
+					resolvedData.duration === "repeating" &&
 					!resolvedData.duration_in_months
 				)
 					throw new Error(
-						"if Duration is 'repeating', Duration in Months must be above 0 months"
+						"if Duration is 'repeating', Duration in Months must be set to 1 or above"
 					)
+			},
+			update: ({ resolvedData }) => {
+				if (
+					resolvedData.duration ||
+					resolvedData.amount_off ||
+					resolvedData.percent_off ||
+					resolvedData.duration_in_months
+				) {
+					throw new Error("!!! Can NOT update Coupon's details that affects Discount amount. A new Coupon must be created")
+				}
+			},
+		},
+		beforeOperation: {
+			create: async ({ resolvedData }) => {
+				const coupon = await stripeCouponCreate({
+					name: String(resolvedData.name),
+					percent_off: resolvedData.percent_off || 0,
+					duration: resolvedData.duration as Duration,
+					...(resolvedData.duration_in_months
+						? { duration_in_months: resolvedData.duration_in_months }
+						: {}),
+					// couponId: "",
+          stripeId: resolvedData.stripeId,
+				}).then((res) => {
+					if (!res) return
 
-				// const coupon = await stripeCouponCreate({
-				//   name: String(resolvedData.name),
-				//   percent_off: resolvedData.percent_off || 0,
-				//   // @ts-ignore
-				//   duration: resolvedData.duration as Duration,
-				//   duration_in_months: Number(resolvedData.duration_in_months),
-
-				// }).then(async (coupon) => {
-				//   if(coupon) resolvedData.stripeId = coupon.id
-				// }).catch(err => console.log(err))
-			}
+					resolvedData.stripeId = res.id
+				})
+			},
 		},
 		afterOperation: async ({ operation, resolvedData, item, context }) => {
 			if (operation === "create") {

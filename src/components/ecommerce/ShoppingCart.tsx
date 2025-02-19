@@ -84,9 +84,9 @@ export function ShoppingCart() {
 							<em className="sub-text">
 								{` + ${moneyFormatter(
 									cartItems
-										.filter((item) => item.subscriptionPlan !== null)
+										.filter((item) => item.subscriptionItem !== null)
 										.reduce(
-											(acc, item) => acc + (item.subscriptionPlan?.price || 0),
+											(acc, item) => acc + (item.subscriptionItem?.price || 0),
 											0
 										)
 								)} subscription`}

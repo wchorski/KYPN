@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import {
 	integer,
@@ -6,6 +6,7 @@ import {
 	select,
 	text,
 	timestamp,
+	virtual,
 } from "@keystone-6/core/fields"
 import { isLoggedIn, permissions, rules } from "../access"
 import { hasOnlyOneValue } from "../../lib/utils"
@@ -18,7 +19,7 @@ export const OrderItem: Lists.OrderItem = list({
 			delete: rules.canManageOrders,
 		},
 		operation: {
-			create: isLoggedIn,
+			create: permissions.canManageOrder,
 			query: isLoggedIn,
 			update: permissions.canManageOrder,
 			delete: permissions.canManageOrder,
@@ -28,6 +29,7 @@ export const OrderItem: Lists.OrderItem = list({
 		type: select({
 			options: [
 				{ label: "Sale", value: "SALE" },
+				{ label: "Discount", value: "DISCOUNT" },
 				{ label: "Rental", value: "RENTAL" },
 				{ label: "Subscription", value: "SUBSCRIPTION" },
 				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
@@ -38,8 +40,31 @@ export const OrderItem: Lists.OrderItem = list({
 				createView: { fieldMode: "edit" },
 			},
 		}),
-		subTotal: integer({ validation: { isRequired: true, min: 0 } }),
+		total: virtual({
+			field: graphql.field({
+				type: graphql.Int,
+				async resolve(item, context) {
+					return item.subTotal * item.quantity
+				},
+			}),
+		}),
+		...group({
+			label: "Item Info",
+			description:
+				"copied info from Product, Booking, Rental, Tickets, SubscriptionItem, Coupon upon date created",
+			fields: {
+				subTotal: integer({ validation: { isRequired: true, min: 0 } }),
+				amount_off: integer({ validation: { min: 0 } }),
+				percent_off: integer({
+					validation: {
+						min: 1,
+						max: 100,
+					},
+				}),
+			},
+		}),
 		quantity: integer({ validation: { isRequired: true, min: 1 } }),
+		rentalDays: integer({ validation: { isRequired: true, min: 0 }, defaultValue: 0 }),
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
 		rental: relationship({ ref: "Rental.orderItem", many: false }),
@@ -49,7 +74,7 @@ export const OrderItem: Lists.OrderItem = list({
 			many: false,
 		}),
 		coupon: relationship({ ref: "Coupon" }),
-		order: relationship({ ref: "Order.items" }),
+		order: relationship({ ref: "Order.items", many: false }),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },
 			validation: { isRequired: true },
@@ -64,30 +89,54 @@ export const OrderItem: Lists.OrderItem = list({
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
-				const hasOnlyOne = hasOnlyOneValue(resolvedData, [
+				const validationStrings = [
 					"product",
-					"event",
+					"tickets",
 					"subscriptionItem",
 					"booking",
 					"rental",
 					"coupon",
-				])
+				]
+				const hasOnlyOne = hasOnlyOneValue(resolvedData, validationStrings)
 				console.log("!!! hasOnlyOne:: ", hasOnlyOne)
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionItem", "rental",  "coupon"] set'
+						`!!! Order Item can only have one of [${validationStrings.join(
+							", "
+						)}] set`
 					)
+
+				if (
+					resolvedData.coupon &&
+					(!resolvedData.amount_off || !resolvedData.percent_off)
+				)
+					throw new Error("!!! OrderItem Coupon: discount is null")
+
+				if (resolvedData.amount_off && resolvedData.percent_off)
+					throw new Error(
+						"Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank"
+					)
+				if (
+					resolvedData.coupon ||
+					resolvedData.booking ||
+					resolvedData.rental
+				) {
+					if (resolvedData.quantity && resolvedData.quantity > 1)
+						throw new Error(
+							"!!! Quantity cannot be above 1 for Coupon, Booking, or Rental"
+						)
+				}
 			},
 			update: ({ resolvedData, item }) => {
 				const thisNewCombinedData = { ...item, ...resolvedData }
 
 				// console.log({ thisNewCombinedData })
 				//? check that no other cartItem type is being connected or disconnected
-				const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, [
+				const validationStrings = [
 					"product",
 					"productId",
-					"event",
-					"eventId",
+					"tickets",
+					"ticketIds",
 					"booking",
 					"bookingId",
 					"subscriptionItemId",
@@ -96,12 +145,18 @@ export const OrderItem: Lists.OrderItem = list({
 					"rentalId",
 					"coupon",
 					"couponId",
-				])
+				]
+				const hasOnlyOne = hasOnlyOneValue(
+					thisNewCombinedData,
+					validationStrings
+				)
 
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						'!!! Order Item can only have one of ["product", "event", "booking", "subscriptionItem", "rental", "coupon", + itemId(s)] set'
+						`!!! Order Item can only have one of [${validationStrings.join(
+							", "
+						)}] set`
 					)
 			},
 		},

@@ -17,7 +17,7 @@ import { getServerSession } from "next-auth"
 import { notFound, redirect } from "next/navigation"
 
 type Props = {
-	searchParams: { id: string }
+	searchParams: { id: string, addons:string, coupons:string }
 	params: { id: string }
 }
 
@@ -30,7 +30,9 @@ export default async function CheckoutSubscriptionPage({
 	params,
 	searchParams,
 }: Props) {
-	const { id } = await searchParams
+	const { id, addons, coupons } = await searchParams
+  const addonIds = addons.split(',')
+  const couponIds = addons.split(',')
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return redirect("/login")
 	const user = (await keystoneContext.withSession(session).query.User.findOne({
@@ -62,6 +64,8 @@ export default async function CheckoutSubscriptionPage({
 			<div className={[page_content, layout_site].join(" ")}>
 				<StripeSubscriptionCheckout
 					subscriptionPlan={plainObj(subscriptionPlan)}
+          addonIds={addonIds}
+          couponIds={couponIds}
 					email={session.user.email}
 					user={session.user as User}
 				/>

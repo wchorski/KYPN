@@ -2051,6 +2051,7 @@ type CartItem {
   booking: Booking
   rental: Rental
   event: Event
+  subscriptionItem: SubscriptionItem
   user: User
 }
 
@@ -2070,6 +2071,7 @@ input CartItemWhereInput {
   booking: BookingWhereInput
   rental: RentalWhereInput
   event: EventWhereInput
+  subscriptionItem: SubscriptionItemWhereInput
   user: UserWhereInput
 }
 
@@ -2087,6 +2089,7 @@ input CartItemUpdateInput {
   booking: BookingRelateToOneForUpdateInput
   rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
+  subscriptionItem: SubscriptionItemRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -2120,6 +2123,12 @@ input EventRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input SubscriptionItemRelateToOneForUpdateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CartItemUpdateArgs {
   where: CartItemWhereUniqueInput!
   data: CartItemUpdateInput!
@@ -2133,6 +2142,7 @@ input CartItemCreateInput {
   booking: BookingRelateToOneForCreateInput
   rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
+  subscriptionItem: SubscriptionItemRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
@@ -2161,11 +2171,20 @@ input EventRelateToOneForCreateInput {
   connect: EventWhereUniqueInput
 }
 
+input SubscriptionItemRelateToOneForCreateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
+}
+
 type OrderItem {
   id: ID!
   type: String
+  total: Int
   subTotal: Int
+  amount_off: Int
+  percent_off: Int
   quantity: Int
+  rentalDays: Int
   product: Product
   booking: Booking
   rental: Rental
@@ -2189,7 +2208,10 @@ input OrderItemWhereInput {
   id: IDFilter
   type: StringFilter
   subTotal: IntFilter
+  amount_off: IntNullableFilter
+  percent_off: IntNullableFilter
   quantity: IntFilter
+  rentalDays: IntFilter
   product: ProductWhereInput
   booking: BookingWhereInput
   rental: RentalWhereInput
@@ -2205,7 +2227,10 @@ input OrderItemOrderByInput {
   id: OrderDirection
   type: OrderDirection
   subTotal: OrderDirection
+  amount_off: OrderDirection
+  percent_off: OrderDirection
   quantity: OrderDirection
+  rentalDays: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -2213,7 +2238,10 @@ input OrderItemOrderByInput {
 input OrderItemUpdateInput {
   type: String
   subTotal: Int
+  amount_off: Int
+  percent_off: Int
   quantity: Int
+  rentalDays: Int
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
   rental: RentalRelateToOneForUpdateInput
@@ -2223,12 +2251,6 @@ input OrderItemUpdateInput {
   order: OrderRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input SubscriptionItemRelateToOneForUpdateInput {
-  create: SubscriptionItemCreateInput
-  connect: SubscriptionItemWhereUniqueInput
-  disconnect: Boolean
 }
 
 input OrderRelateToOneForUpdateInput {
@@ -2245,7 +2267,10 @@ input OrderItemUpdateArgs {
 input OrderItemCreateInput {
   type: String
   subTotal: Int
+  amount_off: Int
+  percent_off: Int
   quantity: Int
+  rentalDays: Int
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
   rental: RentalRelateToOneForCreateInput
@@ -2255,11 +2280,6 @@ input OrderItemCreateInput {
   order: OrderRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input SubscriptionItemRelateToOneForCreateInput {
-  create: SubscriptionItemCreateInput
-  connect: SubscriptionItemWhereUniqueInput
 }
 
 input OrderRelateToOneForCreateInput {
@@ -2274,7 +2294,6 @@ type Order {
   email: String
   notes: String
   total: Int
-  subTotal: Int
   fees: Int
   count: Int
   stripeCheckoutSessionId: String
@@ -2299,7 +2318,6 @@ input OrderWhereInput {
   id: IDFilter
   email: StringFilter
   notes: StringFilter
-  subTotal: IntFilter
   fees: IntFilter
   stripeCheckoutSessionId: StringFilter
   stripePaymentIntent: StringFilter
@@ -2315,7 +2333,6 @@ input OrderOrderByInput {
   id: OrderDirection
   email: OrderDirection
   notes: OrderDirection
-  subTotal: OrderDirection
   fees: OrderDirection
   stripeCheckoutSessionId: OrderDirection
   stripePaymentIntent: OrderDirection
@@ -2328,7 +2345,6 @@ input OrderOrderByInput {
 input OrderUpdateInput {
   email: String
   notes: String
-  subTotal: Int
   fees: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
@@ -2348,7 +2364,6 @@ input OrderUpdateArgs {
 input OrderCreateInput {
   email: String
   notes: String
-  subTotal: Int
   fees: Int
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
@@ -3151,7 +3166,7 @@ type Mutation {
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   checkout: Order
   checkoutSubscription(subscriptionPlanId: String!, addonIds: [String], couponIds: [String]): Order
-  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, subscriptionPlanId: ID): CartItem
+  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, subscriptionPlanId: ID, couponId: ID, addonIds: [String]): CartItem
 }
 
 type Query {

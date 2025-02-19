@@ -61,6 +61,8 @@ export const checkout = (base: BaseSchemaMeta) =>
           subTotal
           product {
             id
+            price
+            rental_price
           }
           event {
             id
@@ -68,9 +70,11 @@ export const checkout = (base: BaseSchemaMeta) =>
           }
           booking {
             id
+            price
           }
-          subscriptionPlan {
+          subscriptionItem {
             id
+            price
             billing_interval
           }
           rental {
@@ -78,6 +82,8 @@ export const checkout = (base: BaseSchemaMeta) =>
           }
           coupon {
             id
+            amount_off
+            percent_off
           }
         `,
 			})) as CartItem[]
@@ -93,10 +99,19 @@ export const checkout = (base: BaseSchemaMeta) =>
 					cartItems.map(
 						async (item): Promise<OrderItemCreateInput | undefined> => {
 							switch (true) {
+								case item.product !== null && item.type === "SALE":
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: item.product?.price,
+										product: { connect: { id: item.product?.id } },
+									}
+
 								case item.booking !== null:
 									return {
 										type: item.type,
 										quantity: item.quantity,
+										subTotal: item.booking?.price,
 										booking: { connect: { id: item.booking?.id } },
 									}
 
@@ -104,14 +119,13 @@ export const checkout = (base: BaseSchemaMeta) =>
 									return {
 										type: item.type,
 										quantity: item.quantity,
+										subTotal: cartItems
+											.filter((item) => item.type === "RENTAL")
+											.reduce(
+												(sum, item) => sum + (item.product?.rental_price || 0),
+												0
+											),
 										rental: { connect: { id: item.rental?.id } },
-									}
-
-								case item.product !== null:
-									return {
-										type: item.type,
-										quantity: item.quantity,
-										product: { connect: { id: item.product?.id } },
 									}
 
 								case item.event !== null:
@@ -126,36 +140,31 @@ export const checkout = (base: BaseSchemaMeta) =>
 									return {
 										type: item.type,
 										quantity: item.quantity,
+										subTotal: item.event?.price,
 										tickets: {
 											create: tixs,
 										},
 									}
 
-								// case item.subscriptionPlan !== null:
-								// 	return {
-								// 		type: item.type,
-								// 		quantity: item.quantity,
-								// 		subscriptionItem: {
-								// 			create: {
-								// 				subscriptionPlan: {
-								// 					connect: { id: item.subscriptionPlan?.id },
-								// 				},
-								// 				status:
-								// 					session.stripe?.payment_status === "paid"
-								// 						? "ACTIVE"
-								// 						: "TRIAL",
-								// 				billing_interval:
-								// 					item.subscriptionPlan?.billing_interval,
-								// 				user: {
-								// 					connect: {
-								// 						id: session.itemId || session.stripe?.customerId,
-								// 					},
-								// 				},
-                //         // TODO this is combined `sub_***` checkout. we want single `si_***` saved here
-								// 				stripeSubscriptionId: session.stripe?.subscriptionId,
-								// 			},
-								// 		},
-								// 	}
+								case item.subscriptionItem !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: 0,
+										subscriptionItem: {
+											connect: { id: item.subscriptionItem?.id },
+										},
+									}
+
+								case item.coupon !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: 0,
+										amount_off: item.coupon?.amount_off,
+										percent_off: item.coupon?.percent_off,
+										coupon: { connect: { id: item.coupon?.id } },
+									}
 
 								default:
 									return undefined
@@ -174,7 +183,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					subTotal: amountTotal,
+					// subTotal: amountTotal,
 					fees: transactionFees,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
 					user: { connect: { id: customerId } },

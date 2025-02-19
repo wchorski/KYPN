@@ -5,6 +5,7 @@ import { Context } from ".keystone/types"
 import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import { countAvailableSeats } from "./checkoutTickets"
 import type { Event } from "../types"
+import { hasOnlyOneValue } from "../../lib/utils"
 
 export const addToCart = (base: BaseSchemaMeta) =>
 	graphql.field({
@@ -16,16 +17,36 @@ export const addToCart = (base: BaseSchemaMeta) =>
 			eventId: graphql.arg({ type: graphql.ID }),
 			rentalId: graphql.arg({ type: graphql.ID }),
 			subscriptionPlanId: graphql.arg({ type: graphql.ID }),
+			couponId: graphql.arg({ type: graphql.ID }),
+			addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
 		},
 		async resolve(source, variables, context: Context) {
 			const {
-				productId,
 				type,
+				quantity,
+				productId,
 				eventId,
 				subscriptionPlanId,
-				quantity,
 				rentalId,
+				couponId,
+				addonIds,
 			} = variables
+
+			const validationStrings = [
+				"productId",
+				"eventId",
+				"subscriptionPlanId",
+				"rentalId",
+				"couponId",
+			]
+			const hasOnlyOne = hasOnlyOneValue(variables, validationStrings)
+			if (!hasOnlyOne)
+				throw new Error(
+					`!!! addToCart Item can only have one of[${validationStrings.join(
+						", "
+					)}] set`
+				)
+
 			// const session = await getServerSession(nextAuthOptions)
 			//? prob should use the included ks context
 			const session = await context.session
@@ -66,8 +87,14 @@ export const addToCart = (base: BaseSchemaMeta) =>
 					...(productId ? { product: { id: { equals: productId } } } : {}),
 					...(eventId ? { event: { id: { equals: eventId } } } : {}),
 					...(subscriptionPlanId
-						? { subscriptionPlan: { id: { equals: subscriptionPlanId } } }
+						? {
+								subscriptionItem: {
+									subscriptionPlan: { id: { equals: subscriptionPlanId } },
+								},
+						  }
 						: {}),
+					...(couponId ? { coupon: { id: { equals: couponId } } } : {}),
+
 					type: { equals: type },
 				},
 			})
@@ -75,8 +102,10 @@ export const addToCart = (base: BaseSchemaMeta) =>
 			const [exisitingItem] = allCartItems
 
 			if (exisitingItem) {
-
-        if(exisitingItem.rentalId) throw new Error("!!! Cart can only have one Rental Item")
+				if (exisitingItem.rentalId)
+					throw new Error("!!! Cart can only have one Rental Item")
+				if (exisitingItem.couponId)
+					throw new Error("!!! Cart can only have one Coupon Item")
 
 				const cartItemUpdate = await sudoContext().db.CartItem.updateOne({
 					where: { id: exisitingItem.id },
@@ -87,15 +116,44 @@ export const addToCart = (base: BaseSchemaMeta) =>
 
 				return cartItemUpdate
 			} else {
+				if (type === "DISCOUNT" && !couponId)
+					throw new Error(
+						"!!! cannot mark cart item as DISCOUNT unless it is a coupon"
+					)
+
 				const cartItemAdded = await sudoContext().db.CartItem.createOne({
 					data: {
 						type,
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
-						...(rentalId ? { rental: { connect: { id: rentalId } } } : {}),
-						...(subscriptionPlanId
-							? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
+						...(rentalId
+							? {
+									rental: { connect: { id: rentalId } },
+									addons: {
+										connect: addonIds ? addonIds.map((id) => ({ id: id })) : [],
+									},
+							  }
 							: {}),
+						...(subscriptionPlanId
+							? {
+									subscriptionItem: {
+										create: {
+											status: "REQUESTED",
+											subscriptionPlan: { connect: { id: subscriptionPlanId } },
+											user: { connect: { id: session?.itemId } },
+											addons: {
+												connect: addonIds
+													? addonIds.map((id) => ({ id: id }))
+													: [],
+											},
+										},
+									},
+							  }
+							: {}),
+						// ...(subscriptionPlanId
+						// 	? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
+						// 	: {}),
+						...(couponId ? { coupon: { connect: { id: couponId } } } : {}),
 						user: { connect: { id: session?.itemId } },
 						quantity,
 					},
