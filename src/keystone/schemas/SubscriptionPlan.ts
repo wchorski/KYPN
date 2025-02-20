@@ -67,7 +67,7 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 			many: false,
 		}),
 
-		name: text({ validation: { isRequired: true } }),
+		name: text({ validation: { isRequired: true, length: { min: 3 } } }),
 		slug: text({
 			validation: { isRequired: true },
 			isIndexed: "unique",

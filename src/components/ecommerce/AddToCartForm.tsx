@@ -28,7 +28,7 @@ type Props = {
 	buttonText?: string
 }
 
-// throw new Error('!!! mutation/addToCart')
+throw new Error('!!! mutation/addToCart will not handle subscripitons very well, so why do i keep trying to add them to cart?')
 
 export default function AddToCartForm({
 	eventId,

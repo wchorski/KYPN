@@ -30,6 +30,8 @@ import {
 } from "@styles/ecommerce/product.module.css"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { PriceTag } from "@components/ecommerce/PriceTag"
+import { CheckoutSubscriptionPlanForm } from "@components/ecommerce/CheckoutSubscriptionPlanForm"
+import { plainObj } from "@lib/utils"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -208,13 +210,10 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 							<StatusBadge type={"product"} status={status} />
 						</Card>
 					) : (
-						<AddToCartForm
-							subscriptionPlanId={id}
-							productId={undefined}
-							eventId={undefined}
-							sessionId={session.itemId}
-							type={"SUBSCRIPTION"}
-							addonOptions={addonOptions}
+						<CheckoutSubscriptionPlanForm
+							subscriptionPlan={plainObj(subscriptionPlan)}
+							customerId={session.itemId}
+              addons={plainObj(addons)}
 						/>
 					)}
 

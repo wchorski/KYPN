@@ -41,7 +41,7 @@ export const CartItem: Lists.CartItem = list({
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
         { label: "Discount", value: "DISCOUNT" },
-				{ label: "Subscription", value: "SUBSCRIPTION" },
+				// { label: "Subscription", value: "SUBSCRIPTION" },
 				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
 			validation: { isRequired: true },
@@ -122,7 +122,7 @@ export const CartItem: Lists.CartItem = list({
 		booking: relationship({ ref: "Booking" }),
 		rental: relationship({ ref: "Rental" }),
 		event: relationship({ ref: "Event" }),
-		subscriptionItem: relationship({ ref: "SubscriptionItem" }),
+		// subscriptionItem: relationship({ ref: "SubscriptionItem" }),
 		user: relationship({ ref: "User.cart" }),
 	},
 	hooks: {
@@ -134,7 +134,7 @@ export const CartItem: Lists.CartItem = list({
         const validationStrings = [
 					"product",
 					"event",
-					"subscriptionItem",
+					// "subscriptionItem",
 					"booking",
 					"rental",
 					"coupon",
@@ -169,8 +169,8 @@ export const CartItem: Lists.CartItem = list({
 					"eventId",
 					"booking",
 					"bookingId",
-					"subscriptionItemId",
-					"subscriptionItem",
+					// "subscriptionItemId",
+					// "subscriptionItem",
 					"rental",
 					"rentalId",
 					"coupon",
@@ -200,14 +200,6 @@ export const CartItem: Lists.CartItem = list({
 				if (item.rentalId) {
 					await context.sudo().db.Rental.updateOne({
 						where: { id: item.rentalId },
-						data: {
-							status: "CANCELED",
-						},
-					})
-				}
-				if (item.subscriptionItem) {
-					await context.sudo().db.SubscriptionItem.updateOne({
-						where: { id: item.subscriptionItem },
 						data: {
 							status: "CANCELED",
 						},

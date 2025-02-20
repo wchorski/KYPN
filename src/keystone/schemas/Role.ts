@@ -26,7 +26,7 @@ export const Role: Lists.Role = list({
 	},
 	fields: {
 		name: text({
-			validation: { isRequired: true },
+			validation: { isRequired: true, length: { min: 3 } },
 			isIndexed: "unique",
 			ui: {
 				description:

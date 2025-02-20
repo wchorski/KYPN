@@ -68,7 +68,10 @@ export const Product: Lists.Product = list({
 			},
 		}),
 		image: text(),
-		name: text({ validation: { isRequired: true }, isIndexed: "unique" }),
+		name: text({
+			validation: { isRequired: true, length: { min: 3 } },
+			isIndexed: "unique",
+		}),
 		slug: text({
 			validation: { isRequired: true },
 			isIndexed: "unique",
@@ -237,8 +240,8 @@ export const Product: Lists.Product = list({
 					image,
 				} = resolvedData
 
-        //? this does not account for rental price. which is ok i guess because that
-        // is handled purely by this app
+				//? this does not account for rental price. which is ok i guess because that
+				// is handled purely by this app
 				try {
 					const createdProduct = await stripeProductCreate({
 						// id,

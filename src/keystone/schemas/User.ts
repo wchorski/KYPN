@@ -67,7 +67,7 @@ export const User: Lists.User = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-		name: text({ validation: { isRequired: true } }),
+		name: text({ validation: { isRequired: true, length: { min: 3 } } }),
 		nameLast: text(),
 		authId: text({
 			isIndexed: "unique",

@@ -64,7 +64,7 @@ export const Event: Lists.Event = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-		summary: text({ validation: { isRequired: true } }),
+		summary: text({ validation: { isRequired: true, length: { min: 3 } } }),
 		start: timestamp({ validation: { isRequired: true } }),
 		end: timestamp({validation: { isRequired: true }}),
 		price: integer({ defaultValue: 0, validation: { isRequired: true, min: 0 },  }),

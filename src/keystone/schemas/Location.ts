@@ -34,9 +34,9 @@ export const Location: Lists.Location = list({
 	},
 
 	fields: {
-		name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 } } }),
     image: text({}),
-		address: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		address: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 }} }),
 		rooms: integer({ defaultValue: 1, validation: {isRequired: true } }),
 		// events: relationship({ ref: 'Event.location', many: true }),
 		status: select({

@@ -19,7 +19,7 @@ type StripeSession = {
 		payment_intent: string
 		customerId: string
 		amount_total: number
-		subscriptionId: string | undefined
+		// subscriptionId: string | undefined
 		rentalId: string | undefined
 	}
 }
@@ -71,11 +71,6 @@ export const checkout = (base: BaseSchemaMeta) =>
           booking {
             id
             price
-          }
-          subscriptionItem {
-            id
-            price
-            billing_interval
           }
           rental {
             id
@@ -146,15 +141,16 @@ export const checkout = (base: BaseSchemaMeta) =>
 										},
 									}
 
-								case item.subscriptionItem !== null:
-									return {
-										type: item.type,
-										quantity: item.quantity,
-										subTotal: 0,
-										subscriptionItem: {
-											connect: { id: item.subscriptionItem?.id },
-										},
-									}
+                //? in it's own mutation
+								// case item.subscriptionItem !== null:
+								// 	return {
+								// 		type: item.type,
+								// 		quantity: item.quantity,
+								// 		subTotal: 0,
+								// 		subscriptionItem: {
+								// 			connect: { id: item.subscriptionItem?.id },
+								// 		},
+								// 	}
 
 								case item.coupon !== null:
 									return {

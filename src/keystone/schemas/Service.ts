@@ -64,7 +64,7 @@ export const Service: Lists.Service = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-		name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 } } }),
 		image: text(),
 		excerpt: text({
 			ui: {

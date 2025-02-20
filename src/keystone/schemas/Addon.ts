@@ -40,7 +40,7 @@ export const Addon: Lists.Addon = list({
 	},
 
 	fields: {
-		name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 } } }),
 		slug: text({
 			isIndexed: "unique",
 			validation: { isRequired: true },

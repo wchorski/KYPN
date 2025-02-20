@@ -72,7 +72,7 @@ export const Post: Lists.Post = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-		title: text({ validation: { isRequired: true } }),
+		title: text({ validation: { isRequired: true, length: { min: 3 } } }),
 		slug: text({
 			isIndexed: "unique",
 			validation: { isRequired: true },

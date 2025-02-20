@@ -28,7 +28,7 @@ export const Coupon: Lists.Coupon = list({
 	// },
 
 	fields: {
-		name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 5 } } }),
 		stripeId: text(),
 		...group({
 			label: "Discount",
