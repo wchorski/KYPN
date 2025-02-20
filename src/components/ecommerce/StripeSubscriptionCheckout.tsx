@@ -9,12 +9,12 @@ import {
 import { envs } from "@/envs"
 import { useCallback } from "react"
 import { postStripeSubscriptionSession } from "@lib/actions/postStripeSubscriptionSession"
-import type { SubscriptionPlan, User } from "@ks/types"
+import type { Addon, SubscriptionPlan, User } from "@ks/types"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan
 	couponIds?: string[]
-	addonIds?: string[]
+	addons?: Addon[]
 	user: User
 	email?: string
 }
@@ -26,7 +26,7 @@ const stripePromise = loadStripe(envs.STRIPE_PUBLIC_KEY)
 export function StripeSubscriptionCheckout({
 	subscriptionPlan,
 	couponIds = [],
-	addonIds = [],
+	addons = [],
   user,
   email,
 }: Props) {
@@ -36,12 +36,12 @@ export function StripeSubscriptionCheckout({
 		const stripeResponse = await postStripeSubscriptionSession({
 			subscriptionPlan,
 			couponIds,
-			addonIds,
+			addons,
 			user,
 			email,
 		})
 		return stripeResponse.clientSecret
-	}, [subscriptionPlan, addonIds, couponIds, user, email])
+	}, [subscriptionPlan, addons, couponIds, user, email])
 
 	// https://docs.stripe.com/payments/checkout/customization/appearance?payment-ui=embedded-components
 	const options = {

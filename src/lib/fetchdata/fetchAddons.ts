@@ -4,13 +4,23 @@ import { keystoneContext } from "@ks/context"
 type Props = {
 	query: string
 	session: any
+	ids?: string[]
 }
 
-export default async function fetchAddons({ session, query }: Props) {
+export default async function fetchAddons({ ids = [], session, query }: Props) {
 	try {
 		const addons = (await keystoneContext
 			.withSession(session)
 			.query.Addon.findMany({
+				...(ids.length > 0
+					? {
+							where: {
+								id: {
+									in: ids,
+								},
+							},
+					  }
+					: {}),
 				query,
 			})) as Addon[]
 

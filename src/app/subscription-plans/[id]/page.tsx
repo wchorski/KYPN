@@ -192,13 +192,10 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									// subtext={'billed ' + billing_interval}
 								/>
 							</span>
-							<p className={"debug"}>moving back singular addToCart Button</p>
-							<Link
-								href={`/checkout/subscription?id=${id}`}
-								className="button medium"
-							>
-								Checkout
-							</Link>
+	
+            <p>
+              Subscription
+            </p>
 						</Card>
 					)}
 					{!session ? (
@@ -211,7 +208,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 						</Card>
 					) : (
 						<CheckoutSubscriptionPlanForm
-							subscriptionPlan={plainObj(subscriptionPlan)}
+							subscriptionPlan={plainObj({...subscriptionPlan, id})}
 							customerId={session.itemId}
               addons={plainObj(addons)}
 						/>

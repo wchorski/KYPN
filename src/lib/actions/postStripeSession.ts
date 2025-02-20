@@ -185,6 +185,35 @@ function createProductLineItem(
 	}
 }
 
+function createAddonLineItem(
+	cartItem: CartItem
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!cartItem.addon) return undefined
+	const { addon, quantity } = cartItem
+	return {
+		quantity,
+		// price: product.stripePriceId,
+		...(addon.stripePriceId
+			? { price: addon.stripePriceId }
+			: {
+					price_data: {
+						// TODO make this part of CartItem schema item.currency, not hard coded
+						currency: "usd",
+						product_data: {
+							name: addon.name,
+							images: [addon?.image || ""],
+							metadata: {
+								productId: addon.id,
+								typeof: "addon",
+							},
+						},
+
+						unit_amount: addon.price,
+					},
+			  }),
+	}
+}
+
 // function createSubscriptionLineItem(
 // 	cartItem: CartItem
 // ): Stripe.Checkout.SessionCreateParams.LineItem | undefined {

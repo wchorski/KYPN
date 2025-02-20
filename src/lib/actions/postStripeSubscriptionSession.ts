@@ -1,6 +1,12 @@
 "use server"
 import { envs } from "@/envs"
-import type { CartItem, Product, SubscriptionPlan, User } from "@ks/types"
+import type {
+	Addon,
+	CartItem,
+	Product,
+	SubscriptionPlan,
+	User,
+} from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -13,7 +19,7 @@ export type StripeCheckoutSessionAction = {
 	email?: string
 	subscriptionPlan: SubscriptionPlan
 	couponIds: string[]
-	addonIds: string[]
+	addons: Addon[]
 	// TODO this is here for my peace of mind, but prob can omit
 	// itemType: "ticket" | "product" | "booking"
 }
@@ -28,26 +34,30 @@ export type StripeCheckoutSessionAction = {
 // 	  }
 //   )
 
-export const postStripeSubscriptionSession = async (props: StripeCheckoutSessionAction) => {
-	const { subscriptionPlan, couponIds, addonIds, email, user } = props
+export const postStripeSubscriptionSession = async (
+	props: StripeCheckoutSessionAction
+) => {
+	const { subscriptionPlan, couponIds, addons, email, user } = props
 
-  
-  const subscriptionLineItem = createSubscriptionLineItem(subscriptionPlan)
-  // TODO create couponLineItems via `couponIds`
-  // TODO create addonLineItems via `addonIds`
+	const subscriptionLineItem = createSubscriptionLineItem(subscriptionPlan)
+	const addonLineItems = addons
+		.map((adn) => createAddonLineItem(adn))
+		.filter(Boolean) as Stripe.Checkout.SessionCreateParams.LineItem[]
+	// TODO create couponLineItems via `couponIds`
 
-  // const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined = [
-  //   createSubscriptionLineItem(item)
-  // ]
+	// const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] | undefined = [
+	//   createSubscriptionLineItem(item)
+	// ]
 
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 	console.log({ subscriptionLineItem })
-  if(!subscriptionLineItem) throw new Error('!!! STRIPE subscription line_item not created')
+	if (!subscriptionLineItem)
+		throw new Error("!!! STRIPE subscription line_item not created")
 	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",
-		line_items: [subscriptionLineItem],
+		line_items: [subscriptionLineItem, ...addonLineItems],
 		mode: "subscription",
 		return_url: returnUrl,
 		...(email ? { customer_email: email } : {}),
@@ -76,6 +86,35 @@ export const postStripeSubscriptionSession = async (props: StripeCheckoutSession
 }
 
 //* Line Item helper
+
+function createAddonLineItem(
+	addon: Addon
+): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+	if (!addon) return undefined
+
+	return {
+		quantity: 1,
+		// price: product.stripePriceId,
+		...(addon.stripePriceId
+			? { price: addon.stripePriceId }
+			: {
+					price_data: {
+						// TODO make this part of CartItem schema item.currency, not hard coded
+						currency: "usd",
+						product_data: {
+							name: `ADD-ON: ${addon.name}`,
+							images: [addon?.image || ""],
+							metadata: {
+								productId: addon.id,
+								typeof: "addon",
+							},
+						},
+
+						unit_amount: addon.price,
+					},
+			  }),
+	}
+}
 
 function createSubscriptionLineItem(
 	subscriptionPlan: SubscriptionPlan

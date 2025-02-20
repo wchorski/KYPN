@@ -241,6 +241,11 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			create: async ({ resolvedData }) => {
 				if (!resolvedData.subscriptionPlan)
 					throw new Error("!!! SubscriptionItem must have SubscriptionPlan")
+
+				// TODO check to see if addons are allowed to be put on by checking SubscriptionPlan.addons ids
+				console.log(
+					"🐸 TODO check to see if addons are allowed to be put on by checking SubscriptionPlan.addons ids"
+				)
 			},
 			update: async ({ resolvedData, item }) => {
 				if (resolvedData.subscriptionPlan)

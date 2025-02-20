@@ -329,6 +329,16 @@ type Coupon = {
 	amount_off?: number
 	duration: Duration
 	duration_in_months?: number
+  currency?:string
+}
+
+export async function stripeCouponDelete(id:string){
+  try {
+    await stripeConfig.coupons.del(id)
+    
+  } catch (error) {
+    console.log('💳❌ STRIPE:: ', error);
+  }
 }
 
 export async function stripeCouponCreate({
@@ -339,6 +349,7 @@ export async function stripeCouponCreate({
 	duration,
 	duration_in_months,
 	couponId,
+  currency = 'usd',
 }: Coupon) {
 	if (!envs.STRIPE_PUBLIC_KEY) return
 	//? if product has stripeId then find and update existing product
@@ -366,11 +377,13 @@ export async function stripeCouponCreate({
 	}
 
 	let couponParams: Stripe.CouponCreateParams = {
-		name,
+		id: name,
+    name,
 		duration,
 		...(duration === "repeating" ? { duration_in_months } : {}),
 		...(amount_off ? { amount_off } : {}),
 		...(percent_off ? { percent_off } : {}),
+    currency,
 		metadata: {
 			couponId: couponId || "",
 		},

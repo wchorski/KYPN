@@ -5,6 +5,7 @@ import ErrorPage from "@components/layouts/ErrorPage"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { keystoneContext } from "@ks/context"
 import { User } from "@ks/types"
+import fetchAddons from "@lib/fetchdata/fetchAddons"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
 import {
@@ -17,7 +18,11 @@ import { getServerSession } from "next-auth"
 import { notFound, redirect } from "next/navigation"
 
 type Props = {
-	searchParams: { id: string, addons:string, coupons:string }
+	searchParams: {
+		id: string
+		addons: string | undefined
+		coupons: string | undefined
+	}
 	params: { id: string }
 }
 
@@ -30,9 +35,9 @@ export default async function CheckoutSubscriptionPage({
 	params,
 	searchParams,
 }: Props) {
-	const { id, addons, coupons } = await searchParams
-  const addonIds = addons.split(',')
-  const couponIds = addons.split(',')
+	const { id, addons: addonParams, coupons: couponParams } = await searchParams
+	const addonIds = addonParams?.split(",") || []
+	const couponIds = couponParams?.split(",") || []
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return redirect("/login")
 	const user = (await keystoneContext.withSession(session).query.User.findOne({
@@ -47,11 +52,18 @@ export default async function CheckoutSubscriptionPage({
 		query: QUERY_SUBPLAN,
 		session,
 	})
+	const { addons = [], error: errorAddons } = await fetchAddons({
+		ids: addonIds,
+		query: QUERY_ADDONS,
+		session,
+	})
+
+  // TODO fetchCoupons
 
 	if (!user || !subscriptionPlan) return notFound()
-	if (error)
+	if (error || errorAddons)
 		return (
-			<ErrorPage error={error}>
+			<ErrorPage error={error || errorAddons}>
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
@@ -64,8 +76,8 @@ export default async function CheckoutSubscriptionPage({
 			<div className={[page_content, layout_site].join(" ")}>
 				<StripeSubscriptionCheckout
 					subscriptionPlan={plainObj(subscriptionPlan)}
-          addonIds={addonIds}
-          couponIds={couponIds}
+					addons={plainObj(addons)}
+					couponIds={couponIds}
 					email={session.user.email}
 					user={session.user as User}
 				/>
@@ -73,6 +85,15 @@ export default async function CheckoutSubscriptionPage({
 		</main>
 	)
 }
+
+const QUERY_ADDONS = `
+  id
+  name
+  image
+  price
+  stripePriceId
+`
+
 const QUERY_USER = `
   id
   name

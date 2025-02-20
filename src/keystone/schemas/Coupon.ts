@@ -1,7 +1,7 @@
 import { list, group } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import { integer, relationship, select, text } from "@keystone-6/core/fields"
-import stripeConfig, { stripeCouponCreate } from "../../lib/stripe"
+import stripeConfig, { stripeCouponCreate, stripeCouponDelete, stripeProductUpdate } from "../../lib/stripe"
 import { isLoggedIn, permissions, rules } from "../access"
 import { Duration } from "@ks/types"
 
@@ -56,6 +56,11 @@ export const Coupon: Lists.Coupon = list({
           validation: { isRequired: true },
         }),
 			},
+      // TODO fields
+      // applies_too
+      // redeem_by
+      // max_redemptions
+      // valid (checkbox)
 		}),
 		// this can be helpful to find out all the Posts associated with a Tag
 
@@ -84,6 +89,7 @@ export const Coupon: Lists.Coupon = list({
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
+        console.log({resolvedData});
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
 						"Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank"
@@ -110,9 +116,10 @@ export const Coupon: Lists.Coupon = list({
 		},
 		beforeOperation: {
 			create: async ({ resolvedData }) => {
-				const coupon = await stripeCouponCreate({
+				await stripeCouponCreate({
 					name: String(resolvedData.name),
 					percent_off: resolvedData.percent_off || 0,
+					amount_off: resolvedData.amount_off || 0,
 					duration: resolvedData.duration as Duration,
 					...(resolvedData.duration_in_months
 						? { duration_in_months: resolvedData.duration_in_months }
@@ -125,21 +132,14 @@ export const Coupon: Lists.Coupon = list({
 					resolvedData.stripeId = res.id
 				})
 			},
+      //? for now not allowing any updating of coupon, just create a new one
+      // update: async ({ resolvedData, context, item }) => {
+      // },
 		},
-		afterOperation: async ({ operation, resolvedData, item, context }) => {
-			if (operation === "create") {
-				await stripeCouponCreate({
-					couponId: item.id,
-					name: item.name,
-					percent_off: item.percent_off || 0,
-					duration: item.duration as Duration,
-					duration_in_months: Number(item.duration_in_months),
-				})
-					.then(async (stripeCoupon) => {
-						if (stripeCoupon) resolvedData.stripeId = stripeCoupon.id
-					})
-					.catch((err) => console.log(err))
-			}
+		afterOperation: {
+      delete: async ({originalItem}) => {
+        await stripeCouponDelete(originalItem.stripeId)
+      }
 		},
 	},
 })

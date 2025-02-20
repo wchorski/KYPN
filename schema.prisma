@@ -185,7 +185,8 @@ model Addon {
   excerpt           String             @default("")
   price             Int                @default(0)
   stripeProductId   String             @default("")
-  status            String?            @default("PUBLIC")
+  stripePriceId     String             @default("")
+  status            String
   author            User?              @relation("Addon_author", fields: [authorId], references: [id])
   authorId          String?            @map("author")
   services          Service[]          @relation("Addon_services")
@@ -243,23 +244,22 @@ model SubscriptionPlan {
 }
 
 model SubscriptionItem {
-  id                             String            @id @default(cuid())
-  custom_price                   Int?
-  subscriptionPlan               SubscriptionPlan? @relation("SubscriptionItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
-  subscriptionPlanId             String?           @map("subscriptionPlan")
-  isActive                       Boolean           @default(true)
-  isDelinquent                   Boolean           @default(false)
-  status                         String            @default("REQUESTED")
-  billing_interval               String
-  notes                          String            @default("")
-  addons                         Addon[]           @relation("Addon_subscriptionItems")
-  user                           User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
-  userId                         String?           @map("user")
-  stripeSubscriptionId           String            @default("")
-  dateCreated                    DateTime          @default(now())
-  dateModified                   DateTime          @default(now())
-  orderItem                      OrderItem?        @relation("OrderItem_subscriptionItem")
-  from_CartItem_subscriptionItem CartItem[]        @relation("CartItem_subscriptionItem")
+  id                   String            @id @default(cuid())
+  custom_price         Int?
+  subscriptionPlan     SubscriptionPlan? @relation("SubscriptionItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId   String?           @map("subscriptionPlan")
+  isActive             Boolean           @default(true)
+  isDelinquent         Boolean           @default(false)
+  status               String            @default("REQUESTED")
+  billing_interval     String
+  notes                String            @default("")
+  addons               Addon[]           @relation("Addon_subscriptionItems")
+  user                 User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
+  userId               String?           @map("user")
+  stripeSubscriptionId String            @default("")
+  dateCreated          DateTime          @default(now())
+  dateModified         DateTime          @default(now())
+  orderItem            OrderItem?        @relation("OrderItem_subscriptionItem")
 
   @@index([subscriptionPlanId])
   @@index([userId])
@@ -320,30 +320,27 @@ model Rental {
 }
 
 model CartItem {
-  id                 String            @id @default(cuid())
-  quantity           Int               @default(1)
-  type               String
-  coupon             Coupon?           @relation("CartItem_coupon", fields: [couponId], references: [id])
-  couponId           String?           @map("coupon")
-  product            Product?          @relation("CartItem_product", fields: [productId], references: [id])
-  productId          String?           @map("product")
-  booking            Booking?          @relation("CartItem_booking", fields: [bookingId], references: [id])
-  bookingId          String?           @map("booking")
-  rental             Rental?           @relation("CartItem_rental", fields: [rentalId], references: [id])
-  rentalId           String?           @map("rental")
-  event              Event?            @relation("CartItem_event", fields: [eventId], references: [id])
-  eventId            String?           @map("event")
-  subscriptionItem   SubscriptionItem? @relation("CartItem_subscriptionItem", fields: [subscriptionItemId], references: [id])
-  subscriptionItemId String?           @map("subscriptionItem")
-  user               User?             @relation("CartItem_user", fields: [userId], references: [id])
-  userId             String?           @map("user")
+  id        String   @id @default(cuid())
+  quantity  Int      @default(1)
+  type      String
+  coupon    Coupon?  @relation("CartItem_coupon", fields: [couponId], references: [id])
+  couponId  String?  @map("coupon")
+  product   Product? @relation("CartItem_product", fields: [productId], references: [id])
+  productId String?  @map("product")
+  booking   Booking? @relation("CartItem_booking", fields: [bookingId], references: [id])
+  bookingId String?  @map("booking")
+  rental    Rental?  @relation("CartItem_rental", fields: [rentalId], references: [id])
+  rentalId  String?  @map("rental")
+  event     Event?   @relation("CartItem_event", fields: [eventId], references: [id])
+  eventId   String?  @map("event")
+  user      User?    @relation("CartItem_user", fields: [userId], references: [id])
+  userId    String?  @map("user")
 
   @@index([couponId])
   @@index([productId])
   @@index([bookingId])
   @@index([rentalId])
   @@index([eventId])
-  @@index([subscriptionItemId])
   @@index([userId])
 }
 

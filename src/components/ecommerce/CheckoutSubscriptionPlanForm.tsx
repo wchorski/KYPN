@@ -6,7 +6,7 @@ import {
 	Coupon,
 	SubscriptionPlan,
 } from "@ks/types"
-import { useCallback, useReducer } from "react"
+import { useCallback, useEffect, useReducer } from "react"
 import formStyles, { form } from "@styles/menus/form.module.scss"
 import moneyFormatter from "@lib/moneyFormatter"
 import { PriceTag } from "./PriceTag"
@@ -53,6 +53,7 @@ export function CheckoutSubscriptionPlanForm({
 	coupons = [],
 }: Props) {
 	const searchParams = useSearchParams()
+	// const addonIds = searchParams.get("addonIds")
 
 	const defaultState: State = {
 		subscriptionPlanPrice: subscriptionPlan.price,
@@ -114,7 +115,7 @@ export function CheckoutSubscriptionPlanForm({
 	}
 	const [state, dispatch] = useReducer(reducer, defaultState)
 
-  // cred - https://nextjs.org/docs/app/api-reference/functions/use-search-params
+	// cred - https://nextjs.org/docs/app/api-reference/functions/use-search-params
 	const createQueryString = useCallback(
 		(name: string, value: string) => {
 			const params = new URLSearchParams(searchParams.toString())
@@ -135,6 +136,11 @@ export function CheckoutSubscriptionPlanForm({
 			: subscriptionPlan.price * (couponApplied.percent_off / 100)
 		return discountedTotal + addonAccumulatedTotal
 	}
+
+	useEffect(() => {
+		console.log("change")
+		// return () =>
+	}, [searchParams])
 
 	// const { } = useForm()
 
@@ -206,7 +212,7 @@ export function CheckoutSubscriptionPlanForm({
 			</label>
 
 			<p>
-				Total: <PriceTag price={state.total} />
+				Total: <PriceTag price={state.total} /> /{subscriptionPlan.billing_interval}
 			</p>
 
 			<footer
@@ -220,11 +226,13 @@ export function CheckoutSubscriptionPlanForm({
 					couponName={state.couponName}
 				/> */}
 				<Link
+          className={'button medium'} 
 					href={
 						`/checkout/subscription?id=${subscriptionPlan.id}` +
+						"&" +
 						createQueryString(
-							"addonIds",
-							state.addonOptions.filter((adn) => adn.isChecked).join(",")
+							"addons",
+							state.addonOptions.filter((adn) => adn.isChecked).flatMap(adn => adn.id).join(",")
 						)
 					}
 				>

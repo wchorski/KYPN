@@ -1344,6 +1344,7 @@ type Addon {
   excerpt: String
   price: Int
   stripeProductId: String
+  stripePriceId: String
   status: String
   author: User
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
@@ -1383,7 +1384,8 @@ input AddonWhereInput {
   excerpt: StringFilter
   price: IntFilter
   stripeProductId: StringFilter
-  status: StringNullableFilter
+  stripePriceId: StringFilter
+  status: StringFilter
   author: UserWhereInput
   services: ServiceManyRelationFilter
   products: ProductManyRelationFilter
@@ -1405,6 +1407,7 @@ input AddonOrderByInput {
   excerpt: OrderDirection
   price: OrderDirection
   stripeProductId: OrderDirection
+  stripePriceId: OrderDirection
   status: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -1417,6 +1420,7 @@ input AddonUpdateInput {
   excerpt: String
   price: Int
   stripeProductId: String
+  stripePriceId: String
   status: String
   author: UserRelateToOneForUpdateInput
   services: ServiceRelateToManyForUpdateInput
@@ -1443,6 +1447,7 @@ input AddonCreateInput {
   excerpt: String
   price: Int
   stripeProductId: String
+  stripePriceId: String
   status: String
   author: UserRelateToOneForCreateInput
   services: ServiceRelateToManyForCreateInput
@@ -2051,7 +2056,6 @@ type CartItem {
   booking: Booking
   rental: Rental
   event: Event
-  subscriptionItem: SubscriptionItem
   user: User
 }
 
@@ -2071,7 +2075,6 @@ input CartItemWhereInput {
   booking: BookingWhereInput
   rental: RentalWhereInput
   event: EventWhereInput
-  subscriptionItem: SubscriptionItemWhereInput
   user: UserWhereInput
 }
 
@@ -2089,7 +2092,6 @@ input CartItemUpdateInput {
   booking: BookingRelateToOneForUpdateInput
   rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
-  subscriptionItem: SubscriptionItemRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
 }
 
@@ -2123,12 +2125,6 @@ input EventRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input SubscriptionItemRelateToOneForUpdateInput {
-  create: SubscriptionItemCreateInput
-  connect: SubscriptionItemWhereUniqueInput
-  disconnect: Boolean
-}
-
 input CartItemUpdateArgs {
   where: CartItemWhereUniqueInput!
   data: CartItemUpdateInput!
@@ -2142,7 +2138,6 @@ input CartItemCreateInput {
   booking: BookingRelateToOneForCreateInput
   rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
-  subscriptionItem: SubscriptionItemRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
 }
 
@@ -2169,11 +2164,6 @@ input RentalRelateToOneForCreateInput {
 input EventRelateToOneForCreateInput {
   create: EventCreateInput
   connect: EventWhereUniqueInput
-}
-
-input SubscriptionItemRelateToOneForCreateInput {
-  create: SubscriptionItemCreateInput
-  connect: SubscriptionItemWhereUniqueInput
 }
 
 type OrderItem {
@@ -2253,6 +2243,12 @@ input OrderItemUpdateInput {
   dateModified: DateTime
 }
 
+input SubscriptionItemRelateToOneForUpdateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
+  disconnect: Boolean
+}
+
 input OrderRelateToOneForUpdateInput {
   create: OrderCreateInput
   connect: OrderWhereUniqueInput
@@ -2280,6 +2276,11 @@ input OrderItemCreateInput {
   order: OrderRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
+}
+
+input SubscriptionItemRelateToOneForCreateInput {
+  create: SubscriptionItemCreateInput
+  connect: SubscriptionItemWhereUniqueInput
 }
 
 input OrderRelateToOneForCreateInput {

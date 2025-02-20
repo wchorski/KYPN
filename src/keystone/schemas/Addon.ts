@@ -11,7 +11,11 @@ import {
 } from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
 import { slugFormat } from "../../lib/slugFormat"
-import { stripeProductCreate } from "../../lib/stripe"
+import {
+	stripeArchiveProduct,
+	stripeProductCreate,
+	stripeProductUpdate,
+} from "../../lib/stripe"
 import { envs } from "../../../envs"
 
 export const Addon: Lists.Addon = list({
@@ -40,14 +44,16 @@ export const Addon: Lists.Addon = list({
 	},
 
 	fields: {
-		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 } } }),
+		name: text({
+			isIndexed: "unique",
+			validation: { isRequired: true, length: { min: 3 } },
+		}),
 		slug: text({
 			isIndexed: "unique",
-			validation: { isRequired: true },
+			validation: { isRequired: true, length: { min: 3, max: 25 } },
 			hooks: {
 				resolveInput: ({ inputData, operation }) => {
-          
-          if (operation === "create") {          
+					if (operation === "create") {
 						if (inputData.slug) {
 							return slugFormat(inputData.slug)
 						} else if (inputData.name) {
@@ -63,17 +69,23 @@ export const Addon: Lists.Addon = list({
 				displayMode: "textarea",
 			},
 		}),
-		price: integer({ defaultValue: 0, validation: { isRequired: true, min: 0 } }),
+		price: integer({
+			defaultValue: 0,
+			validation: { isRequired: true, min: 0 },
+		}),
+    // TODO subscription price. billing_interval is taken from subscriptionPlan
 		stripeProductId: text(),
+		stripePriceId: text(),
 		// TODO instead of "out of stock" add `stockCount` as to not run into privacy issues
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },
 				{ label: "Public", value: "PUBLIC" },
-				{ label: "Out of Stock", value: "OUT_OF_STOCK" },
 				{ label: "Private", value: "PRIVATE" },
+				{ label: "Out of Stock", value: "OUT_OF_STOCK" },
+				{ label: "Archived", value: "ARCHIVED" },
 			],
-			defaultValue: "PUBLIC",
+			validation: { isRequired: true },
 			ui: {
 				displayMode: "segmented-control",
 				createView: { fieldMode: "edit" },
@@ -83,11 +95,17 @@ export const Addon: Lists.Addon = list({
 			ref: "User.addons",
 		}),
 		services: relationship({ ref: "Service.addons", many: true }),
-		products: relationship({ ref: 'Product.addons', many: true }),
-		rentals: relationship({ ref: 'Rental.addons', many: true }),
-		subscriptionPlans: relationship({ ref: 'SubscriptionPlan.addons', many: true }),
+		products: relationship({ ref: "Product.addons", many: true }),
+		rentals: relationship({ ref: "Rental.addons", many: true }),
+		subscriptionPlans: relationship({
+			ref: "SubscriptionPlan.addons",
+			many: true,
+		}),
 		bookings: relationship({ ref: "Booking.addons", many: true }),
-		subscriptionItems: relationship({ ref: 'SubscriptionItem.addons', many: true }),
+		subscriptionItems: relationship({
+			ref: "SubscriptionItem.addons",
+			many: true,
+		}),
 
 		categories: relationship({
 			ref: "Category.addons",
@@ -98,36 +116,94 @@ export const Addon: Lists.Addon = list({
 			ref: "Tag.addons",
 			many: true,
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		dateModified: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
 	},
 	hooks: {
-		beforeOperation: async ({ operation, resolvedData, context, item }) => {
-			if (operation === "create") {
-				const res = await stripeProductCreate({
-					id: resolvedData.id || "",
-					name: resolvedData.name || "",
-					description: resolvedData.excerpt || "",
-					// category: resolvedData.categories ? resolvedData.categories[0].name : 'uncategorized',
-					category: "uncategorized",
-					status: resolvedData.status || "",
-					type: "subscription",
-					image: resolvedData.image || "",
-					price: Number(resolvedData.price),
-					url: envs.FRONTEND_URL + "/shop/subscriptionplans/" + resolvedData.id,
-					// authorEmail: resolvedData.author || 'no_author',
-					authorEmail: "no_author",
+		beforeOperation: {
+			create: async ({ item, resolvedData, context }) => {
+				const {
+					id,
+					name,
+					excerpt,
+					status,
+					author,
+					price,
+					stripeProductId,
+					stripePriceId,
+					image,
+				} = resolvedData
+
+				//? this does not account for rental price. which is ok i guess because that
+				// is handled purely by this app
+				try {
+					const createdProduct = await stripeProductCreate({
+						// id,
+						name: "ADD-ON: " + String(name),
+						price: Number(price),
+						excerpt,
+						category: "addon",
+						status,
+						authorId: author?.connect?.id || "",
+						type: "addon",
+						image,
+						url: envs.FRONTEND_URL + `/addons/${id}`,
+						stripeProductId,
+						stripePriceId,
+						billing_interval: undefined,
+					})
+
+					if (createdProduct) {
+						resolvedData.stripeProductId = createdProduct.id
+						resolvedData.stripePriceId = String(createdProduct.default_price)
+					}
+				} catch (error: any) {
+					console.log("!!! 💳 STRIPE:: ", {
+						code: error.code,
+						message: error.raw.message,
+					})
+				}
+			},
+			update: async ({ resolvedData, context, item }) => {
+				//? item.stripeProductId will be undefined on first creation
+				await stripeProductUpdate({
+					stripeProductId: item.stripeProductId,
+					stripePriceId: item.stripePriceId,
+					image: resolvedData.image as string | undefined,
+					price: resolvedData.price as number | undefined,
+					name: resolvedData.name as string | undefined,
+					status: resolvedData.status as string | undefined,
+					// category: resolvedData.category,
+					category: "product",
+					excerpt: resolvedData.excerpt as string | undefined,
+					authorId: resolvedData.author?.connect?.id,
+					billing_interval: undefined,
+				}).then(async (res) => {
+					if (!res) return
+
+					if (res.default_price) {
+						resolvedData.stripePriceId = String(res.default_price)
+					}
 				})
-					.then(async (res) => {
-						if (res && resolvedData) {
-							resolvedData.stripeProductId = res.id
-						}
-					})
-					.catch((err) => {
-						console.log("Addon create err: " + err)
-						throw new Error("Addon create err: " + "haha uh oh::" + err.message)
-					})
-			}
+
+				resolvedData.dateModified = new Date().toISOString()
+			},
+		},
+		afterOperation: {
+			// create: async ({ resolvedData, item, context }) => {},
+			// update: async ({ resolvedData, item, context }) => {},
+			delete: async ({ originalItem }) => {
+				//? stripe. deleting product is not recommended
+				// as product history will also be erased
+				// await stripeProductDelete(originalItem.stripeProductId)
+				await stripeArchiveProduct(originalItem.stripeProductId)
+			},
 		},
 	},
 })

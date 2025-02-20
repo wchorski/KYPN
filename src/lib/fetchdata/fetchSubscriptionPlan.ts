@@ -18,24 +18,6 @@ export default async function fetchSubscriptionPlan({ id, query, session }: Prop
 				query,
 			})) as SubscriptionPlan
 
-		// const addons = (await keystoneContext
-		//   .withSession(session)
-		//   .query.Addon.findMany({
-		//     where: {
-		//       // status: {
-		//       //   notIn: ["DRAFT", "PRIVATE"]
-		//       // },
-		//       // include ids filtering if array is present
-		//       ...(addonIds && addonIds.length > 0 ? { id: { in: addonIds } } : {}),
-		//     },
-		//     orderBy: [
-		//       {
-		//         dateCreated: "desc",
-		//       },
-		//     ],
-		//     query: queryAddons,
-		//   })) as Addon[]
-
 		return { subscriptionPlan }
 	} catch (error) {
 		console.log("!!! fetchSubscriptionPlan: ", error)
