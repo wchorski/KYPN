@@ -1,9 +1,16 @@
 import { list, group } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
-import { integer, relationship, select, text } from "@keystone-6/core/fields"
-import stripeConfig, { stripeCouponCreate, stripeCouponDelete, stripeProductUpdate } from "../../lib/stripe"
+import {
+	integer,
+	relationship,
+	select,
+	text,
+	timestamp,
+} from "@keystone-6/core/fields"
+import { stripeCouponCreate, stripeCouponDelete } from "../../lib/stripe"
 import { isLoggedIn, permissions, rules } from "../access"
-import { Duration } from "@ks/types"
+import { Duration } from "../types"
+import { codeFormat } from "../../lib/slugFormat"
 
 // TODO figoure out coupons
 export const Coupon: Lists.Coupon = list({
@@ -21,15 +28,44 @@ export const Coupon: Lists.Coupon = list({
 		},
 	},
 
-	// setting this to isHidden for the user interface prevents this list being visible in the Admin UI
-	// todo hide these again
-	// ui: {
-	//   isHidden: true,
-	// },
+	ui: {
+		listView: {
+			initialColumns: [
+				"name",
+				"code",
+				"amount_off",
+				"percent_off",
+				"max_redemptions",
+				"dateModified",
+			],
+			initialSort: { field: "dateModified", direction: "DESC" },
+		},
+	},
 
 	fields: {
-		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 5 } } }),
-		stripeId: text(),
+		name: text({
+			isIndexed: "unique",
+			validation: { isRequired: true, length: { min: 5, max: 200 } },
+		}),
+		code: text({
+			isIndexed: "unique",
+			validation: { isRequired: true, length: { max: 200 } },
+			ui: {
+				description:
+					"may only contain alphanumeric characters in addition to - and _. Treat this field like a password. Make it hard to guess as customers will be able to guess when adding to their checkout",
+			},
+			hooks: {
+				resolveInput: ({ inputData, operation }) => {
+					if (operation === "create") {
+						if (inputData.code) {
+							return codeFormat(inputData.code)
+						} else {
+							throw new Error("code is required")
+						}
+					}
+				},
+			},
+		}),
 		...group({
 			label: "Discount",
 			description: "may only choose one. Leave other blank",
@@ -41,27 +77,43 @@ export const Coupon: Lists.Coupon = list({
 						max: 100,
 					},
 				}),
-        duration_in_months: integer({ validation: { min: 1 } }),
-        duration: select({
-          options: [
-            { label: "once", value: "once" },
-            { label: "repeating", value: "repeating" },
-            { label: "forever", value: "forever" },
-          ],
-          // defaultValue: 'once',
-          ui: {
-            displayMode: "segmented-control",
-            createView: { fieldMode: "edit" },
-          },
-          validation: { isRequired: true },
-        }),
+				duration_in_months: integer({ validation: { min: 1 } }),
+				duration: select({
+					options: [
+						{ label: "once", value: "once" },
+						{ label: "repeating", value: "repeating" },
+						{ label: "forever", value: "forever" },
+					],
+					// defaultValue: 'once',
+					ui: {
+						displayMode: "segmented-control",
+						createView: { fieldMode: "edit" },
+					},
+					validation: { isRequired: true },
+				}),
+				redeem_by: timestamp({
+					validation: { isRequired: true },
+					// defaultValue: { kind: "now" },
+					ui: {
+						description:
+							"The timestamp of last allowed redemption. Currently applied coupons do not expire and must be removed.",
+					},
+				}),
+				max_redemptions: integer({
+					validation: { isRequired: true, min: 0 },
+					defaultValue: 9999,
+					ui: {
+						description:
+							"This limit applies across customers so it won't prevent a single customer from redeeming multiple times.",
+					},
+				}),
 			},
-      // TODO fields
-      // applies_too
-      // redeem_by
-      // max_redemptions
-      // valid (checkbox)
 		}),
+
+		// TODO fields
+		// applies_too [products, services, etc]
+		//? needs to be virtual (check `redeem_by` and current date or product is `applies_too`)
+		// valid (checkbox)
 		// this can be helpful to find out all the Posts associated with a Tag
 
 		// todo add coupon relations
@@ -84,12 +136,44 @@ export const Coupon: Lists.Coupon = list({
 			many: true,
 			ui: { description: "available coupons before purchase" },
 		}),
+		...group({
+			label: "Metadata",
+			// description: 'Group description',
+
+			fields: {
+				redeptions: integer({
+					validation: { isRequired: true, min: 0 },
+					defaultValue: 0,
+				}),
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+					// https://keystonejs.com/docs/fields/timestamp#title
+					db: {
+						updatedAt: true,
+					},
+				}),
+				// categories: relationship({
+				// 	ref: "Category.products",
+				// 	many: true,
+				// }),
+
+				// tags: relationship({
+				// 	ref: "Tag.products",
+				// 	many: true,
+				// }),
+				stripeId: text(),
+			},
+		}),
 	},
 
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
-        console.log({resolvedData});
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
 						"Cannot have 'Amount Off and Percent Off chosen together. Chose only one option and leave the other blank"
@@ -108,9 +192,12 @@ export const Coupon: Lists.Coupon = list({
 					resolvedData.duration ||
 					resolvedData.amount_off ||
 					resolvedData.percent_off ||
+					resolvedData.code ||
 					resolvedData.duration_in_months
 				) {
-					throw new Error("!!! Can NOT update Coupon's details that affects Discount amount. A new Coupon must be created")
+					throw new Error(
+						"!!! Can NOT update Coupon's details that affects Discount amount. A new Coupon must be created"
+					)
 				}
 			},
 		},
@@ -118,6 +205,7 @@ export const Coupon: Lists.Coupon = list({
 			create: async ({ resolvedData }) => {
 				await stripeCouponCreate({
 					name: String(resolvedData.name),
+					code: String(resolvedData.code),
 					percent_off: resolvedData.percent_off || 0,
 					amount_off: resolvedData.amount_off || 0,
 					duration: resolvedData.duration as Duration,
@@ -125,21 +213,23 @@ export const Coupon: Lists.Coupon = list({
 						? { duration_in_months: resolvedData.duration_in_months }
 						: {}),
 					// couponId: "",
-          stripeId: resolvedData.stripeId,
+					stripeId: resolvedData.stripeId,
 				}).then((res) => {
 					if (!res) return
 
 					resolvedData.stripeId = res.id
+					console.log({ resolvedData })
 				})
+				console.log({ resolvedData })
 			},
-      //? for now not allowing any updating of coupon, just create a new one
-      // update: async ({ resolvedData, context, item }) => {
-      // },
+			//? for now not allowing any updating of coupon, just create a new one
+			// update: async ({ resolvedData, context, item }) => {
+			// },
 		},
 		afterOperation: {
-      delete: async ({originalItem}) => {
-        await stripeCouponDelete(originalItem.stripeId)
-      }
+			delete: async ({ originalItem }) => {
+				await stripeCouponDelete(originalItem.stripeId)
+			},
 		},
 	},
 })

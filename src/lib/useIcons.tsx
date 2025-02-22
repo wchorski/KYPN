@@ -14,14 +14,14 @@ import { SiBandlab } from "react-icons/si"
 import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
-import { RiFileEditFill } from "react-icons/ri"
+import { RiFileEditFill, RiCoupon2Line } from "react-icons/ri"
 import { PiFlagBannerFoldLight, PiSpinnerThin } from "react-icons/pi";
 import { BiLock } from "react-icons/bi"
 import { TbCheck, TbExclamationCircle, TbShoppingBagPlus, TbShoppingBag, TbCalendarRepeat } from "react-icons/tb"
 import { FaRepeat } from "react-icons/fa6"
 import { ImDownload } from "react-icons/im";
 
-
+export const IconCoupon = () => <RiCoupon2Line />
 export const IconBookmark = () => <BsFillBookmarkFill />
 export const IconPadLock = () => <BiLock />
 export const IconCheckMark = () => <TbCheck />

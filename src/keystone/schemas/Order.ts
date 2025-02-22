@@ -88,14 +88,16 @@ export const Order: Lists.Order = list({
 		total: virtual({
 			field: graphql.field({
 				type: graphql.Int,
-				async resolve(item, context) {
+				async resolve(item, args, context) {
 					const orderItems = (await context.query.OrderItem.findMany({
-						where: { order: { id: item.id } },
+						where: { order: { id: { equals: item.id } } },
 						query: `
               type
               quantity
               subTotal
               total
+              amount_off
+              percent_off
               product {
                 id
               }
@@ -260,36 +262,36 @@ export const Order: Lists.Order = list({
 	hooks: {
 		afterOperation: {
 			create: async ({ item, context }) => {
-        console.log('✉️ 🐸 send mail when order is updated... ')
-        console.log('❌ why does below hook code cause an error?')
+				console.log("✉️ 🐸 send mail when order is updated... ")
+				console.log("❌ why does below hook code cause an error?")
 				// const order = (await context.sudo().query.Order.findOne({
 				// 	where: { id: item.id },
 				// 	query: `
-        //     id
-        //     dateCreated
-        //     status
-        //     total
-        //     email
-        //     user {
-        //       name
-        //       email
-        //     }
-        //     items {
-        //       quantity
-        //       booking {
-        //         id
-        //         summary
-        //       }
-        //       tickets {
-        //         id
-        //         eventSummary
-        //       }
-        //       product {
-        //         id
-        //         name
-        //       }
-        //     }
-        //   `,
+				//     id
+				//     dateCreated
+				//     status
+				//     total
+				//     email
+				//     user {
+				//       name
+				//       email
+				//     }
+				//     items {
+				//       quantity
+				//       booking {
+				//         id
+				//         summary
+				//       }
+				//       tickets {
+				//         id
+				//         eventSummary
+				//       }
+				//       product {
+				//         id
+				//         name
+				//       }
+				//     }
+				//   `,
 				// })) as TOrder
 
 				// console.log({ order })
@@ -301,8 +303,10 @@ export const Order: Lists.Order = list({
 				// })
 			},
 			update: async ({ item }) => {
-        console.log('🐸 send mail when order is updated... but maybe i should even have orders be updateable?');
-      },
+				console.log(
+					"🐸 send mail when order is updated... but maybe i should even have orders be updateable?"
+				)
+			},
 		},
 		// afterOperation: async ({ operation, resolvedData, item, context }) => {
 		// 	if (operation === "create" || operation === "update") {

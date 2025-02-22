@@ -16,8 +16,10 @@ export const addToCart = (base: BaseSchemaMeta) =>
 			productId: graphql.arg({ type: graphql.ID }),
 			eventId: graphql.arg({ type: graphql.ID }),
 			rentalId: graphql.arg({ type: graphql.ID }),
-			subscriptionPlanId: graphql.arg({ type: graphql.ID }),
-			couponId: graphql.arg({ type: graphql.ID }),
+			//? causes lot's of pain. cannot have mix of differint `billing_interval` subscriptions
+			// subscriptionPlanId: graphql.arg({ type: graphql.ID }),
+			couponCode: graphql.arg({ type: graphql.ID }),
+			//? addons are added to Services, Bookings, Rental not to the cart iteself
 			addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
 		},
 		async resolve(source, variables, context: Context) {
@@ -26,18 +28,18 @@ export const addToCart = (base: BaseSchemaMeta) =>
 				quantity,
 				productId,
 				eventId,
-				subscriptionPlanId,
+				// subscriptionPlanId,
 				rentalId,
-				couponId,
+				couponCode,
 				addonIds,
 			} = variables
 
 			const validationStrings = [
 				"productId",
 				"eventId",
-				"subscriptionPlanId",
+				// "subscriptionPlanId",
 				"rentalId",
-				"couponId",
+				"couponCode",
 			]
 			const hasOnlyOne = hasOnlyOneValue(variables, validationStrings)
 			if (!hasOnlyOne)
@@ -81,32 +83,37 @@ export const addToCart = (base: BaseSchemaMeta) =>
 					)
 			}
 
+			//? finds exisitng cartItem from incoming new cartItem being added
 			const allCartItems = await sudoContext().db.CartItem.findMany({
 				where: {
 					user: { id: { equals: session.itemId } },
 					...(productId ? { product: { id: { equals: productId } } } : {}),
 					...(eventId ? { event: { id: { equals: eventId } } } : {}),
-					...(subscriptionPlanId
-						? {
-								subscriptionItem: {
-									subscriptionPlan: { id: { equals: subscriptionPlanId } },
-								},
-						  }
-						: {}),
-					...(couponId ? { coupon: { id: { equals: couponId } } } : {}),
+					// ...(subscriptionPlanId
+					// 	? {
+					// 			subscriptionItem: {
+					// 				subscriptionPlan: { id: { equals: subscriptionPlanId } },
+					// 			},
+					// 	  }
+					// 	: {}),
+					// ...(couponCode ? { coupon: { code: { equals: couponCode } } } : {}),
 
 					type: { equals: type },
 				},
 			})
 
+			const isRentalExist = allCartItems.some((item) => item.rentalId)
+			if (isRentalExist)
+				throw new Error("!!! Cart can only have one Rental per session")
+			const isCouponExist = allCartItems.some((item) => item.couponId)
+			if (isCouponExist)
+				throw new Error("!!! Cart can only have one Coupon applied per session")
+
+			//? grabs first el. i.e. `allCartItems[0]`
 			const [exisitingItem] = allCartItems
-
+			// TODO this still allows for multi rental and coupons to be added
+			// do not allow item creation if ANY of type 'RENTAL' or 'COUPON' is added
 			if (exisitingItem) {
-				if (exisitingItem.rentalId)
-					throw new Error("!!! Cart can only have one Rental Item")
-				if (exisitingItem.couponId)
-					throw new Error("!!! Cart can only have one Coupon Item")
-
 				const cartItemUpdate = await sudoContext().db.CartItem.updateOne({
 					where: { id: exisitingItem.id },
 					data: {
@@ -116,14 +123,18 @@ export const addToCart = (base: BaseSchemaMeta) =>
 
 				return cartItemUpdate
 			} else {
-				if (type === "DISCOUNT" && !couponId)
+				if (type === "DISCOUNT" && !couponCode)
 					throw new Error(
 						"!!! cannot mark cart item as DISCOUNT unless it is a coupon"
 					)
+				if (couponCode && quantity > 1)
+					throw new Error("!!! Cannot add more than one of each coupon")
 
 				const cartItemAdded = await sudoContext().db.CartItem.createOne({
 					data: {
 						type,
+						user: { connect: { id: session?.itemId } },
+						quantity,
 						...(productId ? { product: { connect: { id: productId } } } : {}),
 						...(eventId ? { event: { connect: { id: eventId } } } : {}),
 						...(rentalId
@@ -134,28 +145,25 @@ export const addToCart = (base: BaseSchemaMeta) =>
 									},
 							  }
 							: {}),
-						...(subscriptionPlanId
-							? {
-									subscriptionItem: {
-										create: {
-											status: "REQUESTED",
-											subscriptionPlan: { connect: { id: subscriptionPlanId } },
-											user: { connect: { id: session?.itemId } },
-											addons: {
-												connect: addonIds
-													? addonIds.map((id) => ({ id: id }))
-													: [],
-											},
-										},
-									},
-							  }
-							: {}),
 						// ...(subscriptionPlanId
-						// 	? { subscriptionPlan: { connect: { id: subscriptionPlanId } } }
+						// 	? {
+						// 			subscriptionItem: {
+						// 				create: {
+						// 					status: "REQUESTED",
+						// 					subscriptionPlan: { connect: { id: subscriptionPlanId } },
+						// 					user: { connect: { id: session?.itemId } },
+						// 					addons: {
+						// 						connect: addonIds
+						// 							? addonIds.map((id) => ({ id: id }))
+						// 							: [],
+						// 					},
+						// 				},
+						// 			},
+						// 	  }
 						// 	: {}),
-						...(couponId ? { coupon: { connect: { id: couponId } } } : {}),
-						user: { connect: { id: session?.itemId } },
-						quantity,
+						...(couponCode
+							? { coupon: { connect: { code: couponCode } } }
+							: {}),
 					},
 				})
 

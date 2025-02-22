@@ -5,16 +5,25 @@ import styles, { badge } from "@styles/ecommerce/cart.module.css"
 import { IconShoppingBag, IconSpinnerLines } from "@lib/useIcons"
 
 type Props = {
-	prop?: string
+	isNonInteractive?: boolean
 }
 
-export function CartBadgeButton({ prop }: Props) {
+export function CartBadgeButton({ isNonInteractive }: Props) {
 	const { isOpen, openCart, isPending, cartCount } = useCart()
 
-	// const count = cartItems?.reduce(
-	// 	(tally: any, cartItem: any) => tally + cartItem.quantity,
-	// 	0
-	// )
+  if(isNonInteractive) return (
+    <i
+			className={[badge].join(" ")}
+			data-tooltip="cart"
+			title="shopping cart"
+      style={{fontStyle: 'inherit'}}
+		>
+			<span key={cartCount} className="count tick-down-flick">
+				{isPending ? <IconSpinnerLines /> : cartCount}
+			</span>
+			<IconShoppingBag />
+		</i>
+  )
 
 	return (
 		<button

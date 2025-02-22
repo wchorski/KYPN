@@ -1,6 +1,6 @@
 "use server"
 import { envs } from "@/envs"
-import type { CartItem, Product, User } from "@ks/types"
+import type { CartItem, Coupon, Product, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -66,6 +66,10 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 	// const hasSubscription = cartItems.some((obj) => obj.subscriptionPlan !== null)
 
 	if (!line_items) throw new Error("!!! stripe no line_items")
+	const coupons = cartItems
+		.filter((item) => item.type === "DISCOUNT")
+		.map((item) => item.coupon).filter(Boolean) as Coupon[]
+
 	console.log({ line_items })
 	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
@@ -76,6 +80,12 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		return_url: returnUrl,
 		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
+    //? only supports one coupon even though it's an array lol
+		...(coupons.length > 0
+			? {
+					discounts: coupons.map((coupon) => ({ coupon: coupon.stripeId })),
+			  }
+			: {}),
 		metadata: {
 			// typesof: ,
 			customerId: user.id,
@@ -185,34 +195,35 @@ function createProductLineItem(
 	}
 }
 
-function createAddonLineItem(
-	cartItem: CartItem
-): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
-	if (!cartItem.addon) return undefined
-	const { addon, quantity } = cartItem
-	return {
-		quantity,
-		// price: product.stripePriceId,
-		...(addon.stripePriceId
-			? { price: addon.stripePriceId }
-			: {
-					price_data: {
-						// TODO make this part of CartItem schema item.currency, not hard coded
-						currency: "usd",
-						product_data: {
-							name: addon.name,
-							images: [addon?.image || ""],
-							metadata: {
-								productId: addon.id,
-								typeof: "addon",
-							},
-						},
+//? addons are addons to services or bookings. prob shouldn't be a cartitem
+// function createAddonLineItem(
+// 	cartItem: CartItem
+// ): Stripe.Checkout.SessionCreateParams.LineItem | undefined {
+// 	if (!cartItem.addon) return undefined
+// 	const { addon, quantity } = cartItem
+// 	return {
+// 		quantity,
+// 		// price: product.stripePriceId,
+// 		...(addon.stripePriceId
+// 			? { price: addon.stripePriceId }
+// 			: {
+// 					price_data: {
+// 						// TODO make this part of CartItem schema item.currency, not hard coded
+// 						currency: "usd",
+// 						product_data: {
+// 							name: addon.name,
+// 							images: [addon?.image || ""],
+// 							metadata: {
+// 								productId: addon.id,
+// 								typeof: "addon",
+// 							},
+// 						},
 
-						unit_amount: addon.price,
-					},
-			  }),
-	}
-}
+// 						unit_amount: addon.price,
+// 					},
+// 			  }),
+// 	}
+// }
 
 // function createSubscriptionLineItem(
 // 	cartItem: CartItem

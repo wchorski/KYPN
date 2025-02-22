@@ -214,7 +214,7 @@ export type ListAccessArgs = {
 
 export type CartItem = Lists.CartItem.Item & {
 	typeof: "cartitem"
-	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
+	type: "SALE" | "RENTAL" | "SUBSCRIPTION" | "DISCOUNT"
 	product?: Product
 	event?: Event
 	booking?: Booking

@@ -1,6 +1,12 @@
-import { graphql, list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
-import { integer, relationship, select, virtual } from "@keystone-6/core/fields"
+import {
+	integer,
+	relationship,
+	select,
+	timestamp,
+	virtual,
+} from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
 import type { Rental, Event, CartItem as TCartItem } from "../types"
 import { hasOnlyOneValue } from "../../lib/utils"
@@ -17,6 +23,13 @@ export const CartItem: Lists.CartItem = list({
 			create: permissions.canManageCart,
 			update: permissions.canManageCart,
 			delete: permissions.canManageCart,
+		},
+	},
+
+	ui: {
+		listView: {
+			initialColumns: ["user", "type", "quantity", "subTotal", "dateModified"],
+			initialSort: { field: "dateModified", direction: "DESC" },
 		},
 	},
 
@@ -40,7 +53,7 @@ export const CartItem: Lists.CartItem = list({
 			options: [
 				{ label: "Sale", value: "SALE" },
 				{ label: "Rental", value: "RENTAL" },
-        { label: "Discount", value: "DISCOUNT" },
+				{ label: "Discount", value: "DISCOUNT" },
 				// { label: "Subscription", value: "SUBSCRIPTION" },
 				{ label: "Rent Reservation", value: "RENT_RESERVATION" },
 			],
@@ -124,6 +137,24 @@ export const CartItem: Lists.CartItem = list({
 		event: relationship({ ref: "Event" }),
 		// subscriptionItem: relationship({ ref: "SubscriptionItem" }),
 		user: relationship({ ref: "User.cart" }),
+		...group({
+			label: "Metadata",
+			// description: 'Group description',
+
+			fields: {
+				dateCreated: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+				}),
+				dateModified: timestamp({
+					defaultValue: { kind: "now" },
+					validation: { isRequired: true },
+					db: {
+						updatedAt: true,
+					},
+				}),
+			},
+		}),
 	},
 	hooks: {
 		validate: {
@@ -131,7 +162,7 @@ export const CartItem: Lists.CartItem = list({
 				if (!resolvedData?.user?.connect?.id)
 					throw new Error("!!! CartItem must have connected user")
 
-        const validationStrings = [
+				const validationStrings = [
 					"product",
 					"event",
 					// "subscriptionItem",
@@ -142,7 +173,9 @@ export const CartItem: Lists.CartItem = list({
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, validationStrings)
 				if (!hasOnlyOne)
 					throw new Error(
-						`!!! Cart Item can only have one of [${validationStrings.join(', ')}] set`
+						`!!! Cart Item can only have one of [${validationStrings.join(
+							", "
+						)}] set`
 					)
 
 				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
@@ -162,7 +195,7 @@ export const CartItem: Lists.CartItem = list({
 
 				// console.log({ thisNewCombinedData })
 				//? check that no other cartItem type is being connected or disconnected
-        const validationStrings = [
+				const validationStrings = [
 					"product",
 					"productId",
 					"event",
@@ -176,14 +209,19 @@ export const CartItem: Lists.CartItem = list({
 					"coupon",
 					"couponId",
 				]
-				const hasOnlyOne = hasOnlyOneValue(thisNewCombinedData, validationStrings)
+				const hasOnlyOne = hasOnlyOneValue(
+					thisNewCombinedData,
+					validationStrings
+				)
 				console.log(
 					"🐸🐸🐸 check that cartItem can only have one of item type 🐸🐸🐸"
 				)
 				console.log({ hasOnlyOne })
 				if (!hasOnlyOne)
 					throw new Error(
-						`!!! Cart Item can only have one of [${validationStrings.join(', ')}] set`
+						`!!! Cart Item can only have one of [${validationStrings.join(
+							", "
+						)}] set`
 					)
 			},
 		},

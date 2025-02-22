@@ -89,6 +89,9 @@ export const OrderItem: Lists.OrderItem = list({
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
+
+        if(!resolvedData.order?.connect) throw new Error('!!! OrderItem must be associated with an Order')
+          
 				const validationStrings = [
 					"product",
 					"tickets",
@@ -108,9 +111,9 @@ export const OrderItem: Lists.OrderItem = list({
 
 				if (
 					resolvedData.coupon &&
-					(!resolvedData.amount_off || !resolvedData.percent_off)
+					(!resolvedData.amount_off && !resolvedData.percent_off)
 				)
-					throw new Error("!!! OrderItem Coupon: discount is null")
+					throw new Error("!!! OrderItem Coupon: discount (amount_off && percent_off) are both null")
 
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
@@ -164,6 +167,7 @@ export const OrderItem: Lists.OrderItem = list({
 			// const contextSudo = context.sudo()
 
 			delete: async ({ item, context }) => {
+        // TODO why is this error? booking is added to OrderItem schema!!!!
 				if (item.bookingId) {
 					await context.sudo().db.Booking.updateOne({
 						where: { id: item.bookingId },

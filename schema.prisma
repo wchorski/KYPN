@@ -320,21 +320,23 @@ model Rental {
 }
 
 model CartItem {
-  id        String   @id @default(cuid())
-  quantity  Int      @default(1)
-  type      String
-  coupon    Coupon?  @relation("CartItem_coupon", fields: [couponId], references: [id])
-  couponId  String?  @map("coupon")
-  product   Product? @relation("CartItem_product", fields: [productId], references: [id])
-  productId String?  @map("product")
-  booking   Booking? @relation("CartItem_booking", fields: [bookingId], references: [id])
-  bookingId String?  @map("booking")
-  rental    Rental?  @relation("CartItem_rental", fields: [rentalId], references: [id])
-  rentalId  String?  @map("rental")
-  event     Event?   @relation("CartItem_event", fields: [eventId], references: [id])
-  eventId   String?  @map("event")
-  user      User?    @relation("CartItem_user", fields: [userId], references: [id])
-  userId    String?  @map("user")
+  id           String   @id @default(cuid())
+  quantity     Int      @default(1)
+  type         String
+  coupon       Coupon?  @relation("CartItem_coupon", fields: [couponId], references: [id])
+  couponId     String?  @map("coupon")
+  product      Product? @relation("CartItem_product", fields: [productId], references: [id])
+  productId    String?  @map("product")
+  booking      Booking? @relation("CartItem_booking", fields: [bookingId], references: [id])
+  bookingId    String?  @map("booking")
+  rental       Rental?  @relation("CartItem_rental", fields: [rentalId], references: [id])
+  rentalId     String?  @map("rental")
+  event        Event?   @relation("CartItem_event", fields: [eventId], references: [id])
+  eventId      String?  @map("event")
+  user         User?    @relation("CartItem_user", fields: [userId], references: [id])
+  userId       String?  @map("user")
+  dateCreated  DateTime @default(now())
+  dateModified DateTime @default(now()) @updatedAt
 
   @@index([couponId])
   @@index([productId])
@@ -393,15 +395,21 @@ model Order {
 model Coupon {
   id                    String             @id @default(cuid())
   name                  String             @unique @default("")
-  stripeId              String             @default("")
+  code                  String             @unique @default("")
   amount_off            Int?
   percent_off           Int?
   duration_in_months    Int?
   duration              String
+  redeem_by             DateTime
+  max_redemptions       Int                @default(9999)
   products              Product[]          @relation("Coupon_products")
   subscriptionPlans     SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
   events                Event[]            @relation("Coupon_events")
   services              Service[]          @relation("Coupon_services")
+  redeptions            Int                @default(0)
+  dateCreated           DateTime           @default(now())
+  dateModified          DateTime           @default(now()) @updatedAt
+  stripeId              String             @default("")
   from_CartItem_coupon  CartItem[]         @relation("CartItem_coupon")
   from_OrderItem_coupon OrderItem[]        @relation("OrderItem_coupon")
 }

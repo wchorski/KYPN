@@ -2057,6 +2057,8 @@ type CartItem {
   rental: Rental
   event: Event
   user: User
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input CartItemWhereUniqueInput {
@@ -2076,12 +2078,16 @@ input CartItemWhereInput {
   rental: RentalWhereInput
   event: EventWhereInput
   user: UserWhereInput
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
 }
 
 input CartItemOrderByInput {
   id: OrderDirection
   quantity: OrderDirection
   type: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
 }
 
 input CartItemUpdateInput {
@@ -2093,6 +2099,8 @@ input CartItemUpdateInput {
   rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input CouponRelateToOneForUpdateInput {
@@ -2139,6 +2147,8 @@ input CartItemCreateInput {
   rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
+  dateCreated: DateTime
+  dateModified: DateTime
 }
 
 input CouponRelateToOneForCreateInput {
@@ -2379,11 +2389,13 @@ input OrderCreateInput {
 type Coupon {
   id: ID!
   name: String
-  stripeId: String
+  code: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  redeem_by: DateTime
+  max_redemptions: Int
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
@@ -2392,11 +2404,16 @@ type Coupon {
   eventsCount(where: EventWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
   servicesCount(where: ServiceWhereInput! = {}): Int
+  redeptions: Int
+  dateCreated: DateTime
+  dateModified: DateTime
+  stripeId: String
 }
 
 input CouponWhereUniqueInput {
   id: ID
   name: String
+  code: String
 }
 
 input CouponWhereInput {
@@ -2405,38 +2422,56 @@ input CouponWhereInput {
   NOT: [CouponWhereInput!]
   id: IDFilter
   name: StringFilter
-  stripeId: StringFilter
+  code: StringFilter
   amount_off: IntNullableFilter
   percent_off: IntNullableFilter
   duration_in_months: IntNullableFilter
   duration: StringFilter
+  redeem_by: DateTimeFilter
+  max_redemptions: IntFilter
   products: ProductManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
   events: EventManyRelationFilter
   services: ServiceManyRelationFilter
+  redeptions: IntFilter
+  dateCreated: DateTimeFilter
+  dateModified: DateTimeFilter
+  stripeId: StringFilter
 }
 
 input CouponOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  stripeId: OrderDirection
+  code: OrderDirection
   amount_off: OrderDirection
   percent_off: OrderDirection
   duration_in_months: OrderDirection
   duration: OrderDirection
+  redeem_by: OrderDirection
+  max_redemptions: OrderDirection
+  redeptions: OrderDirection
+  dateCreated: OrderDirection
+  dateModified: OrderDirection
+  stripeId: OrderDirection
 }
 
 input CouponUpdateInput {
   name: String
-  stripeId: String
+  code: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  redeem_by: DateTime
+  max_redemptions: Int
   products: ProductRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
+  redeptions: Int
+  dateCreated: DateTime
+  dateModified: DateTime
+  stripeId: String
 }
 
 input CouponUpdateArgs {
@@ -2446,15 +2481,21 @@ input CouponUpdateArgs {
 
 input CouponCreateInput {
   name: String
-  stripeId: String
+  code: String
   amount_off: Int
   percent_off: Int
   duration_in_months: Int
   duration: String
+  redeem_by: DateTime
+  max_redemptions: Int
   products: ProductRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
+  redeptions: Int
+  dateCreated: DateTime
+  dateModified: DateTime
+  stripeId: String
 }
 
 type Page {
@@ -3167,7 +3208,7 @@ type Mutation {
   checkoutTickets(userId: String!, eventId: String!, customerEmail: String!, quantity: Int!): Order
   checkout: Order
   checkoutSubscription(subscriptionPlanId: String!, addonIds: [String], couponIds: [String]): Order
-  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, subscriptionPlanId: ID, couponId: ID, addonIds: [String]): CartItem
+  addToCart(type: String!, quantity: Int!, productId: ID, eventId: ID, rentalId: ID, couponCode: ID, addonIds: [String]): CartItem
 }
 
 type Query {

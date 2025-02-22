@@ -27,6 +27,7 @@ export function calcTotalPrice(cart: CartItem[]) {
 	const totalAfterAmountOff = subTotal - discount.amount_off
 	const percentToDecimal = discount.percent_off / 100
 
+  //TODO don't allow negative numbers
 	return totalAfterAmountOff - totalAfterAmountOff * percentToDecimal
 }
 

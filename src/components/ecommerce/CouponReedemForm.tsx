@@ -1,0 +1,110 @@
+"use client"
+import { SelectField } from "@components/forms/SelectField"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { useCart } from "@components/hooks/CartStateContext"
+import { InputField } from "@components/InputField"
+import { TextareaField } from "@components/TextareaField"
+// import { useForm } from "@hooks/useForm"
+import { useFormState } from "react-dom"
+import { Rental, SelectOption } from "@ks/types"
+import {
+	postRentalToCart,
+	RentalToCartState,
+} from "@lib/actions/postRentalToCart"
+import { form } from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { dateFormatLocalDateTime } from "@lib/dateFormatter"
+import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
+import { useRouter } from "next/navigation"
+import { CSSProperties, useState } from "react"
+import { AddToCartState, postAddToCart } from "@lib/actions/postAddToCart"
+import Flex from "@components/layouts/Flex"
+
+type Props = {
+	code?: string
+}
+
+const today = new Date()
+
+export function CouponReedemForm({ code }: Props) {
+	const router = useRouter()
+	const { addToCart } = useCart()
+
+	const initState: AddToCartState = {
+		values: {
+			type: "DISCOUNT",
+			quantity: 1,
+			productId: undefined,
+			eventId: undefined,
+			subscriptionPlanId: undefined,
+			couponCode: code || "",
+		},
+		valueErrors: undefined,
+		error: undefined,
+		success: undefined,
+		url: undefined,
+		id: undefined,
+	}
+
+	// const { state, action, submitCount } = useForm(postAddToCart, initState)
+
+	const [state, action] = useFormState(async (state: any, formData: any) => {
+		let isError = false
+		try {
+			const resData = await postAddToCart(initState, formData)
+			if (resData.cartItem) addToCart(resData.cartItem) // Update React Context
+			return resData
+		} catch (error) {
+			console.log(error)
+			isError = true
+			return state
+		}
+	}, initState)
+
+	return (
+		<form className={form} action={action}>
+			<Flex>
+				<InputField
+					type="hidden"
+					name={"type"}
+					error={state?.valueErrors?.type}
+					required={true}
+					defaultValue={state?.values?.type}
+				/>
+				<InputField
+					type="hidden"
+					name={"quantity"}
+					error={state?.valueErrors?.quantity}
+					required={true}
+					defaultValue={state?.values?.quantity}
+				/>
+				<InputField
+					type="text"
+					name={"couponCode"}
+					label="Coupon Code"
+          placeholder="D1$C0VNT..."
+					error={state?.valueErrors?.couponCode}
+					defaultValue={state?.values?.couponCode}
+				/>
+
+				<SubmitButton label={"Apply"} />
+			</Flex>
+			{!state?.success ? (
+				<></>
+			) : (
+				<p className={"success"}>
+					{state?.success}
+				</p>
+			)}
+
+			<p className={"error"} style={errorStyle}>
+				{state?.error}
+			</p>
+		</form>
+	)
+}
+
+const errorStyle = {
+	overflowY: "auto",
+	height: "10vh",
+} as CSSProperties

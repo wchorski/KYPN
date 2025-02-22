@@ -120,7 +120,10 @@ li.item :global {
 	position: relative;
 	background: var(--c-desaturated);
 	position: fixed;
-	height: 100%;
+	/* height: 100%; */
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -135,9 +138,9 @@ li.item :global {
 	align-content: start;
 
 	& header {
-		border-bottom: 5px solid black;
+		border-bottom: 5px solid var(--c-seperator);
 		margin-bottom: 2rem;
-		padding-bottom: 2rem;
+		
 	}
 
 	& .cartCount {
@@ -154,7 +157,8 @@ li.item :global {
 		align-items: center;
 		font-size: 3rem;
 		font-weight: 900;
-		& p {
+    padding-bottom: var(--space-l);
+		& strong {
 			margin: 0;
 			font-size: 2rem;
 		}
@@ -243,4 +247,16 @@ input[type="number"].quantity {
   padding: var(--space-xs);
   padding-right: var(--space-ms);
   height: fit-content;
+}
+
+.coupon_cart_item {
+  background-color: var(--c-txt-bg);
+  border: dashed 2px var(--c-txt); 
+  padding: var(--space-ms);
+  display: flex;
+  flex-wrap: wrap;
+
+  & h5, & p {
+    margin: 0;
+  }
 }

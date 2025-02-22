@@ -189,15 +189,6 @@ export const QUERY_USER_CART = `
         image
       }
     }
-    subscriptionItem {
-      id
-      price
-      billing_interval
-      subscriptionPlan {
-        name
-        image
-      }
-    }
     rental {
       id
       summary
@@ -209,8 +200,8 @@ export const QUERY_USER_CART = `
       timeZone
     }
     coupon {
-      id
       name
+      code
       amount_off
       percent_off
       stripeId

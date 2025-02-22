@@ -324,6 +324,7 @@ export async function stripeProductUpdate({
 type Coupon = {
 	stripeId?: string
 	name: string
+	code: string
 	couponId?: string
 	percent_off?: number
 	amount_off?: number
@@ -344,6 +345,7 @@ export async function stripeCouponDelete(id:string){
 export async function stripeCouponCreate({
 	stripeId,
 	name,
+  code,
 	amount_off,
 	percent_off,
 	duration,
@@ -377,7 +379,7 @@ export async function stripeCouponCreate({
 	}
 
 	let couponParams: Stripe.CouponCreateParams = {
-		id: name,
+		id: code,
     name,
 		duration,
 		...(duration === "repeating" ? { duration_in_months } : {}),
@@ -387,6 +389,7 @@ export async function stripeCouponCreate({
 		metadata: {
 			couponId: couponId || "",
 		},
+    
 	}
 
 	const coupon = await stripeConfig.coupons.create(couponParams)

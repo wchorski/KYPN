@@ -9,6 +9,7 @@ import ErrorMessage from "../ErrorMessage"
 import { useCart } from "@components/hooks/CartStateContext"
 import Link from "next/link"
 import Flex from "@components/layouts/Flex"
+import { IconCoupon } from "@lib/useIcons"
 
 type UpdateCartItem = {
 	id: string
@@ -27,6 +28,7 @@ export default function CartItem({ item, sessionId }: Props) {
 		return <SubscriptionItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
 	if (item.rental) return <RentalItem item={item} />
+	if (item.coupon) return <CouponItem item={item} sessionId={sessionId} />
 
 	return <p>no item associated</p>
 }
@@ -70,6 +72,7 @@ function RentalItem({ item }: { item: CartItem }) {
 		</li>
 	)
 }
+
 function BookingItem({ item }: { item: CartItem }) {
 	if (!item.booking) return <p>Booking Not Found</p>
 
@@ -125,7 +128,7 @@ function TicketItem({ item }: { item: CartItem }) {
 			</div>
 
 			<div className={perItemTotal}>
-				<p>{moneyFormatter(( price) * quantity)}</p>
+				<p>{moneyFormatter(price * quantity)}</p>
 				<em> {moneyFormatter(price)} each </em>
 			</div>
 
@@ -134,6 +137,101 @@ function TicketItem({ item }: { item: CartItem }) {
 	)
 }
 
+function CouponItem({
+	item,
+	sessionId,
+}: {
+	item: CartItem
+	sessionId: string | undefined
+}) {
+	const [quantityState, setQuantityState] = useState(item.quantity)
+
+	useEffect(() => {
+		setQuantityState(item.quantity)
+
+		// return () =>
+	}, [item.quantity])
+	const [error, setError] = useState<any>(undefined)
+	const { getUserCart } = useCart()
+
+	async function updateQuantity(value: number) {
+		const variables = {
+			where: {
+				id: item.id,
+			},
+			data: {
+				quantity: value,
+			},
+		}
+
+		// TODO maybe make a server action?
+		try {
+			// const { user } = await client.request(query, variables) as { user:User }
+			const res = await fetch(`/api/gql/protected`, {
+				method: "POST",
+				body: JSON.stringify({ query, variables }),
+			})
+
+			const { updateCartItem } = (await res.json()) as {
+				updateCartItem: UpdateCartItem
+			}
+			setQuantityState(updateCartItem.quantity)
+		} catch (error) {
+			console.warn("cart item udate error: ", error)
+			setError(error)
+		} finally {
+			getUserCart(sessionId)
+		}
+	}
+
+	if (!item?.coupon)
+		return (
+			<li className={styles.item}>
+				<p>This cart item is no longer supplied by our store</p>
+			</li>
+		)
+
+	const {
+		coupon: { name, code, percent_off, amount_off, stripeId },
+		type,
+		quantity,
+	} = item
+
+	return (
+		<>
+			<li className={styles.item} style={{ border: "dashed 1px var(--c-txt)" }}>
+				<figure style={{margin: 'var(--space-ms)'}}>
+					<IconCoupon />
+				</figure>
+
+				<Flex
+					flexDirection={"column"}
+					gap={"ms"}
+					justifyContent={"space-between"}
+				>
+					<h5>{name}</h5>
+					<span>coupon</span>
+				</Flex>
+
+				<div className={perItemTotal}>
+					{percent_off ? (
+						<p>
+							-{percent_off} <small>%</small>
+						</p>
+					) : amount_off ? (
+						<p>-{moneyFormatter(amount_off)}</p>
+					) : (
+						<></>
+					)}
+				</div>
+
+				<CartRemoveItem id={item.id} />
+			</li>
+
+			<ErrorMessage error={error} />
+		</>
+	)
+}
 function ProductItem({
 	item,
 	sessionId,
@@ -161,6 +259,7 @@ function ProductItem({
 			},
 		}
 
+		// TODO maybe make a server action?
 		try {
 			// const { user } = await client.request(query, variables) as { user:User }
 			const res = await fetch(`/api/gql/protected`, {
@@ -312,7 +411,10 @@ function SubscriptionItem({
 		<>
 			<li className={styles.item}>
 				<ImageDynamic
-					photoIn={{ url: subscriptionPlan.image, altText: `${name} featured image` }}
+					photoIn={{
+						url: subscriptionPlan.image,
+						altText: `${name} featured image`,
+					}}
 				/>
 
 				<Flex
@@ -321,7 +423,9 @@ function SubscriptionItem({
 					justifyContent={"space-between"}
 				>
 					<h5>
-						<Link href={`/shop/subscription-items/${id}`}>{subscriptionPlan.name}</Link>
+						<Link href={`/shop/subscription-items/${id}`}>
+							{subscriptionPlan.name}
+						</Link>
 					</h5>
 
 					<input

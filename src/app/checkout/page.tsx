@@ -101,6 +101,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							</p>
 						</>
 					)}
+          
 				</section>
 
 				<hr />
@@ -116,6 +117,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							email={session.user.email}
 							user={session.user as User}
 						/>
+            // <></>
 					)}
 				</section>
 			</div>
@@ -159,18 +161,6 @@ const query = `
         image
       }
     }
-    subscriptionPlan {
-      id
-      typeof
-      image
-      name
-      slug
-      excerpt
-      status
-      price
-      billing_interval
-      stockMax
-    }
     rental {
       id
       summary
@@ -187,6 +177,7 @@ const query = `
       name
       amount_off
       percent_off
+      stripeId
     }
   }
 `

@@ -28,8 +28,6 @@ type Props = {
 	buttonText?: string
 }
 
-throw new Error('!!! mutation/addToCart will not handle subscripitons very well, so why do i keep trying to add them to cart?')
-
 export default function AddToCartForm({
 	eventId,
 	productId,
@@ -43,6 +41,7 @@ export default function AddToCartForm({
 			eventId,
 			productId,
 			subscriptionPlanId,
+      couponCode: undefined,
 			quantity: 1,
 			type,
 		},
@@ -53,6 +52,7 @@ export default function AddToCartForm({
 		id: undefined,
 		data: undefined,
 	}
+  
 	const { state, action } = useForm(onSubmit, initState)
 	const [inlineIconState, setInlineIconState] = useState<ReactNode>(
 		<IconShoppingBagAdd />
@@ -205,4 +205,42 @@ export default function AddToCartForm({
 	)
 }
 
-
+const query = `
+  id
+  type
+  quantity
+  subTotal
+  event {
+    id
+    summary
+    price
+    image
+  }
+  product {
+    id
+    price
+    rental_price
+    name
+    image
+    stripePriceId
+    stripeProductId
+  }
+  booking {
+    id
+    price
+    summary
+    service {
+      image
+    }
+  }
+  rental {
+    id
+    summary
+    start
+    end
+    days
+    address
+    delivery
+    timeZone
+  }
+`

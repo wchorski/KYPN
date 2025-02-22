@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "name": "11DOLLARSOFFFOREVER",
+      "code": "11DOLLARSOFFFOREVER",
+      "amount_off": 11,
+      "percent_off": null,
+      "duration": "forever",
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "name": "5PERCENTOFFSUB_6MONTH",
+      "code": "5PERCENTOFFSUB_6MONTH",
+      "amount_off": null,
+      "percent_off": 5,
+      "duration": "repeating",
+      "duration_in_months": 6,
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "name": "7DOLLARSOFFSUB_3MONTH",
+      "code": "7DOLLARSOFFSUB_3MONTH",
+      "amount_off": 7,
+      "percent_off": null,
+      "duration": "repeating",
+      "duration_in_months": 3,
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "name": "5DOLLARSOFF",
+      "code": "5DOLLARSOFF",
+      "amount_off": 500,
+      "percent_off": null,
+      "duration": "once",
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "name": "15PERCENTOFF",
+      "code": "15PERCENTOFF",
+      "amount_off": null,
+      "percent_off": 15,
+      "duration": "once",
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    },
+    {
+      "name": "10PERCENTOFF",
+      "code": "10PERCENTOFF",
+      "amount_off": null,
+      "percent_off": 10,
+      "duration": "once",
+      "redeem_by": "2025-03-15T00:00:00.000Z"
+    }
+  ]
+}

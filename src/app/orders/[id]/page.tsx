@@ -4,7 +4,10 @@ import { datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { getServerSession } from "next-auth"
 import Link from "next/link"
-import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
+import styles, {
+	coupon_cart_item,
+	perItemTotal,
+} from "@styles/ecommerce/cart.module.css"
 import { Metadata } from "next"
 import { envs } from "@/envs"
 import { TicketList } from "@components/events/TicketList"
@@ -23,6 +26,7 @@ import { OrderItem } from "@ks/types"
 import { NoData } from "@components/elements/NoData"
 import { PriceTag } from "@components/ecommerce/PriceTag"
 import { ProductOrderItem } from "@components/ecommerce/ProductOrderItem"
+import { sortOrderItems } from "@lib/sortUtils"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
@@ -61,6 +65,8 @@ export default async function OrderByIdPage({ params }: Props) {
 		dateModified,
 		total,
 	} = order
+
+	const sortedOrderItems = sortOrderItems(items)
 
 	return (
 		<main className={page_layout}>
@@ -103,9 +109,9 @@ export default async function OrderByIdPage({ params }: Props) {
 
 				<section>
 					<h3> Items: </h3>
-					{order.items.length > 0 ? (
+					{sortedOrderItems.length > 0 ? (
 						<ul className="orderItems unstyled grid gap-s">
-							{order.items.flatMap((it) =>
+							{sortedOrderItems.flatMap((it) =>
 								[
 									it.booking && (
 										<BookingOrderItem item={it} key={`booking-${it.id}`} />
@@ -119,7 +125,7 @@ export default async function OrderByIdPage({ params }: Props) {
 									it.product && (
 										<ProductOrderItem item={it} key={`product-${it.id}`} />
 									),
-                  // TODO make these look nicer later
+									// TODO make these look nicer later
 									it.rental && (
 										<li key={`rental-${it.id}`}>
 											<Link href={`/rentals/${it.rental.id}`}>
@@ -138,13 +144,15 @@ export default async function OrderByIdPage({ params }: Props) {
 										</li>
 									),
 									it.coupon && (
-										<li key={`coupon-${it.id}`}>
+										<li key={`coupon-${it.id}`} className={coupon_cart_item}>
 											<h5>Coupon: {it.coupon.name}</h5>
-											{it.coupon.amount_off ? (
-												<p>-{moneyFormatter(it.coupon.amount_off)}</p>
-											) : (
-												<p>{it.coupon.percent_off}%</p>
-											)}
+											<div className={perItemTotal}>
+												{it.coupon.amount_off ? (
+													<p>-{moneyFormatter(it.coupon.amount_off)}</p>
+												) : (
+													<p>-{it.coupon.percent_off}%</p>
+												)}
+											</div>
 										</li>
 									),
 								].filter(Boolean)
