@@ -44,6 +44,10 @@ export function ShoppingCart() {
 		}
 	}, [handleClickOutside])
 
+	console.log(cartItems)
+
+	const hasCoupon = cartItems.some((item) => item.coupon !== null)
+
 	return (
 		<div
 			className={
@@ -75,8 +79,8 @@ export function ShoppingCart() {
 			<CartItemsList />
 
 			<footer>
-
-				<CouponReedemForm />
+	
+				{!cartItems.some((item) => item.coupon !== null) && <CouponReedemForm />}
 
 				<div className="flex" style={{ alignItems: "baseline" }}>
 					<h3>Total: </h3>

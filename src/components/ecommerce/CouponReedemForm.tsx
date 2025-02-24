@@ -36,7 +36,7 @@ export function CouponReedemForm({ code }: Props) {
 			quantity: 1,
 			productId: undefined,
 			eventId: undefined,
-			subscriptionPlanId: undefined,
+			// subscriptionPlanId: undefined,
 			couponCode: code || "",
 		},
 		valueErrors: undefined,
@@ -89,6 +89,7 @@ export function CouponReedemForm({ code }: Props) {
 
 				<SubmitButton label={"Apply"} />
 			</Flex>
+      {/* // TODO animate this to pop in and out. like how blog `share link` works */}
 			{!state?.success ? (
 				<></>
 			) : (

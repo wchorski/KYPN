@@ -177,7 +177,7 @@ export function ArticleItem({
 									type={"SALE"}
 									eventId={undefined}
 									productId={item.id}
-									subscriptionPlanId={undefined}
+									// subscriptionPlanId={undefined}
 									sessionId={"session.itemId"}
 									buttonText={"Buy"}
 								/>
@@ -194,7 +194,7 @@ export function ArticleItem({
 									productId={item.id}
 									sessionId={"session.itemId"}
 									eventId={undefined}
-									subscriptionPlanId={undefined}
+									// subscriptionPlanId={undefined}
 									type={"RENTAL"}
 									buttonText={"Rent"}
 								/>

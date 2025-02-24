@@ -21,7 +21,8 @@ import moneyFormatter from "@lib/moneyFormatter"
 type Props = {
 	productId: string | undefined
 	eventId: string | undefined
-	subscriptionPlanId: string | undefined
+  //? cannot have subscriptions in cart. must have seperate checkout
+	// subscriptionPlanId: string | undefined
 	addonOptions?: AddonCheckboxOptions[]
 	sessionId: string
 	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
@@ -31,7 +32,7 @@ type Props = {
 export default function AddToCartForm({
 	eventId,
 	productId,
-	subscriptionPlanId,
+	// subscriptionPlanId,
 	type,
 	buttonText,
   addonOptions = []
@@ -40,7 +41,7 @@ export default function AddToCartForm({
 		values: {
 			eventId,
 			productId,
-			subscriptionPlanId,
+			// subscriptionPlanId,
       couponCode: undefined,
 			quantity: 1,
 			type,
@@ -76,8 +77,8 @@ export default function AddToCartForm({
 				method: "POST",
 				body: JSON.stringify({
 					query: `
-            mutation AddToCart($type: String!, $quantity: Int!, $productId: ID, $eventId: ID, $subscriptionPlanId: ID) {
-              addToCart(type: $type, quantity: $quantity, productId: $productId, eventId: $eventId, subscriptionPlanId: $subscriptionPlanId) {
+            mutation AddToCart($type: String!, $quantity: Int!, $productId: ID, $eventId: ID) {
+              addToCart(type: $type, quantity: $quantity, productId: $productId, eventId: $eventId) {
                 ${query}
               }
             }
@@ -87,7 +88,7 @@ export default function AddToCartForm({
 						// ...state.values,
 						type: state.values?.type,
 						productId: state.values?.productId,
-						subscriptionPlanId: state.values?.subscriptionPlanId,
+						// subscriptionPlanId: state.values?.subscriptionPlanId,
 						eventId: state.values?.eventId,
 						quantity: Number(state.values?.quantity),
 					},
@@ -142,12 +143,12 @@ export default function AddToCartForm({
 				name={"productId"}
 				error={state.valueErrors?.productId}
 			/>
-			<InputField
+			{/* <InputField
 				type={"hidden"}
 				defaultValue={state.values?.subscriptionPlanId}
 				name={"subscriptionPlanId"}
 				error={state.valueErrors?.subscriptionPlanId}
-			/>
+			/> */}
 			<InputField
 				type={"hidden"}
 				defaultValue={state.values?.quantity}

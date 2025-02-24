@@ -79,7 +79,7 @@ export type AddToCartValues = {
 	quantity: number
 	productId: string | undefined
 	eventId: string | undefined
-	subscriptionPlanId: string | undefined
+	// subscriptionPlanId: string | undefined
 	couponCode: string | undefined
 }
 
