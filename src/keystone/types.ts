@@ -57,6 +57,8 @@ export type ColorsTheme =
 	| "bg_c_accent"
 	| "bg_c_transparent"
 	| "bg_c_reverse_theme"
+	| "outline_c_secondary"
+	| "outline_c_tertiary"
 export type WidthLayoutSize =
 	| "layout-full"
 	| "layout-wide"

@@ -86,7 +86,8 @@
 	// display: grid;
 	// gap: 3rem;
 	//todo may want to reconsider this for forms with better layouts
-	max-width: 25rem;
+	// TODO prob gonna break some layouts, but will struggle through because forms be looking ugly leaving empty space around
+	// max-width: 25rem;
 	width: 100%;
 	box-sizing: border-box;
 	// margin-inline: auto;
@@ -461,4 +462,30 @@ label.coupon {
 
 .footer {
 	margin-top: auto;
+}
+
+fieldset.inline_w_submit {
+	display: flex;
+  margin: 0;
+
+  & label {
+    width: 100%;
+  }
+
+	& label > span:first-child {
+      
+			display: none;
+	}
+
+  & button[type="submit"]{
+    font-size: 1rem;
+    padding: var(--space-s);
+    margin-left: auto;
+  }
+}
+
+fieldset.stand_alone {
+  border-width: 2px;
+  border-color: var(--c-seperator);
+  padding: var(--space-m);
 }

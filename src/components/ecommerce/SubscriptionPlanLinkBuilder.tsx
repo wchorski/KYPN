@@ -7,16 +7,17 @@ import {
 	SubscriptionPlan,
 } from "@ks/types"
 import { useCallback, useEffect, useReducer } from "react"
-import formStyles, { form } from "@styles/menus/form.module.scss"
+import formStyles, { form, stand_alone } from "@styles/menus/form.module.scss"
 import moneyFormatter from "@lib/moneyFormatter"
 import { PriceTag } from "./PriceTag"
-import StripeSubscriptionButton from "./StripeSubscriptionButton"
-import { useForm } from "@hooks/useForm"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
 import { IconCoupon } from "@lib/useIcons"
 import Flex from "@components/layouts/Flex"
+import { CouponRedeemForm } from "./CouponRedeemForm"
+import { bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { Card } from "@components/layouts/Card"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan
@@ -38,7 +39,6 @@ type FormAsideAction =
 	| { type: "RESET" }
 	| { type: "SET_ADDON_OPTIONS"; payload: AddonCheckboxOptions[] }
 	| { type: "SET_TOTAL"; payload: number }
-	| { type: "SET_COUPONCODE"; payload: string }
 	| { type: "SET_COUPON"; payload: Coupon | undefined }
 	| { type: "ADDON_CHECKBOX"; payload: { value: string; isChecked: boolean } }
 	| {
@@ -50,7 +50,7 @@ type FormAsideAction =
 			}
 	  }
 
-export function CheckoutSubscriptionPlanForm({
+export function SubscriptionPlanLinkBuilder({
 	subscriptionPlan,
 	addons = [],
 	customerId,
@@ -76,18 +76,8 @@ export function CheckoutSubscriptionPlanForm({
 	}
 	const reducer = (state: State, action: FormAsideAction): State => {
 		switch (action.type) {
-			case "SET_COUPONCODE":
-				return { ...state, couponCode: action.payload }
-
 			case "SET_COUPON":
 				return { ...state, coupon: action.payload, couponCode: "" }
-			// case "SET_COUPON":
-			// 	const addonsTotal = state.addonOptions
-			// 		.filter((opt) => opt.isChecked)
-			// 		.reduce((accumulator, addon) => {
-			// 			return accumulator + addon.price
-			// 		}, 0)
-			// 	return { ...state, total: calcTotalPrice(state, addonsTotal) }
 
 			case "SET_ADDON_OPTIONS":
 				return { ...state, addonOptions: action.payload }
@@ -144,64 +134,30 @@ export function CheckoutSubscriptionPlanForm({
 		return discountedTotal + addonAccumulatedTotal
 	}
 
-	async function handleCouponRedeem(code: string) {
-		const res = await fetch(`/api/gql/protected`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				query: `
-          mutation RedeemCoupon($code: String!) {
-            redeemCoupon(code: $code) {
-              id
-              name
-              code
-              amount_off
-              percent_off
-              duration_in_months
-              duration
-              redeem_by
-              max_redemptions
-              redemptions
-            }
-          }
-        `,
-				variables: {
-					code: code,
-				},
-			}),
-		})
-
-		const { redeemCoupon, error } = (await res.json()) as {
-			redeemCoupon: Coupon
-			error: any
-		}
-
-		if (error) throw new Error(error.message)
-		if (!redeemCoupon) throw new Error("!!! coupon not found")
-		console.log({ redeemCoupon })
-
-		dispatch({ type: "SET_COUPON", payload: redeemCoupon })
-	}
-
 	useEffect(() => {
 		console.log("change")
 		// return () =>
 	}, [searchParams])
 
 	// const { } = useForm()
+	function handleCouponDetails(coupon: Coupon) {
+		const { duration, duration_in_months } = coupon
+		let text = ""
+		text += duration
+		text += duration_in_months ? `for ${duration_in_months} months` : ""
+		return text
+	}
 
 	return (
-		<form
-			className={form}
-			// todo do i need a form action?
-			// action={formAction}
+		<Card
+			// className={form}
+      gap={'var(--space-m)'}
+      colorTheme={'outline_c_tertiary'}
 		>
-			<legend>Config Subscription</legend>
+			<h2>Subscription Builder</h2>
 
 			{addons && addons.length > 0 && (
-				<fieldset>
+				<fieldset className={stand_alone} >
 					<legend> Add-Ons</legend>
 					{state.addonOptions.length === 0 && (
 						<p className="subtext"> no addons available </p>
@@ -238,76 +194,87 @@ export function CheckoutSubscriptionPlanForm({
 					</div>
 				</fieldset>
 			)}
-			<fieldset>
-				{state.coupon && (
-					<div
-						className={styles.item}
-						style={{ border: "dashed 1px var(--c-txt)" }}
+			{state.coupon ? (
+				<div
+					className={styles.item}
+					style={{ border: "dashed 1px var(--c-txt)" }}
+				>
+					<figure style={{ margin: "var(--space-ms)" }}>
+						<IconCoupon />
+					</figure>
+
+					<Flex
+						flexDirection={"column"}
+						gap={"ms"}
+						justifyContent={"space-between"}
 					>
-						<figure style={{ margin: "var(--space-ms)" }}>
-							<IconCoupon />
-						</figure>
+						<h5>{state.coupon.name}</h5>
+						<span>coupon</span>
+					</Flex>
 
-						<Flex
-							flexDirection={"column"}
-							gap={"ms"}
-							justifyContent={"space-between"}
-						>
-							<h5>{state.coupon.name}</h5>
-							<span>coupon</span>
-						</Flex>
-
-						<div className={perItemTotal}>
-							{state.coupon.percent_off ? (
-								<p>
-									-{state.coupon.percent_off} <small>%</small>
-								</p>
-							) : state.coupon.amount_off ? (
-								<p>-{moneyFormatter(state.coupon.amount_off)}</p>
-							) : (
-								<></>
-							)}
-						</div>
-
-						{/* <CartRemoveItem id={item.id} /> */}
-						<button
-							disabled={state.coupon ? true : false}
-							className={styles.remove}
-							type={"button"}
-							onClick={(e) =>
-								dispatch({ type: "SET_COUPON", payload: undefined })
-							}
-							title={"remove coupon"}
-						>
-							<span> &times; </span>
-						</button>
+					<div className={perItemTotal}>
+						{state.coupon.percent_off ? (
+							<p>
+								-{state.coupon.percent_off} <small>%</small>
+							</p>
+						) : state.coupon.amount_off ? (
+							<p>-{moneyFormatter(state.coupon.amount_off)}</p>
+						) : (
+							<></>
+						)}
 					</div>
-				)}
-				<label className={formStyles.coupon}>
-					<input
-						name="coupon"
-						type="text"
-						placeholder="D1$C0VNT C0D3..."
-						onChange={(e) =>
-							dispatch({ type: "SET_COUPONCODE", payload: e.target.value })
-						}
-					/>
+
+					{/* <CartRemoveItem id={item.id} /> */}
 					<button
-						type="button"
-						className="button"
-						onClick={() => handleCouponRedeem(state.couponCode)}
+						disabled={!state.coupon ? true : false}
+						className={styles.remove}
+						type={"button"}
+						onClick={() =>
+							dispatch({
+								type: "SET_COUPON",
+								payload: undefined,
+							})
+						}
+						title={"remove coupon"}
 					>
-						Apply Coupon
+						<span> &times; </span>
 					</button>
-				</label>
-			</fieldset>
+				</div>
+			) : (
+				<CouponRedeemForm
+					onApply={(coupon) =>
+						dispatch({
+							type: "SET_COUPON",
+							payload: coupon,
+						})
+					}
+				/>
+			)}
 
-			<p>
-				Total: <PriceTag price={state.total} /> /
-				{subscriptionPlan.billing_interval}
+			<p style={{fontSize: '1.6rem'}}>
+				{!state.coupon ? (
+					<>
+						<PriceTag price={state.total} /> /
+						{subscriptionPlan.billing_interval}
+					</>
+				) : (
+					<>
+						<s>
+							<PriceTag price={state.total} /> /
+							{subscriptionPlan.billing_interval}
+						</s>
+						<br />
+            <PriceTag price={calcDiscount(state.total, state.coupon)} /> /
+						{subscriptionPlan.billing_interval}
+						<span className={["discount", "pill", bg_c_tertiary].join(' ')}>
+
+							{handleCouponDetails(state.coupon)}
+						</span>
+					</>
+				)}
+
+				{/* // TODO more verbose discount description (for one time, repeating, forever) */}
 			</p>
-
-      <p className={'debug'}> useReducer to calc added coupon (mention if one time, duraton, or forever)</p>
 
 			<footer
 			// className={styles.footer}
@@ -330,12 +297,30 @@ export function CheckoutSubscriptionPlanForm({
 								.filter((adn) => adn.isChecked)
 								.flatMap((adn) => adn.id)
 								.join(",")
+						) +
+						"&" +
+						createQueryString(
+							"couponCode",
+							state.coupon?.code || ''
 						)
 					}
 				>
 					Checkout
 				</Link>
 			</footer>
-		</form>
+		</Card>
 	)
+}
+
+function calcDiscount(total:number, coupon:Coupon){
+  if(coupon.amount_off){
+    return total - coupon.amount_off
+  }
+  if(coupon.percent_off){
+    const decimal = coupon.percent_off / 100
+    const discount = total * decimal
+    return total * discount
+  }
+
+  return total
 }

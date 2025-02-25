@@ -6,7 +6,7 @@
 	}
 }
 
-.stack_el {
+.stack_grid {
 	display: grid;
 	grid-template-areas: stack;
 	place-items: center;

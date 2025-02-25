@@ -76,4 +76,6 @@ export type INIT_ACTIONState = {
   valueErrors?: Record<keyof INIT_ACTIONValues, string> | undefined
   error?: string
   success?: string
+  //? possibly return whole object of data like `product` or `user`
+  // data:any
 }

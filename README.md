@@ -277,6 +277,7 @@ When initializing a fresh database or returning to development you may add/remov
   - [ ] automate update Orders accordingling
 - [ ] limit / validate form inputs for things like names or text (as to not have infinite letters inputed)
 - [ ] think about setting up all colors as `hsl` and set the `lightness` according to `dark` or `light` theme
+- [ ] look into color theming per block and using `color-mix` to help with contrast
 - [ ] look into more robust light dark + other color themes
   - https://github.com/stolinski/tolin.ski/blob/main/src/routes/(blank)/experiments/dark-light/%2Bpage.svelte
   - https://tolin.ski/experiments/dark-light

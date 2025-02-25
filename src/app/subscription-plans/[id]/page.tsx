@@ -30,7 +30,7 @@ import {
 } from "@styles/ecommerce/product.module.css"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import { CheckoutSubscriptionPlanForm } from "@components/ecommerce/CheckoutSubscriptionPlanForm"
+import { SubscriptionPlanLinkBuilder } from "@components/ecommerce/SubscriptionPlanLinkBuilder"
 import { plainObj } from "@lib/utils"
 
 export async function generateMetadata(
@@ -147,6 +147,22 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 						</Card>
 					)}
 
+					{!session ? (
+						<CallbackLink>Login to Purchase</CallbackLink>
+					) : session?.data.role === null ? (
+						<VerifyEmailCard email={session.user.email} />
+					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
+						<Card>
+							<StatusBadge type={"subscriptionPlan"} status={status} />
+						</Card>
+					) : (
+						<SubscriptionPlanLinkBuilder
+							subscriptionPlan={plainObj({ ...subscriptionPlan, id })}
+							customerId={session.itemId}
+							addons={plainObj(addons)}
+						/>
+					)}
+
 					<ul className="categories">
 						{categories?.map((cat) => (
 							<li key={cat.id}>
@@ -192,31 +208,10 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									// subtext={'billed ' + billing_interval}
 								/>
 							</span>
-	
-            <p>
-              Subscription
-            </p>
-						</Card>
-					)}
-					{!session ? (
-						<CallbackLink>Login to Purchase</CallbackLink>
-					) : session?.data.role === null ? (
-						<VerifyEmailCard email={session.user.email} />
-					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
-						<Card>
-							<StatusBadge type={"product"} status={status} />
-						</Card>
-					) : (
-						<CheckoutSubscriptionPlanForm
-							subscriptionPlan={plainObj({...subscriptionPlan, id})}
-							customerId={session.itemId}
-              addons={plainObj(addons)}
-						/>
-					)}
 
-					<p className={"debug"}>
-						Pre Checkout form in popup (addons, coupons)
-					</p>
+							<p>Subscription</p>
+						</Card>
+					)}
 
 					{!isEmptyDocument(description?.document) && (
 						<>

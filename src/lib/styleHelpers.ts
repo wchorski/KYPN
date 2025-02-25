@@ -1,5 +1,5 @@
 import { ColorsTheme } from "../keystone/types"
-import { bg_c_accent, bg_c_plain, bg_c_primary, bg_c_reverse_theme, bg_c_secondary, bg_c_tertiary, bg_c_transparent } from "../styles/colorthemes.module.css"
+import { bg_c_accent, bg_c_plain, bg_c_primary, bg_c_reverse_theme, bg_c_secondary, bg_c_tertiary, bg_c_transparent, outline_c_secondary, outline_c_tertiary } from "../styles/colorthemes.module.css"
 
 
 export function getColorTheme(colorTheme:ColorsTheme) {
@@ -16,6 +16,10 @@ export function getColorTheme(colorTheme:ColorsTheme) {
       return bg_c_tertiary
     case "bg_c_accent":
       return bg_c_accent
+    case "outline_c_secondary":
+      return outline_c_secondary
+    case "outline_c_tertiary":
+      return outline_c_tertiary
     default:
       return bg_c_plain
   }

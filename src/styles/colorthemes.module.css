@@ -10,6 +10,7 @@
 		color: var(--c-txt-primary-h);
 	}
 }
+
 .bg_c_secondary {
 	background-color: var(--c-secondary);
 	color: var(--c-txt-primary);
@@ -17,6 +18,23 @@
 		color: var(--c-txt-primary-h);
 	}
 }
+.outline_c_secondary {
+  background-color: var(--c-txt-bg);
+  border-width: var(--space-xxs);
+	border-color: var(--c-secondary);
+  border-style: solid;
+}
+.outline_c_tertiary {
+  background-color: var(--c-txt-bg);
+  border-width: var(--space-xxs);
+	border-color: var(--c-tertiary);
+  border-style: solid;
+
+  & button {
+    border-color: var(--c-tertiary);
+  }
+}
+
 .bg_c_tertiary {
 	background-color: var(--c-tertiary);
 	color: var(--c-txt-primary);

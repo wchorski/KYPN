@@ -5,7 +5,7 @@ import {
 	IconShoppingBag,
 	IconSpinnerLines,
 } from "@lib/useIcons"
-import { stack_el } from "@styles/elements/button.module.css"
+import { stack_grid } from "@styles/elements/button.module.css"
 import { hidden } from "@styles/menus/form.module.scss"
 import { ReactNode, useEffect } from "react"
 import { useFormStatus } from "react-dom"
@@ -24,41 +24,47 @@ export function SubmitButton({ label, className }: SubmitButtonsProps) {
 		<button
 			type={"submit"}
 			disabled={pending}
-			className={[
-				stack_el,
-				className,
-				pending ? "anim_border_spin pending" : "",
-			].join(" ")}
+			className={[className, pending ? "anim_border_spin pending" : ""].join(
+				" "
+			)}
 		>
-			<span className={pending ? hidden : ""}>{btnText}</span>
-			{/* {pending && <LoadingAnim /> } */}
-			<LoadingAnim isVisable={pending} />
+			<div className={stack_grid}>
+				<span className={pending ? hidden : ""}>{btnText}</span>{" "}
+				<LoadingAnim isVisable={pending} />
+			</div>
+
+			{/* <LoadingAnim isVisable={pending} /> */}
 		</button>
 	)
 }
 
-export type SubmitButtonState = "loading" | "pending" | "error" | "out_of_stock" | "success" | undefined
-
+export type SubmitButtonState =
+	| "loading"
+	| "pending"
+	| "error"
+	| "out_of_stock"
+	| "success"
+	| undefined
 
 type SubmitButtonsInlineIconsProps = {
 	label?: string
 	className?: string
-	icon:ReactNode
-  title?:string
-  isPending:boolean
+	icon: ReactNode
+	title?: string
+	isPending: boolean
 }
 
-// TODO instead of manipulating dom via JS 
-// use css animations and hide/visible 
-// as to not use timeouts 
+// TODO instead of manipulating dom via JS
+// use css animations and hide/visible
+// as to not use timeouts
 // try doing a carosel and animate transform position
 // cancel out of animation if error occurs?
 export function SubmitButtonInlineIcons({
 	label,
 	className,
-  icon,
-  title = 'submit',
-  isPending,
+	icon,
+	title = "submit",
+	isPending,
 }: SubmitButtonsInlineIconsProps) {
 	const { pending } = useFormStatus()
 
@@ -80,25 +86,24 @@ export function SubmitButtonInlineIcons({
 
 	const btnText = label || "Submit"
 
-  // useEffect(() => {
-  //   renderIcon()
-  
-  //   // return () => 
-  // }, [buttonState])
-  
+	// useEffect(() => {
+	//   renderIcon()
+
+	//   // return () =>
+	// }, [buttonState])
 
 	return (
 		<button
-      title={title}
+			title={title}
 			type={"submit"}
 			disabled={isPending}
 			className={[
-				// stack_el,
+				// stack_grid,
 				className,
 				isPending ? "anim_border_spin pending" : "",
 			].join(" ")}
 		>
-      {label && <span>{label}</span>}
+			{label && <span>{label}</span>}
 			{icon}
 		</button>
 	)

@@ -16,6 +16,7 @@ export const redeemCoupon = (base: BaseSchemaMeta) =>
 
 			const { db: sudoDb } = context.sudo()
 
+      //? must use `context.db` for proper return of `Coupon` 
 			const coupon = (await sudoDb.Coupon.findOne({
 				where: { code: code },
 				// query: `

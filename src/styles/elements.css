@@ -45,6 +45,7 @@ button:disabled {
 button {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-ms);
 }
 
@@ -247,4 +248,21 @@ blockquote {
 	& .App-Background {
 		background-color: var(--c-body);
 	}
+}
+
+s {
+  color: var(--c-disabled);
+  /* ? other viable options, maybe will look into color-mix later */
+  /* color: color-mix(in srgb, blue 80%, black 20%); */
+  /* opacity: 0.6; */
+  & data{
+    color: inherit !important;
+    text-decoration: line-through;
+  }
+}
+
+.pill {
+  padding-inline: var(--space-s);
+  margin-inline: var(--space-xs);
+  border-radius: var(--br-soft);
 }
