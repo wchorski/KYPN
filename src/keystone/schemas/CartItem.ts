@@ -8,7 +8,7 @@ import {
 	virtual,
 } from "@keystone-6/core/fields"
 import { permissions, rules } from "../access"
-import type { Rental, Event, CartItem as TCartItem } from "../types"
+import type { Rental, Event, CartItem as TCartItem, Coupon } from "../types"
 import { hasOnlyOneValue } from "../../lib/utils"
 
 export const CartItem: Lists.CartItem = list({
@@ -189,6 +189,33 @@ export const CartItem: Lists.CartItem = list({
 					throw new Error(
 						"!!! CartItems may only have one Rental item per user session"
 					)
+				if (resolvedData.coupon?.connect?.code) {
+					const coupon = (await context.query.Coupon.findOne({
+						where: { code: resolvedData.coupon.connect.code },
+						query: `
+                      id
+                      name
+                      code
+                      amount_off
+                      percent_off
+                      duration
+                      duration_in_months
+                      redeem_by
+                      max_redemptions
+                      redemptions
+                    `,
+					})) as Coupon
+
+					// Validation
+					if (!coupon) throw new Error("!!! Coupon not found")
+
+					if (coupon.redemptions > coupon.max_redemptions)
+						throw new Error("!!! Reached max redemptions")
+
+					const now = new Date()
+					const expirationDate = new Date(coupon.redeem_by)
+					if (now > expirationDate) throw new Error("!!! Coupon has expired")
+				}
 			},
 			update: ({ resolvedData, item }) => {
 				const thisNewCombinedData = { ...item, ...resolvedData }

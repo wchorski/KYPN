@@ -183,7 +183,7 @@ model Addon {
   slug              String             @unique @default("")
   image             String             @default("")
   excerpt           String             @default("")
-  price             Int                @default(0)
+  price             Int
   stripeProductId   String             @default("")
   stripePriceId     String             @default("")
   status            String
@@ -406,7 +406,6 @@ model Coupon {
   subscriptionPlans     SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
   events                Event[]            @relation("Coupon_events")
   services              Service[]          @relation("Coupon_services")
-  redeptions            Int                @default(0)
   dateCreated           DateTime           @default(now())
   dateModified          DateTime           @default(now()) @updatedAt
   stripeId              String             @default("")

@@ -14,6 +14,9 @@ import StripeSubscriptionButton from "./StripeSubscriptionButton"
 import { useForm } from "@hooks/useForm"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
+import { IconCoupon } from "@lib/useIcons"
+import Flex from "@components/layouts/Flex"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan
@@ -26,7 +29,8 @@ type State = {
 	subscriptionPlanPrice: number
 	addonOptions: AddonCheckboxOptions[]
 	customerId: string
-	couponName: string
+	couponCode: string
+	coupon: Coupon | undefined
 	total: number
 }
 
@@ -34,8 +38,8 @@ type FormAsideAction =
 	| { type: "RESET" }
 	| { type: "SET_ADDON_OPTIONS"; payload: AddonCheckboxOptions[] }
 	| { type: "SET_TOTAL"; payload: number }
-	| { type: "SET_COUPON"; payload: string }
-	| { type: "APPLY_COUPON"; payload: string }
+	| { type: "SET_COUPONCODE"; payload: string }
+	| { type: "SET_COUPON"; payload: Coupon | undefined }
 	| { type: "ADDON_CHECKBOX"; payload: { value: string; isChecked: boolean } }
 	| {
 			type: "SET_CUSTOMER"
@@ -66,21 +70,24 @@ export function CheckoutSubscriptionPlanForm({
 				isChecked: false,
 				price: ad.price,
 			})) || [],
-		couponName: "",
+		couponCode: "",
+		coupon: undefined,
 		total: subscriptionPlan.price,
 	}
 	const reducer = (state: State, action: FormAsideAction): State => {
 		switch (action.type) {
-			case "SET_COUPON":
-				return { ...state, couponName: action.payload }
+			case "SET_COUPONCODE":
+				return { ...state, couponCode: action.payload }
 
-			case "APPLY_COUPON":
-				const addonsTotal = state.addonOptions
-					.filter((opt) => opt.isChecked)
-					.reduce((accumulator, addon) => {
-						return accumulator + addon.price
-					}, 0)
-				return { ...state, total: calcTotalPrice(state, addonsTotal) }
+			case "SET_COUPON":
+				return { ...state, coupon: action.payload, couponCode: "" }
+			// case "SET_COUPON":
+			// 	const addonsTotal = state.addonOptions
+			// 		.filter((opt) => opt.isChecked)
+			// 		.reduce((accumulator, addon) => {
+			// 			return accumulator + addon.price
+			// 		}, 0)
+			// 	return { ...state, total: calcTotalPrice(state, addonsTotal) }
 
 			case "SET_ADDON_OPTIONS":
 				return { ...state, addonOptions: action.payload }
@@ -128,13 +135,54 @@ export function CheckoutSubscriptionPlanForm({
 
 	function calcTotalPrice(state: State, addonAccumulatedTotal: number) {
 		const couponApplied = coupons?.find(
-			(coup) => coup.name === state.couponName
+			(coup) => coup.name === state.couponCode
 		)
 		if (!couponApplied) return subscriptionPlan.price + addonAccumulatedTotal
 		let discountedTotal = couponApplied.amount_off
 			? subscriptionPlan.price - couponApplied.amount_off
 			: subscriptionPlan.price * (couponApplied.percent_off / 100)
 		return discountedTotal + addonAccumulatedTotal
+	}
+
+	async function handleCouponRedeem(code: string) {
+		const res = await fetch(`/api/gql/protected`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				query: `
+          mutation RedeemCoupon($code: String!) {
+            redeemCoupon(code: $code) {
+              id
+              name
+              code
+              amount_off
+              percent_off
+              duration_in_months
+              duration
+              redeem_by
+              max_redemptions
+              redemptions
+            }
+          }
+        `,
+				variables: {
+					code: code,
+				},
+			}),
+		})
+
+		const { redeemCoupon, error } = (await res.json()) as {
+			redeemCoupon: Coupon
+			error: any
+		}
+
+		if (error) throw new Error(error.message)
+		if (!redeemCoupon) throw new Error("!!! coupon not found")
+		console.log({ redeemCoupon })
+
+		dispatch({ type: "SET_COUPON", payload: redeemCoupon })
 	}
 
 	useEffect(() => {
@@ -153,8 +201,8 @@ export function CheckoutSubscriptionPlanForm({
 			<legend>Config Subscription</legend>
 
 			{addons && addons.length > 0 && (
-				<>
-					<h5> Add-Ons</h5>
+				<fieldset>
+					<legend> Add-Ons</legend>
 					{state.addonOptions.length === 0 && (
 						<p className="subtext"> no addons available </p>
 					)}
@@ -188,32 +236,78 @@ export function CheckoutSubscriptionPlanForm({
 							</label>
 						))}
 					</div>
-				</>
+				</fieldset>
 			)}
+			<fieldset>
+				{state.coupon && (
+					<div
+						className={styles.item}
+						style={{ border: "dashed 1px var(--c-txt)" }}
+					>
+						<figure style={{ margin: "var(--space-ms)" }}>
+							<IconCoupon />
+						</figure>
 
-			<label className={formStyles.coupon}>
-				<input
-					name="coupon"
-					type="text"
-					onChange={(e) =>
-						dispatch({ type: "SET_COUPON", payload: e.target.value })
-					}
-				/>
-				<button
-					type="button"
-					className="button"
-					onClick={() =>
-						dispatch({ type: "APPLY_COUPON", payload: state.couponName })
-					}
-				>
-					{" "}
-					Apply Coupon{" "}
-				</button>
-			</label>
+						<Flex
+							flexDirection={"column"}
+							gap={"ms"}
+							justifyContent={"space-between"}
+						>
+							<h5>{state.coupon.name}</h5>
+							<span>coupon</span>
+						</Flex>
+
+						<div className={perItemTotal}>
+							{state.coupon.percent_off ? (
+								<p>
+									-{state.coupon.percent_off} <small>%</small>
+								</p>
+							) : state.coupon.amount_off ? (
+								<p>-{moneyFormatter(state.coupon.amount_off)}</p>
+							) : (
+								<></>
+							)}
+						</div>
+
+						{/* <CartRemoveItem id={item.id} /> */}
+						<button
+							disabled={state.coupon ? true : false}
+							className={styles.remove}
+							type={"button"}
+							onClick={(e) =>
+								dispatch({ type: "SET_COUPON", payload: undefined })
+							}
+							title={"remove coupon"}
+						>
+							<span> &times; </span>
+						</button>
+					</div>
+				)}
+				<label className={formStyles.coupon}>
+					<input
+						name="coupon"
+						type="text"
+						placeholder="D1$C0VNT C0D3..."
+						onChange={(e) =>
+							dispatch({ type: "SET_COUPONCODE", payload: e.target.value })
+						}
+					/>
+					<button
+						type="button"
+						className="button"
+						onClick={() => handleCouponRedeem(state.couponCode)}
+					>
+						Apply Coupon
+					</button>
+				</label>
+			</fieldset>
 
 			<p>
-				Total: <PriceTag price={state.total} /> /{subscriptionPlan.billing_interval}
+				Total: <PriceTag price={state.total} /> /
+				{subscriptionPlan.billing_interval}
 			</p>
+
+      <p className={'debug'}> useReducer to calc added coupon (mention if one time, duraton, or forever)</p>
 
 			<footer
 			// className={styles.footer}
@@ -226,13 +320,16 @@ export function CheckoutSubscriptionPlanForm({
 					couponName={state.couponName}
 				/> */}
 				<Link
-          className={'button medium'} 
+					className={"button medium"}
 					href={
 						`/checkout/subscription?id=${subscriptionPlan.id}` +
 						"&" +
 						createQueryString(
 							"addons",
-							state.addonOptions.filter((adn) => adn.isChecked).flatMap(adn => adn.id).join(",")
+							state.addonOptions
+								.filter((adn) => adn.isChecked)
+								.flatMap((adn) => adn.id)
+								.join(",")
 						)
 					}
 				>

@@ -226,6 +226,9 @@ export type CartItem = Lists.CartItem.Item & {
 }
 
 export type Coupon = Lists.Coupon.Item & {
+	//? virtual
+	typeof: "coupon"
+	redemptions: number
 	products: Product[]
 	subscriptionItems: SubscriptionItem[]
 	subscriptionPlans: SubscriptionPlan[]
@@ -347,8 +350,8 @@ export type OrderItem = Lists.OrderItem.Item & {
 	dateCreated: string
 	dateModified: string
 	order: Order
-  //? virtual subTotal * quantity
-  total: number
+	//? virtual subTotal * quantity
+	total: number
 }
 
 export type Availability = Lists.Availability.Item & {

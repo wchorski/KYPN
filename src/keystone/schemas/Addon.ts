@@ -70,7 +70,7 @@ export const Addon: Lists.Addon = list({
 			},
 		}),
 		price: integer({
-			defaultValue: 0,
+			// defaultValue: 0,
 			validation: { isRequired: true, min: 0 },
 		}),
     // TODO subscription price. billing_interval is taken from subscriptionPlan

@@ -14,8 +14,8 @@ button.remove {
 	background-color: var(--c-body);
 	color: var(--c-error) !important;
 }
-
-li.item :global {
+/* list item */
+.item :global {
 	padding: var(--space-s);
 	border-bottom: 1px solid rgba(43, 43, 43, 0.424);
 	display: flex;

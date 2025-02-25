@@ -1,4 +1,4 @@
-import { list, group } from "@keystone-6/core"
+import { list, group, graphql } from "@keystone-6/core"
 import type { Lists } from ".keystone/types"
 import {
 	integer,
@@ -6,10 +6,11 @@ import {
 	select,
 	text,
 	timestamp,
+	virtual,
 } from "@keystone-6/core/fields"
 import { stripeCouponCreate, stripeCouponDelete } from "../../lib/stripe"
 import { isLoggedIn, permissions, rules } from "../access"
-import { Duration } from "../types"
+import { Duration, OrderItem } from "../types"
 import { codeFormat } from "../../lib/slugFormat"
 
 // TODO figoure out coupons
@@ -43,6 +44,17 @@ export const Coupon: Lists.Coupon = list({
 	},
 
 	fields: {
+		typeof: virtual({
+			field: graphql.field({
+				type: graphql.String,
+				resolve() {
+					return "coupon"
+				},
+			}),
+			ui: {
+				itemView: { fieldMode: "hidden" },
+			},
+		}),
 		name: text({
 			isIndexed: "unique",
 			validation: { isRequired: true, length: { min: 5, max: 200 } },
@@ -141,9 +153,21 @@ export const Coupon: Lists.Coupon = list({
 			// description: 'Group description',
 
 			fields: {
-				redeptions: integer({
-					validation: { isRequired: true, min: 0 },
-					defaultValue: 0,
+				// redemptions: integer({
+				// 	validation: { isRequired: true, min: 0 },
+				// 	defaultValue: 0,
+				// }),
+				redemptions: virtual({
+					field: graphql.field({
+						type: graphql.Int,
+						async resolve(item, args, context) {
+							const orderItemsCount = await context.db.OrderItem.count({
+								where: { coupon: { id: { equals: item.id } } },
+							})
+
+							return orderItemsCount
+						},
+					}),
 				}),
 				dateCreated: timestamp({
 					defaultValue: { kind: "now" },

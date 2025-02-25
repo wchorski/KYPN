@@ -1,20 +1,9 @@
 "use client"
-import { SelectField } from "@components/forms/SelectField"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { useCart } from "@components/hooks/CartStateContext"
 import { InputField } from "@components/InputField"
-import { TextareaField } from "@components/TextareaField"
-// import { useForm } from "@hooks/useForm"
 import { useFormState } from "react-dom"
-import { Rental, SelectOption } from "@ks/types"
-import {
-	postRentalToCart,
-	RentalToCartState,
-} from "@lib/actions/postRentalToCart"
 import { form } from "@styles/menus/form.module.scss"
-import Link from "next/link"
-import { dateFormatLocalDateTime } from "@lib/dateFormatter"
-import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
 import { useRouter } from "next/navigation"
 import { CSSProperties, useState } from "react"
 import { AddToCartState, postAddToCart } from "@lib/actions/postAddToCart"
@@ -26,7 +15,7 @@ type Props = {
 
 const today = new Date()
 
-export function CouponReedemForm({ code }: Props) {
+export function CouponAddToCartForm({ code }: Props) {
 	const router = useRouter()
 	const { addToCart } = useCart()
 
@@ -82,21 +71,15 @@ export function CouponReedemForm({ code }: Props) {
 					type="text"
 					name={"couponCode"}
 					label="Coupon Code"
-          placeholder="D1$C0VNT..."
+					placeholder="D1$C0VNT..."
 					error={state?.valueErrors?.couponCode}
 					defaultValue={state?.values?.couponCode}
 				/>
 
 				<SubmitButton label={"Apply"} />
 			</Flex>
-      {/* // TODO animate this to pop in and out. like how blog `share link` works */}
-			{!state?.success ? (
-				<></>
-			) : (
-				<p className={"success"}>
-					{state?.success}
-				</p>
-			)}
+			{/* // TODO animate this to pop in and out. like how blog `share link` works */}
+			{!state?.success ? <></> : <p className={"success"}>{state?.success}</p>}
 
 			<p className={"error"} style={errorStyle}>
 				{state?.error}

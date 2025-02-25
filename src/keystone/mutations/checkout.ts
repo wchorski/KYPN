@@ -79,11 +79,13 @@ export const checkout = (base: BaseSchemaMeta) =>
             id
             amount_off
             percent_off
+            redemptions
           }
         `,
 			})) as CartItem[]
 
 			const rentalItem = cartItems.find((item) => item.rental)?.rental
+			const couponItem = cartItems.find((item) => item.coupon)?.coupon
 
 			const amountTotal = calcTotalPrice(cartItems)
 			const transactionFees =

@@ -15,7 +15,7 @@ import { CartItemsList } from "./CartItemsList"
 import { CartTotal } from "./CartTotal"
 import { CartBadgeButton } from "./CartBadgeButton"
 import Flex from "@components/layouts/Flex"
-import { CouponReedemForm } from "./CouponReedemForm"
+import { CouponAddToCartForm } from "./CouponAddToCartForm"
 
 export function ShoppingCart() {
 	const elementRef = useRef<HTMLDivElement | null>(null)
@@ -43,10 +43,6 @@ export function ShoppingCart() {
 			document.removeEventListener("click", handleClickOutside)
 		}
 	}, [handleClickOutside])
-
-	console.log(cartItems)
-
-	const hasCoupon = cartItems.some((item) => item.coupon !== null)
 
 	return (
 		<div
@@ -80,7 +76,7 @@ export function ShoppingCart() {
 
 			<footer>
 	
-				{!cartItems.some((item) => item.coupon !== null) && <CouponReedemForm />}
+				{!cartItems.some((item) => item.coupon !== null) && <CouponAddToCartForm />}
 
 				<div className="flex" style={{ alignItems: "baseline" }}>
 					<h3>Total: </h3>
