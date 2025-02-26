@@ -138,6 +138,10 @@ export const Coupon: Lists.Coupon = list({
 			ref: "SubscriptionPlan.coupons",
 			many: true,
 		}),
+		subscriptionItems: relationship({
+			ref: "SubscriptionItem.coupon",
+			many: true,
+		}),
 		events: relationship({
 			ref: "Event.coupons",
 			many: true,

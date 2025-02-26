@@ -75,6 +75,7 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",
 		line_items: line_items,
+    //? subscription has it's own logic
 		// mode: hasSubscription ? "subscription" : "payment",
 		mode: "payment",
 		return_url: returnUrl,

@@ -2,7 +2,6 @@ import Stripe from "stripe"
 import "dotenv/config"
 import { envs } from "../../envs"
 import { Billing_Interval, Duration, SubscriptionItem } from "../keystone/types"
-import { active } from "@styles/nav.module.css"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! STRIP_SECRET is missing.")
 
@@ -330,28 +329,27 @@ type Coupon = {
 	amount_off?: number
 	duration: Duration
 	duration_in_months?: number
-  currency?:string
+	currency?: string
 }
 
-export async function stripeCouponDelete(id:string){
-  try {
-    await stripeConfig.coupons.del(id)
-    
-  } catch (error) {
-    console.log('💳❌ STRIPE:: ', error);
-  }
+export async function stripeCouponDelete(id: string) {
+	try {
+		await stripeConfig.coupons.del(id)
+	} catch (error) {
+		console.log("💳❌ STRIPE:: ", error)
+	}
 }
 
 export async function stripeCouponCreate({
 	stripeId,
 	name,
-  code,
+	code,
 	amount_off,
 	percent_off,
 	duration,
 	duration_in_months,
 	couponId,
-  currency = 'usd',
+	currency = "usd",
 }: Coupon) {
 	if (!envs.STRIPE_PUBLIC_KEY) return
 	//? if product has stripeId then find and update existing product
@@ -380,16 +378,15 @@ export async function stripeCouponCreate({
 
 	let couponParams: Stripe.CouponCreateParams = {
 		id: code,
-    name,
+		name,
 		duration,
 		...(duration === "repeating" ? { duration_in_months } : {}),
 		...(amount_off ? { amount_off } : {}),
 		...(percent_off ? { percent_off } : {}),
-    currency,
+		currency,
 		metadata: {
 			couponId: couponId || "",
 		},
-    
 	}
 
 	const coupon = await stripeConfig.coupons.create(couponParams)
@@ -397,24 +394,46 @@ export async function stripeCouponCreate({
 }
 
 type SubscriptionCreate = {
+	subscriptionPlanId: string
 	stripeCustomerId: string
 	stripePriceId: string
+	couponId?: string
+	trial_period_days?: number
 }
 
 export async function stripeSubscriptionCreate({
 	stripeCustomerId,
 	stripePriceId,
+	subscriptionPlanId,
+	couponId,
+  //? override on subscriptionPlan trial
+	trial_period_days,
 }: SubscriptionCreate) {
 	if (!envs.STRIPE_PUBLIC_KEY) return
 
 	try {
 		const subscription = await stripeConfig.subscriptions.create({
 			customer: stripeCustomerId,
+
 			items: [
 				{
 					price: stripePriceId,
+					quantity: 1,
+					metadata: {
+						subscriptionPlanId: subscriptionPlanId,
+					},
 				},
 			],
+			...(couponId
+				? {
+						discounts: [{ coupon: couponId }],
+				  }
+				: {}),
+			...(trial_period_days
+				? {
+						trial_period_days: trial_period_days,
+				  }
+				: {}),
 			metadata: {
 				type: "subscriptionItem",
 			},
@@ -426,7 +445,7 @@ export async function stripeSubscriptionCreate({
 			type: error.type,
 			code: error.code,
 			message: error.raw.message,
-			log: "!!! If seeding, stripe product did not exist and this func will create a new one with a new ID",
+			log: "!!! If seeding, stripe subscriptionPlan did not exist and this func will create a new one with a new ID",
 		})
 	}
 }

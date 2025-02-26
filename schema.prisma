@@ -218,51 +218,56 @@ model Availability {
 }
 
 model SubscriptionPlan {
-  id               String             @id @default(cuid())
-  image            String             @default("")
-  author           User?              @relation("SubscriptionPlan_author", fields: [authorId], references: [id])
-  authorId         String?            @map("author")
-  name             String             @default("")
-  slug             String             @unique @default("")
-  excerpt          String             @default("")
-  description      Json               @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  status           String             @default("DRAFT")
-  price            Int
-  billing_interval String             @default("month")
-  stockMax         Int
-  addons           Addon[]            @relation("Addon_subscriptionPlans")
-  coupons          Coupon[]           @relation("Coupon_subscriptionPlans")
-  items            SubscriptionItem[] @relation("SubscriptionItem_subscriptionPlan")
-  dateCreated      DateTime           @default(now())
-  dateModified     DateTime           @default(now())
-  categories       Category[]         @relation("Category_subscriptionPlans")
-  tags             Tag[]              @relation("SubscriptionPlan_tags")
-  stripeProductId  String             @default("")
-  stripePriceId    String             @default("")
+  id                String             @id @default(cuid())
+  image             String             @default("")
+  author            User?              @relation("SubscriptionPlan_author", fields: [authorId], references: [id])
+  authorId          String?            @map("author")
+  name              String             @default("")
+  slug              String             @unique @default("")
+  excerpt           String             @default("")
+  description       Json               @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  status            String             @default("DRAFT")
+  price             Int
+  billing_interval  String             @default("month")
+  trial_period_days Int                @default(30)
+  stockMax          Int
+  addons            Addon[]            @relation("Addon_subscriptionPlans")
+  coupons           Coupon[]           @relation("Coupon_subscriptionPlans")
+  items             SubscriptionItem[] @relation("SubscriptionItem_subscriptionPlan")
+  dateCreated       DateTime           @default(now())
+  dateModified      DateTime           @default(now())
+  categories        Category[]         @relation("Category_subscriptionPlans")
+  tags              Tag[]              @relation("SubscriptionPlan_tags")
+  stripeProductId   String             @unique @default("")
+  stripePriceId     String             @unique @default("")
 
   @@index([authorId])
 }
 
 model SubscriptionItem {
-  id                   String            @id @default(cuid())
-  custom_price         Int?
-  subscriptionPlan     SubscriptionPlan? @relation("SubscriptionItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
-  subscriptionPlanId   String?           @map("subscriptionPlan")
-  isActive             Boolean           @default(true)
-  isDelinquent         Boolean           @default(false)
-  status               String            @default("REQUESTED")
-  billing_interval     String
-  notes                String            @default("")
-  addons               Addon[]           @relation("Addon_subscriptionItems")
-  user                 User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
-  userId               String?           @map("user")
-  stripeSubscriptionId String            @default("")
-  dateCreated          DateTime          @default(now())
-  dateModified         DateTime          @default(now())
-  orderItem            OrderItem?        @relation("OrderItem_subscriptionItem")
+  id                       String            @id @default(cuid())
+  custom_price             Int?
+  subscriptionPlan         SubscriptionPlan? @relation("SubscriptionItem_subscriptionPlan", fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId       String?           @map("subscriptionPlan")
+  isActive                 Boolean           @default(true)
+  isDelinquent             Boolean           @default(false)
+  status                   String            @default("REQUESTED")
+  billing_interval         String
+  notes                    String            @default("")
+  addons                   Addon[]           @relation("Addon_subscriptionItems")
+  user                     User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
+  userId                   String?           @map("user")
+  stripeSubscriptionId     String            @default("")
+  stripeSubscriptionItemId String            @default("")
+  dateCreated              DateTime          @default(now())
+  dateModified             DateTime          @default(now())
+  orderItem                OrderItem?        @relation("OrderItem_subscriptionItem")
+  coupon                   Coupon?           @relation("SubscriptionItem_coupon", fields: [couponId], references: [id])
+  couponId                 String?           @map("coupon")
 
   @@index([subscriptionPlanId])
   @@index([userId])
+  @@index([couponId])
 }
 
 model Product {
@@ -404,6 +409,7 @@ model Coupon {
   max_redemptions       Int                @default(9999)
   products              Product[]          @relation("Coupon_products")
   subscriptionPlans     SubscriptionPlan[] @relation("Coupon_subscriptionPlans")
+  subscriptionItems     SubscriptionItem[] @relation("SubscriptionItem_coupon")
   events                Event[]            @relation("Coupon_events")
   services              Service[]          @relation("Coupon_services")
   dateCreated           DateTime           @default(now())

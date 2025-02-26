@@ -7,12 +7,14 @@ type Props = {
 	ids?: string[]
 }
 
-export default async function fetchAddons({ ids = [], session, query }: Props) {
+export default async function fetchAddons({ ids, session, query }: Props) {
 	try {
+		if (ids && ids.length <= 0) return { addons: [] }
+
 		const addons = (await keystoneContext
 			.withSession(session)
 			.query.Addon.findMany({
-				...(ids.length > 0
+				...(ids && ids.length > 0
 					? {
 							where: {
 								id: {

@@ -2,10 +2,10 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { StripeSubscriptionCheckout } from "@components/ecommerce/StripeSubscriptionCheckout"
 import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { keystoneContext } from "@ks/context"
-import { User } from "@ks/types"
+import { Addon, User } from "@ks/types"
 import fetchAddons from "@lib/fetchdata/fetchAddons"
+import fetchRedeemCoupon from "@lib/fetchdata/fetchRedeemCoupon"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
 import {
@@ -21,7 +21,7 @@ type Props = {
 	searchParams: {
 		id: string
 		addons: string | undefined
-		coupons: string | undefined
+		couponCode: string | undefined
 	}
 	params: { id: string }
 }
@@ -35,9 +35,9 @@ export default async function CheckoutSubscriptionPage({
 	params,
 	searchParams,
 }: Props) {
-	const { id, addons: addonParams, coupons: couponParams } = await searchParams
+	const { id, addons: addonParams, couponCode } = await searchParams
 	const addonIds = addonParams?.split(",") || []
-	const couponIds = couponParams?.split(",") || []
+
 	const session = await getServerSession(nextAuthOptions)
 	if (!session) return redirect("/login")
 	const user = (await keystoneContext.withSession(session).query.User.findOne({
@@ -52,18 +52,25 @@ export default async function CheckoutSubscriptionPage({
 		query: QUERY_SUBPLAN,
 		session,
 	})
-	const { addons = [], error: errorAddons } = await fetchAddons({
-		ids: addonIds,
-		query: QUERY_ADDONS,
-		session,
+	// const { addons = [], error: errorAddons } = await fetchAddons({
+	// 	ids: addonIds,
+	// 	query: QUERY_ADDONS,
+	// 	session,
+	// })
+	// console.log({ addons })
+  // TODO currently not supporting subscription addons because it's a mf headache
+  const addons = [] as Addon[]
+  const errorAddons = false
+
+	const { coupon, error: errorCoupon } = await fetchRedeemCoupon({
+		code: couponCode,
+		query: COUPON_QUERY,
 	})
 
-  // TODO fetchCoupons
-
 	if (!user || !subscriptionPlan) return notFound()
-	if (error || errorAddons)
+	if (error || errorAddons || errorCoupon)
 		return (
-			<ErrorPage error={error || errorAddons}>
+			<ErrorPage error={error || errorAddons || errorCoupon}>
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
@@ -77,7 +84,7 @@ export default async function CheckoutSubscriptionPage({
 				<StripeSubscriptionCheckout
 					subscriptionPlan={plainObj(subscriptionPlan)}
 					addons={plainObj(addons)}
-					couponIds={couponIds}
+					coupon={plainObj(coupon)}
 					email={session.user.email}
 					user={session.user as User}
 				/>
@@ -85,7 +92,10 @@ export default async function CheckoutSubscriptionPage({
 		</main>
 	)
 }
-
+const COUPON_QUERY = `
+  id
+  stripeId
+`
 const QUERY_ADDONS = `
   id
   name
@@ -124,4 +134,5 @@ const QUERY_SUBPLAN = `
   stockMax
   stripePriceId
   stripeProductId
+  trial_period_days
 `

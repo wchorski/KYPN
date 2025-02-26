@@ -17,6 +17,7 @@ import { envs } from "../../../envs"
 import { mailOrder } from "../../lib/mail"
 import { User, Order as TOrder, OrderItem } from "../../keystone/types"
 
+// TODO thinking about changing to `Transaction` to all encompass products, subscriptions, etc.
 export const Order: Lists.Order = list({
 	access: {
 		filter: {

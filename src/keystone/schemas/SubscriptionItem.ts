@@ -125,9 +125,9 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
               price
             `,
 					})
-					console.log({ addons })
+					console.log('🐸 addons dont work exactly right for subscritions fyi');
 					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
-					console.log({ addonsPrice })
+
 					const subTotal = subPlan.price + addonsPrice
 
 					return subTotal
@@ -223,6 +223,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			label: "Metadata",
 			fields: {
 				stripeSubscriptionId: text(),
+				stripeSubscriptionItemId: text(),
 				dateCreated: timestamp({
 					defaultValue: { kind: "now" },
 					validation: { isRequired: true },
@@ -234,6 +235,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			},
 		}),
 		orderItem: relationship({ ref: "OrderItem.subscriptionItem", many: false }),
+		coupon: relationship({ ref: "Coupon.subscriptionItems", many: false }),
 	},
 
 	hooks: {

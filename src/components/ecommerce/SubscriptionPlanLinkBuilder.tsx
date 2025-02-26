@@ -18,6 +18,7 @@ import Flex from "@components/layouts/Flex"
 import { CouponRedeemForm } from "./CouponRedeemForm"
 import { bg_c_tertiary } from "@styles/colorthemes.module.css"
 import { Card } from "@components/layouts/Card"
+import { envs } from "@/envs"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan
@@ -115,10 +116,11 @@ export function SubscriptionPlanLinkBuilder({
 	// cred - https://nextjs.org/docs/app/api-reference/functions/use-search-params
 	const createQueryString = useCallback(
 		(name: string, value: string) => {
+			if (!value) return ""
 			const params = new URLSearchParams(searchParams.toString())
 			params.set(name, value)
 
-			return params.toString()
+			return "&" + params.toString()
 		},
 		[searchParams]
 	)
@@ -130,7 +132,9 @@ export function SubscriptionPlanLinkBuilder({
 		if (!couponApplied) return subscriptionPlan.price + addonAccumulatedTotal
 		let discountedTotal = couponApplied.amount_off
 			? subscriptionPlan.price - couponApplied.amount_off
-			: subscriptionPlan.price * (couponApplied.percent_off / 100)
+			: couponApplied.percent_off
+			? subscriptionPlan.price * (couponApplied.percent_off / 100)
+			: subscriptionPlan.price
 		return discountedTotal + addonAccumulatedTotal
 	}
 
@@ -151,13 +155,13 @@ export function SubscriptionPlanLinkBuilder({
 	return (
 		<Card
 			// className={form}
-      gap={'var(--space-m)'}
-      colorTheme={'outline_c_tertiary'}
+			gap={"var(--space-m)"}
+			colorTheme={"outline_c_tertiary"}
 		>
 			<h2>Subscription Builder</h2>
-
-			{addons && addons.length > 0 && (
-				<fieldset className={stand_alone} >
+			{/* // TODO currently not supporting subscription addons because it's a mf headache const addons = [] as Addon[] const errorAddons = false */}
+			{/* {addons && addons.length > 0 && (
+				<fieldset className={stand_alone}>
 					<legend> Add-Ons</legend>
 					{state.addonOptions.length === 0 && (
 						<p className="subtext"> no addons available </p>
@@ -193,7 +197,7 @@ export function SubscriptionPlanLinkBuilder({
 						))}
 					</div>
 				</fieldset>
-			)}
+			)} */}
 			{state.coupon ? (
 				<div
 					className={styles.item}
@@ -251,7 +255,7 @@ export function SubscriptionPlanLinkBuilder({
 				/>
 			)}
 
-			<p style={{fontSize: '1.6rem'}}>
+			<p style={{ fontSize: "1.6rem", margin: "0" }}>
 				{!state.coupon ? (
 					<>
 						<PriceTag price={state.total} /> /
@@ -264,12 +268,19 @@ export function SubscriptionPlanLinkBuilder({
 							{subscriptionPlan.billing_interval}
 						</s>
 						<br />
-            <PriceTag price={calcDiscount(state.total, state.coupon)} /> /
+						<PriceTag price={calcDiscount(state.total, state.coupon)} /> /
 						{subscriptionPlan.billing_interval}
-						<span className={["discount", "pill", bg_c_tertiary].join(' ')}>
-
+						<span className={["discount", "pill", bg_c_tertiary].join(" ")}>
 							{handleCouponDetails(state.coupon)}
 						</span>
+					</>
+				)}
+				{subscriptionPlan.trial_period_days > 0 && (
+					<>
+						<br />
+						<small className={"sub-text"}>
+							includes {subscriptionPlan.trial_period_days} day trial period
+						</small>
 					</>
 				)}
 
@@ -290,7 +301,6 @@ export function SubscriptionPlanLinkBuilder({
 					className={"button medium"}
 					href={
 						`/checkout/subscription?id=${subscriptionPlan.id}` +
-						"&" +
 						createQueryString(
 							"addons",
 							state.addonOptions
@@ -298,11 +308,7 @@ export function SubscriptionPlanLinkBuilder({
 								.flatMap((adn) => adn.id)
 								.join(",")
 						) +
-						"&" +
-						createQueryString(
-							"couponCode",
-							state.coupon?.code || ''
-						)
+						createQueryString("couponCode", state.coupon?.code || "")
 					}
 				>
 					Checkout
@@ -312,15 +318,15 @@ export function SubscriptionPlanLinkBuilder({
 	)
 }
 
-function calcDiscount(total:number, coupon:Coupon){
-  if(coupon.amount_off){
-    return total - coupon.amount_off
-  }
-  if(coupon.percent_off){
-    const decimal = coupon.percent_off / 100
-    const discount = total * decimal
-    return total * discount
-  }
+function calcDiscount(total: number, coupon: Coupon) {
+	if (coupon.amount_off) {
+		return total - coupon.amount_off
+	}
+	if (coupon.percent_off) {
+		const decimal = coupon.percent_off / 100
+		const discount = total * decimal
+		return total * discount
+	}
 
-  return total
+	return total
 }

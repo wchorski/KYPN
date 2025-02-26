@@ -1540,6 +1540,7 @@ type SubscriptionPlan {
   status: String
   price: Int
   billing_interval: String
+  trial_period_days: Int
   stockMax: Int
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
@@ -1564,6 +1565,8 @@ type SubscriptionPlan_description_Document {
 input SubscriptionPlanWhereUniqueInput {
   id: ID
   slug: String
+  stripeProductId: String
+  stripePriceId: String
 }
 
 input SubscriptionPlanWhereInput {
@@ -1579,6 +1582,7 @@ input SubscriptionPlanWhereInput {
   status: StringFilter
   price: IntFilter
   billing_interval: StringFilter
+  trial_period_days: IntFilter
   stockMax: IntFilter
   addons: AddonManyRelationFilter
   coupons: CouponManyRelationFilter
@@ -1600,6 +1604,7 @@ input SubscriptionPlanOrderByInput {
   status: OrderDirection
   price: OrderDirection
   billing_interval: OrderDirection
+  trial_period_days: OrderDirection
   stockMax: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -1617,6 +1622,7 @@ input SubscriptionPlanUpdateInput {
   status: String
   price: Int
   billing_interval: String
+  trial_period_days: Int
   stockMax: Int
   addons: AddonRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
@@ -1644,6 +1650,7 @@ input SubscriptionPlanCreateInput {
   status: String
   price: Int
   billing_interval: String
+  trial_period_days: Int
   stockMax: Int
   addons: AddonRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
@@ -1672,9 +1679,11 @@ type SubscriptionItem {
   addonsCount(where: AddonWhereInput! = {}): Int
   user: User
   stripeSubscriptionId: String
+  stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
   orderItem: OrderItem
+  coupon: Coupon
 }
 
 input SubscriptionItemWhereUniqueInput {
@@ -1696,9 +1705,11 @@ input SubscriptionItemWhereInput {
   addons: AddonManyRelationFilter
   user: UserWhereInput
   stripeSubscriptionId: StringFilter
+  stripeSubscriptionItemId: StringFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
   orderItem: OrderItemWhereInput
+  coupon: CouponWhereInput
 }
 
 input IntNullableFilter {
@@ -1721,6 +1732,7 @@ input SubscriptionItemOrderByInput {
   billing_interval: OrderDirection
   notes: OrderDirection
   stripeSubscriptionId: OrderDirection
+  stripeSubscriptionItemId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -1736,14 +1748,22 @@ input SubscriptionItemUpdateInput {
   addons: AddonRelateToManyForUpdateInput
   user: UserRelateToOneForUpdateInput
   stripeSubscriptionId: String
+  stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
   orderItem: OrderItemRelateToOneForUpdateInput
+  coupon: CouponRelateToOneForUpdateInput
 }
 
 input SubscriptionPlanRelateToOneForUpdateInput {
   create: SubscriptionPlanCreateInput
   connect: SubscriptionPlanWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CouponRelateToOneForUpdateInput {
+  create: CouponCreateInput
+  connect: CouponWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -1763,14 +1783,21 @@ input SubscriptionItemCreateInput {
   addons: AddonRelateToManyForCreateInput
   user: UserRelateToOneForCreateInput
   stripeSubscriptionId: String
+  stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
   orderItem: OrderItemRelateToOneForCreateInput
+  coupon: CouponRelateToOneForCreateInput
 }
 
 input SubscriptionPlanRelateToOneForCreateInput {
   create: SubscriptionPlanCreateInput
   connect: SubscriptionPlanWhereUniqueInput
+}
+
+input CouponRelateToOneForCreateInput {
+  create: CouponCreateInput
+  connect: CouponWhereUniqueInput
 }
 
 type Product {
@@ -2103,12 +2130,6 @@ input CartItemUpdateInput {
   dateModified: DateTime
 }
 
-input CouponRelateToOneForUpdateInput {
-  create: CouponCreateInput
-  connect: CouponWhereUniqueInput
-  disconnect: Boolean
-}
-
 input ProductRelateToOneForUpdateInput {
   create: ProductCreateInput
   connect: ProductWhereUniqueInput
@@ -2149,11 +2170,6 @@ input CartItemCreateInput {
   user: UserRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
-}
-
-input CouponRelateToOneForCreateInput {
-  create: CouponCreateInput
-  connect: CouponWhereUniqueInput
 }
 
 input ProductRelateToOneForCreateInput {
@@ -2401,6 +2417,8 @@ type Coupon {
   productsCount(where: ProductWhereInput! = {}): Int
   subscriptionPlans(where: SubscriptionPlanWhereInput! = {}, orderBy: [SubscriptionPlanOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionPlanWhereUniqueInput): [SubscriptionPlan!]
   subscriptionPlansCount(where: SubscriptionPlanWhereInput! = {}): Int
+  subscriptionItems(where: SubscriptionItemWhereInput! = {}, orderBy: [SubscriptionItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SubscriptionItemWhereUniqueInput): [SubscriptionItem!]
+  subscriptionItemsCount(where: SubscriptionItemWhereInput! = {}): Int
   events(where: EventWhereInput! = {}, orderBy: [EventOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EventWhereUniqueInput): [Event!]
   eventsCount(where: EventWhereInput! = {}): Int
   services(where: ServiceWhereInput! = {}, orderBy: [ServiceOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ServiceWhereUniqueInput): [Service!]
@@ -2432,6 +2450,7 @@ input CouponWhereInput {
   max_redemptions: IntFilter
   products: ProductManyRelationFilter
   subscriptionPlans: SubscriptionPlanManyRelationFilter
+  subscriptionItems: SubscriptionItemManyRelationFilter
   events: EventManyRelationFilter
   services: ServiceManyRelationFilter
   dateCreated: DateTimeFilter
@@ -2465,6 +2484,7 @@ input CouponUpdateInput {
   max_redemptions: Int
   products: ProductRelateToManyForUpdateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForUpdateInput
+  subscriptionItems: SubscriptionItemRelateToManyForUpdateInput
   events: EventRelateToManyForUpdateInput
   services: ServiceRelateToManyForUpdateInput
   dateCreated: DateTime
@@ -2488,6 +2508,7 @@ input CouponCreateInput {
   max_redemptions: Int
   products: ProductRelateToManyForCreateInput
   subscriptionPlans: SubscriptionPlanRelateToManyForCreateInput
+  subscriptionItems: SubscriptionItemRelateToManyForCreateInput
   events: EventRelateToManyForCreateInput
   services: ServiceRelateToManyForCreateInput
   dateCreated: DateTime

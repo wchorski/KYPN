@@ -1,8 +1,14 @@
 "use server"
+//? look into `stripe.subscriptions.create` instead of `checkout.sessions` - https://docs.stripe.com/billing/subscriptions/multiple-products
+//? https://www.youtube.com/watch?v=ag7HXbgJtuk
+//! if trial period. create subscription right away, and create a "add credit card" form in the /account dashboard
+//? https://docs.stripe.com/payments/save-and-reuse
+
 import { envs } from "@/envs"
 import type {
 	Addon,
 	CartItem,
+	Coupon,
 	Product,
 	SubscriptionPlan,
 	User,
@@ -18,7 +24,7 @@ export type StripeCheckoutSessionAction = {
 	user: User
 	email?: string
 	subscriptionPlan: SubscriptionPlan
-	couponIds: string[]
+	coupon?: Coupon
 	addons: Addon[]
 	// TODO this is here for my peace of mind, but prob can omit
 	// itemType: "ticket" | "product" | "booking"
@@ -37,7 +43,7 @@ export type StripeCheckoutSessionAction = {
 export const postStripeSubscriptionSession = async (
 	props: StripeCheckoutSessionAction
 ) => {
-	const { subscriptionPlan, couponIds, addons, email, user } = props
+	const { subscriptionPlan, coupon, addons, email, user } = props
 
 	const subscriptionLineItem = createSubscriptionLineItem(subscriptionPlan)
 	const addonLineItems = addons
@@ -66,14 +72,21 @@ export const postStripeSubscriptionSession = async (
 			typeof: "subscription-item",
 			customerId: user.id,
 			orderId: "",
+      // TODO make this a 'per listItem'. but i'll have to fix it on product creation for it to work
 			subscriptionPlanId: subscriptionPlan.id,
+			couponId: coupon?.id || "",
 		},
 		// https://docs.stripe.com/payments/checkout/free-trials
-		...(envs.STRIPE_SUB_TRIAL_PERIOD_DAYS
+		...(subscriptionPlan.trial_period_days
 			? {
 					subscription_data: {
-						trial_period_days: envs.STRIPE_SUB_TRIAL_PERIOD_DAYS,
+						trial_period_days: subscriptionPlan.trial_period_days,
 					},
+			  }
+			: {}),
+		...(coupon
+			? {
+					discounts: [{ coupon: coupon.stripeId }],
 			  }
 			: {}),
 	})
@@ -124,7 +137,7 @@ function createSubscriptionLineItem(
 		quantity: 1,
 		// price: product.stripePriceId,
 		...(subscriptionPlan.stripePriceId
-			? { price: subscriptionPlan.stripePriceId }
+			? { price: subscriptionPlan.stripePriceId,  }
 			: {
 					price_data: {
 						// TODO make this part of CartItem schema item.currency, not hard coded
@@ -137,7 +150,7 @@ function createSubscriptionLineItem(
 							images: [subscriptionPlan?.image || ""],
 							metadata: {
 								subscriptionPlanId: subscriptionPlan.id,
-								typeof: "subscriptionPlan",
+								typeof: "subscription-item",
 							},
 						},
 

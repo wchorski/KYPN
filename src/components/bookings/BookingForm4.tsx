@@ -2,6 +2,9 @@
 // cred - https://www.sumologic.com/blog/react-hook-typescript/
 // cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
 // cred ByteGrad -  https://www.youtube.com/watch?v=GgyP0_b-WPY
+
+throw new Error('!!! fix layout with Grid component')
+
 import {
 	Addon,
 	AddonCheckboxOptions,
@@ -142,7 +145,6 @@ type FormAsideAction =
 			}
 	  }
 
-const genTimeStrings = generateTimesArray().map((t) => t.value)
 
 export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	const {

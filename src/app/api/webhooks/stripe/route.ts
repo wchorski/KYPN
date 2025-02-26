@@ -60,6 +60,17 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			// This approach helps you avoid hitting rate limits.
 			break
 
+		case "invoice.created":
+			break
+		case "invoice.updated":
+			break
+		case "invoice.finalized":
+			break
+		case "invoice.payment_succeeded":
+			break
+		case "invoiceitem.created":
+			break
+
 		case "invoice.payment_failed":
 			// The payment failed or the customer does not have a valid payment method.
 			// The subscription becomes past_due. Notify your customer and send them to the
@@ -67,6 +78,8 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			// console.log(JSON.stringify(event.data.object, null, 2))
 
 			// afterFailure(event.data.object as Charge, event.data.object.metadata?.type)
+			break
+		case "payment_intent.created":
 			break
 
 		case "product.created":
@@ -85,7 +98,8 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 		case "customer.subscription.created":
 			//? handled with `checkout.session.completed`
-			console.log("🐸 customer.subscription.created")
+			console.log("🐸🐸🐸 customer.subscription.created")
+			handleSubscriptionCreate(stripePayload.data.object)
 		// if (!["trialing", "active"].includes(stripePayload.data.object.status))
 		// 	throw new Error(
 		// 		`!!! 💳❌ stripe subscription not "trialing" or "active": ${stripePayload.data.object.id} ${stripePayload.data.object.status}`
@@ -94,13 +108,17 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 		case "customer.subscription.updated":
 			console.log("🐸 customer.subscription.created")
-			// TODO is it possible to update KS database if subscription is edited from stripe?
-			// console.log(JSON.stringify(stripePayload.data.object, null, 2))
+		// TODO is it possible to update KS database if subscription is edited from stripe?
+		// console.log(JSON.stringify(stripePayload.data.object, null, 2))
 
 		case "customer.subscription.deleted":
 			console.log("🐸 customer.subscription.deleted")
-			// TODO is it possible to update KS database if subscription is edited from stripe?
-			// console.log(JSON.stringify(stripePayload.data.object, null, 2))
+		// TODO is it possible to update KS database if subscription is edited from stripe?
+		// console.log(JSON.stringify(stripePayload.data.object, null, 2))
+		case "customer.discount.created":
+			break
+		case "customer.subscription.trial_will_end":
+			break
 
 		default:
 			// other events that we don't handle
@@ -162,6 +180,71 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 // 	}
 // }
 
+type SubscriptionMetadata = {
+	metadata: {
+		couponId: string
+		customerId: string
+	}
+	items: {
+		data: {
+			metadata: {
+				subscriptionPlanId: string
+			}
+		}[]
+	}
+}
+
+async function handleSubscriptionCreate(
+	stripeSubscription: Stripe.Subscription
+) {
+	const {
+		// cancel_at,
+		// cancel_at_period_end,
+		// collection_method,
+		// customer,
+		// discounts,
+		// discount,
+		// latest_invoice,
+		// trial_start,
+		// trial_end,
+		id,
+		status,
+		items,
+		metadata,
+	} = stripeSubscription as Stripe.Subscription & SubscriptionMetadata
+	console.log("stripeSubscription")
+	console.log({ id, status, items, metadata })
+	if (items.object === "list") {
+		// TODO is it safe to do sudo here? should i create a seperate mutation?
+		const createdsubscriptionItems = await keystoneContext
+			.sudo()
+			.db.SubscriptionItem.createMany({
+				data: items.data.map((sub) => ({
+					stripeSubscriptionId: id,
+					stripeSubscriptionItemId: sub.id,
+					billing_interval: sub.plan.interval,
+					subscriptionPlan: {
+						connect: { stripeProductId: sub.plan.id },
+					},
+					user: { connect: { id: metadata.customerId } },
+					status:
+						status === "trialing"
+							? "TRIAL"
+							: status === "active"
+							? "ACTIVE"
+							: "REQUESTED",
+					...(metadata.couponId
+						? {
+								coupon: { connect: { id: metadata.couponId } },
+						  }
+						: {}),
+				})),
+			})
+
+		console.log({ createdsubscriptionItems })
+	}
+}
+
 async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	// console.log("webhook handleSuccessfulCheckout session::: ", { session })
 	const checkoutSession = await stripe.checkout.sessions
@@ -188,10 +271,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		throw new Error("!!! ❌ stripe did not have customerId in metadata")
 	// if (!checkoutSession.metadata?.typeof)
 	// 	throw new Error("!!! ❌ stripe did not have typeof in metadata")
-	if (
-		checkoutSession.mode === "payment" &&
-		checkoutSession.metadata?.typeof !== "subscription-item"
-	) {
+	if (checkoutSession.mode === "payment") {
 		const data = (await keystoneContext
 			.withSession({
 				session: {
@@ -223,40 +303,46 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 			checkout: data.checkout,
 		}
 	} else if (checkoutSession.mode === "subscription") {
-		const data = (await keystoneContext
-			.withSession({
-				session: {
-					itemId: checkoutSession.metadata.customerId,
-				},
-				stripe: {
-					payment_status: checkoutSession.payment_status,
-					id: checkoutSession.id,
-					payment_intent: checkoutSession.payment_intent,
-					customerId: checkoutSession.metadata.customerId,
-					amount_total: checkoutSession.amount_total,
-					subscriptionId: checkoutSession.subscription,
-					rentalId: checkoutSession.metadata.rentalId,
-				},
-			})
-			.graphql.run({
-				query: `
-          mutation CheckoutSubscription($subscriptionPlanId: String!, $addonIds: [String], $couponIds: [String]) {
-            checkoutSubscription(subscriptionPlanId: $subscriptionPlanId, addonIds: $addonIds, couponIds: $couponIds) {
-              id
-              status
-            }
-          }
-        `,
-				variables: {
-					subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
-					addonIds: [],
-					couponIds: [],
-				},
-			})) as { checkoutSubscription: { id: string; status: string } }
+		console.log('🐸🐸🐸 checkoutSession.mode === "subscription"')
+		const { id, metadata, amount_total, subscription, payment_status } =
+			checkoutSession
+		console.log({ id, metadata, amount_total, subscription, payment_status })
+		// const data = (await keystoneContext
+		// 	.withSession({
+		// 		session: {
+		// 			itemId: checkoutSession.metadata.customerId,
+		// 		},
+		// 		stripe: {
+		// 			payment_status: checkoutSession.payment_status,
+		// 			id: checkoutSession.id,
+		// 			payment_intent: checkoutSession.payment_intent,
+		// 			customerId: checkoutSession.metadata.customerId,
+		// 			amount_total: checkoutSession.amount_total,
+		// 			subscriptionId: checkoutSession.subscription,
+		// 			rentalId: checkoutSession.metadata.rentalId,
+		// 		},
+		// 	})
+		// 	.graphql.run({
+		// 		query: `
+		//       mutation CheckoutSubscription($subscriptionPlanId: String!, $addonIds: [String], $couponIds: [String]) {
+		//         checkoutSubscription(subscriptionPlanId: $subscriptionPlanId, addonIds: $addonIds, couponIds: $couponIds) {
+		//           id
+		//           status
+		//         }
+		//       }
+		//     `,
+		// 		variables: {
+		// 			subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
+		// 			addonIds: [],
+		// 			couponIds: [],
+		// 		},
+		// 	})) as { checkoutSubscription: { id: string; status: string } }
 
-		return {
-			checkout: data.checkoutSubscription,
-		}
+		// return {
+		// 	checkout: data.checkoutSubscription,
+		// }
+	} else if (checkoutSession.mode === "setup") {
+		console.log('🐸🐸🐸 checkoutSession.mode === "setup"')
 	}
 }
 

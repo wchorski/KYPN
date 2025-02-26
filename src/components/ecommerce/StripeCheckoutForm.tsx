@@ -52,10 +52,6 @@ export function StripeCheckoutForm({ user, email }: Props) {
 	// if (cartItems.length <= 0) return null
 	return (
 		<div id="stripe-checkout" key={cartTotal}>
-			<p>clientSecret: {clientSecret}</p>
-      <pre>
-       {JSON.stringify(options, null, 2)}
-      </pre>
 			{options ? (
 				<EmbeddedCheckoutProvider
 					stripe={stripePromise}

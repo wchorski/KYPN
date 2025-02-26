@@ -257,6 +257,7 @@ const query = `
   image
   name
   slug
+  trial_period_days
   description {
     document
   }

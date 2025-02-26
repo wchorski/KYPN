@@ -90,7 +90,8 @@ export const OrderItem: Lists.OrderItem = list({
 		validate: {
 			create: ({ resolvedData }) => {
 
-        if(!resolvedData.order?.connect) throw new Error('!!! OrderItem must be associated with an Order')
+        //? chicken and egg senario
+        // if(!resolvedData.order?.connect) throw new Error('!!! OrderItem must be associated with an Order')
           
 				const validationStrings = [
 					"product",

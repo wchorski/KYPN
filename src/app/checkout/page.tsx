@@ -2,9 +2,7 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
 import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
-import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
-import CartItem from "@components/ecommerce/CartItem"
 import type { User } from "@ks/types"
 import { plainObj } from "@lib/contentHelpers"
 import {
@@ -72,19 +70,6 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 					{someRentalItems && user.cart.find((item) => item.rental) && (
 						<>
 							<h2>Cart Items</h2>
-							{/* <ul className={"unstyled grid gap-m"}>
-								{cartRentalItems.map((item) => (
-									<CartItem
-										key={item.id}
-										item={plainObj(item)}
-										sessionId={session.itemId}
-									/>
-								))}
-								<CartItem
-									item={plainObj(user.cart.find((item) => item.rental))}
-									sessionId={session.itemId}
-								/>
-							</ul> */}
 							<CartItemsList />
 							<Card>
 								<h4>Notes</h4>

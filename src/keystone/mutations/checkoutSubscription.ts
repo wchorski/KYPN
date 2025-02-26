@@ -109,7 +109,6 @@ export const checkoutSubscription = (base: BaseSchemaMeta) =>
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					subTotal: subscriptionPlan.price,
 					// fees: transactionFees,
 					...(newOrderItem ? { items: { create: newOrderItem } } : {}),
 					user: { connect: { id: customerId } },

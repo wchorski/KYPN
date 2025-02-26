@@ -6,11 +6,15 @@ import {
 	select,
 	text,
 	timestamp,
-  virtual,
+	virtual,
 } from "@keystone-6/core/fields"
 import { document } from "@keystone-6/fields-document"
 import { permissions, rules } from "../access"
-import { stripeArchiveProduct, stripeProductCreate, stripeProductUpdate } from "../../lib/stripe"
+import {
+	stripeArchiveProduct,
+	stripeProductCreate,
+	stripeProductUpdate,
+} from "../../lib/stripe"
 import "dotenv/config"
 import { componentBlocks } from "../blocks"
 import { slugFormat } from "../../lib/slugFormat"
@@ -25,10 +29,9 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 	// access: allowAll,
 	access: {
 		filter: {
-			
 			query: rules.canViewSubscriptionPlans,
 			update: rules.canManageSubscriptionPlans,
-      delete: rules.canManageSubscriptionPlans,
+			delete: rules.canManageSubscriptionPlans,
 		},
 		operation: {
 			query: () => true,
@@ -39,7 +42,7 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 	},
 
 	fields: {
-    typeof: virtual({
+		typeof: virtual({
 			field: graphql.field({
 				type: graphql.String,
 				resolve() {
@@ -161,6 +164,11 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 			},
 			validation: { isRequired: true },
 		}),
+		trial_period_days: integer({
+			validation: { isRequired: true, min: 0 },
+			defaultValue: envs.STRIPE_SUB_TRIAL_PERIOD_DAYS,
+			ui: { description: "defaults to trial days set in .env" },
+		}),
 
 		stockMax: integer({ validation: { isRequired: true, min: 0 } }),
 
@@ -199,14 +207,14 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 					ref: "Tag.subscriptionPlans",
 					many: true,
 				}),
-				stripeProductId: text(),
-				stripePriceId: text(),
+				stripeProductId: text({ isIndexed: "unique" }),
+				stripePriceId: text({ isIndexed: "unique" }),
 			},
 		}),
 	},
 
 	hooks: {
-    validate: {
+		validate: {
 			create: async ({ resolvedData, context, inputData }) => {
 				if (!resolvedData.author) {
 					const currentUserId = await context.session.itemId
@@ -215,82 +223,83 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 			},
 		},
 		beforeOperation: {
-          create: async ({ item, resolvedData, context }) => {
-            const {
-              id,
-              name,
-              excerpt,
-              status,
-              author,
-              price,
-              stripeProductId,
-              stripePriceId,
-              image,
-              billing_interval,
-            } = resolvedData
-    
-            try {
-              const createdProduct = await stripeProductCreate({
-                // id,
-                name: String(name),
-                price: Number(price),
-                excerpt,
-                category: "subscriptionPlan",
-                status,
-                authorId: author?.connect?.id || "no_author_id",
-                type: "subscriptionPlan",
-                image,
-                url: envs.FRONTEND_URL + `/subscription-plans/${id}`,
-                stripeProductId,
-                stripePriceId,
-                billing_interval: billing_interval as Billing_Interval,
-              })
-    
-              if (createdProduct) {
-                resolvedData.stripeProductId = createdProduct.id
-                resolvedData.stripePriceId = String(createdProduct.default_price)
-              }
-            } catch (error: any) {
-              console.log("!!! 💳 STRIPE:: ", {
-                code: error.code,
-                message: error.raw.message,
-              })
-            }
-          },
-          update: async ({ resolvedData, context, item }) => {
-            //? item.stripeProductId will be undefined on first creation
-            await stripeProductUpdate({
-              stripeProductId: item.stripeProductId,
-              stripePriceId: item.stripePriceId,
-              image: resolvedData.image as string | undefined,
-              price: resolvedData.price as number | undefined,
-              name: resolvedData.name as string | undefined,
-              status: resolvedData.status as string | undefined,
-              // category: resolvedData.category,
-              category: "product",
-              excerpt: resolvedData.excerpt as string | undefined,
-              authorId: resolvedData.author?.connect?.id,
-              billing_interval: resolvedData.billing_interval as Billing_Interval,
-            }).then(async (res) => {
-              if (!res) return
-    
-              if (res.default_price) {
-                resolvedData.stripePriceId = String(res.default_price)
-              }
-            })
-    
-            resolvedData.dateModified = new Date().toISOString()
-          },
-        },
-        afterOperation: {
-          // create: async ({ resolvedData, item, context }) => {},
-          // update: async ({ resolvedData, item, context }) => {},
-          delete: async ({ originalItem }) => {
-            //? stripe. deleting product is not recommended
-            // as product history will also be erased
-            // await stripeProductDelete(originalItem.stripeProductId)
-            await stripeArchiveProduct(originalItem.stripeProductId)
-          },
-        },
+			create: async ({ item, resolvedData, context }) => {
+				const {
+					id,
+					name,
+					excerpt,
+					status,
+					author,
+					price,
+					stripeProductId,
+					stripePriceId,
+					image,
+					billing_interval,
+				} = resolvedData
+
+				try {
+					const createdProduct = await stripeProductCreate({
+						// id,
+						name: String(name),
+						price: Number(price),
+						excerpt,
+						category: "subscriptionPlan",
+						status,
+						authorId: author?.connect?.id || "no_author_id",
+						type: "subscriptionPlan",
+						image,
+						url: envs.FRONTEND_URL + `/subscription-plans/${id}`,
+						stripeProductId,
+						stripePriceId,
+						billing_interval: billing_interval as Billing_Interval,
+					})
+
+					if (createdProduct) {
+						resolvedData.stripeProductId = createdProduct.id
+						resolvedData.stripePriceId = String(createdProduct.default_price)
+					}
+				} catch (error: any) {
+					console.log("!!! 💳 STRIPE:: ", {
+						code: error.code,
+						message: error.raw.message,
+					})
+				}
+			},
+			update: async ({ resolvedData, context, item }) => {
+				//? item.stripeProductId will be undefined on first creation
+				await stripeProductUpdate({
+					stripeProductId: item.stripeProductId,
+					stripePriceId: item.stripePriceId,
+					image: resolvedData.image as string | undefined,
+					price: resolvedData.price as number | undefined,
+					name: resolvedData.name as string | undefined,
+					status: resolvedData.status as string | undefined,
+					// category: resolvedData.category,
+					category: "product",
+					excerpt: resolvedData.excerpt as string | undefined,
+					authorId: resolvedData.author?.connect?.id,
+					billing_interval: resolvedData.billing_interval as Billing_Interval,
+				}).then(async (res) => {
+					if (!res) return
+
+					if (res.default_price) {
+						resolvedData.stripePriceId = String(res.default_price)
+					}
+				})
+
+				resolvedData.dateModified = new Date().toISOString()
+			},
+		},
+		afterOperation: {
+			// TODO updated the stripe product with the subscription id?
+			// create: async ({ resolvedData, item, context }) => {},
+			// update: async ({ resolvedData, item, context }) => {},
+			delete: async ({ originalItem }) => {
+				//? stripe. deleting product is not recommended
+				// as product history will also be erased
+				// await stripeProductDelete(originalItem.stripeProductId)
+				await stripeArchiveProduct(originalItem.stripeProductId)
+			},
+		},
 	},
 })

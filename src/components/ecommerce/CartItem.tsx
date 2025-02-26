@@ -28,7 +28,7 @@ export default function CartItem({ item, sessionId }: Props) {
 		return <SubscriptionItem item={item} sessionId={sessionId} />
 	if (item.booking) return <BookingItem item={item} />
 	if (item.rental) return <RentalItem item={item} />
-	if (item.coupon) return <CouponItem item={item} sessionId={sessionId} />
+	if (item.coupon) return <CouponCartItem item={item} sessionId={sessionId} />
 
 	return <p>no item associated</p>
 }
@@ -137,7 +137,7 @@ function TicketItem({ item }: { item: CartItem }) {
 	)
 }
 
-function CouponItem({
+export function CouponCartItem({
 	item,
 	sessionId,
 }: {

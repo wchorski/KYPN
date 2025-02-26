@@ -443,6 +443,7 @@ export type Addon = Lists.Addon.Item & {
 	bookings?: Booking[]
 	categories: Category[]
 	tags: Tag[]
+  // price:number
 }
 
 //** Schema Lists END */
@@ -570,7 +571,7 @@ export type AddonCheckboxOptions = {
 	label: string
 	id: string
 	isChecked: boolean
-	price: number | null
+	price: number
 }
 
 export type IDObj = {
