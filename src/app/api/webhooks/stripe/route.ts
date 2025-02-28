@@ -136,7 +136,7 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 type SubscriptionMetadata = {
 	metadata: {
-		couponId: string
+		couponCode: string
 		customerId: string
 		customerEmail: string
 		subscriptionPlanId: string
@@ -150,16 +150,16 @@ async function handleSubscriptionCreate(
 	const {
 		id,
 		metadata,
-		amount_total,
+		// amount_total,
 		subscription,
-		payment_status,
-		total_details,
+		// payment_status,
+		// total_details,
+    //@ts-ignore
+    discounts,
 		customer,
 	} = checkoutSession as Stripe.Checkout.Session & SubscriptionMetadata
-	console.log("stripeSubscription")
-	console.log(JSON.stringify({ checkoutSession }, null, 2))
-	console.log({ id, metadata })
-	const couponId = total_details?.breakdown?.discounts[0].discount?.coupon.id
+
+	const couponCode = discounts[0].coupon as string || metadata.couponCode
 	// console.log(JSON.stringify({ items }, null, 2))
 	const stripeSubscription = await stripe.subscriptions.retrieve(
 		String(subscription)
@@ -170,7 +170,7 @@ async function handleSubscriptionCreate(
 			lineItems.map(async (item) => ({
 				stripeSubscriptionId: id,
 				stripeSubscriptionItemId: String(subscription),
-				//! set in subscriptionItem before Hook?
+				//? this is set in subscriptionItem billing_interval resolveInput field hook
 				// billing_interval: sub.plan.interval,
 				subscriptionPlan: {
 					connect: {
@@ -191,10 +191,10 @@ async function handleSubscriptionCreate(
 						: status === "active"
 						? "ACTIVE"
 						: "REQUESTED",
-				...(couponId
+				...(couponCode
 					? {
 							coupon: {
-								connect: { id: await findCouponId(couponId) },
+								connect: { code: couponCode },
 							},
 					  }
 					: {}),
@@ -207,8 +207,6 @@ async function handleSubscriptionCreate(
 			.db.SubscriptionItem.createMany({
 				data,
 			})
-
-		console.log({ createdsubscriptionItems })
 	}
 }
 
@@ -282,7 +280,7 @@ async function findSubscriptionPlanId(
 	stripePriceId: string|undefined,
 	subscriptionPlanId: string
 ) {
-	console.log(`findSubscriptionPlanId id: ${stripePriceId}`)
+	
 	if (subscriptionPlanId) return subscriptionPlanId
 	try {
 		const subPlans = await keystoneContext.sudo().db.SubscriptionPlan.findMany({
@@ -303,21 +301,21 @@ async function findSubscriptionPlanId(
 		console.log("!!! find error:: ", error)
 	}
 }
-async function findCouponId(stripeId: string) {
-	console.log(`findCouponId id ${stripeId}`)
-	const coupons = await keystoneContext.sudo().db.Coupon.findMany({
-		where: {
-			stripeId: {
-				equals: stripeId,
-			},
-		},
-	})
-	console.log({ coupons })
-	if (!coupons[0].id)
-		throw new Error(`!!! Coupon not found with stripeId:: ${stripeId}`)
-	//? schema field validation should not allow multiple items in this array
-	return coupons[0].id
-}
+// async function findCouponId(stripeId: string) {
+// 	console.log(`findCouponId id ${stripeId}`)
+// 	const coupons = await keystoneContext.sudo().db.Coupon.findMany({
+// 		where: {
+// 			stripeId: {
+// 				equals: stripeId,
+// 			},
+// 		},
+// 	})
+// 	console.log({ coupons })
+// 	if (!coupons[0].id)
+// 		throw new Error(`!!! Coupon not found with stripeId:: ${stripeId}`)
+// 	//? schema field validation should not allow multiple items in this array
+// 	return coupons[0].id
+// }
 async function findUserId(stripeCustomerId?: string, customerId?: string) {
 	console.log({ stripeCustomerId, customerId })
 	//? go off of native user id, and if not set in metadata, then use stripe customer id
@@ -329,7 +327,7 @@ async function findUserId(stripeCustomerId?: string, customerId?: string) {
 			},
 		},
 	})
-	console.log({ users })
+	
 	if (!users[0].id || users.length > 1)
 		throw new Error(
 			`!!! User not found with stripeCustomerId:: ${stripeCustomerId}`
@@ -425,26 +423,6 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		}
 	} else if (checkoutSession.mode === "subscription") {
 		console.log('🐸🐸🐸 checkoutSession.mode === "subscription"')
-		const {
-			id,
-			metadata,
-			amount_total,
-			subscription,
-			payment_status,
-			total_details,
-			line_items,
-		} = checkoutSession
-		console.log(JSON.stringify({ lineItems }, null, 2))
-		console.log({
-			id,
-			metadata,
-			amount_total,
-			subscription,
-			payment_status,
-			line_items,
-		})
-		console.log("total_details")
-		console.log(JSON.stringify({ total_details }, null, 2))
 
 		const sub = await handleSubscriptionCreate(checkoutSession, lineItems)
 		// const data = (await keystoneContext

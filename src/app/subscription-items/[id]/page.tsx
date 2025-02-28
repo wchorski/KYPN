@@ -1,12 +1,11 @@
 import ErrorMessage from "@components/ErrorMessage"
 import { DayMonthTime } from "@components/blocks/DayMonthTime"
-import { UserBadge } from "@components/menus/UserBadge"
-
 import { datePrettyLocal } from "@lib/dateFormatter"
-import fetchBooking from "@lib/fetchdata/fetchBooking"
-import moneyFormatter from "@lib/moneyFormatter"
+import moneyFormatter, {
+	calcDiscount,
+	handleCouponDetails,
+} from "@lib/moneyFormatter"
 import Link from "next/link"
-import { FiEdit } from "react-icons/fi"
 import { CgExternal } from "react-icons/cg"
 import { DialogPopup } from "@components/menus/Dialog"
 import { StatusBadge } from "@components/StatusBadge"
@@ -23,15 +22,17 @@ import {
 } from "@styles/layout.module.css"
 import { notFound } from "next/navigation"
 import Flex from "@components/layouts/Flex"
-import { IconUserAccountAvatar } from "@lib/useIcons"
+import { IconCoupon, IconUserAccountAvatar } from "@lib/useIcons"
 import { Card } from "@components/layouts/Card"
 import { NoData } from "@components/elements/NoData"
 import Image from "next/image"
-import { Callout } from "@components/blocks/Callout"
 import fetchSubscriptionItem from "@lib/fetchdata/fetchSubscriptionItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
 import { IconLink } from "@components/elements/IconLink"
+import { PriceTag } from "@components/ecommerce/PriceTag"
+import { bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { item, perItemTotal } from "@styles/ecommerce/cart.module.css"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -87,7 +88,7 @@ export default async function SubscriptionItemByIdPage({
 
 	const {
 		summary,
-		price,
+		// price,
 		subscriptionPlan,
 		status,
 		isDelinquent,
@@ -97,6 +98,7 @@ export default async function SubscriptionItemByIdPage({
 		dateCreated,
 		dateModified,
 		addons,
+		coupon,
 	} = subscriptionItem
 
 	return (
@@ -187,8 +189,62 @@ export default async function SubscriptionItemByIdPage({
 								</td>
 								<td>
 									<span className="price">
-										{moneyFormatter(price)}{" "}
-										<em className="sub-text"> /{billing_interval}</em>
+										{!coupon ? (
+											<>
+												<PriceTag price={subscriptionPlan.price} /> /
+												{subscriptionPlan.billing_interval}
+											</>
+										) : (
+											<>
+												<s>
+													<PriceTag price={subscriptionPlan.price} /> /
+													{subscriptionPlan.billing_interval}
+												</s>
+												<br />
+												<PriceTag
+													price={calcDiscount(subscriptionPlan.price, coupon)}
+												/>{" "}
+												/{subscriptionPlan.billing_interval}
+												<span
+													className={["discount", "pill", bg_c_tertiary].join(
+														" "
+													)}
+												>
+													{handleCouponDetails(coupon)}
+												</span>
+                        <br />
+                        <br />
+												<div
+													className={item}
+													style={{ border: "dashed 1px var(--c-txt)" }}
+												>
+													<figure style={{ margin: "var(--space-ms)" }}>
+														<IconCoupon />
+													</figure>
+
+													<Flex
+														flexDirection={"column"}
+														gap={"ms"}
+														justifyContent={"space-between"}
+													>
+														<h5>{coupon.name}</h5>
+														<span>coupon</span>
+													</Flex>
+
+													<div className={perItemTotal}>
+														{coupon.percent_off ? (
+															<p>
+																-{coupon.percent_off} <small>%</small>
+															</p>
+														) : coupon.amount_off ? (
+															<p>-{moneyFormatter(coupon.amount_off)}</p>
+														) : (
+															<></>
+														)}
+													</div>
+												</div>
+											</>
+										)}
 									</span>
 								</td>
 							</tr>
@@ -247,7 +303,7 @@ export default async function SubscriptionItemByIdPage({
 const query = `  
     id
     summary
-    price
+    
     status
     isDelinquent
     billing_interval
@@ -273,5 +329,12 @@ const query = `
       id
       name
       excerpt
+    }
+    coupon {
+      name
+      amount_off
+      percent_off
+      duration
+      duration_in_months
     }
   `

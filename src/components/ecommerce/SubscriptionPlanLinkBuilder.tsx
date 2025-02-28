@@ -8,7 +8,7 @@ import {
 } from "@ks/types"
 import { useCallback, useEffect, useReducer } from "react"
 import formStyles, { form, stand_alone } from "@styles/menus/form.module.scss"
-import moneyFormatter from "@lib/moneyFormatter"
+import moneyFormatter, { calcDiscount, handleCouponDetails } from "@lib/moneyFormatter"
 import { PriceTag } from "./PriceTag"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -144,13 +144,6 @@ export function SubscriptionPlanLinkBuilder({
 	}, [searchParams])
 
 	// const { } = useForm()
-	function handleCouponDetails(coupon: Coupon) {
-		const { duration, duration_in_months } = coupon
-		let text = ""
-		text += duration
-		text += duration_in_months ? `for ${duration_in_months} months` : ""
-		return text
-	}
 
 	return (
 		<Card
@@ -318,15 +311,3 @@ export function SubscriptionPlanLinkBuilder({
 	)
 }
 
-function calcDiscount(total: number, coupon: Coupon) {
-	if (coupon.amount_off) {
-		return total - coupon.amount_off
-	}
-	if (coupon.percent_off) {
-		const decimal = coupon.percent_off / 100
-		const discount = total * decimal
-		return total * discount
-	}
-
-	return total
-}

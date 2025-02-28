@@ -1,6 +1,7 @@
 import "dotenv/config"
 import type { Lists } from ".keystone/types"
 import type {
+	Coupon,
 	SubscriptionPlan,
 	SubscriptionItem as TypeSubsItem,
 	User,
@@ -96,6 +97,9 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		custom_price: integer(),
 
 		price: virtual({
+      ui: {
+        description: 'charged per interval',
+      },
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
@@ -111,26 +115,41 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
             `,
 					})) as SubscriptionPlan
 
-					const addons = await context.query.Addon.findMany({
-						where: {
-							subscriptionItems: {
-								every: {
-									id: {
-										equals: item.id,
-									},
-								},
-							},
-						},
+					if (!item.couponId) return subPlan.price
+
+					const coupon = (await context.query.Coupon.findOne({
+						where: { id: item.couponId },
 						query: `
-              price
+              amount_off
+              percent_off
             `,
-					})
-					console.log('🐸 addons dont work exactly right for subscritions fyi');
-					const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+					})) as Coupon
 
-					const subTotal = subPlan.price + addonsPrice
+					if (coupon.amount_off) return subPlan.price - coupon.amount_off
+					if (coupon.percent_off)
+						return subPlan.price - subPlan.price * (coupon.percent_off / 100)
 
-					return subTotal
+          // TODO add addons back into the price once I figure that out....
+					// const addons = await context.query.Addon.findMany({
+					// 	where: {
+					// 		subscriptionItems: {
+					// 			every: {
+					// 				id: {
+					// 					equals: item.id,
+					// 				},
+					// 			},
+					// 		},
+					// 	},
+					// 	query: `
+					//     price
+					//   `,
+					// })
+					// console.log('🐸 addons dont work exactly right for subscritions fyi');
+					// const addonsPrice = addons.reduce((acc, item) => acc + item.price, 0)
+
+					// const subTotal = subPlan.price + addonsPrice
+
+					// return subTotal
 				},
 			}),
 		}),
@@ -223,13 +242,13 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 			label: "Metadata",
 			fields: {
 				stripeSubscriptionId: text({
-          isIndexed: true,
-          validation: { isRequired: false },
-        }),
+					isIndexed: true,
+					validation: { isRequired: false },
+				}),
 				stripeSubscriptionItemId: text({
-          isIndexed: true,
-          validation: { isRequired: false },
-        }),
+					isIndexed: true,
+					validation: { isRequired: false },
+				}),
 				dateCreated: timestamp({
 					defaultValue: { kind: "now" },
 					validation: { isRequired: true },

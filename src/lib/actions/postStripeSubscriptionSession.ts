@@ -57,8 +57,7 @@ export const postStripeSubscriptionSession = async (
 
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
-	console.log({ subscriptionLineItem })
-  console.log(`are you getting this metadata???? ${user.id} ${subscriptionPlan.id}`);
+
 	if (!subscriptionLineItem)
 		throw new Error("!!! STRIPE subscription line_item not created")
 	// https://docs.stripe.com/api/checkout/sessions/create
@@ -75,7 +74,7 @@ export const postStripeSubscriptionSession = async (
 			orderId: "",
       // TODO make this a 'per listItem'. but i'll have to fix it on product creation for it to work
 			subscriptionPlanId: subscriptionPlan.id,
-			couponId: coupon?.id || "",
+			couponCode: coupon?.code || "",
 		},
     subscription_data: {
       metadata: {

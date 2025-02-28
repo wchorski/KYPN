@@ -425,8 +425,6 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
-	user: User
-	addons: Addon[]
 	status:
 		| "ACTIVE"
 		| "TRIAL"
@@ -436,6 +434,10 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 		| "PAUSED"
 		| "DELINQUENT"
 		| "REQUESTED"
+  //? relationships
+  user: User
+	addons: Addon[]
+  coupon: Coupon
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User

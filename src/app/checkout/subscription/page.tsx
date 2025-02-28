@@ -95,6 +95,7 @@ export default async function CheckoutSubscriptionPage({
 const COUPON_QUERY = `
   id
   stripeId
+  code
 `
 const QUERY_ADDONS = `
   id
