@@ -1565,8 +1565,6 @@ type SubscriptionPlan_description_Document {
 input SubscriptionPlanWhereUniqueInput {
   id: ID
   slug: String
-  stripeProductId: String
-  stripePriceId: String
 }
 
 input SubscriptionPlanWhereInput {

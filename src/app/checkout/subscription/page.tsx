@@ -62,10 +62,10 @@ export default async function CheckoutSubscriptionPage({
   const addons = [] as Addon[]
   const errorAddons = false
 
-	const { coupon, error: errorCoupon } = await fetchRedeemCoupon({
-		code: couponCode,
-		query: COUPON_QUERY,
-	})
+  const { coupon, error: errorCoupon } = (await fetchRedeemCoupon({
+    code: couponCode,
+    query: COUPON_QUERY,
+  })) ?? {}
 
 	if (!user || !subscriptionPlan) return notFound()
 	if (error || errorAddons || errorCoupon)
@@ -84,7 +84,7 @@ export default async function CheckoutSubscriptionPage({
 				<StripeSubscriptionCheckout
 					subscriptionPlan={plainObj(subscriptionPlan)}
 					addons={plainObj(addons)}
-					coupon={plainObj(coupon)}
+					coupon={coupon ? plainObj(coupon) : undefined}
 					email={session.user.email}
 					user={session.user as User}
 				/>

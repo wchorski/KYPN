@@ -222,8 +222,14 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		...group({
 			label: "Metadata",
 			fields: {
-				stripeSubscriptionId: text(),
-				stripeSubscriptionItemId: text(),
+				stripeSubscriptionId: text({
+          isIndexed: true,
+          validation: { isRequired: false },
+        }),
+				stripeSubscriptionItemId: text({
+          isIndexed: true,
+          validation: { isRequired: false },
+        }),
 				dateCreated: timestamp({
 					defaultValue: { kind: "now" },
 					validation: { isRequired: true },

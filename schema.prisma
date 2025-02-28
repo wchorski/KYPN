@@ -24,7 +24,7 @@ model User {
   isActive           Boolean            @default(true)
   stripeCustomerId   String             @default("")
   dateCreated        DateTime           @default(now())
-  dateModified       DateTime?          @default(now())
+  dateModified       DateTime?          @default(now()) @updatedAt
   buisnessHourOpen   String?            @default("09:00:00")
   buisnessHourClosed String?            @default("18:00:00")
   role               Role?              @relation("User_role", fields: [roleId], references: [id])
@@ -238,10 +238,12 @@ model SubscriptionPlan {
   dateModified      DateTime           @default(now())
   categories        Category[]         @relation("Category_subscriptionPlans")
   tags              Tag[]              @relation("SubscriptionPlan_tags")
-  stripeProductId   String             @unique @default("")
-  stripePriceId     String             @unique @default("")
+  stripeProductId   String             @default("")
+  stripePriceId     String             @default("")
 
   @@index([authorId])
+  @@index([stripeProductId])
+  @@index([stripePriceId])
 }
 
 model SubscriptionItem {
@@ -267,6 +269,8 @@ model SubscriptionItem {
 
   @@index([subscriptionPlanId])
   @@index([userId])
+  @@index([stripeSubscriptionId])
+  @@index([stripeSubscriptionItemId])
   @@index([couponId])
 }
 
@@ -297,6 +301,8 @@ model Product {
   from_CartItem_product CartItem[]  @relation("CartItem_product")
 
   @@index([authorId])
+  @@index([stripeProductId])
+  @@index([stripePriceId])
 }
 
 model Rental {
@@ -417,6 +423,8 @@ model Coupon {
   stripeId              String             @default("")
   from_CartItem_coupon  CartItem[]         @relation("CartItem_coupon")
   from_OrderItem_coupon OrderItem[]        @relation("OrderItem_coupon")
+
+  @@index([stripeId])
 }
 
 model Page {

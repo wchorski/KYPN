@@ -1,10 +1,13 @@
 // cred - https://stackoverflow.com/questions/71352151/how-to-access-items-metadata-in-stripe-checkout-session/71352601#71352601
 import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
+
+import type { SubscriptionItemCreateInput } from ".keystone/types"
 import { stripeSubscriptionUpdate } from "@lib/stripe"
 import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
+import { User } from "@ks/types"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! ❌ envs.STRIPE_SECRET not set")
 const stripe = new Stripe(envs.STRIPE_SECRET)
@@ -22,8 +25,6 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
 	const payload = await request.text()
 	const signature = request.headers.get("stripe-signature") as string
-	// console.log({signature});
-	// console.log({searchParams});
 
 	// let event: Stripe.Event | null = null;
 	const stripePayload = stripe.webhooks.constructEvent(
@@ -96,15 +97,16 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			// JSON.stringify(stripePayload.data, null, 2)
 			break
 
-		case "customer.subscription.created":
-			//? handled with `checkout.session.completed`
-			console.log("🐸🐸🐸 customer.subscription.created")
-			handleSubscriptionCreate(stripePayload.data.object)
-		// if (!["trialing", "active"].includes(stripePayload.data.object.status))
-		// 	throw new Error(
-		// 		`!!! 💳❌ stripe subscription not "trialing" or "active": ${stripePayload.data.object.id} ${stripePayload.data.object.status}`
-		// 	)
-		// handleSubscriptionCreate(stripePayload.data.object)
+		//! does not included important metadata set by this app
+		// case "customer.subscription.created":
+		// 	//? handled with `checkout.session.completed`
+		// 	console.log("🐸🐸🐸 customer.subscription.created")
+		// 	handleSubscriptionCreate(stripePayload.data.object)
+		// // if (!["trialing", "active"].includes(stripePayload.data.object.status))
+		// // 	throw new Error(
+		// // 		`!!! 💳❌ stripe subscription not "trialing" or "active": ${stripePayload.data.object.id} ${stripePayload.data.object.status}`
+		// // 	)
+		// // handleSubscriptionCreate(stripePayload.data.object)
 
 		case "customer.subscription.updated":
 			console.log("🐸 customer.subscription.created")
@@ -132,128 +134,247 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 	return redirect("/shop")
 }
 
-// async function handleSubscriptionCreate(subscription: Stripe.Subscription) {
-// 	console.log("webhook handleSubscriptionCreate session::: ", { session: subscription })
-
-// 	if (!subscription)
-// 		throw new Error("!!! No stripe subscription")
-
-// 	if (!subscription.metadata?.customerId)
-// 		throw new Error("!!! ❌ stripe did not have customerId in metadata")
-
-// 	if (!subscription.metadata?.subscriptionPlanId)
-// 		throw new Error("!!! ❌ stripe did not have subscriptionPlanId in metadata")
-
-// 	const data = (await keystoneContext
-// 		.withSession({
-// 			session: {
-// 				itemId: subscription.metadata.customerId,
-// 			},
-// 			stripe: {
-// 				payment_status: subscription.payment_status,
-// 				id: subscription.id,
-// 				payment_intent: subscription.payment_intent,
-// 				customerId: subscription.metadata.customerId,
-// 				amount_total: subscription.amount_total,
-// 				subscriptionId: subscription.subscription,
-// 				rentalId: subscription.metadata.rentalId,
-// 			},
-// 		})
-// 		.graphql.run({
-// 			query: `
-//         mutation CheckoutSubscription {
-//           checkoutSubscription {
-//             id
-//             status
-//           }
-//         }
-//       `,
-// 			variables: {
-// 				subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
-// 				addonIds: [],
-// 				couponIds: [],
-// 			},
-// 		})) as { checkoutSubscription: { id: string; status: string } }
-
-// 	return {
-// 		checkout: data.checkoutSubscription,
-// 	}
-// }
-
 type SubscriptionMetadata = {
 	metadata: {
 		couponId: string
 		customerId: string
-	}
-	items: {
-		data: {
-			metadata: {
-				subscriptionPlanId: string
-			}
-		}[]
+		customerEmail: string
+		subscriptionPlanId: string
 	}
 }
 
 async function handleSubscriptionCreate(
-	stripeSubscription: Stripe.Subscription
+	checkoutSession: Stripe.Checkout.Session,
+	lineItems: Stripe.LineItem[]
 ) {
 	const {
-		// cancel_at,
-		// cancel_at_period_end,
-		// collection_method,
-		// customer,
-		// discounts,
-		// discount,
-		// latest_invoice,
-		// trial_start,
-		// trial_end,
 		id,
-		status,
-		items,
 		metadata,
-	} = stripeSubscription as Stripe.Subscription & SubscriptionMetadata
+		amount_total,
+		subscription,
+		payment_status,
+		total_details,
+		customer,
+	} = checkoutSession as Stripe.Checkout.Session & SubscriptionMetadata
 	console.log("stripeSubscription")
-	console.log({ id, status, items, metadata })
-	if (items.object === "list") {
+	console.log(JSON.stringify({ checkoutSession }, null, 2))
+	console.log({ id, metadata })
+	const couponId = total_details?.breakdown?.discounts[0].discount?.coupon.id
+	// console.log(JSON.stringify({ items }, null, 2))
+	const stripeSubscription = await stripe.subscriptions.retrieve(
+		String(subscription)
+	)
+	const status = stripeSubscription.status
+	if (lineItems) {
+		const data: SubscriptionItemCreateInput[] = await Promise.all(
+			lineItems.map(async (item) => ({
+				stripeSubscriptionId: id,
+				stripeSubscriptionItemId: String(subscription),
+				//! set in subscriptionItem before Hook?
+				// billing_interval: sub.plan.interval,
+				subscriptionPlan: {
+					connect: {
+						id: await findSubscriptionPlanId(
+							item.price?.id,
+							metadata.subscriptionPlanId,
+						),
+					},
+				},
+				user: {
+					connect: {
+						id: await findUserId(customer?.toString(), metadata.customerId),
+					},
+				},
+				status:
+					status === "trialing"
+						? "TRIAL"
+						: status === "active"
+						? "ACTIVE"
+						: "REQUESTED",
+				...(couponId
+					? {
+							coupon: {
+								connect: { id: await findCouponId(couponId) },
+							},
+					  }
+					: {}),
+			}))
+		)
+
 		// TODO is it safe to do sudo here? should i create a seperate mutation?
 		const createdsubscriptionItems = await keystoneContext
 			.sudo()
 			.db.SubscriptionItem.createMany({
-				data: items.data.map((sub) => ({
-					stripeSubscriptionId: id,
-					stripeSubscriptionItemId: sub.id,
-					billing_interval: sub.plan.interval,
-					subscriptionPlan: {
-						connect: { stripeProductId: sub.plan.id },
-					},
-					user: { connect: { id: metadata.customerId } },
-					status:
-						status === "trialing"
-							? "TRIAL"
-							: status === "active"
-							? "ACTIVE"
-							: "REQUESTED",
-					...(metadata.couponId
-						? {
-								coupon: { connect: { id: metadata.couponId } },
-						  }
-						: {}),
-				})),
+				data,
 			})
 
 		console.log({ createdsubscriptionItems })
 	}
 }
 
+// async function handleSubscriptionCreate(
+// 	stripeSubscription: Stripe.Subscription
+// ) {
+// 	const {
+// 		// cancel_at,
+// 		// cancel_at_period_end,
+// 		// collection_method,
+// 		// customer,
+// 		// discounts,
+// 		// discount,
+// 		// latest_invoice,
+// 		// trial_start,
+// 		// trial_end,
+// 		id,
+// 		customer,
+
+// 		status,
+// 		items,
+// 		metadata,
+// 		discounts,
+// 	} = stripeSubscription as Stripe.Subscription & SubscriptionMetadata
+// 	console.log("stripeSubscription")
+// 	console.log(JSON.stringify({ stripeSubscription }, null, 2))
+// 	console.log({ id, status, metadata })
+// 	// console.log(JSON.stringify({ items }, null, 2))
+// 	if (items.object === "list") {
+// 		const data: SubscriptionItemCreateInput[] = await Promise.all(
+// 			items.data.map(async (sub) => ({
+// 				stripeSubscriptionId: id,
+// 				stripeSubscriptionItemId: sub.id,
+// 				billing_interval: sub.plan.interval,
+// 				subscriptionPlan: {
+// 					connect: { id: await findSubscriptionPlanId(sub.plan.id) },
+// 				},
+// 				user: {
+// 					connect: {
+// 						id: await findUserId(customer.toString(), metadata.customerId),
+// 					},
+// 				},
+// 				status:
+// 					status === "trialing"
+// 						? "TRIAL"
+// 						: status === "active"
+// 						? "ACTIVE"
+// 						: "REQUESTED",
+// 				...(discounts[0]
+// 					? {
+// 							coupon: {
+// 								connect: { id: await findCouponId(discounts[0].toString()) },
+// 							},
+// 					  }
+// 					: {}),
+// 			}))
+// 		)
+
+// 		// TODO is it safe to do sudo here? should i create a seperate mutation?
+// 		const createdsubscriptionItems = await keystoneContext
+// 			.sudo()
+// 			.db.SubscriptionItem.createMany({
+// 				data,
+// 			})
+
+// 		console.log({ createdsubscriptionItems })
+// 	}
+// }
+
+async function findSubscriptionPlanId(
+	stripePriceId: string|undefined,
+	subscriptionPlanId: string
+) {
+	console.log(`findSubscriptionPlanId id: ${stripePriceId}`)
+	if (subscriptionPlanId) return subscriptionPlanId
+	try {
+		const subPlans = await keystoneContext.sudo().db.SubscriptionPlan.findMany({
+			where: {
+				stripePriceId: {
+					equals: stripePriceId,
+				},
+			},
+		})
+
+		if (!subPlans[0].id || subPlans.length > 1)
+			throw new Error(
+				`!!! subscriptionPlan not found with stripePriceId:: ${stripePriceId}`
+			)
+		//? schema field validation should not allow multiple items in this array
+		return subPlans[0].id
+	} catch (error) {
+		console.log("!!! find error:: ", error)
+	}
+}
+async function findCouponId(stripeId: string) {
+	console.log(`findCouponId id ${stripeId}`)
+	const coupons = await keystoneContext.sudo().db.Coupon.findMany({
+		where: {
+			stripeId: {
+				equals: stripeId,
+			},
+		},
+	})
+	console.log({ coupons })
+	if (!coupons[0].id)
+		throw new Error(`!!! Coupon not found with stripeId:: ${stripeId}`)
+	//? schema field validation should not allow multiple items in this array
+	return coupons[0].id
+}
+async function findUserId(stripeCustomerId?: string, customerId?: string) {
+	console.log({ stripeCustomerId, customerId })
+	//? go off of native user id, and if not set in metadata, then use stripe customer id
+	if (customerId) return customerId
+	const users = await keystoneContext.sudo().db.User.findMany({
+		where: {
+			stripeCustomerId: {
+				equals: stripeCustomerId,
+			},
+		},
+	})
+	console.log({ users })
+	if (!users[0].id || users.length > 1)
+		throw new Error(
+			`!!! User not found with stripeCustomerId:: ${stripeCustomerId}`
+		)
+	//? schema field validation should not allow multiple items in this array
+	return users[0].id
+
+	//? thought I had to be clever w email search, but can just use metadata
+	// } else if (email) {
+	// 	const data = (await keystoneContext.sudo().graphql.run({
+	// 		query: `
+	//       query Query($where: UserWhereInput!) {
+	//         users(where: $where)
+	//       }
+	//     `,
+	// 		variables: {
+	// 			where: {
+	// 				email: {
+	// 					equals: email,
+	// 					mode: "insensitive",
+	// 				},
+	// 			},
+	// 		},
+	// 	})) as { users: User[] }
+
+	// 	if (data.users.length > 1 || !data.users[0].id)
+	// 		throw Error(`!!! User not found with email:: ${email}`)
+
+	// 	return data.users[0].id
+	// } else {
+	// 	throw new Error("!!! no stripe ID or email provided")
+	// }
+}
+
 async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	// console.log("webhook handleSuccessfulCheckout session::: ", { session })
-	const checkoutSession = await stripe.checkout.sessions
-		.retrieve(session.id, {
-			// expand: ["line_items"],
-		})
-		.catch((error) => {
-			throw new Error(error)
-		})
+	// TODO do i need to refetch the session? don't i already have all the data avail from the session?
+	const checkoutSession = session
+	// const checkoutSession = await stripe.checkout.sessions
+	// 	.retrieve(session.id, {
+	// 		// expand: ["line_items"],
+	// 	})
+	// 	.catch((error) => {
+	// 		throw new Error(error)
+	// 	})
 
 	const lineItemsObj = await stripe.checkout.sessions
 		.listLineItems(session.id, {
@@ -264,8 +385,8 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		})
 	const lineItems = lineItemsObj.data
 
-	if (!checkoutSession || lineItems.length === 0)
-		throw new Error("!!! No checkout session or line items")
+	// if (!checkoutSession || lineItems.length === 0)
+	// 	throw new Error("!!! No checkout session or line items")
 
 	if (!checkoutSession.metadata?.customerId)
 		throw new Error("!!! ❌ stripe did not have customerId in metadata")
@@ -304,9 +425,28 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		}
 	} else if (checkoutSession.mode === "subscription") {
 		console.log('🐸🐸🐸 checkoutSession.mode === "subscription"')
-		const { id, metadata, amount_total, subscription, payment_status } =
-			checkoutSession
-		console.log({ id, metadata, amount_total, subscription, payment_status })
+		const {
+			id,
+			metadata,
+			amount_total,
+			subscription,
+			payment_status,
+			total_details,
+			line_items,
+		} = checkoutSession
+		console.log(JSON.stringify({ lineItems }, null, 2))
+		console.log({
+			id,
+			metadata,
+			amount_total,
+			subscription,
+			payment_status,
+			line_items,
+		})
+		console.log("total_details")
+		console.log(JSON.stringify({ total_details }, null, 2))
+
+		const sub = await handleSubscriptionCreate(checkoutSession, lineItems)
 		// const data = (await keystoneContext
 		// 	.withSession({
 		// 		session: {

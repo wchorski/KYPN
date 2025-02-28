@@ -2,12 +2,16 @@ import { Coupon } from "@ks/types"
 import { keystoneContext } from "@ks/context"
 
 type Props = {
-	code: string|undefined
+	code: string | undefined
 	query: string
 }
 
-export default async function fetchRedeemCoupon({ code, query }: Props) {
+export default async function fetchRedeemCoupon({
+	code,
+	query,
+}: Props): Promise<{ coupon?: Coupon; error?: unknown } | undefined> {
 	try {
+		if (!code) return undefined
 		const data = (await keystoneContext.graphql.run({
 			query: `
         mutation RedeemCoupon($code: String!) {

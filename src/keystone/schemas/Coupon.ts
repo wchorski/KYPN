@@ -194,7 +194,37 @@ export const Coupon: Lists.Coupon = list({
 				// 	ref: "Tag.products",
 				// 	many: true,
 				// }),
-				stripeId: text(),
+				stripeId: text({ isIndexed: true, hooks: {
+          validate: {
+            create: async ({ resolvedData, context, addValidationError }) => {
+              //? custom `unique` validation that also allows the field to be empty is not using stripe at all
+              if(!resolvedData.stripeId) return
+              const coupons = await context
+                .sudo()
+                .db.Coupon.findMany({
+                  where: {
+                    stripeId: {
+                      equals: resolvedData.stripeId,
+                    },
+                  },
+                })
+              if(coupons.length > 0) addValidationError('!!! Coupon can not share same stripeId with others')
+            },
+            update: async ({ resolvedData, context, addValidationError }) => {
+              if(!resolvedData.stripeId) return
+              const coupons = await context
+                .sudo()
+                .db.Coupon.findMany({
+                  where: {
+                    stripeId: {
+                      equals: resolvedData.stripeId,
+                    },
+                  },
+                })
+              if(coupons.length > 1) addValidationError('!!! Coupon can not share same stripeId with others')
+            },
+          },
+        }, }),
 			},
 		}),
 	},

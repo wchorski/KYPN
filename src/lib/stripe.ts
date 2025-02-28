@@ -173,6 +173,7 @@ export async function stripeServiceCreate({
 }
 
 type Customer = {
+	stripeCustomerId?: string
 	email: string
 	name: string
 	nameLast?: string
@@ -180,6 +181,7 @@ type Customer = {
 }
 
 export async function stripeCustomerCreate({
+	stripeCustomerId,
 	email,
 	name,
 	nameLast,
@@ -187,15 +189,60 @@ export async function stripeCustomerCreate({
 }: Customer) {
 	if (!envs.STRIPE_SECRET) return
 
+	if (stripeCustomerId) {
+		const exisitingCustomer = await stripeConfig.customers.retrieve(
+			stripeCustomerId
+		)
+
+		if (exisitingCustomer) {
+			return await stripeCustomerUpdate({
+				stripeCustomerId,
+				email,
+				name,
+				nameLast,
+				isActive,
+			})
+		}
+	}
+
 	const customer = await stripeConfig.customers.create({
 		email: email,
-		name: name + " " + nameLast,
+		name: name + (nameLast ? ` ${nameLast}` : ""),
 		metadata: {
 			isActive: String(isActive),
 		},
 	})
 
 	if (!customer) return Promise.reject(new Error("Customer creation failed"))
+
+	return customer
+}
+
+type CustomerUpdate = {
+	userId?: string
+	stripeCustomerId: string
+	email?: string
+	name?: string
+	nameLast?: string
+	isActive: boolean
+}
+
+export async function stripeCustomerUpdate({
+	stripeCustomerId,
+	userId,
+	email,
+	name,
+	nameLast,
+	isActive,
+}: CustomerUpdate) {
+	const customer = await stripeConfig.customers.update(stripeCustomerId, {
+		...(email ? { email } : {}),
+		...(name ? { name: name + (nameLast ? ` ${nameLast}` : "") } : {}),
+		metadata: {
+			...(isActive ? { isActive: String(isActive) } : {}),
+			...(userId ? { userId } : {}),
+		},
+	})
 
 	return customer
 }
@@ -396,6 +443,7 @@ export async function stripeCouponCreate({
 type SubscriptionCreate = {
 	subscriptionPlanId: string
 	stripeCustomerId: string
+  customerId:string,
 	stripePriceId: string
 	couponId?: string
 	trial_period_days?: number
@@ -403,10 +451,11 @@ type SubscriptionCreate = {
 
 export async function stripeSubscriptionCreate({
 	stripeCustomerId,
+  customerId,
 	stripePriceId,
 	subscriptionPlanId,
 	couponId,
-  //? override on subscriptionPlan trial
+	//? override on subscriptionPlan trial
 	trial_period_days,
 }: SubscriptionCreate) {
 	if (!envs.STRIPE_PUBLIC_KEY) return
@@ -421,6 +470,7 @@ export async function stripeSubscriptionCreate({
 					quantity: 1,
 					metadata: {
 						subscriptionPlanId: subscriptionPlanId,
+						customerId: customerId,
 					},
 				},
 			],
@@ -436,6 +486,7 @@ export async function stripeSubscriptionCreate({
 				: {}),
 			metadata: {
 				type: "subscriptionItem",
+        customerId: customerId,
 			},
 		})
 

@@ -18,6 +18,7 @@ import { permissions, rules } from "../access"
 import { timesArray } from "../../lib/timeArrayCreator"
 import { calcTotalPrice } from "../../lib/calcTotalPrice"
 import { CartItem } from "../types"
+import { stripeCustomerCreate, stripeCustomerUpdate } from "../../lib/stripe"
 // import { mailVerifyUser } from "../../lib/mail";
 // import { tokenEmailVerify } from "../../lib/tokenEmailVerify";
 
@@ -129,10 +130,49 @@ export const User: Lists.User = list({
 		stripeCustomerId: text({
 			isIndexed: true,
 			validation: { isRequired: false },
+			hooks: {
+				validate: {
+					create: async ({ resolvedData, context, addValidationError }) => {
+						//? custom `unique` validation that also allows the field to be empty is not using stripe at all
+						if (!resolvedData.stripeCustomerId) return
+						const users = await context.sudo().db.User.findMany({
+							where: {
+								stripeCustomerId: {
+									equals: resolvedData.stripeCustomerId,
+								},
+							},
+						})
+						if (users.length > 0)
+							addValidationError(
+								"!!! User can not share same stripeCustomerId with others"
+							)
+					},
+					update: async ({ resolvedData, context, addValidationError }) => {
+						if (!resolvedData.stripeCustomerId) return
+						const users = await context.sudo().db.User.findMany({
+							where: {
+								stripeCustomerId: {
+									equals: String(resolvedData.stripeCustomerId),
+								},
+							},
+						})
+						if (users.length > 1)
+							addValidationError(
+								"!!! User can not share same stripeCustomerId with others"
+							)
+					},
+				},
+			},
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
 		dateModified: timestamp({
 			defaultValue: { kind: "now" },
+			db: {
+				updatedAt: true,
+			},
 			hooks: {
 				beforeOperation({ resolvedData, operation }) {
 					if (operation === "create" || operation === "update") {
@@ -198,15 +238,15 @@ export const User: Lists.User = list({
 				type: graphql.Int,
 				async resolve(item, args, context) {
 					// if(!item.serviceId) return item.name
-					const userCartItems = await context.query.CartItem.findMany({
+					const userCartItems = (await context.query.CartItem.findMany({
 						where: { user: { id: { equals: item.id } } },
-            query: `
+						query: `
               id
               quantity
               type
               subTotal
-            `
-					}) as CartItem[]
+            `,
+					})) as CartItem[]
 
 					return calcTotalPrice(userCartItems)
 				},
@@ -231,10 +271,30 @@ export const User: Lists.User = list({
 		}),
 	},
 	hooks: {
-		async beforeOperation({ operation, resolvedData }) {
-			if (operation === "update") {
-				resolvedData.dateModified = new Date().toISOString()
-			}
+		beforeOperation: {
+			create: async ({ resolvedData, item }) => {
+				await stripeCustomerCreate({
+					email: String(resolvedData.email),
+					name: String(resolvedData.name),
+					nameLast: String(resolvedData.nameLast),
+					isActive: resolvedData.isActive ? resolvedData.isActive : false,
+				}).then(res => {
+          if(!res) return
+          resolvedData.stripeCustomerId = res.id
+        })
+			},
+      update: async ({resolvedData, item}) => {
+        await stripeCustomerUpdate({
+          stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
+          email: String(resolvedData.email),
+					name: String(resolvedData.name),
+					nameLast: String(resolvedData.nameLast),
+					isActive: resolvedData.isActive ? Boolean(resolvedData.isActive) : item.isActive,
+        }).then(res => {
+          if(!res) return
+          resolvedData.stripeCustomerId = res.id
+        })
+      },
 		},
 		async afterOperation({ operation, context, item }) {
 			if (operation === "create") {

@@ -58,6 +58,7 @@ export const postStripeSubscriptionSession = async (
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 	console.log({ subscriptionLineItem })
+  console.log(`are you getting this metadata???? ${user.id} ${subscriptionPlan.id}`);
 	if (!subscriptionLineItem)
 		throw new Error("!!! STRIPE subscription line_item not created")
 	// https://docs.stripe.com/api/checkout/sessions/create
@@ -76,6 +77,13 @@ export const postStripeSubscriptionSession = async (
 			subscriptionPlanId: subscriptionPlan.id,
 			couponId: coupon?.id || "",
 		},
+    subscription_data: {
+      metadata: {
+        typeof: "subscription-item",
+        customerId: user.id,
+        subscriptionPlanId: subscriptionPlan.id,
+      }
+    },
 		// https://docs.stripe.com/payments/checkout/free-trials
 		...(subscriptionPlan.trial_period_days
 			? {
@@ -135,6 +143,7 @@ function createSubscriptionLineItem(
 	if (!subscriptionPlan) return undefined
 	return {
 		quantity: 1,
+    
 		// price: product.stripePriceId,
 		...(subscriptionPlan.stripePriceId
 			? { price: subscriptionPlan.stripePriceId,  }
