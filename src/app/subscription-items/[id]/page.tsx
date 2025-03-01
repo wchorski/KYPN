@@ -1,6 +1,6 @@
 import ErrorMessage from "@components/ErrorMessage"
 import { DayMonthTime } from "@components/blocks/DayMonthTime"
-import { datePrettyLocal } from "@lib/dateFormatter"
+import { dateFormatLocalDateTime, datePrettyLocal } from "@lib/dateFormatter"
 import moneyFormatter, {
 	calcDiscount,
 	handleCouponDetails,
@@ -31,8 +31,9 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
 import { IconLink } from "@components/elements/IconLink"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import { bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { bg_c_accent, bg_c_tertiary } from "@styles/colorthemes.module.css"
 import { item, perItemTotal } from "@styles/ecommerce/cart.module.css"
+import { isDateOlderThanNow } from "@lib/dateCheck"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -99,14 +100,26 @@ export default async function SubscriptionItemByIdPage({
 		dateModified,
 		addons,
 		coupon,
+		trial_end,
 	} = subscriptionItem
 
 	return (
 		<main className={page_layout}>
 			<header className={layout_breakout}>
-				<h1>{summary}</h1>
+				<h1>
+					<span role="doc-subtitle">subscription</span>
+					{summary}
+				</h1>
 				<Flex alignItems={"center"}>
 					<StatusBadge type={"subscriptionItem"} status={status} />{" "}
+					{trial_end && isDateOlderThanNow(trial_end) && (
+						<div className={["pill", bg_c_accent].join(" ")}>
+							<span>Trial Ends: </span>
+							<time dateTime={trial_end}>
+								{datePrettyLocal(trial_end, "day")}
+							</time>
+						</div>
+					)}
 					<IconLink
 						icon={"edit"}
 						label="Edit"
@@ -212,8 +225,8 @@ export default async function SubscriptionItemByIdPage({
 												>
 													{handleCouponDetails(coupon)}
 												</span>
-                        <br />
-                        <br />
+												<br />
+												<br />
 												<div
 													className={item}
 													style={{ border: "dashed 1px var(--c-txt)" }}
@@ -303,13 +316,13 @@ export default async function SubscriptionItemByIdPage({
 const query = `  
     id
     summary
-    
     status
     isDelinquent
     billing_interval
     notes
     dateCreated
     dateModified
+    trial_end
     user {
       id
       name

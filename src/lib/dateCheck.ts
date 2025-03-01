@@ -1,3 +1,9 @@
+export const isDateOlderThanNow = (date:string|Date) => {
+  const thisDate = new Date(date)
+  const now = new Date()
+  return thisDate > now
+}
+
 export const dateAdjuster = (
 	date: Date | string,
 	{ years = 0, months = 0, days = 0 }

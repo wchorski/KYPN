@@ -1565,6 +1565,7 @@ type SubscriptionPlan_description_Document {
 input SubscriptionPlanWhereUniqueInput {
   id: ID
   slug: String
+  stripePriceId: String
 }
 
 input SubscriptionPlanWhereInput {
@@ -1670,6 +1671,7 @@ type SubscriptionItem {
   subscriptionPlan: SubscriptionPlan
   isActive: Boolean
   isDelinquent: Boolean
+  trial_end: DateTime
   status: String
   billing_interval: String
   notes: String
@@ -1686,6 +1688,8 @@ type SubscriptionItem {
 
 input SubscriptionItemWhereUniqueInput {
   id: ID
+  stripeSubscriptionId: String
+  stripeSubscriptionItemId: String
 }
 
 input SubscriptionItemWhereInput {
@@ -1697,6 +1701,7 @@ input SubscriptionItemWhereInput {
   subscriptionPlan: SubscriptionPlanWhereInput
   isActive: BooleanFilter
   isDelinquent: BooleanFilter
+  trial_end: DateTimeNullableFilter
   status: StringFilter
   billing_interval: StringFilter
   notes: StringFilter
@@ -1726,6 +1731,7 @@ input SubscriptionItemOrderByInput {
   custom_price: OrderDirection
   isActive: OrderDirection
   isDelinquent: OrderDirection
+  trial_end: OrderDirection
   status: OrderDirection
   billing_interval: OrderDirection
   notes: OrderDirection
@@ -1740,6 +1746,7 @@ input SubscriptionItemUpdateInput {
   subscriptionPlan: SubscriptionPlanRelateToOneForUpdateInput
   isActive: Boolean
   isDelinquent: Boolean
+  trial_end: DateTime
   status: String
   billing_interval: String
   notes: String
@@ -1775,6 +1782,7 @@ input SubscriptionItemCreateInput {
   subscriptionPlan: SubscriptionPlanRelateToOneForCreateInput
   isActive: Boolean
   isDelinquent: Boolean
+  trial_end: DateTime
   status: String
   billing_interval: String
   notes: String

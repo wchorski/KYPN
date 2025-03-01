@@ -79,9 +79,9 @@ export function TicketRedeemForm({ ticketId, status }: Props) {
 				{/* <RadioField
 					name={"status"}
           required={true}
-					dataId={state.values?.status}
+					dataid={state.values?.status}
 					options={statusOptions}
-					defaultOptionValue={state.values?.status}
+					defaultoptionvalue={state.values?.status}
           error={state.valueErrors?.status}
 				/> */}
 			</fieldset>

@@ -9,6 +9,7 @@ import {
 } from "@lib/actions/postSubscriptionUpdate"
 import { useForm } from "@hooks/useForm"
 import { RadioField } from "./RadioField"
+import { InputField } from "@components/InputField"
 
 type Props = {
 	subscriptionItemId: string
@@ -39,20 +40,27 @@ export function SubscriptionUpdateForm({ subscriptionItemId, status }: Props) {
 
 	return (
 		<form className={form} action={action}>
-			<RadioField
-				name={"status"}
-				required={true}
-				dataId={state.values?.status}
-				options={statusOptions}
-				defaultOptionValue={state.values?.status}
-				error={state.valueErrors?.status}
-			/>
+			<fieldset disabled={state.success ? true : false}>
+				<InputField
+					type={"hidden"}
+					name={"subscriptionItemId"}
+					defaultValue={state.values?.subscriptionItemId}
+					required={true}
+					error={state.valueErrors?.subscriptionItemId}
+				/>
+				<RadioField
+					name={"status"}
+					required={true}
+					dataid={state.values?.status}
+					options={statusOptions}
+					defaultoptionvalue={state.values?.status}
+					error={state.valueErrors?.status}
+				/>
+			</fieldset>
 			{!state.success ? (
 				<SubmitButton label={"Update"} />
 			) : (
-				<p className={"success"}>
-					<Callout intent={"success"}>{state.success}</Callout>
-				</p>
+				<Callout intent={"success"}>{state.success}</Callout>
 			)}
 			<p className={"error"}>{state.error}</p>
 		</form>

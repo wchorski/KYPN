@@ -98,8 +98,8 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 			break
 
 		//! does not included important metadata set by this app
+		//? handled with `checkout.session.completed`
 		// case "customer.subscription.created":
-		// 	//? handled with `checkout.session.completed`
 		// 	console.log("🐸🐸🐸 customer.subscription.created")
 		// 	handleSubscriptionCreate(stripePayload.data.object)
 		// // if (!["trialing", "active"].includes(stripePayload.data.object.status))
@@ -145,38 +145,38 @@ type SubscriptionMetadata = {
 
 async function handleSubscriptionCreate(
 	checkoutSession: Stripe.Checkout.Session,
-	lineItems: Stripe.LineItem[]
 ) {
 	const {
-		id,
+		id: csId,
 		metadata,
 		// amount_total,
 		subscription,
 		// payment_status,
 		// total_details,
-    //@ts-ignore
-    discounts,
+		//@ts-ignore
+		discounts,
 		customer,
 	} = checkoutSession as Stripe.Checkout.Session & SubscriptionMetadata
 
-	const couponCode = discounts[0].coupon as string || metadata.couponCode
-	// console.log(JSON.stringify({ items }, null, 2))
+	const couponCode = (discounts[0]?.coupon as string) || metadata.couponCode || undefined
+
 	const stripeSubscription = await stripe.subscriptions.retrieve(
 		String(subscription)
 	)
-	const status = stripeSubscription.status
-	if (lineItems) {
+	const { id: subId, status, trial_end, items } = stripeSubscription
+	console.log(`🐸 insert checkout session id to Order ${csId}`)
+	if (items) {
 		const data: SubscriptionItemCreateInput[] = await Promise.all(
-			lineItems.map(async (item) => ({
-				stripeSubscriptionId: id,
-				stripeSubscriptionItemId: String(subscription),
+			items.data.map(async (item) => ({
+				stripeSubscriptionId: subId,
+				stripeSubscriptionItemId: item.id,
 				//? this is set in subscriptionItem billing_interval resolveInput field hook
 				// billing_interval: sub.plan.interval,
 				subscriptionPlan: {
 					connect: {
 						id: await findSubscriptionPlanId(
 							item.price?.id,
-							metadata.subscriptionPlanId,
+							metadata.subscriptionPlanId
 						),
 					},
 				},
@@ -185,12 +185,24 @@ async function handleSubscriptionCreate(
 						id: await findUserId(customer?.toString(), metadata.customerId),
 					},
 				},
-				status:
-					status === "trialing"
-						? "TRIAL"
-						: status === "active"
-						? "ACTIVE"
-						: "REQUESTED",
+				status: ![
+					"incomplete",
+					"incomplete_expired",
+					"past_due",
+					"canceled",
+					"unpaid",
+					"paused",
+				].includes(status)
+					? "ACTIVE"
+					: status === "paused"
+					? "PAUSED"
+					: "REQUESTED",
+				...(trial_end
+					? {
+              //? convert value from milliseconds to seconds
+							trial_end: new Date(trial_end * 1000).toISOString()
+					  }
+					: {}),
 				...(couponCode
 					? {
 							coupon: {
@@ -277,10 +289,9 @@ async function handleSubscriptionCreate(
 // }
 
 async function findSubscriptionPlanId(
-	stripePriceId: string|undefined,
+	stripePriceId: string | undefined,
 	subscriptionPlanId: string
 ) {
-	
 	if (subscriptionPlanId) return subscriptionPlanId
 	try {
 		const subPlans = await keystoneContext.sudo().db.SubscriptionPlan.findMany({
@@ -317,7 +328,6 @@ async function findSubscriptionPlanId(
 // 	return coupons[0].id
 // }
 async function findUserId(stripeCustomerId?: string, customerId?: string) {
-	console.log({ stripeCustomerId, customerId })
 	//? go off of native user id, and if not set in metadata, then use stripe customer id
 	if (customerId) return customerId
 	const users = await keystoneContext.sudo().db.User.findMany({
@@ -327,7 +337,7 @@ async function findUserId(stripeCustomerId?: string, customerId?: string) {
 			},
 		},
 	})
-	
+
 	if (!users[0].id || users.length > 1)
 		throw new Error(
 			`!!! User not found with stripeCustomerId:: ${stripeCustomerId}`
@@ -424,7 +434,7 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 	} else if (checkoutSession.mode === "subscription") {
 		console.log('🐸🐸🐸 checkoutSession.mode === "subscription"')
 
-		const sub = await handleSubscriptionCreate(checkoutSession, lineItems)
+		const sub = await handleSubscriptionCreate(checkoutSession)
 		// const data = (await keystoneContext
 		// 	.withSession({
 		// 		session: {

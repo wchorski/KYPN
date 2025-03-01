@@ -21,10 +21,6 @@ import { slugFormat } from "../../lib/slugFormat"
 import { Billing_Interval } from "@ks/types"
 import { envs } from "../../../envs"
 
-const SITE_TITLE = process.env.SITE_TITLE || "Ecommerce "
-const IMG_PLACEHOLDER =
-	process.env.FRONTEND_URL + "/assets/product-placeholder.png"
-
 export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 	// access: allowAll,
 	access: {
@@ -207,14 +203,15 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 					ref: "Tag.subscriptionPlans",
 					many: true,
 				}),
+        // TODO get rid of this crazy logic
 				stripeProductId: text({
 					isIndexed: true,
 					validation: { isRequired: false },
 					hooks: {
 						validate: {
 							create: async ({ resolvedData, context, addValidationError }) => {
-                //? custom `unique` validation that also allows the field to be empty is not using stripe at all
-                if(!resolvedData.stripeProductId) return
+								//? custom `unique` validation that also allows the field to be empty is not using stripe at all
+								if (!resolvedData.stripeProductId) return
 								const subPlans = await context
 									.sudo()
 									.db.SubscriptionPlan.findMany({
@@ -224,10 +221,13 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 											},
 										},
 									})
-                if(subPlans.length > 0) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
+								if (subPlans.length > 0)
+									addValidationError(
+										"!!! SubscriptionPlan can not share same stripeProductId with others"
+									)
 							},
 							update: async ({ resolvedData, context, addValidationError }) => {
-                if(!resolvedData.stripeProductId) return
+								if (!resolvedData.stripeProductId) return
 								const subPlans = await context
 									.sudo()
 									.db.SubscriptionPlan.findMany({
@@ -237,46 +237,54 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 											},
 										},
 									})
-                if(subPlans.length > 1) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
+								if (subPlans.length > 1)
+									addValidationError(
+										"!!! SubscriptionPlan can not share same stripeProductId with others"
+									)
 							},
 						},
 					},
 				}),
 				stripePriceId: text({
-					isIndexed: true,
+					isIndexed: "unique",
 					validation: { isRequired: false },
-          hooks: {
-						validate: {
-							create: async ({ resolvedData, context, addValidationError }) => {
-                //? custom `unique` validation that also allows the field to be empty is not using stripe at all
-                if(!resolvedData.stripeProductId) return
-								const subPlans = await context
-									.sudo()
-									.db.SubscriptionPlan.findMany({
-										where: {
-											stripePriceId: {
-												equals: resolvedData.stripeProductId,
-											},
-										},
-									})
-                if(subPlans.length > 0) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
-							},
-							update: async ({ resolvedData, context, addValidationError }) => {
-                if(!resolvedData.stripeProductId) return
-								const subPlans = await context
-									.sudo()
-									.db.SubscriptionPlan.findMany({
-										where: {
-											stripePriceId: {
-												equals: resolvedData.stripeProductId,
-											},
-										},
-									})
-                if(subPlans.length > 1) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
-							},
-						},
-					},
 				}),
+        // TODO get rid of this crazy logic
+				// stripePriceId: text({
+				// 	isIndexed: true,
+				// 	validation: { isRequired: false },
+				//   hooks: {
+				// 		validate: {
+				// 			create: async ({ resolvedData, context, addValidationError }) => {
+				//         //? custom `unique` validation that also allows the field to be empty is not using stripe at all
+				//         if(!resolvedData.stripeProductId) return
+				// 				const subPlans = await context
+				// 					.sudo()
+				// 					.db.SubscriptionPlan.findMany({
+				// 						where: {
+				// 							stripePriceId: {
+				// 								equals: resolvedData.stripeProductId,
+				// 							},
+				// 						},
+				// 					})
+				//         if(subPlans.length > 0) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
+				// 			},
+				// 			update: async ({ resolvedData, context, addValidationError }) => {
+				//         if(!resolvedData.stripeProductId) return
+				// 				const subPlans = await context
+				// 					.sudo()
+				// 					.db.SubscriptionPlan.findMany({
+				// 						where: {
+				// 							stripePriceId: {
+				// 								equals: resolvedData.stripeProductId,
+				// 							},
+				// 						},
+				// 					})
+				//         if(subPlans.length > 1) addValidationError('!!! SubscriptionPlan can not share same stripeProductId with others')
+				// 			},
+				// 		},
+				// 	},
+				// }),
 			},
 		}),
 	},

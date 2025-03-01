@@ -229,7 +229,7 @@ model SubscriptionPlan {
   status            String             @default("DRAFT")
   price             Int
   billing_interval  String             @default("month")
-  trial_period_days Int                @default(30)
+  trial_period_days Int                @default(1)
   stockMax          Int
   addons            Addon[]            @relation("Addon_subscriptionPlans")
   coupons           Coupon[]           @relation("Coupon_subscriptionPlans")
@@ -239,11 +239,10 @@ model SubscriptionPlan {
   categories        Category[]         @relation("Category_subscriptionPlans")
   tags              Tag[]              @relation("SubscriptionPlan_tags")
   stripeProductId   String             @default("")
-  stripePriceId     String             @default("")
+  stripePriceId     String             @unique @default("")
 
   @@index([authorId])
   @@index([stripeProductId])
-  @@index([stripePriceId])
 }
 
 model SubscriptionItem {
@@ -253,14 +252,15 @@ model SubscriptionItem {
   subscriptionPlanId       String?           @map("subscriptionPlan")
   isActive                 Boolean           @default(true)
   isDelinquent             Boolean           @default(false)
+  trial_end                DateTime?
   status                   String            @default("REQUESTED")
   billing_interval         String
   notes                    String            @default("")
   addons                   Addon[]           @relation("Addon_subscriptionItems")
   user                     User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId                   String?           @map("user")
-  stripeSubscriptionId     String            @default("")
-  stripeSubscriptionItemId String            @default("")
+  stripeSubscriptionId     String            @unique @default("")
+  stripeSubscriptionItemId String            @unique @default("")
   dateCreated              DateTime          @default(now())
   dateModified             DateTime          @default(now())
   orderItem                OrderItem?        @relation("OrderItem_subscriptionItem")
@@ -269,8 +269,6 @@ model SubscriptionItem {
 
   @@index([subscriptionPlanId])
   @@index([userId])
-  @@index([stripeSubscriptionId])
-  @@index([stripeSubscriptionItemId])
   @@index([couponId])
 }
 

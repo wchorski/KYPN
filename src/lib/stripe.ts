@@ -512,7 +512,7 @@ export async function stripeSubscriptionUpdate({
 	stripeSubscriptionId,
 	subItemId,
 }: SubscriptionUpdate) {
-	if (!envs.STRIPE_SECRET) return
+	if (!envs.STRIPE_SECRET || !stripeSubscriptionId) return
 
 	console.log("🐸 stripeSubscriptionUpdate. DOES THIS WORK w STRIPE???")
 

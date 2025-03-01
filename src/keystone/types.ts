@@ -425,6 +425,7 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
+  trial_end: string
 	status:
 		| "ACTIVE"
 		| "TRIAL"

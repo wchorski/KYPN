@@ -88,7 +88,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
             `,
 					})
 
-					return `${customer?.name || "Anonymous"} | ${
+					return `${customer?.name || "Anonymous"}'s ${
 						subPlan?.name || "No Service Selected"
 					}`
 				},
@@ -97,9 +97,9 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		custom_price: integer(),
 
 		price: virtual({
-      ui: {
-        description: 'charged per interval',
-      },
+			ui: {
+				description: "charged per interval",
+			},
 			field: graphql.field({
 				type: graphql.Int,
 				async resolve(item, args, context) {
@@ -129,7 +129,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 					if (coupon.percent_off)
 						return subPlan.price - subPlan.price * (coupon.percent_off / 100)
 
-          // TODO add addons back into the price once I figure that out....
+					// TODO add addons back into the price once I figure that out....
 					// const addons = await context.query.Addon.findMany({
 					// 	where: {
 					// 		subscriptionItems: {
@@ -167,10 +167,11 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		}),
 		isActive: checkbox({ defaultValue: true }),
 		isDelinquent: checkbox({ defaultValue: false }),
+		trial_end: timestamp(),
 		status: select({
 			options: [
 				{ label: "Active", value: "ACTIVE" },
-				{ label: "Trial", value: "TRIAL" },
+				// { label: "Trial", value: "TRIAL" },
 				{ label: "Expired", value: "EXPIRED" },
 				{ label: "Canceled", value: "CANCELED" },
 				{ label: "Suspended", value: "SUSPENDED" },
@@ -241,12 +242,13 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		...group({
 			label: "Metadata",
 			fields: {
+        // TODO may cause problems if bundling subscriptions?
 				stripeSubscriptionId: text({
-					isIndexed: true,
+					isIndexed: "unique",
 					validation: { isRequired: false },
 				}),
 				stripeSubscriptionItemId: text({
-					isIndexed: true,
+					isIndexed: 'unique',
 					validation: { isRequired: false },
 				}),
 				dateCreated: timestamp({
@@ -301,7 +303,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 						status: resolvedData.status as TypeSubsItem["status"],
 					})
 			},
-			delete: async ({ item }) => {
+			delete: async ({ item,  }) => {
 				await stripeSubscriptionUpdate({
 					subItemId: item.id,
 					stripeSubscriptionId: item.stripeSubscriptionId,

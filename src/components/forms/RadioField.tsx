@@ -5,16 +5,16 @@ import { forwardRef, type HTMLProps, type Ref } from "react"
 type Props = {
 	name: string
 	options: SelectOption[]
-	defaultOptionValue?: string | null
+	defaultoptionvalue?: string | null
   //? usefull if reusing mutli forms on one page
-	dataId?: string
+	dataid?: string
   error?: string
 } & HTMLProps<HTMLInputElement>
 
 function RadioFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
-	const { options, defaultOptionValue, name, dataId, error } = props
+	const { options, defaultoptionvalue, name, dataid, error } = props
 
-  const forId = (value:string) => value + (dataId ? `-${dataId}` : "")
+  const forId = (value:string) => value + (dataid ? `-${dataid}` : "")
 
 	return (
 		<ul className={radio}>
@@ -26,10 +26,10 @@ function RadioFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
 						type={"radio"}
 						id={forId(opt.value)}
 						value={opt.value}
-						defaultChecked={opt.value === defaultOptionValue}
+						defaultChecked={opt.value === defaultoptionvalue}
 						ref={ref}
 					/>
-					{opt.value === defaultOptionValue ? (
+					{opt.value === defaultoptionvalue ? (
 						<strong className="current">{opt.label}</strong>
 					) : (
 						<span> {opt.label} </span>

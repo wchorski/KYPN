@@ -16,7 +16,6 @@ export async function postSubscriptionUpdate(
 	// // @ts-ignore
 	// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 	const { subscriptionItemId, status } = values
-	// console.log({ values })
 
 	const valueErrors = validateValues(values)
 	if (valueErrors)
@@ -39,6 +38,8 @@ export async function postSubscriptionUpdate(
 					status,
 				},
 			})) as { status: string }
+
+		console.log({ updatedSubscription })
 
 		return {
 			values: {

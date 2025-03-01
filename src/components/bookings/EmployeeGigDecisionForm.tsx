@@ -151,9 +151,9 @@ export function EmployeeGigDecisionForm({
 			<fieldset>
         <RadioField 
           name={'decision'}
-          dataId={bookingId}
+          dataid={bookingId}
           options={decisionOptions}
-          defaultOptionValue={state.values?.decision}
+          defaultoptionvalue={state.values?.decision}
         />
 				{/* <ul className="radio">
 					{decisionOptions.map((opt, i) => (
