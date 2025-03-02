@@ -608,4 +608,12 @@ export async function stripeCreateInstallmentPayment({
 	console.log({ stripePaymentPlan })
 }
 
+export async function stripeWebhookCreate(){
+  const webhookEndpoint = await stripeConfig.webhookEndpoints.create({
+    enabled_events: ['checkout.session.completed'],
+    url: envs.FRONTEND_URL + `/api/webhooks/stripe`,
+  });
+  console.log(`💳 Stripe Webhook created for production: ${webhookEndpoint}`);
+}
+
 export default stripeConfig

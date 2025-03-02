@@ -8,12 +8,13 @@ type Props = {
 	href?: string
 	baseURL?: string
 	children: ReactNode
-}
+  className?:string
+} 
 
-export function CallbackLink({ href = "/login", baseURL, children }: Props) {
+export function CallbackLink({ href = "/login", baseURL, children, className }: Props) {
 	const pathName = usePathname()
 
 	const withBaseUrl = (baseURL || envs.FRONTEND_URL) + pathName
 
-	return <Link href={`${href}?callbackUrl=${withBaseUrl}`}>{children}</Link>
+	return <Link href={`${href}?callbackUrl=${withBaseUrl}`} className={className}>{children}</Link>
 }

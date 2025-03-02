@@ -247,7 +247,7 @@ export function SubscriptionPlanLinkBuilder({
 					}
 				/>
 			)}
-
+      <h5>{subscriptionPlan.name}</h5>
 			<p style={{ fontSize: "1.6rem", margin: "0" }}>
 				{!state.coupon ? (
 					<>

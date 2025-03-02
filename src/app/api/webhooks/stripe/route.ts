@@ -222,72 +222,6 @@ async function handleSubscriptionCreate(
 	}
 }
 
-// async function handleSubscriptionCreate(
-// 	stripeSubscription: Stripe.Subscription
-// ) {
-// 	const {
-// 		// cancel_at,
-// 		// cancel_at_period_end,
-// 		// collection_method,
-// 		// customer,
-// 		// discounts,
-// 		// discount,
-// 		// latest_invoice,
-// 		// trial_start,
-// 		// trial_end,
-// 		id,
-// 		customer,
-
-// 		status,
-// 		items,
-// 		metadata,
-// 		discounts,
-// 	} = stripeSubscription as Stripe.Subscription & SubscriptionMetadata
-// 	console.log("stripeSubscription")
-// 	console.log(JSON.stringify({ stripeSubscription }, null, 2))
-// 	console.log({ id, status, metadata })
-// 	// console.log(JSON.stringify({ items }, null, 2))
-// 	if (items.object === "list") {
-// 		const data: SubscriptionItemCreateInput[] = await Promise.all(
-// 			items.data.map(async (sub) => ({
-// 				stripeSubscriptionId: id,
-// 				stripeSubscriptionItemId: sub.id,
-// 				billing_interval: sub.plan.interval,
-// 				subscriptionPlan: {
-// 					connect: { id: await findSubscriptionPlanId(sub.plan.id) },
-// 				},
-// 				user: {
-// 					connect: {
-// 						id: await findUserId(customer.toString(), metadata.customerId),
-// 					},
-// 				},
-// 				status:
-// 					status === "trialing"
-// 						? "TRIAL"
-// 						: status === "active"
-// 						? "ACTIVE"
-// 						: "REQUESTED",
-// 				...(discounts[0]
-// 					? {
-// 							coupon: {
-// 								connect: { id: await findCouponId(discounts[0].toString()) },
-// 							},
-// 					  }
-// 					: {}),
-// 			}))
-// 		)
-
-// 		// TODO is it safe to do sudo here? should i create a seperate mutation?
-// 		const createdsubscriptionItems = await keystoneContext
-// 			.sudo()
-// 			.db.SubscriptionItem.createMany({
-// 				data,
-// 			})
-
-// 		console.log({ createdsubscriptionItems })
-// 	}
-// }
-
 async function findSubscriptionPlanId(
 	stripePriceId: string | undefined,
 	subscriptionPlanId: string
@@ -312,21 +246,7 @@ async function findSubscriptionPlanId(
 		console.log("!!! find error:: ", error)
 	}
 }
-// async function findCouponId(stripeId: string) {
-// 	console.log(`findCouponId id ${stripeId}`)
-// 	const coupons = await keystoneContext.sudo().db.Coupon.findMany({
-// 		where: {
-// 			stripeId: {
-// 				equals: stripeId,
-// 			},
-// 		},
-// 	})
-// 	console.log({ coupons })
-// 	if (!coupons[0].id)
-// 		throw new Error(`!!! Coupon not found with stripeId:: ${stripeId}`)
-// 	//? schema field validation should not allow multiple items in this array
-// 	return coupons[0].id
-// }
+
 async function findUserId(stripeCustomerId?: string, customerId?: string) {
 	//? go off of native user id, and if not set in metadata, then use stripe customer id
 	if (customerId) return customerId
@@ -435,76 +355,8 @@ async function handleSuccessfulCheckout(session: Stripe.Checkout.Session) {
 		console.log('🐸🐸🐸 checkoutSession.mode === "subscription"')
 
 		const sub = await handleSubscriptionCreate(checkoutSession)
-		// const data = (await keystoneContext
-		// 	.withSession({
-		// 		session: {
-		// 			itemId: checkoutSession.metadata.customerId,
-		// 		},
-		// 		stripe: {
-		// 			payment_status: checkoutSession.payment_status,
-		// 			id: checkoutSession.id,
-		// 			payment_intent: checkoutSession.payment_intent,
-		// 			customerId: checkoutSession.metadata.customerId,
-		// 			amount_total: checkoutSession.amount_total,
-		// 			subscriptionId: checkoutSession.subscription,
-		// 			rentalId: checkoutSession.metadata.rentalId,
-		// 		},
-		// 	})
-		// 	.graphql.run({
-		// 		query: `
-		//       mutation CheckoutSubscription($subscriptionPlanId: String!, $addonIds: [String], $couponIds: [String]) {
-		//         checkoutSubscription(subscriptionPlanId: $subscriptionPlanId, addonIds: $addonIds, couponIds: $couponIds) {
-		//           id
-		//           status
-		//         }
-		//       }
-		//     `,
-		// 		variables: {
-		// 			subscriptionPlanId: checkoutSession.metadata.subscriptionPlanId,
-		// 			addonIds: [],
-		// 			couponIds: [],
-		// 		},
-		// 	})) as { checkoutSubscription: { id: string; status: string } }
-
-		// return {
-		// 	checkout: data.checkoutSubscription,
-		// }
+		
 	} else if (checkoutSession.mode === "setup") {
 		console.log('🐸🐸🐸 checkoutSession.mode === "setup"')
 	}
 }
-
-type WithMetadata = Stripe.Checkout.Session &
-	(
-		| {
-				metadata: {
-					typeof: "ticket"
-					eventId: string
-					customerId: string
-					orderId: string
-				}
-		  }
-		| {
-				metadata: {
-					typeof: "product"
-					orderId: string
-					customerId: string
-				}
-		  }
-		| {
-				metadata: {
-					typeof: "subscriptionPlan"
-					subscriptionPlanId: string
-					orderId: string
-					customerId: string
-				}
-		  }
-		| {
-				metadata: {
-					typeof: "subscription-item"
-					subscriptionPlanId: string
-					orderId: string
-					customerId: string
-				}
-		  }
-	)

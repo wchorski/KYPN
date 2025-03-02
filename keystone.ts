@@ -8,6 +8,7 @@ import { nextAuthSessionStrategy } from "./session"
 import { extractDBData } from "./src/keystone/seed/extractDBData"
 import Stripe from "stripe"
 import express from 'express'
+import { stripeWebhookCreate } from "./src/lib/stripe"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! ❌ envs.STRIPE_SECRET not set")
 const stripe = new Stripe(envs.STRIPE_SECRET)
@@ -70,15 +71,10 @@ export default config({
 			) {
 				await extractDBData(context)
 			}
-
-			// if (envs.BACKEND_URL.startsWith("http://")) return
-			// const endpoint = await stripe.webhookEndpoints.create({
-			// 	url: `${envs.BACKEND_URL}/api/webhooks/stripe`,
-			// 	enabled_events: [
-			// 		"payment_intent.payment_failed",
-			// 		"payment_intent.succeeded",
-			// 	],
-			// })
+      // TODO still figuring out how to generate and pass webhook secret through API (without using stripe dashboard)
+      // if(envs.NODE_ENV === 'production' && envs.FRONTEND_URL.startsWith("https://")){
+      //   await stripeWebhookCreate()
+      // }
 		},
 	},
 	server: {

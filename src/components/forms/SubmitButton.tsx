@@ -13,9 +13,14 @@ import { useFormStatus } from "react-dom"
 type SubmitButtonsProps = {
 	label?: string
 	className?: string
+	isDisabled?: boolean
 }
 
-export function SubmitButton({ label, className }: SubmitButtonsProps) {
+export function SubmitButton({
+	label,
+	className,
+	isDisabled = false,
+}: SubmitButtonsProps) {
 	const { pending } = useFormStatus()
 
 	const btnText = label || "Submit"
@@ -23,7 +28,7 @@ export function SubmitButton({ label, className }: SubmitButtonsProps) {
 	return (
 		<button
 			type={"submit"}
-			disabled={pending}
+			disabled={isDisabled ? isDisabled : pending}
 			className={[className, pending ? "anim_border_spin pending" : ""].join(
 				" "
 			)}

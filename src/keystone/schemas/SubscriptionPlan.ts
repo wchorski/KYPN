@@ -37,6 +37,16 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 		},
 	},
 
+  ui: {
+		
+		listView: {
+			initialColumns: ["name", "price", "status", "billing_interval", "trial_period_days", "stockMax"],
+			initialSort: { field: "dateCreated", direction: "DESC" },
+		},
+		//? maybe I'd prefer email? idk
+		labelField: `name`,
+	},
+
 	fields: {
 		typeof: virtual({
 			field: graphql.field({
@@ -203,48 +213,52 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 					ref: "Tag.subscriptionPlans",
 					many: true,
 				}),
-        // TODO get rid of this crazy logic
-				stripeProductId: text({
-					isIndexed: true,
+        stripeProductId: text({
+					isIndexed: "unique",
 					validation: { isRequired: false },
-					hooks: {
-						validate: {
-							create: async ({ resolvedData, context, addValidationError }) => {
-								//? custom `unique` validation that also allows the field to be empty is not using stripe at all
-								if (!resolvedData.stripeProductId) return
-								const subPlans = await context
-									.sudo()
-									.db.SubscriptionPlan.findMany({
-										where: {
-											stripePriceId: {
-												equals: resolvedData.stripeProductId,
-											},
-										},
-									})
-								if (subPlans.length > 0)
-									addValidationError(
-										"!!! SubscriptionPlan can not share same stripeProductId with others"
-									)
-							},
-							update: async ({ resolvedData, context, addValidationError }) => {
-								if (!resolvedData.stripeProductId) return
-								const subPlans = await context
-									.sudo()
-									.db.SubscriptionPlan.findMany({
-										where: {
-											stripePriceId: {
-												equals: resolvedData.stripeProductId,
-											},
-										},
-									})
-								if (subPlans.length > 1)
-									addValidationError(
-										"!!! SubscriptionPlan can not share same stripeProductId with others"
-									)
-							},
-						},
-					},
 				}),
+        // TODO get rid of this crazy logic
+				// stripeProductId: text({
+				// 	isIndexed: true,
+				// 	validation: { isRequired: false },
+				// 	hooks: {
+				// 		validate: {
+				// 			create: async ({ resolvedData, context, addValidationError }) => {
+				// 				//? custom `unique` validation that also allows the field to be empty is not using stripe at all
+				// 				if (!resolvedData.stripeProductId) return
+				// 				const subPlans = await context
+				// 					.sudo()
+				// 					.db.SubscriptionPlan.findMany({
+				// 						where: {
+				// 							stripePriceId: {
+				// 								equals: resolvedData.stripeProductId,
+				// 							},
+				// 						},
+				// 					})
+				// 				if (subPlans.length > 0)
+				// 					addValidationError(
+				// 						"!!! SubscriptionPlan can not share same stripeProductId with others"
+				// 					)
+				// 			},
+				// 			update: async ({ resolvedData, context, addValidationError }) => {
+				// 				if (!resolvedData.stripeProductId) return
+				// 				const subPlans = await context
+				// 					.sudo()
+				// 					.db.SubscriptionPlan.findMany({
+				// 						where: {
+				// 							stripePriceId: {
+				// 								equals: resolvedData.stripeProductId,
+				// 							},
+				// 						},
+				// 					})
+				// 				if (subPlans.length > 1)
+				// 					addValidationError(
+				// 						"!!! SubscriptionPlan can not share same stripeProductId with others"
+				// 					)
+				// 			},
+				// 		},
+				// 	},
+				// }),
 				stripePriceId: text({
 					isIndexed: "unique",
 					validation: { isRequired: false },

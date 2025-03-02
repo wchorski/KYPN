@@ -32,6 +32,7 @@ import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { PriceTag } from "@components/ecommerce/PriceTag"
 import { SubscriptionPlanLinkBuilder } from "@components/ecommerce/SubscriptionPlanLinkBuilder"
 import { plainObj } from "@lib/utils"
+import { DialogPopup } from "@components/menus/Dialog"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -140,7 +141,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 							<IconLink
 								icon={"edit"}
 								label={"Edit"}
-								href={envs.BACKEND_URL + `/products/${id}`}
+								href={envs.BACKEND_URL + `/subscription-plans/${id}`}
 							>
 								<span>Edit Product Details</span>
 							</IconLink>
@@ -156,10 +157,11 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 							<StatusBadge type={"subscriptionPlan"} status={status} />
 						</Card>
 					) : (
-						<SubscriptionPlanLinkBuilder
-							subscriptionPlan={plainObj({ ...subscriptionPlan, id })}
-							customerId={session.itemId}
-							addons={plainObj(addons)}
+						<IconLink
+              className="button medium"
+							icon={"subscription"}
+							label="Build a Plan"
+							href={`?${new URLSearchParams({ popup: "modal" })}`}
 						/>
 					)}
 
@@ -224,24 +226,25 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 					)}
 				</div>
 			</article>
-			{/* <footer>
-				{canEdit(author, session) && (
-					<section className={layout_wide}>
-						<Card>
-							<h2> Author Panel </h2>
-
-							<IconLink
-								icon={"edit"}
-								label={"Edit"}
-								href={envs.BACKEND_URL + `/products/${id}`}
-								className={"button medium"}
-							>
-								<span>Edit Product Details</span>
-							</IconLink>
-						</Card>
-					</section>
+	
+			<DialogPopup
+				// title={``}
+				// onClose={() => null}
+				// onOk={() => null}
+				buttonLabel=""
+			>
+				{session ? (
+					<SubscriptionPlanLinkBuilder
+						subscriptionPlan={plainObj({ ...subscriptionPlan, id })}
+						customerId={session.itemId}
+						addons={plainObj(addons)}
+					/>
+				) : (
+					<p>
+						<CallbackLink>Login</CallbackLink> to subscribe
+					</p>
 				)}
-			</footer> */}
+			</DialogPopup>
 		</main>
 	)
 }

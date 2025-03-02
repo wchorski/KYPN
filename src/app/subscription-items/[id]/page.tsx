@@ -112,6 +112,11 @@ export default async function SubscriptionItemByIdPage({
 				</h1>
 				<Flex alignItems={"center"}>
 					<StatusBadge type={"subscriptionItem"} status={status} />{" "}
+					<IconLink
+						icon={"edit"}
+						label="Update"
+						href={`?${new URLSearchParams({ popup: "modal" })}`}
+					/>
 					{trial_end && isDateOlderThanNow(trial_end) && (
 						<div className={["pill", bg_c_accent].join(" ")}>
 							<span>Trial Ends: </span>
@@ -120,11 +125,6 @@ export default async function SubscriptionItemByIdPage({
 							</time>
 						</div>
 					)}
-					<IconLink
-						icon={"edit"}
-						label="Edit"
-						href={`?${new URLSearchParams({ popup: "modal" })}`}
-					/>
 					{user && (
 						<Card
 							direction={"row"}

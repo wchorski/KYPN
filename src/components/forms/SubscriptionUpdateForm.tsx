@@ -10,6 +10,7 @@ import {
 import { useForm } from "@hooks/useForm"
 import { RadioField } from "./RadioField"
 import { InputField } from "@components/InputField"
+import Link from "next/link"
 
 type Props = {
 	subscriptionItemId: string
@@ -40,7 +41,15 @@ export function SubscriptionUpdateForm({ subscriptionItemId, status }: Props) {
 
 	return (
 		<form className={form} action={action}>
-			<fieldset disabled={state.success ? true : false}>
+			<fieldset
+				disabled={
+					state.success
+						? true
+						: state.values?.status === "CANCELED"
+						? true
+						: false
+				}
+			>
 				<InputField
 					type={"hidden"}
 					name={"subscriptionItemId"}
@@ -57,10 +66,20 @@ export function SubscriptionUpdateForm({ subscriptionItemId, status }: Props) {
 					error={state.valueErrors?.status}
 				/>
 			</fieldset>
+
 			{!state.success ? (
-				<SubmitButton label={"Update"} />
+				<SubmitButton
+					label={"Update"}
+					isDisabled={state.values?.status === "CANCELED"}
+				/>
 			) : (
 				<Callout intent={"success"}>{state.success}</Callout>
+			)}
+			{state.values?.status === "CANCELED" && (
+				<p className="error">
+					Subscription cannot be re-activated after cancelation. Create a new{" "}
+					<Link href={`/subscription-plans`}>subscription</Link>
+				</p>
 			)}
 			<p className={"error"}>{state.error}</p>
 		</form>
