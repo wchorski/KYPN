@@ -1,6 +1,6 @@
-import { Booking } from "@ks/types";
 import { keystoneContext } from "@ks/context";
-import { Session } from "next-auth";
+import type { Booking } from "@ks/types";
+import type { Session } from "next-auth";
 
 export default async function fetchBookings(
   dateSelectedString: string,

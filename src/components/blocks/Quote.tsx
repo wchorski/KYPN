@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
 import {quote} from '@styles/blocs/quote.module.scss';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
+import React from 'react';
 
 type QuoteProps = {
   href:string|undefined,

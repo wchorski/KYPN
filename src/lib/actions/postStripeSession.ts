@@ -1,8 +1,9 @@
 "use server"
-import { envs } from "@/envs"
 import type { CartItem, Coupon, Product, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
+
+import { envs } from "@/envs"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! ❌ envs.STRIPE_SECRET not set")
 

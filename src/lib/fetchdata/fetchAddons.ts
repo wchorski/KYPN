@@ -1,5 +1,5 @@
-import { Addon } from "@ks/types"
 import { keystoneContext } from "@ks/context"
+import type { Addon } from "@ks/types"
 
 type Props = {
 	query: string

@@ -1,8 +1,8 @@
 // cred - Kevin Powell - https://www.youtube.com/watch?v=Z-3tPXf9a7M&t=388s
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
-import Link from "next/link"
-import { ReactNode } from "react";
 import styles from '@styles/blocs/infocard.module.css'
+import Link from "next/link"
+import type { ReactNode } from "react";
 
 type InfoCard = {
   header:string,

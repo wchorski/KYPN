@@ -1,14 +1,14 @@
 'use client'
 import { useEffect, useState } from 'react';
+
+// import { QueryLoading } from '../../menus/QueryLoading';
+import type { tMap } from './Map';
 // TODO add back map leaflet
 // @ts-ignore
 // import Leaflet from 'leaflet';
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 // import 'leaflet/dist/leaflet.css';
-
 import styles from './Map.module.css';
-// import { QueryLoading } from '../../menus/QueryLoading';
-import { tMap } from './Map';
 
 const myaddress = "111 S Michigan Ave, Chicago, IL 60603 United States"; // Replace with your desired address
 

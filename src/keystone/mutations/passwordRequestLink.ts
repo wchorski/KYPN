@@ -1,12 +1,13 @@
 // cred Mafia Codes - https://www.youtube.com/watch?v=72JYhSoVYPc
 
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { User } from "../types"
-import { mailPasswordRequest } from "../../lib/mail"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 import jwt from "jsonwebtoken"
+
 import { envs } from "../../../envs"
+import { mailPasswordRequest } from "../../lib/mail"
+import type { User } from "../types"
+import type { Context } from ".keystone/types"
 
 const IMG_PLACEHOLD =
 	process.env.FRONTEND_URL + "/assets/product-placeholder.png"

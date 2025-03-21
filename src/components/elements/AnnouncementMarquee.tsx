@@ -1,24 +1,23 @@
 "use client"
-import Link from "next/link"
-import { ReactNode, useState } from "react"
-import { MdClose } from "react-icons/md"
-import { FiExternalLink } from "react-icons/fi"
-import { BlockRender } from "@components/blocks/BlockRender"
-import { Announcement } from "@ks/types"
-import {
-	sAnnouncement,
-	sOpened,
-	btnClose,
-	btnlink,
-} from "@styles/menus/announcement.module.css"
+import Flex from "@components/layouts/Flex"
+import type {  Announcement  } from "@ks/types"
+import { getColorTheme } from "@lib/styleHelpers"
 import {
 	layout_full,
-	layout_site,
-	page_layout,
 	layout_wide,
+	page_layout,
 } from "@styles/layout.module.css"
-import Flex from "@components/layouts/Flex"
-import { getColorTheme } from "@lib/styleHelpers"
+import {
+	btnClose,
+	btnlink,
+	sAnnouncement,
+	sOpened,
+} from "@styles/menus/announcement.module.css"
+import Link from "next/link"
+import type { ReactNode} from "react";
+import { useState } from "react"
+import { FiExternalLink } from "react-icons/fi"
+import { MdClose } from "react-icons/md"
 
 type Props = {
 	announcement: Announcement

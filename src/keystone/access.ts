@@ -1,6 +1,5 @@
-import { includes } from "fp-ts/lib/string"
-import { permissionsList } from "./schemas/permissions"
-import { ListAccessArgs } from "./types"
+import { permissionsList } from "./permissions"
+import type { ListAccessArgs } from "./types"
 
 // At it's simplest, the access control returns a yes or no value depending on the users session
 

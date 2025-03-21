@@ -4,8 +4,8 @@
 // To get full List and GraphQL API type support, uncomment them here and use them below
 // import type { KeystoneListsTypeInfo } from './.keystone/schema-types';
 
-import { KeystoneGraphQLAPI, KeystoneListsAPI } from "@keystone-6/core/types"
-import type { Permission } from "./schemas/fields"
+import type { KeystoneGraphQLAPI, KeystoneListsAPI } from "@keystone-6/core/types"
+
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
 // https://github.com/keystonejs/keystone/discussions/8498

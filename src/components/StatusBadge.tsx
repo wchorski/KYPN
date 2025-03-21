@@ -1,4 +1,4 @@
-import {
+import type { 
   Addon,
 	Booking,
 	Event,
@@ -11,7 +11,7 @@ import {
 	SubscriptionItem,
 	SubscriptionPlan,
 	Ticket,
-} from "@ks/types"
+ } from "@ks/types"
 import { stringCapFirstLetter } from "@lib/slugFormat"
 import styles from "@styles/blocs/status.module.css"
 

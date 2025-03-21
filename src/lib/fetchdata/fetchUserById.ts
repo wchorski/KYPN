@@ -1,7 +1,8 @@
-import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
-import { User } from "@ks/types";
+import type { User } from "@ks/types";
 import { getServerSession } from "next-auth";
+
+import { nextAuthOptions } from "@/session";
 
 export async function fetchUserById(id:string){
 

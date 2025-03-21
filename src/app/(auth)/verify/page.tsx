@@ -1,16 +1,12 @@
-import ErrorMessage from "@components/ErrorMessage"
-import { Callout } from "@components/blocks/Callout"
-import { Header } from "@components/elements/Header"
-import { BlockLayout } from "@components/layouts/BlockLayout"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { fetchVerifyEmail } from "@lib/fetchdata/fetchVerifyEmail"
-import {
-	layout_content,
-	page_content,
-	page_layout,
-} from "@styles/layout.module.css"
+import { VerifyEmailCard } from "@components/VerifyEmailCard"
+// import {
+// 	layout_content,
+// 	page_content,
+// 	page_layout,
+// } from "@styles/layout.module.css"
 import Link from "next/link"
+
+import { fetchVerifyEmail } from "../../fetch/fetchVerifyEmail"
 type Props = {
 	searchParams: {
 		email: string
@@ -37,12 +33,16 @@ export default async function VerifyPage({ searchParams }: Props) {
 	const { data, error } = await fetchVerifyEmail(email, token)
 
 	return (
-		<main className={page_layout}>
-			<Header widthOfContent={"layout_content"}>
+		<main 
+      // className={page_layout}
+      >
+			<header >
 				<h1> Verify Account </h1>
-			</Header>
+			</header>
 
-			<div className={[page_content, layout_content].join(" ")}>
+			<div 
+      // className={[page_content, layout_content].join(" ")}
+      >
 				{(!email || !token) ? (
 					<WhyAreYouHere />
 				) : error ? (
@@ -66,7 +66,7 @@ function Content({ email }: { email: string }) {
 				</p>
 				<p>
 					{" "}
-					<Link href={"/account"}> View account </Link>
+					<Link href={"/"}> View account </Link>
 				</p>
 		</>
 	)
@@ -77,20 +77,20 @@ function NotSuccessMessage({ error, email }: any) {
 		case String(error).includes("user already is of role"):
 			return (
 				<>
-					<Callout intent={"success"}>
+					<div className={"success"}>
 						<p> This account is already verified. </p>
 						<p>
 							{" "}
-							<Link href={"/account"}> View account </Link>
+							<Link href={"/"}> View account </Link>
 						</p>
-					</Callout>
+					</div>
 				</>
 			)
 
 		default:
 			return (
 				<>
-					<ErrorMessage error={error}> </ErrorMessage>
+					<p className={'error'}>{error.toString()}</p>
 					<VerifyEmailCard email={email} />
 				</>
 			)
@@ -103,7 +103,7 @@ function WhyAreYouHere() {
 			<p> not sure how you got here without a key... </p>
 			<p>
 				{" "}
-				<Link href={`/account`}> Get otta here </Link>{" "}
+				<Link href={`/`}> Get otta here </Link>{" "}
 			</p>
 		</div>
 	)

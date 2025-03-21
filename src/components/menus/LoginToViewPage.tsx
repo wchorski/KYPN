@@ -1,8 +1,8 @@
-import { page_content, page_layout } from "@styles/layout.module.css"
-import { ReactNode } from "react"
-import { CallbackLink } from "./CallbackLink"
-import { envs } from "@/envs"
 import { IconPadLock } from "@lib/useIcons"
+import { page_content, page_layout } from "@styles/layout.module.css"
+import type { ReactNode } from "react"
+
+import { CallbackLink } from "./CallbackLink"
 
 type Props = {
 	children?: ReactNode | ReactNode[]

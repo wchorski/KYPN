@@ -4,17 +4,16 @@
 //! if trial period. create subscription right away, and create a "add credit card" form in the /account dashboard
 //? https://docs.stripe.com/payments/save-and-reuse
 
-import { envs } from "@/envs"
 import type {
 	Addon,
-	CartItem,
 	Coupon,
-	Product,
 	SubscriptionPlan,
 	User,
 } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
+
+import { envs } from "@/envs"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! ❌ envs.STRIPE_SECRET not set")
 

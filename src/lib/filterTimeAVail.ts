@@ -1,5 +1,5 @@
+import type  { DateRange, StringRange } from '../keystone/types'
 import { isSameCalendarDay } from "./dateCheckCal"
-import  { DateRange, StringRange } from '../keystone/types'
 
 type TimeOpt = {
   value: string,

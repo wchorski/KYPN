@@ -1,7 +1,7 @@
 // cred - https://www.youtube.com/watch?v=ecjaXnL2CUs&list=PLdoAUl4PfSFs_9yDIf-HODc6nPteNCww9&index=1
-import { RefObject, useEffect, useState } from 'react'
-import Calendar from 'react-calendar'
 import styles from '@styles/menus/bookingcalendar.module.scss'
+import { useState } from 'react'
+import Calendar from 'react-calendar'
 
 type iProps = {
   blackoutDays: Date[]

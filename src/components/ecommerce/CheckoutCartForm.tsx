@@ -1,19 +1,20 @@
 "use client"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { useCart } from "@components/hooks/CartStateContext"
 import { useForm } from "@hooks/useForm"
-import { CartItem } from "@ks/types"
+import type {  CartItem  } from "@ks/types"
+import type {
+	CheckoutCartState} from "@lib/actions/postCheckoutCart";
 import {
-	CheckoutCartState,
 	postCheckoutCart,
 } from "@lib/actions/postCheckoutCart"
 import { form } from "@styles/menus/form.module.scss"
-import { useEffect } from "react"
-import { CartTotal } from "./CartTotal"
 import { useRouter } from "next/navigation"
-import { getServerSession } from "next-auth"
 import { useSession } from "next-auth/react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { useEffect } from "react"
+
+import { CartTotal } from "./CartTotal"
 
 type Props = {
 	cartItems: CartItem[]

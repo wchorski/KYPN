@@ -1,13 +1,15 @@
-import React, { ReactElement } from "react"
-import Link from "next/link"
-import styles from "@styles/ecommerce/product.module.css"
 import AddToCartForm from "@components/ecommerce/AddToCartForm"
-import { ImageDynamic } from "../elements/ImageDynamic"
-// import { OutOfStockLabel } from '../elements/OutOfStockLabel';
-import { Product, Session } from "@ks/types"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import { envs } from "@/envs"
 import { StatusBadge } from "@components/StatusBadge"
+// import { OutOfStockLabel } from '../elements/OutOfStockLabel';
+import type {  Product  } from "@ks/types"
+import styles from "@styles/ecommerce/product.module.css"
+import Link from "next/link"
+import React from "react"
+
+import { envs } from "@/envs"
+
+import { ImageDynamic } from "../elements/ImageDynamic"
 
 type Props = {
 	product: Product
@@ -93,7 +95,7 @@ export async function ProductThumbnail({
 
 			{session?.data?.role?.canManageProducts && (
 				<div className="menu admin">
-					<Link href={envs.BACKEND_URL + `/products/${id}`} target={"_blank"}>
+					<Link href={envs.CMS_URL + `/products/${id}`} target={"_blank"}>
 						{" "}
 						Edit ✏️{" "}
 					</Link>

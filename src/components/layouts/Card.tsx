@@ -1,7 +1,7 @@
-import { CSSProperties, ReactNode } from "react"
-import { card } from "@styles/card.module.scss"
-import { ColorsTheme, SpaceSize } from "@ks/types"
+import type {  ColorsTheme, SpaceSize  } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
+import { card } from "@styles/card.module.scss"
+import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
 	children: ReactNode

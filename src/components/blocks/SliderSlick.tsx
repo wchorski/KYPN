@@ -1,12 +1,12 @@
 // docs - https://react-slick.neostack.com/docs/api
 // cred - https://stackoverflow.com/questions/49028877/slick-carousel-force-slides-to-have-the-same-height
-import * as React from 'react';
 // todo add back when slick slider is `yarn add`
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
 import styles from '@styles/blocs/slider.module.scss'
+import type { ReactNode } from 'react';
+import * as React from 'react';
 import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
-import { ReactNode } from 'react';
 
 const sliderDefaults = {
   accessibility: true,

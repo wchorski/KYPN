@@ -1,11 +1,12 @@
 'use client'
 import { LoadingAnim } from '@components/elements/LoadingAnim'
-import { CSSProperties, Suspense, useEffect, useRef, useState } from 'react'
+import { fileExtensionRegEx } from '@lib/regexPatterns'
 import styles from '@styles/blocs/video.module.scss'
 import stylesSlider from '@styles/elements/rangeslider.module.scss'
+import type { CSSProperties} from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { AiFillPauseCircle, AiFillPlayCircle, AiOutlineDownload, AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { RiVolumeDownFill } from 'react-icons/ri'
-import { fileExtensionRegEx } from '@lib/regexPatterns'
 
 type Props = {
   url:string,

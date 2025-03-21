@@ -1,8 +1,8 @@
-import Link from "next/link"
-import React, { useState } from "react"
-import {table} from "@styles/elements/table.module.css"
 import { NoData } from "@components/elements/NoData"
+import {table} from "@styles/elements/table.module.css"
 import { layout_wide } from "@styles/layout.module.css"
+import Link from "next/link"
+import React from "react"
 
 interface TableProps {
 	caption: string

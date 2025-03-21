@@ -4,19 +4,20 @@ import { SubmitButton } from "@components/forms/SubmitButton"
 import { useCart } from "@components/hooks/CartStateContext"
 import { InputField } from "@components/InputField"
 import { TextareaField } from "@components/TextareaField"
-// import { useForm } from "@hooks/useForm"
-import { useFormState } from "react-dom"
-import { Rental, SelectOption } from "@ks/types"
+import type {  Rental, SelectOption  } from "@ks/types"
+import type {
+	RentalToCartState} from "@lib/actions/postRentalToCart";
 import {
-	postRentalToCart,
-	RentalToCartState,
+	postRentalToCart
 } from "@lib/actions/postRentalToCart"
+import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
+import { dateFormatLocalDateTime } from "@lib/dateFormatter"
 import { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
-import { dateFormatLocalDateTime } from "@lib/dateFormatter"
-import { calcDaysBetweenTimestamps } from "@lib/dateCheck"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+// import { useForm } from "@hooks/useForm"
+import { useFormState } from "react-dom"
 
 type Props = {
 	customerId: string

@@ -1,18 +1,19 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import { getServerSession } from "next-auth"
+
+import { nextAuthOptions } from "../../../session"
 import {
 	calcEndTime,
 	dateCheckAvail,
 	dateOverlapCount,
 	dayOfWeek,
 } from "../../lib/dateCheck"
-import { Location, User, Addon } from "../types"
 import { dateToISOTimezone } from "../../lib/dateFormatter"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "../../../session"
+import type {Location, User } from "../types";
+import type { Context } from ".keystone/types"
 
 const now = new Date().toISOString()
 

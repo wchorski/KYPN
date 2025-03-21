@@ -1,26 +1,27 @@
-import { Pagination } from "@components/Pagination"
+import { NoData } from "@components/elements/NoData"
+import { ArticleList } from "@components/layouts/ArticleList"
+import { AsideBar } from "@components/layouts/AsideBar"
+import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { TagsPool } from "@components/menus/TagsPool"
-import { envs } from "@/envs"
-import { Metadata } from "next"
-import { Card } from "@components/layouts/Card"
+import { Pagination } from "@components/Pagination"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { NoData } from "@components/elements/NoData"
-import { CSSProperties } from "react"
-import Flex from "@components/layouts/Flex"
 import {
-	page_layout,
 	layout_full,
+	layout_site_to_wide,
 	layout_wide,
 	page_content,
-	layout_site_to_wide,
+	page_layout,
 } from "@styles/layout.module.css"
-import { AsideBar } from "@components/layouts/AsideBar"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
-import { ArticleList } from "@components/layouts/ArticleList"
+import type { Metadata } from "next"
+import { getServerSession } from "next-auth"
+import type { CSSProperties } from "react"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	params: {
@@ -35,7 +36,7 @@ type Props = {
 
 export const metadata: Metadata = {
 	title: `Blog | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 export default async function BlogFeedPage({ params, searchParams }: Props) {

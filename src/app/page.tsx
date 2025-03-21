@@ -1,6 +1,7 @@
-import { envs } from "@/envs"
-import Link from "next/link"
 import { layout_content, page_layout } from "@styles/layout.module.css"
+import Link from "next/link"
+
+import { envs } from "@/envs"
 type Props = {
 	searchParams: { q: string }
 	params: { id: string }

@@ -1,18 +1,7 @@
 import { useIcons } from "@lib/useIcons"
-import Link from "next/link"
-import { CSSProperties, ReactNode } from "react"
-import {
-	FaFacebook,
-	FaInstagram,
-	FaBandcamp,
-	FaTwitch,
-	FaTwitter,
-	FaYoutube,
-	FaGithub,
-	FaLinkedin,
-	FaLink,
-} from "react-icons/fa"
-import { SiBandlab } from "react-icons/si"
+import type { CSSProperties } from "react"
+
+
 
 type Props = {
 	color: string

@@ -1,76 +1,66 @@
-// Welcome to your
-//   Schema driven development is Keystone's modus operandi
-//
-// This file is where we define the lists, fields and hooks for our data.
-// If you want to learn more about how lists are configured, please read
-// - https://keystonejs.com/docs/config/lists
+import { graphql } from '@keystone-6/core'
 
-// if you want to make your own fields, see https://keystonejs.com/docs/guides/custom-fields
-
-import { graphql } from "@keystone-6/core"
-import type { Lists } from ".keystone/types"
-
-import { User } from "./schemas/User"
-import { Role } from "./schemas/Role"
-import { registerAnAccount } from "./mutations/registerAnAccount"
-import { Post } from "./schemas/Post"
-import { Page } from "./schemas/Page"
-import { Category } from "./schemas/Category"
-import { Ticket } from "./schemas/Ticket"
-import { Event } from "./schemas/Event"
-import { Order } from "./schemas/Order"
-import { Tag } from "./schemas/Tag"
-import { passwordRequestLink } from "./mutations/passwordRequestLink"
-import { verifyEmailRequest } from "./mutations/verifyEmailRequest"
-import { verifyEmail } from "./mutations/verifyEmail"
-import { passwordReset } from "./mutations/passwordReset"
-import { contact } from "./mutations/contact"
-import { Announcement } from "./schemas/Announcement"
-import { Booking } from "./schemas/Booking"
-import { Location } from "./schemas/Location"
-import { Availability } from "./schemas/Availability"
-import { Service } from "./schemas/Service"
-import { Addon } from "./schemas/Addon"
-import { bookAService } from "./mutations/bookAService"
-import { Coupon } from "./schemas/Coupon"
-import { OrderItem } from "./schemas/OrderItem"
-import { Rental } from "./schemas/Rental"
-import { Product } from "./schemas/Product"
-import { SubscriptionItem } from "./schemas/SubscriptionItem"
-import { SubscriptionPlan } from "./schemas/SubscriptionPlan"
-import { CartItem } from "./schemas/CartItem"
-import { checkoutTickets } from "./mutations/checkoutTickets"
+import { Addon } from './lists/Addon'
+import { Announcement } from './lists/Announcement'
+import { Availability } from './lists/Availability'
+import { Booking } from './lists/Booking'
+import { CartItem } from './lists/CartItem'
+import { Category } from './lists/Category'
+import { Coupon } from './lists/Coupon'
+import { Event } from './lists/Event'
+import { Location } from './lists/Location'
+import { Order } from './lists/Order'
+import { OrderItem } from './lists/OrderItem'
+import { Page } from './lists/Page'
+import { Post } from "./lists/Post"
+import { Product } from './lists/Product'
+import { Rental } from './lists/Rental'
+import { Role } from "./lists/Role"
+import { Service } from './lists/Service'
+import { SubscriptionItem } from './lists/SubscriptionItem'
+import { SubscriptionPlan } from './lists/SubscriptionPlan'
+import { Tag } from './lists/Tag'
+import { Ticket } from './lists/Ticket'
+import { User } from "./lists/User"
 import { addToCart } from "./mutations/addToCart"
+import { bookAService } from "./mutations/bookAService"
 import { checkout } from "./mutations/checkout"
 import { checkoutSubscription } from "./mutations/checkoutSubscription"
+import { checkoutTickets } from "./mutations/checkoutTickets"
+import { contact } from "./mutations/contact"
+import { passwordRequestLink } from "./mutations/passwordRequestLink"
+import { passwordReset } from "./mutations/passwordReset"
 import { redeemCoupon } from "./mutations/redeemCoupon"
+import { registerAnAccount } from "./mutations/registerAnAccount"
+import { verifyEmail } from "./mutations/verifyEmail"
+import { verifyEmailRequest } from "./mutations/verifyEmailRequest"
+import { type Lists } from '.keystone/types'
 
-// todo fix type error with this - https://github.com/keystonejs/keystone/issues/8228
-
-export const lists: Lists = {
-	User,
-  Role,
-  Announcement,
-  Booking,
-  Service,
-  Location,
+export const lists = {
   Addon,
+  Announcement,
   Availability,
-  SubscriptionPlan,
-  SubscriptionItem,
-  Product,
-  Rental,
+  Booking,
   CartItem,
-  OrderItem,
-  Order,
+  Category,
   Coupon,
+  Event,
+  Location,
+  Order,
+  OrderItem,
   Page,
   Post,
-  Event,
-  Ticket,
-  Category,
+  Product,
+  Rental,
+  Role,
+  Service,
+  SubscriptionItem,
+  SubscriptionPlan,
   Tag,
-}
+  Ticket,
+  User,
+  
+} satisfies Lists
 
 export const extendGraphqlSchema = graphql.extend((base) => {
 	return {

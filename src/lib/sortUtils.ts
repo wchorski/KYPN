@@ -1,4 +1,4 @@
-import { CartItem, OrderItem } from "@ks/types"
+import type {  CartItem, OrderItem  } from "@ks/types"
 const typeOrder: Record<string, number> = {
 	SALE: 0,
 	SUBSCRIPTION: 1,

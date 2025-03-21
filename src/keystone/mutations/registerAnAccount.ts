@@ -1,9 +1,10 @@
 // docs - https://keystonejs.com/docs/guides/schema-extension
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+
 import { envs } from "../../../envs"
 import { emailRegex, passwordRegExp } from "../../lib/regexPatterns"
+import type { Context } from ".keystone/types"
 
 export const registerAnAccount = (base: BaseSchemaMeta) =>
 	graphql.field({

@@ -1,9 +1,9 @@
 "use server"
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
 import { getServerSession } from "next-auth"
-import { redirect, RedirectType } from "next/navigation"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export async function actionTicketRedeem(
 	prevState: TicketRedeemState,

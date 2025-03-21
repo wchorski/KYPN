@@ -1,4 +1,4 @@
-import { Category } from "@ks/types"
+import type {  Category  } from "@ks/types"
 import styles from "@styles/categories.module.css"
 import Link from "next/link"
 

@@ -1,7 +1,6 @@
-import React from 'react';
-
 // import { Box } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const carousel = component({
   label: 'Carousel',

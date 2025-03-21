@@ -1,16 +1,14 @@
 "use client"
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { InputField } from "@components/InputField"
-import Flex from "@components/layouts/Flex"
 import { useForm } from "@hooks/useForm"
-import { Coupon } from "@ks/types"
+import type {  Coupon  } from "@ks/types"
+import type {
+	RedeemCouponState} from "@lib/actions/postRedeemCoupon";
 import {
-	postRedeemCoupon,
-	RedeemCouponState,
+	postRedeemCoupon
 } from "@lib/actions/postRedeemCoupon"
-import moneyFormatter from "@lib/moneyFormatter"
-import { IconCheckMark, IconCoupon } from "@lib/useIcons"
-import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
+import { IconCheckMark } from "@lib/useIcons"
 import { form, inline_w_submit } from "@styles/menus/form.module.scss"
 import { useRef } from "react"
 

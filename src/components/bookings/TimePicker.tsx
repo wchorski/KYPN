@@ -1,7 +1,7 @@
-import { RefObject, useCallback, useEffect, useState } from "react"
 import styles from '@styles/menus/timepicker.module.scss'
+import { useEffect, useState } from "react"
+
 import { generateTimesArray } from "../../lib/generateTimesArray";
-import { DayTimes } from "@ks/types";
 
 interface iProps {
   times: string[],

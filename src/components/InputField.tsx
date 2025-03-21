@@ -1,9 +1,9 @@
 import { input_label } from "@styles/menus/form.module.scss"
 import {
 	forwardRef,
-	type Ref,
 	type HTMLInputTypeAttribute,
 	type HTMLProps,
+	type Ref,
 } from "react"
 
 type Props = {

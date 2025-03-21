@@ -1,7 +1,8 @@
 // cred - chatgpt lol
-import Link from "next/link"
-import React, { useState } from "react"
 import {table} from "@styles/elements/table.module.css"
+import Link from "next/link"
+import React from "react"
+
 import { NoData } from "./NoData"
 
 interface TableProps {

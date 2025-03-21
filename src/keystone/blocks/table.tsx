@@ -1,11 +1,10 @@
-import React from 'react';
-
 // todo - is there anyway to make the ui more user friendly instead of nesting hell?
 import {
 	component,
 	fields,
 	NotEditable,
 } from "@keystone-6/fields-document/component-blocks"
+import React from 'react';
 
 export const table = component({
 	label: "Table",

@@ -1,5 +1,5 @@
-import { Category } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import type { Category } from "@ks/types";
 
 export default async function fetchCategory(name:string){
 

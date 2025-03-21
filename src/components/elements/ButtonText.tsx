@@ -1,7 +1,8 @@
 'use client'
 
-import { ReactNode } from "react"
 import styles from "@styles/elements/button.module.css";
+import type { ReactNode } from "react"
+
 import { LoadingAnim } from "./LoadingAnim";
 
 type Props = {

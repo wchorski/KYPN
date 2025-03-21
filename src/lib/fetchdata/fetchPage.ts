@@ -1,8 +1,9 @@
-import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
-import { Category, Page } from "@ks/types";
+import type { Page } from "@ks/types";
 import { getServerSession } from "next-auth";
-import type { PageOrderByInput, Lists } from ".keystone/types"
+
+import { nextAuthOptions } from "@/session";
+
 
 export default async function fetchPage(slug:string, query:string){
 

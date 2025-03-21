@@ -1,17 +1,15 @@
 'use client'
 // cred - https://blog.stackademic.com/integrating-stripe-checkout-mode-with-next-js-13-7fbf1680c600
 
-import {loadStripe} from "@stripe/stripe-js";
-import { useCart } from "@hooks/CartStateContext";
-import { envs } from "@/envs";
-import { BsStripe } from "react-icons/bs";
-import { useState } from "react";
-import ErrorMessage from "@components/ErrorMessage";
-import { LoadingAnim } from "@components/elements/LoadingAnim";
-import { CartItem, Rental } from "@ks/types";
-import { checkProductRentalAvail } from "@lib/checkProductRentalAvail";
-import styles from '@styles/elements/button.module.css'
 import { Button } from "@components/elements/Button";
+import ErrorMessage from "@components/ErrorMessage";
+import type { CartItem, Rental } from "@ks/types";
+import { checkProductRentalAvail } from "@lib/checkProductRentalAvail";
+import {loadStripe} from "@stripe/stripe-js";
+import { useState } from "react";
+import { BsStripe } from "react-icons/bs";
+
+import { envs } from "@/envs";
 
 type Props = {
   cartItems: CartItem[],

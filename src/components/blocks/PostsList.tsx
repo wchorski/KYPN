@@ -1,10 +1,10 @@
-import { nextAuthOptions } from "@/session"
-import { BlogList } from "@components/blog/BlogList"
 import { Section } from "@components/blocks/Section"
+import { BlogList } from "@components/blog/BlogList"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
-import { ReactElement } from "react"
-import { layout_site } from "@styles/layout.module.css"
+import type { ReactElement } from "react"
+
+import { nextAuthOptions } from "@/session"
 
 type Props = {
   header:string,

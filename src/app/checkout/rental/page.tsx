@@ -1,23 +1,21 @@
-import { nextAuthOptions } from "@/session"
+import { Callout } from "@components/blocks/Callout"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
-import { CartTotal } from "@components/ecommerce/CartTotal"
 import { RentalForm } from "@components/ecommerce/RentalForm"
-import Flex from "@components/layouts/Flex"
 import { Grid } from "@components/layouts/Grid"
 import { keystoneContext } from "@ks/context"
-import CartItem from "@components/ecommerce/CartItem"
-import { User } from "@ks/types"
+import type {  User  } from "@ks/types"
+import { sortedCartItems } from "@lib/sortUtils"
+import { plainObj } from "@lib/utils"
 import {
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { getServerSession } from "next-auth"
 import { notFound, redirect } from "next/navigation"
-import { plainObj } from "@lib/utils"
+import { getServerSession } from "next-auth"
+
 import { envs } from "@/envs"
-import { sortedCartItems } from "@lib/sortUtils"
-import { Callout } from "@components/blocks/Callout"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	searchParams: { q: string }

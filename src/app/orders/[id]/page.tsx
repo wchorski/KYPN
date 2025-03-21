@@ -1,36 +1,35 @@
-import { nextAuthOptions } from "@/session"
+import { PriceTag } from "@components/ecommerce/PriceTag"
+import { ProductOrderItem } from "@components/ecommerce/ProductOrderItem"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { NoData } from "@components/elements/NoData"
+import { TicketList } from "@components/events/TicketList"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { StatusBadge } from "@components/StatusBadge"
+import type {  OrderItem  } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
+import { fetchOrder } from "@lib/fetchdata/fetchOrder"
 import moneyFormatter from "@lib/moneyFormatter"
-import { getServerSession } from "next-auth"
-import Link from "next/link"
+import { sortOrderItems } from "@lib/sortUtils"
 import styles, {
 	coupon_cart_item,
 	perItemTotal,
 } from "@styles/ecommerce/cart.module.css"
-import { Metadata } from "next"
-import { envs } from "@/envs"
-import { TicketList } from "@components/events/TicketList"
-import { StatusBadge } from "@components/StatusBadge"
 import {
-	layout_breakout,
 	layout_content,
-	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { fetchOrder } from "@lib/fetchdata/fetchOrder"
-import ErrorPage from "@components/layouts/ErrorPage"
+import type { Metadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import { OrderItem } from "@ks/types"
-import { NoData } from "@components/elements/NoData"
-import { PriceTag } from "@components/ecommerce/PriceTag"
-import { ProductOrderItem } from "@components/ecommerce/ProductOrderItem"
-import { sortOrderItems } from "@lib/sortUtils"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Order Receipt | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

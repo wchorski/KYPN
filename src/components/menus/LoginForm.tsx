@@ -1,25 +1,24 @@
 "use client"
+import { Button } from "@components/elements/Button"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import Flex from "@components/layouts/Flex"
+import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
 import { form } from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+import { useState } from "react"
+import { useFormState } from "react-dom"
 import {
-	FaGithub,
 	FaFacebookSquare,
-	FaTwitter,
+	FaGithub,
 	FaGoogle,
 	FaTwitterSquare,
 } from "react-icons/fa"
-import { useFormState, useFormStatus } from "react-dom"
-import { useState } from "react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { signIn } from "next-auth/react"
-import Link from "next/link"
-import { envs } from "@/envs"
-import { useRouter } from "next/navigation"
 import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
-import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
-import { Button } from "@components/elements/Button"
-import Flex from "@components/layouts/Flex"
-import { InputField } from "@components/InputField"
-import { SubmitButton } from "@components/forms/SubmitButton"
+
+import { envs } from "@/envs"
 
 type State = "pending" | "error" | "success" | undefined
 

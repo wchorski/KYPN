@@ -1,27 +1,27 @@
-import { Pagination } from "@components/Pagination"
+import { NoData } from "@components/elements/NoData"
+import { ArticleList } from "@components/layouts/ArticleList"
+import { AsideBar } from "@components/layouts/AsideBar"
+import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
 import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { TagsPool } from "@components/menus/TagsPool"
-import { envs } from "@/envs"
-import { Metadata } from "next"
-import { Card } from "@components/layouts/Card"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { NoData } from "@components/elements/NoData"
-import { CSSProperties } from "react"
-import Flex from "@components/layouts/Flex"
+import { Pagination } from "@components/Pagination"
+import fetchProducts from "@lib/fetchdata/fetchProducts"
 import {
-	page_layout,
 	layout_full,
+	layout_site_to_wide,
 	layout_wide,
 	page_content,
-	layout_site_to_wide,
+	page_layout,
 } from "@styles/layout.module.css"
-import { AsideBar } from "@components/layouts/AsideBar"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
-import { ArticleList } from "@components/layouts/ArticleList"
-import fetchProducts from "@lib/fetchdata/fetchProducts"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+import type { CSSProperties } from "react"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	searchParams: {
@@ -33,7 +33,7 @@ type Props = {
 
 export const metadata: Metadata = {
 	title: `Products | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 export default async function ProductsPage({ searchParams }: Props) {

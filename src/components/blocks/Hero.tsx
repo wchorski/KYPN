@@ -1,6 +1,7 @@
-import React, { CSSProperties, ReactNode } from "react"
-import styles from "@styles/blocs/hero.module.scss"
+import styles from "@styles/blocs/hero.module.css"
 import sLayout from "@styles/layout.module.css"
+import type { CSSProperties, ReactNode } from "react";
+import React from "react"
 
 type HeroProps = {
 	imageSrc: string

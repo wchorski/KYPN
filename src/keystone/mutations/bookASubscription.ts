@@ -1,14 +1,13 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 //! trying to fit this all into `addToCart.ts`
 import { graphql } from "@keystone-6/core"
-import {
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+
+import type {
   CartItemCreateInput,
-	Context,
-	Lists,
-	OrderItemCreateInput,
-	TicketCreateInput,
-} from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+	Context} from ".keystone/types";
+
+
 
 type StripeSession = {
 	stripe?: {

@@ -1,7 +1,7 @@
 "use server"
-import { redirect } from 'next/navigation'
 import { keystoneContext } from "@ks/context"
-import { emailRegex, passwordRegExp } from "@lib/regexPatterns"
+import { emailRegex } from "@lib/regexPatterns"
+import { redirect } from 'next/navigation'
 
 export async function actionBookAService(
 	prevState: BookAServiceState,

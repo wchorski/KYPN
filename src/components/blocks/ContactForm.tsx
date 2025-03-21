@@ -1,18 +1,16 @@
 "use client"
-import { CSSProperties, FormEvent, useRef, useState } from "react"
-import { useFormState, useFormStatus } from "react-dom"
-
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useSession } from "next-auth/react"
-import styles, { form } from "@styles/menus/form.module.scss"
-import {
-	actionContactFormSubmit,
-	ContactState,
-} from "@lib/actions/actionContactFormSubmit"
-import { useForm } from "@hooks/useForm"
+import { SubmitButton } from "@components/forms/SubmitButton"
 import { InputField } from "@components/InputField"
 import { TextareaField } from "@components/TextareaField"
-import { SubmitButton } from "@components/forms/SubmitButton"
+import { useForm } from "@hooks/useForm"
+import type {
+	ContactState} from "@lib/actions/actionContactFormSubmit";
+import {
+	actionContactFormSubmit
+} from "@lib/actions/actionContactFormSubmit"
+import { form } from "@styles/menus/form.module.scss"
+import { useSession } from "next-auth/react"
+import type { CSSProperties} from "react";
 
 type Props = {
 	header?: string

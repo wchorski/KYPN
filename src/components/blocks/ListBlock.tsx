@@ -1,4 +1,4 @@
-import { JSXElementConstructor, ReactElement, ReactNode } from "react"
+import type { JSXElementConstructor, ReactElement} from "react";
 
 type Props = {
 	type: "unordered" | "ordered"

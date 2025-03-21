@@ -1,3 +1,4 @@
+import React from "react"
 import { envs } from "../../envs"
 import {
 	NavigationContainer,
@@ -13,6 +14,7 @@ import { FaTags } from "react-icons/fa6"
 import { TiShoppingCart } from "react-icons/ti"
 import { MdOutlineInventory2 } from "react-icons/md"
 import type { CSSProperties } from "react"
+import Link from "next/link"
 
 export function CustomNavigation({
 	authenticatedItem,
@@ -34,27 +36,28 @@ export function CustomNavigation({
 		<NavigationContainer authenticatedItem={authenticatedItem}>
 			{status === "loading" ? (
 				<p style={styleBorder}>Loading...</p>
+			) : session?.user ? (
+				<div style={styleBorder}>
+					<small> logged in as </small>
+
+					<strong>{session.user.name}</strong>
+
+					<span>{session.user.email}</span>
+
+					<small>
+						<a
+							href={envs.FRONTEND_URL + `/api/auth/signout`}
+							className="button"
+							style={{ color: "red" }}
+						>
+							Sign Out
+						</a>
+					</small>
+				</div>
 			) : (
-				session?.user && (
-					<div style={styleBorder}>
-						<small> logged in as </small>
-
-						<strong>{session.user.name}</strong>
-
-						<span>{session.user.email}</span>
-
-						<small>
-							<a
-								href={envs.FRONTEND_URL + `/api/auth/signout`}
-								className="button"
-								style={{ color: "red" }}
-							>
-								{" "}
-								Sign Out{" "}
-							</a>
-						</small>
-					</div>
-				)
+				<div style={styleBorder}>
+					<p>no session found. <Link href={envs.FRONTEND_URL + '/login'}>Login</Link></p>
+				</div>
 			)}
 
 			<hr style={lineSeperator} />

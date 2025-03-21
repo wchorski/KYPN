@@ -1,38 +1,36 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { User } from "@ks/types"
-import { fetchEvent } from "@lib/fetchdata/fetchEvent"
-import { Metadata, ResolvingMetadata } from "next"
-import { getServerSession, Session } from "next-auth"
-import Link from "next/link"
 import { BlockRender } from "@components/blocks/BlockRender"
+import { PriceTag } from "@components/ecommerce/PriceTag"
+import { SubscriptionPlanLinkBuilder } from "@components/ecommerce/SubscriptionPlanLinkBuilder"
+import { IconLink } from "@components/elements/IconLink"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { CallbackLink } from "@components/menus/CallbackLink"
+import { DialogPopup } from "@components/menus/DialogPopup"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { StatusBadge } from "@components/StatusBadge"
+import type {  User  } from "@ks/types"
+import { isEmptyDocument } from "@lib/contentHelpers"
+import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
+import { plainObj } from "@lib/utils"
+import {
+	featured_img,
+	price_text,
+	product_page,
+} from "@styles/ecommerce/product.module.css"
 import {
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
+import type { Metadata, ResolvingMetadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import moneyFormatter from "@lib/moneyFormatter"
-import { IconLink } from "@components/elements/IconLink"
-import { isEmptyDocument } from "@lib/contentHelpers"
-import ErrorPage from "@components/layouts/ErrorPage"
-import fetchProduct from "@lib/fetchdata/fetchProduct"
-import { CallbackLink } from "@components/menus/CallbackLink"
-import AddToCartForm from "@components/ecommerce/AddToCartForm"
-import { StatusBadge } from "@components/StatusBadge"
-import {
-	product_page,
-	price_text,
-	featured_img,
-} from "@styles/ecommerce/product.module.css"
-import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
-import { PriceTag } from "@components/ecommerce/PriceTag"
-import { SubscriptionPlanLinkBuilder } from "@components/ecommerce/SubscriptionPlanLinkBuilder"
-import { plainObj } from "@lib/utils"
-import { DialogPopup } from "@components/menus/Dialog"
+import type { Session } from "next-auth";
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -49,7 +47,7 @@ export async function generateMetadata(
 	if (!subscriptionPlan || error)
 		return {
 			title: envs.SITE_TITLE,
-			description: envs.SITE_DESC,
+			description: envs.SITE_DESCRIPTION,
 		}
 
 	const { name, excerpt, image, tags, author } = subscriptionPlan

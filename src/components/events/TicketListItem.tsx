@@ -1,10 +1,10 @@
+import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { StatusBadge } from "@components/StatusBadge"
+import type {  Ticket  } from "@ks/types"
 import { datePrettyLocalDay } from "@lib/dateFormatter"
-import { Ticket } from "@ks/types"
+import { actions_wrap } from "@styles/events/tickets.module.css"
 import Link from "next/link"
 import { BsQrCode } from "react-icons/bs"
-import { StatusBadge } from "@components/StatusBadge"
-import { actions_wrap } from "@styles/events/tickets.module.css"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
 
 type Props = {
 	ticket: Ticket

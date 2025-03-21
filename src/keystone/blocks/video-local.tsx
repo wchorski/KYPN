@@ -1,5 +1,5 @@
-import React from 'react';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 const FRONTEND_MOVIE = process.env.FRONTEND_URL + 'movie.mp4'
 

@@ -1,16 +1,14 @@
 "use client"
-import styles, { form } from "@styles/menus/form.module.scss"
-import { useFormState, useFormStatus } from "react-dom"
-import { useRef } from "react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { Button } from "@components/elements/Button"
-import {
-	actionPasswordRequest,
-	PasswordRequestState,
-} from "@lib/actions/actionPassworRequest"
-import { InputField } from "@components/InputField"
-import Link from "next/link"
 import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import type {
+	PasswordRequestState} from "@lib/actions/actionPassworRequest";
+import {
+	actionPasswordRequest
+} from "@lib/actions/actionPassworRequest"
+import { form } from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { useFormState } from "react-dom"
 
 const initState: PasswordRequestState = {
 	values: {

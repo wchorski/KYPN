@@ -1,29 +1,28 @@
-import fetchService from "@lib/fetchdata/fetchService"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { BlockRender } from "@components/blocks/BlockRender"
-import { Card } from "@components/layouts/Card"
+import { ImageBlock } from "@components/blocks/ImageBlock"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import Link from "next/link"
-import { timePretty } from "@lib/dateFormatter"
+import { IconLink } from "@components/elements/IconLink"
+import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
+import { Grid } from "@components/layouts/Grid"
+import { CategoriesList } from "@components/menus/CategoriesList"
+import { StatusBadge } from "@components/StatusBadge"
 import { daysOfWeek } from "@lib/dateCheck"
-import { Metadata, ResolvingMetadata } from "next"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { envs } from "@/envs"
+import { timePretty } from "@lib/dateFormatter"
+import fetchService from "@lib/fetchdata/fetchService"
 import {
-	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import ErrorPage from "@components/layouts/ErrorPage"
+import type { Metadata, ResolvingMetadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Grid } from "@components/layouts/Grid"
-import Flex from "@components/layouts/Flex"
-import { ImageBlock } from "@components/blocks/ImageBlock"
-import { StatusBadge } from "@components/StatusBadge"
-import { IconLink } from "@components/elements/IconLink"
-import { CategoriesList } from "@components/menus/CategoriesList"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export async function generateMetadata(
 	{ params, searchParams }: Props,
@@ -36,7 +35,7 @@ export async function generateMetadata(
 	if (!service)
 		return {
 			title: envs.SITE_TITLE,
-			description: envs.SITE_DESC,
+			description: envs.SITE_DESCRIPTION,
 		}
 
 	const { name, excerpt, image, categories, tags } = service

@@ -1,7 +1,7 @@
 "use client"
 
-import { useCart } from "@components/hooks/CartStateContext"
 import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { useCart } from "@components/hooks/CartStateContext"
 import styles from "@styles/ecommerce/cart.module.css"
 import { useState } from "react"
 // import { CgRemoveR } from "react-icons/cg"

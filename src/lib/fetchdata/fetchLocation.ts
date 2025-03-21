@@ -1,5 +1,5 @@
-import { Location } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import type { Location } from "@ks/types";
 
 type Props = {
   id:string,

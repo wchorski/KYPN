@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { ReactNode } from "react"
-import { LuExternalLink } from "react-icons/lu";
 import styles from '@styles/blocs/imagelinks.module.scss'
+import Link from "next/link"
+import type { ReactNode } from "react"
+import { LuExternalLink } from "react-icons/lu";
 
 type InfoCard = {
   header:string,

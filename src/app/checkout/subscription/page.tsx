@@ -1,10 +1,7 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import { StripeSubscriptionCheckout } from "@components/ecommerce/StripeSubscriptionCheckout"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { keystoneContext } from "@ks/context"
-import { Addon, User } from "@ks/types"
-import fetchAddons from "@lib/fetchdata/fetchAddons"
+import type {  Addon, User  } from "@ks/types"
 import fetchRedeemCoupon from "@lib/fetchdata/fetchRedeemCoupon"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
@@ -13,9 +10,12 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { Metadata } from "next"
-import { getServerSession } from "next-auth"
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	searchParams: {
@@ -28,7 +28,7 @@ type Props = {
 
 export const metadata: Metadata = {
 	title: `Checkout Subscription | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 export default async function CheckoutSubscriptionPage({

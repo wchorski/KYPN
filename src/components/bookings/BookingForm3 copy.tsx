@@ -1,7 +1,8 @@
 "use client"
 // cred - https://www.sumologic.com/blog/react-hook-typescript/
 // cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
-import {
+import { Button } from "@components/elements/Button"
+import type { 
 	Addon,
 	AddonCheckboxOptions,
 	Availability,
@@ -13,35 +14,30 @@ import {
 	Service,
 	Session,
 	User,
-} from "@ks/types"
-import { generateTimesArray } from "@lib/generateTimesArray"
-import {
-	ReducerAction,
-	useCallback,
-	useEffect,
-	useReducer,
-	useRef,
-	useState,
-} from "react"
-import { useFormState, useFormStatus } from "react-dom"
-import formStyles from "@styles/menus/form.module.scss"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { calcEndTime } from "@lib/dateCheck"
-import moneyFormatter from "@lib/moneyFormatter"
-import gridStyles from "@styles/elements/section.module.scss"
+ } from "@ks/types"
+import { findOverlapTimes } from "@lib/dateCheckCal"
 import { datePrettyLocal, timePrettyTo12HourFormat } from "@lib/dateFormatter"
-import { CalendarDatePicker } from "./Calendar"
 import {
 	filterBuisnessTimes,
 	findUniqueDays,
 	isDateRangeAvailable,
 } from "@lib/filterTimeAVail"
+import { generateTimesArray } from "@lib/generateTimesArray"
+import moneyFormatter from "@lib/moneyFormatter"
 import { findEmployeeBusyRanges } from "@lib/userUtils"
-import { TimePicker } from "./TimePicker"
-import { findOverlapTimes } from "@lib/dateCheckCal"
+import formStyles from "@styles/menus/form.module.scss"
 import Link from "next/link"
+import {
+	useCallback,
+	useEffect,
+	useReducer,
+	useRef,
+} from "react"
+import { useFormState, useFormStatus } from "react-dom"
 import { BsFillBookmarkFill } from "react-icons/bs"
-import { Button } from "@components/elements/Button"
+
+import { CalendarDatePicker } from "./Calendar"
+import { TimePicker } from "./TimePicker"
 
 type Fields = {
 	// event: string,

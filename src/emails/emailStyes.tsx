@@ -1,5 +1,6 @@
+import type { CSSProperties } from "react"
+
 import { envs } from "../../envs"
-import { CSSProperties } from "react"
 
 const status = {
   borderLeft: 'solid 10px cyan',

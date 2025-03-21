@@ -1,26 +1,22 @@
-import { nextAuthOptions } from "@/session"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Section } from "@components/blocks/Section"
+import { BlogList } from "@components/blog/BlogList"
+import { NoData } from "@components/elements/NoData"
+import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
+import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
+import { TagsPool } from "@components/menus/TagsPool"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import fetchTags from "@lib/fetchdata/fetchTags"
-import { getServerSession } from "next-auth"
-import { Post, Tag } from "@ks/types"
-import { Card } from "@components/layouts/Card"
-import { BlogList } from "@components/blog/BlogList"
-import { TagsPool } from "@components/menus/TagsPool"
-import ErrorMessage from "@components/ErrorMessage"
-import { envs } from "@/envs"
-import { Metadata } from "next"
 import {
-	layout_full,
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { NoData } from "@components/elements/NoData"
-import Flex from "@components/layouts/Flex"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
+import type { Metadata } from "next"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	params: {
@@ -35,7 +31,7 @@ type Props = {
 
 export const metadata: Metadata = {
 	title: `Tags | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 export default async function TagsPage({ params, searchParams }: Props) {

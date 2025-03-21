@@ -1,10 +1,12 @@
-import React, { ReactNode } from "react"
-
-import PropTypes from "prop-types"
-import { MdError } from "react-icons/md"
 import styles from "@styles/error.module.scss"
 import Link from "next/link"
+import PropTypes from "prop-types"
+import type { ReactNode } from "react";
+import React from "react"
+import { MdError } from "react-icons/md"
+
 import { envs } from "@/envs"
+
 import Flex from "./layouts/Flex"
 
 type Props = {

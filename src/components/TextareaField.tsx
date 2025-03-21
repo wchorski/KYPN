@@ -1,5 +1,5 @@
 import { input_label } from "@styles/menus/form.module.scss"
-import type { HTMLInputTypeAttribute, HTMLProps } from "react"
+import type { HTMLProps } from "react"
 
 type Props = {
 	name: string

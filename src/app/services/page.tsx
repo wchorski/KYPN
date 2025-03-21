@@ -1,21 +1,18 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
-import { InfoCard, InfoCardList } from "@components/blocks/InfoCardList"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { List } from "@components/elements/List"
+import type { InfoCard} from "@components/blocks/InfoCardList";
+import { InfoCardList } from "@components/blocks/InfoCardList"
 import { NoData } from "@components/elements/NoData"
-import { Card } from "@components/layouts/Card"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Addon, Service } from "@ks/types"
+import type {  Addon, Service  } from "@ks/types"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import { layout_site, page_layout } from "@styles/layout.module.css"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { getServerSession } from "next-auth"
-import Link from "next/link"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Services | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

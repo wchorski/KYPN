@@ -1,21 +1,22 @@
-import { envs } from "@/envs"
-import { Metadata } from "next"
-import fetchCategories from "@lib/fetchdata/fetchCats"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { fetchPosts } from "@lib/fetchdata/fetchPosts"
-import { CategoriesPool } from "@components/menus/CategoriesPool"
 import { BlogList } from "@components/blog/BlogList"
-import { Card } from "@components/layouts/Card"
-import {
-	page_layout,
-	page_content,
-	layout_site,
-} from "@styles/layout.module.css"
-import Flex from "@components/layouts/Flex"
 import { NoData } from "@components/elements/NoData"
+import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
+import { CategoriesPool } from "@components/menus/CategoriesPool"
+import fetchCategories from "@lib/fetchdata/fetchCats"
+import { fetchPosts } from "@lib/fetchdata/fetchPosts"
+import {
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { Metadata } from "next"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	params: {
@@ -30,7 +31,7 @@ type Props = {
 
 export const metadata: Metadata = {
 	title: `Categoires | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 export default async function CategoriesPage({ params, searchParams }: Props) {

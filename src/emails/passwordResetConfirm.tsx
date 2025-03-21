@@ -1,8 +1,8 @@
-import { envs } from '../../envs';
 import {
   Body,
-  Container,
+  Button,
   Column,
+  Container,
   Head,
   Html as EmailHtml,
   Img,
@@ -11,9 +11,10 @@ import {
   Row,
   Section,
   Text,
-  Button,
 } from '@react-email/components';
 import * as React from 'react';
+
+import { envs } from '../../envs';
 
 interface TwitchResetPasswordEmailProps {
   user: {

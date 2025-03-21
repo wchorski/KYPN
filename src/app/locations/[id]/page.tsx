@@ -1,13 +1,11 @@
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Location } from "@ks/types"
-import fetchLocation from "@lib/fetchdata/fetchLocation"
-import styles from "@styles/location.module.css"
 import Map from "@components/blocks/Map"
-import { NoData } from "@components/elements/NoData"
-import { layout_content, page_layout } from "@styles/layout.module.css"
-import { notFound } from "next/navigation"
 import ErrorMessage from "@components/ErrorMessage"
+import fetchLocation from "@lib/fetchdata/fetchLocation"
+import { layout_content, page_layout } from "@styles/layout.module.css"
+import styles from "@styles/location.module.css"
+import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
+
 import { nextAuthOptions } from "@/session"
 
 type Props = {

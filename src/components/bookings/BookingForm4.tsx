@@ -3,9 +3,13 @@
 // cred dave gray - https://www.youtube.com/watch?v=26ogBZXeBwc
 // cred ByteGrad -  https://www.youtube.com/watch?v=GgyP0_b-WPY
 
-throw new Error('!!! fix layout with Grid component')
-
-import {
+import { SelectField } from "@components/forms/SelectField"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import { Grid } from "@components/layouts/Grid"
+import { TextareaField } from "@components/TextareaField"
+import { useForm } from "@hooks/useForm"
+import type { 
 	Addon,
 	AddonCheckboxOptions,
 	Availability,
@@ -16,48 +20,35 @@ import {
 	SelectOption,
 	Service,
 	User,
-} from "@ks/types"
-import { generateTimesArray } from "@lib/generateTimesArray"
+ } from "@ks/types"
+import type {
+	BookAServiceState} from "@lib/actions/actionBookAService";
 import {
-	ReducerAction,
-	useCallback,
-	useEffect,
-	useReducer,
-	useRef,
-	useState,
-	useActionState,
-} from "react"
-import { useFormState, useFormStatus } from "react-dom"
-
-import formStyles, { form } from "@styles/menus/form.module.scss"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { calcEndTime } from "@lib/dateCheck"
-import moneyFormatter from "@lib/moneyFormatter"
-import gridStyles from "@styles/elements/section.module.scss"
+	actionBookAService
+} from "@lib/actions/actionBookAService"
+import { findOverlapTimes } from "@lib/dateCheckCal"
 import { datePrettyLocal, timePrettyTo12HourFormat } from "@lib/dateFormatter"
-import { CalendarDatePicker } from "./Calendar"
 import {
 	filterBuisnessTimes,
 	findUniqueDays,
 	isDateRangeAvailable,
 } from "@lib/filterTimeAVail"
+import { generateTimesArray } from "@lib/generateTimesArray"
+import moneyFormatter from "@lib/moneyFormatter"
 import { findEmployeeBusyRanges } from "@lib/userUtils"
-import { TimePicker } from "./TimePicker"
-import { findOverlapTimes } from "@lib/dateCheckCal"
+import formStyles, { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
-import { BsFillBookmarkFill } from "react-icons/bs"
-import { Button } from "@components/elements/Button"
-import { SelectField } from "@components/forms/SelectField"
-import { InputField } from "@components/InputField"
-import { TextareaField } from "@components/TextareaField"
-import { SubmitButton } from "@components/forms/SubmitButton"
-import { useForm } from "@hooks/useForm"
+import type { Session } from "next-auth"
 import {
-	actionBookAService,
-	BookAServiceState,
-} from "@lib/actions/actionBookAService"
-import { Session } from "next-auth"
-import { envs } from "@/envs"
+	useCallback,
+	useEffect,
+	useReducer,
+	useRef,
+} from "react"
+import { BsFillBookmarkFill } from "react-icons/bs"
+
+import { CalendarDatePicker } from "./Calendar"
+import { TimePicker } from "./TimePicker"
 
 type Fields = {
 	// event: string,
@@ -144,7 +135,6 @@ type FormAsideAction =
 				phone?: string
 			}
 	  }
-
 
 export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	const {
@@ -413,7 +403,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
 
 		const buisnessTimeStrings = filterBuisnessTimes(
-			genTimeStrings,
+			generateTimesArray().map(t => t.value),
 			buisnessHours
 		)
 		const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
@@ -536,7 +526,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	}
 
 	return (
-		<div className={formStyles.grid_wrap}>
+		// <div className={formStyles.grid_wrap}>
+		<Grid layout={"1_1"} alignContent={"start"}>
 			<div>
 				{!state.id || !state.url ? (
 					<form action={action} ref={formRef} className={form}>
@@ -788,7 +779,11 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 				)}
 			</div>
 
-			<aside key={stateRed.addonOptions.length} style={{ maxWidth: "20rem" }}>
+			<aside
+				key={stateRed.addonOptions.length}
+				style={{ maxWidth: "20rem" }}
+				className={"sticky"}
+			>
 				<table>
 					<tbody>
 						<tr>
@@ -856,6 +851,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 					</tbody>
 				</table>
 			</aside>
-		</div>
+		</Grid>
+		// </div>
 	)
 }

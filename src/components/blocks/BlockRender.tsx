@@ -1,44 +1,45 @@
-import { ComponentProps, Fragment } from "react"
-import {
-	DocumentRenderer,
-	DocumentRendererProps,
-} from "@keystone-6/document-renderer"
-import { Callout } from "@components/blocks/Callout"
-import { ImageBlock } from "@components/blocks/ImageBlock"
 import { ButtonLink } from "@components/blocks/ButtonLink"
+import { Callout } from "@components/blocks/Callout"
+import { Carousel } from "@components/blocks/Carousel"
+import { ContactForm } from "@components/blocks/ContactForm"
+import { HeadingBlock } from "@components/blocks/HeadingBlock"
+import { Hero } from "@components/blocks/Hero"
+import { IFrame } from "@components/blocks/IFrame"
+import { ImageBlock } from "@components/blocks/ImageBlock"
 import { ImageGallery } from "@components/blocks/ImageGallery"
+import { ImageLinkList } from "@components/blocks/ImageLinkList"
+import { InfoCard } from "@components/blocks/InfoCard"
+import { InfoCardList } from "@components/blocks/InfoCardList"
+import { MediaText } from "@components/blocks/MediaText"
+import { Paragraph } from "@components/blocks/ParagraphBlock"
+import { PostsList } from "@components/blocks/PostsList"
+import { Quote } from "@components/blocks/Quote"
+import SliderSlick from "@components/blocks/SliderSlick"
+import { SocialLinkNav } from "@components/blocks/SocialLinkNav"
+import { Table } from "@components/blocks/Table"
+import { Tweet } from "@components/blocks/Tweet"
 import { VideoLocal } from "@components/blocks/VideoLocal"
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
-import { Tweet } from "@components/blocks/Tweet"
-import { MediaText } from "@components/blocks/MediaText"
-import { SocialLinkNav } from "@components/blocks/SocialLinkNav"
-import { ContactForm } from "@components/blocks/ContactForm"
-import { ImageLinkList } from "@components/blocks/ImageLinkList"
-import { InfoCardList } from "@components/blocks/InfoCardList"
-import { PostsList } from "@components/blocks/PostsList"
-import { IFrame } from "@components/blocks/IFrame"
-import SliderSlick from "@components/blocks/SliderSlick"
-import { Carousel } from "@components/blocks/Carousel"
-import { Quote } from "@components/blocks/Quote"
-import { Hero } from "@components/blocks/Hero"
-import { InfoCard } from "@components/blocks/InfoCard"
-import { BlockLayout } from "@components/blocks/BlockLayout"
-import { Paragraph } from "@components/blocks/ParagraphBlock"
-import { HeadingBlock } from "@components/blocks/HeadingBlock"
-import { CodeBlock } from "./CodeBlock"
 // import styles from '@styles/blocs/blockrenderer.module.scss'
 import { Card } from "@components/layouts/Card"
-import { Blockquote } from "./Blockquote"
-import { Table } from "@components/blocks/Table"
+import { Grid } from "@components/layouts/Grid"
+import type {
+	DocumentRendererProps} from "@keystone-6/document-renderer";
 import {
-	layout_breakout,
+	DocumentRenderer
+} from "@keystone-6/document-renderer"
+import type {  GridLayout  } from "@ks/types"
+import { getColorTheme } from "@lib/styleHelpers"
+import {
 	layout_content,
 	layout_full,
 	layout_wide,
 } from "@styles/layout.module.css"
-import { Grid } from "@components/layouts/Grid"
-import { GridLayout } from "@ks/types"
-import { getColorTheme } from "@lib/styleHelpers"
+import type { ComponentProps} from "react";
+import { Fragment } from "react"
+
+import { Blockquote } from "./Blockquote"
+import { CodeBlock } from "./CodeBlock"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise

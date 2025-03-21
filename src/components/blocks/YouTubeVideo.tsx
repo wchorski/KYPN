@@ -1,5 +1,5 @@
+import { iframePosition, youtubeVideo } from '@styles/blocs/video.module.scss'
 import React from 'react';
-import styles, { iframePosition, youtubeVideo } from '@styles/blocs/video.module.scss'
 
 type YouTubeVideoProps = {
   url: string;

@@ -1,5 +1,4 @@
 'use client'
-import { LoadingAnim } from "@components/elements/LoadingAnim";
 // import { AddToCalendarButton } from "add-to-calendar-button-react"
 import { useEffect, useState } from "react";
 

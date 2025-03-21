@@ -1,22 +1,19 @@
 "use client"
 
-import { useEffect, useReducer, useRef } from "react"
-import { useFormState, useFormStatus } from "react-dom"
-
-import { Event, User } from "@ks/types"
-import { envs } from "@/envs"
-import { loadStripe } from "@stripe/stripe-js"
-import moneyFormatter from "@lib/moneyFormatter"
-import { Button } from "@components/elements/Button"
-import { useForm } from "@hooks/useForm"
-import {
-	actionTicketToCart,
-	TicketCheckoutState,
-} from "@lib/actions/actionTicketToCart"
-import { form } from "@styles/menus/form.module.scss"
-import { InputField } from "@components/InputField"
 import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import { useForm } from "@hooks/useForm"
+import type {  Event, User  } from "@ks/types"
+import type {
+	TicketCheckoutState} from "@lib/actions/actionTicketToCart";
+import {
+	actionTicketToCart
+} from "@lib/actions/actionTicketToCart"
+import moneyFormatter from "@lib/moneyFormatter"
+import { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
+import { useReducer } from "react"
+
 
 type Props = {
 	event: Event

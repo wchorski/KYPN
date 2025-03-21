@@ -1,11 +1,12 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { countAvailableSeats } from "./checkoutTickets"
-import type { Event } from "../types"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+
 import { hasOnlyOneValue } from "../../lib/utils"
+import type { Event } from "../types"
+import { countAvailableSeats } from "./checkoutTickets"
+import type { Context } from ".keystone/types"
 
 export const addToCart = (base: BaseSchemaMeta) =>
 	graphql.field({

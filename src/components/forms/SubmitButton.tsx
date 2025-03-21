@@ -1,13 +1,5 @@
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import {
-	IconCheckMark,
-	IconExclamationCircle,
-	IconShoppingBag,
-	IconSpinnerLines,
-} from "@lib/useIcons"
-import { stack_grid } from "@styles/elements/button.module.css"
-import { hidden } from "@styles/menus/form.module.scss"
-import { ReactNode, useEffect } from "react"
+
+import type { ReactNode } from "react"
 import { useFormStatus } from "react-dom"
 
 type SubmitButtonsProps = {
@@ -33,9 +25,8 @@ export function SubmitButton({
 				" "
 			)}
 		>
-			<div className={stack_grid}>
-				<span className={pending ? hidden : ""}>{btnText}</span>{" "}
-				<LoadingAnim isVisable={pending} />
+			<div >
+				<span>{pending ? 'pending...' : btnText}</span>{" "}
 			</div>
 
 			{/* <LoadingAnim isVisable={pending} /> */}

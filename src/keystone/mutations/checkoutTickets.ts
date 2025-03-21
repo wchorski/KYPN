@@ -1,10 +1,11 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from "@keystone-6/core"
-import { Context, Lists, TicketCreateInput } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import type { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
+
 import type { Event } from "../types"
+import type { Context, Lists, TicketCreateInput } from ".keystone/types"
 
 type StripeSession = {
   payment_status:'paid'|'unpaid'

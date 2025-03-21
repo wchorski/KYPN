@@ -1,11 +1,11 @@
-import { ReactNode } from "react"
-import { PageTMain } from "./PageTemplates"
+import { NoData } from "@components/elements/NoData"
 import {
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { NoData } from "@components/elements/NoData"
+import type { ReactNode } from "react"
+
 
 type Props = {
 	children?: ReactNode

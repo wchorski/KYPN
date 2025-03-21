@@ -1,21 +1,15 @@
-import AccountDash from "@components/menus/AccountDash"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { keystoneContext } from "@ks/context"
-import { Order, Rental, User } from "@ks/types"
-import { LoginToViewPage } from "@components/menus/LoginToViewPage"
-import { Metadata } from "next"
-import { envs } from "@/envs"
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { fetchUser } from "@lib/fetchdata/fetchUser"
-import {
-	layout_site,
-	layout_wide,
-	page_content,
-	page_layout,
-} from "@styles/layout.module.css"
-import { notFound } from "next/navigation"
+import ErrorPage from "@components/layouts/ErrorPage"
 import { Grid } from "@components/layouts/Grid"
+import AccountDash from "@components/menus/AccountDash"
+import type { DashNavData } from "@components/menus/DashNav";
+import { DashNav } from "@components/menus/DashNav"
+import { LoginToViewPage } from "@components/menus/LoginToViewPage"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { keystoneContext } from "@ks/context"
+import type {  Order, User  } from "@ks/types"
+import fetchRentals from "@lib/fetchdata/fetchRentals"
+import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
+import { fetchUser } from "@lib/fetchdata/fetchUser"
 import {
 	IconAccountBox,
 	IconBookmark,
@@ -27,10 +21,18 @@ import {
 	IconSubRepeat,
 	IconTicketOutlined,
 } from "@lib/useIcons"
-import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
-import { DashNav, DashNavData } from "@components/menus/DashNav"
-import ErrorPage from "@components/layouts/ErrorPage"
-import fetchRentals from "@lib/fetchdata/fetchRentals"
+import {
+	layout_site,
+	layout_wide,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,

@@ -1,8 +1,9 @@
-import { BlogListItem } from "./BlogListItem"
-import { Post } from "@ks/types"
-import { ReactElement } from "react"
-import {grid, auto} from '@styles/layout.module.css'
 import { GridList } from "@components/layouts/GridList"
+import type {  Post  } from "@ks/types"
+import {auto,grid} from '@styles/layout.module.css'
+import type { ReactElement } from "react"
+
+import { BlogListItem } from "./BlogListItem"
 export const revalidate = 5
 
 type ProdProps = {

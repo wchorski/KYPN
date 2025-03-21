@@ -1,5 +1,5 @@
 import styles from '@styles/blog/blogpost.module.css'
-import { CSSProperties, ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 
 type PostTHeaderMain = {
   // template:'header_main_aside'|'HeaderMain',

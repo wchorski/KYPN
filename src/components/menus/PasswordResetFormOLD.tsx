@@ -1,11 +1,9 @@
 "use client"
-import styles from "@styles/menus/form.module.scss"
-
-import { useFormState, useFormStatus } from "react-dom"
-import { useRef } from "react"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import Link from "next/link"
 import { Button } from "@components/elements/Button"
+import styles from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { useRef } from "react"
+import { useFormState, useFormStatus } from "react-dom"
 
 type Fields = {
 	password: string

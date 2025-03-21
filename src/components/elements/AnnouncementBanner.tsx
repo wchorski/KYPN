@@ -1,10 +1,11 @@
-import fetchAnnouncements from "@lib/fetchdata/fetchAnnouncements"
-import { AnnouncementsMarquee } from "@components/elements/AnnouncementMarquee"
 import { BlockRender } from "@components/blocks/BlockRender"
-import { ReactElement } from "react"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
+import { AnnouncementsMarquee } from "@components/elements/AnnouncementMarquee"
 import { isEmptyDocument, plainObj } from "@lib/contentHelpers"
+import fetchAnnouncements from "@lib/fetchdata/fetchAnnouncements"
+import { getServerSession } from "next-auth"
+import type { ReactElement } from "react"
+
+import { nextAuthOptions } from "@/session"
 
 type Props = {
   prop?:string

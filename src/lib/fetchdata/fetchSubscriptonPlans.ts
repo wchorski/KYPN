@@ -1,6 +1,7 @@
-import { Addon, Product, Service, SubscriptionPlan } from "@ks/types"
 import { keystoneContext } from "@ks/context"
-import { Session } from "next-auth"
+import type { SubscriptionPlan  } from "@ks/types"
+import type { Session } from "next-auth"
+
 import { envs } from "@/envs"
 
 const perPage = envs.PERPAGE

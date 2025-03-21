@@ -1,20 +1,20 @@
 "use client"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 // cred - https://stackoverflow.com/questions/78215500/react-and-stripe-integration-client-secret-returned-by-stripe-not-being-recogn
-import React, { useCallback, useState, useEffect } from "react"
-import { loadStripe } from "@stripe/stripe-js"
-import {
-	EmbeddedCheckoutProvider,
-	EmbeddedCheckout,
-} from "@stripe/react-stripe-js"
-
+import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { useCart } from "@components/hooks/CartStateContext"
+import type {  User  } from "@ks/types"
 import {
 	postStripeSession,
 } from "@lib/actions/postStripeSession"
+import {
+	EmbeddedCheckout,
+	EmbeddedCheckoutProvider,
+} from "@stripe/react-stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
+import React, { useCallback,useState } from "react"
+
 import { envs } from "@/envs"
-import { useCart } from "@components/hooks/CartStateContext"
-import { User } from "@ks/types"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
 if (!envs.STRIPE_PUBLIC_KEY)
 	throw new Error("!!! envs.STRIPE_PUBLIC_KEY not set")
 const stripePromise = loadStripe(envs.STRIPE_PUBLIC_KEY)

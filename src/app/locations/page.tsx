@@ -1,12 +1,13 @@
-import { nextAuthOptions } from "@/session"
 import ErrorMessage from "@components/ErrorMessage"
 import { Card } from "@components/layouts/Card"
 import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 import { StatusBadge } from "@components/StatusBadge"
 import fetchLocations from "@lib/fetchdata/fetchLocations"
 import { layout_content, page_layout } from "@styles/layout.module.css"
-import { getServerSession } from "next-auth"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
+
+import { nextAuthOptions } from "@/session"
 type Props = {
 	searchParams: { q: string }
 	params: { id: string }

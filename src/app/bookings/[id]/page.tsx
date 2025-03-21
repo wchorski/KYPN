@@ -1,37 +1,37 @@
-import ErrorMessage from "@components/ErrorMessage"
+import { BlockRender } from "@components/blocks/BlockRender"
+import { Callout } from "@components/blocks/Callout"
 import { DayMonthTime } from "@components/blocks/DayMonthTime"
+import { NoData } from "@components/elements/NoData"
+import ErrorMessage from "@components/ErrorMessage"
+import { Card } from "@components/layouts/Card"
+import Flex from "@components/layouts/Flex"
+import { DialogPopup } from "@components/menus/DialogPopup"
 import { UserBadge } from "@components/menus/UserBadge"
-
+import { StatusBadge } from "@components/StatusBadge"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import fetchBooking from "@lib/fetchdata/fetchBooking"
 import moneyFormatter from "@lib/moneyFormatter"
-import Link from "next/link"
-import { FiEdit } from "react-icons/fi"
-import { CgExternal } from "react-icons/cg"
-import { DialogPopup } from "@components/menus/Dialog"
-import { StatusBadge } from "@components/StatusBadge"
+import { IconUserAccountAvatar } from "@lib/useIcons"
 import { booking_single } from "@styles/booking.module.css"
-import { Metadata, ResolvingMetadata } from "next"
-import { envs } from "@/envs"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { BlockRender } from "@components/blocks/BlockRender"
 import {
 	layout_breakout,
 	layout_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { notFound } from "next/navigation"
-import Flex from "@components/layouts/Flex"
-import { IconUserAccountAvatar } from "@lib/useIcons"
-import { Card } from "@components/layouts/Card"
-import { NoData } from "@components/elements/NoData"
+import type { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
-import { Callout } from "@components/blocks/Callout"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+import { CgExternal } from "react-icons/cg"
+import { FiEdit } from "react-icons/fi"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
-//   description: envs.SITE_DESC,
+//   description: envs.SITE_DESCRIPTION,
 // }
 
 // throw new Error('Bookings: cartItem -> checkout -> orderItem ')
@@ -51,12 +51,12 @@ export async function generateMetadata(
 	if (!booking)
 		return {
 			title: "Booking | " + envs.SITE_TITLE,
-			description: envs.SITE_DESC,
+			description: envs.SITE_DESCRIPTION,
 		}
 
 	return {
 		title: booking.summary,
-		description: envs.SITE_DESC,
+		description: envs.SITE_DESCRIPTION,
 	}
 }
 

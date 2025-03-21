@@ -1,9 +1,9 @@
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { OrderItem } from "@ks/types"
-import Link from "next/link"
-import { PriceTag } from "./PriceTag"
+import type {  OrderItem  } from "@ks/types"
 import moneyFormatter from "@lib/moneyFormatter"
 import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
+import Link from "next/link"
+
 
 export function ProductOrderItem({ item }: { item: OrderItem }) {
 	const { name, price, image, id, rental_price } = item.product

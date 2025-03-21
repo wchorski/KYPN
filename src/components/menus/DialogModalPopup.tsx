@@ -1,6 +1,6 @@
 // cred - https://dev.to/fibonacid/creating-a-todo-app-using-the-html-dialog-element-4634
 
-import { useCallback, useEffect, useRef, type ComponentPropsWithoutRef } from "react";
+import { type ComponentPropsWithoutRef,useCallback, useEffect, useRef } from "react";
 
 export type DialogProps = Omit<
   ComponentPropsWithoutRef<"dialog">,

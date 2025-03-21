@@ -1,10 +1,10 @@
 "use client"
-import { CSSProperties, FormEvent, useRef, useState } from "react"
-import { useFormState, useFormStatus } from "react-dom"
-
 import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useSession } from "next-auth/react"
 import styles from "@styles/menus/form.module.scss"
+import { useSession } from "next-auth/react"
+import type { CSSProperties} from "react";
+import { useRef } from "react"
+import { useFormState, useFormStatus } from "react-dom"
 
 type Props = {
 	header?: string

@@ -1,5 +1,5 @@
+import { component, fields } from '@keystone-6/fields-document/component-blocks';
 import React from 'react';
-import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 
 export const mediatext = component({
   label: 'Media & Text',

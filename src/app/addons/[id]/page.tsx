@@ -1,14 +1,9 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import { PriceTag } from "@components/ecommerce/PriceTag"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { List } from "@components/elements/List"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
-import Flex from "@components/layouts/Flex"
 import { Grid } from "@components/layouts/Grid"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { Addon } from "@ks/types"
 import fetchAddon from "@lib/fetchdata/fetchAddon"
 import {
 	layout_breakout,
@@ -16,10 +11,13 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { Metadata, ResolvingMetadata } from "next"
-import { getServerSession } from "next-auth"
+import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -31,7 +29,7 @@ export async function generateMetadata(
 
 	return {
 		title: addon?.name + " | " + envs.SITE_TITLE,
-		description: envs.SITE_DESC,
+		description: envs.SITE_DESCRIPTION,
 	}
 }
 

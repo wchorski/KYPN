@@ -1,8 +1,9 @@
 // docs - https://keystonejs.com/docs/guides/schema-extension
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { Coupon } from "../types"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+
+import type { Coupon } from "../types"
+import type { Context } from ".keystone/types"
 
 export const redeemCoupon = (base: BaseSchemaMeta) =>
 	graphql.field({

@@ -1,5 +1,4 @@
-import { StatusBadge } from "@components/StatusBadge"
-import { type Event } from "@ks/types"
+import type {  type Event  } from "@ks/types"
 import Link from "next/link"
 
 type Props = {

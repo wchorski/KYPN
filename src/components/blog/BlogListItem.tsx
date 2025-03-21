@@ -1,14 +1,15 @@
-import React from "react"
-import Link from "next/link"
-import { datePrettyLocal } from "@lib/dateFormatter"
-import { FiCalendar } from "react-icons/fi"
-import { CgProfile } from "react-icons/cg"
-import { ImageDynamic } from "../elements/ImageDynamic"
-import { Post, User } from "@ks/types"
-// import styles from "@styles/blog/blog.module.scss";
-import styles from "@styles/articles.module.css"
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
 import { StatusBadge } from "@components/StatusBadge"
+import type {  Post, User  } from "@ks/types"
+import { datePrettyLocal } from "@lib/dateFormatter"
+// import styles from "@styles/blog/blog.module.scss";
+import styles from "@styles/articles.module.css"
+import Link from "next/link"
+import React from "react"
+import { CgProfile } from "react-icons/cg"
+import { FiCalendar } from "react-icons/fi"
+
+import { ImageDynamic } from "../elements/ImageDynamic"
 
 type Props = {
 	id: string

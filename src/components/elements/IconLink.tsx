@@ -1,7 +1,7 @@
 import { IconEditPagePencile, IconSubRepeat, IconTicketOutlined } from "@lib/useIcons"
 import { linkWicon } from "@styles/nav.module.css"
 import Link from "next/link"
-import type { CSSProperties, HTMLAttributeAnchorTarget, ReactNode } from "react"
+import type { HTMLAttributeAnchorTarget, ReactNode } from "react"
 
 type Props = {
 	label?: string

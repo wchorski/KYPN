@@ -1,15 +1,16 @@
 "use client"
-import { Ticket } from "@ks/types"
-import { useForm } from "@hooks/useForm"
+import { Callout } from "@components/blocks/Callout"
 import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import { StatusBadge } from "@components/StatusBadge"
+import { useForm } from "@hooks/useForm"
+import type {  Ticket  } from "@ks/types"
+import type {
+	TicketRedeemState} from "@lib/actions/actionTicketRedeem";
 import {
-	actionTicketRedeem,
-	TicketRedeemState,
+	actionTicketRedeem
 } from "@lib/actions/actionTicketRedeem"
 import { form } from "@styles/menus/form.module.scss"
-import { InputField } from "@components/InputField"
-import { Callout } from "@components/blocks/Callout"
-import { StatusBadge } from "@components/StatusBadge"
 
 type Props = {
 	ticketId: string

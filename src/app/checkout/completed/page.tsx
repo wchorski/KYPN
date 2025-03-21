@@ -1,27 +1,26 @@
+
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { NoDataFoundPage } from "@components/layouts/NoDataFoundPage"
 const stripe = require("stripe")(envs.STRIPE_SECRET)
-import { Stripe } from "stripe"
 
+import { Callout } from "@components/blocks/Callout"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { StatusBadge } from "@components/StatusBadge"
+import { fetchOrder } from "@lib/fetchdata/fetchOrder"
+import moneyFormatter from "@lib/moneyFormatter"
 import {
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { StatusBadge } from "@components/StatusBadge"
+import type { Metadata } from "next"
 import Link from "next/link"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { Metadata } from "next"
-import moneyFormatter from "@lib/moneyFormatter"
-import { Callout } from "@components/blocks/Callout"
-import { fetchOrder } from "@lib/fetchdata/fetchOrder"
-import { getServerSession } from "next-auth"
 import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
 
 export const metadata: Metadata = {
 	title: `Checkout Completed | ` + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

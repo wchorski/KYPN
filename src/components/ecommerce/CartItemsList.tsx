@@ -1,13 +1,13 @@
 "use client"
-import { useCart } from "@components/hooks/CartStateContext"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useSession } from "next-auth/react"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import CartItem from "./CartItem"
-import { CartItem as TCartItem } from "@ks/types"
 import { Callout } from "@components/blocks/Callout"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { useCart } from "@components/hooks/CartStateContext"
 import { sortedCartItems } from "@lib/sortUtils"
+import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { useEffect } from "react"
+
+import CartItem from "./CartItem"
 
 export function CartItemsList() {
 	// const [isPending, setIsPending] = useState(true)

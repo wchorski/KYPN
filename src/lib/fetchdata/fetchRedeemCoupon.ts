@@ -1,5 +1,5 @@
-import { Coupon } from "@ks/types"
 import { keystoneContext } from "@ks/context"
+import type {  Coupon  } from "@ks/types"
 
 type Props = {
 	code: string | undefined

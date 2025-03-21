@@ -1,21 +1,22 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
-import { InfoCard, InfoCardList } from "@components/blocks/InfoCardList"
-import { NoData } from "@components/elements/NoData"
+import type { InfoCard} from "@components/blocks/InfoCardList";
+import { InfoCardList } from "@components/blocks/InfoCardList"
 import { ArticleList } from "@components/layouts/ArticleList"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { Pagination } from "@components/Pagination"
-import { Addon, Product, Service, SubscriptionPlan } from "@ks/types"
+import type {  Addon, Product, Service, SubscriptionPlan  } from "@ks/types"
 import fetchProducts from "@lib/fetchdata/fetchProducts"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import fetchSubscriptonPlans from "@lib/fetchdata/fetchSubscriptonPlans"
 import { layout_site, page_layout } from "@styles/layout.module.css"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Shop | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

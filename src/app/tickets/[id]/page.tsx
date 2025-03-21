@@ -1,35 +1,36 @@
-import { nextAuthOptions } from "@/session"
+import { Callout } from "@components/blocks/Callout"
+import { QRCode } from "@components/elements/QRCodeSVG"
 import ErrorMessage from "@components/ErrorMessage"
-import { DialogPopup } from "@components/menus/Dialog"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { DialogPopup } from "@components/menus/DialogPopup"
+import { LoginToViewPage } from "@components/menus/LoginToViewPage"
+import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
+import { StatusBadge } from "@components/StatusBadge"
+import { TicketRedeemForm } from "@components/tickets/TicketRedeemForm"
 import { datePrettyLocalDay } from "@lib/dateFormatter"
 import fetchTicket from "@lib/fetchdata/fetchTicket"
-import { getServerSession } from "next-auth"
-import Link from "next/link"
+import { c_theme_light } from "@styles/colorthemes.module.css"
 import styles, {
 	qrcode_wrap,
 	texture_cardstock,
 } from "@styles/events/tickets.module.css"
-import { Metadata } from "next"
-import { envs } from "@/envs"
 import {
 	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
+import type { Metadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
-import { LoginToViewPage } from "@components/menus/LoginToViewPage"
-import { StatusBadge } from "@components/StatusBadge"
-import { QRCode } from "@components/elements/QRCodeSVG"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { c_theme_light } from "@styles/colorthemes.module.css"
-import { TicketRedeemForm } from "@components/tickets/TicketRedeemForm"
-import { Callout } from "@components/blocks/Callout"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Ticket | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

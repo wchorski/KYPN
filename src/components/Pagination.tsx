@@ -1,11 +1,12 @@
 // import { StyledPagination } from '../styles/Pagination.styled'
 // import { gql } from '@apollo/client';
 // import Head from 'next/head'
-import Link from 'next/link'
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { envs } from "@/envs";
 import { count_wrap, pagination } from "@styles/menus/pagination.module.css";
-import { ReactElement } from 'react';
+import Link from 'next/link'
+import type { ReactElement } from 'react';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+
+import { envs } from "@/envs";
 
 const perPage = envs.PERPAGE
 

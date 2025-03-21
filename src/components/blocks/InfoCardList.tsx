@@ -1,14 +1,15 @@
-import Link from "next/link"
-import { ReactNode } from "react"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
+import type { StatusType } from "@components/StatusBadge";
+import { StatusBadge } from "@components/StatusBadge"
+import { featured_image } from "@styles/articles.module.css"
 import  {
 	carditem,
 	cardlist,
 	content_wrap,
 	statusBadge,
 } from "@styles/blocs/infocard.module.css"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { StatusBadge, StatusType } from "@components/StatusBadge"
-import { featured_image } from "@styles/articles.module.css"
+import Link from "next/link"
+import type { ReactNode } from "react"
 
 export type InfoCard = {
   id:string,

@@ -1,10 +1,10 @@
 "use server"
+import { keystoneContext } from "@ks/context"
+import { redirect, RedirectType } from "next/navigation"
+import { getServerSession } from "next-auth"
+
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { keystoneContext } from "@ks/context"
-import stripeConfig from "@lib/stripe"
-import { getServerSession } from "next-auth"
-import { redirect, RedirectType } from "next/navigation"
 
 export async function actionTicketToCart(
 	prevState: TicketCheckoutState,

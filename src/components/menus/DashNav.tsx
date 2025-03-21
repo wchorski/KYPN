@@ -1,17 +1,10 @@
 "use client"
-import { dashnav } from "@styles/menus/dashboard.module.css"
-import { DashNavLink } from "./DashNavLink"
-import {
-	IconAccountBox,
-	IconBookmark,
-	IconCalendar,
-	IconCalendarOutlined,
-	IconShoppingBag,
-	IconTicketOutlined,
-} from "@lib/useIcons"
 import { useUrlHash } from "@hooks/useUrlHash"
+import { dashnav } from "@styles/menus/dashboard.module.css"
 import styles from "@styles/menus/dashboard.module.css"
 import { type ReactNode } from "react"
+
+import { DashNavLink } from "./DashNavLink"
 
 type Props = {
 	dashNavData: DashNavData

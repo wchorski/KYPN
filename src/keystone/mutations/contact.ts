@@ -1,9 +1,10 @@
 // docs - https://keystonejs.com/docs/guides/schema-extension
 import { graphql } from "@keystone-6/core"
-import { Context } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { mailContact } from "../../lib/mail"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+
 import { envs } from "../../../envs"
+import { mailContact } from "../../lib/mail"
+import type { Context } from ".keystone/types"
 
 export const contact = (base: BaseSchemaMeta) =>
 	graphql.field({

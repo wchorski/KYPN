@@ -1,7 +1,7 @@
-import { Ticket } from "@ks/types"
 import { keystoneContext } from "@ks/context"
-import { getServerSession, Session } from "next-auth"
-import { nextAuthOptions } from "@/session"
+import type {  Ticket  } from "@ks/types"
+import type { Session } from "next-auth";
+
 
 export default async function fetchTicket(
 	id: string,

@@ -1,24 +1,23 @@
 "use client"
 
-import {
+import { Card } from "@components/layouts/Card"
+import Flex from "@components/layouts/Flex"
+import type { 
 	Addon,
 	AddonCheckboxOptions,
 	Coupon,
 	SubscriptionPlan,
-} from "@ks/types"
-import { useCallback, useEffect, useReducer } from "react"
-import formStyles, { form, stand_alone } from "@styles/menus/form.module.scss"
+ } from "@ks/types"
 import moneyFormatter, { calcDiscount, handleCouponDetails } from "@lib/moneyFormatter"
-import { PriceTag } from "./PriceTag"
+import { IconCoupon } from "@lib/useIcons"
+import { bg_c_tertiary } from "@styles/colorthemes.module.css"
+import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
-import { IconCoupon } from "@lib/useIcons"
-import Flex from "@components/layouts/Flex"
+import { useCallback, useEffect, useReducer } from "react"
+
 import { CouponRedeemForm } from "./CouponRedeemForm"
-import { bg_c_tertiary } from "@styles/colorthemes.module.css"
-import { Card } from "@components/layouts/Card"
-import { envs } from "@/envs"
+import { PriceTag } from "./PriceTag"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan

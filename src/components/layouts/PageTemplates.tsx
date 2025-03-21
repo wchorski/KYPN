@@ -1,7 +1,8 @@
-import { CSSProperties, ReactNode } from "react"
-import { MainContainer } from "./MainContainer"
 import styles from "@styles/page.module.scss"
+import type { CSSProperties, ReactNode } from "react"
+
 import { AsideBar } from "./AsideBar"
+import { MainContainer } from "./MainContainer"
 
 type PageTHeaderMainAside = {
 	// template:'header_main_aside'|'fullwidth',

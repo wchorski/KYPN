@@ -1,4 +1,4 @@
-import { SelectOption } from "@ks/types"
+import type {  SelectOption  } from "@ks/types"
 import { radio } from "@styles/menus/form.module.scss"
 import { forwardRef, type HTMLProps, type Ref } from "react"
 

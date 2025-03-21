@@ -1,5 +1,3 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
 import { IconUserAccountAvatar } from "@lib/useIcons"
@@ -8,10 +6,13 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { getServerSession } from "next-auth"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
 import { BiEdit } from "react-icons/bi"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
 	searchParams: { q: string }

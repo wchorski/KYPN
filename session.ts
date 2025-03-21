@@ -302,7 +302,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				}
 
 				// login failed catch all
-				console.log("!!!!! login no work for, ", credentials?.email)
+				console.log("!!!!! login no work. Passwords did not match ", credentials?.email)
 				return null
 			},
 		}),

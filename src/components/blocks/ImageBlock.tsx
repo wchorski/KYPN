@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { image_caption, image_wrap } from "@styles/image.module.css"
+import Image from "next/image"
 import { type CSSProperties } from "react"
 
 type Props = {

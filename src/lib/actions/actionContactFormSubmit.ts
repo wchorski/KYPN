@@ -1,7 +1,8 @@
 "use server"
-import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { emailRegex, passwordRegExp } from "@lib/regexPatterns"
+import { emailRegex } from "@lib/regexPatterns"
+
+import { envs } from "@/envs"
 
 export async function actionContactFormSubmit(
 	prevState: ContactState,

@@ -1,20 +1,21 @@
-import styles, {
+import { IconLink } from "@components/elements/IconLink"
+import type {  Event  } from "@ks/types"
+import {
+	datePrettyLocalDayShort,
+	datePrettyLocalTime,
+} from "@lib/dateFormatter"
+import {
 	content,
 	date_start,
 	details,
 	event_article,
 	readmore,
 } from "@styles/events/events.module.css"
-import {
-	datePrettyLocalTime,
-	datePrettyLocalDayShort,
-} from "@lib/dateFormatter"
+import Link from "next/link"
 import { IoMdTime } from "react-icons/io"
 import { MdLocationOn } from "react-icons/md"
-import Link from "next/link"
+
 import { ImageDynamic } from "../elements/ImageDynamic"
-import { Event } from "@ks/types"
-import { IconLink } from "@components/elements/IconLink"
 
 export function EventCard({ image, start, summary, location, id }: Event) {
 	return (

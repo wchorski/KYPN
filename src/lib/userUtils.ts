@@ -1,4 +1,4 @@
-import { Availability, Booking, StringRange, User } from "../keystone/types"
+import type { Availability, Booking, StringRange, User } from "../keystone/types"
 
 export function findEmployeeBusyRanges(employee:User){
 

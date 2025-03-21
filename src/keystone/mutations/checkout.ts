@@ -1,16 +1,17 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
 import { graphql } from "@keystone-6/core"
-import {
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import type { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
+
+import { calcTotalPrice } from "../../lib/calcTotalPrice"
+import type { CartItem } from "../types"
+import type {
 	Context,
 	Lists,
 	OrderItemCreateInput,
 	TicketCreateInput,
 } from ".keystone/types"
-import { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
-import type { CartItem } from "../types"
-import { calcTotalPrice } from "../../lib/calcTotalPrice"
 
 type StripeSession = {
 	stripe?: {

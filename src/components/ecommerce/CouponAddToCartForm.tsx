@@ -2,12 +2,13 @@
 import { SubmitButton } from "@components/forms/SubmitButton"
 import { useCart } from "@components/hooks/CartStateContext"
 import { InputField } from "@components/InputField"
-import { useFormState } from "react-dom"
+import Flex from "@components/layouts/Flex"
+import type { AddToCartState} from "@lib/actions/postAddToCart";
+import { postAddToCart } from "@lib/actions/postAddToCart"
 import { form } from "@styles/menus/form.module.scss"
 import { useRouter } from "next/navigation"
-import { CSSProperties, useState } from "react"
-import { AddToCartState, postAddToCart } from "@lib/actions/postAddToCart"
-import Flex from "@components/layouts/Flex"
+import type { CSSProperties} from "react";
+import { useFormState } from "react-dom"
 
 type Props = {
 	code?: string
@@ -52,7 +53,7 @@ export function CouponAddToCartForm({ code }: Props) {
 
 	return (
 		<form className={form} action={action}>
-			<Flex>
+			<Flex alignItems={'center'}>
 				<InputField
 					type="hidden"
 					name={"type"}

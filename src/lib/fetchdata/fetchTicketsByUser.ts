@@ -1,6 +1,7 @@
-import { Ticket } from "@ks/types"
 import { keystoneContext } from "@ks/context"
+import type {  Ticket  } from "@ks/types"
 import { getServerSession } from "next-auth"
+
 import { nextAuthOptions } from "@/session"
 
 const now = new Date().toISOString()

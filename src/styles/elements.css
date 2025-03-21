@@ -266,3 +266,8 @@ s {
   margin-inline: var(--space-xs);
   border-radius: var(--br-soft);
 }
+
+.sticky {
+  position: sticky;
+  top: 5rem;
+}

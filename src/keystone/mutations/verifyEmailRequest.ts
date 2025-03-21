@@ -1,12 +1,12 @@
 // docs - https://keystonejs.com/docs/guides/schema-extension
 import { graphql } from '@keystone-6/core';
-import { Context } from '.keystone/types';
-import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { mailBooking, mailVerifyUser } from '../../lib/mail';
-import { envs } from '../../../envs';
+import type { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
+
+import { mailVerifyUser } from '../../lib/mail';
 // @ts-ignore
 import { tokenEmailVerify } from '../../lib/tokenEmailVerify';
-import { User } from '../types';
+import type { User } from '../types';
+import type { Context } from '.keystone/types';
 
 type Payload = {
   id:string,

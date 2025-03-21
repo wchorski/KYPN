@@ -1,10 +1,11 @@
 "use client"
-import { CartItem, User } from "@ks/types"
+import type {  CartItem, User  } from "@ks/types"
 import {
 	calcTotalPrice,
 } from "@lib/calcTotalPrice"
+import type {
+	ReactNode} from "react";
 import {
-	ReactNode,
 	createContext,
 	useCallback,
 	useContext,

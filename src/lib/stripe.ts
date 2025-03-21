@@ -1,7 +1,9 @@
-import Stripe from "stripe"
 import "dotenv/config"
+
+import Stripe from "stripe"
+
 import { envs } from "../../envs"
-import { Billing_Interval, Duration, SubscriptionItem } from "../keystone/types"
+import type { Billing_Interval, Duration, SubscriptionItem } from "../keystone/types"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! STRIP_SECRET is missing.")
 
@@ -583,7 +585,7 @@ export async function stripeCreateInstallmentPayment({
 		end_behavior,
 		metadata: {
 			type,
-			url: envs.BACKEND_URL + `/${type}/${id}`,
+			url: envs.CMS_URL + `/${type}/${id}`,
 		},
 		phases: [
 			{

@@ -1,6 +1,7 @@
-import { Ticket } from '@ks/types'
+import type { Ticket } from '@ks/types'
 import styles from '@styles/events/tickets.module.css'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+
 import { TicketListItem } from './TicketListItem'
 
 type Props = {

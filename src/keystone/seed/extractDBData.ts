@@ -1,4 +1,5 @@
 import { promises as fs } from "fs"
+
 import type { Context } from ".keystone/types"
 
 const now = new Date()
@@ -20,7 +21,7 @@ export async function extractDBData(context: Context) {
 		const filePath = `./src/keystone/seed/extracted/`
 
 		saveToFile(fileName, filePath, allDBData)
-		saveToFile("extData.json", filePath, allDBData)
+		saveToFile("seedData.json", filePath, allDBData)
 	} catch (error) {
 		console.log("!!! extract: ", error)
 	}

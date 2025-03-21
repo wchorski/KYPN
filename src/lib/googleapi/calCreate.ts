@@ -1,5 +1,5 @@
-import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
+import { google } from 'googleapis';
 
 const scopes = ['https://www.googleapis.com/auth/calendar'];
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY || 'NO_KEY_SET'

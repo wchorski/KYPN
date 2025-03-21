@@ -1,8 +1,9 @@
 "use client"
-import { envs } from "@/envs"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { type ReactNode } from "react"
+
+import { envs } from "@/envs"
 
 type Props = {
 	href?: string

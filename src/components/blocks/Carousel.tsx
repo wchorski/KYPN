@@ -1,5 +1,5 @@
-import React from 'react';
 import { carousel, carouselImage, carouselItem, title } from '@styles/blocs/carousel.module.css';
+import React from 'react';
 
 type CarouselProps = {
   items: {

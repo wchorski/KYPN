@@ -1,8 +1,8 @@
 // cred - https://www.youtube.com/watch?v=xrvul-JrKFI
 // other tips - https://borstch.com/blog/development/middleware-usage-in-nextjs-14
-import { Post } from '@ks/types';
-import { NextResponse } from 'next/server'
+import type { Post } from '@ks/types';
 import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 
 export async function middleware(request: NextRequest) {
@@ -40,8 +40,8 @@ export async function middleware(request: NextRequest) {
       
       return NextResponse.redirect(new URL(`/posts/${post?.slug}`, request.url))
       
-    } catch (error) {
-      return new Response('Error processing request', { status: 500 });
+    } catch (err:any) {
+      return new Response('Error processing request: ' + err.toString(), { status: 500 });
     }
   }
 }

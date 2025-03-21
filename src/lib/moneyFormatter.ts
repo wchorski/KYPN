@@ -1,4 +1,4 @@
-import { Coupon } from "../keystone/types"
+import type { Coupon } from "../keystone/types"
 
 export default function moneyFormatter(amount: number | undefined = 0) {
 	const options = {

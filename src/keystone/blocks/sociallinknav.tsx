@@ -1,9 +1,10 @@
-import React from 'react';
 import {
 	component,
 	fields,
 	NotEditable,
 } from "@keystone-6/fields-document/component-blocks"
+import React from 'react';
+
 import { useIcons } from "../../lib/useIcons"
 
 export const sociallinknav = component({

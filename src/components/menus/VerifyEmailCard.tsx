@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from "react"
-import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
-import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 import { Callout } from "@components/blocks/Callout"
 import { Button } from "@components/elements/Button"
+import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
+import { useState } from "react"
+import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 
 
 type Props = {

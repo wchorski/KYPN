@@ -1,5 +1,5 @@
-import styles, { icon_label } from "@styles/iconlabel.module.css"
-import { ReactNode } from "react"
+import { icon_label } from "@styles/iconlabel.module.css"
+import type { ReactNode } from "react"
 type Props = {
 	icon: ReactNode
   label:string

@@ -1,15 +1,14 @@
-import { ReactNode } from "react"
 // import { Section } from "@components/blocks/Section"
-import { ColorsTheme, GridLayout, WidthLayoutSize2 } from "@ks/types"
-import { BlockLayout as BlkLayout } from "../../components/layouts/BlockLayout"
+import type {  ColorsTheme, GridLayout, WidthLayoutSize2  } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
-import { number } from "fp-ts"
 import {
-	layout_content,
 	layout_full,
 	layout_site,
 	layout_wide,
 } from "@styles/layout.module.css"
+import type { ReactNode } from "react"
+
+import { BlockLayout as BlkLayout } from "../../components/layouts/BlockLayout"
 
 type Props = {
 	children: ReactNode[]

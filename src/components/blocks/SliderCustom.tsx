@@ -1,6 +1,6 @@
 // cred - https://github.com/monsterlessonsacademy/monsterlessonsacademy/blob/278-advanced-react-slider/src/ImageSlider.js
-import { useCallback, useEffect, useRef, useState } from "react";
 import styles from '@styles/blocs/slidercustom.module.scss'
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const slideStyles = {
   width: "100%",

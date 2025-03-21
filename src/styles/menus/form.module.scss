@@ -361,6 +361,7 @@
 .input_label :global {
 	display: grid;
 	gap: 0.2rem;
+  flex: 1;
 
 	span.label:first-child {
 		font-weight: bold;

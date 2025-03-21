@@ -1,43 +1,43 @@
-import ErrorMessage from "@components/ErrorMessage"
 import { DayMonthTime } from "@components/blocks/DayMonthTime"
-import { dateFormatLocalDateTime, datePrettyLocal } from "@lib/dateFormatter"
+import { PriceTag } from "@components/ecommerce/PriceTag"
+import { IconLink } from "@components/elements/IconLink"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { NoData } from "@components/elements/NoData"
+import ErrorMessage from "@components/ErrorMessage"
+import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
+import { Card } from "@components/layouts/Card"
+import Flex from "@components/layouts/Flex"
+import { DialogPopup } from "@components/menus/DialogPopup"
+import { StatusBadge } from "@components/StatusBadge"
+import { isDateOlderThanNow } from "@lib/dateCheck"
+import { datePrettyLocal } from "@lib/dateFormatter"
+import fetchSubscriptionItem from "@lib/fetchdata/fetchSubscriptionItem"
 import moneyFormatter, {
 	calcDiscount,
 	handleCouponDetails,
 } from "@lib/moneyFormatter"
-import Link from "next/link"
-import { CgExternal } from "react-icons/cg"
-import { DialogPopup } from "@components/menus/Dialog"
-import { StatusBadge } from "@components/StatusBadge"
+import { IconCoupon, IconUserAccountAvatar } from "@lib/useIcons"
 import { booking_single } from "@styles/booking.module.css"
-import { Metadata, ResolvingMetadata } from "next"
-import { envs } from "@/envs"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { BlockRender } from "@components/blocks/BlockRender"
+import { bg_c_accent, bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { item, perItemTotal } from "@styles/ecommerce/cart.module.css"
 import {
 	layout_breakout,
 	layout_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { notFound } from "next/navigation"
-import Flex from "@components/layouts/Flex"
-import { IconCoupon, IconUserAccountAvatar } from "@lib/useIcons"
-import { Card } from "@components/layouts/Card"
-import { NoData } from "@components/elements/NoData"
+import type { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
-import fetchSubscriptionItem from "@lib/fetchdata/fetchSubscriptionItem"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
-import { IconLink } from "@components/elements/IconLink"
-import { PriceTag } from "@components/ecommerce/PriceTag"
-import { bg_c_accent, bg_c_tertiary } from "@styles/colorthemes.module.css"
-import { item, perItemTotal } from "@styles/ecommerce/cart.module.css"
-import { isDateOlderThanNow } from "@lib/dateCheck"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+import { CgExternal } from "react-icons/cg"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
-//   description: envs.SITE_DESC,
+//   description: envs.SITE_DESCRIPTION,
 // }
 
 // throw new Error('Bookings: cartItem -> checkout -> orderItem ')
@@ -57,12 +57,12 @@ export async function generateMetadata(
 	if (!subscriptionItem)
 		return {
 			title: "Booking | " + envs.SITE_TITLE,
-			description: envs.SITE_DESC,
+			description: envs.SITE_DESCRIPTION,
 		}
 
 	return {
 		title: subscriptionItem.summary,
-		description: envs.SITE_DESC,
+		description: envs.SITE_DESCRIPTION,
 	}
 }
 

@@ -1,25 +1,25 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
+import { BiLock } from "react-icons/bi"
+import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
 import {
-	FaFacebook,
-	FaInstagram,
 	FaBandcamp,
+	FaFacebook,
+	FaGithub,
+	FaInstagram,
+	FaLink,
+	FaLinkedin,
 	FaTwitch,
 	FaTwitter,
 	FaYoutube,
-	FaGithub,
-	FaLinkedin,
-	FaLink,
 } from "react-icons/fa"
-import { SiBandlab } from "react-icons/si"
-import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
-import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
-import { RiFileEditFill, RiCoupon2Line } from "react-icons/ri"
-import { PiFlagBannerFoldLight, PiSpinnerThin } from "react-icons/pi";
-import { BiLock } from "react-icons/bi"
-import { TbCheck, TbExclamationCircle, TbShoppingBagPlus, TbShoppingBag, TbCalendarRepeat } from "react-icons/tb"
 import { FaRepeat } from "react-icons/fa6"
+import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { ImDownload } from "react-icons/im";
+import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
+import { PiFlagBannerFoldLight, PiSpinnerThin } from "react-icons/pi";
+import { RiCoupon2Line,RiFileEditFill } from "react-icons/ri"
+import { SiBandlab } from "react-icons/si"
+import { TbCalendarRepeat,TbCheck, TbExclamationCircle, TbShoppingBag, TbShoppingBagPlus } from "react-icons/tb"
 
 export const IconCoupon = () => <RiCoupon2Line />
 export const IconBookmark = () => <BsFillBookmarkFill />

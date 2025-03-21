@@ -1,23 +1,21 @@
-import { envs } from "@/envs"
-import fetchEvents from "@lib/fetchdata/fetchEvents"
-import { Metadata } from "next"
-import { EventCard } from "@components/events/EventCard"
-import  { events_list } from "@styles/events/events.module.css"
 import ErrorMessage from "@components/ErrorMessage"
+import { SchedualCalendar } from "@components/SchedualCalendar"
+import fetchEvents from "@lib/fetchdata/fetchEvents"
 import {
   layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { SchedualCalendar } from "@components/SchedualCalendar"
+import type { Metadata } from "next"
 import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { NoData } from "@components/elements/NoData"
 
 export const metadata: Metadata = {
 	title: "Events | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {

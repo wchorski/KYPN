@@ -2,7 +2,7 @@
 
 // import { useUrlHash } from "@hooks/useUrlHash"
 // import { dashlink, linkactive } from "@styles/menus/dashboard.module.css"
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
 
 type Props = {
 	slug: string

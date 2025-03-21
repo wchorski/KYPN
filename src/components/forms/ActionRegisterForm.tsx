@@ -1,9 +1,7 @@
 "use client"
-import { envs } from "@/envs"
-import { Form } from "@components/Form"
+
+import { PasswordRequirements } from "@components/forms/PasswordRequirements"
 import { InputField } from "@components/InputField"
-import { Card } from "@components/layouts/Card"
-import { PasswordRequirements } from "@components/menus/PasswordRequirements"
 import { useForm } from "@hooks/useForm"
 import {
 	actionRegisterAnAccount,
@@ -11,6 +9,7 @@ import {
 } from "@lib/actions/actionRegisterAnAccount"
 import { form } from "@styles/menus/form.module.scss"
 import { signIn } from "next-auth/react"
+
 import { SubmitButton } from "./SubmitButton"
 
 const initState: RegisterAnAccountState = {
@@ -78,9 +77,9 @@ export function ActionRegsiterForm() {
 					error={state.valueErrors?.password}
 				/>
 
-				<Card colorTheme={"bg_c_reverse_theme"}>
+				<div className={'card'}>
 					<PasswordRequirements />
-				</Card>
+				</div>
 
 				<InputField
 					name={"passwordConfirm"}

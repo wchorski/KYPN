@@ -1,7 +1,7 @@
-import { WidthLayoutSize, WidthLayoutSize2 } from "@ks/types"
-import { CSSProperties, ReactNode } from "react"
-import sLayout, { layout_full } from "@styles/layout.module.css"
+import type { WidthLayoutSize2  } from "@ks/types"
 import styles from '@styles/blog/blogpost.module.css'
+import sLayout, { layout_full } from "@styles/layout.module.css"
+import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
 	children: ReactNode

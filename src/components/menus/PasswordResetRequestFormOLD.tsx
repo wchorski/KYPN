@@ -1,9 +1,8 @@
 "use client"
-import styles from "@styles/menus/form.module.scss"
-import { useFormState, useFormStatus } from "react-dom"
-import { useRef } from "react"
-import { Button } from "@components/elements/Button"
 import { SubmitButton } from "@components/forms/SubmitButton"
+import styles from "@styles/menus/form.module.scss"
+import { useRef } from "react"
+import { useFormState } from "react-dom"
 
 type Fields = {
 	email: string

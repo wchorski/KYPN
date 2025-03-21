@@ -1,10 +1,9 @@
 'use server'
-import { envs } from "@/envs"
 // import type { Lists } from ".keystone/types"
 // type Post = Lists.Post["fields"]
 //todo there must be a right way to pull types in from ks. i'm so close
 import { keystoneContext } from "@ks/context"
-import {Post} from '@ks/types'
+import type {Post} from '@ks/types'
 
 export async function fetchPost(slug:string, session:any){
 

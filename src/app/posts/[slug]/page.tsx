@@ -1,16 +1,22 @@
-import Link from "next/link"
-import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
-import { datePrettyLocal } from "@lib/dateFormatter"
-import { TagsPool } from "@components/menus/TagsPool"
-import { CategoriesPool } from "@components/menus/CategoriesPool"
-import { ImageDynamic } from "@components/elements/ImageDynamic"
-import { envs } from "@/envs"
 import { BlockRender } from "@components/blocks/BlockRender"
-import { fetchPost } from "@lib/fetchdata/fetchPost"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { Metadata, ResolvingMetadata } from "next"
+import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
+import { Header } from "@components/elements/Header"
+import { IconLink } from "@components/elements/IconLink"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
+import { NoData } from "@components/elements/NoData"
+import { ShareButton } from "@components/elements/ShareButton"
+import { AsideBar } from "@components/layouts/AsideBar"
 import { Card } from "@components/layouts/Card"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
+import { CategoriesPool } from "@components/menus/CategoriesPool"
+import { TableOfContents } from "@components/menus/TableOfContents"
+import { TagsPool } from "@components/menus/TagsPool"
+import { StatusBadge } from "@components/StatusBadge"
+import { findAllHeadings, isEmptyDocument } from "@lib/contentHelpers"
+import { datePrettyLocal } from "@lib/dateFormatter"
+import { fetchPost } from "@lib/fetchdata/fetchPost"
+import sArticles from "@styles/articles.module.css"
 import { featured_image_wrap } from "@styles/blog/blogpost.module.css"
 import {
 	layout_full,
@@ -19,21 +25,16 @@ import {
 	page_layout,
 	page_title,
 } from "@styles/layout.module.css"
-import sArticles from "@styles/articles.module.css"
-import { StatusBadge } from "@components/StatusBadge"
-import { CgProfile } from "react-icons/cg"
-import { Header } from "@components/elements/Header"
-import Flex from "@components/layouts/Flex"
-import { TableOfContents } from "@components/menus/TableOfContents"
-import { CSSProperties } from "react"
-import { AsideBar } from "@components/layouts/AsideBar"
-import { NoData } from "@components/elements/NoData"
-import { findAllHeadings, isEmptyDocument } from "@lib/contentHelpers"
-import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
-import { ShareButton } from "@components/elements/ShareButton"
-import ErrorPage from "@components/layouts/ErrorPage"
-import { IconLink } from "@components/elements/IconLink"
+import type { Metadata, ResolvingMetadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+import type { CSSProperties } from "react"
+import { CgProfile } from "react-icons/cg"
+import { TbCalendarMonth, TbCalendarUp } from "react-icons/tb"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const revalidate = 5
 
@@ -57,7 +58,7 @@ export async function generateMetadata(
 	if (!post)
 		return {
 			title: envs.SITE_TITLE,
-			description: envs.SITE_DESC,
+			description: envs.SITE_DESCRIPTION,
 		}
 
 	const { title, excerpt, featured_image, tags, author } = post

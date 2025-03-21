@@ -1,5 +1,4 @@
 import styles from "@styles/elements/button.module.css"
-import { wait } from "@lib/waitTimeout"
 import Link from "next/link"
 
 export default function SignOutButton() {

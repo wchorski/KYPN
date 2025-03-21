@@ -1,13 +1,11 @@
 
 import ErrorMessage from '@components/ErrorMessage'
-
 import {
   layout_site,
   page_content,
   page_layout,
   } from '@styles/layout.module.css'
-import { getServerSession } from 'next-auth'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 type Props = {
   children?:ReactNode

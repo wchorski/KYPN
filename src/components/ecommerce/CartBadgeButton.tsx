@@ -1,8 +1,8 @@
 "use client"
 
 import { useCart } from "@components/hooks/CartStateContext"
-import styles, { badge } from "@styles/ecommerce/cart.module.css"
 import { IconShoppingBag, IconSpinnerLines } from "@lib/useIcons"
+import { badge } from "@styles/ecommerce/cart.module.css"
 
 type Props = {
 	isNonInteractive?: boolean

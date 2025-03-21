@@ -1,7 +1,6 @@
 "use server"
-import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { Coupon } from "@ks/types"
+import type {  Coupon  } from "@ks/types"
 import { plainObj } from "@lib/utils"
 
 export async function postRedeemCoupon(

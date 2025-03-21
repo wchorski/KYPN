@@ -1,19 +1,19 @@
-import { CSSProperties, ReactNode } from "react"
-import { GridLayout, SpaceSize } from "@ks/types"
+import type {  GridLayout, SpaceSize  } from "@ks/types"
 import {
-	grid,
-	auto,
 	_1,
 	_1_1,
 	_1_1_1,
 	_1_1_1_1,
 	_1_2,
-	_2_1,
 	_1_2_1,
   _1_4,
+	_2_1,
+	auto,
+	grid,
   grid_item,
 } from "@styles/grid.module.css"
 import { layout_site, layout_wide } from "@styles/layout.module.css"
+import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
 	pad?: number

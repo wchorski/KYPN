@@ -1,11 +1,12 @@
-import { ProductThumbnail } from "@components/ecommerce/ProductThumbnail";
-import styles from '@styles/ecommerce/product.module.css'
-import { SubscriptionPlan } from "@ks/types";
 import { List } from "@components/elements/List";
+import type { SubscriptionPlan } from "@ks/types";
+import styles from '@styles/ecommerce/product.module.css'
 import { getServerSession } from "next-auth";
+import type { ReactElement } from "react";
+
 import { nextAuthOptions } from "@/session";
+
 import { SubscriptionPlanThumbnail } from "./SubscriptionPlanThumbnail";
-import { ReactElement } from "react";
 
 
 type ProdProps = {

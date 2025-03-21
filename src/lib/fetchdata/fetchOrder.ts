@@ -1,6 +1,6 @@
 import { keystoneContext } from "@ks/context"
-import { Order } from "@ks/types"
-import { Session } from "next-auth"
+import type {  Order  } from "@ks/types"
+import type { Session } from "next-auth"
 
 type Props = {
 	id: string

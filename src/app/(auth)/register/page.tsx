@@ -1,19 +1,17 @@
-import { envs } from "@/envs"
-import { PageTHeaderMain } from "@components/layouts/PageTemplates"
-import { RegsiterForm } from "@components/menus/RegisterFormOLD"
-import { Metadata } from "next"
-import { BlockLayout } from "@components/layouts/BlockLayout"
-import { Header } from "@components/elements/Header"
+import { ActionRegsiterForm } from "@components/forms/ActionRegisterForm"
 import {
+  layout_breakout,
 	layout_content,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import { ActionRegsiterForm } from "@components/forms/ActionRegisterForm"
+import type { Metadata } from "next"
+
+import { envs } from "@/envs"
 
 export const metadata: Metadata = {
 	title: "Regsiter | " + envs.SITE_TITLE,
-	description: envs.SITE_DESC,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {
@@ -23,14 +21,18 @@ type Props = {
 
 export default async function RegisterPage({ params, searchParams }: Props) {
 	return (
-		<main className={page_layout}>
-			<Header widthOfContent={"layout_content"} style={{display: 'none'}}>
+		<main
+		className={page_layout}
+		>
+			<header className={layout_breakout} >
 				<h1> Register an Account </h1>
-			</Header>
+			</header>
 
-			<div className={[page_content, layout_content].join(" ")}>
+			<div
+			className={[page_content, layout_content].join(" ")}
+			>
 				{/* <RegsiterForm /> */}
-        <ActionRegsiterForm />
+				<ActionRegsiterForm />
 			</div>
 		</main>
 	)

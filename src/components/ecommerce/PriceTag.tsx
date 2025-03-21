@@ -1,7 +1,8 @@
-import type { CSSProperties } from "react"
-import moneyFormatter from "../../lib/moneyFormatter"
+import type {  Billing_Interval  } from "@ks/types"
 import styles from "@styles/ecommerce/pricetag.module.css"
-import { Billing_Interval } from "@ks/types"
+import type { CSSProperties } from "react"
+
+import moneyFormatter from "../../lib/moneyFormatter"
 
 type Props = {
 	price: number | null

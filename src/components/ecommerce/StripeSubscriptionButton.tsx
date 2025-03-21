@@ -1,17 +1,15 @@
 'use client'
 // cred - https://blog.stackademic.com/integrating-stripe-checkout-mode-with-next-js-13-7fbf1680c600
 
-import {loadStripe} from "@stripe/stripe-js";
-import { useCart } from "@hooks/CartStateContext";
-import { envs } from "@/envs";
-import { BsStripe } from "react-icons/bs";
-import { useState } from "react";
-import ErrorMessage from "@components/ErrorMessage";
 import { LoadingAnim } from "@components/elements/LoadingAnim";
+import ErrorMessage from "@components/ErrorMessage";
+import {loadStripe} from "@stripe/stripe-js";
 import formStyles from '@styles/menus/form.module.scss'
 import Link from "next/link";
-import { Addon, AddonCheckboxOptions } from "@ks/types";
-import moneyFormatter from "@lib/moneyFormatter";
+import { useState } from "react";
+import { BsStripe } from "react-icons/bs";
+
+import { envs } from "@/envs";
 
 type Props = {
   id:string,

@@ -1,22 +1,19 @@
-import { envs } from "@/envs"
-import { nextAuthOptions } from "@/session"
 import { Callout } from "@components/blocks/Callout"
-import { DialogPopup } from "@components/menus/Dialog"
-import { LoginForm } from "@components/menus/LoginForm"
-import { PasswordRequestForm } from "@components/menus/PasswordRequestForm"
-import { Metadata } from "next"
-import { getServerSession } from "next-auth"
-import { getProviders } from "next-auth/react"
-import Link from "next/link"
-import { Header } from "@components/elements/Header"
+import { LoginForm } from "@components/LoginForm"
+import { DialogPopup } from "@components/menus/DialogPopup"
+import { PasswordRequestForm } from "@components/PasswordRequestForm"
 import {
-	layout_full,
-	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import Flex from "@components/layouts/Flex"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { getProviders } from "next-auth/react"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
 	title: "Login | " + envs.SITE_TITLE,
@@ -45,37 +42,37 @@ export default async function LoginPage({ searchParams }: Props) {
 				<PasswordRequestForm />
 			</DialogPopup>
 
-			<Header widthOfContent={"layout_wide"}>
+			<header className={layout_wide}>
 				<h1> Login </h1>
 				{callbackUrl && (
 					<Callout intent={"warning"}>
 						<p>You will return back to the previous page after login</p>
 					</Callout>
 				)}
-			</Header>
+			</header>
 			<div className={[page_content, layout_wide].join(" ")}>
-				<Flex>
+				<div className={"flex"}>
 					<div>
 						<LoginForm providers={providers} callbackUrl={callbackUrl} />
 					</div>
 
 					<div>
 						{session?.user.email && (
-							<Callout intent={"info"}>
+							<Callout intent={"info"} style={{maxWidth: '17rem'}}>
 								<p>
 									{" "}
 									currently logged in with email{" "}
 									<strong> {session.user.email} </strong>. Go to your{" "}
-									<Link href={`/account`}> Account </Link>
+									<Link href={`/`}> Account </Link>
 								</p>
 							</Callout>
 						)}
 
 						{error && (
-							<Callout intent={"error"}>
+							<div className={"error"}>
 								{" "}
 								<p> Login failed. Please try again </p>
-							</Callout>
+							</div>
 						)}
 						<h4> Create a New Account </h4>
 						<p>
@@ -85,7 +82,7 @@ export default async function LoginPage({ searchParams }: Props) {
 							</Link>
 						</p>
 					</div>
-				</Flex>
+				</div>
 			</div>
 		</main>
 	)

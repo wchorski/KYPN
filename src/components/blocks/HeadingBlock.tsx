@@ -1,5 +1,5 @@
 import { slugFormat } from "@lib/slugFormat"
-import { CSSProperties, ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
 	level: 1 | 2 | 3 | 4 | 5 | 6

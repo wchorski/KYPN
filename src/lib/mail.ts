@@ -1,16 +1,15 @@
-import { Booking, Order, SubscriptionItem } from "../keystone/types"
-import { createTransport, getTestMessageUrl } from "nodemailer"
 import { render } from "@react-email/render"
-import moneyFormatter from "../lib/moneyFormatter"
-import { datePrettyLocal } from "./dateFormatter"
+import { createTransport, getTestMessageUrl } from "nodemailer"
+
 import { envs } from "../../envs"
-import PasswordResetEmail from "../emails/passwordReset"
-import PasswordResetConfirmEmail from "../emails/passwordResetConfirm"
-import UserVerifyEmail from "../emails/userVerify"
 import BookingEmail from "../emails/bookings"
 import ContactEmail from "../emails/contact"
 import OrdersEmail from "../emails/orders"
+import PasswordResetEmail from "../emails/passwordReset"
+import PasswordResetConfirmEmail from "../emails/passwordResetConfirm"
 import SubscriptionItemEmail from "../emails/subscriptionItem"
+import UserVerifyEmail from "../emails/userVerify"
+import type { Booking, Order, SubscriptionItem } from "../keystone/types"
 
 const MAIL_HOST = envs.MAIL_HOST
 const MAIL_PORT = envs.MAIL_PORT

@@ -1,10 +1,11 @@
 "use client"
-import { useFormState, useFormStatus } from "react-dom"
 import { submitTestUsername } from "@lib/actions/testAction"
-import { Card } from "./layouts/Card"
 import { form } from "@styles/menus/form.module.scss"
 import { useRouter } from 'next/navigation'
 import { useRef } from "react"
+import { useFormState, useFormStatus } from "react-dom"
+
+import { Card } from "./layouts/Card"
 
 type Props = {
 	prop?: string

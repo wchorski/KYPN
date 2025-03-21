@@ -2,7 +2,7 @@
 // cred - https://aurorascharff.no/posts/handling-form-validation-errors-and-resets-with-useactionstate/
 
 import { useEffect, useState } from "react"
-import { useFormState, useFormStatus } from "react-dom"
+import { useFormState } from "react-dom"
 
 type FormProps<T> = {
 	action: () => void

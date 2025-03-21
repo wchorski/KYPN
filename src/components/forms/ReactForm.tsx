@@ -1,14 +1,12 @@
 "use client"
 // cred - https://medium.com/@omril_15649/replacing-react-hook-form-in-react-19-dd069f29d505
-import React from "react"
-import { form } from "@styles/menus/form.module.scss"
 import {
 	submitTestUsername,
 	type TestUsernameState,
 } from "@lib/actions/testAction"
+import { form } from "@styles/menus/form.module.scss"
+import React from "react"
 import { useFormState, useFormStatus } from "react-dom"
-import { actionRegisterAnAccount } from "@lib/actions/actionRegisterAnAccount"
-import type { RegisterAnAccountValues } from "@lib/actions/actionRegisterAnAccount"
 
 // const handleSubmit = async (
 // 	data: TestUsernameState // formData is now a regular data

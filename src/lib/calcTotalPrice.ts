@@ -1,4 +1,4 @@
-import { CartItem } from "@ks/types"
+import type {  CartItem  } from "@ks/types"
 
 export function calcTotalPrice(cart: CartItem[]) {
   //? Cartitem.ts set's rental products subTotal to 0

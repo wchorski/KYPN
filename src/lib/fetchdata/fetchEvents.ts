@@ -1,6 +1,6 @@
-import { Category, Event } from "@ks/types";
 import { keystoneContext } from '@ks/context';
-import { Session } from "next-auth";
+import type { Event } from "@ks/types";
+import type { Session } from "next-auth";
 
 export default async function fetchEvents(dateSelectedString:string, query:string, session:Session|null){
 

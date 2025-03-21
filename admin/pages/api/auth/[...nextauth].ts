@@ -3,5 +3,4 @@
 import NextAuth from 'next-auth';
 import { nextAuthOptions } from '../../../../session';
 
-//@ts-ignore
 export default  NextAuth(nextAuthOptions);

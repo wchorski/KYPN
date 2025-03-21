@@ -1,25 +1,23 @@
+import type { Booking, Event as TEvent } from "@ks/types"
+import { datePrettyLocal } from "@lib/dateFormatter"
+import styles, {
+	header,
+	hide_on_mobile,
+	reveal_on_mobile,
+} from "@styles/events/calendar.module.css"
+import { events_list } from "@styles/events/events.module.css"
+import { layout_content } from "@styles/layout.module.css"
 import Link from "next/link"
 import {
 	MdOutlineKeyboardArrowLeft,
 	MdOutlineKeyboardArrowRight,
 } from "react-icons/md"
-import styles, {
-	event_chip,
-	header,
-	hide_on_mobile,
-	reveal_on_mobile,
-} from "@styles/events/calendar.module.css"
-import type { Booking, Event as TEvent } from "@ks/types"
-import { datePrettyLocal, datePrettyLocalTime } from "@lib/dateFormatter"
-import { BsFillBookmarkFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { ReactNode } from "react"
-import { SchedualChip } from "./SchedualChip"
-import Flex from "./layouts/Flex"
+
 import { NoData } from "./elements/NoData"
-import { layout_content, layout_site } from "@styles/layout.module.css"
-import { events_list } from "@styles/events/events.module.css"
 import { EventCard } from "./events/EventCard"
+import Flex from "./layouts/Flex"
 import { Grid } from "./layouts/Grid"
+import { SchedualChip } from "./SchedualChip"
 
 type Props = {
 	date: string

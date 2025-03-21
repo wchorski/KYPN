@@ -1,6 +1,6 @@
 import { keystoneContext } from "@ks/context"
-import { Event } from "@ks/types"
-import { Session } from "next-auth"
+import type {  Event  } from "@ks/types"
+import type { Session } from "next-auth"
 
 export async function fetchEvent(
 	id: string,

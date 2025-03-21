@@ -1,9 +1,9 @@
 //! this is from example repo
-import React from 'react'
 import {
-  type DocumentRendererProps,
   DocumentRenderer,
+  type DocumentRendererProps,
 } from '@keystone-6/document-renderer'
+import React from 'react'
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise

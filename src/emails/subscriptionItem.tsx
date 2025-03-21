@@ -1,12 +1,8 @@
-import { SubscriptionItem } from '../keystone/types';
-import { envs } from '../../envs';
-import { emailStyles } from "./emailStyes";
 import {
   Body,
   Button,
   Column,
   Container,
-  Head,
   Hr,
   Html,
   Img,
@@ -17,8 +13,12 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react'
+
+import { envs } from '../../envs';
+import type { SubscriptionItem } from '../keystone/types';
 import { datePrettyLocal } from '../lib/dateFormatter';
 import moneyFormatter from '../lib/moneyFormatter';
+import { emailStyles } from "./emailStyes";
 
 const { main, container, heading, subheading, button, footer, hr, link, paragraph, reportLink, review, status, statusState, userImage } = emailStyles
 

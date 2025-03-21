@@ -1,8 +1,10 @@
 // cred - https://next-auth.js.org/tutorials/securing-pages-and-api-routes
-import { nextAuthOptions } from "@/session"
-import { getServerSession } from "next-auth/next"
 import { keystoneContext } from "@ks/context"
-import { NextRequest, NextResponse } from "next/server"
+import type { NextRequest} from "next/server";
+import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth/next"
+
+import { nextAuthOptions } from "@/session"
 
 export async function POST(req: NextRequest) {
 	const request = await req.json()
@@ -20,7 +22,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({ ...data }, { status: 222 })
 	} catch (error) {
-		console.log("/api/gql/protected ERROR: ", error)
+		console.log("!!! /api/gql/protected ERROR: ", error)
 		return NextResponse.json({ error }, { status: 555 })
 	}
 }

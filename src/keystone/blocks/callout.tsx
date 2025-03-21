@@ -1,19 +1,19 @@
-import React from 'react';
-
-import { useTheme } from '@keystone-ui/core';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+//! "@keystone-ui" will show errors in editor but still works in dev and prod
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
 import {
   ToolbarButton,
   ToolbarGroup,
   ToolbarSeparator,
 } from '@keystone-6/fields-document/primitives';
-import { InfoIcon } from '@keystone-ui/icons/icons/InfoIcon';
-import { AlertTriangleIcon } from '@keystone-ui/icons/icons/AlertTriangleIcon';
+import { jsx, useTheme } from '@keystone-ui/core';
 import { AlertOctagonIcon } from '@keystone-ui/icons/icons/AlertOctagonIcon';
+import { AlertTriangleIcon } from '@keystone-ui/icons/icons/AlertTriangleIcon';
 import { CheckCircleIcon } from '@keystone-ui/icons/icons/CheckCircleIcon';
+import { InfoIcon } from '@keystone-ui/icons/icons/InfoIcon';
 import { Trash2Icon } from '@keystone-ui/icons/icons/Trash2Icon';
 import { Tooltip } from '@keystone-ui/tooltip';
-import { CalloutStatus } from '@ks/types';
 
 const calloutIconMap = {
   info: InfoIcon,
@@ -33,7 +33,7 @@ export const callout = component({
         { value: 'warning', label: 'Warning' },
         { value: 'error', label: 'Error' },
         { value: 'success', label: 'Success' },
-      ] as {value:CalloutStatus,label:string}[],
+      ] as const,
       defaultValue: 'info',
     }),
     content: fields.child({
@@ -49,9 +49,6 @@ export const callout = component({
     const { palette, radii, spacing } = useTheme();
     const intentMap = {
       info: {
-        // background: palette.blue100,
-        // foreground: palette.blue700,
-        // icon: calloutIconMap.info,
         background: palette.blue100,
         foreground: palette.blue700,
         icon: calloutIconMap.info,

@@ -1,4 +1,3 @@
-import { envs } from "@/envs"
 import { QRCodeSVG } from "qrcode.react"
 
 type Props = {

@@ -1,8 +1,7 @@
-import type { Lists, Context, TicketCreateInput } from ".keystone/types"
-import { dateAdjuster } from "../../lib/dateCheck"
-
-import allDataJson from "./extracted/extData.json"
 import { envs } from "../../../envs"
+import { dateAdjuster } from "../../lib/dateCheck"
+import allDataJson from "./extracted/seedData.json"
+import type { Context, Lists, TicketCreateInput } from ".keystone/types"
 
 export const seedDatabase = async (context: Context) => {
 	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
@@ -88,140 +87,152 @@ const seedSchemaItems = async (
 	itemsToCreate.forEach((item) => {
 		delete item.id
 	})
+	console.log("### ### ###")
+	console.log("### ### ###")
+	console.log("### ### ###")
+	console.log(schemaType)
+	console.log({ itemsToCreate })
+	console.log("### ### ###")
+	console.log("### ### ###")
+	console.log("### ### ###")
+
+	const formattedItems = itemsToCreate.map((item) => ({
+		...removeTopLevelEmptyArrays(item),
+
+		//? DOCUMENT field Type (rich text)
+		...(item.content ? { content: item.content.document } : {}),
+		...(item.description ? { description: item.description.document } : {}),
+		...(item.details ? { details: item.details.document } : {}),
+		...(item.password
+			? { password: item.email + envs.SEED_PASSWORD_SECRET }
+			: {}),
+
+		//? relation TO ONE
+		...(item.role ? { role: { connect: { name: item.role.name } } } : {}),
+		...(item.author
+			? {
+					author: { connect: { email: item.author.email } },
+			  }
+			: {}),
+		...(item.customer
+			? {
+					customer: { connect: { email: item.customer.email } },
+			  }
+			: {}),
+		...(item.location
+			? {
+					location: { connect: { address: item.location.address } },
+			  }
+			: {}),
+		...(item.service
+			? {
+					service: { connect: { name: item.service.name } },
+			  }
+			: {}),
+
+		//? relation TO MANY
+		...(item.locations
+			? {
+					locations: {
+						connect: item.locations?.map((field: any) => ({
+							address: field.address,
+						})),
+					},
+			  }
+			: {}),
+		...(item.coupons
+			? {
+					coupons: {
+						connect: item.coupons?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: {}),
+		...(item.addons?.length > 0
+			? {
+					addons: {
+						connect: item.addons?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
+			//! will this cause problems for other schemas?
+			item.addons?.length === 0
+			? {}
+			: {}),
+		// addons:null,
+		//? USERS Start
+		...(item.privateAccess
+			? {
+					privateAccess: {
+						connect: item.privateAccess?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.employees
+			? {
+					employees: {
+						connect: item.employees?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.employee_requests
+			? {
+					employee_requests: {
+						connect: item.employee_requests?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.hosts
+			? {
+					hosts: {
+						connect: item.hosts?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.cohosts
+			? {
+					cohosts: {
+						connect: item.cohosts?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		// USERS End
+		...(item.categories?.length > 0
+			? {
+					categories: {
+						connect: item.categories?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: {}),
+		...(item.tags?.length > 0
+			? {
+					tags: {
+						connect: item.tags?.map((field: any) => ({ name: field.name })),
+					},
+			  }
+			: {}),
+	}))
+
+	console.log({ formattedItems })
 
 	//@ts-ignore
 	const createdItems = await sudoDB[schemaType].createMany({
-		data: itemsToCreate.map((item) => ({
-			...item,
-
-			//? DOCUMENT field Type (rich text)
-			...(item.content ? { content: item.content.document } : {}),
-			...(item.description ? { description: item.description.document } : {}),
-			...(item.details ? { details: item.details.document } : {}),
-			...(item.password
-				? { password: item.email + envs.SEED_PASSWORD_SECRET }
-				: {}),
-
-			//? relation TO ONE
-			...(item.role ? { role: { connect: { name: item.role.name } } } : {}),
-			...(item.author
-				? {
-						author: { connect: { email: item.author.email } },
-				  }
-				: {}),
-			...(item.customer
-				? {
-						customer: { connect: { email: item.customer.email } },
-				  }
-				: {}),
-			...(item.location
-				? {
-						location: { connect: { address: item.location.address } },
-				  }
-				: {}),
-			...(item.service
-				? {
-						service: { connect: { name: item.service.name } },
-				  }
-				: {}),
-
-			//? relation TO MANY
-			...(item.locations
-				? {
-						locations: {
-							connect: item.locations?.map((field: any) => ({
-								address: field.address,
-							})),
-						},
-				  }
-				: {}),
-			...(item.coupons
-				? {
-						coupons: {
-							connect: item.coupons?.map((field: any) => ({
-								name: field.name,
-							})),
-						},
-				  }
-				: {}),
-			...(item.addons?.length > 0
-				? {
-						addons: {
-							connect: item.addons?.map((field: any) => ({
-								name: field.name,
-							})),
-						},
-				  }
-				: //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
-				//! will this cause problems for other schemas?
-				item.addons?.length === 0
-				? { addons: null }
-				: {}),
-			// addons:null,
-			//? USERS Start
-			...(item.privateAccess
-				? {
-						privateAccess: {
-							connect: item.privateAccess?.map((field: any) => ({
-								email: field.email,
-							})),
-						},
-				  }
-				: {}),
-			...(item.employees
-				? {
-						employees: {
-							connect: item.employees?.map((field: any) => ({
-								email: field.email,
-							})),
-						},
-				  }
-				: {}),
-			...(item.employee_requests
-				? {
-						employee_requests: {
-							connect: item.employee_requests?.map((field: any) => ({
-								email: field.email,
-							})),
-						},
-				  }
-				: {}),
-			...(item.hosts
-				? {
-						hosts: {
-							connect: item.hosts?.map((field: any) => ({
-								email: field.email,
-							})),
-						},
-				  }
-				: {}),
-			...(item.cohosts
-				? {
-						cohosts: {
-							connect: item.cohosts?.map((field: any) => ({
-								email: field.email,
-							})),
-						},
-				  }
-				: {}),
-			// USERS End
-			...(item.categories
-				? {
-						categories: {
-							connect: item.categories?.map((field: any) => ({
-								name: field.name,
-							})),
-						},
-				  }
-				: {}),
-			...(item.tags
-				? {
-						tags: {
-							connect: item.tags?.map((field: any) => ({ name: field.name })),
-						},
-				  }
-				: {}),
-		})),
+		data: formattedItems,
 	})
 
 	createdItems.map((item: any) => {
@@ -230,7 +241,7 @@ const seedSchemaItems = async (
 
 	// if (schemaType === "Service") seedBookings(createdItems, context)
 	//? I must auto create tickets based off events because Event and Ticket have no `unique` fields
-	if (schemaType === "Event") await seedTicketOrders(createdItems, context)
+	// if (schemaType === "Event") await seedTicketOrders(createdItems, context)
 }
 
 // ---
@@ -265,6 +276,17 @@ const seedSchemaItems = async (
 // 		console.log(" + Booking: " + item.name + " | " + item.serviceId)
 // 	})
 // }
+
+// remove empty relational items like `categories` or `tags` and not conflict with list items that don't have matching ones
+export function removeTopLevelEmptyArrays(
+	obj: Record<string, any>
+): Record<string, any> {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([_, value]) => !Array.isArray(value) || value.length > 0
+		)
+	)
+}
 
 async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 	// throw new Error('🐸 seedTicketOrders find out how to do this')

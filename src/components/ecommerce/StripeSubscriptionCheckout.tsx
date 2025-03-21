@@ -1,15 +1,16 @@
 "use client"
 // cred - https://docs.stripe.com/billing/subscriptions/build-subscriptions?platform=web&ui=embedded-form
-import { loadStripe } from "@stripe/stripe-js"
+import type { Addon, Coupon, SubscriptionPlan, User } from "@ks/types"
+import { postStripeSubscriptionSession } from "@lib/actions/postStripeSubscriptionSession"
 import {
-	EmbeddedCheckoutProvider,
 	// CheckoutProvider,
 	EmbeddedCheckout,
+	EmbeddedCheckoutProvider,
 } from "@stripe/react-stripe-js"
-import { envs } from "@/envs"
+import { loadStripe } from "@stripe/stripe-js"
 import { useCallback } from "react"
-import { postStripeSubscriptionSession } from "@lib/actions/postStripeSubscriptionSession"
-import type { Addon, Coupon, SubscriptionPlan, User } from "@ks/types"
+
+import { envs } from "@/envs"
 
 type Props = {
 	subscriptionPlan: SubscriptionPlan
