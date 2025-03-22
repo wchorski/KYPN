@@ -8,7 +8,7 @@ import type { Billing_Interval, Duration, SubscriptionItem } from "../keystone/t
 if (!envs.STRIPE_SECRET) throw new Error("!!! STRIP_SECRET is missing.")
 
 const stripeConfig = new Stripe(envs.STRIPE_SECRET, {
-	apiVersion: "2024-12-18.acacia; custom_checkout_beta=v1" as any,
+	apiVersion: "2025-02-24.acacia; custom_checkout_beta=v1" as any,
 })
 
 type StripeProductCreate = {

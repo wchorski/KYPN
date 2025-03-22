@@ -10,18 +10,19 @@ WORKDIR /app
 # COPY package.json ./
 # COPY yarn.lock ./
 # COPY package-lock.json ./
-COPY pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 COPY . ./
+COPY .env.prod ./.env
 
 ## TODO just use $PKG_MGMR instead of this crazy if logic. Once I test it of course
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    corepack enable pnpm && pnpm i --frozen-lockfile; \
+  elif [ -f yarn.lock ]; then \ 
     yarn install --frozen-lockfile; \
   elif [ -f package-lock.json ]; then \ 
     npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    corepack enable pnpm && pnpm i --frozen-lockfile; \
   else \ 
     echo "Lockfile not found." && exit 1; \
   fi
@@ -29,23 +30,12 @@ RUN \
 # RUN corepack enable pnpm && pnpm i --frozen-lockfile;
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
-    yarn next telemetry disable; \
-  elif [ -f package-lock.json ]; then\ 
-    npm next telemetry disable; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-  pnpm next telemetry disable; \
-  else \
-    echo "Lockfile not found." && exit 1; \
-  fi
-
-RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    pnpm add sharp; \
+  elif [ -f yarn.lock ]; then \ 
     yarn add sharp; \
   elif [ -f package-lock.json ]; then\ 
     npm install sharp; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-  pnpm add sharp; \
   else \
     echo "Lockfile not found." && exit 1; \
   fi
@@ -55,23 +45,23 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    corepack enable pnpm && pnpm tbuild; \
+  elif [ -f yarn.lock ]; then \ 
     yarn run build; \
   elif [ -f package-lock.json ]; then \ 
     npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    corepack enable pnpm && pnpm run build; \
   else \ 
     echo "Lockfile not found." && exit 1; \
   fi
-  
+
 RUN \
-  if [ -f yarn.lock ]; then  \
-    yarn next telemetry disable; \
-  elif [ -f package-lock.json ]; then  \
-    npm next telemetry disable; \
-  elif [ -f pnpm-lock.yaml ];  then \
+  if [ -f pnpm-lock.yaml ]; then \ 
     pnpm next telemetry disable; \
+  elif [ -f yarn.lock ]; then \ 
+    yarn next telemetry disable; \
+  elif [ -f package-lock.json ]; then\ 
+    npm next telemetry disable; \
   else \
     echo "Lockfile not found." && exit 1; \
   fi

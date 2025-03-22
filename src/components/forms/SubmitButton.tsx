@@ -1,6 +1,8 @@
-
+import { LoadingAnim } from "@components/elements/LoadingAnim"
 import type { ReactNode } from "react"
 import { useFormStatus } from "react-dom"
+import { hidden } from "@styles/menus/form.module.scss"
+import { stack_grid } from "@styles/elements/button.module.css"
 
 type SubmitButtonsProps = {
 	label?: string
@@ -21,15 +23,14 @@ export function SubmitButton({
 		<button
 			type={"submit"}
 			disabled={isDisabled ? isDisabled : pending}
-			className={[className, pending ? "anim_border_spin pending" : ""].join(
-				" "
-			)}
+			className={[
+				className,
+				stack_grid,
+				pending ? "anim_border_spin pending" : "",
+			].join(" ")}
 		>
-			<div >
-				<span>{pending ? 'pending...' : btnText}</span>{" "}
-			</div>
-
-			{/* <LoadingAnim isVisable={pending} /> */}
+			<span className={pending ? hidden : ""}>{btnText}</span>
+			<LoadingAnim isVisable={pending} />
 		</button>
 	)
 }
@@ -48,6 +49,7 @@ type SubmitButtonsInlineIconsProps = {
 	icon: ReactNode
 	title?: string
 	isPending: boolean
+	isDisabled?: boolean
 }
 
 // TODO instead of manipulating dom via JS
@@ -61,6 +63,7 @@ export function SubmitButtonInlineIcons({
 	icon,
 	title = "submit",
 	isPending,
+	isDisabled = false,
 }: SubmitButtonsInlineIconsProps) {
 	const { pending } = useFormStatus()
 
@@ -92,7 +95,7 @@ export function SubmitButtonInlineIcons({
 		<button
 			title={title}
 			type={"submit"}
-			disabled={isPending}
+			disabled={isDisabled ? isDisabled : isPending}
 			className={[
 				// stack_grid,
 				className,

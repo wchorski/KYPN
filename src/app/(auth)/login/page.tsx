@@ -25,11 +25,12 @@ type Props = {
 		reset: string
 		error: string
 		callbackUrl?: string
+		message?: string
 	}
 }
 
 export default async function LoginPage({ searchParams }: Props) {
-	const { error, callbackUrl } = await searchParams
+	const { error, callbackUrl, message } = await searchParams
 	// todo next-auth is aight idk
 
 	const session = await getServerSession(nextAuthOptions)
@@ -46,7 +47,13 @@ export default async function LoginPage({ searchParams }: Props) {
 				<h1> Login </h1>
 				{callbackUrl && (
 					<Callout intent={"warning"}>
-						<p>You will return back to the previous page after login</p>
+						<p>
+							{message}
+							<br />
+							<small>
+								You will return back to the previous page after login
+							</small>
+						</p>
 					</Callout>
 				)}
 			</header>
@@ -58,7 +65,7 @@ export default async function LoginPage({ searchParams }: Props) {
 
 					<div>
 						{session?.user.email && (
-							<Callout intent={"info"} style={{maxWidth: '17rem'}}>
+							<Callout intent={"info"} style={{ maxWidth: "17rem" }}>
 								<p>
 									{" "}
 									currently logged in with email{" "}

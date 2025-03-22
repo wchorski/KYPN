@@ -64,7 +64,8 @@ export const passwordRequestLink = (base: BaseSchemaMeta) =>
 				id: user.id,
 				email: user.email,
 			}
-			const token = jwt.sign(payload, secret, { expiresIn: "5m" })
+      // TODO change back to 5 minutes after debug
+			const token = jwt.sign(payload, secret, {  expiresIn: "25m" })
 
 			const mail = await mailPasswordRequest({
 				to: [email],
@@ -74,7 +75,9 @@ export const passwordRequestLink = (base: BaseSchemaMeta) =>
 					email: user.email,
 					name: user.name,
 				},
-			}).catch((error) => console.log("!!! ✉️❌ passwordRequestLink Mutation: ", error))
+			}).catch((error) =>
+				console.log("!!! ✉️❌ passwordRequestLink Mutation: ", error)
+			)
 
 			return {
 				id: user.id,

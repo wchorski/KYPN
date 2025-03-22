@@ -71,7 +71,7 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 		.filter((item) => item.type === "DISCOUNT")
 		.map((item) => item.coupon).filter(Boolean) as Coupon[]
 
-	console.log({ line_items })
+	
 	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",

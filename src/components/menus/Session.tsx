@@ -63,7 +63,7 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 						<li>
 							<NavLink href={envs.CMS_URL} className="button">
 								{" "}
-								Admin Panel{" "}
+								Admin Dashboard{" "}
 							</NavLink>
 						</li>
 						<li>

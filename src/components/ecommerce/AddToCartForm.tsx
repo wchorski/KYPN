@@ -1,12 +1,10 @@
 "use client"
-import {
-	SubmitButtonInlineIcons,
-} from "@components/forms/SubmitButton"
+import { SubmitButtonInlineIcons } from "@components/forms/SubmitButton"
 import { useCart } from "@components/hooks/CartStateContext"
 import { InputField } from "@components/InputField"
 import { useForm } from "@hooks/useForm"
-import type {  AddonCheckboxOptions, CartItem  } from "@ks/types"
-import type { AddToCartState} from "@lib/actions/postAddToCart";
+import type { AddonCheckboxOptions, CartItem } from "@ks/types"
+import type { AddToCartState } from "@lib/actions/postAddToCart"
 import moneyFormatter from "@lib/moneyFormatter"
 import {
 	IconCheckMark,
@@ -15,17 +13,23 @@ import {
 	IconSpinnerLines,
 } from "@lib/useIcons"
 import { delay } from "@lib/utils"
-import { addons_wrap,form, one_click_form } from "@styles/menus/form.module.scss"
-import type { ReactNode} from "react";
+import {
+	addons_wrap,
+	form,
+	one_click_form,
+} from "@styles/menus/form.module.scss"
+import { useSession } from "next-auth/react"
+import { usePathname, useRouter } from "next/navigation"
+import type { ReactNode } from "react"
 import { useState } from "react"
 
 type Props = {
 	productId: string | undefined
 	eventId: string | undefined
-  //? cannot have subscriptions in cart. must have seperate checkout
+  itemStatus?:string,
+	//? cannot have subscriptions in cart. must have seperate checkout
 	// subscriptionPlanId: string | undefined
 	addonOptions?: AddonCheckboxOptions[]
-	sessionId: string
 	type: "SALE" | "RENTAL" | "SUBSCRIPTION"
 	buttonText?: string
 }
@@ -36,14 +40,18 @@ export default function AddToCartForm({
 	// subscriptionPlanId,
 	type,
 	buttonText,
-  addonOptions = []
+	addonOptions = [],
+  itemStatus = '',
 }: Props) {
+	const pathName = usePathname()
+  const { data: session } = useSession()
+
 	const initState: AddToCartState = {
 		values: {
 			eventId,
 			productId,
 			// subscriptionPlanId,
-      couponCode: undefined,
+			couponCode: undefined,
 			quantity: 1,
 			type,
 		},
@@ -54,13 +62,14 @@ export default function AddToCartForm({
 		id: undefined,
 		data: undefined,
 	}
-  
+
 	const { state, action } = useForm(onSubmit, initState)
 	const [inlineIconState, setInlineIconState] = useState<ReactNode>(
 		<IconShoppingBagAdd />
 	)
 	const [isPending, setIsPending] = useState(false)
 	const { addToCart } = useCart()
+	const router = useRouter()
 
 	// async function onSubmit(
 	// 	prevState: AddToCartState,
@@ -69,6 +78,13 @@ export default function AddToCartForm({
 
 	async function onSubmit(e: React.FormEvent): Promise<AddToCartState> {
 		e.preventDefault()
+		if (!session?.itemId)
+			return router.push(
+				`/login?${new URLSearchParams({
+					callbackUrl: pathName || "/shop",
+					message: "Must have an account to add items to cart",
+				})}`
+			)
 		// if (!session) return router.push(`/auth`)
 
 		try {
@@ -202,6 +218,7 @@ export default function AddToCartForm({
 				title="add to cart"
 				label={buttonText}
 				isPending={isPending}
+        isDisabled={(['ARCHIVED','OUT_OF_STOCK', 'DRAFT'].includes(itemStatus))}
 			/>
 		</form>
 	)

@@ -102,7 +102,7 @@ export const OrderItem: Lists.OrderItem = list({
 					"coupon",
 				]
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, validationStrings)
-				console.log("!!! hasOnlyOne:: ", hasOnlyOne)
+				
 				if (!hasOnlyOne)
 					throw new Error(
 						`!!! Order Item can only have one of [${validationStrings.join(

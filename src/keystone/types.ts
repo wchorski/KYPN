@@ -287,6 +287,7 @@ export type Product = Lists.Product.Item & {
 	categories: Category[]
 	author: User
 	rentals: Rental
+  status: 'DRAFT'|'PRIVATE'|'PUBLIC'|'OUT_OF_STOCK'|'ARCHIVED'
 }
 
 export type Rental = Lists.Rental.Item & {

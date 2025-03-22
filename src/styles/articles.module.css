@@ -17,7 +17,7 @@ article.post_card {
 	gap: var(--space-ms);
 	grid-template-rows:
 		[graphic-start] minmax(10rem, 15rem)
-		[graphic-end header-start] minmax(auto, 1fr)
+		[graphic-end header-start] minmax(.1rem, 1fr)
 		[header-end excerpt-start] minmax(0, 8rem)
 		[excerpt-end footer-start] minmax(1rem, auto)
 		[footer-end];
@@ -34,11 +34,11 @@ article.post_card {
 		grid-row-end: excerpt-end;
 	}
 	& footer {
+    background-color: var(--c-seperator);
 		grid-row-start: footer-start;
 		grid-row-end: footer-end;
 		display: flex;
 		justify-content: flex-end;
-		/* flex-direction: column; */
     flex-wrap: wrap;
     gap: var(--space-ms);
     justify-content: space-between;
@@ -78,7 +78,7 @@ article.post_card {
 	}
 
 	& h3 {
-		margin-top: 0;
+		margin: 0;
 		color: inherit;
 		word-wrap: break-word;
 		overflow: hidden;

@@ -218,7 +218,7 @@ export const Coupon: Lists.Coupon = list({
                 .db.Coupon.findMany({
                   where: {
                     stripeId: {
-                      equals: resolvedData.stripeId,
+                      equals: resolvedData.stripeId as string,
                     },
                   },
                 })
@@ -277,9 +277,8 @@ export const Coupon: Lists.Coupon = list({
 					if (!res) return
 
 					resolvedData.stripeId = res.id
-					console.log({ resolvedData })
+
 				})
-				console.log({ resolvedData })
 			},
 			//? for now not allowing any updating of coupon, just create a new one
 			// update: async ({ resolvedData, context, item }) => {

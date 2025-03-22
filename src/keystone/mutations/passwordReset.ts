@@ -30,8 +30,9 @@ export const passwordReset = (base: BaseSchemaMeta) =>
 			email: graphql.arg({ type: graphql.nonNull(graphql.String) }),
 		},
 
-		// 1. Make sure they are signed in
-		async resolve(source, { password, token, email }, context: Context) {
+		async resolve(source, variables, context: Context) {
+			
+			const { password, token, email } = variables
 			try {
 				if (password && !passwordRegExp.test(password))
 					throw new Error("Password strength does not meet requirements")
@@ -39,8 +40,8 @@ export const passwordReset = (base: BaseSchemaMeta) =>
 				// const foundUser = await context.sudo().query.User.findOne({
 				// 	where: { email: email },
 				// 	query: `
-        //     password
-        //   `,
+				//     password
+				//   `,
 				// })
 
 				const data = (await context.sudo().graphql.run({
@@ -68,7 +69,9 @@ export const passwordReset = (base: BaseSchemaMeta) =>
 				const secret = envs.NEXTAUTH_SECRET + foundUser.password
 
 				// verify token
-				const payload = (await jwt.verify(token, secret)) as Payload
+				// const payload = (await jwt.verify(token, secret)) as Payload
+				const payload = jwt.verify(token, secret) as Payload
+				
 
 				// update user
 				const user = await context.sudo().db.User.updateOne({
@@ -84,19 +87,22 @@ export const passwordReset = (base: BaseSchemaMeta) =>
 					to: [user.email],
 					user,
 				})
+
+        return {
+          status: "success",
+          message: "account password successfully reset",
+          dateModified: user.dateModified,
+        }
+
 			} catch (error) {
 				console.log("!!! passwordReset ERROR: ", error)
-				throw new Error("Link is stale. Request a new password reset link")
+				throw new Error("Link is stale. Request a new password reset link\n\n")
 				// return {
 				//   status: 'error',
 				//   message: 'password reset failed'
 				// }
 			}
 
-			return {
-				status: "success",
-				message: "account password successfully reset",
-				// dateModified: new Date().toISOString(),
-			}
+			
 		},
 	})

@@ -9,7 +9,7 @@ import {
 
 import { hasOnlyOneValue } from "../../lib/utils"
 import { permissions, rules } from "../access"
-import type { CartItem as TCartItem, Coupon,Event, Rental } from "../types"
+import type { CartItem as TCartItem, Coupon, Event, Rental, Product } from "../types"
 import type { Lists } from ".keystone/types"
 
 export const CartItem: Lists.CartItem = list({
@@ -178,6 +178,18 @@ export const CartItem: Lists.CartItem = list({
 							", "
 						)}] set`
 					)
+
+        if(resolvedData.product?.connect?.id){
+
+          const product = await context.sudo().query.Product.findOne({
+            where: { id: resolvedData.product.connect.id },
+            query: `status`
+          }) as Product
+
+          if(['ARCHIVED','OUT_OF_STOCK', 'DRAFT'].includes(product.status)){
+            throw new Error('Product is not avaiable for purchase at this time.')
+          }
+        }
 
 				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
 					where: { user: { id: { equals: resolvedData.user.connect.id } } },

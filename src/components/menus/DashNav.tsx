@@ -55,90 +55,9 @@ export function DashNav({ dashNavData }: Props) {
 	return (
 		<nav className={dashnav}>
 			{/* <p>{dashState}</p> */}
-			<ul>
+			<ul className={'unstyled'}>
 				{navListItems(dashNavData)}
-				{/* <DashNavLink
-					onClick={setHash}
-					slug="main"
-					text="Dashboard"
-					icon={<IconAccountBox />}
-				/>
-
-				{user.bookings.length > 0 && (
-					<DashNavLink
-						onClick={setHash}
-						slug="bookings"
-						icon={<IconBookmark />}
-					/>
-				)}
-				{tickets && tickets?.length > 0 && (
-					<DashNavLink
-						onClick={setHash}
-						slug="tickets"
-						icon={<IconTicketOutlined />}
-					/>
-				)}
-				{gigs.length > 0 && (
-					<DashNavLink onClick={setHash} slug="gigs" icon={<IconCalendar />} />
-				)}
-				{gig_requests.length > 0 && (
-					<DashNavLink
-						onClick={setHash}
-						slug="gig_requests"
-						text="Gig Requests"
-						icon={<IconCalendarOutlined />}
-					/>
-				)}
-				{orders.length > 0 && (
-					<DashNavLink
-						onClick={setHash}
-						slug="orders"
-						icon={<IconShoppingBag />}
-					/>
-				)} */}
-				{/* {rentals.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=rentals#rentals"}
-										className={
-											dashState === "rentals"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Rentals <BsSignpost />
-									</Link>
-								</li>
-							)} */}
-				{/* {user.subscriptions.length > 0 && (
-								<li>
-									<Link
-										href={"/account?dashState=subscriptions#subscriptions"}
-										className={
-											dashState === "subscriptions"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Subscriptions <MdAutorenew />
-									</Link>
-								</li>
-							)} */}
-				{/* //todo when downloads are added */}
-				{/* {false && (
-								<li>
-									<Link
-										href={"/account?dashState=downloads#downloads"}
-										className={
-											dashState === "downloads"
-												? styles.linkactive
-												: styles.dashlink
-										}
-									>
-										Downloads <MdOutlineDownload />
-									</Link>
-								</li>
-							)} */}
+				
 			</ul>
 		</nav>
 	)

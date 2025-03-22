@@ -6,7 +6,7 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { NoData } from "@components/elements/NoData"
 import { GridList } from "@components/layouts/GridList"
 import { StatusBadge } from "@components/StatusBadge"
-import type {  Post, Product, Service, SubscriptionPlan  } from "@ks/types"
+import type { Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
 import styles, { post_card, row_graphic } from "@styles/articles.module.css"
@@ -25,7 +25,7 @@ export function ArticleList({ items = [], type, buttonText }: Props) {
 	if (!items) return <NoData name={type} />
 	// return <pre>{JSON.stringify(/{ items }, null, 2)}</pre>
 	return (
-		<GridList gap="1rem">
+		<GridList gap="1rem" colMinWidth="18rem">
 			{items.map((item: any, i: number) => (
 				<ArticleItem item={item} key={i} type={type} buttonText={buttonText} />
 			))}
@@ -178,7 +178,7 @@ export function ArticleItem({
 									eventId={undefined}
 									productId={item.id}
 									// subscriptionPlanId={undefined}
-									sessionId={"session.itemId"}
+									itemStatus={status || ""}
 									buttonText={"Buy"}
 								/>
 							</Flex>
@@ -188,11 +188,10 @@ export function ArticleItem({
 								<PriceTag
 									price={item.rental_price}
 									hideZeroCents={true}
-									billing_interval={'day'}
+									billing_interval={"day"}
 								/>
 								<AddToCartForm
 									productId={item.id}
-									sessionId={"session.itemId"}
 									eventId={undefined}
 									// subscriptionPlanId={undefined}
 									type={"RENTAL"}
@@ -208,7 +207,12 @@ export function ArticleItem({
 							hideZeroCents={true}
 							billing_interval={item.billing_interval}
 						/>{" "}
-            <IconLink icon={'subscription'} title="subscribe" className="readmore button medium" href={`/subscription-plans/${item.id}`}/>
+						<IconLink
+							icon={"subscription"}
+							title="subscribe"
+							className="readmore button medium"
+							href={`/subscription-plans/${item.id}`}
+						/>
 					</>
 				) : (
 					<Link className="readmore" href={link}>

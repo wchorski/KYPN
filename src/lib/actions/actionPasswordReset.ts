@@ -8,18 +8,18 @@ export async function actionPasswordReset(
 	prevState: PasswordResetState,
 	formData: FormData
 ): Promise<PasswordResetState> {
-  const values = Object.fromEntries(formData) as PasswordResetValues
-  // // @ts-ignore
-  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-  const { token, email, password, passwordConfirm } = values
+	const values = Object.fromEntries(formData) as PasswordResetValues
+	// // @ts-ignore
+	// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+	const { token, email, password, passwordConfirm } = values
 
-  const valueErrors = validateValues(values)
-  if (valueErrors)
-    return { valueErrors, values, error: "Check for errors in form fields" }
+	const valueErrors = validateValues(values)
+	if (valueErrors)
+		return { valueErrors, values, error: "Check for errors in form fields" }
 
-  const variables = values as PasswordResetVariables
-  delete variables.passwordConfirm
-  
+	const variables = values as PasswordResetVariables
+	delete variables.passwordConfirm
+
 	try {
 
 		const data = (await keystoneContext.graphql.run({
@@ -31,7 +31,7 @@ export async function actionPasswordReset(
         }
       `,
 			variables,
-		})) as { passwordReset: { id: string } }
+		})) as { passwordReset: { dateModified: string } }
 
 		return {
 			values: {
@@ -40,7 +40,7 @@ export async function actionPasswordReset(
 				token: "",
 				passwordConfirm: "",
 			},
-			id: data.passwordReset.id,
+			// id: data.passwordReset.id,
 			// url: envs.FRONTEND_URL + `/users/${data.PasswordReset.id}`,
 			url: envs.FRONTEND_URL + `/account`,
 			success: `Success! Password has been updated`,

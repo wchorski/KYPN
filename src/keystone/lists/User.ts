@@ -172,14 +172,8 @@ export const User: Lists.User = list({
 		dateModified: timestamp({
 			defaultValue: { kind: "now" },
 			db: {
+        //? sets as current date for any update
 				updatedAt: true,
-			},
-			hooks: {
-				beforeOperation({ resolvedData, operation }) {
-					if (operation === "create" || operation === "update") {
-						resolvedData.dateModified = new Date().toISOString()
-					}
-				},
 			},
 		}),
 		buisnessHourOpen: select({
@@ -284,18 +278,19 @@ export const User: Lists.User = list({
           resolvedData.stripeCustomerId = res.id
         })
 			},
-      update: async ({resolvedData, item}) => {
-        await stripeCustomerUpdate({
-          stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
-          email: String(resolvedData.email),
-					name: String(resolvedData.name),
-					nameLast: String(resolvedData.nameLast),
-					isActive: resolvedData.isActive ? Boolean(resolvedData.isActive) : item.isActive,
-        }).then(res => {
-          if(!res) return
-          resolvedData.stripeCustomerId = res.id
-        })
-      },
+      // update: async ({resolvedData, item}) => {
+      //   console.log('🐸 if email changed and authId is an email (regex) then update to match');
+      //   await stripeCustomerUpdate({
+      //     stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
+      //     email: String(resolvedData.email),
+			// 		name: String(resolvedData.name),
+			// 		nameLast: String(resolvedData.nameLast),
+			// 		isActive: resolvedData.isActive ? Boolean(resolvedData.isActive) : item.isActive,
+      //   }).then(res => {
+      //     if(!res) return
+      //     resolvedData.stripeCustomerId = res.id
+      //   })
+      // },
 		},
 		async afterOperation({ operation, context, item }) {
 			if (operation === "create") {

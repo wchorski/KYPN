@@ -18,22 +18,22 @@ const nextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	// async redirects() {
-	//   // return [
-	//   //   {
-	//   //     source: '/juicy',
-	//   //     destination: '/posts',
-	//   //     permanent: true,
-	//   //   },
-	//   // ];
-	//   // return [
-	//   //   {
-	//   //     source: '/',
-	//   //     destination: '/home',
-	//   //     permanent: true,
-	//   //   },
-	//   // ];
-	// },
+	async redirects() {
+	  // return [
+	  //   {
+	  //     source: '/juicy',
+	  //     destination: '/posts',
+	  //     permanent: true,
+	  //   },
+	  // ];
+	  return [
+	    {
+	      source: '/',
+	      destination: '/home',
+	      permanent: true,
+	    },
+	  ];
+	},
 	//? https://nextjs.org/docs/pages/api-reference/config/next-config-js/rewrites
 	async rewrites() {
 		const beforeFiles = []

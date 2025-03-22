@@ -88,6 +88,8 @@ type PasswordRequest = {
 		id: string
 	}
 }
+
+//? wtf am i doing? https://react.email/docs/utilities/render
 export async function mailPasswordRequest({
 	to,
 	resetToken,
@@ -99,9 +101,11 @@ export async function mailPasswordRequest({
 		envs.FRONTEND_URL +
 		`/password-reset?email=${user.email}&token=${resetToken}`
 
-	const html = render(
-		PasswordResetEmail({ user, updatedDate: new Date(), resetToken, resetLink })
-	)
+	// const html = await render(<PasswordResetEmail user={user} updatedDate={new Date()} resetToken={resetToken} resetLink={resetLink}  />)
+	// const html = await render(<p>note</p>,  {
+  //   pretty: true,
+  // })
+	const html = await render(PasswordResetEmail({user, updatedDate: new Date(), resetToken, resetLink,}))
 	const info = await transport
 		.sendMail({
 			to,
@@ -138,7 +142,7 @@ export async function mailVerifyUser({
 	const verifyLink =
 		envs.FRONTEND_URL + `/verify?email=${user.email}&token=${token}`
 
-	const html = render(
+	const html = await render(
 		UserVerifyEmail({ user, updatedDate: new Date(), verifyLink })
 	)
 	const info = await transport
@@ -172,7 +176,7 @@ export async function mailPasswordResetConfirm({
 }: PasswordResetConfirm): Promise<void> {
 	// email the user a token
 
-	const html = render(
+	const html = await render(
 		PasswordResetConfirmEmail({ user, updatedDate: new Date() })
 	)
 	const info = await transport
@@ -200,7 +204,7 @@ type MailBooking= {
 }
 
 
-// const bookingHtml = render(<BookingEmail />)
+// const bookingHtml = await render(<BookingEmail />)
 
 export async function mailBooking({
   to, 
@@ -210,7 +214,7 @@ export async function mailBooking({
 }:MailBooking
 ): Promise<void> {
 
-  const bookingHtml = render(BookingEmail({booking, operation, employeeNames}))
+  const bookingHtml = await render(BookingEmail({booking, operation, employeeNames}))
 
   const info = (await transport.sendMail({
     to,
@@ -244,7 +248,7 @@ export async function mailContact({
 }:MailContact
 ): Promise<void> {
 
-  const html = render(ContactEmail({contact}))
+  const html = await render(ContactEmail({contact}))
 
   const info = (await transport.sendMail({
     to,
@@ -270,7 +274,7 @@ type MailOrder = {
 export async function mailOrder({to, operation, order }:MailOrder): Promise<void> {
   // email the user a token
 
-  const html = render(OrdersEmail({operation, order}))
+  const html = await render(OrdersEmail({operation, order}))
 
   const info = (await transport.sendMail({
     to,
@@ -294,7 +298,7 @@ type MailSub = {
 export async function mailSubscription({to, operation, subscriptionItem }:MailSub): Promise<void> {
   // email the user a token
 
-  const html = render(SubscriptionItemEmail({operation, subscriptionItem}))
+  const html = await render(SubscriptionItemEmail({operation, subscriptionItem}))
 
   const info = (await transport.sendMail({
     to,

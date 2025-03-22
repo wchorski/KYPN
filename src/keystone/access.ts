@@ -156,7 +156,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageProducts({ session })) return true // They can read everything!
-		if (!session) return false
+		// if (!session) return false
 		// if(session) return {
 		//   OR: [
 		//     { author: { id: { equals: session.itemId } } },
@@ -214,7 +214,7 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageServices({ session })) return true // They can read everything!
-		if (!session) return false
+		// if (!session) return false
 		return {
 			OR: [
 				{

@@ -42,9 +42,7 @@ const seedSchemaItems = async (
 	seedJson: any[],
 	context: Context
 ) => {
-	// console.log("### seedSchemaItems ###")
-	// console.log({ schemaType })
-	// console.log({ seedJson })
+
 	const { db: sudoDB } = context.sudo()
 
 	//@ts-ignore
@@ -87,14 +85,6 @@ const seedSchemaItems = async (
 	itemsToCreate.forEach((item) => {
 		delete item.id
 	})
-	console.log("### ### ###")
-	console.log("### ### ###")
-	console.log("### ### ###")
-	console.log(schemaType)
-	console.log({ itemsToCreate })
-	console.log("### ### ###")
-	console.log("### ### ###")
-	console.log("### ### ###")
 
 	const formattedItems = itemsToCreate.map((item) => ({
 		...removeTopLevelEmptyArrays(item),
@@ -227,8 +217,6 @@ const seedSchemaItems = async (
 			  }
 			: {}),
 	}))
-
-	console.log({ formattedItems })
 
 	//@ts-ignore
 	const createdItems = await sudoDB[schemaType].createMany({

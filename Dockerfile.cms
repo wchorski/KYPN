@@ -9,45 +9,45 @@ COPY . ./
 COPY .env.prod ./.env
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    corepack enable pnpm && pnpm i --production --frozen-lockfile; \
+  elif [ -f yarn.lock ]; then \ 
     yarn install --production --frozen-lockfile; \
   elif [ -f package-lock.json ]; then \ 
     npm ci --production --frozen-lockfile; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    corepack enable pnpm && pnpm i --production --frozen-lockfile; \
   else \ 
     echo "Lockfile not found." && exit 1; \
   fi
 
-RUN \
-  if [ -f yarn.lock ]; then \ 
-    yarn generate; \
-  elif [ -f package-lock.json ]; then \ 
-    npm generate; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    pnpm generate; \
-  else \ 
-    echo "Lockfile not found." && exit 1; \
-  fi
+# RUN \
+#   if [ -f yarn.lock ]; then \ 
+#     yarn generate; \
+#   elif [ -f package-lock.json ]; then \ 
+#     npm generate; \
+#   elif [ -f pnpm-lock.yaml ]; then \ 
+#     pnpm generate; \
+#   else \ 
+#     echo "Lockfile not found." && exit 1; \
+#   fi
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    pnpm ks:build; \
+  elif [ -f yarn.lock ]; then \ 
     yarn ks:build; \
   elif [ -f package-lock.json ]; then \ 
     npm ks:build; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    pnpm ks:build; \
   else \ 
     echo "Lockfile not found." && exit 1; \
   fi
 
 RUN \
-  if [ -f yarn.lock ]; then \ 
+  if [ -f pnpm-lock.yaml ]; then \ 
+    pnpm next telemetry disable; \
+  elif [ -f yarn.lock ]; then \ 
     yarn next telemetry disable; \
   elif [ -f package-lock.json ]; then \ 
     npm next telemetry disable; \
-  elif [ -f pnpm-lock.yaml ]; then \ 
-    pnpm next telemetry disable; \
   else \ 
     echo "Lockfile not found." && exit 1; \
   fi
