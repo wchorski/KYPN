@@ -1,11 +1,39 @@
-.row_graphic {
+/* .row_graphic {
 	grid-row-start: graphic-start;
 	grid-row-end: graphic-end;
 	margin-bottom: calc(var(--space-m) * -1);
-}
+} */
 
 article.post_card {
 	background-color: var(--c-txt-bg);
+	padding: var(--space-m);
+	border: solid 1px var(--c-seperator);
+	position: relative;
+	display: grid;
+  gap: var(--space-ms);
+	grid-template-areas:
+		"graphic"
+		"header"
+		"excerpt"
+		"footer";
+  grid-template-rows: auto minmax(3rem, auto) 1fr;
+  height: 100%;
+	box-sizing: border-box;
+
+	& figure {
+		grid-area: graphic;
+	}
+	& header {
+		grid-area: header;
+	}
+	& p {
+		grid-area: excerpt;
+		height: 100%;
+	}
+	& footer {
+		grid-area: footer;
+	}
+	/* background-color: var(--c-txt-bg);
 	padding: var(--space-m);
 	border: solid 1px var(--c-seperator);
 	height: 100%;
@@ -29,20 +57,19 @@ article.post_card {
 		justify-content: flex-end;
 		flex-direction: column;
 	}
-	& p {
-		grid-row-start: excerpt-start;
-		grid-row-end: excerpt-end;
-	}
+
+    */
+  & p {
+    margin: 0;
+  }
 	& footer {
-    background-color: var(--c-seperator);
-		grid-row-start: footer-start;
-		grid-row-end: footer-end;
 		display: flex;
 		justify-content: flex-end;
     flex-wrap: wrap;
     gap: var(--space-ms);
     justify-content: space-between;
     align-items: center;
+    margin-top: var(--space-m);
 
     & data {
       font-size: 2rem;
@@ -86,7 +113,7 @@ article.post_card {
 		line-clamp: 3;
 		-webkit-box-orient: vertical;
 		display: -webkit-box;
-    padding-bottom: var(--space-xxs);
+		padding-bottom: var(--space-xxs);
 		/* font-size: clamp(
 			1rem * (var(--font-size-multi) * 2),
 			1rem + 0.7vw,
@@ -124,7 +151,7 @@ article.post_card {
 	word-wrap: break-word;
 	overflow: hidden;
 	-webkit-line-clamp: 4;
-  line-clamp: 4;
+	line-clamp: 4;
 	-webkit-box-orient: vertical;
 	display: -webkit-box;
 }
