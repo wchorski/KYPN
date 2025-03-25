@@ -90,7 +90,6 @@ export default async function BookingSinglePage({
 		name,
 		location,
 		address,
-		service,
 		price,
 		notes,
 		addons,
@@ -294,7 +293,7 @@ export default async function BookingSinglePage({
 				</p>
 				<Link href={`/bookings`}> Create new booking </Link>
 				{/* <BookingFormUpdate /> */}
-				<Link href={envs.BACKEND_URL + `/bookings/${id}`}>booking</Link>
+				<Link href={envs.CMS_URL + `/bookings/${id}`}>booking</Link>
 			</DialogPopup>
 		</main>
 	)

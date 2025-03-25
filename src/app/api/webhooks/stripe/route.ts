@@ -163,6 +163,7 @@ async function handleSubscriptionCreate(
 	} = checkoutSession as Stripe.Checkout.Session & SubscriptionMetadata
 
 	const couponCode =
+  //@ts-ignore
 		(discounts[0]?.coupon as string) || metadata.couponCode || undefined
 
 	const stripeSubscription = await stripe.subscriptions.retrieve(

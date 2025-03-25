@@ -291,7 +291,7 @@ export default async function RentalSinglePage({
 					Updating a rental is almost ready. For now, contact {envs.ADMIN_EMAIL_ADDRESS} for any revisions to this rental.
 				</p>
 				{/* <RentalFormUpdate /> */}
-				<Link href={envs.BACKEND_URL + `/rentals/${id}`}>dashboard</Link>
+				<Link href={envs.CMS_URL + `/rentals/${id}`}>dashboard</Link>
 			</DialogPopup>
 		</main>
 	)

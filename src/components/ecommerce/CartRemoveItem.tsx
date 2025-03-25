@@ -1,8 +1,11 @@
 "use client"
 
-import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { LoadingAnim, LoadingAnimSpinner } from "@components/elements/LoadingAnim"
 import { useCart } from "@components/hooks/CartStateContext"
+import { IconSpinnerLines } from "@lib/useIcons"
 import styles from "@styles/ecommerce/cart.module.css"
+import { stack_grid } from "@styles/elements/button.module.css"
+import { hidden } from "@styles/menus/form.module.scss"
 import { useState } from "react"
 // import { CgRemoveR } from "react-icons/cg"
 
@@ -40,7 +43,6 @@ export default function CartRemoveItem({ id }: { id: string }) {
 				}),
 			})
 			const data = await res.json()
-			console.log({ data }) 
 
 			removeFromCart(id)
 			setisPending(false)
@@ -57,13 +59,14 @@ export default function CartRemoveItem({ id }: { id: string }) {
 
 	return (
 		<button
-			className={styles.remove}
+			className={[styles.remove, stack_grid].join(" ")}
 			type="button"
 			title="Remove this item from cart"
 			disabled={isPending}
 			onPointerUp={handleMutation}
 		>
-			{isPending ? <LoadingAnim /> : <span> &times; </span>}
+			<span className={isPending ? hidden : ""}> &times; </span>
+			<LoadingAnimSpinner isVisable={isPending}/>
 		</button>
 	)
 }

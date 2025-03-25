@@ -9,7 +9,7 @@ import { CallbackLink } from "@components/menus/CallbackLink"
 import { DialogPopup } from "@components/menus/DialogPopup"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { StatusBadge } from "@components/StatusBadge"
-import type {  User  } from "@ks/types"
+import type { User } from "@ks/types"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
@@ -26,7 +26,7 @@ import {
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Session } from "next-auth";
+import type { Session } from "next-auth"
 import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
@@ -139,7 +139,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 							<IconLink
 								icon={"edit"}
 								label={"Edit"}
-								href={envs.BACKEND_URL + `/subscription-plans/${id}`}
+								href={envs.CMS_URL + `/subscription-plans/${id}`}
 							>
 								<span>Edit Product Details</span>
 							</IconLink>
@@ -156,7 +156,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 						</Card>
 					) : (
 						<IconLink
-              className="button medium"
+							className="button medium"
 							icon={"subscription"}
 							label="Build a Plan"
 							href={`?${new URLSearchParams({ popup: "modal" })}`}
@@ -180,7 +180,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 					</ul>
 				</header>
 
-				<div>
+				<div className={"scroll-over"}>
 					<h1>{name}</h1>
 
 					{!session ? (
@@ -224,7 +224,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 					)}
 				</div>
 			</article>
-	
+
 			<DialogPopup
 				// title={``}
 				// onClose={() => null}

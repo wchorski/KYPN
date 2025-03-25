@@ -1,19 +1,17 @@
 "use client"
 
 import { SubmitButton } from "@components/forms/SubmitButton"
+import { useCart } from "@components/hooks/CartStateContext"
 import { InputField } from "@components/InputField"
 import { useForm } from "@hooks/useForm"
-import type {  Event, User  } from "@ks/types"
-import type {
-	TicketCheckoutState} from "@lib/actions/actionTicketToCart";
-import {
-	actionTicketToCart
-} from "@lib/actions/actionTicketToCart"
+import type { Event, User } from "@ks/types"
+import type { TicketCheckoutState } from "@lib/actions/actionTicketToCart"
+import { actionTicketToCart } from "@lib/actions/actionTicketToCart"
 import moneyFormatter from "@lib/moneyFormatter"
 import { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
-import { useReducer } from "react"
-
+import { useRouter } from "next/navigation"
+import { useEffect, useReducer } from "react"
 
 type Props = {
 	event: Event
@@ -62,8 +60,18 @@ export function TicketForm({ event, user }: Props) {
 		}
 	}
 
+	const router = useRouter()
 	const [stateRed, dispatchRed] = useReducer(reducer, defaultstateRed)
 	const { state, action, submitCount } = useForm(actionTicketToCart, initState)
+	const { addToCart } = useCart()
+
+	useEffect(() => {
+		if (state.success && state.cartItem) {
+			addToCart(state.cartItem)
+			router.push("/checkout")
+		}
+		// return () =>
+	}, [state])
 
 	return (
 		<form action={action} className={form}>
@@ -97,8 +105,8 @@ export function TicketForm({ event, user }: Props) {
 					name={"quantity"}
 					type={"number"}
 					placeholder={"1"}
-          min={1}
-          max={50}
+					min={1}
+					max={50}
 					defaultValue={state.values?.quantity}
 					error={state.valueErrors?.quantity}
 					onChange={(e) =>

@@ -1,4 +1,4 @@
-import styles from '@styles/menus/timepicker.module.scss'
+import styles, { active_time_chip } from '@styles/menus/timepicker.module.css'
 import { useEffect, useState } from "react"
 
 import { generateTimesArray } from "../../lib/generateTimesArray";
@@ -80,7 +80,7 @@ function TimeButton({timeobj, isDisabled, onClick, pickedTime}:TimeButtonProps) 
   return(
     <button 
       type='button' 
-      className={timeobj.value === pickedTime ? 'active' : ''}
+      className={timeobj.value === pickedTime ? active_time_chip : ''}
       onClick={() => onClick(timeobj.value)}
       disabled={isDisabled}
     >

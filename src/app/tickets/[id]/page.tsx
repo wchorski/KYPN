@@ -75,7 +75,7 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						<TicketRedeemForm ticketId={id} status={status} />
 						<hr />
 						<p>
-							<Link href={envs.BACKEND_URL + `/tickets/${id}`}>
+							<Link href={envs.CMS_URL + `/tickets/${id}`}>
 								resolve ticket issues
 							</Link>
 						</p>

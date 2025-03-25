@@ -146,9 +146,9 @@ export default async function EventByID({ params }: Props) {
 							<ImageDynamic photoIn={image} priority={true}/>
 						</picture>
 
-						<AddToCalendar summary={summary} start={start} end={end} />
+						{/* <AddToCalendar summary={summary} start={start} end={end} /> */}
 
-						<hr />
+						{/* <hr /> */}
 						<ul className="categories">
 							{categories?.map((cat) => (
 								<li key={cat.id}>
@@ -173,7 +173,7 @@ export default async function EventByID({ params }: Props) {
 					</div>
 				</header>
 
-				<div className={""}>
+				<div className={"scroll-over"}>
 					<h1>{summary}</h1>
 
 					<div

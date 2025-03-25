@@ -53,7 +53,7 @@ export function CartItemsList() {
 							</li>
 						)}
 						{sorteCartItems.map((item, i) => (
-							<CartItem key={item.id} item={item} sessionId={session?.itemId} />
+							<CartItem key={i} item={item} sessionId={session?.itemId} />
 						))}
 						{/* {ticketCartItems?.map((item, i) => (
 							<CartItem key={i} item={item} sessionId={session?.itemId} />

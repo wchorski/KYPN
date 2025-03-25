@@ -202,7 +202,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 								session?.data?.role?.canManagePosts) && (
 								<IconLink
 									icon={"edit"}
-									href={envs.BACKEND_URL + `/posts/${id}`}
+									href={envs.CMS_URL + `/posts/${id}`}
 									label={"edit"}
 								/>
 							)}

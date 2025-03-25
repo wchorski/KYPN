@@ -1,9 +1,14 @@
+"server only"
 import "dotenv/config"
 
 import Stripe from "stripe"
 
 import { envs } from "../../envs"
-import type { Billing_Interval, Duration, SubscriptionItem } from "../keystone/types"
+import type {
+	Billing_Interval,
+	Duration,
+	SubscriptionItem,
+} from "../keystone/types"
 
 if (!envs.STRIPE_SECRET) throw new Error("!!! STRIP_SECRET is missing.")
 
@@ -445,7 +450,7 @@ export async function stripeCouponCreate({
 type SubscriptionCreate = {
 	subscriptionPlanId: string
 	stripeCustomerId: string
-  customerId:string,
+	customerId: string
 	stripePriceId: string
 	couponId?: string
 	trial_period_days?: number
@@ -453,7 +458,7 @@ type SubscriptionCreate = {
 
 export async function stripeSubscriptionCreate({
 	stripeCustomerId,
-  customerId,
+	customerId,
 	stripePriceId,
 	subscriptionPlanId,
 	couponId,
@@ -488,7 +493,7 @@ export async function stripeSubscriptionCreate({
 				: {}),
 			metadata: {
 				type: "subscriptionItem",
-        customerId: customerId,
+				customerId: customerId,
 			},
 		})
 
@@ -610,12 +615,12 @@ export async function stripeCreateInstallmentPayment({
 	console.log({ stripePaymentPlan })
 }
 
-export async function stripeWebhookCreate(){
-  const webhookEndpoint = await stripeConfig.webhookEndpoints.create({
-    enabled_events: ['checkout.session.completed'],
-    url: envs.FRONTEND_URL + `/api/webhooks/stripe`,
-  });
-  console.log(`💳 Stripe Webhook created for production: ${webhookEndpoint}`);
+export async function stripeWebhookCreate() {
+	const webhookEndpoint = await stripeConfig.webhookEndpoints.create({
+		enabled_events: ["checkout.session.completed"],
+		url: envs.FRONTEND_URL + `/api/webhooks/stripe`,
+	})
+	console.log(`💳 Stripe Webhook created for production: ${webhookEndpoint}`)
 }
 
 export default stripeConfig

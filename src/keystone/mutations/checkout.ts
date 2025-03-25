@@ -138,7 +138,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 									return {
 										type: item.type,
 										quantity: item.quantity,
-										subTotal: item.event?.price,
+										subTotal: item.subTotal,
 										tickets: {
 											create: tixs,
 										},

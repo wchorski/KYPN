@@ -61,28 +61,30 @@ export const postStripeSession = async (props: StripeCheckoutSessionAction) => {
 			return theseCartItems.filter((item) => item !== undefined).flat()
 		})()
 
+	// if (line_items.length === 0) throw new Error("cart is empty")
+
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
 
 	// const hasSubscription = cartItems.some((obj) => obj.subscriptionPlan !== null)
 
-	if (!line_items) throw new Error("!!! stripe no line_items")
+	if (line_items?.length === 0) throw new Error("!!! stripe no line_items")
 	const coupons = cartItems
 		.filter((item) => item.type === "DISCOUNT")
-		.map((item) => item.coupon).filter(Boolean) as Coupon[]
+		.map((item) => item.coupon)
+		.filter(Boolean) as Coupon[]
 
-	
 	// https://docs.stripe.com/api/checkout/sessions/create
 	const session = await stripe.checkout.sessions.create({
 		ui_mode: "embedded",
 		line_items: line_items,
-    //? subscription has it's own logic
+		//? subscription has it's own logic
 		// mode: hasSubscription ? "subscription" : "payment",
 		mode: "payment",
 		return_url: returnUrl,
 		...(email ? { customer_email: email } : {}),
 		customer: user?.stripeCustomerId,
-    //? only supports one coupon even though it's an array lol
+		//? only supports one coupon even though it's an array lol
 		...(coupons.length > 0
 			? {
 					discounts: coupons.map((coupon) => ({ coupon: coupon.stripeId })),

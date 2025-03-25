@@ -43,10 +43,10 @@ button:disabled {
 }
 
 button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-ms);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-ms);
 }
 
 .button {
@@ -161,9 +161,9 @@ input[type="radio"] {
 }
 
 label:has(input[type="checkbox"]) {
-  display: flex;
-  gap: var(--space-ms);
-  flex-wrap: wrap;
+	display: flex;
+	gap: var(--space-ms);
+	flex-wrap: wrap;
 }
 
 blockquote {
@@ -227,18 +227,17 @@ blockquote {
 }
 
 .mvh-s {
-  min-height: 30vh;
+	min-height: 30vh;
 }
 .mvh-m {
-  min-height: 50vh;
+	min-height: 50vh;
 }
 .mvh-l {
-  min-height: 80vh;
+	min-height: 80vh;
 }
 .mvh-xl {
-  min-height: 100vh;
+	min-height: 100vh;
 }
-
 
 #stripe-checkout,
 #stripe-checkout iframe {
@@ -251,23 +250,28 @@ blockquote {
 }
 
 s {
-  color: var(--c-disabled);
-  /* ? other viable options, maybe will look into color-mix later */
-  /* color: color-mix(in srgb, blue 80%, black 20%); */
-  /* opacity: 0.6; */
-  & data{
-    color: inherit !important;
-    text-decoration: line-through;
-  }
+	color: var(--c-disabled);
+	/* ? other viable options, maybe will look into color-mix later */
+	/* color: color-mix(in srgb, blue 80%, black 20%); */
+	/* opacity: 0.6; */
+	& data {
+		color: inherit !important;
+		text-decoration: line-through;
+	}
 }
 
 .pill {
-  padding-inline: var(--space-s);
-  margin-inline: var(--space-xs);
-  border-radius: var(--br-soft);
+	padding-inline: var(--space-s);
+	margin-inline: var(--space-xs);
+	border-radius: var(--br-soft);
 }
 
 .sticky {
-  position: sticky;
-  top: 5rem;
+	position: sticky;
+	top: 5rem;
+}
+
+.scroll-over {
+	background-color: var(--c-body);
+	z-index: 1;
 }

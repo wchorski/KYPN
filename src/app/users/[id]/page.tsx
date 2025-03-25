@@ -70,7 +70,7 @@ export default async function UserByIdPage({ params, searchParams }: Props) {
 					</tbody>
 				</table>
 				<p>
-					<Link href={envs.BACKEND_URL + `/users/${id}`}>
+					<Link href={envs.CMS_URL + `/users/${id}`}>
 						<BiEdit />
 						<span>Edit</span>
 					</Link>

@@ -7,7 +7,7 @@ import ErrorPage from "@components/layouts/ErrorPage"
 import { CallbackLink } from "@components/menus/CallbackLink"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { StatusBadge } from "@components/StatusBadge"
-import type {  User  } from "@ks/types"
+import type { User } from "@ks/types"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import fetchProduct from "@lib/fetchdata/fetchProduct"
@@ -25,7 +25,7 @@ import {
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Session } from "next-auth";
+import type { Session } from "next-auth"
 import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
@@ -118,7 +118,7 @@ export default async function ProductById({ params }: Props) {
 							<IconLink
 								icon={"edit"}
 								label={"Edit"}
-								href={envs.BACKEND_URL + `/products/${id}`}
+								href={envs.CMS_URL + `/products/${id}`}
 							>
 								<span>Edit Product Details</span>
 							</IconLink>
@@ -142,7 +142,7 @@ export default async function ProductById({ params }: Props) {
 					</ul>
 				</header>
 
-				<div>
+				<div className={"scroll-over"}>
 					<h1>{name}</h1>
 
 					{!session ? (
@@ -170,8 +170,6 @@ export default async function ProductById({ params }: Props) {
 									<AddToCartForm
 										productId={id}
 										eventId={undefined}
-										sessionId={session.itemId}
-                    subscriptionPlanId={undefined}
 										type={"SALE"}
 									/>
 								</Card>
@@ -187,7 +185,7 @@ export default async function ProductById({ params }: Props) {
 									<span className={price_text}>
 										{price > 0 ? (
 											<span className={price_text}>
-                        {/* //TODO don't hardcode `day` */}
+												{/* //TODO don't hardcode `day` */}
 												{moneyFormatter(price)} <small>/day</small>
 											</span>
 										) : (
@@ -196,9 +194,7 @@ export default async function ProductById({ params }: Props) {
 									</span>
 									<AddToCartForm
 										productId={id}
-										sessionId={session.itemId}
 										eventId={undefined}
-                    subscriptionPlanId={undefined}
 										type={"RENTAL"}
 									/>
 								</Card>
@@ -225,7 +221,7 @@ export default async function ProductById({ params }: Props) {
 							<IconLink
 								icon={"edit"}
 								label={"Edit"}
-								href={envs.BACKEND_URL + `/products/${id}`}
+								href={envs.CMS_URL + `/products/${id}`}
 								className={"button medium"}
 							>
 								<span>Edit Product Details</span>

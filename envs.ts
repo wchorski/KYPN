@@ -44,7 +44,7 @@ const GOOGLE_AUTH_SECRET = process.env.GOOGLE_AUTH_SECRET
 // Plugins
 const ANALYTICS_URL = process.env.NEXT_PUBLIC_UMAMI_URL
 
-const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS
+const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS!
 const MAIL_SERVICE = process.env.MAIL_SERVICE
 const MAIL_HOST = process.env.MAIL_HOST
 const MAIL_PORT = process.env.MAIL_PORT

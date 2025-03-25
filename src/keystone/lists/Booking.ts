@@ -138,7 +138,7 @@ export const Booking: Lists.Booking = list({
             `,
 					})) as Service
 
-          console.log(service);
+          // console.log(service);
 
 					const addons = await context.query.Addon.findMany({
 						where: {

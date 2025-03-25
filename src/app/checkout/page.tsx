@@ -19,6 +19,7 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { CartEmptyMessage } from "@components/ecommerce/CartEmptyMessage"
 
 export const metadata: Metadata = {
 	title: `Checkout | ` + envs.SITE_TITLE,
@@ -52,7 +53,6 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 
 	const cartRental = user.cart.find((item) => item.rental)?.rental
 	const someRentalItems = user.cart.some((item) => item.type === "RENTAL")
-	const cartRentalItems = user.cart.filter((item) => item.type === "RENTAL")
 
 	if (someRentalItems && !cartRental) return redirect(`/checkout/rental`)
 	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
@@ -79,19 +79,18 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							<Link className={"button medium"} href={`/checkout/rental`}>
 								Update Rental Details
 							</Link>
-              <br />
-              <br />
+							<br />
+							<br />
 							<p>
 								Total: <CartTotal />
 							</p>
 						</>
 					)}
-          
 				</section>
 
 				<hr />
 				<section className={layout_site}>
-					{user.cart.length === 0 ? (
+					{user.cart.filter((item) => !item.coupon).length === 0 ? (
 						<CartEmptyMessage />
 					) : !envs.STRIPE_PUBLIC_KEY ? (
 						<CheckoutCartForm cartItems={plainObj(user.cart)} />
@@ -102,7 +101,7 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 							email={session.user.email}
 							user={session.user as User}
 						/>
-            // <></>
+						// <></>
 					)}
 				</section>
 			</div>
@@ -110,14 +109,6 @@ export default async function CheckoutPage({ params, searchParams }: Props) {
 	)
 }
 
-export function CartEmptyMessage() {
-	return (
-		<p>
-			Cart is empty. View the <Link href={`/shop`}>Shop</Link> or checkout some{" "}
-			<Link href={`/events`}>Events</Link>
-		</p>
-	)
-}
 
 const query = `
   cart {

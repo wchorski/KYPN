@@ -245,6 +245,8 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				},
 			})
 
+      // TODO how to update web cart context without refreshing whole page?
+
 			await sudoContext.db.CartItem.createOne({
 				data: {
 					type: "SALE",

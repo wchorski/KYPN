@@ -40,28 +40,24 @@ export const rules = {
 	canViewPages({ session }: ListAccessArgs) {
 		// 1. Do they have the permission
 		if (permissions.canManagePages({ session })) return true
-		if (!session) return false
 
 		//todo get rid of comment if good
 		// 2. If not, do they own this item?
-		// if (session)
-		// 	return {
-		// 		author: { id: { equals: session?.itemId || "no_session.itemId" } },
-		// 	}
-		// return { status: { equals: "PUBLIC" } }
-		return {
-			OR: [
-				{
-					author: { id: { equals: session?.itemId || "no_session.itemId" } },
-				},
-				{
-					privateAccess: {
-						some: { id: { in: [session?.itemId || "no_session.itemId"] } },
+		if (session)
+			return {
+				OR: [
+					{ status: { equals: "PUBLIC" } },
+					{
+						author: { id: { equals: session.itemId } },
 					},
-				},
-				{ status: { equals: "PUBLIC" } },
-			],
-		}
+					{
+						privateAccess: {
+							some: { id: { in: [session.itemId] } },
+						},
+					},
+				],
+			}
+		return { status: { equals: "PUBLIC" } }
 	},
 	canManagePosts({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
@@ -82,6 +78,7 @@ export const rules = {
 
 		return {
 			OR: [
+				{ status: { equals: "PUBLIC" } },
 				{
 					author: { id: { equals: session?.itemId || "no_session.itemId" } },
 				},
@@ -90,7 +87,6 @@ export const rules = {
 						some: { id: { in: [session?.itemId || "no_session.itemId"] } },
 					},
 				},
-				{ status: { equals: "PUBLIC" } },
 			],
 		}
 
@@ -156,20 +152,12 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageProducts({ session })) return true // They can read everything!
-		// if (!session) return false
-		// if(session) return {
-		//   OR: [
-		//     { author: { id: { equals: session.itemId } } },
-		//     { status: { equals: "AVAILABLE" } },
-		//     { status: { equals: "PUBLIC" } },
-		//     { status: { equals: "OUT_OF_STOCK" } },
-		//   ],
-		// };
+
 		// ? if anonymous user
 		return {
 			OR: [
-				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
 				{ status: { equals: "PUBLIC" } },
+				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
 				{ status: { equals: "OUT_OF_STOCK" } },
 			],
 		}
@@ -195,10 +183,10 @@ export const rules = {
 		// if(!session) return false
 		return {
 			OR: [
+				{ status: { in: ["PUBLIC", "OUT_OF_STOCK"] } },
 				{ author: { id: { equals: session?.itemId || "no_session.itemId" } } },
 				// { status: { equals: "PUBLIC" } },
 				// { status: { equals: "OUT_OF_STOCK" } },
-				{ status: { in: ["PUBLIC", "OUT_OF_STOCK"] } },
 			],
 		}
 	},
@@ -214,15 +202,15 @@ export const rules = {
 		// if (!isLoggedIn({ session })) return false;
 
 		if (permissions.canManageServices({ session })) return true // They can read everything!
-		// if (!session) return false
+
 		return {
 			OR: [
+				{ status: { equals: "PUBLIC" } },
 				{
 					employees: {
 						some: { id: { in: [session?.itemId || "no_session.itemId"] } },
 					},
 				},
-				{ status: { equals: "PUBLIC" } },
 			],
 		}
 	},
@@ -267,7 +255,7 @@ export const rules = {
 		return false
 	},
 
-  canViewRentals({ session }: ListAccessArgs) {
+	canViewRentals({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 		if (permissions.canManageRentals) return true
 		if (session)
@@ -279,7 +267,7 @@ export const rules = {
 	canManageRentals({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 		if (permissions.canManageRentals) return true
-    //? don't allow customers to update to 'PAID'
+		//? don't allow customers to update to 'PAID'
 		// if (session)
 		// 	return {
 		// 		customer: { id: { equals: session.itemId || "no_session_id" } },
@@ -536,8 +524,8 @@ export const rules = {
 		// 2. If not, do they own this item?
 		return false
 	},
-  // todo this is the same as manager access....
-  canViewSubscriptionItems({ session }: ListAccessArgs) {
+	// todo this is the same as manager access....
+	canViewSubscriptionItems({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 		if (permissions.canManageSubscriptionItems) return true
 		if (session)

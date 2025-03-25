@@ -305,7 +305,7 @@ export default async function SubscriptionItemByIdPage({
 				<SubscriptionUpdateForm status={status} subscriptionItemId={id} />
 				<br />
 				<br />
-				<Link href={envs.BACKEND_URL + `/subscription-items/${id}`}>
+				<Link href={envs.CMS_URL + `/subscription-items/${id}`}>
 					subscription-item
 				</Link>
 			</DialogPopup>

@@ -136,7 +136,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 								session?.data?.role?.canManagePosts) && (
 								<IconLink
 									icon={"edit"}
-									href={envs.BACKEND_URL + `/services/${id}`}
+									href={envs.CMS_URL + `/services/${id}`}
 									label={"edit"}
 								/>
 							)}

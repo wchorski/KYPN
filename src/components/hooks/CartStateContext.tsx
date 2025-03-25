@@ -1,10 +1,7 @@
 "use client"
-import type {  CartItem, User  } from "@ks/types"
-import {
-	calcTotalPrice,
-} from "@lib/calcTotalPrice"
-import type {
-	ReactNode} from "react";
+import type { CartItem, User } from "@ks/types"
+import { calcTotalPrice } from "@lib/calcTotalPrice"
+import type { ReactNode } from "react"
 import {
 	createContext,
 	useCallback,
@@ -14,8 +11,8 @@ import {
 } from "react"
 
 const defaultCtx = {
-	cartTotal: 0,
-	cartCount: 0,
+	cartTotal: null,
+	cartCount: null,
 	isOpen: false,
 	setIsOpen: (isOpen: boolean) => {},
 	isPending: false,
@@ -34,20 +31,17 @@ const LocalStateContext = createContext(defaultCtx)
 function CartStateProvider({ children }: { children: ReactNode }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [isPending, setIsPending] = useState<boolean>(false)
-	const [cartTotal, setCartTotal] = useState<number>(0)
-	const [cartCount, setCartCount] = useState<number>(0)
+	const [cartTotal, setCartTotal] = useState<number|null>(null)
+	const [cartCount, setCartCount] = useState<number|null>(null)
 	const [cartItems, setCartItems] = useState<CartItem[]>([])
 
 	function addToCart(cartItem: CartItem) {
+    //? don't forget to send in quantity, subTotal, and id
 
 		setCartItems((prev) => {
 			const exists = prev.some((item) => item.id === cartItem.id)
 			return exists
-				? prev.map((item) =>
-						item.id === cartItem.id
-							? cartItem
-							: item
-				  )
+				? prev.map((item) => (item.id === cartItem.id ? cartItem : item))
 				: [...prev, cartItem]
 		})
 	}
@@ -102,7 +96,7 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 	}, [])
 
 	function calcCartCount(items: CartItem[]) {
-    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
+		const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
 		setCartCount(totalQuantity)
 	}
 
@@ -123,13 +117,12 @@ function CartStateProvider({ children }: { children: ReactNode }) {
 		setIsOpen(true)
 	}
 
-  useEffect(() => {
-    calcCartCount(cartItems)
-    setCartTotal(calcTotalPrice(cartItems))
-  
-    // return () => 
-  }, [cartItems])
-  
+	useEffect(() => {
+		calcCartCount(cartItems)
+		setCartTotal(calcTotalPrice(cartItems))
+
+		// return () =>
+	}, [cartItems])
 
 	return (
 		<LocalStateContext.Provider

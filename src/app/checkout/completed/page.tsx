@@ -188,17 +188,16 @@ async function StripeCheckoutCheck({
 						</li>
 						<li>checkout_id: {stripeCheckoutSession.id}</li>
 						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li>
-						<li>
-							<Link href={`/account#orders`}>My Account</Link>
-						</li>
 					</ul>
+          <br />
+          <Link href={`/account#orders`} className={'button medium'} > View My Account</Link>
 
-					<h3>Stripe Checkout Session Response Debug</h3>
+					{/* <h3>Stripe Checkout Session Response Debug</h3>
 					<p>
 						stripeCheckoutSession.metadata.typeof{" "}
 						<strong>{stripeCheckoutSession.metadata.typeof}</strong>
 					</p>
-					<pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre>
+					<pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre> */}
 				</div>
 			</main>
 		)

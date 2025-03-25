@@ -98,7 +98,7 @@ export default async function PageBySlug({ params }: Props) {
 					>
 						<StatusBadge type={"page"} status={status} />
 						<IconLink
-							href={envs.BACKEND_URL + `/pages/${id}`}
+							href={envs.CMS_URL + `/pages/${id}`}
 							target={"_blank"}
 							label={"edit page"}
 							icon={"edit"}

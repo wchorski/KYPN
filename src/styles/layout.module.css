@@ -101,9 +101,9 @@
 	}
 }
 
-.page_layout > .layout_full:not(.flex, figure, img),
-.page_layout > .layout_site_to_wide:not(.flex, figure, img),
-.page_layout > .layout_wide:not(.flex, figure, img) {
+.page_layout > .layout_full:not(div:global(.flex), figure, img, nav),
+.page_layout > .layout_site_to_wide:not(div:global(.flex), figure, img),
+.page_layout > .layout_wide:not(div:global(.flex), figure, img) {
 	display: grid;
 }
 
