@@ -1,51 +1,48 @@
-import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { Product } from "@ks/types"
+import type { Product } from "@ks/types"
+import type { Session } from "next-auth"
+
+import { envs } from "@/envs"
 
 const perPage = envs.PERPAGE
 
-export async function fetchProduct(id:string, session:any){
-  
-  try {
-
-    // const product = await keystoneContext.withSession(session).query.Product.findOne({
-    const product = await keystoneContext.withSession(session).query.Product.findOne({
-      where: {
-        id: id,
-      },
-      query: query
-    }) as Product
-    
-    return { product }
-    
-  } catch (error) {
-    return {error}
-  }
+type Props = {
+	id: string
+	query: string
+	page?: number
+	session: Session | null
 }
 
-const query = `
-  id
-  name
-  image
-  price
-  status
-  excerpt
-  rental_price
-  isForSale
-  isForRental
-  description {
-    document
-  }
-  author{
-    id
-    name
-  }
-  tags {
-    name
-    id
-  }
-  categories {
-    name
-    id
-  }
-`
+export default async function fetchProduct({ id, query, session }: Props) {
+	try {
+		const product = (await keystoneContext
+			.withSession(session)
+			.query.Product.findOne({
+				where: { id },
+				query,
+			})) as Product
+
+		// const addons = (await keystoneContext
+		//   .withSession(session)
+		//   .query.Addon.findMany({
+		//     where: {
+		//       // status: {
+		//       //   notIn: ["DRAFT", "PRIVATE"]
+		//       // },
+		//       // include ids filtering if array is present
+		//       ...(addonIds && addonIds.length > 0 ? { id: { in: addonIds } } : {}),
+		//     },
+		//     orderBy: [
+		//       {
+		//         dateCreated: "desc",
+		//       },
+		//     ],
+		//     query: queryAddons,
+		//   })) as Addon[]
+
+		return { product }
+	} catch (error) {
+		console.log("!!! fetchProduct: ", error)
+		return { error }
+	}
+}

@@ -1,33 +1,38 @@
-import { BlogListItem } from './BlogListItem';
-import styles from "@styles/blog/blog.module.scss";
-import { List } from '@components/elements/List';
-import { Post } from '@ks/types'
-import { ReactElement } from 'react';
-export const revalidate = 5;
+import { GridList } from "@components/layouts/GridList"
+import type {  Post  } from "@ks/types"
+import {auto,grid} from '@styles/layout.module.css'
+import type { ReactElement } from "react"
+
+import { BlogListItem } from "./BlogListItem"
+export const revalidate = 5
 
 type ProdProps = {
-  posts:Post[]|undefined
+	posts: Post[] | undefined
 }
 
-// any type is a bug workaround
-// @ts-ignore
-export function BlogList({ posts }: ProdProps):ReactElement<any, any> {
+export function BlogList({ posts }: ProdProps): ReactElement<any, any> {
 
-  if(!posts) return <></>
+  const cls = ['unstyled', grid, auto].join(' ')
 
-  return (
-    <ul 
-      className={styles.blog + ' unstyled'} 
-      // isAnimated={true} 
-      // style={{gridTemplateColumns: 'repeat(auto-fill, minmax(calc(var(--w-sitemax)/2), 1fr))'}}
-    >
-      {posts.map((item: any, i:number) => (
-        <BlogListItem {...item} key={i} />
-      ))}
-    </ul>
-  )
+	if (!posts) return <> no posts found</>
 
+	return (
+		<GridList gap="1rem" paddingInline="1rem">
+      {posts.map((item: any, i: number) => (
+        <BlogListItem {...item} key={i}/>
+			))}
+    </GridList>
+	)
+	// return (
+	// 	<ul
+	// 		className={cls}
+	// 		// className={styles.blog + ' unstyled'}
+	// 	>
+	// 		{posts.map((item: any, i: number) => (
+  //       <li key={i}>
+  //         <BlogListItem {...item} />
+  //       </li>
+	// 		))}
+	// 	</ul>
+	// )
 }
-
-
-

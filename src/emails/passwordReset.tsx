@@ -1,19 +1,20 @@
-import { envs } from '../../envs';
 import {
   Body,
-  Container,
+  Button,
   Column,
+  Container,
   Head,
-  Html,
+  Html as EmailHtml,
   Img,
   Link,
   Preview,
   Row,
   Section,
   Text,
-  Button,
 } from '@react-email/components';
 import * as React from 'react';
+
+import { envs } from '../../envs';
 
 interface TwitchResetPasswordEmailProps {
   user: {
@@ -40,7 +41,7 @@ export default function PasswordRestEmail({
   }).format(updatedDate);
 
   return (
-    <Html>
+    <EmailHtml>
       <Head />
       <Preview>You requested a password reset for your {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
@@ -79,7 +80,7 @@ export default function PasswordRestEmail({
             </Text>
             <Text style={paragraph}>
               Still have questions? Please contact our support email {' '}
-              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
+              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}?subject=Help Reset Password`} style={link}>
                 {envs.ADMIN_EMAIL_ADDRESS}
               </Link>
             </Text>
@@ -106,7 +107,7 @@ export default function PasswordRestEmail({
           </Text>
         </Section>
       </Body>
-    </Html>
+    </EmailHtml>
   );
 };
 

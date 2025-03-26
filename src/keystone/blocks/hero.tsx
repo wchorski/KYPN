@@ -1,9 +1,5 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const hero = component({
   label: 'Hero',
@@ -11,6 +7,9 @@ export const hero = component({
     imageSrc: fields.text({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
+    }),
+    color: fields.text({
+      label: 'Text Color',
     }),
     caption: fields.conditional(fields.checkbox({ label: 'Has caption' }), {
       false: fields.empty(),
@@ -33,6 +32,7 @@ export const hero = component({
               backgroundSize: 'cover',
               minHeight: 200,
               width: '100%',
+              ...(props.fields.color ? {color: props.fields.color.value } : {})
             }}
           />
         </NotEditable>

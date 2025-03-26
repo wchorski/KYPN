@@ -1,0 +1,1 @@
+local docker image builds that can be transfered to server

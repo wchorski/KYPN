@@ -1,68 +1,31 @@
-import { Booking } from "@ks/types";
-import { keystoneContext } from '@ks/context';
+import { keystoneContext } from "@ks/context"
+import type { Booking } from "@ks/types"
+import type { Session } from "next-auth"
 
-export default async function fetchBooking(id:string){ 
-
-  try {
-
-    const booking = await keystoneContext.sudo().query.Booking.findOne({
-      where: { id: id },
-      query: query
-    }) as Booking
-    
-    return { booking }
-    
-  } catch (error) {
-    console.log('!!! fetch booking: ', error)
-    return { error }
-  }
+type Props = {
+	id: string
+	session: Session | null
+	query: string
 }
 
+export default async function fetchBooking({ id, session, query }: Props) {
+	try {
+		const booking = (await keystoneContext
+			.withSession(session)
+			.query.Booking.findOne({
+				where: { id },
+				query,
+			})) as Booking
 
-const query = `
-  id
-  email
-  phone
-  name
-  dateCreated
-  dateModified
-  addonsCount
-  end
-  google
-  start
-  status
-  summary
-  notes
-  price
-  details {
-    document
-  }
-  addons {
-    id
-    excerpt
-    name
-    price
-  }
-  customer {
-    id
-    email
-    phone
-    name
-    nameLast
-  }
-  employees {
-    id
-    name
-    email
-    image
-  }
-  location {
-    id
-    name
-    address
-  }
-  service {
-    id
-    name
-  }
-`
+		const cartItemCount = await keystoneContext
+			.withSession(session)
+			.query.CartItem.count({
+				where: { booking: { id: { equals: id } } },
+			})
+
+		return { booking, cartItemCount }
+	} catch (error) {
+		console.log("!!! fetch booking: ", error)
+		return { error }
+	}
+}

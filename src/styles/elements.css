@@ -1,0 +1,277 @@
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	/* margin-block: var(--space-l); */
+}
+thead th {
+	border-bottom-width: 3px;
+}
+tbody td {
+	border-bottom-width: 1px;
+}
+th,
+td {
+	padding: var(--space-m);
+	text-align: left;
+	border-bottom-style: solid;
+	border-bottom-color: var(--c-seperator);
+}
+th:first-child,
+td:first-child {
+	padding-left: 0;
+}
+th:last-child,
+td:last-child {
+	padding-right: 0;
+}
+
+hr {
+	max-width: var(--w-sitemax);
+	border-style: solid;
+	border-width: var(--space-xxs);
+	margin-block: var(--space-l);
+	width: 100%;
+}
+
+ul.unstyled {
+	list-style: none;
+	padding: 0;
+}
+
+button:disabled {
+	cursor: not-allowed;
+}
+
+button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-ms);
+}
+
+.button {
+	border-radius: var(--br-dull);
+	border: solid 1px var(--c-primary);
+	padding-inline: 1rem;
+	transition: all 0.3s;
+	display: inline-flex;
+	justify-content: space-between;
+	align-content: center;
+
+	& span {
+		display: flex;
+		gap: 1rem;
+		justify-content: space-around;
+	}
+
+	&.medium {
+		padding: 0.5rem 1rem;
+		font-size: 1.3rem;
+	}
+
+	&.large {
+		padding: 1rem;
+		font-size: 1.3rem;
+	}
+}
+
+/* form,
+fieldset {
+	padding: var(--space-m);
+
+	& label {
+		gap: var(--space-ms);
+	}
+	& label:has(
+			input[type="email"],
+			input[type="number"],
+			input[type="search"],
+			input[type="text"],
+			input[type="tel"],
+			input[type="url"],
+			input[type="password"],
+			textarea,
+			select
+		) {
+		display: grid;
+	}
+
+	& label:has(input[type="checkbox"], input[type="radio"]) {
+		display: flex;
+		align-content: center;
+		cursor: pointer;
+
+		input {
+			width: var(--space-ml);
+		}
+	}
+} */
+input[type="checkbox"],
+input[type="radio"],
+select {
+	cursor: pointer;
+}
+
+legend {
+	font-weight: bold;
+}
+
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+	height: var(--space-l);
+	padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+	border-radius: var(--br-dull);
+	border-width: 1px;
+	border-style: solid;
+	box-sizing: border-box;
+}
+/* Removes awkward default styles on some inputs for iOS */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+textarea {
+	min-height: 8em;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+fieldset {
+	padding: 0;
+	border-width: 0;
+}
+input[type="checkbox"],
+input[type="radio"] {
+	display: inline;
+}
+
+label:has(input[type="checkbox"]) {
+	display: flex;
+	gap: var(--space-ms);
+	flex-wrap: wrap;
+}
+
+blockquote {
+	display: grid;
+	align-items: center;
+	border-left-color: var(--c-primary);
+	border-left-style: solid;
+	border-left-width: 5px;
+	padding-block: var(--space-m);
+	padding-inline: var(--space-ml);
+	margin-left: var(--space-m);
+	background-color: hsla(0, 0%, 0%, 0.11);
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+	scroll-margin-top: var(--space-xl);
+	position: relative;
+
+	&::after {
+		display: block;
+		content: "";
+		width: 0%;
+		transition-property: border, color, background, width, height, opacity;
+		transition-duration: 1s;
+		transition-timing-function: ease-out;
+		opacity: 0;
+	}
+}
+
+.sticky {
+	position: sticky;
+	top: var(--space-ml);
+}
+
+.thick-underline-text {
+	border-bottom: solid var(--space-s) var(--c-seperator);
+}
+
+.grid {
+	display: grid;
+}
+
+.gap-s {
+	gap: var(--space-s);
+}
+.gap-ms {
+	gap: var(--space-ms);
+}
+.gap-m {
+	gap: var(--space-m);
+}
+.gap-ml {
+	gap: var(--space-ml);
+}
+.gap-l {
+	gap: var(--space-l);
+}
+
+.mvh-s {
+	min-height: 30vh;
+}
+.mvh-m {
+	min-height: 50vh;
+}
+.mvh-l {
+	min-height: 80vh;
+}
+.mvh-xl {
+	min-height: 100vh;
+}
+
+#stripe-checkout,
+#stripe-checkout iframe {
+	background-color: var(--c-body);
+	& iframe,
+	& iframe #root,
+	& .App-Background {
+		background-color: var(--c-body);
+	}
+}
+
+s {
+	color: var(--c-disabled);
+	/* ? other viable options, maybe will look into color-mix later */
+	/* color: color-mix(in srgb, blue 80%, black 20%); */
+	/* opacity: 0.6; */
+	& data {
+		color: inherit !important;
+		text-decoration: line-through;
+	}
+}
+
+.pill {
+	padding-inline: var(--space-s);
+	margin-inline: var(--space-xs);
+	border-radius: var(--br-soft);
+}
+
+.sticky {
+	position: sticky;
+	top: 5rem;
+}
+
+.scroll-over {
+	background-color: var(--c-body);
+	z-index: 1;
+}

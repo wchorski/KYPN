@@ -1,110 +1,91 @@
-import { envs } from '@/envs'
-import ErrorMessage from '@components/ErrorMessage'
-import { ImageDynamic } from '@components/elements/ImageDynamic'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import { User } from '@ks/types'
-import { fetchUserById } from '@lib/fetchdata/fetchUserById'
-import { Metadata, ResolvingMetadata } from 'next'
-import Link from 'next/link'
+import ErrorPage from "@components/layouts/ErrorPage"
+import { fetchUser } from "@lib/fetchdata/fetchUser"
+import { IconUserAccountAvatar } from "@lib/useIcons"
+import {
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+import { BiEdit } from "react-icons/bi"
 
-export async function generateMetadata(
-  { params }:Props,
-  parent: ResolvingMetadata,
-): Promise<Metadata>  {
-
-  const { id } = params
-  const { user , error} = await fetchUserById(id)
-
-  return {
-    title: (user?.name || user?.email) + ' | ' + envs.SITE_TITLE,
-    description: envs.SITE_DESC,
-  }
-}
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 type Props = {
-  searchParams:{q:string}
-  params:{id:string}
+	searchParams: { q: string }
+	params: { id: string }
 }
 
-export default async function UserByIdPage ({ params, searchParams }:Props) {
 
-  const { id } = params
+export default async function UserByIdPage({ params, searchParams }: Props) {
+	const { id } = await params
+	const session = await getServerSession(nextAuthOptions)
+	const { user, error } = await fetchUser(id, QUERY_USER_THIN, session)
 
-  const { user, error } = await fetchUserById(id)
+	if (error)
+		return (
+			<ErrorPage error={error}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!user) return notFound()
 
-  if(error) return <ErrorMessage error={error} />
+	const { name, email, role, image } = user
 
-  return (
-    <PageTHeaderMain
-      header={Header(user?.name, user?.email)}
-      main={Main(user)}
-    />
-  )
+	return (
+		<main className={[page_layout].join(" ")}>
+			<header className={layout_site}>
+				<h1>User: {name}</h1>
+				<figure style={{ margin: "0" }}>
+					{image ? (
+						<img
+							src={image}
+							alt={"user avatar"}
+							width={100}
+							height={100}
+						/>
+					) : (
+						<IconUserAccountAvatar />
+					)}
+				</figure>
+			</header>
+			<div className={[page_content, layout_site].join(" ")}>
+				<table>
+					<tbody>
+						<tr>
+							<td>Name: </td>
+							<td>{name}</td>
+						</tr>
+						<tr>
+							<td>Email: </td>
+							<td>{email}</td>
+						</tr>
+						<tr>
+							<td>Role: </td>
+							<td>{role?.name || "unverified"}</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+					<Link href={envs.CMS_URL + `/users/${id}`}>
+						<BiEdit />
+						<span>Edit</span>
+					</Link>
+				</p>
+			</div>
+		</main>
+	)
 }
 
-function Header(name?:string, email?:string){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> {name || email} </h1>
-    </Section>
-  </>
-}
-
-function Main(user?:User){
-
-  if(!user) return <p> no user found </p>
-
-  return<>
-    <Section layout={'1_1'}>
-
-      <ImageDynamic photoIn={user.image} alt={`profile thumbnail of user ${user.name}`}/>
-
-      <ul className='unstyled' style={{lineHeight: '2rem', display: 'grid', gap: '1rem',}}>
-        <li> {user.email} </li>
-        <li> <Link href={`/blog?userId=${user.id}`}> {user.name}'s Posts </Link></li>
-        <li>
-          <Link 
-            href={envs.BACKEND_URL + `/users/${user.id}`}
-            className={'button medium'} 
-          >
-            {user.name}'s account 
-          </Link>
-        </li>
-        <li>
-          <Link 
-            href={envs.BACKEND_URL + `/subscription-items?!user_matches="${user.id}"`}
-            className={'button medium'} 
-          >
-            Subscriptions 
-          </Link>
-        </li>
-        <li>
-          <Link 
-            href={envs.BACKEND_URL + `/bookings?!customer_matches="${user.id}"`}
-            className={'button medium'} 
-          >
-            Bookings 
-          </Link>
-        </li>
-        <li>
-          <Link 
-            href={envs.BACKEND_URL + `/tickets?!holder_matches="${user.id}"`}
-              className={'button medium'} 
-            >        
-            Tickets 
-          </Link>
-        </li>
-        <li>
-          <Link 
-            href={envs.BACKEND_URL + `/orders?!user_matches="${user.id}"`}
-              className={'button medium'} 
-            >
-            Orders 
-          </Link>
-        </li>
-      </ul>
-    </Section>
-  </>
-}
+const QUERY_USER_THIN = `
+  id
+  name
+  email
+  image
+  role {
+    name
+  }
+`

@@ -1,9 +1,5 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
-import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { component, fields } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const image = component({
   label: 'Image',
@@ -12,6 +8,10 @@ export const image = component({
     imageSrc: fields.url({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
+    }),
+    alt: fields.url({
+      label: 'Image Alt Text',
+      defaultValue: '',
     }),
     color: fields.text({
       label: 'Fallback background color',
@@ -25,16 +25,12 @@ export const image = component({
       label: 'Frame Border',
       defaultValue: 0
     }),
-    width: fields.integer({
+    width: fields.text({
       label: 'Frame Width',
-      defaultValue: 0
+      defaultValue: '400'
     }),
   },
   preview: function Quote(props) {
-
-    const currWidth = (props.fields.width.value > 0) 
-      ? props.fields.width.value+'px'
-      : '100%'
 
     return (
 
@@ -44,7 +40,7 @@ export const image = component({
           margin: '0',
           backgroundColor: props.fields.color.value,
           backgroundImage: props.fields.imageSrc.value,
-          width: currWidth,
+          width: props.fields.width.value || '100%',
           // width: props.fields.width.value + 'px',
           marginInline: 'auto',
         }}>

@@ -1,7 +1,8 @@
-import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
-import { User } from "@ks/types";
+import type { User } from "@ks/types";
 import { getServerSession } from "next-auth";
+
+import { nextAuthOptions } from "@/session";
 
 export async function fetchUserById(id:string){
 
@@ -26,7 +27,6 @@ export const query = `
   name
   nameLast
   email
-  isAdmin
   isActive
   image
   posts {
@@ -42,7 +42,7 @@ export const query = `
     id
     name
     canManageProducts
-    canSeeOtherUsers
+    canViewUsers
     canManageUsers
     canManageRoles
     canManageCart

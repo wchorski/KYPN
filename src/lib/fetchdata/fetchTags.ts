@@ -1,9 +1,7 @@
 // cred - https://github.com/jasonkuhrt/graphql-request/blob/HEAD/examples/typescript-typed-document-node.ts
-import { TypedDocumentNode } from '@graphql-typed-document-node/core';
-import { client } from '@lib/request';
-import { parse } from "graphql";
-import { Tag } from '@ks/types';
+
 import { keystoneContext } from '@ks/context';
+import type { Tag } from '@ks/types';
 
 
 export default async function fetchTags(tagIds?:string[]){

@@ -1,81 +1,110 @@
-import ErrorMessage from '@components/ErrorMessage'
-import { Callout } from '@components/blocks/Callout'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import { VerifyEmailCard } from '@components/menus/VerifyEmailCard'
-import { fetchVerifyEmail } from '@lib/fetchdata/fetchVerifyEmail'
-import Link from 'next/link'
+import { VerifyEmailCard } from "@components/VerifyEmailCard"
+// import {
+// 	layout_content,
+// 	page_content,
+// 	page_layout,
+// } from "@styles/layout.module.css"
+import Link from "next/link"
+
+import { fetchVerifyEmail } from "../../fetch/fetchVerifyEmail"
 type Props = {
-  searchParams:{
-    email:string,
-    token:string,
-  }
+	searchParams: {
+		email: string
+		token: string
+	}
 }
 
-export default async function VerifyPage ({ searchParams }:Props) {
+export default async function VerifyPage({ searchParams }: Props) {
+	const { email, token } = await searchParams
 
-  const { email, token } = searchParams
+	// if (!email || !token)
+	// 	return (
+	// 		<main>
+	// 			<BlockLayout layout={"1"}>
+	// 				<p> not sure how you got here without a key... </p>
+	// 				<p>
+	// 					{" "}
+	// 					<Link href={`/account`}> Get otta here </Link>{" "}
+	// 				</p>
+	// 			</BlockLayout>
+	// 		</main>
+	// 	)
 
-  if(!email || !token) return <main>
-    <Section layout={'1'}>
-      <p> not sure how you got here without a key... </p>
-      <p> <Link href={`/account`}> Get otta here </Link> </p>
-    </Section>
-  </main>
+	const { data, error } = await fetchVerifyEmail(email, token)
 
-  const { data, error } = await fetchVerifyEmail(email, token)
+	return (
+		<main 
+      // className={page_layout}
+      >
+			<header >
+				<h1> Verify Account </h1>
+			</header>
 
-
-  return (
-    <PageTHeaderMain
-      header={Header()}
-      main={Main(email, token, data, error)}
-    />
-  )
+			<div 
+      // className={[page_content, layout_content].join(" ")}
+      >
+				{(!email || !token) ? (
+					<WhyAreYouHere />
+				) : error ? (
+					<NotSuccessMessage error={error} email={email} />
+				) : (
+					<Content email={email} />
+				)}
+			</div>
+		</main>
+	)
 }
 
-function Header(){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> Verify Account </h1>
-    </Section>
-  </>
+function Content({ email }: { email: string }) {
+	return (
+		<>
+			
+				<h3 className="success"> Success </h3>
+				<p>
+					{" "}
+					The email <strong>{email}</strong> has been verified
+				</p>
+				<p>
+					{" "}
+					<Link href={"/"}> View account </Link>
+				</p>
+		</>
+	)
 }
 
+function NotSuccessMessage({ error, email }: any) {
+	switch (true) {
+		case String(error).includes("user already is of role"):
+			return (
+				<>
+					<div className={"success"}>
+						<p> This account is already verified. </p>
+						<p>
+							{" "}
+							<Link href={"/"}> View account </Link>
+						</p>
+					</div>
+				</>
+			)
 
-function NotSuccessMessage({error, email}:any){
-
-  switch (true) {
-    case String(error).includes('user already is of role'):
-      return<>
-        <Callout intent={'success'}>
-          <p> This account is already verified. </p>
-          <p> <Link href={'/account'}> View account </Link></p>
-        </Callout>
-      </>
-  
-    default:
-      return  <>
-        <ErrorMessage error={error}> </ErrorMessage> 
-        <VerifyEmailCard email={email} />
-      </>
-  }
+		default:
+			return (
+				<>
+					<p className={'error'}>{error.toString()}</p>
+					<VerifyEmailCard email={email} />
+				</>
+			)
+	}
 }
 
-function Main(email:string, token:string, data?:unknown, error?:any){
-
-  if(error) return <Section layout={'1'}>
-
-    <NotSuccessMessage error={error} email={email} />
-
-  </Section>
-
-  return<>
-    <Section layout={'1'}>
-      <h3 className='success'> Success </h3>
-      <p> The email <strong>{email}</strong> has been verified</p>
-      <p> <Link href={'/account'}> View account </Link></p>
-    </Section>
-  </>
+function WhyAreYouHere() {
+	return (
+		<div>
+			<p> not sure how you got here without a key... </p>
+			<p>
+				{" "}
+				<Link href={`/`}> Get otta here </Link>{" "}
+			</p>
+		</div>
+	)
 }

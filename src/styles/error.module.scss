@@ -6,6 +6,10 @@
   > h3{
     color: var(--c-error);
   }
+
+  svg {
+    font-size: 3rem;
+  }
 }
 
 .error_comp {
@@ -23,7 +27,7 @@
     margin: .5rem 0;
     font-weight: 100;
   }
-  strong {
-    margin-right: 1rem;
+  svg {
+    font-size: 3rem;
   }
 }

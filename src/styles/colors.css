@@ -1,0 +1,177 @@
+
+.debug {
+  border-color: yellow;
+  border-style: dashed;
+  border-width: var(--space-xxs);
+  padding: var(--space-xxs);
+  background: color-mix(in srgb, yellow 20%, transparent 60%);
+}
+.success, .error {
+  border-width: var(--space-xxs);
+  border-left-width: var(--space-s);
+  border-style: solid;
+	padding-inline: var(--space-m);
+	padding-block: var(--space-s);
+  color: var(--c-header);
+}
+
+.success {
+  border-color: var(--c-success);
+}
+.error {
+  border-color: var(--c-error);
+}
+
+.sub-text {
+	color: var(--c-txt-sub);
+}
+
+hr {
+	border-color: var(--c-seperator);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	transition-property: background, color;
+	transition-duration: 0.3s;
+	transition-timing-function: ease-in;
+	color: var(--c-header);
+}
+
+.glass {
+	background-color: var(--c-glass);
+	backdrop-filter: blur(1px);
+}
+
+.overlay {
+	position: relative;
+	z-index: 1;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background: var(--c-overlay);
+		pointer-events: none;
+		z-index: -1;
+	}
+}
+
+html,
+body {
+	background-color: var(--c-body);
+	color: var(--c-txt);
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		color-scheme: dark;
+	}
+}
+
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+	background-color: var(--c-txt-bg);
+	border-color: var(--c-seperator);
+	box-shadow: var(--shadow-1), var(--shadow-1-inset);
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+	border-color: var(--c-accent);
+	outline: 0;
+}
+
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	box-shadow: var(--shadow-1);
+	background-color: var(--c-txt-bg);
+	color: var(--c-primary);
+	border-color: var(--c-primary);
+	transition-property: color, border;
+	transition-duration: 0.1s;
+	transition-timing-function: cubic-bezier(0, 0.57, 0, 0.99);
+}
+
+
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+	&:focus:not(:disabled),
+	&:hover:not(:disabled) {
+		color: var(--c-secondary);
+		border-color: var(--c-secondary);
+		outline: 0;
+	}
+}
+/* //https://stackoverflow.com/questions/4350786/is-it-correct-to-combine-active-and-hover-pseudo-selector-like-aactivehover */
+
+a,
+.button,
+button {
+	&:active:active:not(:disabled),
+	&:hover:not(:disabled) {
+		color: var(--c-accent);
+		border-color: var(--c-accent);
+	}
+}
+
+a,
+button, 
+.button {
+  &:disabled {
+    /* border-color: var(--c-disabled); */
+    border-color: transparent !important;
+    color: var(--c-disabled);
+  }
+} 
+
+pre,
+code {
+	color: var(--c-code);
+	border-color: var(--c-code);
+	background-color: var(--c-code-bg);
+}
+
+ul,
+ol {
+	&::marker {
+		background-color: var(--c-txt);
+		fill: var(--c-txt);
+	}
+}
+
+a {
+	color: var(--c-primary);
+	transition-duration: var(--anim-duration-fast);
+	transition-property: color, background;
+}
+a:hover {
+	color: var(--c-secondary);
+}

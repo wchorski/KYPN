@@ -1,5 +1,5 @@
-import { google } from 'googleapis';
 import { JWT } from 'google-auth-library';
+import { google } from 'googleapis';
 
 const scopes = ['https://www.googleapis.com/auth/calendar'];
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY || 'NO_KEY_SET'
@@ -41,11 +41,11 @@ type GEvent = {
   description: string,
   start: {
     dateTime: string,
-    // timeZone: string,
+    timeZone: string,
   },
   end: {
     dateTime: string,
-    // timeZone: string,
+    timeZone: string,
   }
 }
 
@@ -53,7 +53,7 @@ export async function deleteCalendarEvent(eventId:string){
   if(GOOGLE_PRIVATE_KEY === 'NO_KEY_SET') return console.log('%%%%%%% GoogleAPI Calendar: NO_KEY_SET');
   let calendar = google.calendar('v3')
 
-  console.log('local file -- - eventId, ', eventId);
+  console.log('## calEvent Deleted. eventId: ', eventId);
   
   
   try {

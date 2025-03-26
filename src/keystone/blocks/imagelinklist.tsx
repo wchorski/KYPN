@@ -1,8 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { Box, jsx } from '@keystone-ui/core';
+// import { Box } from '@keystone-ui/core';
 import { component, fields, NotEditable, } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const imagelinklist = component({
   label: 'Image Link List',
@@ -55,9 +53,10 @@ export const imagelinklist = component({
         >
           {props.fields.items.elements.map(item => {
             return (
-              <Box
+              // <Box
+              <div
                 key={item.key}
-                margin="xsmall"
+                // margin="xsmall"
                 style={{
                   minWidth: '21.8%',
                   scrollSnapAlign: 'center',
@@ -88,7 +87,7 @@ export const imagelinklist = component({
                   
                 </article>
 
-              </Box>
+              </div>
             );
           })}
         </div>

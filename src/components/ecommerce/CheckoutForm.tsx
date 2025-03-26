@@ -1,27 +1,27 @@
 'use client'
+import { Button } from "@components/elements/Button"
+import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { Section } from "@components/layouts/Section"
+import { useCart } from "@hooks/CartStateContext"
+import type {   CartItem as CartItemType, Order, OrderItem, Rental  } from "@ks/types"
+import { calcCartRentalTotal, calcCartSaleTotal } from "@lib/calcTotalPrice"
+import { checkProductRentalAvail } from "@lib/checkProductRentalAvail"
+import { datePrettyLocal } from "@lib/dateFormatter"
+import { isTimeCheckStartEnd, timeCalcHours } from "@lib/timeUtils"
+import styles from '@styles/menus/form.module.scss'
+import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { useEffect, useReducer, useRef, useState } from "react"
 import { 
   // @ts-ignore
   experimental_useFormState as useFormState, 
   // @ts-ignore
   experimental_useFormStatus as useFormStatus 
 } from "react-dom"
-import {  CartItem as CartItemType, Order, OrderItem, Rental } from "@ks/types"
+
 import CartItem from "./CartItem"
-import { useEffect, useReducer, useRef, useState } from "react"
 import { PriceTag } from "./PriceTag"
-import { Card } from "@components/layouts/Card"
-import styles from '@styles/menus/form.module.scss'
-import { Section } from "@components/layouts/Section"
-import { isTimeCheckStartEnd, timeCalcHours } from "@lib/timeUtils"
-import { useCart } from "@components/hooks/CartStateContext"
-import { calcCartRentalTotal, calcCartSaleTotal, calcTotalPrice } from "@lib/calcTotalPrice"
-import { LoadingAnim } from "@components/elements/LoadingAnim"
-import { useSession } from "next-auth/react"
-import Link from "next/link"
-import { datePrettyLocal } from "@lib/dateFormatter"
 import StripeCheckoutButton from "./StripeCheckoutButton"
-import { checkProductRentalAvail } from "@lib/checkProductRentalAvail"
-import { Button } from "@components/elements/Button"
 
 type Props = {
   sessionId:string,
@@ -285,7 +285,7 @@ export function CheckoutForm ({ sessionId, data:{rentalItems, rentals, saleItems
           end: state.end,
           location,
           notes,
-          status: 'HOLD',
+          status: 'HOLDING',
           delivery: state.isDelivery,
           order: newOrder as Order,
         }})

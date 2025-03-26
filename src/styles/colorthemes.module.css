@@ -1,0 +1,128 @@
+  .bg_c_plain {
+    background-color: var(--c-txt-bg);
+    color: var(--c-txt);
+  }
+
+  .bg_c_primary :global{
+    background-color: var(--c-primary);
+    color: var(--c-txt-primary);
+    /* & *:is(h1, h2, h3, h4, h5, h6)  */
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: var(--c-txt-primary-h);
+    }
+  }
+
+  .bg_c_secondary :global{
+    background-color: var(--c-secondary);
+    color: var(--c-txt-primary);
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: var(--c-txt-primary-h);
+    }
+  }
+  .outline_c_secondary {
+    background-color: var(--c-txt-bg);
+    border-width: var(--space-xxs);
+    border-color: var(--c-secondary);
+    border-style: solid;
+  }
+  .outline_c_tertiary :global{
+    background-color: var(--c-txt-bg);
+    border-width: var(--space-xxs);
+    border-color: var(--c-tertiary);
+    border-style: solid;
+
+    & button {
+      border-color: var(--c-tertiary);
+    }
+  }
+
+  .bg_c_tertiary :global{
+    background-color: var(--c-tertiary);
+    color: var(--c-txt-primary);
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: var(--c-txt-primary-h);
+    }
+  }
+  .bg_c_accent :global{
+    position: relative;
+    z-index: 1;
+    background-color: var(--c-accent);
+    color: var(--c-txt-primary);
+
+    & > * {
+      z-index: 1;
+    }
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      background-image: linear-gradient(
+        to right,
+        var(--c-accent),
+        var(--c-accent)
+      );
+
+      color: var(--c-txt-primary-h);
+
+      display: inline;
+      background-size: 100% 10%;
+      background-repeat: no-repeat;
+      background-position: 0 105%;
+      text-shadow: var(--shadow-4);
+    }
+  }
+  /* //todo set colors from status.module.css to here for other components to use */
+
+  .bg_c_transparent {
+    background-color: transparent;
+  }
+  .bg_c_reverse_theme :global{
+    color: var(--c-txt-rev);
+    background-color: var(--c-txt-bg-rev);
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: var(--c-txt-rev);
+    }
+  }
+
+  /* look in readme to make this work for real */
+  .c_theme_light :global{
+    color-scheme: only light;
+    color: darkslategrey;
+    background-color: white;
+
+    & h1,
+    & h2,
+    & h3,
+    & h4,
+    & h5,
+    & h6 {
+      color: black;
+    }
+
+    --c-txt-bg: whitesmoke;
+    /* --c-primary: color-mix(in hsl, blue, black 1%); */
+  }

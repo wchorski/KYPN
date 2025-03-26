@@ -1,9 +1,5 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
-import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { component, fields } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const mediatext = component({
   label: 'Media & Text',
@@ -34,7 +30,7 @@ export const mediatext = component({
           position: 'relative',
           borderRadius: 6,
           display: 'flex',
-          flexDirection: props.fields.rowReverse ? 'row-reverse' : 'row',
+          flexDirection: props.fields.rowReverse.value ? 'row-reverse' : 'row',
         }}
       >
         <div style={{ fontStyle: 'italic', color: '#4A5568', flex: '1', padding: '10px'}}>

@@ -1,151 +1,133 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
+//! trying to fit this all into `addToCart.ts`
+import { graphql } from "@keystone-6/core"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 
-import { graphql } from '@keystone-6/core';
-// @ts-ignore
-import { Context } from '.keystone/types';
-// import { relationship } from '@keystone-6/core/fields';
-import stripeConfig from '../../lib/stripe';
-import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { CartItem, SubscriptionItem } from '../types';
+import type {
+	Context,
+	OrderItemCreateInput} from ".keystone/types";
 
-const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
 
-type SubPlan = {
-  status?:'DRAFT'|'AVAILABLE'|'OUT_OF_STOCK'
+
+type StripeSession = {
+	stripe?: {
+		payment_status: "paid" | "unpaid"
+		id: string
+		payment_intent: string
+		customerId: string
+		amount_total: number
+		subscriptionId: string | undefined
+		rentalId: string | undefined
+	}
 }
 
-export const checkoutSubscription = (base: BaseSchemaMeta) => graphql.field({
-  type: base.object('SubscriptionItem'),
+// type SessionWStripe = Session & StripeSession
+type SessionWStripe = {
+	itemId?: string
+	user: { email: string }
+} & StripeSession
 
-  args: { 
-    amount_total: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
-    planId: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    chargeId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
-    addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
-    stripeSubscriptionId: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
-    customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }), 
-    couponNames: graphql.arg({ type: graphql.list(graphql.String) }), 
-  },
+// TODO consolidate into one checkout mutation
+// grab items from cart instead of doing all this song and dance with form input
 
-  async resolve(source, { planId, chargeId, amount_total, addonIds, couponNames, customerEmail, stripeSubscriptionId }, context: Context) {
-    const contextSudo = context.sudo()
+export const checkoutSubscription = (base: BaseSchemaMeta) =>
+	graphql.field({
+		type: base.object("Order"),
+		args: {
+			subscriptionPlanId: graphql.arg({
+				type: graphql.nonNull(graphql.String),
+			}),
+			addonIds: graphql.arg({ type: graphql.list(graphql.String) }),
+			couponIds: graphql.arg({ type: graphql.list(graphql.String) }),
+		},
+		async resolve(source, variables, context: Context) {
+			const { subscriptionPlanId, addonIds, couponIds } = variables
 
-    try {
+			//? Stripe Webhook validates payment success
+			const sudoContext = context.sudo()
+			const session: SessionWStripe = context.session
+			if (!session)
+				throw new Error(
+					"!!! mutation.checkoutSubscription: Session not available"
+				)
 
-      const thePlan = await context.query.SubscriptionPlan.findOne({
-        where: {id: planId},
-        query: `
-          id
-          name
-          price
-          status
-          stripeProductId
-          stripePriceId
-          billing_interval
-          stockMax
-        `
-      })
+			// console.log({ variables })
+			// console.log({ session })
 
-      const activeSubsCount = await context.query.SubscriptionItem.count({
-        
-        where: {
-          subscriptionPlan: {
-            id: {
-              equals: thePlan.id
-            }
-          },
-          NOT: [
-            {
-              status: {
-                equals: "CANCELED"
-              }
-            },
-            {
-              status: {
-                equals: "EXPIRED"
-              }
-            }
-          ]
-        }
-      })
+			const paymentStatus = session.stripe?.payment_status || "unpaid"
+			const customerId = session.itemId || session.stripe?.customerId
 
-      const newPlanData:SubPlan = {}
-
-      if(activeSubsCount === thePlan.stockMax) newPlanData.status = 'OUT_OF_STOCK'
-      if(activeSubsCount > thePlan.stockMax) throw new Error("Item is out of stock");
-      
-
-      // const SubItemCount = await context.query.SubscriptionItem.count({
-      //     where: {
-      //       NOT: [
-      //         {
-      //           status: {
-      //             equals: "CANCELED"
-      //           }
-      //         },
-      //         {
-      //           status: {
-      //             equals: "EXPIRED"
-      //           }
-      //         }
-      //       ]
-      //     },
-      // })
-
-      //Query the current user
-      const user = await contextSudo.query.User.findOne({
-        where: { email: customerEmail },
-        query:
-          `
+			// TODO fix. this allows anyone to subscribe even to PRIVATE or DRAFT plans
+			const subscriptionPlan = await sudoContext.query.SubscriptionPlan.findOne(
+				// context.withSession(session)
+				{
+					where: { id: subscriptionPlanId },
+					query: `
             id
-            name
-            email
-            stripeCustomerId
+            billing_interval
+            price
           `,
-      })
-      if(!user) throw new Error('This user is not registered to the website')
+				}
+			)
 
-      const now = new Date
-      const subscriptionItem = await contextSudo.db.SubscriptionItem.createOne({
-        data: {
-          custom_price: amount_total,
-          subscriptionPlan: { connect: { id: planId } },
-          user: { connect: { id: user.id } },
-          stripeChargeId: chargeId,
-          stripeSubscriptionId: stripeSubscriptionId,
-          status: "ACTIVE",
-          coupons: couponNames ? {connect: couponNames?.map(coup => ({ name: coup }))} : null,
-          addons: addonIds ? {connect: addonIds.map(addId => ({ id: addId}))} : null,
-          dateCreated: now.toISOString(),
-          dateModified: now.toISOString(),
-        },
-      }).catch((error:any) => {
-        console.log('!!! MUTATION checkoutSubscription ERROR', error);
-      }) as SubscriptionItem|undefined
+			if (!subscriptionPlan)
+				throw new Error(
+					"!!! mutation.checkoutSubscription: no subscriptionPlan found"
+				)
 
-      const updatedSubPlan = await context.db.SubscriptionPlan.updateOne({
-        where: { id: thePlan.id },
-        data: newPlanData,
-      })
-      
+			// TODO addonIds
+			// const addons = await
 
-      return {
-        subscriptionItem,
-        status: 'success',
-        message: 'subscription started',
-        id: subscriptionItem?.id,
-      }
-      // return null
-      
-    } catch (error:any) {
+			// TODO couponIds
+			// const coupons = await
 
-      console.log('MUTATION checkoutsubscription Error: ', error);
-      // if(error.code === 'resource_missing') return error
+			// const amountTotal = subscriptionPlan.price
+			// const transactionFees =
+			// 	(session.stripe?.amount_total || amountTotal) - amountTotal
 
-      return {
-        error
-      } 
-    }
-  
-  }
-})
+			const newOrderItem = {
+				type: "SUBSCRIPTION",
+				quantity: 1,
+				subscriptionItem: {
+					create: {
+						subscriptionPlan: {
+							connect: { id: subscriptionPlan.id },
+						},
+						status: paymentStatus === "paid" ? "ACTIVE" : "TRIAL",
+						billing_interval: subscriptionPlan?.billing_interval,
+						user: {
+							connect: {
+								id: session.itemId || session.stripe?.customerId,
+							},
+						},
+						// TODO this is combined `sub_***` checkout. we want single `si_***` saved here
+						stripeSubscriptionId: session.stripe?.subscriptionId,
+					},
+				},
+			} as OrderItemCreateInput
+
+			const order = await sudoContext.db.Order.createOne({
+				// const order = await context.withSession(session).db.Order.createOne({
+				data: {
+					// fees: transactionFees,
+					...(newOrderItem ? { items: { create: newOrderItem } } : {}),
+					user: { connect: { id: customerId } },
+					stripeCheckoutSessionId: session.stripe?.id || "",
+					stripePaymentIntent: session.stripe?.payment_intent || "",
+					//TODO maybe not secure
+					...(session.stripe?.payment_status === "paid" || subscriptionPlan.price === 0
+						? { status: "PAYMENT_RECIEVED" }
+						: { status: "REQUESTED" }),
+				},
+			})
+
+			if (!order) throw new Error("!!! mutation.checkout: order not created")
+			console.log({ order })
+			//? email sent with Order afterOperation
+
+			return {
+				status: order.status,
+				id: order.id,
+			}
+		},
+	})

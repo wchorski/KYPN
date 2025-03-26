@@ -1,0 +1,9 @@
+picture.featured {
+
+  & img{
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+  }
+}
+

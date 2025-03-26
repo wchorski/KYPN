@@ -1,5 +1,4 @@
 import { keystoneContext } from "@ks/context";
-import { NextResponse } from "next/server";
 
 export async function fetchVerifyEmail(email:string, token:string){
 

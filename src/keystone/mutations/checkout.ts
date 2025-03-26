@@ -1,163 +1,339 @@
 // cred - https://github.com/carlos815/3rd-shop-backend/blob/main/mutations/addToCart.ts
 
-import { graphql } from '@keystone-6/core';
-// @ts-ignore
-import { Context } from '.keystone/types';
-// import { relationship } from '@keystone-6/core/fields';
-import stripeConfig from '../../lib/stripe';
-import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { CartItem, OrderItem, Product } from '../types';
-import { calcTotalPrice } from '../../lib/calcTotalPrice';
-import { getServerSession } from 'next-auth';
-import { nextAuthOptions } from '../../../session';
+import { graphql } from "@keystone-6/core"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
+import type { KeystoneContextFromListTypeInfo } from "@keystone-6/core/types"
 
-type PartialProduct = Partial<Product>
+import { calcTotalPrice } from "../../lib/calcTotalPrice"
+import type { CartItem } from "../types"
+import type {
+	Context,
+	Lists,
+	OrderItemCreateInput,
+	TicketCreateInput,
+} from ".keystone/types"
 
-const IMG_PLACEHOLD = process.env.FRONTEND_URL + '/assets/product-placeholder.png'
-const ADMIN_EMAIL_ADDRESS = process.env.ADMIN_EMAIL_ADDRESS || 'no_admin_email@m.lan'
+type StripeSession = {
+	stripe?: {
+		payment_status: "paid" | "unpaid"
+		id: string
+		payment_intent: string
+		customerId: string
+		amount_total: number
+		// subscriptionId: string | undefined
+		rentalId: string | undefined
+	}
+}
 
-export const checkout = (base: BaseSchemaMeta) => graphql.field({
-  type: base.object('CartItem'),
+// type SessionWStripe = Session & StripeSession
+type SessionWStripe = {
+	itemId?: string
+	user: { email: string }
+} & StripeSession
 
-  args: { 
-    chargeId: graphql.arg({ type: graphql.String }), 
-    customerEmail: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    start: graphql.arg({ type: graphql.String }),
-    end: graphql.arg({ type: graphql.String }),
-    durationInHours: graphql.arg({ type: graphql.String }),
-    location: graphql.arg({ type: graphql.String }),
-    notes: graphql.arg({ type: graphql.String }),
-    delivery: graphql.arg({ type: graphql.Boolean }),
-  },
+// TODO consolidate into one checkout mutation
+// grab items from cart instead of doing all this song and dance with form input
 
-  // 1. Make sure they are signed in
-  async resolve(source, { chargeId, customerEmail, start, end, durationInHours, location, delivery, notes }, context: Context) {
+export const checkout = (base: BaseSchemaMeta) =>
+	graphql.field({
+		type: base.object("Order"),
+		async resolve(source, variables, context: Context) {
+			// const {} = variables
 
-    const contextSudo = context.sudo()
-    //Query the current user
-    const user = await contextSudo.query.User.findOne({
-      where: { email: customerEmail },
-      query:
-        `
+			//? Stripe Webhook validates payment success
+			const sudoContext = context.sudo()
+			const session: SessionWStripe = context.session
+			if (!session)
+				throw new Error("!!! mutation.checkout: Session not available")
+
+			const paymentStatus = session.stripe?.payment_status || "unpaid"
+			const customerId = session.itemId || session.stripe?.customerId
+
+			const cartItems = (await sudoContext.query.CartItem.findMany({
+				where: {
+					user: {
+						id: { equals: customerId },
+					},
+				},
+				query: `
           id
-          name
-          email
-          orders {
+          quantity
+          type
+          subTotal
+          product {
+            id
+            price
+            rental_price
+          }
+          event {
+            id
+            seats
+          }
+          booking {
+            id
+            price
+          }
+          rental {
             id
           }
-          cart {
+          coupon {
             id
-            type
-            quantity
-            product {
-              id
-              name
-              price
-              stockCount
-              image
-            }
+            amount_off
+            percent_off
+            redemptions
           }
         `,
-    })
+			})) as CartItem[]
 
-    if(!user) throw new Error(`!!! checkout, No user Found with email: ${customerEmail}`)
+			const rentalItem = cartItems.find((item) => item.rental)?.rental
+			const couponItem = cartItems.find((item) => item.coupon)?.coupon
 
-    if(user.cart.length <= 0) throw new Error('!!! No cart items found')
-    //Create an order based on the cart item
-    const orderItems = user.cart.map((cartItem: CartItem) => {
+			const amountTotal = calcTotalPrice(cartItems)
+			const transactionFees =
+				(session.stripe?.amount_total || amountTotal) - amountTotal
 
-      return {
-        name: cartItem.product.name,
-        description: cartItem.product.description,
-        price: cartItem.product.price,
-        type: cartItem.type,
-        quantity: cartItem.quantity,
-        image: cartItem.product.image,
-        product: { connect: { id: cartItem.product.id }}
-        // productId: cartItem.product.id,
-        // photo: { connect: { id: cartItem.product.photo.id } },
-      }
+			const newOrderItems: OrderItemCreateInput[] = await (async () => {
+				const theseOrderItems = await Promise.all(
+					cartItems.map(
+						async (item): Promise<OrderItemCreateInput | undefined> => {
+							switch (true) {
+								case item.product !== null && item.type === "SALE":
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: item.product?.price,
+										product: { connect: { id: item.product?.id } },
+									}
 
-    }) as OrderItem[]  
-    
-    const now = new Date
-    const order = await contextSudo.db.Order.createOne({
-      data: {
-        total: calcTotalPrice(user.cart),
-        // @ts-ignore
-        items: { create: orderItems },
-        email: customerEmail,
-        user: { connect: { id: user.id } },
-        charge: chargeId ? chargeId : '',
-        dateCreated: now.toISOString(),
-        // todo make logic that handles open, expired, unpaid, no_payment states
-        status: calcTotalPrice(user.cart) <= 0 ? 'PROCESSING' : chargeId ? 'PAYMENT_RECIEVED' : 'PAYMENT_PENDING',
-        // payment_status: chargeId ? 'PAID' : 'UNPAID',
-        notes,
-      },
-    })
+								case item.booking !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: item.booking?.price,
+										booking: { connect: { id: item.booking?.id } },
+									}
 
-    // Clean up! Delete all cart items
-    await context.db.CartItem.deleteMany({
-      where: user.cart.map((cartItem: CartItem) => { return { id: cartItem.id } })
-    })
+								case item.rental !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: cartItems
+											.filter((item) => item.type === "RENTAL")
+											.reduce(
+												(sum, item) => sum + (item.product?.rental_price || 0),
+												0
+											),
+										rental: { connect: { id: item.rental?.id } },
+									}
 
-    // remove saleItems from stock 
-    const updatedSaleItems = user.cart.map(async (cartItem:CartItem) => {
-      
-      // if it's a RENTAL ignore stock update
-      if(cartItem.type === 'RENTAL') return 
+								case item.event !== null:
+									const tixs = await createTicketItemsPerEvent(
+										item,
+										paymentStatus,
+										customerId,
+										context
+									)
+									if (!tixs) return undefined
 
-      const currProduct = await contextSudo.db.Product.findOne({
-        where: {id: cartItem.product.id}
-      })
-      if(!currProduct) return 
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: item.subTotal,
+										tickets: {
+											create: tixs,
+										},
+									}
 
-      // @ts-ignore
-      const currData:Product = {
-        stockCount: currProduct.stockCount - cartItem.quantity,
-      }
-      
-      if(currData.stockCount <= 0) currData.status = 'OUT_OF_STOCK'
-      
-      const updatedProduct = await contextSudo.db.Product.updateOne({
-        where: {id: cartItem.product.id},
-        // @ts-ignore
-        data: currData
-      })
-    })
+                //? in it's own mutation
+								// case item.subscriptionItem !== null:
+								// 	return {
+								// 		type: item.type,
+								// 		quantity: item.quantity,
+								// 		subTotal: 0,
+								// 		subscriptionItem: {
+								// 			connect: { id: item.subscriptionItem?.id },
+								// 		},
+								// 	}
 
-    const rentalItems = orderItems.filter(item => item.type === 'RENTAL')
-    if(rentalItems.length <= 0) return { 
-      status: 'success', 
-      message: 'checkout cart successful', 
-      order,
-      id: order.id,
-    }
-    // const saleItems = orderItems.filter(item => item.type === 'SALE')
+								case item.coupon !== null:
+									return {
+										type: item.type,
+										quantity: item.quantity,
+										subTotal: 0,
+										amount_off: item.coupon?.amount_off,
+										percent_off: item.coupon?.percent_off,
+										coupon: { connect: { id: item.coupon?.id } },
+									}
 
-    const rental = await contextSudo.db.Rental.createOne({
-      data: {
-        status: chargeId ? 'PAYMENT_RECIEVED' : 'HOLD',
-        start,
-        end,
-        durationInHours,
-        location,
-        delivery,
-        notes,
-        customer: customerEmail ? { connect: { email: customerEmail } } : null,
-        order: order ? { connect: { id: order.id} } : null
-      }
-    })
+								default:
+									return undefined
+							}
+						}
+					)
+				)
+				return theseOrderItems.filter((item) => item !== undefined)
+			})()
 
-    // return order w rental
-    
-    return { 
-      status: 'success', 
-      message: 'checkout cart successful', 
-      order,
-      rental,
-      id: order.id,
-    }
-  }
-})
+			if (!newOrderItems)
+				throw new Error("!!! mutation.checkout: no newOrderItems ")
+
+			JSON.stringify({ newOrderItems }, null, 2)
+
+			const order = await sudoContext.db.Order.createOne({
+				// const order = await context.withSession(session).db.Order.createOne({
+				data: {
+					// subTotal: amountTotal,
+					fees: transactionFees,
+					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
+					user: { connect: { id: customerId } },
+					stripeCheckoutSessionId: session.stripe?.id || "",
+					stripePaymentIntent: session.stripe?.payment_intent || "",
+					//TODO maybe not secure
+					...(session.stripe?.payment_status === "paid" || amountTotal === 0
+						? { status: "PAYMENT_RECIEVED" }
+						: { status: "REQUESTED" }),
+				},
+			})
+
+			if (!order) throw new Error("!!! mutation.checkout: order not created")
+
+			await sudoContext.db.CartItem.deleteMany({
+				where: cartItems.map((item) => ({ id: item.id })),
+			})
+
+			if (rentalItem) {
+				await sudoContext.db.Rental.updateOne({
+					where: { id: rentalItem.id },
+					data: {
+						status:
+							session.stripe?.payment_status === "paid"
+								? "PAYMENT_RECIEVED"
+								: "REQUESTED",
+					},
+				})
+			}
+
+			await sudoContext.db.Booking.updateMany({
+				data: cartItems
+					.filter((item) => item.booking?.id)
+					.map((cartItem) => ({
+						where: { id: cartItem.booking?.id || "no_booking_id" },
+						// data: { status: "HOLDING" },
+						data: {
+							status:
+								cartItem.booking?.price === 0
+									? "RSVP"
+									: paymentStatus === "paid"
+									? "PAID"
+									: "HOLDING",
+						},
+					})),
+			})
+
+			//? email sent with Order afterOperation
+
+			return {
+				status: order.status,
+				id: order.id,
+			}
+		},
+	})
+
+async function createTicketItemsPerEvent(
+	cartItem: CartItem,
+	payment_status: "paid" | "unpaid",
+	customerId: string | undefined,
+	context: Context
+) {
+	if (!cartItem.event) return
+	const { event, quantity } = cartItem
+
+	if (!event) throw new Error("!!! mutation.checkout: No Event Found")
+
+	const seatsTaken = await countAvailableSeats({
+		context,
+		eventId: event.id,
+	})
+	//? if (# of seats customer is requesting + already taken seats) is over event.seats max
+	if (quantity + seatsTaken > event.seats)
+		throw new Error(
+			`!!! mutation.checkout: Not enough seats available for event. ${
+				event.seats - seatsTaken
+			} seats left.`
+		)
+
+	const tickets: TicketCreateInput[] = Array.from(
+		{ length: quantity },
+		(_, index) => ({
+			status:
+				event.price === 0
+					? "RSVP"
+					: payment_status === "paid"
+					? "PAID"
+					: "PENDING",
+			event: { connect: { id: event.id } },
+			holder: customerId ? { connect: { id: customerId } } : null,
+		})
+	)
+
+	return tickets
+}
+//! made things too complicated for this, but i like the logic of creating a nested async loop
+// async function createTicketItemsMultiEvents(
+// 	ticketCartItems: TicketCartItem[],
+// 	context: any,
+// 	session: SessionWStripe
+// ) {
+// 	const ticketsToCreate = await Promise.all(
+// 		ticketCartItems.map(async ({ event, quantity }) => {
+// 			if (!event) throw new Error("!!! mutation.checkout: No Event Found")
+
+// 			const seatsTaken = await countAvailableSeats({
+// 				context,
+// 				eventId: event.id,
+// 			})
+// 			//? if (# of seats customer is requesting + already taken seats) is over event.seats max
+// 			if (quantity + seatsTaken > event.seats)
+// 				throw new Error(
+// 					`!!! mutation.checkout: Not enough seats available for event. ${
+// 						event.seats - seatsTaken
+// 					} seats left.`
+// 				)
+
+// 			const tickets: TicketCreateInput[] = Array.from(
+// 				{ length: quantity },
+// 				(_, index) => ({
+// 					event: { connect: { id: event.id } },
+// 					holder: session.itemId ? { connect: { id: session.itemId } } : null,
+// 					email: session.user.email,
+// 				})
+// 			)
+
+// 			return tickets
+// 		})
+// 	)
+
+// 	return ticketsToCreate.flat()
+// }
+
+type CheckSeatsProps = {
+	context: KeystoneContextFromListTypeInfo<Lists.Ticket.TypeInfo<any>>
+	eventId: string
+}
+
+export async function countAvailableSeats({
+	context,
+	eventId,
+}: CheckSeatsProps) {
+	const seatsTaken = (await context.sudo().query.Ticket.count({
+		where: {
+			event: {
+				id: {
+					equals: eventId,
+				},
+			},
+		},
+	})) as number
+
+	return seatsTaken
+}

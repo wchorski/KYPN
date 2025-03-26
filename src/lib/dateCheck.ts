@@ -1,119 +1,155 @@
+export const isDateOlderThanNow = (date:string|Date) => {
+  const thisDate = new Date(date)
+  const now = new Date()
+  return thisDate > now
+}
+
+export const dateAdjuster = (
+	date: Date | string,
+	{ years = 0, months = 0, days = 0 }
+) =>
+	new Date(
+		new Date(date).setFullYear(
+			new Date(date).getFullYear() + years,
+			new Date(date).getMonth() + months,
+			new Date(date).getDate() + days
+		)
+	).toISOString()
+
 type BusyRange = {
-  id: string,
-  start: string,
-  end: string,
-  durationInHours: string,
+	id: string
+	start: string
+	end: string
+	durationInHours: string
 }
 
 type Range = {
-  start: string,
-  end: string,
+	start: string | Date
+	end: string | Date
 }
 
 // export function dateCheckAvail2(start:string, end:string, busyRanges:BusyRange[], serviceDays[]){
 
 // }
 
-export function dateOverlapCount(gig:Range, busyRanges:BusyRange[]){
-  const count = busyRanges.reduce((n, busy) => 
+const todayISO = new Date().toISOString()
 
-    (isRangesOverlap(gig, busy))
-      ? n + 1
-      : n
-    
-  , 0)
+export const calcDaysBetweenTimestamps = (
+	startISO: string | Date | undefined,
+	endISO: string | Date | undefined
+) => {
+	const start = new Date(startISO || todayISO).getTime()
+	const end = new Date(endISO || todayISO).getTime()
 
-  return count
+	return Math.floor((end - start) / (1000 * 60 * 60 * 24))
 }
 
-export function isRangesOverlap(gig:Range, busy:Range) {
-  const gigStart = new Date(gig.start).getTime();
-  const gigEnd = new Date(gig.end).getTime();
-  const busyStart = new Date(busy.start).getTime();
-  const busyEnd = new Date(busy.end).getTime();
+export function dateOverlapCount(gig: Range, busyRanges: BusyRange[]) {
+	const count = busyRanges.reduce(
+		(n, busy) => (isRangesOverlap(gig, busy) ? n + 1 : n),
 
-  if (gigStart <= busyEnd && gigEnd >= busyStart) {
-    return true;
-  }
+		0
+	)
 
-  if (busyStart <= gigEnd && busyEnd >= gigStart) {
-    return true;
-  }
-
-  return false;
+	return count
 }
 
-export function dateCheckAvail(start:string, end:string, busyRanges:BusyRange[]) {
+export function isRangesOverlap(gig: Range, busy: Range) {
+	const gigStart = new Date(gig.start).getTime()
 
-  const selectedStart = new Date(start)
-  const selectedEnd = new Date(end)
+	const gigEnd = new Date(gig.end).getTime()
 
-  for (let i = 0; i < busyRanges.length; i++) {
-    
-    const busyStart = new Date(busyRanges[i].start);
-    const busyEnd = new Date(busyRanges[i].end)
+	const busyStart = new Date(busy.start).getTime()
 
-    if (selectedEnd <= busyStart || selectedStart >= busyEnd) {
-      // console.log('the selected date time and the vacation day do not overlap')
-      continue;
-    } else {
+	const busyEnd = new Date(busy.end).getTime()
 
-      console.log('the selected date time and the vacation day overlap')
-      console.log('gig / vacation id: ', busyRanges[i].id);
-      
-      return false;
-    }
-  }
+	if (gigStart <= busyEnd && gigEnd >= busyStart) {
+		return true
+	}
 
-  console.log('no vacation day overlaps with selected date')
-  return true; // no vacation day overlaps with selected date
+	if (busyStart <= gigEnd && busyEnd >= gigStart) {
+		return true
+	}
+
+	return false
 }
 
-export function calcEndTime(start:string, duration:string|undefined){
-  const date = new Date(start);
-  if(!duration) return date.toISOString()
-  date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000);
-  // console.log('calcendtime, ', date.toISOString());
-  
-  return date.toISOString();
+export function dateCheckAvail(
+	start: string | Date,
+	end: string | Date,
+	busyRanges: BusyRange[]
+) {
+	const selectedStart = new Date(start)
+	const selectedEnd = new Date(end)
 
+	for (let i = 0; i < busyRanges.length; i++) {
+		const busyStart = new Date(busyRanges[i].start)
+		const busyEnd = new Date(busyRanges[i].end)
+
+		if (selectedEnd <= busyStart || selectedStart >= busyEnd) {
+			// console.log('the selected date time and the vacation day do not overlap')
+			continue
+		} else {
+			console.log("the selected date time and the vacation day overlap")
+			console.log("gig / vacation id: ", busyRanges[i].id)
+
+			return false
+		}
+	}
+
+	// console.log('no vacation day overlaps with selected date')
+	return true // no vacation day overlaps with selected date
 }
 
-export function calcDurationInHours(dateString1: string, dateString2: string) {
-  const date1 = new Date(dateString1)
-  const date2 = new Date(dateString2)
-  
-  const durationInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
-  const durationInHours = durationInMilliseconds / (1000 * 60 * 60)
-  
-  return durationInHours
+export function calcEndTime(
+	start: string | Date,
+	duration: string | undefined
+) {
+	const date = new Date(start)
+	if (!duration) return date.toISOString()
+	date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000)
+	// console.log('calcendtime, ', date.toISOString());
+
+	return date.toISOString()
 }
 
-export function dayOfWeek(num:number){
-  switch (num) {
-    case 0:
-      return 'Sunday'
-    case 1:
-      return 'Monday'
-    case 2:
-      return 'Tuesday'
-    case 3:
-      return 'Wednesday'
-    case 4:
-      return 'Thursday'
-    case 5:
-      return 'Friday'
-    case 6:
-      return 'Saturday'
-  
-    default:
-      return 'day of week error'
-  }
+export function calcDurationInHours(
+	dateString1: string | Date,
+	dateString2: string | Date
+) {
+	const date1 = new Date(dateString1)
+	const date2 = new Date(dateString2)
+
+	const durationInMilliseconds = Math.abs(date2.getTime() - date1.getTime())
+	const durationInHours = durationInMilliseconds / (1000 * 60 * 60)
+
+	return durationInHours
 }
 
-export function daysOfWeek(numbers:number[]){
- 
-  const daysOfWeek = numbers.map(num => dayOfWeek(num)) as string[]
+export function dayOfWeek(num: number) {
+	switch (num) {
+		case 0:
+			return "Sunday"
+		case 1:
+			return "Monday"
+		case 2:
+			return "Tuesday"
+		case 3:
+			return "Wednesday"
+		case 4:
+			return "Thursday"
+		case 5:
+			return "Friday"
+		case 6:
+			return "Saturday"
 
-  return daysOfWeek
+		default:
+			return "day of week error"
+	}
+}
+
+export function daysOfWeek(numbers: number[]) {
+	const daysOfWeek = numbers.map((num) => dayOfWeek(num)) as string[]
+
+	return daysOfWeek
 }

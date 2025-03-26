@@ -1,263 +1,243 @@
-import { Section } from "@components/layouts/Section"
-import Link from "next/link"
-import { MdAutorenew, MdOutlineAccountBox, MdOutlineDownload, MdShop, } from "react-icons/md"
-import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { Grid } from "@components/layouts/Grid"
 import AccountDash from "@components/menus/AccountDash"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
-import { keystoneContext } from "@ks/context"
-import { Order, Rental, User } from "@ks/types"
-import { LoginToView } from "@components/menus/LoginToView"
-import fetchTicketsByUser from "@lib/fetchdata/fetchTicketsByUser"
-import styles from '@styles/menus/dashboard.module.scss'
-import { Metadata } from "next"
-import { envs } from "@/envs"
+import type { DashNavData } from "@components/menus/DashNav";
+import { DashNav } from "@components/menus/DashNav"
+import { LoginToViewPage } from "@components/menus/LoginToViewPage"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import { BsSignpost } from "react-icons/bs"
+import { keystoneContext } from "@ks/context"
+import type {  Order, User  } from "@ks/types"
+import fetchRentals from "@lib/fetchdata/fetchRentals"
+import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
+import { fetchUser } from "@lib/fetchdata/fetchUser"
+import {
+	IconAccountBox,
+	IconBookmark,
+	IconCalendar,
+	IconCalendarOutlined,
+	IconDownload,
+	IconFlagRent,
+	IconShoppingBag,
+	IconSubRepeat,
+	IconTicketOutlined,
+} from "@lib/useIcons"
+import {
+	layout_site,
+	layout_wide,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
-  title: 'Account | ' + envs.SITE_TITLE,
-  description: 'dashboard for orders, subscriptions, bookings, tickets, downloads',
+	title: "Account | " + envs.SITE_TITLE,
+	description:
+		"dashboard for orders, subscriptions, bookings, tickets, downloads",
 }
 
-type Props = {
-  searchParams:{
-    dashState:'main'|'orders'|'rentals'|'subscriptions'|'downloads'|'tickets'|'gigs'|'gig_requests',
-  }
-  params:{id:string}
-}
+const today = new Date().toISOString()
 
-const now  = new Date().toISOString()
+export default async function AccountPage() {
+	const session = await getServerSession(nextAuthOptions)
+	if (!session) return <LoginToViewPage />
 
-export default async function AccountPage ({ params, searchParams }:Props) {
+	const { user, error: userError } = await fetchUser(
+		session.itemId,
+		USER_DASH_QUERY,
+		session
+	)
 
-  const { dashState = 'main' } = searchParams
-  
-  const session = await getServerSession(nextAuthOptions)
-  if(!session) return <LoginToView />
+	const orders = (await keystoneContext
+		.withSession(session)
+		.query.Order.findMany({
+			where: {
+				user: {
+					id: { equals: session.itemId },
+				},
+			},
+			orderBy: [
+				{
+					dateCreated: "desc",
+				},
+			],
+			query: `
+        id
+        total
+        dateCreated
+        status
+        count
+      `,
+		})) as Order[]
 
-  const user = await keystoneContext.withSession(session).query.User.findOne({
-    // TODO have pagination in mind (or maybe by date filtering?), split this into diff queries
-    where: {
-      id: session.itemId,
-    },
-    query: USER_DASH_QUERY,
-  }) as User
-
-  const orders = await keystoneContext.withSession(session).query.Order.findMany({
-    where: {
-      user: {
-        id: { equals: session.itemId },
-      }
-    },
-    orderBy: [
-      {
-        dateCreated: "desc"
-      }
-    ],
-    query: `
-      id
-      total
-      dateCreated
-      status
-      items{
-        quantity
-      }
-    `,
-  }) as Order[]
-
-  const rentals = await keystoneContext.withSession(session).query.Rental.findMany({
-    where: {
-      customer: {
-        id: { equals: session.itemId },
-      }
-    },
-    orderBy: [
-      {
-        start: "desc"
-      }
-    ],
-    query: `
-      id
-      start
-      end
-      durationInHours
-      location
-      delivery
-      status
-    `,
-  }) as Rental[]
-
-
-
-  const employeeGigData = await keystoneContext.withSession(session).graphql.run({
-    variables: {
-      where: {
-        id: session.itemId
-      },
-      gigsWhere: {
-        end: {
-          gt: now
-        }
-      },
-      gigRequestsWhere: {
-        end: {
-          gt: now
-        }
-      },
-      orderBy: [
-        {
-          start: "desc"
-        }
-      ],
-    },
-    query: `
-      query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
-        user(where: $where){
-          id
-          gig_requests(where: $gigRequestsWhere) {
+	// TODO move this to a `fetchDATA` function
+	const employeeGigData = (await keystoneContext
+		.withSession(session)
+		// .sudo()
+		.graphql.run({
+			variables: {
+				where: {
+					id: session.itemId,
+				},
+				gigsWhere: {
+					end: {
+						gt: today,
+					},
+				},
+				gigRequestsWhere: {
+					end: {
+						gt: today,
+					},
+				},
+				orderBy: [
+					{
+						start: "desc",
+					},
+				],
+			},
+			query: `
+        query User($where: UserWhereUniqueInput!, $gigsWhere: BookingWhereInput!, $gigRequestsWhere: BookingWhereInput!) {
+          user(where: $where){
             id
-            start
-            end
-            summary
-            status
-            service {
-              name
+            gig_requests(where: $gigRequestsWhere) {
+              id
+              start
+              end
+              summary
+              status
+              service {
+                name
+              }
             }
-          }
-          gigs(where: $gigsWhere) {
-            id
-            start
-            end
-            summary
-            status
-            service {
-              name
+            gigs(where: $gigsWhere) {
+              id
+              start
+              end
+              summary
+              status
+              service {
+                name
+              }
             }
           }
         }
-      }
-    `
-  }) as {user:User}
-  const {gig_requests, gigs} = employeeGigData.user
+      `,
+		})) as { user: User }
 
-  const {tickets, error } = await fetchTicketsByUser(user?.id)
+	const QUERY_USER_RENTALS = `
+    id
+    summary
+    start
+    end
+    timeZone
+    days
+    address
+    delivery
+    status
+  `
+
+	const { rentals, error } = await fetchRentals({
+		query: QUERY_USER_RENTALS,
+		session,
+		dateSelectedString: today,
+	})
+
+	if (userError) return <ErrorPage error={userError} />
+
+	if (!user) return notFound()
+	const { gig_requests, gigs } = employeeGigData.user
+
+	const {
+		tickets,
+		sudoTicketCount = 0,
+		error: errorTickets,
+	} = await fetchTicketsByUser(user.id)
+
+	const dashNavData: DashNavData = [
+		{
+			slug: "main",
+			text: "Dashboard",
+			isCount: true,
+			icon: <IconAccountBox />,
+		},
+		{
+			slug: "bookings",
+			isCount: user.bookings.length > 0,
+			icon: <IconBookmark />,
+		},
+		{
+			slug: "subscriptions",
+			isCount: user.subscriptions.length > 0,
+			icon: <IconSubRepeat />,
+		},
+		{
+			slug: "tickets",
+			isCount:
+				sudoTicketCount > 0 || (tickets && tickets.length > 0) ? true : false,
+			icon: <IconTicketOutlined />,
+		},
+		{
+			slug: "gigs",
+			isCount: gigs.length > 0,
+			icon: <IconCalendar />,
+		},
+		{
+			slug: "gig_requests",
+			text: "Gig Requests",
+			isCount: gig_requests.length > 0,
+			icon: <IconCalendarOutlined />,
+		},
+		{
+			slug: "orders",
+			isCount: orders.length > 0,
+			icon: <IconShoppingBag />,
+		},
+		{
+			slug: "rentals",
+			isCount: rentals ? rentals.length > 0 : false,
+			icon: <IconFlagRent />,
+		},
+		{
+			slug: "downloads",
+			isCount: false,
+			// count: downloads.length > 0,
+			icon: <IconDownload />,
+		},
+	]
   
-  return <main>
-    <header >
-      <Section layout={'1'}>
-        <h1 style={{display: 'none'}}> Account </h1>
+	const data = {
+		user,
+		orders,
+		tickets,
+		sudoTicketCount,
+		rentals: rentals ? rentals : [],
+		downloads: [],
+		employeeGigs: { gigs, gig_requests },
+	}
 
-        {!session.data.role && (
-          <VerifyEmailCard email={user.email} />
-        )}
-        
-      </Section>
-    </header>
+	return (
+		<main className={page_layout}>
+			<header className={layout_site}>
+				<h1 style={{ display: "none" }}> Account </h1>
 
-    <Section layout={'1_4'}>
-  
+				{!session.data.role && <VerifyEmailCard email={user.email} />}
+			</header>
 
-        {/* <h2>{session?.user?.name}</h2> */}
+			<div className={[page_content, layout_wide].join(" ")}>
+				<Grid layout={"1_4"} isAuto={false} alignContent={"start"}>
+					<DashNav dashNavData={dashNavData} />
 
-        <nav className={styles.dashnav} >
-          <ul>
-            <li>
-              <Link 
-                href={'/account?dashState=main#main'}
-                className={dashState === 'main' ? styles.linkactive : styles.dashlink}
-              >
-                Dashboard <MdOutlineAccountBox />
-              </Link>
-            </li>
-            {(gigs.length > 0) && (
-              <li>
-                <Link 
-                  href={'/account?dashState=gigs#gigs'}
-                  className={dashState === 'gigs' ? styles.linkactive : styles.dashlink}
-                >
-                  Gigs <HiCalendar />
-                </Link>
-              </li>
-            )}
-            {(gig_requests.length > 0) && (
-              <li>
-                <Link 
-                  href={'/account?dashState=gig_requests#gig_requests'}
-                  className={dashState === 'gig_requests' ? styles.linkactive : styles.dashlink}
-                >
-                  Gig Requests <HiOutlineCalendar />
-                </Link>
-              </li>
-            )}
-            {orders.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=orders#orders'}
-                  className={dashState === 'orders' ? styles.linkactive : styles.dashlink}
-                >
-                  Orders <MdShop />
-                </Link>
-              </li>
-
-            )}
-            {rentals.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=rentals#rentals'}
-                  className={dashState === 'rentals' ? styles.linkactive : styles.dashlink}
-                >
-                  Rentals <BsSignpost />
-                </Link>
-              </li>
-            )}
-            {user.subscriptions.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=subscriptions#subscriptions'}
-                  className={dashState === 'subscriptions' ? styles.linkactive : styles.dashlink}
-                >
-                  Subscriptions <MdAutorenew />
-                </Link>
-              </li>
-            )}
-            {/* //todo when downloads are added */}
-            {false && (
-              <li>
-                <Link 
-                  href={'/account?dashState=downloads#downloads'}
-                  className={dashState === 'downloads' ? styles.linkactive : styles.dashlink}
-                >
-                  Downloads <MdOutlineDownload />
-                </Link>
-              </li>
-            )}
-            {tickets && tickets?.length > 0 && (
-              <li>
-                <Link 
-                  href={'/account?dashState=tickets#tickets'}
-                  className={dashState === 'tickets' ? styles.linkactive : styles.dashlink}
-                >
-                  Tickets <HiOutlineTicket />
-                </Link>
-              </li>
-            )}
-          </ul>
-        </nav>
-
-    
-      <AccountDash 
-        dashState={dashState} 
-        user={user} 
-        orders={orders}
-        rentals={rentals}
-        tickets={tickets} 
-        employeeGigs={{gigs, gig_requests}}
-      />
-    </Section>
-  </main>
+					<AccountDash data={data} />
+				</Grid>
+			</div>
+		</main>
+	)
 }
-
+// todo move subscriptions to seperate fetch so i can order them by date
 const USER_DASH_QUERY = `
   id
   name
@@ -268,34 +248,20 @@ const USER_DASH_QUERY = `
     price
     start
     service {
+      id
       name
     }
     status
   }
-  subscriptions{
+  subscriptions {
     id
+    dateCreated
+    status
     subscriptionPlan {
       id
       name
-    }
-    status
-    dateModified
-    dateCreated
-  }
-
-  tickets {
-    id
-    orderCount
-    status
-    event {
-      id
-      start
-      summary
-      location {
-        id
-        name
-      }
+      status
+      billing_interval
     }
   }
-
 `

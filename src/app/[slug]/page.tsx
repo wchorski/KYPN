@@ -1,158 +1,139 @@
-
+import { BlockRender } from "@components/blocks/BlockRender"
+import { IconLink } from "@components/elements/IconLink"
+import { AsideBar } from "@components/layouts/AsideBar"
 import { Card } from "@components/layouts/Card"
-import { PageTHeaderMain, PageTHeaderMainAside, PageTMain } from "@components/layouts/PageTemplates"
-
-import Error404 from "../not-found"
-import ErrorMessage from "@components/ErrorMessage"
-import {  Page } from "@ks/types"
-import { datePretty } from "@lib/dateFormatter"
-import fetchPage from "@lib/fetchdata/fetchPage"
-import { BlockRender } from '@components/blocks/BlockRender'
-import { envs } from "@/envs"
-import { Metadata, ResolvingMetadata } from "next"
-import { Section } from "@components/layouts/Section"
-import {NotPublicPage} from "@components/NotPublicPage"
+import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
+import { TableOfContents } from "@components/menus/TableOfContents"
 import { StatusBadge } from "@components/StatusBadge"
-import Link from "next/link"
-export const revalidate = 5;
+import { findAllHeadings } from "@lib/contentHelpers"
+import fetchPage from "@lib/fetchdata/fetchPage"
+import {
+	layout_content,
+	layout_full,
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { ResolvingMetadata } from "next"
+import { notFound } from "next/navigation"
+import type { CSSProperties } from "react"
+
+import { envs } from "@/envs"
+export const revalidate = 5
 
 type Props = {
-  params:{
-    slug:string,
-  },
-}
- 
-export async function generateMetadata({ params }:Props,
-  parent: ResolvingMetadata,
-){
-
-  const { slug } = params
-  const { page , error} = await fetchPage(slug)
-
-  return {
-    title: page?.title || '404' + ' | ' + envs.SITE_TITLE,
-    description: envs.SITE_DESC,
-  }
+	params: {
+		slug: string
+	}
 }
 
-export default async function PageBySlug ({params,}:Props) {
+export async function generateMetadata(
+	{ params }: Props,
+	parent: ResolvingMetadata
+) {
+	const { slug } = await params
+	const { page, error } = await fetchPage(slug, QUERY_PAGE)
 
-
-  const { page , error} = await fetchPage(params.slug)
-
-
-  // if (loading) return <QueryLoading />
-  if (error) return <ErrorMessage error={error} />
-  if (!page) return <Error404> <p> This page could not be found, or you do not have permission to view. </p></Error404>
-
-  const {
-    id,
-    title,
-    slug,
-    status,
-    featured_image,
-    featured_video,
-    excerpt,
-    dateModified,
-    dateCreated,
-    template,
-    author,
-    categories,
-    tags,
-    content,
-  }:Page = page
-
-  // console.log(data)
-
-  // if (status === 'PRIVATE') return (
-  //   <NotPublicPage status={status}> 
-  //     <p>This blog post is private</p> 
-  //   </NotPublicPage>
-  // )
-
-  if(template === 'FULLWIDTH' || template === 'FULLWIDTH_WITHHEADER') return (
-    <PageTHeaderMain
-      header={Header({dateCreated, dateModified, title, author, featured_image, template})} 
-      main={Main(content, status,id)}
-      headerStyles={{
-        backgroundImage: `url(${featured_image})`,
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        display: (template === 'FULLWIDTH_WITHHEADER') ? 'block' : 'none',
-      }}
-    />
-  )
-
-  return (
-    <PageTHeaderMainAside 
-      header={Header({dateCreated, dateModified, title, author, featured_image, template})}
-      main={Main(content, status,id)}
-      aside={Aside()}
-    />
-  )
+	return {
+		title: page?.title || "404" + " | " + envs.SITE_TITLE,
+		description: envs.SITE_DESCRIPTION,
+	}
 }
 
-type Header = {
-  title:string,
-  dateCreated:string,
-  dateModified:string,
-  featured_image:string,
-  template:'FULLWIDTH'|'FULLWIDTH_WITHHEADER'|'WITHSIDEBAR'|'BLANK'|string,
-  author?:{
-    name?:string,
-  }
+export default async function PageBySlug({ params }: Props) {
+	const { slug } = await params
+	const { page, error } = await fetchPage(slug, QUERY_PAGE)
+
+	// if (loading) return <QueryLoading />
+	if (error)
+		return (
+			<ErrorPage error={error}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!page) return notFound()
+
+	const { id, title, status, template, content } = page
+
+	const tableOfContentLinks = findAllHeadings(content?.document)
+
+	return (
+		<main
+			className={page_layout}
+			style={
+				{
+					"--sidebar-comp-max-width": "500px",
+					"--sidebar-width-footprint": "300px",
+				} as CSSProperties
+			}
+		>
+			<header
+				className={[
+					template !== "FULLWIDTH_WITHHEADER"
+						? "screen-reader-text"
+						: undefined,
+					layout_site,
+				].join(" ")}
+				//? not accessable
+				// style={{
+				//   ...(template !== 'FULLWIDTH_WITHHEADER' ? {display: 'none'} : {})
+				// }}
+			>
+				<h1>{title}</h1>
+			</header>
+
+			<div
+				className={[
+					page_content,
+					template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full,
+				].join(" ")}
+			>
+				{status !== "PUBLIC" && (
+					<Card
+						// className={"siteWrapper"}
+						style={{ marginInline: "auto", marginBlock: "1rem" }}
+						direction={"row"}
+						gap={"var(--space-m)"}
+					>
+						<StatusBadge type={"page"} status={status} />
+						<IconLink
+							href={envs.CMS_URL + `/pages/${id}`}
+							target={"_blank"}
+							label={"edit page"}
+							icon={"edit"}
+						/>
+					</Card>
+				)}
+
+				<BlockRender document={content?.document} />
+			</div>
+			{template === "WITH_TABLEOFCONTENTS" && (
+				<AsideBar aria_label="Page Sidebar">
+					<Flex
+						flexDirection={"column"}
+						alignItems="flex-start"
+						style={{ marginLeft: "var(--space-m)" }}
+					>
+						<Card>
+							<TableOfContents headerObjs={tableOfContentLinks} />
+						</Card>
+					</Flex>
+				</AsideBar>
+			)}
+		</main>
+	)
 }
 
-//? Content
-function Header({dateCreated, dateModified, title, author, featured_image, template }:Header){
-
-  // console.log(dateCreated);
-  
-  return <>
-
-    <Section layout={'1'}>
-      
-    
-      <h1>{title}</h1>
-
-      <span>
-        <em> Published on {datePretty(dateCreated)}</em>
-        <br />
-        <em> Modified on {datePretty(dateModified)}</em>
-      </span>
-      <br />
-
-      {author?.name && (
-        <span>
-          <em> · by {author?.name}</em>
-        </span>
-      )}
-
-      {/* <span>View Count : 12345</span> */}
-
-  </Section>
-  </>
-}
-
-
-function Main(content:any, status:Page['status'],id:string){
-
-  return <>
-    {status !== "PUBLIC" && (
-        <Card className={'siteWrapper'} style={{marginInline: 'auto', marginBlock: '1rem'}} direction={'row'}>
-          <StatusBadge type={"page"} status={status} />
-          <Link href={envs.BACKEND_URL + `/pages/${id}`} className={'button'} target={'_blank'}> edit page </Link>
-        </Card>
-      )}
-    <BlockRender document={content.document} />
-  </>
-}
-
-function Aside(){
-  return <>
-    <Card>
-      <h2> Aside</h2>
-    </Card>
-  </>
-}
+const QUERY_PAGE = `
+    id
+    slug
+    title
+    template
+    dateCreated
+    dateModified
+    status
+    content {
+      document
+    }
+`

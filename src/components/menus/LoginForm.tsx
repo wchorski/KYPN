@@ -1,245 +1,222 @@
-'use client'
-import styles from '@styles/menus/form.module.scss'
-import { FaGithub, FaFacebookSquare, FaTwitter, FaGoogle, FaTwitterSquare } from "react-icons/fa";
-import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
-} from "react-dom"
-import { useRef, useState } from 'react';
-import { LoadingAnim } from '@components/elements/LoadingAnim';
-import { signIn } from 'next-auth/react';
-import Link from 'next/link';
-import { envs } from '@/envs';
-import { useRouter } from 'next/navigation';
-import { TbCheck, TbExclamationCircle, TbLoader } from 'react-icons/tb';
-import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
-import { Button } from '@components/elements/Button';
+"use client"
+import { Button } from "@components/elements/Button"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import Flex from "@components/layouts/Flex"
+import stylesAnim from "@styles/eyecandy/SpinCycle.module.scss"
+import { form } from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
+import { useState } from "react"
+import { useFormState } from "react-dom"
+import {
+	FaFacebookSquare,
+	FaGithub,
+	FaGoogle,
+	FaTwitterSquare,
+} from "react-icons/fa"
+import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 
-type State = 'pending'|'error'|'success'|undefined
+import { envs } from "@/envs"
+
+type State = "pending" | "error" | "success" | undefined
 
 type Fields = {
-  email: string,
-  password:string,
+	email: string
+	password: string
 }
 
 type FormState = {
-  message: string,
-  status: 'success'|'error',
-  errors: Record<keyof Fields, string> | undefined,
-  fieldValues: Fields,
+	message: string
+	status: "success" | "error" | "unknown" | ""
+	errors: Record<keyof Fields, string> | undefined
+	fieldValues: Fields
 }
 
 type Props = {
-  providers:any,
+	providers: any
+	callbackUrl?: string
 }
 
-export function LoginForm({providers}:Props) {
+export function LoginForm({ providers, callbackUrl }: Props) {
+	const [state, setstate] = useState<State>(undefined)
 
-  const [state, setstate] = useState<State>(undefined)
+	const router = useRouter()
+	// const { session, setSession } = useGlobalContext()
+	const defaultFormData: FormState = {
+		message: "",
+		status: "",
+		errors: undefined,
+		fieldValues: {
+			email: "",
+			password: "",
+		},
+	}
 
-  const router = useRouter()
-  // const { session, setSession } = useGlobalContext()
-  const defaultFormData = {
-    message: '',
-    errors: undefined,
-    fieldValues: {
-      email: '',
-      password: '',
-    }
-  }
-  const formRef = useRef<HTMLFormElement>(null)
-  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	const [formState, formAction] = useFormState(onSubmit, defaultFormData)
 
+	async function onSubmit(
+		prevState: FormState,
+		data: FormData
+	): Promise<FormState> {
+		const email = data.get("email") as string
+		const password = data.get("password") as string
 
-  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
-    const email = data.get('email') as string
-    const password = data.get('password') as string
+		const inputValues = {
+			email,
+			password,
+		}
 
-    const inputValues = {
-      email,
-      password,
-    }
+		try {
+			const res = await signIn("credentials", {
+				email,
+				password,
+				redirect: false,
+				callbackUrl: callbackUrl || envs.FRONTEND_URL + "/account",
+			})
 
-    try {
+			if (res?.error)
+				return {
+					...formState,
+					status: "error",
+					message: "Login failed. Please check credentials",
+				}
 
-      const res = await signIn("credentials", { 
-        email, 
-        password, 
-        redirect: false,
-        callbackUrl: envs.FRONTEND_URL + '/account'
-      })
-      // console.log(res);
-      // @ts-ignore
-      const { error, status, ok, url } =  res
+      //? just using `res.ok` instead
+			// if (res?.status === 200)
 
-      if(error) return {
-        ...formState,
-        status: 'error',
-        message: 'Login failed. Please check credentials',
-      }
+			if (res?.ok) {
+				// todo but with next 14 not getting session on sudo page load
+				// router.refresh()
+				// router.push(`/account`)
+				// window.location.replace("/account")
 
+				router.push(res?.url || '/account')
+				return {
+					...formState,
+					status: "success",
+					message: "login successful",
+				}
+			}
+			return {
+				...formState,
+				status: "unknown",
+				message: "login unknown",
+			}
+		} catch (error: any) {
+			console.log("!!! Login Form ERROR: ", error.message)
+			return {
+				status: "error",
+				message: error?.message,
+				// TODO validate each field
+				errors: {
+					email: "",
+					password: "",
+				},
+				fieldValues: inputValues,
+			}
+		}
+	}
 
-      router.refresh()
-      router.push(`/account`)
+	async function socialSignin(id: string) {
+		try {
+			setstate("pending")
+			await signIn(id)
+			// setstate('success')
+		} catch (error) {
+			console.log(error)
+			setstate("error")
+		}
+	}
 
-      return {
-        ...formState,
-        status: 'success',
-        message: 'login successful',
-      }
-      
-    } catch (error:any) {
-      console.log('!!! Login Form ERROR: ', error.message);
-      return {
-        status: 'error',
-        message: error?.message,
-        // TODO validate each field
-        errors: {
-          email: '',
-          password: '',
-        },
-        fieldValues: inputValues
-      }
-      
-    }
-  }
+	const getIcon = (id: string) => {
+		switch (id) {
+			case "github":
+				return <FaGithub />
 
-  async function socialSignin(id:string){
-    try {
-      setstate('pending')
-      await signIn(id)
-      // setstate('success')
-      
-    } catch (error) {
-      console.log(error);
-      setstate('error')
-    }
-  }
-  
-  const getIcon =(id:string) => {
-    switch (id) {
-      case 'github':
-        return <FaGithub />
+			case "facebook":
+				return <FaFacebookSquare />
 
-      case 'facebook':
-        return <FaFacebookSquare />
+			case "twitter":
+				return <FaTwitterSquare />
 
-      case 'twitter':
-        return <FaTwitterSquare />
+			case "google":
+				return <FaGoogle />
 
-      case 'google':
-        return <FaGoogle />
-    
-      default:
-        return null
-    }
-  }
+			default:
+				return null
+		}
+	}
 
-  const statusIcon = (state:State) => {
+	const statusIcon = (state: State) => {
+		switch (state) {
+			case "pending":
+				return <TbLoader className={stylesAnim.spin} />
 
-    switch (state) {
-      case 'pending':
-        return <TbLoader className={stylesAnim.spin}/>
-        
-      case 'success':
-        return <TbCheck />
+			case "success":
+				return <TbCheck />
 
-      case 'error':
-        return <TbExclamationCircle />
-    
-      default:
-        return null
-    }
-  }
+			case "error":
+				return <TbExclamationCircle />
 
+			default:
+				return null
+		}
+	}
 
-  return (<>
+	return (
+		<form action={formAction} className={form}>
+			<fieldset>
+				<InputField
+					name={"email"}
+					type={"email"}
+					required={true}
+					autoComplete={"email"}
+					placeholder={"sam@hotmail.com"}
+					defaultValue={formState.fieldValues.email}
+					error={formState.errors?.email}
+				/>
+				<InputField
+					name={"password"}
+					type={"password"}
+					required={true}
+					autoComplete={"password"}
+					placeholder={"***"}
+					defaultValue={formState.fieldValues.password}
+					error={formState.errors?.password}
+				/>
 
-    <form action={formAction} className={styles.form}>
+				<p className={formState.status}>{formState.message}</p>
 
-      <fieldset>
+				{formState.status !== "success" && (
+					<Flex alignItems="center">
+						<SubmitButton label={"Login"} />
 
-        <label htmlFor="email">
-          Email
-          <input 
-            name={'email'}
-            id={'email'}
-            placeholder="sam@hotmail.com"
-            type={'text'}
-            required={true}
-            defaultValue={formState.fieldValues.email}
-            autoComplete={'email'}
-          />
-        </label>
+						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
+							password reset
+						</Link>
+					</Flex>
+				)}
+			</fieldset>
 
-        <label htmlFor="password">
-          Password
-          <input 
-            name={'password'}
-            id={'password'}
-            placeholder="***"
-            type={'password'}
-            required={true}
-            defaultValue={formState.fieldValues.password}
-          />
-        </label>
+			<fieldset>
+				<legend> or with Social {statusIcon(state)}</legend>
 
-        <p className={formState.status}> 
-          {formState.message} 
-        </p>
-
-        <div className='flex gap_1'>
-          <SubmitButton />
-
-          <Link 
-            href={`?${new URLSearchParams({ popup: 'modal'})}`}
-          > 
-            password reset
-          </Link>
-        </div>
-
- 
-
-      </fieldset>
-
-      <fieldset>
-        <legend> or with Social {statusIcon(state)}</legend>
-
-        
-        {Object.values(providers).filter((prov:any) => prov.id !== 'credentials').map((provider:any) => (
-
-            <button 
-              key={provider.name}
-              type='button'
-              className={'button'}
-              disabled={(state === 'pending')}
-              onClick={() => socialSignin(provider.id)}
-            >
-              <span>
-                Login with {provider.name} {getIcon(provider.id)}
-              </span>
-
-            </button>
-        ))}
-      </fieldset>
-    </form>
-
-  </>)
-}
-
-function SubmitButton(){
-
-  const { pending, } = useFormStatus()
-
-  return(
-    // <button
-    //   disabled={pending}
-    //   type={'submit'}
-    // >
-    //   {pending ? <LoadingAnim /> : 'Login'}
-    // </button>
-    <Button size={'medium'} disabled={pending} type={'submit'}> Login </Button>
-  )
+				{providers &&
+					Object.values(providers)
+						.filter((prov: any) => prov.id !== "credentials")
+						.map((provider: any) => (
+							<Button
+								key={provider.name}
+								type="button"
+								disabled={state === "pending"}
+								onClick={() => socialSignin(provider.id)}
+							>
+								Login with {provider.name} {getIcon(provider.id)}
+							</Button>
+						))}
+			</fieldset>
+		</form>
+	)
 }

@@ -1,9 +1,5 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 const FRONTEND_MOVIE = process.env.FRONTEND_URL + 'movie.mp4'
 

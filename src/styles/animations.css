@@ -1,0 +1,200 @@
+/* //todo add `@media (prefers-reduced-motion: no-preference){` for any `transform` animation */
+button,
+.button {
+	&:enabled:active {
+		transform: translateY(1px);
+	}
+
+	&.pending {
+		cursor: progress;
+	}
+
+	transition-property: color, background;
+	transition-duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+:is(h1, h2, h3, h4, h5, h6).targeted,
+:is(h1, h2, h3, h4, h5, h6):target::after {
+	content: "";
+	width: 100%;
+	height: var(--space-s);
+	background-color: var(--c-accent);
+	background: linear-gradient(-55deg, transparent, var(--c-accent));
+	position: absolute;
+	bottom: 0%;
+	left: 0;
+	z-index: 0;
+	opacity: 1;
+}
+
+.anim_border_spin {
+	/* display: grid;
+	grid-template-areas: "stack"; */
+	position: relative;
+
+	/* & span {
+		grid-area: stack;
+		place-content: center;
+		border-radius: var(--br-dull);
+	} */
+
+	&::before {
+		content: "";
+		pointer-events: none;
+		/* grid-area: stack; */
+		position: absolute;
+
+		height: 1px;
+		/* place-self: end; */
+		background-color: var(--c-txt);
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		border-radius: var(--br-dull);
+
+		margin-bottom: calc(-1 * var(--space-s));
+		/* background-color: var(--c-bg); */
+		background-image: linear-gradient(
+			80deg,
+			var(--c-body) 10%,
+			var(--c-accent) 90%,
+			transparent 20%
+		);
+
+		background-size: 900% 60%;
+
+		animation-name: border_spin;
+		animation-duration: 2000ms;
+		animation-iteration-count: infinite;
+		animation-direction: reverse;
+		animation-fill-mode: forwards;
+		animation-timing-function: linear;
+	}
+}
+
+/* cred - https://stackoverflow.com/a/78699836/15579591 */
+.border-dash-march {
+	--bd-gap-and-dash-length: 10px;
+	--bd-border-width: 4px;
+	--bd-border-color: var(--c-primary);
+	--bd-dash-percent: 70%;
+	--bd-speed: 300px;
+
+	height: 100%;
+	background: linear-gradient(
+			90deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			90deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			0deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		),
+		linear-gradient(
+			0deg,
+			var(--bd-border-color) var(--bd-dash-percent),
+			transparent calc(100% - var(--bd-dash-percent))
+		);
+	background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+	background-size: var(--bd-gap-and-dash-length) var(--bd-border-width),
+		var(--bd-gap-and-dash-length) var(--bd-border-width),
+		var(--bd-border-width) var(--bd-gap-and-dash-length),
+		var(--bd-border-width) var(--bd-gap-and-dash-length);
+	background-position: 0 0, var(--bd-speed) 100%, 0 var(--bd-speed), 100% 0;
+	animation: border_march 10s infinite linear;
+}
+
+@keyframes border_march {
+	0% {
+	}
+	100% {
+		background-position: var(--bd-speed) 0, 0 100%, 0 0, 100% var(--bd-speed);
+	}
+}
+
+.anim_shadow_breath {
+	/* outline-width: 3px;
+	outline-style: solid;
+	outline-color: var(--c-accent); */
+	box-shadow: 0px 0px 0px 5px var(--c-primary);
+	transition: box-shadow 0.6s linear;
+	margin: 0.5em;
+
+	animation-name: breath_shadow_radius;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	/* animation-fill-mode: forwards; */
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes breath_shadow_radius {
+	to {
+		box-shadow: 0px 0px 0px 10px var(--c-primary);
+	}
+}
+
+@keyframes border_spin {
+	0% {
+		background-position: 0% 50%;
+	}
+	/* 10% {
+		background-position: 30% 50%;
+	} */
+	100% {
+		background-position: 100% 50%;
+	}
+}
+
+.anim-spin-circle {
+	animation-name: circle_spin;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: normal;
+	/* animation-fill-mode: forwards; */
+	animation-timing-function: ease-out;
+}
+
+@keyframes circle_spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	/* 10% {
+		background-position: 30% 50%;
+	} */
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.tick-down-flick {
+	animation-name: trans_down_flick;
+	animation-duration: 1000ms;
+	animation-iteration-count: 1;
+	animation-direction: normal;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+@keyframes trans_down_flick {
+	0% {
+    transform: translate(-50%, 100%);
+    opacity: 0.1;
+	}
+	100% {
+    transform: translate(-50%, -8%);
+    opacity: 1;
+	}
+}

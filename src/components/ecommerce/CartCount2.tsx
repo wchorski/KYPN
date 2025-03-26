@@ -1,4 +1,4 @@
-import styles from '@styles/ecommerce/cart.module.scss'
+import styles from '@styles/ecommerce/cart.module.css'
 import { MdShoppingBag } from "react-icons/md";
 
 

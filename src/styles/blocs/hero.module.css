@@ -1,0 +1,22 @@
+.hero {
+  display: grid;
+  place-items: center;
+  min-height: 30vh;
+  background-size: cover;
+  background-position: center;
+  text-shadow: var(--shadow-1);
+
+  & > * {
+    grid-column: 1;
+  }
+
+
+
+}
+.backgroundImage {
+    background-color: white;
+    background-position: center;
+    background-size: cover;
+    min-height: 400px;
+    width: 100%;
+}

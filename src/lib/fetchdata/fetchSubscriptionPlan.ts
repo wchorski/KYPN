@@ -1,74 +1,26 @@
-import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import {  SubscriptionPlan } from "@ks/types"
+import type { SubscriptionPlan  } from "@ks/types"
+import type { Session } from "next-auth"
 
-const perPage = envs.PERPAGE
-
-export async function fetchSubscriptionPlan(id:string, session:any){
-
-  
-  try {
-    
-    const count = await keystoneContext.withSession(session).query.SubscriptionPlan.count({
-    
-    })
-    
-
-    const subscriptionPlan = await keystoneContext.withSession(session).query.SubscriptionPlan.findOne({
-      where: {
-        id
-      },
-      query: query
-    }) as SubscriptionPlan
-    
-    
-    return { subscriptionPlan, count }
-    
-  } catch (error) {
-    return {error}
-  }
+type Props = {
+	id: string
+	query: string
+	page?: number
+	session: Session | null
 }
 
-const query = `
-  id
-  author {
-    id
-    name
-  }
-  categories {
-    id
-    name
-  }
-  name
-  excerpt
-  description {
-    document
-  }
-  billing_interval
-  image
-  image
-  price
-  slug
-  status
-  stockMax
-  tags {
-    id
-    name
-  }
-  addons{
-    id
-    name
-    image
-    excerpt
-    price
-  }
-  coupons {
-    id
-    name
-    stripeId
-    amount_off
-    percent_off
-    duration_in_months
-    duration
-  }
-`
+export default async function fetchSubscriptionPlan({ id, query, session }: Props) {
+	try {
+		const subscriptionPlan = (await keystoneContext
+			.withSession(session)
+			.query.SubscriptionPlan.findOne({
+				where: { id },
+				query,
+			})) as SubscriptionPlan
+
+		return { subscriptionPlan }
+	} catch (error) {
+		console.log("!!! fetchSubscriptionPlan: ", error)
+		return { error }
+	}
+}

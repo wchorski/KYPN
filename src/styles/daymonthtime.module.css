@@ -1,0 +1,28 @@
+.daymonthtime :global {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	/* border: solid 2px var(--c-txt); */
+	/* border-radius: var(--br-sharp); */
+	max-width: 12rem;
+
+	& time {
+		font-size: 1.5rem;
+		white-space: collapse;
+	}
+
+	& time.date {
+		display: flex;
+		flex-direction: column;
+		background-color: var(--c-txt);
+		color: var(--c-txt-rev);
+
+		.month {
+			font-size: 1.1rem;
+		}
+	}
+
+	& time.time {
+		padding-right: 1.5rem;
+	}
+}

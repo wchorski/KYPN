@@ -1,0 +1,86 @@
+ARG PRODUCTION_PLATFORM
+FROM --platform=$PRODUCTION_PLATFORM node:21-alpine AS base
+
+FROM base AS builder
+WORKDIR /app
+
+# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY . ./
+COPY .env.prod ./.env
+
+RUN \
+  if [ -f pnpm-lock.yaml ]; then \ 
+    corepack enable pnpm && pnpm i --production --frozen-lockfile; \
+  elif [ -f yarn.lock ]; then \ 
+    yarn install --production --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then \ 
+    npm ci --production --frozen-lockfile; \
+  else \ 
+    echo "Lockfile not found." && exit 1; \
+  fi
+
+# RUN \
+#   if [ -f yarn.lock ]; then \ 
+#     yarn generate; \
+#   elif [ -f package-lock.json ]; then \ 
+#     npm generate; \
+#   elif [ -f pnpm-lock.yaml ]; then \ 
+#     pnpm generate; \
+#   else \ 
+#     echo "Lockfile not found." && exit 1; \
+#   fi
+
+RUN \
+  if [ -f pnpm-lock.yaml ]; then \ 
+    pnpm ks:build; \
+  elif [ -f yarn.lock ]; then \ 
+    yarn ks:build; \
+  elif [ -f package-lock.json ]; then \ 
+    npm ks:build; \
+  else \ 
+    echo "Lockfile not found." && exit 1; \
+  fi
+
+RUN \
+  if [ -f pnpm-lock.yaml ]; then \ 
+    pnpm next telemetry disable; \
+  elif [ -f yarn.lock ]; then \ 
+    yarn next telemetry disable; \
+  elif [ -f package-lock.json ]; then \ 
+    npm next telemetry disable; \
+  else \ 
+    echo "Lockfile not found." && exit 1; \
+  fi
+
+# Learn more here: https://nextjs.org/telemetry
+ENV NEXT_TELEMETRY_DISABLED 1
+
+FROM base AS runner
+WORKDIR /app
+
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml .
+
+COPY --from=builder /app/.keystone ./.keystone
+COPY --from=builder /app/schema.prisma ./schema.prisma
+COPY --from=builder /app/migrations ./migrations
+# COPY --from=builder /app/next.config.mjs ./
+## todo try getting rid of `public` folder?
+# COPY --from=builder /app/public ./public
+## todo do i need `node_modules`?
+COPY --from=builder /app/node_modules ./node_modules
+## todo maybe only copy over single modules like 
+# COPY --from=builder /app/node_modules/@keystone-core ./node_modules/@keystone-core
+# etc
+
+
+EXPOSE 3001
+ENV NODE_ENV production
+ENV PORT 3001
+
+# RUN npx keystone prisma migrate deploy
+# RUN npx keystone prisma generate
+# RUN npx keystone postinstall
+
+CMD ["npx", "keystone", "start", "--with-migrations"]
+# CMD ["pnpm", "ks:start"]

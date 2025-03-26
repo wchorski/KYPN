@@ -1,0 +1,124 @@
+ul.tickets :global {
+  padding: 0;
+  margin: 0;
+
+  & li{
+    border: solid 1px var(--c-primary);
+    margin-bottom: .2em;
+    border-radius: var(--br-dull);
+    padding: .5em;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m);
+
+    & .qrbutton{
+      margin-left: auto;
+
+      display: grid;
+      align-content: center;
+
+    }
+  }
+}
+
+.actions_wrap {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-ms);
+}
+
+.ticket :global {
+  border: solid 1px var(--c-primary);
+  box-shadow: var(--boxs-1);
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: var(--br-soft);
+}
+
+.meta_short{
+  padding: 1em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--space-ml);
+}
+
+ul.details{
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border-left: dashed 1px #e0e0e0;
+  padding: 1em;
+  margin: 0;
+  gap: var(--space-s);
+}
+
+.qrcode_wrap{
+  margin-left: auto;
+  padding: 1em;
+  background-color: white;
+  border-radius: var(--br-soft);
+  height: auto;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  flex: 1;
+
+  & svg{
+    width: 400px;
+    height: 400px;
+  }
+}
+
+& .status{
+  background-color: var(--c-txt-bg);
+  padding: .1em 1em;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 2px;
+  border-right-width: 15px;
+  border-radius: 15px 0 0 0;
+}
+
+.rip {  
+  height: 20px;
+  margin: 0 10px;
+  background-size: 4px 2px;
+  background-repeat: repeat-x;
+  background-position: center;
+  position: relative;
+
+}
+
+.texture_cardstock {
+  /* width: min(50%, 600px);
+  height: 50%;
+  position: fixed;
+  inset: 0;
+  margin: auto; */
+
+  /* Change this value to adjust the stamp perforation size: */
+  --radius: 1px;
+
+  background-image: 
+    radial-gradient(
+      var(--radius),
+      transparent 98%,
+      white
+    ),
+    linear-gradient(rgb(236, 236, 236) 0 0);
+  background-repeat: 
+    round, 
+    no-repeat;
+  background-position:
+    calc(var(--radius) * -1.5) calc(var(--radius) * -1.5),
+    50%;
+  background-size:
+    calc(var(--radius) * 3) calc(var(--radius) * 3),
+    calc(100% - var(--radius) * 3) calc(100% - var(--radius) * 3);
+}

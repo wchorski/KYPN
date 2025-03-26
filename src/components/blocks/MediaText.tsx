@@ -1,6 +1,6 @@
+import { content_wrap, media_wrap,mediatext } from '@styles/blocs/mediatext.module.css'
 import Image from "next/image";
-import styles from '@styles/blocs/mediatext.module.scss'
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 // const bg = `https://i.pinimg.com/originals/13/3b/75/133b756e50d32b13e227cdf62bad3cb7.jpg`
 
@@ -29,22 +29,22 @@ export function MediaText({imageSrc, imageAlt, content, rowReverse = false, chil
   
   // console.log(rowReverse);
   
-  
+  const clsnms = [mediatext, 'mediatext'].join(' ')
   return (
     <div 
-      className={styles.mediatext} 
+      className={clsnms} 
       // bg={imageSrc} 
-      style={{msFlexDirection: rowReverse ? 'row-reverse' : 'row'}}
+      style={{flexDirection: rowReverse ? 'row-reverse' : 'row'}}
     >
-      <div className="content-cont">
-        <article>
+      <div className={content_wrap}>
+
           {content}
           {children}
-        </article>
+
 
       </div>
 
-      <div className="media-cont">
+      <div className={media_wrap}>
         <figure>
           <Image 
             src={imageSrc || ''}

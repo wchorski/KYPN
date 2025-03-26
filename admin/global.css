@@ -1,0 +1,123 @@
+/* STYLES FOR KEYSTONE DASHBOARD (BACKEND APP) */
+
+.nav-link-group {
+  position: relative;
+  & svg {
+    padding: 2px;
+    color: grey;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.7rem;
+    z-index: 3;
+  }
+}
+
+table{
+  border-collapse: collapse;
+}
+table tbody tr:nth-child(even){
+  background-color: rgba(211, 211, 211, 0.24);
+}
+table tbody tr:hover{
+  background-color: rgba(250, 255, 184, 0.24);
+}
+table td, table th{
+  border-color: lightgrey;
+  border-style: solid;
+  padding-inline: 5px;
+}
+
+table td {
+  border-bottom-width: 1px;
+}
+
+table td button {
+  color: black;
+  background-color: white;
+}
+
+table th {
+  text-align: left;
+  border-bottom-width: 4px;
+}
+
+/* todo work on this dark mode override
+@media (prefers-color-scheme: dark) {
+
+  :root {
+    --app-bg: #171923;
+    --input-bg: #272a3b;
+    --text: #a0aec0;
+    --text-heading: #f7f9fc;
+    --border-muted: #212633;
+    --button-shadow: 0 4px 14px 0 rgb(0 118 255 / 10%);
+    --brand-bg-90: #2d7aff;
+    --seperator: #1b2d3f;
+    --link: #7b94bb;
+  }
+
+  body, header, main {
+    background-color: var(--app-bg) !important;
+  }
+  header, .css-11y99f {
+    border-bottom: 1px solid var(--seperator) !important;
+  }
+  h1,h2,h3,h4,h5,h6 {
+    color: var(--text-heading) !important;
+  }
+  p, span, small, strong, li, div, label, legend {
+    color: var(--text) !important;
+  }
+  .css-1c86tco{
+    background-color: var(--app-bg) !important;
+    border: 1px solid var(--border-muted) !important;  
+  }
+  nav a[aria-current="location"]{
+    box-shadow: var(--button-shadow) !important;
+    background-color: #426b8a !important;
+  }
+  nav a{
+    &:hover{
+      color: var(--brand-bg-90) !important;
+      background-color: #112c41 !important;
+    }
+  }
+  a:has(svg){
+    background-color: transparent !important;
+
+    &:hover{
+      background-color: var(--brand-bg-90) !important;
+    }
+  }
+  button {
+    color: var(--text-heading) !important;
+    background-color: var(--app-bg) !important;
+    box-shadow: var(--button-shadow) !important;
+  }
+  div[role="dialog"] {
+    background-color: var(--app-bg) !important;
+    border: solid 2px var(--seperator);
+  }
+  input {
+    background-color: var(--input-bg) !important;
+    border-color: var(--seperator) !important;
+    color: #c7d3e8 !important;
+  }
+  thead tr th, tbody tr td {
+    background-color: var(--app-bg) !important;
+    border-bottom: 2px solid var(--seperator) !important;
+
+    a {
+      color: var(--link) !important;
+      &:hover{
+        color: var(--brand-bg-90) !important;
+      }
+    }
+  }
+
+  .css-1wghm3x{
+    background-color: var(--app-bg) !important;
+    border-color: var(--seperator) !important;
+  }
+} */

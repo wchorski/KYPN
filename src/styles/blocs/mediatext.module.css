@@ -1,0 +1,40 @@
+.content_wrap {
+	padding: var(--space);
+}
+
+.content_wrap,
+.media_wrap {
+	display: grid;
+	place-content: center;
+}
+.mediatext {
+	display: flex;
+	max-width: var(--w-sitemax);
+	margin-inline: auto;
+  width: 100%;
+  justify-content: space-between;
+
+	& figure {
+		margin: 0;
+		background-position: 50% 50%;
+		background-size: cover;
+		height: 100%;
+	}
+
+	& img {
+		width: 100%;
+		height: auto;
+		object-fit: cover;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.mediatext :global {
+		flex-direction: column;
+
+		& .content_wrap,
+		& .media_wrap {
+			width: 100%;
+		}
+	}
+}

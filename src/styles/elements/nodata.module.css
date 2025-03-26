@@ -1,0 +1,12 @@
+span.noData {
+  color: var(--c-txt-sub);
+  display: flex;
+  align-items: center;
+
+  opacity: .7;
+  padding-block: 1rem;
+
+  & svg{
+    margin-right: 1rem;
+  }
+}

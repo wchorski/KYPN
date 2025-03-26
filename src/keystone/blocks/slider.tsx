@@ -1,9 +1,6 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { Box, jsx } from '@keystone-ui/core';
+// import { Box } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const slider = component({
   label: 'Slider',
@@ -19,9 +16,10 @@ export const slider = component({
         >
           {props.fields.items.elements.map(item => {
             return (
-              <Box
+              // <Box
+              <div
                 key={item.key}
-                margin="xsmall"
+                // margin="xsmall"
                 style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
@@ -55,7 +53,7 @@ export const slider = component({
                 >
                   {item.fields.title.value}
                 </h3>
-              </Box>
+              </div>
             );
           })}
         </div>

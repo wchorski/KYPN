@@ -1,0 +1,22 @@
+.pricetag {
+  color: var(--c-txt);
+  /* text-shadow: var(--c-dark) 1px 1px 3px; */
+  font-weight: 600;
+  line-height: 1;
+  /* font-size: 2rem; */
+  display: inline-block;
+
+  & sup {
+    /* vertical-align: top; */
+    /* font-size: 1.6rem; */
+    font-weight: lighter;
+  }
+
+  & span.amount, .cents{
+    font-weight: bold;
+  }
+
+  /* & span.cents{
+    font-size: 1.7rem;
+  } */
+}

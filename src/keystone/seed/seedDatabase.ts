@@ -1,371 +1,379 @@
-// @ts-ignore
-import { Context } from '.keystone/types';
-import { 
-  addons_seedjson, 
-  avail_seedjson, 
-  categories_seedjson, 
-  events_seeddata, 
-  locations_seeddata, 
-  pages_seeddata, 
-  posts_seedjson, 
-  // productImage_seedjson, 
-  products_seed, 
-  roles_seedjson, 
-  services_seedjson, 
-  subscriptionPlans_seedjson, 
-  tags_seedjson, 
-  user_seeddata 
-} from './seed_data';
-//@ts-ignore
-import { prepareToUpload } from '../prepareToUpload.js';
-import { Addon, Category, Post, Product, Service, Tag, User } from '../types';
-import { slugFormat } from '../../lib/slugFormat';
-
-const seedUsers = async (context: Context) => {
-  const { db } = context.sudo();
-  const rawJSONData = JSON.stringify(user_seeddata);
-  const seedUsers: any[] = JSON.parse(rawJSONData);
-  const usersAlreadyInDatabase = await db.User.findMany({
-    where: {
-      email: { in: seedUsers.map(user => user.email) },
-    },
-  });
-  const usersToCreate = seedUsers.filter(
-    // @ts-ignore
-    seedUser => !usersAlreadyInDatabase.some((u:User) => u.email === seedUser.email)
-  )
-
-  usersToCreate.map(obj => {
-    console.log(" + USER: " + obj.name)
-  })
-
-  await db.User.createMany({
-    data: usersToCreate,
-  });
-};
-
-const seedAvail = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjs: any[] = avail_seedjson;
-  const objsAlreadyInDatabase = await db.Availability.findMany({
-    where: {
-      // @ts-ignore
-      start: { in: seedObjs.map(obj => obj.start) },
-    },
-  });
-  const objsToCreate = seedObjs.filter(
-    seedObj => !objsAlreadyInDatabase.some((obj:any) => obj.start === seedObj.start)
-  )
-
-  objsToCreate.map(obj => {
-    console.log(" + Avail: " + obj.start)
-  })
-
-  await db.Availability.createMany({
-    data: objsToCreate,
-  });
-};
-
-const seedRoles = async (context: Context) => {
-  const { db } = context.sudo();
-  // const rawJSONData = JSON.stringify(roles_seedjson);
-  const seedRoles: any[] = roles_seedjson
-  // @ts-ignore
-  const objsAlreadyInDatabase = await db.Role.findMany({
-    where: {
-      name: { in: seedRoles.map(i => i.name) },
-    },
-  });
-  const itemsToCreate = seedRoles.filter(
-    seedRole => !objsAlreadyInDatabase.some((u: any) => u.name === seedRole.name)
-  );
-  
-  itemsToCreate.map(obj => {
-    console.log(" + Role: " + obj.name)
-  })
-
-  // @ts-ignore
-  await db.Role.createMany({
-    data: itemsToCreate,
-  });
-};
-
-// seed posts and connect with users
-const seedPosts = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedPosts: any[] = posts_seedjson;
-  const postsAlreadyInDatabase = await db.Post.findMany({
-    where: {
-      slug: { in: seedPosts.map(post => post.slug) },
-    },
-  });
-  
-  const postsToCreate = seedPosts.filter(
-    // @ts-ignore
-    seedPost => !postsAlreadyInDatabase.some((p:Post)=> p.slug === seedPost.slug)
-  );
-
-  postsToCreate.map(obj => {
-    console.log(" + Post: " + obj.slug)
-  })
-
-  await db.Post.createMany({
-    data: postsToCreate.map(p => ({ ...p, content: p?.content?.document })),
-  });
-};
-
-const seedTags = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = tags_seedjson;
-  const objectsAlreadyInDatabase = await db.Tag.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Tag) => dbObj.name === seedObj.name)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Tag: " + obj.name)
-  })
-
-  await db.Tag.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedCategories = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = categories_seedjson;
-  const objectsAlreadyInDatabase = await db.Category.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((dbObj:Category) => dbObj.name === seedObj.name)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Category: " + obj.name)
-  })
-
-  await db.Category.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedProducts = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = products_seed;
-  const objectsAlreadyInDatabase = await db.Product.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  })
-  
-  const objsToCreate = seedObjects.filter(
-    //@ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((p:Product) => p.slug === seedObj.slug)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Product: " + obj.slug)
-  })
-
-  await db.Product.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedSubscriptions = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = subscriptionPlans_seedjson;
-  const objectsAlreadyInDatabase = await db.SubscriptionPlan.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.slug === seedObj.slug)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + SubPlan: " + obj.slug)
-  })
-
-  await db.SubscriptionPlan.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedEventData = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = events_seeddata;
-  const objectsAlreadyInDatabase = await db.Event.findMany({
-    where: {
-      summary: { in: seedObjects.map(obj => obj.summary) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.summary === seedObj.summary)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Event: " + obj.summary)
-  })
-
-  await db.Event.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedLocations = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = locations_seeddata;
-  const objectsAlreadyInDatabase = await db.Location.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((p: any) => p.name === seedObj.name)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Location: " + obj.name)
-  })
-
-  await db.Location.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-const seedServices = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = services_seedjson;
-  const objectsAlreadyInDatabase = await db.Service.findMany({
-    where: {
-      name: { in: seedObjects.map(obj => obj.name) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    // @ts-ignore
-    seedObj => !objectsAlreadyInDatabase.some((p: Service) => p.name === seedObj.name)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Service: " + obj.name)
-  })
-
-  await db.Service.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedAddons = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = addons_seedjson;
-
-  // const slugNames = seedObjects.map(obj => slugFormat(obj.name))
-  
-  const objectsAlreadyInDatabase = await db.Addon.findMany({
-    where: {
-      // @ts-ignore
-      slug: { in: seedObjects.map(obj => slugFormat(obj.slug)) },
-    },
-  });
-  
-  
-  // TODO this doesn't work on windows for some reason? objectsAlreadyInDatabase shows as empty array []
-  
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj: any) => (obj.slug === seedObj.slug))
-  )
-
-  objsToCreate.map(obj => {
-    console.log(" + Addon: " + obj.slug)
-  })
-
-  await db.Addon.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-const seedPages = async (context: Context) => {
-  const { db } = context.sudo();
-  const seedObjects: any[] = pages_seeddata;
-  const objectsAlreadyInDatabase = await db.Page.findMany({
-    where: {
-      slug: { in: seedObjects.map(obj => obj.slug) },
-    },
-  });
-  const objsToCreate = seedObjects.filter(
-    seedObj => !objectsAlreadyInDatabase.some((obj: any) => obj.slug === seedObj.slug)
-  );
-
-  objsToCreate.map(obj => {
-    console.log(" + Page: " + obj.slug)
-  })
-
-  await db.Page.createMany({
-    data: objsToCreate.map(obj => ({ ...obj })),
-  });
-};
-
-// const seedProductImages = async (context: Context) => {
-//   const { db } = context.sudo();
-//   const seedObjects: any[] = productImage_seedjson;
-//   const objectsAlreadyInDatabase = await db.ProductImage.findMany({
-//     where: {
-//       // @ts-ignore
-//       filename: { in: seedObjects.map(obj => obj.filename) },
-//     },
-//   });
-
-//   const objsToCreate = seedObjects.filter(
-//     // @ts-ignore
-//     seedObj => !objectsAlreadyInDatabase.some(p => p.filename === seedObj.filename)
-//   );
-
-
-//   await db.ProductImage.createMany({
-//     data: objsToCreate.map(obj => {
-//       // console.log(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-
-
-//       return ({
-//         ...obj,
-//         // image: {
-//         //   publicUrl: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-//         //   publicUrlTransformed: 'https://res.cloudinary.com/dh5vxixzn/image/upload/v1682118233/cutefruit/product_images/cf-9_mevrrl.png',
-//         //   //   upload: prepareToUpload(path.join(process.cwd() + `/public/assets/images/${obj.filename}`))
-//         // }
-//         // TODO why no seed upload files work?
-//         // upload: prepareToUpload(path.join(process.cwd() + `/public/seedfiles/${obj.filename}`))
-//       })
-//     }),
-//   });
-// };
+import { envs } from "../../../envs"
+import { dateAdjuster } from "../../lib/dateCheck"
+import allDataJson from "./extracted/seedData.json"
+import type { Context, Lists, TicketCreateInput } from ".keystone/types"
 
 export const seedDatabase = async (context: Context) => {
-  console.log(`🌱🌱🌱 Seeding database... 🌱🌱🌱`);
-  await seedUsers(context)
-  await seedRoles(context)
-  await seedCategories(context)
-  await seedTags(context)
-  // // await seedAvail(context)
-  await seedPosts(context)
-  await seedLocations(context)
-  
-  await seedServices(context)
-  // // await seedProductImages(context)
-  await seedProducts(context)
-  await seedSubscriptions(context)
-  await seedEventData(context)
-  await seedAddons(context)
-  await seedPages(context)
-  console.log(`🌱🌱🌱 Seeding database completed. 🌱🌱🌱`);
-};
+	console.log(`🌱🌱🌱 Seeding database 🌱🌱🌱`)
+	await seedSchemaItems("Role", "name", allDataJson.roles, context)
+	await seedSchemaItems("User", "name", allDataJson.users, context)
+	await seedSchemaItems("Category", "name", allDataJson.categories, context)
+	await seedSchemaItems("Tag", "name", allDataJson.tags, context)
+	await seedSchemaItems("Page", "title", allDataJson.pages, context)
+	await seedSchemaItems("Post", "title", allDataJson.posts, context)
+	await seedSchemaItems(
+		"Announcement",
+		"link",
+		allDataJson.announcements,
+		context
+	)
+
+	await seedSchemaItems("Location", "address", allDataJson.locations, context)
+	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
+	await seedSchemaItems("Service", "name", allDataJson.services, context)
+	await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
+
+	await seedSchemaItems("Event", "summary", allDataJson.events, context)
+	// seedTicketOrders creates "Ticket" items after Events are created
+
+	await seedSchemaItems("Product", "name", allDataJson.products, context)
+	await seedSchemaItems(
+		"SubscriptionPlan",
+		"name",
+		allDataJson.subscriptionPlans,
+		context
+	)
+	console.log(`🌲🌲🌲 Seeding complete 🌲🌲🌲`)
+}
+
+const seedSchemaItems = async (
+	schemaType: string,
+	compairKey: string,
+	seedJson: any[],
+	context: Context
+) => {
+
+	const { db: sudoDB } = context.sudo()
+
+	//@ts-ignore
+	const itemsAlreadyInDatabase = await sudoDB[schemaType].findMany({
+		where: {
+			[compairKey]: {
+				// @ts-ignore
+				in: seedJson.flatMap((item) => item[compairKey]) as string[],
+			},
+		},
+	})
+
+	const itemsToCreate = seedJson.filter(
+		(item) =>
+			!itemsAlreadyInDatabase.some(
+				(prevItem: any) => prevItem[compairKey] === item[compairKey]
+			)
+	)
+
+	if (
+		schemaType === "Event" &&
+		process.env.SEED_RANDOM_RELATIVE_DATES === "true"
+	) {
+		randoEventDates(itemsToCreate)
+	}
+	if (schemaType === "Booking") {
+		itemsToCreate.forEach((item) => {
+			//? virtual field
+			delete item.summary
+			delete item.durationInHours
+			delete item.price
+		})
+
+		if (process.env.SEED_RANDOM_RELATIVE_DATES === "true") {
+			randoEventDates(itemsToCreate)
+		}
+	}
+
+	//? remove id as new database will create new ids
+	itemsToCreate.forEach((item) => {
+		delete item.id
+	})
+
+	const formattedItems = itemsToCreate.map((item) => ({
+		...removeTopLevelEmptyArrays(item),
+
+		//? DOCUMENT field Type (rich text)
+		...(item.content ? { content: item.content.document } : {}),
+		...(item.description ? { description: item.description.document } : {}),
+		...(item.details ? { details: item.details.document } : {}),
+		...(item.password
+			? { password: item.email + envs.SEED_PASSWORD_SECRET }
+			: {}),
+
+		//? relation TO ONE
+		...(item.role ? { role: { connect: { name: item.role.name } } } : {}),
+		...(item.author
+			? {
+					author: { connect: { email: item.author.email } },
+			  }
+			: {}),
+		...(item.customer
+			? {
+					customer: { connect: { email: item.customer.email } },
+			  }
+			: {}),
+		...(item.location
+			? {
+					location: { connect: { address: item.location.address } },
+			  }
+			: {}),
+		...(item.service
+			? {
+					service: { connect: { name: item.service.name } },
+			  }
+			: {}),
+
+		//? relation TO MANY
+		...(item.locations
+			? {
+					locations: {
+						connect: item.locations?.map((field: any) => ({
+							address: field.address,
+						})),
+					},
+			  }
+			: {}),
+		...(item.coupons
+			? {
+					coupons: {
+						connect: item.coupons?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: {}),
+		...(item.addons?.length > 0
+			? {
+					addons: {
+						connect: item.addons?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: //! Product.addons: Input error: You must provide "connect" or "create" in to-many relationship inputs for "create" operations.
+			//! will this cause problems for other schemas?
+			item.addons?.length === 0
+			? {}
+			: {}),
+		// addons:null,
+		//? USERS Start
+		...(item.privateAccess
+			? {
+					privateAccess: {
+						connect: item.privateAccess?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.employees
+			? {
+					employees: {
+						connect: item.employees?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.employee_requests
+			? {
+					employee_requests: {
+						connect: item.employee_requests?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.hosts
+			? {
+					hosts: {
+						connect: item.hosts?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		...(item.cohosts
+			? {
+					cohosts: {
+						connect: item.cohosts?.map((field: any) => ({
+							email: field.email,
+						})),
+					},
+			  }
+			: {}),
+		// USERS End
+		...(item.categories?.length > 0
+			? {
+					categories: {
+						connect: item.categories?.map((field: any) => ({
+							name: field.name,
+						})),
+					},
+			  }
+			: {}),
+		...(item.tags?.length > 0
+			? {
+					tags: {
+						connect: item.tags?.map((field: any) => ({ name: field.name })),
+					},
+			  }
+			: {}),
+	}))
+
+	//@ts-ignore
+	const createdItems = await sudoDB[schemaType].createMany({
+		data: formattedItems,
+	})
+
+	createdItems.map((item: any) => {
+		console.log(` + ${schemaType}: ` + item[compairKey])
+	})
+
+	// if (schemaType === "Service") seedBookings(createdItems, context)
+	//? I must auto create tickets based off events because Event and Ticket have no `unique` fields
+	// if (schemaType === "Event") await seedTicketOrders(createdItems, context)
+}
+
+// ---
+
+//? it works but for now I'm setting bookings strait from json
+// async function seedBookings(services: Lists.Service.Item[], context: Context) {
+// 	const { db: sudoDB } = context.sudo()
+
+// 	const fakeEmployees = [
+// 		// {email: "eddy@tawtaw.site"},
+// 		{ email: "admin@tawtaw.site" },
+// 	]
+
+// 	// TODO hook this into orders like how seedTicketOrders does it
+// 	const itemsCreated = await sudoDB.Booking.createMany({
+// 		data: services.map((item) => ({
+// 			start: "2024-11-13T00:29:07.546Z",
+// 			end: "2024-11-13T05:29:07.546Z",
+// 			service: { connect: { id: item.id } },
+// 			location: { connect: { address: allDataJson.locations[0].address } },
+// 			customer: { connect: { email: "admin@tawtaw.site" } },
+// 			addons: {
+// 				connect: allDataJson.addons.map((adn) => ({ name: adn.name })),
+// 			},
+// 			employees: {
+// 				connect: fakeEmployees.map((emp) => ({ email: emp.email })),
+// 			},
+// 		})),
+// 	})
+
+// 	itemsCreated.map((item) => {
+// 		console.log(" + Booking: " + item.name + " | " + item.serviceId)
+// 	})
+// }
+
+// remove empty relational items like `categories` or `tags` and not conflict with list items that don't have matching ones
+export function removeTopLevelEmptyArrays(
+	obj: Record<string, any>
+): Record<string, any> {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([_, value]) => !Array.isArray(value) || value.length > 0
+		)
+	)
+}
+
+async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
+	// throw new Error('🐸 seedTicketOrders find out how to do this')
+	const { db: sudoDB } = context.sudo()
+
+	const fakeEmail = "admin@tawtaw.site"
+	const orderStatuses = ["PAYMENT_RECIEVED", "REQUESTED"]
+	// todo hook this into `tixToOrder`. not really worth it to figure out rn
+	const tixQuantity = 2
+
+	await Promise.all(
+		events.map(async (event) => {
+			const tickets: TicketCreateInput[] = Array.from(
+				{ length: tixQuantity },
+				(_, index) => ({
+					event: { connect: { id: event.id } },
+					holder: { connect: { email: "admin@tawtaw.site" } },
+					email: "admin@tawtaw.site",
+				})
+			)
+
+			const order = await sudoDB.Order.createOne({
+				// const order = await context.withSession(session).db.Order.createOne({
+				data: {
+					// stripeCheckoutSessionId: null,
+					// stripePaymentIntent: null,
+					email: fakeEmail,
+					status: orderStatuses[0],
+					// ticketItems: { create: tickets },
+					items: {
+						create: [
+							{
+								quantity: tixQuantity,
+								type: "SALE",
+								subTotal: event.price,
+								tickets: { create: tickets },
+							},
+						],
+					},
+					user: { connect: { email: fakeEmail } },
+				},
+			})
+
+			//? dev cheat to simulate even that becomes a past event because tickets are not allowed to be create on past events
+			if (event.summary.startsWith("PAST: ")) {
+				await sudoDB.Event.updateOne({
+					where: { id: event.id },
+					data: {
+						start: dateAdjuster(event.start, { months: -1 }),
+						end: dateAdjuster(event.end, { months: -1 }),
+						status: "PAST",
+					},
+				})
+			}
+
+			console.log(` + Ticket Ordered for Event: ${event.summary}`)
+		})
+	)
+}
+
+const dateAdjusterFuncsForEvent = (date: string) => [
+	dateAdjuster(date, { days: 1 }),
+	dateAdjuster(date, { months: -1 }),
+	dateAdjuster(date, { days: 4 }),
+	dateAdjuster(date, { months: 1 }),
+	dateAdjuster(date, { days: -2 }),
+]
+
+type DateRange = {
+	start: string
+	end: string
+	dateCreated: string
+	dateModified: string
+}
+
+const randoEventDates = (items: DateRange[]) => {
+	items.forEach((item, i: number) => {
+		const adjustFuncs = dateAdjusterFuncsForEvent(item.start)
+
+		const now = new Date()
+
+		item.start = preserveTime(new Date(now), item.start)
+		item.end = preserveTime(new Date(now), item.end)
+		item.dateCreated = preserveTime(new Date(now), item.dateCreated)
+		item.dateModified = preserveTime(new Date(now), item.dateModified)
+
+		// Update start and end in place
+		item.start = adjustFuncs[i % adjustFuncs.length]
+		item.end = adjustFuncs[(i + 1) % adjustFuncs.length]
+	})
+}
+
+const preserveTime = (baseDate: Date, targetTime: string): string => {
+	const time = new Date(targetTime)
+	baseDate.setHours(
+		time.getHours(),
+		time.getMinutes(),
+		time.getSeconds(),
+		time.getMilliseconds()
+	)
+	return baseDate.toISOString()
+}

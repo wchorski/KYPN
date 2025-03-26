@@ -1,97 +1,86 @@
-# KeystoneJS CMS, NextJS
+## Keystone-Next-Auth-AIO-Exammple
 
-A extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
+combines keystone CMS, Next 14, and Next Auth into one package while still retaining Keystone's Admin UI.
+
+An extended example of an integrated KeystoneJS CMS in a NextJS App Directory, [example](https://github.com/keystonejs/keystone/tree/main/examples/framework-nextjs-app-directory). Self hostable with Docker
 
 ## Features
+
 <details>
   <summary>view</summary>
 
-  ### Analytics
-  Site analytics are set up to use an externally hosted [Umami](https://umami.is/) app. There are plans to add in admin dashboard analytics that insite user count, sales, and engagement data.
+### Analytics
 
-  ### Calendar
-  Events and Bookings can auto populate a connected Google Calendar. 
+Site analytics are set up to use an externally hosted [Umami](https://umami.is/) app. There are plans to add in admin dashboard analytics that insite user count, sales, and engagement data.
 
-</details>
+### Calendar
 
-## Roles
+Events and Bookings can auto populate a connected Google Calendar.
 
-> These can be edited from the Keystone UI, but here is the initial permission layout
+### Self Host
 
-- Admin 
-  - everything
-  - CRUD any Product
-  - CRUD any Role
-  - CRUD any Order / OrderItem
-- Editor 
-  - 'author' of products
-  - CRUD any product
-- Client 
-  - buy products
-  - view their own orders
-- Anyone 
-  - view store items
+Dockerfiles and Docker Compose configs for hosting anywhere there is Docker
 
-## Init
-
-- create site unique assets for your brand 
-  - `public/assets/logo.svg`
-  - `public/assets/logo.png`
-  - `public/assets/placeholder.png`
-  - `public/favicon.ico`
-- copy these files & folders (or use `init.sh` to automate) 
-  - `cp src/layout.init.tsx src/layout.tsx`
-  - `cp src/components/menus/Footer.init.tsx src/components/menus/Footer.tsx`
-  - `cp src/components/menus/Hero.init.tsx src/components/menus/Hero.tsx`
-  - `cp src/components/menus/Nav.init.tsx src/components/menus/Nav.tsx`
-  - `cp src/components/menus/MainNavList.init.tsxsrc/components/menus/MainNavList.tsx` <!-- - `cp src/styles-init src/styles` -->
-  - `cp src/styles/vars.init.scss src/styles/vars.scss`
-  - `cp src/styles/fonts.init.ts src/styles/fonts.ts`
-  - `cp src/keystone/seed/seed_data.empty.ts src/keystone/seed/seed_data.ts`.
-
-## Authentication
-
-uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration
-
-set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
-
-| Provider | setup url |
-|----------|-----------|
-| Github | https://github.com/settings/developers |
-| Google | https://console.cloud.google.com/apis/dashboard |
-
-## Email
-
-Right now, I'm just using gmail's SMTP. Should be good for low traffic order confirmation & password reset. Once I integrate running mail campaigns I'll need a better solution.
-
-https://myaccount.google.com/security
-
-## Production
-<details>
-<summary> config </summary>
-- Keystone backend: **MAKE SURE DEV ENVIRONMENT IS GOOD 2 GO BEFORE PRODUCTION**. The Prisma types are auto generated and can become unsynced, do not make little tweaks in between dev and prod environments
-- **self hosting** isn't strait forward. Here is my work around 
-  - create a seperate `docker container` that runs `postgres`
-  - run your dev environment to create the tables and edit the schemas
-  - now you can `build` and `run` your app within a `docker container`
 </details>
 
 ## Development
+
+For those who just cloned the repo and want to customize this template or contribute back to this repo
+
+```shell
+git clone https://github.com/wchorski/KYPN.git
+## Look through .env file and set to your environment needs
+cp .env.example .env
+pnpm i
+pnpm dev
+
+## only next app
+pnpm n:dev
+## only keystone cms app
+pnpm ks:dev
+```
+
 <details>
-<summary> config </summary>
+  <summary>view more</summary>
+
+#### Init Components & Pages
+
+This repo ignores some key files to make the frontend as customizable as possible between projects.
+
+check the `ini` folder for examples. I created a `init-files.sh` but haven't tested it. `cp-init-files.sh` is for repo devs who want to update the inital files for everyone.
+
+#### Seed or Extract Data
+
+```
+cp ./keystone/seed/extracted/seedData.json.example ./keystone/seed/extracted/seedData.json
+```
+
+set `SEED_EXTRACT_NONE` to `extract` and run `pnpm ks:dev` to save _most_ data to a `json` file `seedData.json`
+
+### CMS App
 
 > [!warning] changes made to the keystone config / schema / etc must stop and restart both services in this order or you'll recieve `[Error: EPERM: operation not permitted, unlink...` for things like
 
 > [!warning] any file imported inside the `/src/keystone` directory must be an absolute value. Typescript likes to import via `@...` and that will not work for backend imports. example: `import { envs } from '../../../envs'` and not `import { envs } from '@/envs';`
 
-## Rules & Permissions
-any changes to **access** **filters** **operations** or **permissions** will not take effect in the NextJs app until the server is reloaded. Luckily the **Keystone** app will hot reload with these changes
+### Authentication
 
-> 2. next `n:dev`
+uses [Next-Auth](https://next-auth.js.org/) to authenticate session. Check KeystoneJS [example](https://github.com/keystonejs/keystone/tree/main/examples/custom-session-next-auth) for a more basic integration
 
-### Mail Templating
+set your `NEXTAUTH_SECRET` env with `openssl rand -base64 32`
 
-[React Email](https://react.email/)
+| Provider | setup url                                       |
+| -------- | ----------------------------------------------- |
+| Github   | https://github.com/settings/developers          |
+| Google   | https://console.cloud.google.com/apis/dashboard |
+
+### Email
+
+Right now, I'm just using gmail's SMTP. Should be good for low traffic order confirmation & password reset. Once I integrate running mail campaigns I'll need a better solution.
+
+https://myaccount.google.com/security
+
+Mail Templating with [React Email](https://react.email/)
 
 ### Stripe
 
@@ -99,95 +88,92 @@ using stripe CLI have it listen to this webhook
 https://stripe.com/docs/webhooks/quickstart
 
 ```sh
-stripe listen --forward-to http://localhost:3000/api/checkout/webhook
+stripe listen --forward-to http://localhost:3000/api/webhooks/stripe
 ```
-
-During development, if you'd like to deploy your `Pages`, `Products`, `Roles` during production, save them to `seed_data.ts`
-
-> [!info] Document
-> any field using the `document` type will query with an extra nested `document` key. You can remove this
-
-example query from apollo playground
-
-```json
-{
-  content: { 
-    document: [
-      {
-        type: "paragraph",
-        children: [
-          {
-            text: "Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries."
-          }
-        ]
-      }
-    ],
-  }
-}
-```
-
-take out the `document` field
-
-```json
-{
-  content: [
-      {
-        type: "paragraph",
-        children: [
-          {
-            text: "Learn about the amazing health benefits of various types of berries, including blueberries, strawberries, and raspberries."
-          }
-        ]
-      }
-    ],
-}
-```
-
-ignore list when searching code base `.next, *.test.tsx, config.js, *.graphql, *.prisma, .keystone`
 
 ### Database Migrations
-When returning to development you may add new fields to the database schema. This will trigger a migration. Properly name and save the migration. This file will be written inside the `./migrations` folder
 
-When returning to the production environment, you will have to apply these new changes so **Postgres** is aware of these changes.
+When returning to development (from production) you may add new fields to the database schema. You will need to create a migration.
 
-> [!warning] For Now
-> To apply migrations I connect to my prod database within my dev environment and run `yarn ks:dev`. This is not ideal. Later I will add `keystone start --with-migrations` to the `Dockerfile.backend` so that this is all automated
+```shell
+pnpm migrate
+```
+
+Properly name and save the migration. This file will be written inside the `./migrations` folder
+
+When returning to the production environment, a freshly built container will run the migration via `CMD ["npx", "keystone", "start", "--with-migrations"]`.
+
+### CSS Styles
+
+In this repo I rely on css modules. Make sure to set your VS Code and select **Use Workspace Version** for your typescript
+
+The `typescript-plugin-css-modules` package allows you to import css classes like an exported js const / function.
+
+example
+
+```tsx
+import allStyles, {
+	bg_c_accent,
+	bg_c_plain,
+	bg_c_primary,
+	bg_c_reverse_theme,
+	bg_c_secondary,
+	bg_c_tertiary,
+	bg_c_transparent,
+	outline_c_secondary,
+	outline_c_tertiary,
+} from "../styles/colorthemes.module.css"
+```
+
+### Build on Local Machine
+
+Test out a production build using the provided `package.json` scripts.
+
+> this build NextJS as standalone app. Keystone is ran as a seperate app but can be accessed through NextJS app through `http://NEXTJS_APP/admin`
+
+1. `pnpm tbuild`
+2. `pnpm start`
+
 </details>
 
-## Gotchas
+## Production
 
-- the `next` depenancy is shared between keystone's auto generated backend UI and Client side frontend UI. I attempted to upgrade to `next 14` but that caused a "multi graphql dependancy" issue. I might consider decoupling these depencancies
+This template is not a clone and go repo. You must checkout out the Development drop down and initiate some files before your ready to deploy
 
-## TODO
-- [ ] built in calendar for admin dash
-- [ ] create a special admin input search for Users & Events that hot swaps with main search at top
-- [x] transition as much Styled Components to CSS Modules
-- [ ] screen shots / recordings
-  - [ ] 16 / 10 (1200 x 750) - laptop
-  - [ ] ? / ? - phone
-  - [ ] Events
-  - [ ] Bookings
-  - [ ] Products (checkout)
-- [ ] use grid-template-areas to make a better PricingTable component
-- [ ] which components are site specific, add them to .ignore
-  - [ ] `Hero.tsx`
-  - [ ] `Nav.tsx`
-  - [ ] `layout.tsx`
-- [ ] add option for multi email brokers (other than gmail)
-- [ ] global toast notifcations with Context Provider
-- [ ] Error404 on all page route types
-  - [x] posts
-  - [x] pages
-  - [ ] bookings
-  - [ ] bookings
-- Announcements
-  - create dynamic announcements that are private, members only, etc. 
+<details>
+  <summary>view more</summary>
 
- 
-## Color pallet?
+### Database Migrations
 
-- https://realtimecolors.com/?colors=110604-fbf0ee-1b6874-ffffff-1b6874
+If you've made any changes to the Keystone app, you must create a `database migration`. This will ensure all db tables (`Users` `Posts` `Roles` etc) are created.
 
-## Credits
+```shell
+pnpm migrate --name CUSTOM_NAME
+```
 
-following along with Wes Bos Tutorial
+### Docker Build
+
+- `cp .env.example .env.prod` (seperate file for production)
+- `cp compose.yml.example compose.yml`
+
+```shell
+docker compose build
+docker compose up
+```
+
+or use the `build-deploy-containers.sh` script.
+
+> you may add the `--no-cache` flag at the end incase of stale build conflicts
+
+> [!warning] Docker build does not support `sqlite` database
+
+</details>
+
+## Enviroment
+```
+node v21
+```
+
+## Issues
+
+- [util.\_extend issue](https://github.com/vercel/next.js/issues/71374)

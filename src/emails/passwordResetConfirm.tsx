@@ -1,19 +1,20 @@
-import { envs } from '../../envs';
 import {
   Body,
-  Container,
+  Button,
   Column,
+  Container,
   Head,
-  Html,
+  Html as EmailHtml,
   Img,
   Link,
   Preview,
   Row,
   Section,
   Text,
-  Button,
 } from '@react-email/components';
 import * as React from 'react';
+
+import { envs } from '../../envs';
 
 interface TwitchResetPasswordEmailProps {
   user: {
@@ -36,7 +37,7 @@ export default function PasswordRestConfirmEmail({
   }).format(updatedDate);
 
   return (
-    <Html>
+    <EmailHtml>
       <Head />
       <Preview> Successful password change for {envs.SITE_TITLE} account</Preview>
       <Body style={main}>
@@ -74,7 +75,7 @@ export default function PasswordRestConfirmEmail({
             </Text>
             <Text style={paragraph}>
               Still have questions? Please contact our support email {' '}
-              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}`} style={link}>
+              <Link href={`mailto:${envs.ADMIN_EMAIL_ADDRESS}?subject=Help Reset Password`} style={link}>
                 {envs.ADMIN_EMAIL_ADDRESS}
               </Link>
             </Text>
@@ -87,21 +88,21 @@ export default function PasswordRestConfirmEmail({
         </Container>
 
         <Section style={footer}>
-          <Row>
+          {/* <Row> */}
             {/* <Column align="right" style={{ width: '50%', paddingRight: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-twitter.png`} />
             </Column>
             <Column align="left" style={{ width: '50%', paddingLeft: '8px' }}>
               <Img src={`${baseUrl}/static/twitch-icon-facebook.png`} />
             </Column> */}
-          </Row>
+          {/* </Row> */}
           <Text style={{ textAlign: 'center', color: '#706a7b' }}>
             <Button href={envs.FRONTEND_URL}> {envs.SITE_TITLE}</Button> <br />
             {/* 350 Bush Street, 2nd Floor, San Francisco, CA, 94104 - USA */}
           </Text>
         </Section>
       </Body>
-    </Html>
+    </EmailHtml>
   );
 };
 

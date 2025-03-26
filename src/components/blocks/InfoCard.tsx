@@ -1,8 +1,8 @@
 // cred - Kevin Powell - https://www.youtube.com/watch?v=Z-3tPXf9a7M&t=388s
 // cred - Andy Merskin - https://codepen.io/andymerskin/details/XNMWvQ
+import styles from '@styles/blocs/infocard.module.css'
 import Link from "next/link"
-import { ReactNode } from "react";
-import styles from '@styles/blocs/infocard.module.scss'
+import type { ReactNode } from "react";
 
 type InfoCard = {
   header:string,
@@ -52,6 +52,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
   // }
 
   return (
+    // @ts-ignore
     <article className={[styles.infocard, styles[`vAlign_${verticleAlign}`] ].join(' ')}  
       style={{
         paddingInline: padding + 'rem',
@@ -73,6 +74,7 @@ export function InfoCard({content, buttonLink, buttonText, header, imageSrc, col
         {content && <>{content}</>}
         {children}
         {/* <p>x: {mousePosition.x}, y: {mousePosition.y}</p> */}
+        <p>href::: {buttonLink}</p>
         {buttonLink && (
           <Link href={buttonLink} className="button"> {buttonText} </Link>
         )}

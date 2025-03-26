@@ -1,9 +1,7 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
+
+//TODO make this a list of buttonss
 
 export const buttonlink = component({
   label: 'Button',

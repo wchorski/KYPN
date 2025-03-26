@@ -1,112 +1,159 @@
-import { nextAuthOptions } from "@/session"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
 import { CartTotal } from "@components/ecommerce/CartTotal"
-import StripeCheckoutButton from "@components/ecommerce/StripeCheckoutButton"
-import { PageTHeaderMain, } from "@components/layouts/PageTemplates"
-import { getServerSession } from "next-auth"
-import { Section } from "@components/layouts/Section"
-import styles from '@styles/ecommerce/cart.module.scss'
-import { Metadata } from "next"
-import { envs } from "@/envs"
-import fetchSessionCartItems from "@lib/fetchdata/fetchSessionCartItems"
-import { CartItem as CartItemType, Rental } from "@ks/types"
-import { CheckoutForm } from "@components/ecommerce/CheckoutForm"
-import CartItem from "@components/ecommerce/CartItem"
+import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
+import { StripeCheckoutForm } from "@components/ecommerce/StripeCheckoutForm"
+import { Card } from "@components/layouts/Card"
+import { keystoneContext } from "@ks/context"
+import type { User } from "@ks/types"
+import { plainObj } from "@lib/contentHelpers"
+import {
+	layout_content,
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { Metadata } from "next"
 import Link from "next/link"
-import ErrorMessage from "@components/ErrorMessage"
+import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
+import { CartEmptyMessage } from "@components/ecommerce/CartEmptyMessage"
 
 export const metadata: Metadata = {
-  title: 'Checkout | ' +  envs.SITE_TITLE,
-  description: envs.SITE_DESC,
+	title: `Checkout | ` + envs.SITE_TITLE,
+	description: envs.SITE_DESCRIPTION,
 }
 
 type Props = {
-  searchParams:{q:string}
-  params:{id:string}
+	searchParams: { q: string }
+	params: { id: string }
 }
 
-export default async function CheckoutPage ({ params, searchParams }:Props) {
+// throw new Error(
+// TODO
+// 	"allow payment installments with /lib/stripe > stripeCreateInstallmentPayment"
+// )
 
-  const session = await getServerSession(nextAuthOptions)
-  const {saleItems, rentalItems, rentals, error} = await fetchSessionCartItems(session?.itemId)
-  
-  if(error) return <ErrorMessage error={error} />
-  return (
-    <PageTHeaderMain 
-      header={Header()}
-      main={Main({
-        sessionId: session?.itemId,
-        saleItems,
-        rentalItems,
-        rentals,
-      })}
+export default async function CheckoutPage({ params, searchParams }: Props) {
+	const session = await getServerSession(nextAuthOptions)
+	// const { data, error } = await fetch()
+	// if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>
+	// if (!users) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
-    />
-  )
+	if (!session) return redirect("/login")
+
+	const user = (await keystoneContext.withSession(session).query.User.findOne({
+		where: { id: session.itemId },
+		//! Error: Syntax Error: Expected Name, found "[". for below
+		// query: QUERY_USER_CART,
+		query,
+	})) as User
+
+	const cartRental = user.cart.find((item) => item.rental)?.rental
+	const someRentalItems = user.cart.some((item) => item.type === "RENTAL")
+
+	if (someRentalItems && !cartRental) return redirect(`/checkout/rental`)
+	// TODO if not using stripe render native checkout form (don't forget to mark as UNPAID)
+
+	return (
+		<main className={[page_layout].join(" ")}>
+			<header className={layout_content}>
+				<h1>Checkout</h1>
+			</header>
+			<div
+				className={[page_content, layout_site, "grid"].join(" ")}
+				style={{ gridTemplateColumns: "inherit" }}
+			>
+				<section className={layout_content}>
+					{someRentalItems && user.cart.find((item) => item.rental) && (
+						<>
+							<h2>Cart Items</h2>
+							<CartItemsList />
+							<Card>
+								<h4>Notes</h4>
+								<p>{cartRental?.notes}</p>
+							</Card>
+
+							<Link className={"button medium"} href={`/checkout/rental`}>
+								Update Rental Details
+							</Link>
+							<br />
+							<br />
+							<p>
+								Total: <CartTotal />
+							</p>
+						</>
+					)}
+				</section>
+
+				<hr />
+				<section className={layout_site}>
+					{user.cart.filter((item) => !item.coupon).length === 0 ? (
+						<CartEmptyMessage />
+					) : !envs.STRIPE_PUBLIC_KEY ? (
+						<CheckoutCartForm cartItems={plainObj(user.cart)} />
+					) : (
+						<StripeCheckoutForm
+							// itemType={"ticket"}
+							// cartItems={plainObj(user.cart)}
+							email={session.user.email}
+							user={session.user as User}
+						/>
+						// <></>
+					)}
+				</section>
+			</div>
+		</main>
+	)
 }
 
-function Header(){
 
-  return <>
-    <Section layout={'1'} styles={{display: 'none'}}>
-      <h1> Checkout </h1>
-    </Section>
-  </>
-}
-
-type Main = {
-  sessionId:string,
-  saleItems:CartItemType[]|undefined,
-  rentalItems:CartItemType[]|undefined,
-  rentals:Rental[]|undefined,
-}
-
-async function Main({saleItems, rentalItems, rentals, sessionId}:Main){
-
-  if(!sessionId) return  <Section layout={'1'}>
-      <p> <Link href={`/auth`}> Login </Link> to view your cart </p>
-  </Section>
-  const data = {saleItems, rentalItems, rentals}
-
-  const plainObject = JSON.parse(JSON.stringify(data))
-
-  return <>
-    <Section layout={'1'}>
-
-      {/* <div>
-        <CartItemsList />
-      </div> */}
-
-      <div>
-        {/* <h4> Cart Items </h4>
-        {saleItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)}
-
-        <h4> Rental Items </h4>
-        {rentalItems?.map((item: any) => <CartItem key={item.id} item={item} sessionId={sessionId}/>)} */}
-        
-        <CheckoutForm 
-          sessionId={sessionId} 
-          data={plainObject}
-          // rentalItems={rentalItems || []}
-          // rentals={rentals || []}
-          // saleItems={saleItems || []}
-        />
-      </div>
-     
-      
-    </Section>
-    
-    {/* <hr />
-    <footer
-      className={styles.footer} 
-    >
-
-      <p className="total"> 
-        <span>Total: </span> 
-        <CartTotal />
-      </p>
-      
-      <StripeCheckoutButton />
-    </footer> */}
-  </>
-}
+const query = `
+  cart {
+    id
+    type
+    quantity
+    subTotal
+    event {
+      id
+      summary
+      price
+      image
+    }
+    product {
+      id
+      price
+      rental_price
+      name
+      image
+    }
+    booking {
+      id
+      price
+      summary
+      service {
+        image
+      }
+    }
+    rental {
+      id
+      summary
+      start
+      end
+      days
+      address
+      delivery
+      timeZone
+      notes
+    }
+    coupon {
+      id
+      name
+      amount_off
+      percent_off
+      stripeId
+    }
+  }
+`

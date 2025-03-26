@@ -1,0 +1,195 @@
+
+.header :global{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 2rem;
+  margin-bottom: var(--space-m);
+
+  & p.month-label{
+    margin: 1rem 0;
+    /* transform: translateX(-10px); */
+    /* transition: transform 1s ease-out; */
+    animation: labelAnim .3s ease-out forwards;
+  }
+
+  @keyframes labelAnim {
+    0% { 
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    100% { 
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .arrow{
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    transition: all .3s;
+    color: var(--c-txt);
+
+    &:hover{
+      color: var(--c-primary);
+    }
+
+    &:active {
+      color: var(--c-accent);
+    }
+  }
+}
+
+.monthLabel{
+  min-height: 2rem;
+}
+
+.grid  {
+  width: 100%;
+  min-height: 50vh;
+  border-collapse: collapse;
+
+  & thead{
+    background-color: var(--c-desaturated);
+    height: 3rem;
+  }
+
+  & td {
+    height: calc(100% - 27px - 40px);
+    border: solid 1px var(--c-desaturated);
+    background-color: var(--c-desaturated);
+    animation-name: cellAnim;
+    animation-duration: .3s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes cellAnim {
+    0%{
+      opacity: .1;
+    }
+    100%{
+      opacity: .9;
+    }
+  }
+}
+
+.grid_7{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+
+  &.calendar-body{
+    min-height: 20vh;
+  }
+
+  & .calendar-cell{
+    height: calc(100% - 27px - 40px);
+  }
+}
+
+.is28Days{
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.isNot28Days {
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.calendar{
+  background-color: var(--c-txt-bg);
+}
+
+.head_day {
+  text-align: center;
+  border: 1px solid var(--c-desaturated);
+  padding: 5px;
+  background: var(--c-txt-bg)
+}
+
+.cell_day{
+  border: solid 1px var(--c-desaturated);
+  text-align: right;
+  padding: 5px;
+  min-height: 6em;
+
+  & label{
+    padding: 5px;
+    border-radius: var(--br-soft);
+    color: var(--c-txt);
+    display: inline-block;
+    width: 15px;
+    text-align: center;
+  }
+}
+
+.cell_active {
+  border: solid 1px var(--c-primary);
+}
+
+.event_chip {
+  display: grid;
+  text-align: right;
+
+  & > a {
+    display: flex;
+    text-align: right;
+    margin-bottom: 5px;
+    margin-left: auto;
+    background-color: var(--c-txt-bg);
+    text-decoration: none;
+    padding: 5px;
+    border-radius: var(--br-sharp);
+    border-left: solid .3rem var(--c-primary);
+    color: var(--c-txt);
+    font-size: small;
+    transition-duration: .3s;
+    transition-property: opacity;
+
+    &:hover, &:focus{
+      opacity: .8;
+    }
+
+    &:active{
+      /* //TODO how to override properly? */
+      border-color: var(--c-tertiary) !important;
+      color: var(--c-accent);
+      transform: translateY(2px);
+    }
+
+    & > svg {
+      font-size: 1.6rem;
+      color: var(--c-primary);
+      width: var(--space-l);
+    }
+  }
+}
+
+.booking {
+  & > a {
+    border-left-color: var(--c-secondary);
+
+    & > svg {
+      color: var(--c-secondary);
+      margin-right: auto;
+    }
+  }
+}
+
+.reveal_on_mobile {
+  display: none;
+}
+
+@media screen and (width < 696px) {
+  .hide_on_mobile {
+    display: none;
+  
+  }
+  .reveal_on_mobile {
+    display: contents;
+  
+  }
+  
+}

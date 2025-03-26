@@ -1,0 +1,64 @@
+.sAnnouncement {
+  --c-banner: #dbdbdb;
+  
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: stretch;
+
+  interpolate-size: allow-keywords;
+  transition: height, max-height 0.5s;
+  height: 0;
+}
+
+.sOpened{
+  height: auto;
+  height: calc-size(auto);
+  max-height: 80rem;
+}
+
+.sAnnouncement:hover .btnlink{
+  background-color: var(--c-primary);
+  color: var(--c-txt-primary);
+}
+
+
+.btnlink{
+  font-size: 2rem;
+  margin-left: auto;
+
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  transform: scale(1);
+  transition: all .3s;
+  cursor: pointer;
+
+  &:hover, &:focus{
+    background-color: var(--c-accent) !important;
+    color: var(--c-txt-accent) !important;
+  }
+}
+
+.btnlink, .btnClose {
+  color: inherit;
+}
+
+.btnClose{
+  /* position: absolute; */
+  top: 0;
+  right: 0;
+  /* margin: 1em; */
+  padding: 1em;
+  font-size: 20px;
+  border: none;
+  background-color: transparent;
+  transition: all .3s;
+  box-shadow: none;
+  
+  &:hover{
+    background-color: #00000064;
+    color: var(--c-error) !important;
+  }
+}

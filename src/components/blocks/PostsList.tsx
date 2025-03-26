@@ -1,9 +1,10 @@
-import { nextAuthOptions } from "@/session"
+import { Section } from "@components/blocks/Section"
 import { BlogList } from "@components/blog/BlogList"
-import { Section } from "@components/layouts/Section"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
-import { ReactElement } from "react"
+import type { ReactElement } from "react"
+
+import { nextAuthOptions } from "@/session"
 
 type Props = {
   header:string,
@@ -19,7 +20,8 @@ type Props = {
 export async function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props):ReactElement<any, any> {
   
   const session = await getServerSession(nextAuthOptions)
-  const { posts, error} = await fetchPosts(1, categories.flatMap(cat => cat.id), session)
+  const categoryIds = categories.flatMap(cat => cat.id)
+  const { posts, error} = await fetchPosts({page: 1, categoryIds, session})
 
   return (
     <Section 
@@ -32,12 +34,14 @@ export async function PostsList({header, color, colorOverlay, imageSrc, categori
       }}
       overlay={colorOverlay}
     >
+      
+        <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
+          {header}
+        </h2>
 
-      <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
-        {header}
-      </h2>
+        <BlogList posts={posts} />
+      
 
-      <BlogList posts={posts} />
 
     </Section>
   )

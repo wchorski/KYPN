@@ -1,9 +1,11 @@
-import { nextAuthOptions } from "@/session";
 import { keystoneContext } from "@ks/context";
-import { Page } from "@ks/types";
+import type { Page } from "@ks/types";
 import { getServerSession } from "next-auth";
 
-export default async function fetchPage(slug:string){
+import { nextAuthOptions } from "@/session";
+
+
+export default async function fetchPage(slug:string, query:string){
 
   try {
 
@@ -25,26 +27,27 @@ export default async function fetchPage(slug:string){
 // ? don't include top "query getUser" on top 
 // if query direct from keystoneContext
 
-const query = `
+// ? moved to the page
+// const query = `
 
-    id
-    slug
-    title
-    template
-    dateCreated
-    dateModified
-    tags {
-      name
-    }
-    categories {
-      name
-    }
-    status
-    author{
-      id
-      name
-    }
-    content {
-      document
-    }
-`
+//     id
+//     slug
+//     title
+//     template
+//     dateCreated
+//     dateModified
+//     tags {
+//       name
+//     }
+//     categories {
+//       name
+//     }
+//     status
+//     author{
+//       id
+//       name
+//     }
+//     content {
+//       document
+//     }
+// `

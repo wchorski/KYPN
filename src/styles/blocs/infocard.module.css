@@ -1,0 +1,128 @@
+.cardlist {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	gap: 1rem;
+	padding-inline: 0;
+	list-style: none;
+
+	& li {
+		min-width: 16rem;
+		max-width: 20rem;
+		flex: 1 1;
+	}
+}
+
+.statusBadge {
+	position: absolute;
+	top: var(--space-s);
+	left: var(--space-s);
+	z-index: 2;
+	box-shadow: var(--shadow-4);
+}
+
+.carditem {
+	border: solid 1px var(--c-desaturated);
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	transition: all 0.3s;
+	overflow: hidden;
+	position: relative;
+
+	& img {
+		width: 100%;
+		max-height: 20rem;
+		object-fit: cover;
+	}
+
+	& header {
+		padding: 0;
+		padding-inline: var(--space);
+	}
+
+	& h3 {
+		margin: 0;
+		margin-top: 1rem;
+		font-size: clamp(
+			1rem * (var(--font-size-multi) * 1),
+			1rem + 5.246vw,
+			1rem * (var(--font-size-multi) * 2)
+		);
+	}
+
+	& figure {
+		background-position: 50% 50%;
+		background-size: cover;
+		min-height: 250px;
+		background-size: cover;
+		margin: 0;
+		transition: all 0.3s;
+	}
+}
+
+.vAlign_start {
+	align-content: flex-start;
+}
+.vAlign_center {
+	align-content: center;
+}
+.vAlign_end {
+	align-content: flex-end;
+}
+
+.content_wrap {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	display: grid;
+	gap: 1rem;
+	padding: var(--space);
+
+	& > p {
+		display: -webkit-box;
+		-webkit-box-orient: vertical; 
+		line-clamp: 5;
+		-webkit-line-clamp: 5; /* Limits the paragraph to 3 lines */
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	& > a {
+		margin-top: auto;
+	}
+
+	& > :is(p, ul, ol) {
+		margin: 0;
+	}
+}
+
+article.infocard :global {
+	border-radius: 1em;
+	height: 100%;
+	margin-inline: auto;
+
+	position: relative;
+
+	display: grid;
+
+	& h4:first-child {
+		margin-top: 1rem;
+	}
+
+	& h4 {
+		overflow: hidden;
+		width: 100%;
+		display: inline-block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	& .button {
+		/* box-shadow: #9c9c9c -4px 3px 9px 3px; */
+		border: solid 1px var(--c-desaturated);
+		margin-top: auto;
+		/* align-self: flex-start; */
+	}
+}

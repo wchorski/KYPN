@@ -1,8 +1,6 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { Box, jsx } from '@keystone-ui/core';
+// import { Box, } from '@keystone-ui/core';
 import { component, fields, NotEditable, } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 
 export const infocardlist = component({
@@ -50,9 +48,10 @@ export const infocardlist = component({
         >
           {props.fields.items.elements.map(item => {
             return (
-              <Box
+              // <Box
+              <div
                 key={item.key}
-                margin="xsmall"
+                // margin="xsmall"
                 style={{
                   minWidth: '61.8%',
                   scrollSnapAlign: 'center',
@@ -83,7 +82,7 @@ export const infocardlist = component({
                   
                 </article>
 
-              </Box>
+              </div>
             );
           })}
         </div>

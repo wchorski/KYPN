@@ -1,90 +1,70 @@
-import ErrorMessage from '@components/ErrorMessage'
-import { Table } from '@components/elements/Table'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import { envs } from '@/envs'
-import { fetchUsers } from '@lib/fetchdata/fetchUsers'
-import { User } from '@ks/types'
-import { ReactNode } from 'react'
-import { getServerSession } from 'next-auth'
-import { nextAuthOptions } from '@/session'
-import { Metadata } from 'next'
+import { Table } from "@components/elements/Table"
+import ErrorPage from "@components/layouts/ErrorPage"
+import { fetchUsers } from "@lib/fetchdata/fetchUsers"
+import {
+	layout_site,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import { notFound } from "next/navigation"
+import { getServerSession } from "next-auth"
 
-export const metadata: Metadata = {
-  title: 'Users | ' + envs.SITE_TITLE,
-  description: envs.SITE_DESC,
-}
-  
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
+
 type Props = {
-  params:{
-    id:string | string[] | undefined,
-  },
-  searchParams: { [key: string]: string | string[] | undefined }
+	searchParams: { q: string }
+	params: { id: string }
 }
 
 const page = 1
 const perPage = envs.PERPAGE
 
-export default async function UsersPage ({ params, searchParams }:Props) {
+export default async function Page({ params, searchParams }: Props) {
+	const session = await getServerSession(nextAuthOptions)
+	const { users, error } = await fetchUsers({
+		query: QUERY_USER_THIN,
+		page,
+		perPage,
+		session,
+	})
 
-  const session = await getServerSession(nextAuthOptions);
-  const { users, error } = await fetchUsers( page, perPage, session)
-  
+	if (error)
+		return (
+			<ErrorPage error={error}>
+				<p>data fetch error </p>
+			</ErrorPage>
+		)
+	if (!users) return notFound()
 
-  if(error) return <ErrorMessage error={error} />
-  if(!users) return <p> no users found </p>
-  
+	const cells = users.map((user: any) => ({
+		name: user.name,
+		email: user.email,
+		role: user.role?.name,
+		account: user.id,
+	}))
 
-  const cells = users.map((user:User) => ({
-    name: user.name,
-    email: user.email,
-    role: user.role?.name,
-    account: user.id,
-  }))
-
-  // return <p> the page </p>
-
-  return (
-    <PageTHeaderMain 
-      header={Header()}
-      main={Main({cells})}
-    />
-  )
-
-  
+	return (
+		<main className={[page_layout].join(" ")}>
+			<header className={layout_site}>
+				<h1>Users</h1>
+			</header>
+			<div className={[page_content, layout_site].join(" ")}>
+				<Table
+					caption=""
+					route="/users"
+					headers={["name", "email", "role", "account"]}
+					cells={cells}
+				/>
+			</div>
+		</main>
+	)
 }
-
-function Header(){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> Users </h1>
-    </Section>
-  </>
-  
-}
-
-type Main = {
-  cells:any,
-}
-
-
-function Main({cells}:Main){
-
-  return <>
-    <Section layout={'1'}>
-      <Table 
-        caption=""
-        route="/users"
-        headers={[
-          'name',
-          'email',
-          'role',
-          'account',
-        ]}
-        cells={cells}
-      />
-    </Section>
-  </>
-  
-}
+const QUERY_USER_THIN = `
+  id
+  name
+  email
+  role {
+    name
+  }
+`

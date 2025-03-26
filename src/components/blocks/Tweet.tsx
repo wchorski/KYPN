@@ -1,5 +1,5 @@
-import React from 'react';
 import styles from '@styles/blocs/tweet.module.scss'
+import React from 'react';
 
 type TweetProps = {
   url: string;

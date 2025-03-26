@@ -1,18 +1,29 @@
-import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
-import moneyFormatter from "@lib/moneyFormatter"
+import type {  Event  } from "@ks/types"
 import Link from "next/link"
 
 type Props = {
-  price:number|undefined,
   date:string|undefined,
+  status:Event['status']
 }
 
 const now = new Date()
 
-export function AddTicketButton ({ price, date }:Props) {
+export function AddTicketButton ({ date, status }:Props) {
   const startDate = new Date(String(date))
 
-  if(now > startDate) return (
+  // if(now > startDate) return (
+  //   <button 
+  //     className={'button large'} 
+  //     disabled={true}
+  //     style={{
+  //       marginLeft: 'auto',
+  //     }}
+  //   >
+  //     Past Event
+  //   </button>
+  // )
+
+  if(now > startDate || !["ACTIVE", "POSTPONED"].includes(status)) return (
     <button 
       className={'button large'} 
       disabled={true}
@@ -20,7 +31,8 @@ export function AddTicketButton ({ price, date }:Props) {
         marginLeft: 'auto',
       }}
     >
-      Past Event
+      <span>Past</span>
+      {/* <StatusBadge status={status} type="event"/> */}
     </button>
   )
 
@@ -33,11 +45,7 @@ export function AddTicketButton ({ price, date }:Props) {
       }}
       // onClick={() => setIsPopup(true)}
     > 
-      {price && price > 0 ? (
-        <span>{moneyFormatter(price)} per Ticket</span>
-      ) : (
-        <span> Free </span>
-      )}
+      <span>Get Tickets</span>
     </Link>
   )
 }

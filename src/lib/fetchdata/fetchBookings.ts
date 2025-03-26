@@ -1,9 +1,11 @@
-import { Booking } from "@ks/types";
 import { keystoneContext } from "@ks/context";
+import type { Booking } from "@ks/types";
+import type { Session } from "next-auth";
 
 export default async function fetchBookings(
   dateSelectedString: string,
-  session: any
+  query:string,
+  session: Session|null
 ) {
   const dateSelected = new Date(dateSelectedString);
 
@@ -11,7 +13,7 @@ export default async function fetchBookings(
     const bookings = (await keystoneContext
       .withSession(session)
       .query.Booking.findMany({
-        query: query,
+        query,
         where: {
           AND: [
             {
@@ -52,12 +54,12 @@ export default async function fetchBookings(
   }
 }
 
-const query = `
-  typeof
-  id
-  summary
-  start
-`;
+// const query = `
+//   typeof
+//   id
+//   summary
+//   start
+// `;
 // email
 // phone
 // name

@@ -1,0 +1,71 @@
+.grid {
+	display: grid;
+	justify-content: center;
+}
+.grid_item {
+  width: 100%;
+  height: 100%;
+  /* display: grid; */
+}
+/* //? set in <Grid /> */
+/* // --col-width: 15rem; */
+
+/* // cred - https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/ */
+/* // auto-fill: stretches all grid-items to fit width */
+/* // auto-fit: creates blank space grid-items to keep compact width of each column */
+.auto {
+	grid-template-columns: repeat(auto-fit, minmax(var(--col-width), 1fr));
+
+	& > div {
+		width: 100%;
+	}
+}
+
+._1 {
+	grid-template-columns: repeat(1, 1fr);
+}
+/* ? for some reason isn't working anymore. moved to media query */
+/* ._1_1 {
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(calc(var(--w-sitemax) * 0.5), 1fr)
+	);
+} */
+._1_1_1 {
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(calc(var(--w-sitemax) * 0.13), 1fr)
+	);
+}
+._1_1_1_1 {
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(calc(var(--w-sitemax) * 0.25), 1fr)
+	);
+}
+
+@media screen and (width > 700px) {
+  ._1_1 {
+    grid-template-columns: 1fr 1fr;
+    /* & > div:first-child {
+      grid-column: 1;
+    }
+    & > div:last-child {
+      grid-column: 2;
+    } */
+  }
+	._2_1 {
+		grid-template-columns: 2fr 1fr;
+	}
+	._1_2 {
+		grid-template-columns: 1fr 2fr;
+	}
+	._1_4 {
+		grid-template-columns: 1fr 4fr;
+	}
+}
+@media screen and (width > 900px) {
+	._1_2_1 {
+		grid-template-columns: 1fr 2fr 1fr;
+	}
+}

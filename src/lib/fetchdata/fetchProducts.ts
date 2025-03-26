@@ -1,72 +1,58 @@
-import { envs } from "@/envs"
 import { keystoneContext } from "@ks/context"
-import { Category, Product } from "@ks/types"
+import type { Product } from "@ks/types"
+import type { Session } from "next-auth"
+
+import { envs } from "@/envs"
 
 const perPage = envs.PERPAGE
 
-export async function fetchProducts(page:number, categoryNames:string[], session:any){
+type Props = {
+	query: string
+  page?: number
+	session: Session | null
+}
 
-  const catConnects = categoryNames.map(name => ({categories: { some: { name: { equals: name }}}}))
+export default async function fetchProducts({ query, session, page = 1, }: Props) {
+	try {
+		const products = (await keystoneContext
+			.withSession(session)
+			.query.Product.findMany({
+				
+        skip: page * perPage - perPage,
+			take: perPage,
+				orderBy: [
+					{
+						dateCreated: "desc",
+					},
+				],
+				query,
+			})) as Product[]
 
-  
-  try {
-    
-    const count = await keystoneContext.withSession(session).query.Product.count()
-    
+		const count = (await keystoneContext
+			.withSession(session)
+			.query.Product.count()) as number
 
-    const products = await keystoneContext.withSession(session).query.Product.findMany({
-      skip: page * perPage - perPage,
-      take: perPage,
-      orderBy: [
-        {
-          dateModified: "desc"
-        }
-      ],
-      where: {
-        OR: [
-          ...catConnects,
-          //? moved to backend
-          // {
-          //   NOT: [
-          //     {
-          //       OR: [
-          //         {
-          //           status: {
-          //             equals: "DRAFT"
-          //           }
-          //         },
-          //         // todo if added a new state
-          //         {
-          //           status: {
-          //             equals: "PRIVATE"
-          //           }
-          //         },
-          //       ]
-          //     }
-          //   ]
-          // },
-        ],
-      },
-      query: `
-        excerpt
-        id
-        name
-        price
-        rental_price
-        status
-        image
-        isForSale
-        isForRent
-      `
-    }) as Product[]
+		// const addons = (await keystoneContext
+		//   .withSession(session)
+		//   .query.Addon.findMany({
+		//     where: {
+		//       // status: {
+		//       //   notIn: ["DRAFT", "PRIVATE"]
+		//       // },
+		//       // include ids filtering if array is present
+		//       ...(addonIds && addonIds.length > 0 ? { id: { in: addonIds } } : {}),
+		//     },
+		//     orderBy: [
+		//       {
+		//         dateCreated: "desc",
+		//       },
+		//     ],
+		//     query: queryAddons,
+		//   })) as Addon[]
 
-    
-    // console.log(JSON.stringify({products},null,2));
-    // console.log('### prod length: ', products.length);
-    
-    return { products, count }
-    
-  } catch (error) {
-    return {error}
-  }
+		return { products, count }
+	} catch (error) {
+		console.log("!!! fetchProducts: ", error)
+		return { error }
+	}
 }

@@ -1,39 +1,34 @@
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import { PasswordResetForm } from '@components/menus/PasswordResetForm'
+import { PasswordResetForm } from "@components/forms/PasswordResetForm"
+import {
+  layout_breakout,
+  layout_content,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+
 type Props = {
-  searchParams:{
-    token:string,
-    email:string,
-  }
+	searchParams: {
+		token: string
+		email: string
+	}
 }
 
-export default async function PasswordResetPage ({  searchParams }:Props) {
+export default async function PasswordResetPage({ searchParams }: Props) {
+	const { token, email } = await searchParams
 
-  const { token, email } = searchParams
+	return (
+		<main
+		 className={page_layout}
+		>
+			<header className={layout_breakout} >
+				<h1> Password Reset </h1>
+			</header>
 
-  return (
-    <PageTHeaderMain
-      header={Header()}
-      main={Main(token, email)}
-    />
-  )
-}
-
-function Header(){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> Password Reset </h1>
-    </Section>
-  </>
-}
-
-function Main(token:string, email:string){
-
-  return<>
-    <Section layout={'1'}>
-      <PasswordResetForm token={token} email={email} />
-    </Section>
-  </>
+			<div
+			className={[page_content, layout_content].join(" ")}
+			>
+				<PasswordResetForm token={token} email={email} />
+			</div>
+		</main>
+	)
 }

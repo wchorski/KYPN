@@ -1,9 +1,6 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
 
-import { jsx } from '@keystone-ui/core';
 import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const youtubeVideo = component({
   label: 'YouTube Video',

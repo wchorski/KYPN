@@ -1,6 +1,9 @@
-import { envs } from "@/envs"
+'use server'
+// import type { Lists } from ".keystone/types"
+// type Post = Lists.Post["fields"]
+//todo there must be a right way to pull types in from ks. i'm so close
 import { keystoneContext } from "@ks/context"
-import { Post, Session } from "@ks/types"
+import type {Post} from '@ks/types'
 
 export async function fetchPost(slug:string, session:any){
 
@@ -23,6 +26,7 @@ export async function fetchPost(slug:string, session:any){
   }
 }
 
+//todo move query to `page.tsx` so I can reuse this script more
 const query = `
   id
   title
@@ -53,3 +57,26 @@ const query = `
     document
   }
 ` 
+
+export async function fetchPostSlug(id:string){
+
+  try {
+
+    // todo if you add permissions on schema 'access' then you gotta add session here
+    // const post = await keystoneContext.withSession(session).query.Post.findOne({
+    const post = await keystoneContext.query.Post.findOne({
+      query: `
+        slug
+      `,
+      where: {
+        id
+      }
+    }) as Post
+    
+    return { post }
+    
+  } catch (error) {
+
+    return {error}
+  }
+}

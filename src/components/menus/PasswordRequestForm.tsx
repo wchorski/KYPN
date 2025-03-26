@@ -1,136 +1,111 @@
-'use client'
-import styles from '@styles/menus/form.module.scss'
-import { 
-  // @ts-ignore
-  experimental_useFormState as useFormState, 
-  // @ts-ignore
-  experimental_useFormStatus as useFormStatus 
-} from "react-dom"
-import { useRef } from 'react';
-import { LoadingAnim } from '@components/elements/LoadingAnim';
+"use client"
+import { SubmitButton } from "@components/forms/SubmitButton"
+import { InputField } from "@components/InputField"
+import type {
+	PasswordRequestState} from "@lib/actions/actionPassworRequest";
+import {
+	actionPasswordRequest
+} from "@lib/actions/actionPassworRequest"
+import { form } from "@styles/menus/form.module.scss"
+import Link from "next/link"
+import { useFormState } from "react-dom"
 
-type Fields = {
-  email: string,
-}
-
-type FormState = {
-  message: string,
-  status: 'success'|'error',
-  errors: Record<keyof Fields, string> | undefined,
-  fieldValues: Fields,
+const initState: PasswordRequestState = {
+	values: {
+		email: "",
+	},
+	valueErrors: undefined,
+	error: undefined,
+	success: undefined,
+	url: undefined,
+	id: undefined,
 }
 
 export function PasswordRequestForm() {
+	const [state, action] = useFormState(actionPasswordRequest, initState)
 
-  // const { session, setSession } = useGlobalContext()
-  const defaultFormData = {
-    message: '',
-    errors: undefined,
-    fieldValues: {
-      email: '',
-    }
-  }
-  const formRef = useRef<HTMLFormElement>(null)
-  const [formState, formAction] = useFormState(onSubmit, defaultFormData)
+	// async function onSubmit(
+	// 	prevState: FormState,
+	// 	data: FormData
+	// ): Promise<FormState> {
+	// 	const email = data.get("email") as string
 
+	// 	const inputValues = {
+	// 		email,
+	// 	}
 
+	// 	try {
+	// 		const res = await fetch(`/api/gql/noauth`, {
+	// 			method: "POST",
+	// 			headers: {
+	// 				"Content-Type": "application/json",
+	// 			},
+	// 			body: JSON.stringify({
+	// 				query: `
+	//           mutation Mutation($email: String!) {
+	//             passwordRequestLink(email: $email) {
+	//               dateModified
+	//             }
+	//           }
+	//         `,
+	// 				variables: {
+	// 					email: email,
+	// 				},
+	// 			}),
+	// 		})
+	//     const data = await res.json()
 
-  async function onSubmit(prevState: FormState, data: FormData): Promise<FormState>{
-    const email = data.get('email') as string
+	//     if(data.error) return {
+	//       ...formState,
+	//       status: 'error',
+	//       message: data.error.message
+	//     }
 
-    const inputValues = {
-      email,
-    }
+	// 		return {
+	// 			...formState,
+	// 			status: "success",
+	// 			message:
+	// 				"Request sent. \n\n If an account with the submitted email is found, an email will be sent out with instructions to reset account password",
+	// 		}
+	// 	} catch (error: any) {
+	// 		console.warn("!!! password Request Form ERROR: ", error.message)
+	// 		return {
+	// 			status: "error",
+	// 			message: error?.message,
+	// 			// TODO validate each field
+	// 			errors: {
+	// 				email: "double check spelling of this field",
+	// 			},
+	// 			fieldValues: inputValues,
+	// 		}
+	// 	}
+	// }
 
-    try {
+	return (
+		<>
+			<form action={action} className={form}>
+				<fieldset disabled={state.success ? true : false}>
+					<legend> Request a password reset </legend>
 
-      const res = await fetch(`/api/gql/noauth`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `
-            mutation Mutation($email: String!) {
-              passwordRequestLink(email: $email) {
-                dateModified
-              }
-            }
-          `,
-          variables: {
-            email: email
-          }
-        }),
-      })
-      
-      return {
-        ...formState,
-        status: 'success',
-        message: 'Request sent. \n\n If an account with the submitted email is found, an email will be sent out with instructions to reset account password',
-      }
-      
-    } catch (error:any) {
-      console.log('!!! password Request Form ERROR: ', error.message);
-      return {
-        status: 'error',
-        message: error?.message,
-        // TODO validate each field
-        errors: {
-          email: 'double check spelling of this field',
-        },
-        fieldValues: inputValues
-      }
-      
-    }
-  }
+					<InputField
+						name={"email"}
+						type={"email"}
+						required={true}
+						defaultValue={state.values?.email}
+						error={state.valueErrors?.email}
+					/>
+				</fieldset>
 
-
-  return (<>
-
-    <form action={formAction} className={styles.form} ref={formRef}>
-
-
-        <fieldset>
-          <legend> Request a password reset  </legend>
-
-          <label htmlFor="email">
-            Email
-            <input 
-              name={'email'}
-              id={'email'}
-              placeholder="sam@hotmail.com"
-              type={'text'}
-              required={true}
-              defaultValue={formState.fieldValues.email}
-              autoComplete={'email'}
-            />
-          </label>
-
-          {formState.status === 'success' ? (
-            <p className={formState.status}> 
-              {formState.message} 
-            </p>
-          ) : (
-            <SubmitButton />
-          )}
-          
-
-
-        </fieldset>
-    </form>
-  </>)
-}
-
-function SubmitButton(){
-
-  const { pending, } = useFormStatus()
-
-  return(
-    <button
-      disabled={pending}
-      type={'submit'}
-    >
-      {pending ? <LoadingAnim /> : 'Submit'}
-    </button>
-  )
+				{!state.success ? (
+					<SubmitButton />
+				) : (
+					<p className={"success"}>
+						{state.success} <br/>
+            <Link href={'/login'}> Back to Login </Link>
+					</p>
+				)}
+				<p className={"error"}>{state.error}</p>
+			</form>
+		</>
+	)
 }

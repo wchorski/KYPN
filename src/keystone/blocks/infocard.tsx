@@ -1,10 +1,5 @@
-
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { jsx } from '@keystone-ui/core';
-import { component, fields, NotEditable } from '@keystone-6/fields-document/component-blocks';
+import { component, fields } from '@keystone-6/fields-document/component-blocks';
+import React from 'react';
 
 export const infocard = component({
   label: 'Info Card',

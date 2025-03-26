@@ -1,25 +1,21 @@
-import { envs } from '@/envs'
-import { PageTMain } from '@components/layouts/PageTemplates'
-import { Metadata } from 'next'
- 
-export const metadata: Metadata = {
-  title: envs.SITE_TITLE,
-  description: envs.SITE_DESC,
+import { layout_content, page_layout } from "@styles/layout.module.css"
+import Link from "next/link"
+
+import { envs } from "@/envs"
+type Props = {
+	searchParams: { q: string }
+	params: { id: string }
 }
 
-export default function Home() {
-  return (
-
-    <PageTMain 
-      main={Main()}
-    />
-
-  )
-}
-
-function Main(){
-
-  return <>
-    <p> should redirect to /home route </p>
-  </>
+export default async function AppPage({ params, searchParams }: Props) {
+	return (
+		<main>
+			<header>
+				<h1>{envs.SITE_TITLE}</h1>
+			</header>
+			<div className={[page_layout, layout_content].join(" ")}>
+				<Link href={`/home`}> Take Me Home </Link>
+			</div>
+		</main>
+	)
 }

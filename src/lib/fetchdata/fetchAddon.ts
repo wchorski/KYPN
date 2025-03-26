@@ -1,37 +1,24 @@
-import { Addon, } from "@ks/types";
-import { keystoneContext } from '@ks/context';
+import { keystoneContext } from "@ks/context"
+import type { Addon } from "@ks/types"
 
-export default async function fetchAddon(id:string){
+type Props = {
+	id: string
+	query: string
+	session: any
+}
 
-  try {
+export default async function fetchAddon({ id, query, session }: Props) {
+	try {
+		const addon = (await keystoneContext
+			.withSession(session)
+			.query.Addon.findOne({
+				where: { id },
+				query,
+			})) as Addon
 
-    const addon = await keystoneContext.query.Addon.findOne({
-      where: { id },
-      query: `
-        id
-        name
-        excerpt
-        price
-        image
-        services {
-          id
-          name
-        }
-        categories {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
-      `,
-    }) as Addon
-    
-    return { addon }
-    
-  } catch (error) {
-    console.log('!!! fetch Addon by id: ', error)
-    return { error }
-  }
+		return { addon }
+	} catch (error) {
+		console.log("!!! fetch Addon by id: ", error)
+		return { error }
+	}
 }

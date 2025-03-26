@@ -1,92 +1,96 @@
-import { envs } from '@/envs'
-import { nextAuthOptions } from '@/session'
-import { Callout } from '@components/blocks/Callout'
-import { PageTHeaderMain } from '@components/layouts/PageTemplates'
-import { Section } from '@components/layouts/Section'
-import DialogPopup from '@components/menus/Dialog'
-import { LoginForm } from '@components/menus/LoginForm'
-import { PasswordRequestForm } from '@components/menus/PasswordRequestForm'
-import { PasswordResetForm } from '@components/menus/PasswordResetForm'
-import { RegsiterForm } from '@components/menus/RegisterForm'
-import { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { getCsrfToken, getProviders } from 'next-auth/react'
-import Link from 'next/link'
-import { CSSProperties } from 'react'
+import { Callout } from "@components/blocks/Callout"
+import { LoginForm } from "@components/LoginForm"
+import { DialogPopup } from "@components/menus/DialogPopup"
+import { PasswordRequestForm } from "@components/PasswordRequestForm"
+import {
+	layout_wide,
+	page_content,
+	page_layout,
+} from "@styles/layout.module.css"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { getProviders } from "next-auth/react"
+
+import { envs } from "@/envs"
+import { nextAuthOptions } from "@/session"
 
 export const metadata: Metadata = {
-  title: 'Login | ' + envs.SITE_TITLE,
-  description: 'Login, register, or recover account',
+	title: "Login | " + envs.SITE_TITLE,
+	description: "Login, register, or recover account",
 }
 
 type Props = {
-  searchParams:{
-    reset:string,
-    error:string,
-    callbackUrl?:string,
-  }
+	searchParams: {
+		reset: string
+		error: string
+		callbackUrl?: string
+		message?: string
+	}
 }
 
-export default async function LoginPage ({ searchParams }:Props) {
+export default async function LoginPage({ searchParams }: Props) {
+	const { error, callbackUrl, message } = await searchParams
+	// todo next-auth is aight idk
 
-  const { error, callbackUrl } = searchParams
+	const session = await getServerSession(nextAuthOptions)
+	const providers = await getProviders()
 
-  const session = await getServerSession(nextAuthOptions)
+	return (
+		<main className={page_layout}>
+			<DialogPopup buttonLabel="">
+				<p> Forgot your password? </p>
+				<PasswordRequestForm />
+			</DialogPopup>
 
-  const providers = await getProviders()
+			<header className={layout_wide}>
+				<h1> Login </h1>
+				{callbackUrl && (
+					<Callout intent={"warning"}>
+						<p>
+							{message}
+							<br />
+							<small>
+								You will return back to the previous page after login
+							</small>
+						</p>
+					</Callout>
+				)}
+			</header>
+			<div className={[page_content, layout_wide].join(" ")}>
+				<div className={"flex"}>
+					<div>
+						<LoginForm providers={providers} callbackUrl={callbackUrl} />
+					</div>
 
-  return (
-    <PageTHeaderMain
-      header={Header(callbackUrl)}
-      main={Main(providers, session?.user?.email, error)}
-    />
-  )
+					<div>
+						{session?.user.email && (
+							<Callout intent={"info"} style={{ maxWidth: "17rem" }}>
+								<p>
+									{" "}
+									currently logged in with email{" "}
+									<strong> {session.user.email} </strong>. Go to your{" "}
+									<Link href={`/`}> Account </Link>
+								</p>
+							</Callout>
+						)}
+
+						{error && (
+							<div className={"error"}>
+								{" "}
+								<p> Login failed. Please try again </p>
+							</div>
+						)}
+						<h4> Create a New Account </h4>
+						<p>
+							<Link href={`/register`} className={"button  large"}>
+								{" "}
+								Register Now{" "}
+							</Link>
+						</p>
+					</div>
+				</div>
+			</div>
+		</main>
+	)
 }
-
-function Header(callbackUrl?:string){
-
-  return<>
-    <Section layout={'1'}>
-      <h1> Login </h1>
-      {callbackUrl && (
-        <p className='error'> You must login first to access the page </p>
-      )}
-    </Section>
-  </>
-}
-
-function Main(providers:any, sessionEmail?:string|null, error?:'CredentialsSignin'|string){
-
-  return<>
-    <DialogPopup buttonLabel=''>
-      <p> Forgot your password? </p>
-      <PasswordRequestForm /> 
-    </DialogPopup>
-
-    <Section layout={'1'}>
-
-      <div style={styleForms}>
-        {sessionEmail && <Callout intent={'info'}>
-          <p> currently logged in with email <strong> {sessionEmail} </strong> </p>  
-        </Callout>}
-
-        {error && <Callout intent={'error'}> <p> Login failed. Please try again </p></Callout>}
-        <LoginForm providers={providers} />
-
-      </div>
-
-      
-      <div>
-
-        <h4> Create a New Account </h4>
-        <Link href={`/register`}> Register Now </Link>
-
-      </div>
-    </Section>
-  </>
-}
-
-const styleForms = {
-  display: 'grid',
-  gap: '1rem',
-} as CSSProperties

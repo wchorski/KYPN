@@ -1,41 +1,55 @@
-import { Ticket } from "@ks/types";
-import { keystoneContext } from '@ks/context';
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/session";
+import { keystoneContext } from "@ks/context"
+import type {  Ticket  } from "@ks/types"
+import { getServerSession } from "next-auth"
+
+import { nextAuthOptions } from "@/session"
 
 const now = new Date().toISOString()
 
-export default async function fetchTicketsByUser(userId:string){
+export async function fetchTicketsByUser(userId: string) {
+	try {
+		const session = await getServerSession(nextAuthOptions)
 
-  try {
+		const tickets = (await keystoneContext
+			.withSession(session)
+			.query.Ticket.findMany({
+				query: query,
+        orderBy: {
+          dateCreated: 'desc'
+        },
+				where: {
+					holder: { id: { equals: userId } },
+					event: {
+						start: {
+							gte: now, //? only get tickets if event's start date is later (greater) than today
+						},
+					},
+				},
+			})) as Ticket[]
 
-    const session = await getServerSession(nextAuthOptions)
+		const sudoTicketCount = await keystoneContext.sudo().query.Ticket.count({
+			where: {
+				holder: { id: { equals: userId } },
+				event: {
+					start: {
+						gte: now, //? only get tickets if event's start date is later (greater) than today
+					},
+				},
+			},
+		})
 
-    const tickets = await keystoneContext.withSession(session).query.Ticket.findMany({
-      query: query,
-      where: {
-        holder: { id: { equals: userId } },
-        event: {
-          start: {
-            gte: now //? only get tickets if event's start date is older (greater) than today
-          }
-        }
-       },
-      }
-    ) as Ticket[]
-    
-    return { tickets }
-    
-  } catch (error) {
-    console.log('!!! fetch ticket: ', error)
-    return { error }
-  }
+		return { tickets, sudoTicketCount }
+	} catch (error) {
+		console.log("!!! fetch ticket: ", error)
+		return { error }
+	}
 }
 
 const query = `
-  
+    typeof
     id
     status
+    orderIndex
     holder{
       id
     }
@@ -44,6 +58,7 @@ const query = `
       id
       start
       end
+      image
       location {
         name
         id

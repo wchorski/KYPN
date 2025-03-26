@@ -1,4 +1,4 @@
-import styles from '@styles/daymonthtime.module.scss'
+import { daymonthtime } from '@styles/daymonthtime.module.css'
 
 export function DayMonthTime({dateString}:{dateString:string}){
 
@@ -13,10 +13,10 @@ export function DayMonthTime({dateString}:{dateString:string}){
 
 
   return(
-    <div className={styles.daymonthtime} >
+    <div className={daymonthtime} >
       <time dateTime={calDate} className="date">
-        <span className="day"> {day} </span>
         <span className="month"> {month} </span>
+        <span className="day"> {day} </span>
       </time>
       <time dateTime={time24} className="time">
         <span> {time} </span>

@@ -1,0 +1,87 @@
+.session_image {
+  margin: 0;
+
+  & > img {
+    padding-right: 1rem;
+    width: 100%;
+    transform: scale(2) translateY(2px);
+  }
+}
+
+.session_badge :global {
+  text-align: right;
+  position: relative;
+  margin-left: auto;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  color: var(--c-txt);
+  border: none;
+  height: 100%;
+
+  & svg{
+    margin-right: .5rem;
+    font-size: 1.5rem;
+    
+  }
+
+  & .account-toggle {
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    
+  }
+
+
+  /* svg{
+    font-size: 2rem;
+  } */
+
+  
+
+  /* & li{
+    margin-bottom: 1em;
+    padding: 0;
+    text-align: right;
+  } */
+
+  & a{
+    /* padding: 0 !important; */
+    margin: 0;
+    width: fit-content;
+    margin-left: auto;
+    text-align: right;
+  }
+}
+
+.sub_menu{
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  top: 100%;
+  background-color: var(--c-txt-bg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  box-shadow: var(--shadow-1);
+  transform: translateY(10px);
+  transition: all linear .1s;
+  right: 0;
+  z-index: 999;
+  min-width: 20rem;
+  padding: var(--space-m) !important;
+
+}
+
+.session_btn {
+  display: flex;
+  align-items: center;
+}
+
+.session_badge:hover, .session_badge:focus{
+  & > ul{
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0px);
+  }
+}

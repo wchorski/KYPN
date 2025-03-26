@@ -1,0 +1,42 @@
+.img {
+  width: 100%;
+  height: auto;
+}
+
+.image_wrap {
+  /* //TODO how to fit caption perfectly underneight image but also dynamically expand on all screen sizes
+  // width: fit-content;
+  // width: 100%; */
+  margin-inline: 0;
+  margin-block: var(--space-l);
+
+  & img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: contain;
+    filter: drop-shadow(var(--shadow-3));
+  }
+}
+
+.image_caption {
+  --display-caption: 'contents'
+  padding-block: var(--space-ms);
+  &::before {
+    content: '↳ ';
+    color: var(--c-seperator);
+  } 
+  margin-inline: auto;
+  width: 20rem;
+  display: var(--display-caption);
+
+  &:empty {
+    padding: 0;
+
+    &::before {
+      content: '';
+      width: 0;
+      height: 0;
+    }
+  }
+}

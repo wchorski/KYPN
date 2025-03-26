@@ -1,0 +1,189 @@
+:root {
+  color-scheme: light dark;
+  
+  --c-debug: yellow;
+  --p-sitewrapper: 1rem;
+  --p-sectionblock: 3rem;
+
+  --w-sitemax: 1600px;
+  --w-content-wide: 800px;
+  --w-content-breakout: 700px;
+  --w-contentmax: 620px;
+  --w-sidebar: 600px;
+  --w-sidebar-max: 500px;
+
+  --space: 1rem;
+  --space-0: 0;
+  --space-xxl: calc(var(--space-xl) * 1.618);
+  --space-xl: calc(var(--space-l) * 1.618);
+  --space-l: calc(var(--space-ml) * 1.618);
+  --space-ml: calc(var(--space-m) * 1.618);
+  --space-m: calc(var(--space) * 1);
+  --space-ms: calc(var(--space-m) / 1.618);
+  --space-s: calc(var(--space-ms) / 1.618);
+  --space-xs: calc(var(--space-s) / 1.618);
+  --space-xxs: calc(var(--space-xs) / 2);
+
+  --br-sharp: 2px;
+  --br-dull: 4px;
+  --br-soft: 8px;
+  --border-radius: 12px;
+  
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-size-base: 16px;
+
+  --font-size-multi: 0.55014068;
+
+  --anim-duration-fast: 0.3s;
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --c-body: hsl(0, 0%, 93%);
+    --c-nav: rgba(0, 0, 0, 0.78);
+    --c-footer: rgb(36, 36, 36);
+    --c-code-bg: rgb(32, 30, 30);
+    --c-code: rgb(214, 209, 209);
+    --c-header: hsl(193, 37%, 10%);
+    --c-txt: #7b7a7a;
+    --c-txt-rev: white;
+    --c-txt-bg: hsl(0, 0%, 100%);
+    --c-txt-bg-rev: hsl(197deg 8.74% 24.25%);
+    --c-txt-bg-darker: hsl(190, 7%, 84%);
+    --c-txt-primary: rgb(44, 44, 44);
+    --c-txt-primary-h: black;
+    --c-txt-accent: black;
+    --c-txt-sub: rgb(150, 150, 150);
+    --c-tertiary: rgb(219, 129, 154);
+    --c-secondary: hsl(193, 48%, 39%);
+    --c-primary: hsl(193, 37%, 59%);
+    --c-light: hsl(192, 27%, 77%);
+    --c-desaturated: hsl(193, 5%, 32%);
+    --c-accent: hsl(54, 75%, 43%);
+    --c-error: rgb(200, 74, 74);
+    --c-success: rgb(80, 195, 80);
+    --c-disabled: rgba(182, 182, 182, 0.672);
+    --c-seperator: hsl(0, 0%, 89.4%);
+    --c-txt-disabled: rgb(87, 87, 87);
+    --c-glass: rgba(58, 58, 58, 0.94);
+    --cg-dark: linear-gradient(180deg, rgb(31, 44, 47) 0%, rgb(15, 21, 22) 100%);
+    --cg-1: linear-gradient(120deg, #eaee44, #33d0ff);
+
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+
+
+    --primary-glow: conic-gradient(
+      from 180deg at 50% 50%,
+      #16abff33 0deg,
+      #0885ff33 55deg,
+      #54d6ff33 120deg,
+      #0071ff33 160deg,
+      transparent 360deg
+    );
+    --secondary-glow: radial-gradient(
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+
+    --tile-start-rgb: 239, 245, 249;
+    --tile-end-rgb: 228, 232, 233;
+    --tile-border: conic-gradient(
+      #00000080,
+      #00000040,
+      #00000030,
+      #00000020,
+      #00000010,
+      #00000010,
+      #00000080
+    );
+    --shadow-1: 3px 2px 10px #00000026;
+    --shadow-2: 2px 0px 10px #0000003b;
+    --shadow-3: 2px 4px 6px rgba(73, 73, 73, 0.45);
+    --shadow-4: 3px 3px 4px #0000004d;
+    --shadow-1-inset: 2px 2px 4px #00000026 inset;
+
+    --callout-rgb: 238, 240, 241;
+    --callout-border-rgb: 172, 175, 176;
+    --card-rgb: 180, 185, 188;
+    --card-border-rgb: 131, 134, 135;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-code-bg: rgb(32, 30, 30);
+    --c-code: rgb(214, 209, 209);
+    --c-txt: #bdbcbc;
+    --c-header: hsl(193, 37%, 90%);
+    --c-txt-rev: black;
+    --c-txt-bg: hsl(197deg 8.74% 24.25%);
+    --c-txt-bg-rev: hsl(198, 20%, 84%);
+    --c-txt-bg-darker: #151819;
+    --c-txt-primary: rgb(44, 44, 44);
+    --c-txt-primary-h: black;
+    --c-txt-accent: black;
+    --c-txt-sub: rgb(150, 150, 150);
+    --c-tertiary: rgb(219, 129, 154);
+    --c-secondary: hsl(193, 57%, 59%);
+    --c-primary: #abdbe8;
+    /* --c-primary: hsl(193, 57%, 79%); */
+    --c-body: hsl(193, 19%, 15%);
+    --c-nav: rgba(0, 0, 0, 0.78);
+    --c-footer: rgb(34, 34, 34);
+    --c-light: hsl(192, 27%, 77%);
+    --c-desaturated: hsl(193, 5%, 32%);
+    --c-accent: rgb(235, 223, 113);
+    --c-error: rgb(200, 74, 74);
+    --c-success: rgb(80, 195, 80);
+    --c-disabled: rgba(182, 182, 182, 0.672);
+    --c-seperator: #52585e;
+    --c-seperator-dark: #1f1f1f;
+    --c-txt-disabled: rgb(87, 87, 87);
+    --c-glass: rgba(58, 58, 58, 0.94);
+    --cg-dark: linear-gradient(180deg, rgb(31, 44, 47) 0%, rgb(15, 21, 22) 100%);
+
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
+
+
+    --primary-glow: conic-gradient(
+      from 180deg at 50% 50%,
+      #16abff33 0deg,
+      #0885ff33 55deg,
+      #54d6ff33 120deg,
+      #0071ff33 160deg,
+      transparent 360deg
+    );
+    --secondary-glow: radial-gradient(
+      rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0)
+    );
+
+    --tile-start-rgb: 239, 245, 249;
+    --tile-end-rgb: 228, 232, 233;
+    --tile-border: conic-gradient(
+      #00000080,
+      #00000040,
+      #00000030,
+      #00000020,
+      #00000010,
+      #00000010,
+      #00000080
+    );
+    --shadow-1: 3px 2px 10px #00000026;
+    --shadow-2: 2px 0px 10px #0000003b;
+    --shadow-3: 2px 4px 6px rgba(0, 0, 0, 0.631);
+    --shadow-4: 3px 3px 4px #0000004d;
+    --shadow-1-inset: 2px 2px 4px #00000026 inset;
+
+    --callout-rgb: 238, 240, 241;
+    --callout-border-rgb: 172, 175, 176;
+    --card-rgb: 180, 185, 188;
+    --card-border-rgb: 131, 134, 135;
+  }
+}

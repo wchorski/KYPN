@@ -1,12 +1,9 @@
-import { Booking } from '../keystone/types';
-import { envs } from '../../envs';
-import { emailStyles } from "./emailStyes";
+// @ts-nocheck
 import {
   Body,
   Button,
   Column,
   Container,
-  Head,
   Hr,
   Html,
   Img,
@@ -17,9 +14,13 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react'
-import { datePrettyLocal } from '../lib/dateFormatter';
 
-const { main, container, heading, subheading, button, footer, hr, link, paragraph, reportLink, review, status, statusState, userImage } = emailStyles
+import { envs } from '../../envs';
+import type { Booking } from '../keystone/types';
+import { datePrettyLocal } from '../lib/dateFormatter';
+import { emailStyles } from "./emailStyes";
+
+const { main, container, heading, subheading, button, footer, hr, link, reportLink, review, status, statusState } = emailStyles
 
 type BookingEmailProps =  {
   operation: 'create'|'update'|'delete',

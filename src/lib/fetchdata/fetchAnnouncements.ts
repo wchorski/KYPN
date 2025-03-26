@@ -1,5 +1,5 @@
-import { Announcement } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import type { Announcement } from "@ks/types";
 
 const now = new Date()
 
@@ -10,7 +10,7 @@ export default async function fetchAnnouncements(session:any){
       query: `
         start
         end
-        color
+        colorTheme
         id
         link
         content {

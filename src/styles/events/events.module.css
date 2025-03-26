@@ -1,0 +1,83 @@
+ul.events_list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-bottom: 2rem;
+	display: grid;
+	gap: 1rem;
+}
+
+.event_article .content {
+	display: inline-flex;
+	flex-wrap: wrap;
+	padding: 1rem;
+	width: 100%;
+  gap: var(--space-ml);
+  align-items: center;
+}
+
+.date_start {
+  font-size: var(--space-ml);
+  min-width: 5rem;
+}
+
+.event_article .details {
+  color: var(--c-txt);
+  text-decoration: none;
+  display: grid;
+  gap: var(--space-ms);
+
+  &:hover {
+    text-decoration: revert;
+  }
+}
+
+.event_article a.readmore {
+  margin-left: auto;
+}
+
+.event_article .actions_cont {
+  margin-left: auto;
+}
+article.event_article :global {
+	display: flex;
+	border: solid 1px var(--c-desaturated);
+	transition: border 0.2s ease-in;
+	color: var(--c-txt);
+
+	& img {
+		width: 6em;
+		height: 100%;
+		object-fit: cover;
+		padding: -1rem;
+	}
+
+	& h4 {
+		margin: 0;
+	}
+
+	
+
+	& svg {
+		margin-right: 0.2em;
+	}
+
+	& address {
+		overflow: hidden;
+		/* can also use calc function as per Yudi's answer */
+		width: 100%;
+		display: inline-block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+article.event:hover,
+article.event:focus {
+	border-left: solid 4px var(--c-accent);
+}
+
+.content {
+	& h1 {
+		margin-top: 0;
+	}
+}

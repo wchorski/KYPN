@@ -1,0 +1,38 @@
+.icon_label{
+
+  color: #5e5e5e;
+  font-size: var(--space-ms);
+  overflow: hidden;
+  text-align: center;
+  margin-block: var(--space-ms);
+
+  & > span {
+    visibility: hidden;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+  }
+
+  &::before,
+  &::after {
+    background-color: #7777772d;
+    content: " ";
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+  }
+
+  &::before {
+    right: 0.5em;
+    margin-left: -50%;
+  }
+
+  &::after {
+    left: 0.5em;
+    margin-right: -50%;
+  }
+}

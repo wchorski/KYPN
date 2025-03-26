@@ -1,0 +1,64 @@
+.status {
+	background-color: var(--c-txt-bg);
+	border-radius: var(--br-dull);
+	padding: 0.5rem 1rem;
+	border-style: solid;
+	border-width: 1px;
+	border-left-width: 10px;
+	display: inline-grid;
+	align-content: center;
+	width: fit-content;
+	z-index: 2;
+}
+
+.ACTIVE,
+.TRIAL,
+.DOWNPAYMENT,
+.CONFIRMED,
+.STARTED,
+.PRIVATE {
+	border-color: rgb(0, 132, 255);
+}
+
+.SUSPENDED,
+.PAUSED,
+.POSTPONED,
+.HOLD,
+.HOLDING,
+.PENDING,
+.PAYMENT_PENDING {
+	border-color: rgb(224, 224, 47);
+}
+
+.EXPIRED,
+.DELINQUENT,
+.REJECTED,
+.CANCELLED {
+	border-color: rgb(148, 3, 7);
+}
+
+.CANCELED,
+.LEAD,
+.PAST,
+.ATTENDED,
+.DELIVERED,
+.FULFILLED,
+.DECLINED,
+.DRAFT {
+	border-color: rgb(107, 130, 141);
+}
+
+.PAID,
+.paid,
+.PAYMENT_RECIEVED,
+.PROCESSING,
+.SHIPPED,
+.REFUNDED,
+.RETURNED,
+.ACCEPTED,
+.PUBLISHED,
+.PUBLIC,
+.complete,
+.COMPLETE {
+	border-color: rgb(89, 201, 110);
+}

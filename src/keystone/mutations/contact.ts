@@ -1,72 +1,60 @@
 // docs - https://keystonejs.com/docs/guides/schema-extension
-import { graphql } from '@keystone-6/core';
-import { Context } from '.keystone/types';
-import { BaseSchemaMeta } from '@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema';
-import { mailBooking } from '../../lib/mail';
-import { envs } from '../../../envs';
-import { Booking } from '../types';
-import { datePrettyLocal } from '../../lib/dateFormatter';
+import { graphql } from "@keystone-6/core"
+import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 
+import { envs } from "../../../envs"
+import { mailContact } from "../../lib/mail"
+import type { Context } from ".keystone/types"
 
-export const contact = (base: BaseSchemaMeta) => graphql.field({
+export const contact = (base: BaseSchemaMeta) =>
+	graphql.field({
+		//TODO maybe switch this to Booking as it is a LEAD creator
+		// but this wouldn't fly with sites that don't use Booking data
+		type: base.object("User"),
+		args: {
+			name: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			customerId: graphql.arg({ type: graphql.String }),
+			email: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			tel: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			start: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+			notes: graphql.arg({ type: graphql.nonNull(graphql.String) }),
+		},
 
-  type: base.object('Booking'),
-  args: { 
-    name: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    customerId: graphql.arg({ type: graphql.String }),
-    email: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    phone: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    start: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-    notes: graphql.arg({ type: graphql.nonNull(graphql.String) }),
-  },
+		async resolve(source, variables, context: Context) {
+			const { name, email, tel, notes, start, customerId } = variables
+			// const concatNotes = `- name: ${name} \n- email: ${email} \n- tel: ${tel} \n --- \n ${notes}`
+			// const summary = `${name ? name : email ? email : tel ? tel : 'no_info'}`
 
-  async resolve(source, { name, email, phone, notes, start, customerId }, context:Context) {
+			const now = new Date().toISOString()
 
-    // const concatNotes = `- name: ${name} \n- email: ${email} \n- phone: ${phone} \n --- \n ${notes}`
-    // const summary = `${name ? name : email ? email : phone ? phone : 'no_info'}`
+			const { query: sudoQuery } = context.sudo()
 
-    const now = new Date().toISOString()
+			// todo mail moved to booking afterOpt
+			const user = await sudoQuery.User.findOne({
+				where: { id: customerId || "no_user_id" },
+				query: `
+          id
+        `,
+			})
 
-    const { db } = context.sudo();
-    const booking = await db.Booking.createOne({
-      data: { 
-        // summary: `${summary}`, //? is now a virtual input
-        service: null,
-        start, 
-        status: 'LEAD',
-        email,
-        phone,
-        name,
-        notes, 
-        customer: (customerId) ? { connect: { id: customerId }} : null,
-      },
-    }) 
+			mailContact({
+				to: [envs.ADMIN_EMAIL_ADDRESS],
+				contact: {
+					customerId: user?.id,
+					name,
+					email,
+					tel,
+					start,
+					notes,
+				},
+			}).catch((error) => {
+				console.log("!!! contact email failed")
+				return { error, ok: false }
+			})
 
-    // todo mail moved to booking afterOpt
-    // const user = await db.User.findOne({
-    //   where: { id: customerId },
-    // })
-
-    // mailBooking({
-    //   id: booking.id,
-    //   to: [envs.ADMIN_EMAIL_ADDRESS, email],
-    //   customer: { 
-    //     id: customerId, 
-    //     name: user?.name, 
-    //     email: user?.email, 
-    //     phone: user?.phone, 
-    //   },
-    //   booking: {
-    //     name,
-    //     email,
-    //     phone,
-    //     start: datePrettyLocal(start, 'full'),
-    //     notes,
-    //   },
-
-    // })
-  
-  
-    return booking
-  }
-})
+			// return user
+			return {
+				id: customerId,
+			}
+		},
+	})

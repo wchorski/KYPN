@@ -1,57 +1,50 @@
-'use client'
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
-import { callout } from './callout';
-import { hero } from './hero';
-import { carousel } from './carousel';
-import { quote } from './quote';
-import { tweet } from './tweet';
-import { youtubeVideo } from './youtube-video';
-import { slider } from './slider';
-import { mediatext } from './mediatext';
-import { section } from './section';
-import { eventsupcoming } from './eventsupcoming';
-import { postslist } from './postslist';
-import { infocard } from './infocard';
-import { contactform } from './contactform';
-import { sociallinknav } from './sociallinknav';
-import { iframe } from './iframe';
-import { pricetable } from './pricetable';
-import { infocardlist } from './infocardlist';
-import { imagelinklist } from './imagelinklist';
-import { videoLocal } from './video-local';
-import { imagegallery } from './imagegallery';
-import { buttonlink } from './buttonlink';
-import { productslist } from './productslist';
-import { image } from './image';
-import { subscriptionplan_pricetable } from './subscriptionplan_pricetable';
+"use client"
+//? using over node v21 causes error
+//TODO next needs 'use client' but idk if it's causing upgrade problems
+import { buttonlink } from "./buttonlink"
+import { callout } from "./callout"
+import { card } from "./card"
+import { carousel } from "./carousel"
+import { contactform } from "./contactform"
+import { hero } from "./hero"
+import { iframe } from "./iframe"
+import { image } from "./image"
+import { imagegallery } from "./imagegallery"
+import { imagelinklist } from "./imagelinklist"
+import { infocard } from "./infocard"
+import { infocardlist } from "./infocardlist"
+import { mediatext } from "./mediatext"
+import { postslist } from "./postslist"
+import { quote } from "./quote"
+import { section } from "./section"
+import { sociallinknav } from "./sociallinknav"
+import { table } from "./table"
+import { videoLocal } from "./video-local"
+import { youtubeVideo } from "./youtube-video"
 
 // it's important that this file has a named export called componentBlocks
 // schema.Post.ui.views import looks for a named export `componentBlocks`
 export const componentBlocks = {
-  callout,
-  slider,
-  mediatext,
-  section,
-  eventsupcoming,
-  postslist,
-  image,
-  productslist,
-  infocard,
-  infocardlist,
-  imagelinklist,
-  contactform,
-  sociallinknav,
-  iframe,
-  pricetable,
-  subscriptionplan_pricetable,
-  hero,
-  carousel,
-  quote,
-  tweet,
-  youtubeVideo,
-  videoLocal,
-  imagegallery,
-  buttonlink,
-};
+	callout,
+	// slider,
+	mediatext,
+	section,
+	postslist,
+	image,
+	infocard,
+	infocardlist,
+	imagelinklist,
+	contactform,
+	sociallinknav,
+	iframe,
+	hero,
+	carousel,
+	quote,
+	// tweet,
+	youtubeVideo,
+	videoLocal,
+	imagegallery,
+	buttonlink,
+	card,
+	table,
+}

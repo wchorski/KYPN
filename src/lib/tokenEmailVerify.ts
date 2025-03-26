@@ -1,6 +1,6 @@
-import { envs } from "../../envs"
-// @ts-ignore
 import jwt from 'jsonwebtoken'
+
+import { envs } from "../../envs"
 
 type User = {
   id:string,

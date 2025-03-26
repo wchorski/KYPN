@@ -1,0 +1,72 @@
+services:
+
+  ## you may build db seperately in ./db/compose.yml
+  db:
+    container_name: ${IMAGE_BASE_NAME}-db
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+      POSTGRES_DB: ${DB_COLLECTION}
+    volumes:
+        - ${DATA_VOLUME}:/data/postgres
+    # ports:
+    #   - "${DB_PORT}:5432"
+    networks:
+      - this
+
+  backend:
+    container_name: ${IMAGE_BASE_NAME}-backend
+    image: ${IMAGE_BASE_NAME}-backend:latest # rename ALL 'cutefruit-kypn' to a unique name 
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile.cms
+      args:
+        PRODUCTION_PLATFORM: ${PRODUCTION_PLATFORM}
+    ports: # expose this if you're not using a proxy
+      - 3001:3001
+    ##TODO set seed_data.ts to local file so I can add more without rebuilding container
+    # volumes:
+    #   - ./src/keystone/seed/seed_data.ts:/app/
+    networks:
+      - this
+      # - proxy # TODO turn back on when using proxy
+    depends_on:
+      - db
+
+  frontend:
+    container_name: ${IMAGE_BASE_NAME}-frontend
+    image: ${IMAGE_BASE_NAME}-frontend:latest # rename ALL 'cutefruit-kypn' to a unique name 
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    build: 
+      context: ./
+      # dockerfile: ./Dockerfile.web
+      ## todo trying out optimization https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+      dockerfile: ./Dockerfile.web.standalone
+      args:
+        PRODUCTION_PLATFORM: ${PRODUCTION_PLATFORM}
+    ports: # expose this if you're not using a proxy
+      - 3000:3000
+    networks:
+      - this
+      # - proxy # TODO turn back on when using proxy
+    depends_on:
+      - db
+
+networks:    
+  ## network first built in ./db/compose.yml, then linked with 'external: true' here
+  this:
+    name: ${IMAGE_BASE_NAME}-network
+    driver: bridge  
+    # external: true # set to true if using seperate db in /db/compose.yml
+  # proxy:  # TODO turn back on when using proxy
+    # name: nginx-prox-mgmt-3_default # whatever proxy container network
+    # driver: bridge
+    # external: true

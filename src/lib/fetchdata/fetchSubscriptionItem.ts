@@ -1,51 +1,26 @@
-import { nextAuthOptions } from '@/session';
-import { keystoneContext } from '@ks/context';
-import { SubscriptionItem } from '@ks/types';
-import { getServerSession } from 'next-auth';
+import { keystoneContext } from "@ks/context"
+import type {  SubscriptionItem  } from "@ks/types"
+import type { Session } from "next-auth"
 
-export default async function fetchSubscriptionItem(id:string){
-
-  try {
-
-    const session = await getServerSession(nextAuthOptions)
-    
-
-    const subscriptionItem = await keystoneContext.withSession(session).query.SubscriptionItem.findOne({
-      query: query,
-      where: {
-        id: id,
-      }
-    }) as SubscriptionItem
-    
-    return { subscriptionItem }
-    
-  } catch (error) {
-    console.log('!!! fetch sub item: ', error)
-    return { error }
-  }
+type Props = {
+	id: string
+	query: string
+	page?: number
+	session: Session | null
 }
 
-const query = `
-  custom_price
-  dateCreated
-  dateModified
-  billing_interval
-  id
-  status
+export default async function fetchSubscriptionItem({ id, query, session }: Props) {
+	try {
+		const subscriptionItem = (await keystoneContext
+			.withSession(session)
+			.query.SubscriptionItem.findOne({
+				where: { id },
+				query,
+			})) as SubscriptionItem
 
-  subscriptionPlan {
-    id
-    image
-    name
-    excerpt
-  }
-  addons{
-    id
-    name
-  }
-  user {
-    email
-    id
-    name
-  }
-`
+		return { subscriptionItem }
+	} catch (error) {
+		console.log("!!! fetchSubscriptionItem: ", error)
+		return { error }
+	}
+}

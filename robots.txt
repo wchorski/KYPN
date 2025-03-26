@@ -1,5 +1,12 @@
 User-Agent: *
 Allow: /
+Allow: /events
+Allow: /subscriptions
+Allow: /shop
+Allow: /book-a-service
+Allow: /blog
+Allow: /posts
+Allow: /home
 Disallow: /private/
 Disallow: /admin/
 Disallow: /api/
@@ -8,7 +15,6 @@ Disallow: /checkout/
 Disallow: /orders/
 Disallow: /tickets/
 Disallow: /subscriptions/*
-Allow: /bookings/
-Disallow: /bookings/*
+Disallow: /bookings/
 
 Sitemap: https://acme.com/sitemap.xml

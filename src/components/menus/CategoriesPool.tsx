@@ -1,7 +1,7 @@
-import Link from "next/link"
-import styles from '@styles/categories.module.scss'
+import type {  Category  } from "@ks/types"
 import fetchCategories from "@lib/fetchdata/fetchCats"
-import { Category } from "@ks/types"
+import styles from '@styles/categories.module.css'
+import Link from "next/link"
 
 type Props = {
   activeIds?:string[]
@@ -12,7 +12,7 @@ export async function CategoriesPool({activeIds}:Props) {
   const {categories, error} = await fetchCategories()
 
   return (
-    <ul className={styles.categories}>
+    <ul className={styles.category_list}>
       {categories?.map((c:Category, i:number) => (
         <li key={i}>
           <Link 

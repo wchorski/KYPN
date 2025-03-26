@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from "react"
-import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
-import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 import { Callout } from "@components/blocks/Callout"
+import { Button } from "@components/elements/Button"
+import stylesAnim from '@styles/eyecandy/SpinCycle.module.scss'
+import { useState } from "react"
+import { TbCheck, TbExclamationCircle, TbLoader } from "react-icons/tb"
 
 
 type Props = {
@@ -73,23 +74,22 @@ export function VerifyEmailCard ({ email }:Props) {
   return (
     <Callout intent={'warning'}>
       <h4> Verify Account </h4>
-      <p> {email} has not yet been verified. Check your email for a validation link</p>
+      <p> <strong>{email} </strong> has not yet been verified. Check your email for a validation link</p>
 
       {state === 'success' ? (
         <p className="success"> Follow further instructions sent to {email} </p>
       ): (
-        <button 
-          className={''} 
+        <Button 
           disabled={state === 'pending'}
           onClick={onSubmit}
         > 
           Request a new link 
-        </button>
+        </Button>
       )}
-      <br />
+      {/* <br />
       <br />
 
-      <p>{statusIcon(state)}</p>
+      <p>{statusIcon(state)}</p> */}
     </Callout>
   )
 }

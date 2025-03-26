@@ -1,14 +1,15 @@
-import { Category, Event } from "@ks/types";
 import { keystoneContext } from '@ks/context';
+import type { Event } from "@ks/types";
+import type { Session } from "next-auth";
 
-export default async function fetchEvents(dateSelectedString:string){
+export default async function fetchEvents(dateSelectedString:string, query:string, session:Session|null){
 
-  const dateSelected = new Date(dateSelectedString)
+  const dateSelected = new Date(dateSelectedString )
 
   try {
 
-    const events = await keystoneContext.query.Event.findMany({
-      query: query,
+    const events = await keystoneContext.withSession(session).query.Event.findMany({
+      query,
       where: { 
         AND: [ 
           {
@@ -24,16 +25,16 @@ export default async function fetchEvents(dateSelectedString:string){
                   equals: "DRAFT"
                 }
               },
-              {
-                status: {
-                  equals: "CANCELED"
-                }
-              },
-              {
-                status: {
-                  equals: "PAST"
-                }
-              },
+              // {
+              //   status: {
+              //     equals: "CANCELED"
+              //   }
+              // },
+              // {
+              //   status: {
+              //     equals: "PAST"
+              //   }
+              // },
             ]
           }
         ]
@@ -86,19 +87,19 @@ export default async function fetchEvents(dateSelectedString:string){
 }
 
 
-const query = `
-  typeof
-  id
-  summary
-  image
-  start
-  status
-  end
-  location {
-    name
-    id
-  }
-  price
-  seats
-  ticketsCount
-`
+// const query = `
+//   typeof
+//   id
+//   summary
+//   image
+//   start
+//   status
+//   end
+//   location {
+//     name
+//     id
+//   }
+//   price
+//   seats
+//   ticketsCount
+// `

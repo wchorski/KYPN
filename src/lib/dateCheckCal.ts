@@ -1,4 +1,3 @@
-import { generateTimesArray } from "./generateTimesArray";
 
 type DateRange ={
   start: string,

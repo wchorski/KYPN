@@ -1,60 +1,33 @@
-import { Ticket } from "@ks/types";
-import { keystoneContext } from '@ks/context';
-import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/session";
+import { keystoneContext } from "@ks/context"
+import type {  Ticket  } from "@ks/types"
+import type { Session } from "next-auth";
 
-export default async function fetchTicket(id:string){
 
-  try {
+export default async function fetchTicket(
+	id: string,
+	query: string,
+	session: Session | null
+) {
+	try {
+		const ticket = (await keystoneContext
+			.withSession(session)
+			.query.Ticket.findOne({
+				query,
+				where: {
+					id: id,
+				},
+			})) as Ticket
 
-    const session = await getServerSession(nextAuthOptions)
+		const sudoTicketCount = await keystoneContext.sudo().query.Ticket.count({
+			where: {
+				// holder: { id: { equals: ticket.holder.id } },
+				id: { equals: id },
+			},
+		})
 
-    const variables = {
-      where: {
-        id: id,
-      }
-    }
-    const ticket = await keystoneContext.withSession(session).query.Ticket.findOne({
-      query: query,
-      ...variables,
-    }) as Ticket
-    
-    return { ticket }
-    
-  } catch (error) {
-    console.log('!!! fetch ticket: ', error)
-    return { error }
-  }
+		return { ticket, sudoTicketCount }
+	} catch (error) {
+		console.log("!!! fetchTicket: ", error)
+		return { error }
+	}
 }
-
-
-const query = `
-  qrcode
-  id
-  status
-  email
-  orderCount
-  holder {
-    id
-    name
-    nameLast
-    email
-  }
-  event {
-    id
-    summary
-    location {
-      name
-      address
-      id
-    }
-    hosts{
-      id
-    }
-    start
-    end
-    price
-    image
-    status
-  }
-`
