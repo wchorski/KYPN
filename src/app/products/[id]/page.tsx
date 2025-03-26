@@ -17,6 +17,8 @@ import {
 	price_text,
 	product_page,
 } from "@styles/ecommerce/product.module.css"
+import { category_list } from "@styles/categories.module.css"
+import { tags_list } from "@styles/tags.module.css"
 import {
 	layout_site,
 	page_content,
@@ -30,6 +32,7 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import Flex from "@components/layouts/Flex"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -103,6 +106,7 @@ export default async function ProductById({ params }: Props) {
 
 	return (
 		<main className={page_layout}>
+      
 			<article className={[product_page, page_content, layout_site].join(" ")}>
 				<header className={"sticky"}>
 					<figure className={featured_img}>
@@ -124,22 +128,23 @@ export default async function ProductById({ params }: Props) {
 							</IconLink>
 						</Card>
 					)}
+					<Flex>
+						<ul className={category_list}>
+							{categories?.map((cat) => (
+								<li key={cat.id}>
+									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
+								</li>
+							))}
+						</ul>
 
-					<ul className="categories">
-						{categories?.map((cat) => (
-							<li key={cat.id}>
-								<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
-							</li>
-						))}
-					</ul>
-
-					<ul className="tags">
-						{tags?.map((tag) => (
-							<li key={tag.id}>
-								<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
-							</li>
-						))}
-					</ul>
+						<ul className={tags_list}>
+							{tags?.map((tag) => (
+								<li key={tag.id}>
+									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+								</li>
+							))}
+						</ul>
+					</Flex>
 				</header>
 
 				<div className={"scroll-over"}>

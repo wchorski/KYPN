@@ -4,12 +4,7 @@
 //! if trial period. create subscription right away, and create a "add credit card" form in the /account dashboard
 //? https://docs.stripe.com/payments/save-and-reuse
 
-import type {
-	Addon,
-	Coupon,
-	SubscriptionPlan,
-	User,
-} from "@ks/types"
+import type { Addon, Coupon, SubscriptionPlan, User } from "@ks/types"
 // cred - https://medium.com/@josh.ferriday/intergrating-stripe-payments-with-next-app-router-9e9ba130f101
 import { Stripe } from "stripe"
 
@@ -56,7 +51,7 @@ export const postStripeSubscriptionSession = async (
 
 	//TODO maybe will be different between item types?
 	const returnUrl = `${envs.FRONTEND_URL}/checkout/completed?stripeCheckoutSessionId={CHECKOUT_SESSION_ID}`
-
+	
 	if (!subscriptionLineItem)
 		throw new Error("!!! STRIPE subscription line_item not created")
 	// https://docs.stripe.com/api/checkout/sessions/create
@@ -65,23 +60,24 @@ export const postStripeSubscriptionSession = async (
 		line_items: [subscriptionLineItem, ...addonLineItems],
 		mode: "subscription",
 		return_url: returnUrl,
-		...(email ? { customer_email: email } : {}),
+		// ...(email ? { customer_email: email } : {}),
+		// customer: 'cus_RzCW37NUnJm3ta',
 		customer: user?.stripeCustomerId,
 		metadata: {
 			typeof: "subscription-item",
 			customerId: user.id,
 			orderId: "",
-      // TODO make this a 'per listItem'. but i'll have to fix it on product creation for it to work
+			// TODO make this a 'per listItem'. but i'll have to fix it on product creation for it to work
 			subscriptionPlanId: subscriptionPlan.id,
 			couponCode: coupon?.code || "",
 		},
-    subscription_data: {
-      metadata: {
-        typeof: "subscription-item",
-        customerId: user.id,
-        subscriptionPlanId: subscriptionPlan.id,
-      }
-    },
+		subscription_data: {
+			metadata: {
+				typeof: "subscription-item",
+				customerId: user.id,
+				subscriptionPlanId: subscriptionPlan.id,
+			},
+		},
 		// https://docs.stripe.com/payments/checkout/free-trials
 		...(subscriptionPlan.trial_period_days
 			? {
@@ -141,10 +137,10 @@ function createSubscriptionLineItem(
 	if (!subscriptionPlan) return undefined
 	return {
 		quantity: 1,
-    
+
 		// price: product.stripePriceId,
 		...(subscriptionPlan.stripePriceId
-			? { price: subscriptionPlan.stripePriceId,  }
+			? { price: subscriptionPlan.stripePriceId }
 			: {
 					price_data: {
 						// TODO make this part of CartItem schema item.currency, not hard coded

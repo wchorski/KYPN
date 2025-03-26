@@ -10,7 +10,7 @@ import type {
  } from "@ks/types"
 import moneyFormatter, { calcDiscount, handleCouponDetails } from "@lib/moneyFormatter"
 import { IconCoupon } from "@lib/useIcons"
-import { bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { bg_c_accent, bg_c_tertiary } from "@styles/colorthemes.module.css"
 import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -116,7 +116,7 @@ export function SubscriptionPlanLinkBuilder({
 	const createQueryString = useCallback(
 		(name: string, value: string) => {
 			if (!value) return ""
-			const params = new URLSearchParams(searchParams.toString())
+			const params = new URLSearchParams(searchParams?.toString())
 			params.set(name, value)
 
 			return "&" + params.toString()
@@ -270,7 +270,7 @@ export function SubscriptionPlanLinkBuilder({
 				{subscriptionPlan.trial_period_days > 0 && (
 					<>
 						<br />
-						<small className={"sub-text"}>
+						<small className={["sub-text", 'pill', bg_c_accent].join(' ')} >
 							includes {subscriptionPlan.trial_period_days} day trial period
 						</small>
 					</>

@@ -3,6 +3,7 @@ import {
 	integer,
 	relationship,
 	select,
+	text,
 	timestamp,
 	virtual,
 } from "@keystone-6/core/fields"
@@ -25,6 +26,7 @@ export const OrderItem: Lists.OrderItem = list({
 			delete: permissions.canManageOrder,
 		},
 	},
+
 	fields: {
 		type: select({
 			options: [
@@ -49,9 +51,9 @@ export const OrderItem: Lists.OrderItem = list({
 			}),
 		}),
 		...group({
-			label: "Item Info",
+			label: "Value",
 			description:
-				"copied info from Product, Booking, Rental, Tickets, SubscriptionItem, Coupon upon date created",
+				"Amount set upon transaction date",
 			fields: {
 				subTotal: integer({ validation: { isRequired: true, min: 0 } }),
 				amount_off: integer({ validation: { min: 0 } }),
@@ -63,14 +65,22 @@ export const OrderItem: Lists.OrderItem = list({
 				}),
 			},
 		}),
+    // todo moving to Order.ts
+		// stripeInvoiceId: text({
+		// 	isIndexed: "unique",
+		// 	validation: { isRequired: false },
+		// }),
 		quantity: integer({ validation: { isRequired: true, min: 1 } }),
-		rentalDays: integer({ validation: { isRequired: true, min: 0 }, defaultValue: 0 }),
+		rentalDays: integer({
+			validation: { isRequired: true, min: 0 },
+			defaultValue: 0,
+		}),
 		product: relationship({ ref: "Product.orderItems", many: false }),
 		booking: relationship({ ref: "Booking.orderItem", many: false }),
 		rental: relationship({ ref: "Rental.orderItem", many: false }),
 		tickets: relationship({ ref: "Ticket.orderItem", many: true }),
 		subscriptionItem: relationship({
-			ref: "SubscriptionItem.orderItem",
+			ref: "SubscriptionItem.orderItems",
 			many: false,
 		}),
 		coupon: relationship({ ref: "Coupon" }),
@@ -89,10 +99,9 @@ export const OrderItem: Lists.OrderItem = list({
 	hooks: {
 		validate: {
 			create: ({ resolvedData }) => {
+				//? chicken and egg senario
+				// if(!resolvedData.order?.connect) throw new Error('!!! OrderItem must be associated with an Order')
 
-        //? chicken and egg senario
-        // if(!resolvedData.order?.connect) throw new Error('!!! OrderItem must be associated with an Order')
-          
 				const validationStrings = [
 					"product",
 					"tickets",
@@ -102,7 +111,7 @@ export const OrderItem: Lists.OrderItem = list({
 					"coupon",
 				]
 				const hasOnlyOne = hasOnlyOneValue(resolvedData, validationStrings)
-				
+
 				if (!hasOnlyOne)
 					throw new Error(
 						`!!! Order Item can only have one of [${validationStrings.join(
@@ -112,9 +121,12 @@ export const OrderItem: Lists.OrderItem = list({
 
 				if (
 					resolvedData.coupon &&
-					(!resolvedData.amount_off && !resolvedData.percent_off)
+					!resolvedData.amount_off &&
+					!resolvedData.percent_off
 				)
-					throw new Error("!!! OrderItem Coupon: discount (amount_off && percent_off) are both null")
+					throw new Error(
+						"!!! OrderItem Coupon: discount (amount_off && percent_off) are both null"
+					)
 
 				if (resolvedData.amount_off && resolvedData.percent_off)
 					throw new Error(
@@ -168,7 +180,7 @@ export const OrderItem: Lists.OrderItem = list({
 			// const contextSudo = context.sudo()
 
 			delete: async ({ item, context }) => {
-        // TODO why is this error? booking is added to OrderItem schema!!!!
+				// TODO why is this error? booking is added to OrderItem schema!!!!
 				if (item.bookingId) {
 					await context.sudo().db.Booking.updateOne({
 						where: { id: item.bookingId },

@@ -9,8 +9,7 @@ import { DialogPopup } from "@components/menus/DialogPopup"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { AddTicketButton } from "@components/tickets/AddTicketButton"
 import { TicketForm } from "@components/tickets/TicketForm"
-import { AddToCalendar } from "@components/widgets/AddToCalendar"
-import type {  User  } from "@ks/types"
+import type { User } from "@ks/types"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import {
 	datePrettyLocal,
@@ -31,11 +30,12 @@ import {
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Session } from "next-auth";
+import type { Session } from "next-auth"
 import { getServerSession } from "next-auth"
-
+import { category_list } from "@styles/categories.module.css"
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { tags_list } from "@styles/tags.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -44,7 +44,7 @@ export async function generateMetadata(
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { event, error } = await fetchEvent(id, QUERY_EVENT, session)
-  
+
 	if (!event || error)
 		return {
 			title: envs.SITE_TITLE,
@@ -92,7 +92,6 @@ export default async function EventByID({ params }: Props) {
 	if (error) return <ErrorPage error={error} />
 	if (!event) return notFound()
 
-
 	const {
 		image,
 		summary,
@@ -108,7 +107,7 @@ export default async function EventByID({ params }: Props) {
 		location,
 		categories,
 		tags,
-    status
+		status,
 	} = event
 
 	async function onClose() {
@@ -143,33 +142,31 @@ export default async function EventByID({ params }: Props) {
 				<header className={"sticky"}>
 					<div className="container">
 						<picture className={styles.featured}>
-							<ImageDynamic photoIn={image} priority={true}/>
+							<ImageDynamic photoIn={image} priority={true} />
 						</picture>
 
 						{/* <AddToCalendar summary={summary} start={start} end={end} /> */}
 
 						{/* <hr /> */}
-						<ul className="categories">
-							{categories?.map((cat) => (
-								<li key={cat.id}>
-									<Link href={`/posts/search?categories=${cat.id}`}>
-										{" "}
-										{cat.name}{" "}
-									</Link>
-								</li>
-							))}
-						</ul>
+						<Flex>
+							<ul className={category_list}>
+								{categories?.map((cat) => (
+									<li key={cat.id}>
+										<Link href={`/search?categories=${cat.id}`}>
+											{cat.name}
+										</Link>
+									</li>
+								))}
+							</ul>
 
-						<ul className="tags">
-							{tags?.map((tag) => (
-								<li key={tag.id}>
-									<Link href={`/posts/search?tags=${tag.id}`}>
-										{" "}
-										{tag.name}{" "}
-									</Link>
-								</li>
-							))}
-						</ul>
+							<ul className={tags_list}>
+								{tags?.map((tag) => (
+									<li key={tag.id}>
+										<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Flex>
 					</div>
 				</header>
 
@@ -211,14 +208,13 @@ export default async function EventByID({ params }: Props) {
 							) : (
 								<span style={{ alignContent: "center" }}>RSVP</span>
 							)}
-              
 
 							{!session ? (
 								<CallbackLink>Login to Purchase</CallbackLink>
 							) : session?.data.role === null ? (
 								<VerifyEmailCard email={session.user.email} />
 							) : (
-								<AddTicketButton date={start} status={status}/>
+								<AddTicketButton date={start} status={status} />
 							)}
 						</Flex>
 					</Card>

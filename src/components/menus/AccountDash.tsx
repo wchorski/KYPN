@@ -237,8 +237,8 @@ export default function AccountDash({ data }: Props) {
 						cells={orderCells}
 						route={`/orders`}
 					/>
-					<hr />
-					<p>{"// TODO add pagination"}</p>
+					{/* <hr /> */}
+					{/* <p>{"// TODO add pagination"}</p> */}
 				</Card>
 			)}
 		</div>

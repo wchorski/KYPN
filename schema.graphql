@@ -1384,6 +1384,7 @@ type Order {
   total: Int
   fees: Int
   count: Int
+  stripeInvoiceId: String
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String
@@ -1397,6 +1398,7 @@ type Order {
 
 input OrderWhereUniqueInput {
   id: ID
+  stripeInvoiceId: String
 }
 
 input OrderWhereInput {
@@ -1407,6 +1409,7 @@ input OrderWhereInput {
   email: StringFilter
   notes: StringFilter
   fees: IntFilter
+  stripeInvoiceId: StringFilter
   stripeCheckoutSessionId: StringFilter
   stripePaymentIntent: StringFilter
   shipping_address: StringFilter
@@ -1428,6 +1431,7 @@ input OrderOrderByInput {
   email: OrderDirection
   notes: OrderDirection
   fees: OrderDirection
+  stripeInvoiceId: OrderDirection
   stripeCheckoutSessionId: OrderDirection
   stripePaymentIntent: OrderDirection
   shipping_address: OrderDirection
@@ -1440,6 +1444,7 @@ input OrderUpdateInput {
   email: String
   notes: String
   fees: Int
+  stripeInvoiceId: String
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String
@@ -1466,6 +1471,7 @@ input OrderCreateInput {
   email: String
   notes: String
   fees: Int
+  stripeInvoiceId: String
   stripeCheckoutSessionId: String
   stripePaymentIntent: String
   shipping_address: String
@@ -2431,7 +2437,8 @@ type SubscriptionItem {
   stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
-  orderItem: OrderItem
+  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
   coupon: Coupon
 }
 
@@ -2460,7 +2467,7 @@ input SubscriptionItemWhereInput {
   stripeSubscriptionItemId: StringFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
-  orderItem: OrderItemWhereInput
+  orderItems: OrderItemManyRelationFilter
   coupon: CouponWhereInput
 }
 
@@ -2494,7 +2501,7 @@ input SubscriptionItemUpdateInput {
   stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
-  orderItem: OrderItemRelateToOneForUpdateInput
+  orderItems: OrderItemRelateToManyForUpdateInput
   coupon: CouponRelateToOneForUpdateInput
 }
 
@@ -2524,7 +2531,7 @@ input SubscriptionItemCreateInput {
   stripeSubscriptionItemId: String
   dateCreated: DateTime
   dateModified: DateTime
-  orderItem: OrderItemRelateToOneForCreateInput
+  orderItems: OrderItemRelateToManyForCreateInput
   coupon: CouponRelateToOneForCreateInput
 }
 
@@ -2876,6 +2883,7 @@ input UserWhereUniqueInput {
   id: ID
   authId: String
   email: String
+  stripeCustomerId: String
 }
 
 input UserWhereInput {

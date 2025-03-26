@@ -47,6 +47,7 @@ export function CouponRedeemForm({ onApply }: Props) {
 					type="text"
 					placeholder="D1$C0VNT C0D3..."
 					error={state.valueErrors?.code}
+          isLabelShown={false}
 				/>
 
 				{!state.success ? (

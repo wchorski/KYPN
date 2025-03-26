@@ -1,5 +1,6 @@
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import {
+	layout_full,
 	layout_site,
 	page_content,
 	page_layout,
@@ -17,8 +18,12 @@ export default async function LoadingPage({ params, searchParams }: Props) {
 
 	return (
 		<main className={[page_layout].join(" ")}>
-			<header className={layout_site} style={{ visibility: "hidden" }}>
-				<h1>Loading Page</h1>
+			<header className={layout_site}>
+				<div
+					className={["anim_border_spin", layout_full].join(" ")}
+					aria-label="page loading animation strip"
+				></div>
+				<h1 style={{ visibility: "hidden" }}> Loading Page</h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<LoadingAnim />

@@ -34,6 +34,7 @@ import { CgExternal } from "react-icons/cg"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { Table } from "@components/elements/Table"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -101,6 +102,7 @@ export default async function SubscriptionItemByIdPage({
 		addons,
 		coupon,
 		trial_end,
+		orderItems,
 	} = subscriptionItem
 
 	return (
@@ -294,6 +296,16 @@ export default async function SubscriptionItemByIdPage({
 					<h2> Notes </h2>
 					<p>{notes ? notes : <NoData name="notes" />}</p>
 				</div>
+				<hr />
+				{/* <h2>Transactions</h2> */}
+				<Table
+					caption={"Transactions"}
+					headers={["charge", "date"]}
+					cells={orderItems.map((item) => ({
+						charge: moneyFormatter(item.order.total),
+						date: datePrettyLocal(item.dateCreated, "full"),
+					}))}
+				/>
 			</div>
 
 			<DialogPopup
@@ -349,5 +361,19 @@ const query = `
       percent_off
       duration
       duration_in_months
+    }
+    orderItems {
+      id
+      total
+      dateCreated
+      order {
+        id
+        total
+        items {
+          id
+          amount_off
+          percent_off
+        }
+      }
     }
   `

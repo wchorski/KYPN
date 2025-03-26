@@ -38,9 +38,15 @@
 	grid-column: 1/-1;
 	grid-row: 1;
 	grid-template-columns: inherit;
+  padding-top: var(--space-l);
 }
 .page_layout > header > .page_title {
 	grid-column: layout_wide;
+}
+
+.page_layout > main {
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* how am i gonna fix this? */

@@ -31,6 +31,10 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import Flex from "@components/layouts/Flex"
+import { category_list } from "@styles/categories.module.css"
+import { tags_list } from "@styles/tags.module.css"
+import { bg_c_accent } from "@styles/colorthemes.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -163,21 +167,23 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 						/>
 					)}
 
-					<ul className="categories">
-						{categories?.map((cat) => (
-							<li key={cat.id}>
-								<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
-							</li>
-						))}
-					</ul>
+					<Flex>
+						<ul className={category_list}>
+							{categories?.map((cat) => (
+								<li key={cat.id}>
+									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
+								</li>
+							))}
+						</ul>
 
-					<ul className="tags">
-						{tags?.map((tag) => (
-							<li key={tag.id}>
-								<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
-							</li>
-						))}
-					</ul>
+						<ul className={tags_list}>
+							{tags?.map((tag) => (
+								<li key={tag.id}>
+									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+								</li>
+							))}
+						</ul>
+					</Flex>
 				</header>
 
 				<div className={"scroll-over"}>
@@ -207,6 +213,15 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									hideZeroCents={true}
 									// subtext={'billed ' + billing_interval}
 								/>
+								{subscriptionPlan.trial_period_days > 0 && (
+									<>
+										<br />
+										<small className={["sub-text", 'pill', bg_c_accent].join(' ')} >
+											includes {subscriptionPlan.trial_period_days} day trial
+											period
+										</small>
+									</>
+								)}
 							</span>
 
 							<p>Subscription</p>

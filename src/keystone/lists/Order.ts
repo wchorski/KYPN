@@ -130,6 +130,10 @@ export const Order: Lists.Order = list({
 						orderItems.find((item) => item.type === "RENT_RESERVATION")
 							?.rentalDays || 0
 
+					const subscriptionSubTotal = orderItems
+						.filter((item) => item.type === "SUBSCRIPTION")
+						.reduce((sum, item) => sum + item.total, 0)
+
 					const rentalTotal = rentalsSubTotal * rentalDays
 					// const discountAmountOffTotal = orderItems
 					// 	.filter((item) => item.type === "DISCOUNT")
@@ -156,9 +160,10 @@ export const Order: Lists.Order = list({
 						)
 
 					const totalAfterAmountOff =
-						salesTotal + rentalTotal + item.fees - discount.amount_off
+						salesTotal + subscriptionSubTotal + rentalTotal + item.fees - discount.amount_off
 					const percentToDecimal = discount.percent_off / 100
 
+          console.log('ORDER TOTAL: ', totalAfterAmountOff - totalAfterAmountOff * percentToDecimal);
 					return totalAfterAmountOff - totalAfterAmountOff * percentToDecimal
 				},
 			}),
@@ -195,6 +200,10 @@ export const Order: Lists.Order = list({
 					return itemsCount
 				},
 			}),
+		}),
+    stripeInvoiceId: text({
+			isIndexed: "unique",
+			validation: { isRequired: false },
 		}),
 		stripeCheckoutSessionId: text(),
 		stripePaymentIntent: text({

@@ -4,7 +4,7 @@ import styles, {
 	animated_wrapper,
 	wrapper,
 } from "@styles/popup.module.css"
-import { useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { useRouter } from "next/navigation"
 import { type ComponentPropsWithoutRef,useEffect, useRef } from "react"
 import { IoMdClose } from "react-icons/io"
@@ -18,6 +18,7 @@ type Props = ComponentPropsWithoutRef<"dialog"> & {
 }
 
 export function DialogPopup(props: Props) {
+  const pathname = usePathname()
 	const { title, onClose, onOk, buttonLabel = "OK", children } = props
 
 	const searchParams = useSearchParams()
@@ -62,7 +63,10 @@ export function DialogPopup(props: Props) {
 
 		    dialogRef.current?.classList.remove(styles.close)
 				dialogRef.current?.close()
-				router.back()
+        // TODO if routed directly to page w popup, sends user to previous page instead of just closing popup
+				// router.back()
+        if(pathname) router.replace(pathname)
+				
 				if (onClose) onClose()
 			},
 			{ once: true }

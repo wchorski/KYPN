@@ -1,7 +1,7 @@
 import { StripeSubscriptionCheckout } from "@components/ecommerce/StripeSubscriptionCheckout"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { keystoneContext } from "@ks/context"
-import type {  Addon, User  } from "@ks/types"
+import type { Addon, User } from "@ks/types"
 import fetchRedeemCoupon from "@lib/fetchdata/fetchRedeemCoupon"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
@@ -58,14 +58,15 @@ export default async function CheckoutSubscriptionPage({
 	// 	session,
 	// })
 	// console.log({ addons })
-  // TODO currently not supporting subscription addons because it's a mf headache
-  const addons = [] as Addon[]
-  const errorAddons = false
+	// TODO currently not supporting subscription addons because it's a mf headache
+	const addons = [] as Addon[]
+	const errorAddons = false
 
-  const { coupon, error: errorCoupon } = (await fetchRedeemCoupon({
-    code: couponCode,
-    query: COUPON_QUERY,
-  })) ?? {}
+	const { coupon, error: errorCoupon } =
+		(await fetchRedeemCoupon({
+			code: couponCode,
+			query: COUPON_QUERY,
+		})) ?? {}
 
 	if (!user || !subscriptionPlan) return notFound()
 	if (error || errorAddons || errorCoupon)
@@ -74,6 +75,9 @@ export default async function CheckoutSubscriptionPage({
 				<p>data fetch error </p>
 			</ErrorPage>
 		)
+
+	if (!user.stripeCustomerId)
+		return <p>user has not been setup with Stripe account</p>
 
 	return (
 		<main className={[page_layout].join(" ")}>
@@ -86,7 +90,7 @@ export default async function CheckoutSubscriptionPage({
 					addons={plainObj(addons)}
 					coupon={coupon ? plainObj(coupon) : undefined}
 					email={session.user.email}
-					user={session.user as User}
+					user={plainObj(user)}
 				/>
 			</div>
 		</main>
@@ -107,20 +111,7 @@ const QUERY_ADDONS = `
 
 const QUERY_USER = `
   id
-  name
-  email
-  cart {
-    id
-    type
-    quantity
-    subTotal
-    coupon {
-      id
-      name
-      amount_off
-      percent_off
-    }
-  }
+  stripeCustomerId
 `
 const QUERY_SUBPLAN = `
   id

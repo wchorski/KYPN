@@ -47,7 +47,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				"user",
 				"subscriptionPlan",
 				"status",
-				"custom_price",
+				// "custom_price",
 				"billing_interval",
 				"dateModified",
 			],
@@ -95,6 +95,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				},
 			}),
 		}),
+    // TODO remove this. discounts will provide any price changes
 		custom_price: integer(),
 
 		price: virtual({
@@ -262,7 +263,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				}),
 			},
 		}),
-		orderItem: relationship({ ref: "OrderItem.subscriptionItem", many: false }),
+		orderItems: relationship({ ref: "OrderItem.subscriptionItem", many: true }),
 		coupon: relationship({ ref: "Coupon.subscriptionItems", many: false }),
 	},
 

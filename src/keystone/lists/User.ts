@@ -129,41 +129,42 @@ export const User: Lists.User = list({
 		url: text(),
 		isActive: checkbox({ defaultValue: true }),
 		stripeCustomerId: text({
-			isIndexed: true,
+			isIndexed: 'unique',
 			validation: { isRequired: false },
-			hooks: {
-				validate: {
-					create: async ({ resolvedData, context, addValidationError }) => {
-						//? custom `unique` validation that also allows the field to be empty is not using stripe at all
-						if (!resolvedData.stripeCustomerId) return
-						const users = await context.sudo().db.User.findMany({
-							where: {
-								stripeCustomerId: {
-									equals: resolvedData.stripeCustomerId,
-								},
-							},
-						})
-						if (users.length > 0)
-							addValidationError(
-								"!!! User can not share same stripeCustomerId with others"
-							)
-					},
-					update: async ({ resolvedData, context, addValidationError }) => {
-						if (!resolvedData.stripeCustomerId) return
-						const users = await context.sudo().db.User.findMany({
-							where: {
-								stripeCustomerId: {
-									equals: String(resolvedData.stripeCustomerId),
-								},
-							},
-						})
-						if (users.length > 1)
-							addValidationError(
-								"!!! User can not share same stripeCustomerId with others"
-							)
-					},
-				},
-			},
+      // TODO delete below comment. isIndexed: 'unique' should do it
+			// hooks: {
+			// 	validate: {
+			// 		create: async ({ resolvedData, context, addValidationError }) => {
+			// 			//? custom `unique` validation that also allows the field to be empty is not using stripe at all
+			// 			if (!resolvedData.stripeCustomerId) return
+			// 			const users = await context.sudo().db.User.findMany({
+			// 				where: {
+			// 					stripeCustomerId: {
+			// 						equals: resolvedData.stripeCustomerId,
+			// 					},
+			// 				},
+			// 			})
+			// 			if (users.length > 0)
+			// 				addValidationError(
+			// 					"!!! User can not share same stripeCustomerId with others"
+			// 				)
+			// 		},
+			// 		update: async ({ resolvedData, context, addValidationError }) => {
+			// 			if (!resolvedData.stripeCustomerId) return
+			// 			const users = await context.sudo().db.User.findMany({
+			// 				where: {
+			// 					stripeCustomerId: {
+			// 						equals: String(resolvedData.stripeCustomerId),
+			// 					},
+			// 				},
+			// 			})
+			// 			if (users.length > 1)
+			// 				addValidationError(
+			// 					"!!! User can not share same stripeCustomerId with others"
+			// 				)
+			// 		},
+			// 	},
+			// },
 		}),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },

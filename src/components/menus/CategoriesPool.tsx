@@ -12,7 +12,7 @@ export async function CategoriesPool({activeIds}:Props) {
   const {categories, error} = await fetchCategories()
 
   return (
-    <ul className={styles.categories}>
+    <ul className={styles.category_list}>
       {categories?.map((c:Category, i:number) => (
         <li key={i}>
           <Link 

@@ -207,6 +207,7 @@ model Order {
   email                   String      @default("")
   notes                   String      @default("")
   fees                    Int         @default(0)
+  stripeInvoiceId         String      @unique @default("")
   stripeCheckoutSessionId String      @default("")
   stripePaymentIntent     String      @default("")
   shipping_address        String      @default("")
@@ -235,7 +236,7 @@ model OrderItem {
   rentalId           String?           @unique @map("rental")
   tickets            Ticket[]          @relation("Ticket_orderItem")
   subscriptionItem   SubscriptionItem? @relation("OrderItem_subscriptionItem", fields: [subscriptionItemId], references: [id])
-  subscriptionItemId String?           @unique @map("subscriptionItem")
+  subscriptionItemId String?           @map("subscriptionItem")
   coupon             Coupon?           @relation("OrderItem_coupon", fields: [couponId], references: [id])
   couponId           String?           @map("coupon")
   order              Order?            @relation("OrderItem_order", fields: [orderId], references: [id])
@@ -244,6 +245,7 @@ model OrderItem {
   dateModified       DateTime          @default(now())
 
   @@index([productId])
+  @@index([subscriptionItemId])
   @@index([couponId])
   @@index([orderId])
 }
@@ -429,7 +431,7 @@ model SubscriptionItem {
   stripeSubscriptionItemId String            @unique @default("")
   dateCreated              DateTime          @default(now())
   dateModified             DateTime          @default(now())
-  orderItem                OrderItem?        @relation("OrderItem_subscriptionItem")
+  orderItems               OrderItem[]       @relation("OrderItem_subscriptionItem")
   coupon                   Coupon?           @relation("SubscriptionItem_coupon", fields: [couponId], references: [id])
   couponId                 String?           @map("coupon")
 
@@ -507,7 +509,7 @@ model User {
   password           String             @default("")
   url                String             @default("")
   isActive           Boolean            @default(true)
-  stripeCustomerId   String             @default("")
+  stripeCustomerId   String             @unique @default("")
   dateCreated        DateTime           @default(now())
   dateModified       DateTime?          @default(now()) @updatedAt
   buisnessHourOpen   String?            @default("09:00:00")
@@ -535,6 +537,5 @@ model User {
   orders             Order[]            @relation("Order_user")
   tickets            Ticket[]           @relation("Ticket_holder")
 
-  @@index([stripeCustomerId])
   @@index([roleId])
 }

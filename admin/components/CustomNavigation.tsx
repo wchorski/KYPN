@@ -105,7 +105,7 @@ export function CustomNavigation({
 			<hr style={lineSeperator} />
 			<div className="nav-link-group">
 				<TiShoppingCart />
-				<ListNavItems lists={lists} include={["Order"]} />
+				<ListNavItems lists={lists} include={["Order", "OrderItem"]} />
 			</div>
 
 			<hr style={lineSeperator} />

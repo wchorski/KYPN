@@ -72,7 +72,8 @@ export function CouponAddToCartForm({ code }: Props) {
 					type="text"
 					name={"couponCode"}
 					label="Coupon Code"
-					placeholder="D1$C0VNT..."
+					placeholder="D1$C0VNT C0D3..."
+          isLabelShown={false}
 					error={state?.valueErrors?.couponCode}
 					defaultValue={state?.values?.couponCode}
 				/>

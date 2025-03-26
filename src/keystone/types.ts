@@ -440,6 +440,7 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
   user: User
 	addons: Addon[]
   coupon: Coupon
+  orderItems: OrderItem[]
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User

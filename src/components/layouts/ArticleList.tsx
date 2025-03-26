@@ -9,7 +9,7 @@ import { StatusBadge } from "@components/StatusBadge"
 import type { Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
-import styles, { post_card, row_graphic } from "@styles/articles.module.css"
+import styles, { post_card } from "@styles/articles.module.css"
 import Link from "next/link"
 
 import Flex from "./Flex"
@@ -122,15 +122,15 @@ export function ArticleItem({
 			)}
 
 			{type === "post" && item.featured_video ? (
-				<figure className={[styles.featured_image, row_graphic].join(" ")}>
+				<figure className={[styles.featured_image].join(" ")}>
 					<YouTubeVideo
 						altText={`${title}'s featured video`}
 						url={item.featured_video}
 					/>
 				</figure>
 			) : (
-				<Link href={link} className={row_graphic}>
-					<figure className={[styles.featured_image, row_graphic].join(" ")}>
+				<Link href={link} >
+					<figure className={[styles.featured_image].join(" ")}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 					</figure>
 				</Link>
@@ -211,7 +211,8 @@ export function ArticleItem({
 							icon={"subscription"}
 							title="subscribe"
 							className="readmore button medium"
-							href={`/subscription-plans/${item.id}`}
+							// href={`/subscription-plans/${item.id}`}
+							href={`/subscription-plans/${item.id}?popup=modal`}
 						/>
 					</>
 				) : (
