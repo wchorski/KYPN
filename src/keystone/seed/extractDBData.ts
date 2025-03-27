@@ -445,6 +445,21 @@ const query = `
         name
       }
     }
+    coupons {
+      id
+      name
+      code
+      amount_off
+      percent_off
+      duration_in_months
+      duration
+      redeem_by
+      max_redemptions
+      redemptions
+      dateCreated
+      dateModified
+      stripeId
+    }
   }
 `
 

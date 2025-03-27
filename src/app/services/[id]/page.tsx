@@ -23,6 +23,8 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { category_list } from "@styles/categories.module.css"
+import { tags_list } from "@styles/tags.module.css"
 
 export async function generateMetadata(
 	{ params, searchParams }: Props,
@@ -103,7 +105,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 			<Grid
 				layout={"1_2"}
 				alignContent={"start"}
-				style={{ marginTop: "var(--space-xxl)", gridColumn: "layout_wide" }}
+				style={{ marginTop: "var(--space-xxl)", gridColumn: "layout_site" }}
 				gap={"xl"}
 			>
 				<header style={{ position: "sticky", top: "var(--space-xxl)" }}>
@@ -113,18 +115,31 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 						isCaption={false}
 						isPriority={true}
 					/>
-
 					<h1> {name} </h1>
-
 					<Link
 						href={`/book-a-service?serviceId=${id}`}
 						className="button large"
 					>
 						Book this Service
 					</Link>
+					<Flex>
+						<ul className={category_list}>
+							{categories?.map((cat) => (
+								<li key={cat.id}>
+									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
+								</li>
+							))}
+						</ul>
 
-					{categories.length > 0 && <CategoriesList categories={categories} />}
-
+						<ul className={tags_list}>
+							{tags?.map((tag) => (
+								<li key={tag.id}>
+									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+								</li>
+							))}
+						</ul>
+					</Flex>
+					©
 					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
 						<Card
 							direction={"row"}

@@ -75,8 +75,8 @@ export async function generateMetadata(
 		// 	url: host.email,
 		// })),
 		authors: {
-			name: author.name,
-			url: author.email,
+			name: author?.name || '',
+			url: author?.email || '',
 		},
 	}
 }
@@ -150,23 +150,6 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 						</Card>
 					)}
 
-					{!session ? (
-						<CallbackLink>Login to Purchase</CallbackLink>
-					) : session?.data.role === null ? (
-						<VerifyEmailCard email={session.user.email} />
-					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
-						<Card>
-							<StatusBadge type={"subscriptionPlan"} status={status} />
-						</Card>
-					) : (
-						<IconLink
-							className="button medium"
-							icon={"subscription"}
-							label="Build a Plan"
-							href={`?${new URLSearchParams({ popup: "modal" })}`}
-						/>
-					)}
-
 					<Flex>
 						<ul className={category_list}>
 							{categories?.map((cat) => (
@@ -190,12 +173,12 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 					<h1>{name}</h1>
 
 					{!session ? (
-						<CallbackLink>Login to Purchase</CallbackLink>
+						<CallbackLink className={'button medium'} >Login to Purchase</CallbackLink>
 					) : session?.data.role === null ? (
 						<VerifyEmailCard email={session.user.email} />
 					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
 						<Card>
-							<StatusBadge type={"product"} status={status} />
+							<StatusBadge type={"subscriptionPlan"} status={status} />
 						</Card>
 					) : (
 						<Card

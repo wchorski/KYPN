@@ -13,7 +13,8 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-
+import { Callout } from "@components/blocks/Callout"
+import Link from "next/link"
 
 export const metadata: Metadata = {
 	title: "Book a Service | " + envs.SITE_TITLE,
@@ -51,15 +52,25 @@ export default async function BookingsPage({ searchParams }: Props) {
 
 	if (error) return <ErrorMessage error={error} />
 	if (!data) return notFound()
-  //@ts-ignore
-  data.prevBooking = prevBooking
+	//@ts-ignore
+	data.prevBooking = prevBooking
 
 	return (
 		<main className={page_layout}>
 			<header className={layout_wide}>
 				<h1> Book a Service </h1>
+				{!session && (
+					<Callout intent={"warning"}>
+						<p>
+							Looks like you are browsing as a guest.{" "}
+							<Link href={"/login"}>Login</Link> to add any bookings to you're
+							account. Don't have an account?{" "}
+							<Link href={"/register"}>Register</Link> for a new one
+						</p>
+					</Callout>
+				)}
 			</header>
-			<div className={[page_content, layout_wide].join(' ')}>
+			<div className={[page_content, layout_wide].join(" ")}>
 				<BookingForm
 					data={plainObj(data)}
 					session={plainObj(session)}

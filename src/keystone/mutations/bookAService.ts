@@ -12,7 +12,7 @@ import {
 	dayOfWeek,
 } from "../../lib/dateCheck"
 import { dateToISOTimezone } from "../../lib/dateFormatter"
-import type {Location, User } from "../types";
+import type { Location, User } from "../types"
 import type { Context } from ".keystone/types"
 
 const now = new Date().toISOString()
@@ -57,7 +57,6 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				timeZone,
 				address,
 			} = variables
-			
 
 			const session = await getServerSession(nextAuthOptions)
 
@@ -115,7 +114,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 					// TODO remove `|| 1` because I made it required in schema
 					if (overlapCount > (selectedLocation.rooms || 1)) {
 						throw new Error(
-							`CONFLICT for Location ${selectedLocation.name}: All ${selectedLocation.rooms} rooms booked within this time range`
+							`Location ${selectedLocation.name} is fully booked up for this date and time: ${selectedLocation.rooms}  \n\n`
 						)
 					}
 
@@ -205,7 +204,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			`,
 			})
 
-      // //TODO prices are virtual fields to service/event/product prices 
+			// //TODO prices are virtual fields to service/event/product prices
 			// PRICING
 			// const addonsCombinedPrice = pickedAddons.reduce(
 			// 	// @ts-ignore
@@ -245,12 +244,12 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				},
 			})
 
-      // TODO how to update web cart context without refreshing whole page?
+			// TODO how to update web cart context without refreshing whole page?
 
 			await sudoContext.db.CartItem.createOne({
 				data: {
 					type: "SALE",
-					user: { connect: { id: customerId } },
+					...(customerId ? { user: { connect: { id: customerId } } } : {}),
 					quantity: 1,
 					booking: { connect: { id: booking.id } },
 				},
@@ -261,7 +260,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// TODO i don't think it returns all this data? remove other stuff
 			return {
 				id: booking.id,
-        status: booking.status,
+				status: booking.status,
 			}
 		},
 	})

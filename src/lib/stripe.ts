@@ -549,7 +549,7 @@ export async function stripeSubscriptionUpdate({
 				await stripeConfig.subscriptions.cancel(stripeSubscriptionId)
 
 			default:
-				console.log("### SubscriptionItem Schema. status not supported")
+				console.log("### 💳 SubscriptionItem Schema. status not supported")
 				break
 		}
 	} catch (error: any) {

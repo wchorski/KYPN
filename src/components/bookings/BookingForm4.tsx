@@ -9,7 +9,7 @@ import { InputField } from "@components/InputField"
 import { Grid } from "@components/layouts/Grid"
 import { TextareaField } from "@components/TextareaField"
 import { useForm } from "@hooks/useForm"
-import type { 
+import type {
 	Addon,
 	AddonCheckboxOptions,
 	Availability,
@@ -20,12 +20,9 @@ import type {
 	SelectOption,
 	Service,
 	User,
- } from "@ks/types"
-import type {
-	BookAServiceState} from "@lib/actions/actionBookAService";
-import {
-	actionBookAService
-} from "@lib/actions/actionBookAService"
+} from "@ks/types"
+import type { BookAServiceState } from "@lib/actions/actionBookAService"
+import { actionBookAService } from "@lib/actions/actionBookAService"
 import { findOverlapTimes } from "@lib/dateCheckCal"
 import { datePrettyLocal, timePrettyTo12HourFormat } from "@lib/dateFormatter"
 import {
@@ -39,16 +36,13 @@ import { findEmployeeBusyRanges } from "@lib/userUtils"
 import formStyles, { form } from "@styles/menus/form.module.scss"
 import Link from "next/link"
 import type { Session } from "next-auth"
-import {
-	useCallback,
-	useEffect,
-	useReducer,
-	useRef,
-} from "react"
+import { useCallback, useEffect, useReducer, useRef } from "react"
 import { BsFillBookmarkFill } from "react-icons/bs"
 
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "./TimePicker"
+import { Callout } from "@components/blocks/Callout"
+import { bg_c_reverse_theme } from "@styles/colorthemes.module.css"
 
 type Fields = {
 	// event: string,
@@ -403,7 +397,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
 
 		const buisnessTimeStrings = filterBuisnessTimes(
-			generateTimesArray().map(t => t.value),
+			generateTimesArray().map((t) => t.value),
 			buisnessHours
 		)
 		const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
@@ -722,7 +716,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<InputField
 								name={"name"}
 								type={"text"}
-								required={false}
+								required={true}
 								defaultValue={session?.user?.name || state.values?.name}
 								error={state.valueErrors?.name}
 							/>
@@ -731,7 +725,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								name={"email"}
 								type={"email"}
 								placeholder="my-inbox@mail.lan"
-								required={false}
+								required={true}
 								defaultValue={session?.user?.email || state.values?.email}
 								error={state.valueErrors?.email}
 							/>
@@ -773,8 +767,28 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<BsFillBookmarkFill />
 						<h2> Booking Requested! </h2>
 						<p>{state.success}</p>
-						<Link href={state.url}> Account bookings ⇢ </Link> <br />
-						<Link href={`/bookings/${state.id}`}> Booking Status </Link>
+						{!session ? (
+							<Callout intent={"warning"}>
+								<p>
+									You created this booking as a guest. Make sure to save this
+									page to your records. A follow up email or phone call will be
+									made with the contect provided
+								</p>
+								<ul>
+									<li>name: {state.values?.name}</li>
+									<li>email: {state.values?.email}</li>
+									<li>phone: {state.values?.phone}</li>
+								</ul>
+								<p className={["pill", bg_c_reverse_theme].join(" ")}>
+									{state.id}
+								</p>
+							</Callout>
+						) : (
+							<>
+								<Link href={state.url}> Account bookings ⇢ </Link> <br />
+								<Link href={`/bookings/${state.id}`}> Booking Status </Link>
+							</>
+						)}
 					</div>
 				)}
 			</div>

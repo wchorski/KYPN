@@ -18,10 +18,13 @@ export const seedDatabase = async (context: Context) => {
 		context
 	)
 
+
+	await seedSchemaItems("Coupon", "code", allDataJson.coupons, context)
 	await seedSchemaItems("Location", "address", allDataJson.locations, context)
 	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
 	await seedSchemaItems("Service", "name", allDataJson.services, context)
-	await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
+  //? "cannot create if a booking in the past"
+	// await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
 
 	await seedSchemaItems("Event", "summary", allDataJson.events, context)
 	// seedTicketOrders creates "Ticket" items after Events are created
@@ -79,6 +82,13 @@ const seedSchemaItems = async (
 		if (process.env.SEED_RANDOM_RELATIVE_DATES === "true") {
 			randoEventDates(itemsToCreate)
 		}
+	}
+	if (schemaType === "Coupon") {
+		itemsToCreate.forEach((item) => {
+			//? virtual field
+			delete item.redemptions
+		})
+
 	}
 
 	//? remove id as new database will create new ids

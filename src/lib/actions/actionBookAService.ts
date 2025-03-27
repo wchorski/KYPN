@@ -1,7 +1,7 @@
 "use server"
 import { keystoneContext } from "@ks/context"
 import { emailRegex } from "@lib/regexPatterns"
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation"
 
 export async function actionBookAService(
 	prevState: BookAServiceState,
@@ -20,8 +20,8 @@ export async function actionBookAService(
 	if (valueErrors)
 		return { valueErrors, values, error: "Check for errors in form fields" }
 
-  let isErrorFlagged = false
-  let bookingId = ''
+	let isErrorFlagged = false
+	let bookingId = ""
 	try {
 		// TODO left off seeing how ks catches this mutation
 		const data = (await keystoneContext.graphql.run({
@@ -35,7 +35,7 @@ export async function actionBookAService(
 			variables: values,
 		})) as { bookAService: { id: string; status: string } }
 
-    bookingId = data.bookAService.id
+		bookingId = data.bookAService.id
 
 		return {
 			// values: {
@@ -46,14 +46,14 @@ export async function actionBookAService(
 		}
 	} catch (error) {
 		console.log("!!! actionBookAService: ", error)
-    isErrorFlagged = true
+		isErrorFlagged = true
 		return {
 			error: "Booking Failed: " + error,
 			success: undefined,
 		}
 	} finally {
-    if(!isErrorFlagged) redirect(`/bookings/${bookingId}`)
-  }
+		if (!isErrorFlagged && values.customerId) redirect(`/bookings/${bookingId}`)
+	}
 }
 
 function validateValues({ email, date, time }: BookAServiceValues) {

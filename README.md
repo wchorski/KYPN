@@ -91,6 +91,8 @@ https://stripe.com/docs/webhooks/quickstart
 stripe listen --forward-to http://localhost:3000/api/webhooks/stripe
 ```
 
+Send test events via CLI `https://docs.stripe.com/stripe-cli/triggers`
+
 ### Database Migrations
 
 When returning to development (from production) you may add new fields to the database schema. You will need to create a migration.
@@ -177,3 +179,6 @@ node v21
 ## Issues
 
 - [util.\_extend issue](https://github.com/vercel/next.js/issues/71374)
+
+## Todo
+- [ ] move all docker related files into `docker` folder (still make it easy to build from root dir)

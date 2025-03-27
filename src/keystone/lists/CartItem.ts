@@ -160,8 +160,9 @@ export const CartItem: Lists.CartItem = list({
 	hooks: {
 		validate: {
 			create: async ({ resolvedData, context }) => {
-				if (!resolvedData?.user?.connect?.id)
-					throw new Error("!!! CartItem must have connected user")
+        //? allow bookings to be made by guests
+				// if (!resolvedData?.user?.connect?.id)
+				// 	throw new Error("!!! CartItem must have connected user")
 
 				const validationStrings = [
 					"product",
@@ -192,7 +193,7 @@ export const CartItem: Lists.CartItem = list({
         }
 
 				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
-					where: { user: { id: { equals: resolvedData.user.connect.id } } },
+					where: { user: { id: { equals: resolvedData?.user?.connect?.id || 'no_user' } } },
 				})
 
 				if (

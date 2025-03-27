@@ -88,6 +88,7 @@ export const POST = async (request: NextRequest) => {
 			console.log(
 				"🐸 handle subscription payment failure. mark sub as delinquent"
 			)
+			await updateSubscriptionDelinquent(stripePayload.data.object)
 			break
 		case "payment_intent.created":
 			break
@@ -142,6 +143,29 @@ export const POST = async (request: NextRequest) => {
 		{ status: 200 }
 	)
 	return redirect("/shop")
+}
+
+async function updateSubscriptionDelinquent(stripeInvoice: Stripe.Invoice) {
+	console.log({ stripeInvoice })
+	const { subscription } = stripeInvoice
+  if(!subscription) return console.log('### 💳 stripe-wh no subscription on this invoice');
+	const subCount = await keystoneContext.sudo().db.SubscriptionItem.count({
+		where: {
+			stripeSubscriptionId: { equals: subscription as string },
+		},
+	})
+	if (subCount === 0) {
+		return console.log(
+			`subscription not found. stripeSubscriptionId: ${subscription} `
+		)
+	}
+
+	await keystoneContext.sudo().db.SubscriptionItem.updateOne({
+		where: { stripeSubscriptionId: subscription as string },
+		data: {
+			status: "DELINQUENT",
+		},
+	})
 }
 
 type CreateSubscriptionOrder = {

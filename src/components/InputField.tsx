@@ -27,7 +27,7 @@ function InputFieldComponent(props: Props, ref: Ref<HTMLInputElement>) {
 		placeholder,
 	} = props
 
-  const { isLabelShown, ...inputProps } = props
+  const { isLabelShown = true, ...inputProps } = props
   
 	return (
 		<label
