@@ -42,7 +42,7 @@ export async function actionBookAService(
 			// },
 			id: data.bookAService.id,
 			url: `/bookings/${data.bookAService.id}`,
-			success: `Booking has been requested. Lookout for a reply with the provided contact. email: ${values.email}`,
+			success: `Booking has been requested. Lookout for a reply with the provided contact. email ${values.email} or phone ${values.phone}`,
 		}
 	} catch (error) {
 		console.log("!!! actionBookAService: ", error)

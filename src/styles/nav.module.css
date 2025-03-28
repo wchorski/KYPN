@@ -118,6 +118,7 @@ button.navwich {
 	align-content: center;
 	background-color: transparent;
 	color: var(--c-txt);
+  height: 100%;
 	&:hover,
 	&:active {
 		color: var(--c-primary);

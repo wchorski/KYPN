@@ -139,7 +139,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 							))}
 						</ul>
 					</Flex>
-					©
+					
 					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
 						<Card
 							direction={"row"}

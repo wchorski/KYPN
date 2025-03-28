@@ -772,13 +772,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								<p>
 									You created this booking as a guest. Make sure to save this
 									page to your records. A follow up email or phone call will be
-									made with the contect provided
+									made with the contact provided
 								</p>
-								<ul>
-									<li>name: {state.values?.name}</li>
-									<li>email: {state.values?.email}</li>
-									<li>phone: {state.values?.phone}</li>
-								</ul>
 								<p className={["pill", bg_c_reverse_theme].join(" ")}>
 									{state.id}
 								</p>

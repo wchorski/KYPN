@@ -249,6 +249,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			await sudoContext.db.CartItem.createOne({
 				data: {
 					type: "SALE",
+					...(email ? { email } : {}),
 					...(customerId ? { user: { connect: { id: customerId } } } : {}),
 					quantity: 1,
 					booking: { connect: { id: booking.id } },

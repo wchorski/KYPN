@@ -100,6 +100,9 @@ model CartItem {
   id           String   @id @default(cuid())
   quantity     Int      @default(1)
   type         String
+  email        String   @default("")
+  user         User?    @relation("CartItem_user", fields: [userId], references: [id])
+  userId       String?  @map("user")
   coupon       Coupon?  @relation("CartItem_coupon", fields: [couponId], references: [id])
   couponId     String?  @map("coupon")
   product      Product? @relation("CartItem_product", fields: [productId], references: [id])
@@ -110,17 +113,15 @@ model CartItem {
   rentalId     String?  @map("rental")
   event        Event?   @relation("CartItem_event", fields: [eventId], references: [id])
   eventId      String?  @map("event")
-  user         User?    @relation("CartItem_user", fields: [userId], references: [id])
-  userId       String?  @map("user")
   dateCreated  DateTime @default(now())
   dateModified DateTime @default(now()) @updatedAt
 
+  @@index([userId])
   @@index([couponId])
   @@index([productId])
   @@index([bookingId])
   @@index([rentalId])
   @@index([eventId])
-  @@index([userId])
 }
 
 model Category {

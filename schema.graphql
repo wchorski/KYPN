@@ -727,12 +727,13 @@ type CartItem {
   quantity: Int
   type: String
   subTotal: Int
+  email: String
+  user: User
   coupon: Coupon
   product: Product
   booking: Booking
   rental: Rental
   event: Event
-  user: User
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -748,12 +749,13 @@ input CartItemWhereInput {
   id: IDFilter
   quantity: IntFilter
   type: StringFilter
+  email: StringFilter
+  user: UserWhereInput
   coupon: CouponWhereInput
   product: ProductWhereInput
   booking: BookingWhereInput
   rental: RentalWhereInput
   event: EventWhereInput
-  user: UserWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
 }
@@ -762,6 +764,7 @@ input CartItemOrderByInput {
   id: OrderDirection
   quantity: OrderDirection
   type: OrderDirection
+  email: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
 }
@@ -769,12 +772,13 @@ input CartItemOrderByInput {
 input CartItemUpdateInput {
   quantity: Int
   type: String
+  email: String
+  user: UserRelateToOneForUpdateInput
   coupon: CouponRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   booking: BookingRelateToOneForUpdateInput
   rental: RentalRelateToOneForUpdateInput
   event: EventRelateToOneForUpdateInput
-  user: UserRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
 }
@@ -817,12 +821,13 @@ input CartItemUpdateArgs {
 input CartItemCreateInput {
   quantity: Int
   type: String
+  email: String
+  user: UserRelateToOneForCreateInput
   coupon: CouponRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
   booking: BookingRelateToOneForCreateInput
   rental: RentalRelateToOneForCreateInput
   event: EventRelateToOneForCreateInput
-  user: UserRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
 }

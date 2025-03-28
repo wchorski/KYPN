@@ -275,3 +275,7 @@ s {
 	background-color: var(--c-body);
 	z-index: 1;
 }
+
+p:empty {
+	display: none;
+}

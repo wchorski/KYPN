@@ -3,13 +3,20 @@ import {
 	integer,
 	relationship,
 	select,
+	text,
 	timestamp,
 	virtual,
 } from "@keystone-6/core/fields"
 
 import { hasOnlyOneValue } from "../../lib/utils"
 import { permissions, rules } from "../access"
-import type { CartItem as TCartItem, Coupon, Event, Rental, Product } from "../types"
+import type {
+	CartItem as TCartItem,
+	Coupon,
+	Event,
+	Rental,
+	Product,
+} from "../types"
 import type { Lists } from ".keystone/types"
 
 export const CartItem: Lists.CartItem = list({
@@ -29,7 +36,7 @@ export const CartItem: Lists.CartItem = list({
 
 	ui: {
 		listView: {
-			initialColumns: ["user", "type", "quantity", "subTotal", "dateModified"],
+			initialColumns: ["user", "email", "type", "quantity", "subTotal", "dateModified"],
 			initialSort: { field: "dateModified", direction: "DESC" },
 		},
 	},
@@ -131,13 +138,14 @@ export const CartItem: Lists.CartItem = list({
 				},
 			}),
 		}),
+		email: text({ ui: { description: "identifies guest cart items" } }),
+		user: relationship({ ref: "User.cart" }),
 		coupon: relationship({ ref: "Coupon" }),
 		product: relationship({ ref: "Product" }),
 		booking: relationship({ ref: "Booking" }),
 		rental: relationship({ ref: "Rental" }),
 		event: relationship({ ref: "Event" }),
 		// subscriptionItem: relationship({ ref: "SubscriptionItem" }),
-		user: relationship({ ref: "User.cart" }),
 		...group({
 			label: "Metadata",
 			// description: 'Group description',
@@ -160,7 +168,7 @@ export const CartItem: Lists.CartItem = list({
 	hooks: {
 		validate: {
 			create: async ({ resolvedData, context }) => {
-        //? allow bookings to be made by guests
+				//? allow bookings to be made by guests
 				// if (!resolvedData?.user?.connect?.id)
 				// 	throw new Error("!!! CartItem must have connected user")
 
@@ -180,20 +188,25 @@ export const CartItem: Lists.CartItem = list({
 						)}] set`
 					)
 
-        if(resolvedData.product?.connect?.id){
+				if (resolvedData.product?.connect?.id) {
+					const product = (await context.sudo().query.Product.findOne({
+						where: { id: resolvedData.product.connect.id },
+						query: `status`,
+					})) as Product
 
-          const product = await context.sudo().query.Product.findOne({
-            where: { id: resolvedData.product.connect.id },
-            query: `status`
-          }) as Product
-
-          if(['ARCHIVED','OUT_OF_STOCK', 'DRAFT'].includes(product.status)){
-            throw new Error('Product is not avaiable for purchase at this time.')
-          }
-        }
+					if (["ARCHIVED", "OUT_OF_STOCK", "DRAFT"].includes(product.status)) {
+						throw new Error(
+							"Product is not avaiable for purchase at this time."
+						)
+					}
+				}
 
 				const cartItemsByUser = await context.sudo().db.CartItem.findMany({
-					where: { user: { id: { equals: resolvedData?.user?.connect?.id || 'no_user' } } },
+					where: {
+						user: {
+							id: { equals: resolvedData?.user?.connect?.id || "no_user" },
+						},
+					},
 				})
 
 				if (

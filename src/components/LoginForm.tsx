@@ -188,17 +188,16 @@ export function LoginForm({ providers, callbackUrl }: Props) {
 				/>
 
 				<p className={formState.status}>{formState.message}</p>
-
-				{formState.status !== "success" && (
-					<Flex alignItems="center">
-						<SubmitButton label={"Login"} />
-
-						<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
-							password reset
-						</Link>
-					</Flex>
-				)}
 			</fieldset>
+			{formState.status !== "success" && (
+				<Flex alignItems="center">
+					<SubmitButton label={"Login"} />
+
+					<Link href={`?${new URLSearchParams({ popup: "modal" })}`}>
+						password reset
+					</Link>
+				</Flex>
+			)}
 
 			{providers && providers.length > 0 && (
 				<fieldset>

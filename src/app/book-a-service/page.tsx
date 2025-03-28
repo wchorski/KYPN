@@ -15,6 +15,7 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { Callout } from "@components/blocks/Callout"
 import Link from "next/link"
+import { CallbackLink } from "@components/menus/CallbackLink"
 
 export const metadata: Metadata = {
 	title: "Book a Service | " + envs.SITE_TITLE,
@@ -63,9 +64,10 @@ export default async function BookingsPage({ searchParams }: Props) {
 					<Callout intent={"warning"}>
 						<p>
 							Looks like you are browsing as a guest.{" "}
-							<Link href={"/login"}>Login</Link> to add any bookings to you're
-							account. Don't have an account?{" "}
-							<Link href={"/register"}>Register</Link> for a new one
+							<CallbackLink>Login</CallbackLink>
+							to add any bookings to you're account. Don't have an account?{" "}
+							<CallbackLink href={"/register"}>Register</CallbackLink>
+							for a new one
 						</p>
 					</Callout>
 				)}
