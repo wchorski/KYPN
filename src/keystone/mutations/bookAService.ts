@@ -19,7 +19,9 @@ const now = new Date().toISOString()
 
 export const bookAService = (base: BaseSchemaMeta) =>
 	graphql.field({
-		type: base.object("Booking"),
+		// type: base.object("Booking"),
+		//? this needs to return as CartItem to be added to frontend shopping cart
+		type: base.object("CartItem"),
 
 		args: {
 			// bookingId: graphql.arg({ type: graphql.String }),
@@ -58,16 +60,18 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				address,
 			} = variables
 
-			const session = await getServerSession(nextAuthOptions)
+			// const session = await getServerSession(nextAuthOptions)
+			// if(!session) throw new Error('no session for bookAService')
 
-			const sudoContext = context.sudo()
+			const { sudo: sudoContext } = context
 			let description = ""
 			// const start = new Date(date + "T" + time).toISOString()
 
 			const start = dateToISOTimezone(date, time, timeZone)
 
 			// SERVICE
-			const service = await context.withSession(session).query.Service.findOne({
+			// const service = await context.withSession(session).query.Service.findOne({
+			const service = await context.query.Service.findOne({
 				where: { id: serviceId },
 				query: `
           id
@@ -91,7 +95,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 			// Location
 			if (locationId) {
-				const selectedLocation = (await sudoContext.query.Location.findOne({
+				const selectedLocation = (await sudoContext().query.Location.findOne({
 					where: { id: locationId },
 					query: `
 			      name
@@ -128,7 +132,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 				// maybe query gigs seperately?
 
 				// todo just run a graphql query?
-				const employeesThatHaveCurrentGigs = (await sudoContext.graphql.run({
+				const employeesThatHaveCurrentGigs = (await sudoContext().graphql.run({
 					query: `
             query Query($where: UserWhereInput!, $gigsWhere: BookingWhereInput!, $availWhere: AvailabilityWhereInput!) {
               users(where: $where) {
@@ -195,7 +199,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			}
 
 			// ADDONS
-			const pickedAddons = await context.query.Addon.findMany({
+			const pickedAddons = await sudoContext().query.Addon.findMany({
 				where: {
 					OR: addonIds?.map((id) => ({ id: { equals: id } })),
 				},
@@ -215,7 +219,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// const priceTotal = service.price + addonsCombinedPrice
 
 			// BOOKING
-			const booking = await sudoContext.db.Booking.createOne({
+			const newBooking = await sudoContext().db.Booking.createOne({
 				data: {
 					// summary: `${customerName || customerEmail} | ${service?.name}`,
 					service: { connect: { id: serviceId } },
@@ -246,22 +250,37 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 			// TODO how to update web cart context without refreshing whole page?
 
-			await sudoContext.db.CartItem.createOne({
+			const cartItem = await sudoContext().db.CartItem.createOne({
+				// query: `
+				//   id
+				//   quantity
+				//   type
+				//   subTotal
+				//   email
+				//   booking {
+				//     id
+				//   }
+				// `,
 				data: {
 					type: "SALE",
 					...(email ? { email } : {}),
 					...(customerId ? { user: { connect: { id: customerId } } } : {}),
 					quantity: 1,
-					booking: { connect: { id: booking.id } },
+					// TODO create instead of connect booking here?
+					booking: { connect: { id: newBooking.id } },
 				},
 			})
 
 			// email sent via Schema file
 
-			// TODO i don't think it returns all this data? remove other stuff
 			return {
-				id: booking.id,
-				status: booking.status,
+				...cartItem,
+				booking: newBooking,
 			}
+			// TODO i don't think it returns all this data? remove other stuff
+			// return {
+			// 	id: newBooking.id,
+			// 	status: newBooking.status,
+			// }
 		},
 	})

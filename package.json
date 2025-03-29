@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "migrate": "keystone prisma migrate dev",
-    "db:migrate": "keystone prisma migrate deploy",
+    "migrate-deploy": "keystone prisma migrate deploy",
     "db:seed": "tsx seed-data.ts",
     "keystone:dev": "keystone dev",
     "keystone:build": "keystone build",

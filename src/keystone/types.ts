@@ -155,6 +155,7 @@ export type Booking = Lists.Booking.Item & {
 	employees: User[]
 	employee_requests: User[]
 	customer: User
+	orderItem: OrderItem
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string

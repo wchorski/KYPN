@@ -2,7 +2,6 @@
 /* $sidebar-breakpoint: 1185px; */
 
 .page_layout {
-
 	/* // todo the `150px` is a magic number cheat because it ended up being too wide. idk why */
 	--site-max-width: (calc(var(--w-sitemax) - 150px));
 	--content-max-width: var(--w-contentmax);
@@ -15,7 +14,7 @@
 	--breakout-size: calc((var(--w-content-breakout) - var(--content-max-width)));
 
 	display: grid;
-  row-gap: var(--space-m);
+	row-gap: var(--space-m);
 
 	/* //? if you update this don't forget about the media query below
   //todo maybe add a [layout_sidebar] as to propery set gaps and stuff */
@@ -32,21 +31,21 @@
 		[layout_breakout-end] minmax(0, var(--wide-size))
 		[layout_wide-end] minmax(0, var(--site-bounds))
 		[layout_site-end] minmax(var(--padding-inline), 1fr)
-		[layout_full-end];   
+		[layout_full-end];
 }
 .page_layout > header {
 	grid-column: 1/-1;
 	grid-row: 1;
 	grid-template-columns: inherit;
-  padding-top: var(--space-l);
+	padding-top: var(--space-l);
 }
 .page_layout > header > .page_title {
 	grid-column: layout_wide;
 }
 
-.page_layout > main {
-  min-height: 100vh;
-  min-height: 100dvh;
+main.page_layout {
+	min-height: 100vh;
+	min-height: 100dvh;
 }
 
 /* how am i gonna fix this? */
@@ -59,8 +58,8 @@
 .page_layout > .page_content {
 	grid-row: 2;
 	grid-column: layout_breakout;
-  /* //TODO why does this break a lot of the layouts? */
-  /* grid-template-columns: inherit;
+	/* //TODO why does this break a lot of the layouts? */
+	/* grid-template-columns: inherit;
   display: grid; */
 }
 
@@ -84,22 +83,29 @@
 .page_layout > footer {
 	grid-column: layout_wide;
 	grid-row: 3;
-  grid-template-columns: inherit;
+	grid-template-columns: inherit;
 }
 
 .page_layout,
 .page_layout > .layout_full,
 .page_layout > .layout_wide {
-  & > :is(div:global(.flex), div:global(.grid)){
-    grid-column: layout_site;
-  }
+	& > :is(div:global(.flex), div:global(.grid)) {
+		grid-column: layout_site;
+	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
 		grid-column: layout_wide;
 	}
-  /* //? must target with `:global` as to not get hash id */
-	& > :is( blockquote, pre, div:global(.gallery), div:global(.card), div:global(.youtubeVideo) ) {
+	/* //? must target with `:global` as to not get hash id */
+	&
+		> :is(
+			blockquote,
+			pre,
+			div:global(.gallery),
+			div:global(.card),
+			div:global(.youtubeVideo)
+		) {
 		grid-column: layout_breakout;
-    margin-block: var(--space-l);
+		margin-block: var(--space-l);
 	}
 
 	& > :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav) {
@@ -122,12 +128,10 @@
 .page_layout .layout_site {
 	z-index: 1;
 	grid-column: layout_site;
-
 }
 .page_layout .layout_wide {
 	z-index: 1;
 	grid-column: layout_wide;
-
 }
 
 .page_layout .layout_breakout {
@@ -150,7 +154,7 @@
 }
 
 .page_layout hr {
-  grid-column: layout_content;
+	grid-column: layout_content;
 }
 
 @media screen and (width > 1185px) {

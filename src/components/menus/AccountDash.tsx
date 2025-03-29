@@ -3,14 +3,14 @@ import { Table } from "@components/elements/Table"
 import { TicketList } from "@components/events/TicketList"
 import { Card } from "@components/layouts/Card"
 import { StatusBadge } from "@components/StatusBadge"
-import type { 
+import type {
 	Booking,
 	Order,
 	Rental,
 	SubscriptionItem,
 	Ticket,
 	User,
- } from "@ks/types"
+} from "@ks/types"
 import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import styles from "@styles/menus/dashboard.module.css"
@@ -48,6 +48,7 @@ export default function AccountDash({ data }: Props) {
 			datePrettyLocalTime(book.start || ""),
 		service: book.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={book.status} />,
+		order: <StatusBadge type={"order"} status={book.orderItem.order.status} />,
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
 		details: book.id,
 	}))
@@ -71,13 +72,13 @@ export default function AccountDash({ data }: Props) {
 	)
 
 	const rentalCells = rentals?.map((item) => ({
-	  start: datePrettyLocalDay(item.start),
-	  days: item.days,
-	  status: <StatusBadge type={"rental"} status={item.status} />,
-	  address: item.address,
-	  delivery: item.delivery ? "Delivery" : "Pickup",
-	  details: item.id,
-	}));
+		start: datePrettyLocalDay(item.start),
+		days: item.days,
+		status: <StatusBadge type={"rental"} status={item.status} />,
+		address: item.address,
+		delivery: item.delivery ? "Delivery" : "Pickup",
+		details: item.id,
+	}))
 
 	// todo add employee gig to table. try to make both gigs and requests into one table, but may just split to make it easiuer
 	const gigCells = gigs.map((gig) => ({
@@ -126,7 +127,7 @@ export default function AccountDash({ data }: Props) {
 
 					<Table
 						caption=""
-						headers={["service", "date", "status", "details"]}
+						headers={["service", "date", "status", "order", "details"]}
 						cells={bookingCells}
 						route={`/bookings`}
 					/>
@@ -158,28 +159,24 @@ export default function AccountDash({ data }: Props) {
 				</Card>
 			)}
 			{rentals.length > 0 && (
-        <Card id="rentals" marginBlock={'0'}>
-          <h3
+				<Card id="rentals" marginBlock={"0"}>
+					<h3>Rentals</h3>
 
-          >
-            Rentals
-          </h3>
-
-          <Table
-            caption=""
-            headers={[
-              "start",
-              "days",
-              "status",
-              "address",
-              "delivery",
-              "details",
-            ]}
-            cells={rentalCells}
-            route={`/rentals`}
-          />
-        </Card>
-      )}
+					<Table
+						caption=""
+						headers={[
+							"start",
+							"days",
+							"status",
+							"address",
+							"delivery",
+							"details",
+						]}
+						cells={rentalCells}
+						route={`/rentals`}
+					/>
+				</Card>
+			)}
 
 			{user.subscriptions.length > 0 && (
 				<Card id="subscriptions" marginBlock={"0"}>

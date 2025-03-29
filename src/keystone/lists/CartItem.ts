@@ -127,7 +127,8 @@ export const CartItem: Lists.CartItem = list({
 
 					// TODO does this take into account addons added to booking?
 					if (item.bookingId) {
-						const booking = await context.query.Booking.findOne({
+            // TODO a work around. kinda lazy but shouldn't be sensative info
+						const booking = await context.sudo().query.Booking.findOne({
 							where: { id: item.bookingId || "no_product" },
 							query: `price`,
 						})
@@ -270,7 +271,7 @@ export const CartItem: Lists.CartItem = list({
 				console.log(
 					"🐸🐸🐸 check that cartItem can only have one of item type 🐸🐸🐸"
 				)
-				console.log({ hasOnlyOne })
+				
 				if (!hasOnlyOne)
 					throw new Error(
 						`!!! Cart Item can only have one of [${validationStrings.join(

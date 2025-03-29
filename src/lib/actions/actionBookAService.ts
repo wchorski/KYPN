@@ -1,6 +1,10 @@
 "use server"
+import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
+import { Booking, CartItem } from "@ks/types"
 import { emailRegex } from "@lib/regexPatterns"
+import { plainObj } from "@lib/utils"
+import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 
 export async function actionBookAService(
@@ -12,6 +16,8 @@ export async function actionBookAService(
 	//? array of checkboxes w same name `addonIds`
 	values.addonIds = formData.getAll("addonIds") as string[]
 	// console.log("action: ", { values })
+	const session = await getServerSession(nextAuthOptions)
+	
 	// // @ts-ignore
 	// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 	// const {  } = values
@@ -24,24 +30,39 @@ export async function actionBookAService(
 	let bookingId = ""
 	try {
 		// TODO left off seeing how ks catches this mutation
-		const data = (await keystoneContext.graphql.run({
+		const data = (await keystoneContext.withSession(session).graphql.run({
+			// const data = (await keystoneContext.sudo().graphql.run({
 			query: `
         mutation BookAService($serviceId: String!, $date: String!, $time: String!, $timeZone: String!, $email: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerId: String, $name: String, $phone: String, $notes: String, $amountTotal: Int) {
           bookAService(serviceId: $serviceId, date: $date, time: $time, timeZone: $timeZone, email: $email, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerId: $customerId, name: $name, phone: $phone, notes: $notes, amount_total: $amountTotal) {
             id
+            quantity
+            type
+            subTotal
+            email
+            booking {
+              id
+              price
+              summary
+              service {
+                image
+              }
+            }
           }
         }
       `,
 			variables: values,
-		})) as { bookAService: { id: string; status: string } }
+		})) as { bookAService: CartItem }
 
-		bookingId = data.bookAService.id
+		
+		bookingId = data.bookAService.booking?.id || ""
 
 		return {
 			// values: {
 			// },
-			id: data.bookAService.id,
-			url: `/bookings/${data.bookAService.id}`,
+			id: bookingId || "",
+			url: `/bookings/${bookingId}`,
+			cartItem: plainObj(data.bookAService),
 			success: `Booking has been requested. Lookout for a reply with the provided contact. email ${values.email} or phone ${values.phone}`,
 		}
 	} catch (error) {
@@ -51,9 +72,11 @@ export async function actionBookAService(
 			error: "Booking Failed: " + error,
 			success: undefined,
 		}
-	} finally {
-		if (!isErrorFlagged && values.customerId) redirect(`/bookings/${bookingId}`)
 	}
+	// finally {
+	// 	if (!isErrorFlagged && values.customerId && bookingId)
+	// 		redirect(`/bookings/${bookingId}`)
+	// }
 }
 
 function validateValues({ email, date, time }: BookAServiceValues) {
@@ -97,4 +120,5 @@ export type BookAServiceState = {
 	valueErrors?: Record<keyof BookAServiceValues, string> | undefined
 	error?: string
 	success?: string
+	cartItem?: CartItem
 }

@@ -252,6 +252,11 @@ const USER_DASH_QUERY = `
       name
     }
     status
+    orderItem {
+      order {
+        status
+      }
+    }
   }
   subscriptions {
     id

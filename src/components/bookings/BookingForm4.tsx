@@ -43,6 +43,7 @@ import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "./TimePicker"
 import { Callout } from "@components/blocks/Callout"
 import { bg_c_reverse_theme } from "@styles/colorthemes.module.css"
+import { useCart } from "@components/hooks/CartStateContext"
 
 type Fields = {
 	// event: string,
@@ -131,6 +132,7 @@ type FormAsideAction =
 	  }
 
 export function BookingForm({ data, session, timeZoneOptions }: Props) {
+	const { addToCart } = useCart()
 	const {
 		services = [],
 		locations = [],
@@ -378,6 +380,14 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		}
 	}, [prevBooking])
 
+	useEffect(() => {
+		if (state.success && state.cartItem) {
+			addToCart(state.cartItem)
+		}
+
+		// return () =>
+	}, [state])
+
 	function findPartialDays(id: string) {
 		// const pickedService = services.find((x: any) => x.id === stateRed.service?.id)
 
@@ -523,7 +533,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		// <div className={formStyles.grid_wrap}>
 		<Grid layout={"1_1"} alignContent={"start"}>
 			<div>
-				{!state.id || !state.url ? (
+				{!state.cartItem ? (
 					<form action={action} ref={formRef} className={form}>
 						<fieldset>
 							<legend> The What </legend>
@@ -775,13 +785,14 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 									made with the contact provided
 								</p>
 								<p className={["pill", bg_c_reverse_theme].join(" ")}>
-									{state.id}
+									CartItemId: {state.cartItem.id}
 								</p>
 							</Callout>
 						) : (
 							<>
-								<Link href={state.url}> Account bookings ⇢ </Link> <br />
 								<Link href={`/bookings/${state.id}`}> Booking Status </Link>
+                <br />
+								<Link href={'/account#bookings'}> Account bookings ⇢ </Link> 
 							</>
 						)}
 					</div>

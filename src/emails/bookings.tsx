@@ -52,7 +52,7 @@ export default function BookingEmail({
               </Column>
               <Column align='right'>
                 <Button style={button} href={envs.FRONTEND_URL + `/bookings/${booking?.id}`}>
-                  View Account
+                  View
                 </Button>
               </Column>
             </Row>

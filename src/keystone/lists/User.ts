@@ -102,7 +102,7 @@ export const User: Lists.User = list({
 				description:
 					"Can only be changed via `passwordReset` mutation + access to owner's email",
 				itemView: {
-					fieldMode: "hidden",
+					fieldMode: permissions.canManageUsers ? "edit" : "hidden",
 				},
 				// itemView: {
 				// 	fieldMode: ({ session, context, item }) =>
@@ -129,9 +129,9 @@ export const User: Lists.User = list({
 		url: text(),
 		isActive: checkbox({ defaultValue: true }),
 		stripeCustomerId: text({
-			isIndexed: 'unique',
+			isIndexed: "unique",
 			validation: { isRequired: false },
-      // TODO delete below comment. isIndexed: 'unique' should do it
+			// TODO delete below comment. isIndexed: 'unique' should do it
 			// hooks: {
 			// 	validate: {
 			// 		create: async ({ resolvedData, context, addValidationError }) => {
@@ -173,7 +173,7 @@ export const User: Lists.User = list({
 		dateModified: timestamp({
 			defaultValue: { kind: "now" },
 			db: {
-        //? sets as current date for any update
+				//? sets as current date for any update
 				updatedAt: true,
 			},
 		}),
@@ -274,24 +274,24 @@ export const User: Lists.User = list({
 					name: String(resolvedData.name),
 					nameLast: String(resolvedData.nameLast),
 					isActive: resolvedData.isActive ? resolvedData.isActive : false,
-				}).then(res => {
-          if(!res) return
-          resolvedData.stripeCustomerId = res.id
-        })
+				}).then((res) => {
+					if (!res) return
+					resolvedData.stripeCustomerId = res.id
+				})
 			},
-      // update: async ({resolvedData, item}) => {
-      //   console.log('🐸 if email changed and authId is an email (regex) then update to match');
-      //   await stripeCustomerUpdate({
-      //     stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
-      //     email: String(resolvedData.email),
+			// update: async ({resolvedData, item}) => {
+			//   console.log('🐸 if email changed and authId is an email (regex) then update to match');
+			//   await stripeCustomerUpdate({
+			//     stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
+			//     email: String(resolvedData.email),
 			// 		name: String(resolvedData.name),
 			// 		nameLast: String(resolvedData.nameLast),
 			// 		isActive: resolvedData.isActive ? Boolean(resolvedData.isActive) : item.isActive,
-      //   }).then(res => {
-      //     if(!res) return
-      //     resolvedData.stripeCustomerId = res.id
-      //   })
-      // },
+			//   }).then(res => {
+			//     if(!res) return
+			//     resolvedData.stripeCustomerId = res.id
+			//   })
+			// },
 		},
 		async afterOperation({ operation, context, item }) {
 			if (operation === "create") {
