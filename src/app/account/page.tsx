@@ -1,12 +1,12 @@
 import ErrorPage from "@components/layouts/ErrorPage"
 import { Grid } from "@components/layouts/Grid"
 import AccountDash from "@components/menus/AccountDash"
-import type { DashNavData } from "@components/menus/DashNav";
+import type { DashNavData } from "@components/menus/DashNav"
 import { DashNav } from "@components/menus/DashNav"
 import { LoginToViewPage } from "@components/menus/LoginToViewPage"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { keystoneContext } from "@ks/context"
-import type {  Order, User  } from "@ks/types"
+import type { Order, User } from "@ks/types"
 import fetchRentals from "@lib/fetchdata/fetchRentals"
 import { fetchTicketsByUser } from "@lib/fetchdata/fetchTicketsByUser"
 import { fetchUser } from "@lib/fetchdata/fetchUser"
@@ -208,7 +208,7 @@ export default async function AccountPage() {
 			icon: <IconDownload />,
 		},
 	]
-  
+
 	const data = {
 		user,
 		orders,
@@ -221,7 +221,10 @@ export default async function AccountPage() {
 
 	return (
 		<main className={page_layout}>
-			<header className={layout_site}>
+			<header
+				className={layout_site}
+				style={{ display: session.data.role ? "none" : "initial" }}
+			>
 				<h1 style={{ display: "none" }}> Account </h1>
 
 				{!session.data.role && <VerifyEmailCard email={user.email} />}

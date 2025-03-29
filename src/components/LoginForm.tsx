@@ -88,11 +88,12 @@ export function LoginForm({ providers, callbackUrl }: Props) {
 
 			if (res?.ok) {
 				// todo but with next 14 not getting session on sudo page load
-				// router.refresh()
-				// router.push(`/account`)
+				router.push(callbackUrl || envs.FRONTEND_URL + "/account")
+				router.refresh()
 				// window.location.replace("/account")
 
-				router.push(res?.url || "/account")
+				// todo why not showing session after login? need full refresh
+				// router.push(res?.url || "/account")
 				return {
 					...formState,
 					status: "success",

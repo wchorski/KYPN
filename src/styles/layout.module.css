@@ -43,10 +43,11 @@
 	grid-column: layout_wide;
 }
 
-main.page_layout {
+/* TODO how do i keep footer always just below view */
+/* main.page_layout {
 	min-height: 100vh;
 	min-height: 100dvh;
-}
+} */
 
 /* how am i gonna fix this? */
 /* .page_content {
