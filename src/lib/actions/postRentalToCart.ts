@@ -101,7 +101,7 @@ export async function postRentalToCart(
 					type: "RENT_RESERVATION",
 				},
 			})) as { addToCart: CartItem }
-			console.log({ data })
+			// console.log({ data })
 
 			return {
 				values,

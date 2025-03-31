@@ -94,6 +94,7 @@ export default async function BookingSinglePage({
 		notes,
 		addons,
 		employees,
+    employee_requests,
 		customer,
 		dateModified,
 		start,
@@ -142,16 +143,22 @@ export default async function BookingSinglePage({
 										alt={"user avatar"}
 										width={20}
 										height={20}
+										unoptimized={true}
 									/>
 								) : (
 									<IconUserAccountAvatar />
 								)}
 							</figure>
-							<span>
-								<Link href={`/users/${customer.id}`}>
-									{customer?.name + " | " + customer.email}
-								</Link>
-							</span>
+
+							{customer ? (
+								<span>
+									<Link href={`/users/${customer.id}`}>
+										{customer?.name + " | " + customer?.email}
+									</Link>
+								</span>
+							) : (
+								<span>{email}</span>
+							)}
 						</Card>
 					)}
 				</Flex>
@@ -165,7 +172,9 @@ export default async function BookingSinglePage({
 					<Callout intent={"info"}>
 						<p>
 							Item is in shopping cart. Continue with{" "}
-							<Link className={'button'}  href={`/checkout`}>checkout</Link>
+							<Link className={"button"} href={`/checkout`}>
+								checkout
+							</Link>
 						</p>
 					</Callout>
 				)}
@@ -180,7 +189,7 @@ export default async function BookingSinglePage({
 									<span>
 										{" "}
 										{name}{" "}
-										{customer.email !== email ? " (Unregistered User)" : ""}{" "}
+										{customer?.email !== email ? " (Unregistered User)" : ""}{" "}
 									</span>
 
 									<br />
@@ -269,6 +278,22 @@ export default async function BookingSinglePage({
 							</ul>
 						</>
 					)}
+          {/* only admin can view this list */}
+					{employee_requests.length > 0 && (
+						<>
+							<h2> Employees Requested </h2>
+							<ul
+								className="employees"
+								style={{ padding: "0", listStyle: "none" }}
+							>
+								{employee_requests.map((emp) => (
+									<li key={emp.id}>
+										<UserBadge user={emp} />
+									</li>
+								))}
+							</ul>
+						</>
+					)}
 
 					{details && (
 						<div className={""}>
@@ -324,15 +349,23 @@ const QUERY_BOOKING_RECIEPT = `
       id
       name
     }
+    employee_requests {
+      id
+      name
+      email
+      image
+    }
 		employees {
       id
       name
       email
+      image
     }
 		customer {
       id
       name
       email
+      image
     }
 		dateModified
 		start

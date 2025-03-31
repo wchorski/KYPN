@@ -23,6 +23,8 @@ export default async function fetchBooking({ id, session, query }: Props) {
 				where: { booking: { id: { equals: id } } },
 			})
 
+    // TODO maby fetch employees with sudo here since there is permission issues with access
+
 		return { booking, cartItemCount }
 	} catch (error) {
 		console.log("!!! fetch booking: ", error)

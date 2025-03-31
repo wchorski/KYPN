@@ -16,6 +16,7 @@ import moneyFormatter from "@lib/moneyFormatter"
 import styles from "@styles/menus/dashboard.module.css"
 
 import { VerifyEmailCard } from "./VerifyEmailCard"
+import Link from "next/link"
 
 type Props = {
 	data: {
@@ -48,7 +49,15 @@ export default function AccountDash({ data }: Props) {
 			datePrettyLocalTime(book.start || ""),
 		service: book.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={book.status} />,
-		order: <StatusBadge type={"order"} status={book.orderItem?.order?.status} />,
+    // TODO how to handle canceled, post poned, deleted orders?
+		order: book?.orderItem?.order?.status ? (
+			<StatusBadge type={"order"} status={book.orderItem.order.status} />
+		) : (
+			<Link href={`/checkout`} className={"warning"}>
+				awaiting checkout
+			</Link>
+		),
+
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
 		details: book.id,
 	}))

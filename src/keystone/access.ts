@@ -94,6 +94,34 @@ export const rules = {
 		// return { status: { equals: "PUBLIC" } }
 	},
 
+	canViewUsers({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+
+		if (permissions.canManageUsers({ session })) return true
+		if (permissions.canViewUsers({ session })) return true
+
+		//? allow user to view themselves AND employees on owned booking
+		if (session)
+			return {
+				OR: [
+					{
+						id: { equals: session.itemId },
+					},
+					{
+						gigs: {
+							some: {
+								customer: {
+									id: {
+										equals: session.itemId,
+									},
+								},
+							},
+						},
+					},
+				],
+			}
+		return false
+	},
 	canManageUsers({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 

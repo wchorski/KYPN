@@ -27,7 +27,7 @@ export const User: Lists.User = list({
 	access: {
 		filter: {
 			// query: () => true,
-			query: rules.canManageUsers,
+			query: rules.canViewUsers,
 			update: rules.canManageUsers,
 			// delete: () => false,
 		},

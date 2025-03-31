@@ -6,7 +6,7 @@
   align-items: center;
 
   & figure{
-    border: solid 1px var(--c-accent);
+    /* border: solid 1px var(--c-accent); */
     border-radius: 50%;
     overflow: hidden;
     width: 50px;

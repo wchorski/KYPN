@@ -4,6 +4,7 @@ import Link from "next/link"
 import React from "react"
 
 import { NoData } from "./NoData"
+import { IconLink } from "./IconLink"
 
 interface TableProps {
 	caption: string
@@ -58,7 +59,7 @@ export function Table({ caption, cells, headers, route }: TableProps) {
 								{keys.map((key: string) => (
 									<td key={key} data-cell={key} role="cell">
 										{route && linkterms.includes(key) ? (
-											<Link href={`${route}/${item[key]}`}> {key} </Link>
+											<IconLink title={key + ' document'} icon={'document'} href={`${route}/${item[key]}`} /> 
 										) : (
 											item[key]
 										)}

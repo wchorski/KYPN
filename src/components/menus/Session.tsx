@@ -3,13 +3,13 @@ import { desktop_label } from "@styles/nav.module.css"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import type { ReactElement } from "react"
-import { MdAccountCircle } from "react-icons/md"
-
+import Image from "next/image"
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 
 import { NavLink } from "./NavLink"
 import SignOutButton from "./SignOutButton"
+import { IconAccountBox } from "@lib/useIcons"
 
 
 
@@ -32,14 +32,15 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 			<NavLink href={`/account`} className={session_btn}>
 				<figure className={session_image} >
 					{session.user.image ? (
-						<img
+						<Image
 							src={session.user.image}
 							alt={"user avatar"}
 							width={20}
 							height={20}
+              unoptimized={true}
 						/>
 					) : (
-						<MdAccountCircle />
+						<IconAccountBox />
 					)}
 				</figure>
 				<span className={desktop_label} >{label}</span>

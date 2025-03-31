@@ -9,18 +9,17 @@ export async function actionEmployeeGigDecision(
 	prevState: EmployeeGigDecisionState,
 	formData: FormData
 ): Promise<EmployeeGigDecisionState> {
-  const values = Object.fromEntries(formData) as EmployeeGigDecisionValues
-  // // @ts-ignore
-  // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-  const { userId, bookingId, decision } = values
-  
+	const values = Object.fromEntries(formData) as EmployeeGigDecisionValues
+	// // @ts-ignore
+	// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
+	const { userId, bookingId, decision } = values
 
-  // const valueErrors = validateValues(values)
-  // if (valueErrors)
-  // 	return { valueErrors, values, error: "Check for errors in form fields" }
-  
+	// const valueErrors = validateValues(values)
+	// if (valueErrors)
+	// 	return { valueErrors, values, error: "Check for errors in form fields" }
+
 	try {
-    const session = await getServerSession(nextAuthOptions)
+		const session = await getServerSession(nextAuthOptions)
 
 		const data = (await keystoneContext.withSession(session).graphql.run({
 			query: `
@@ -53,7 +52,7 @@ export async function actionEmployeeGigDecision(
 						  }
 						: // todo may add ability to decline gig
 						  {
-                status: decision,
+								status: decision,
 								employee_requests: {
 									connect: [
 										{
@@ -71,13 +70,13 @@ export async function actionEmployeeGigDecision(
 						  },
 			},
 		})) as { updateBooking: { id: string } }
-    console.log({data});
+		// console.log({ data })
 
 		return {
-      //@ts-ignore
-      values: {
-        decision
-      },
+			//@ts-ignore
+			values: {
+				decision,
+			},
 			id: data.updateBooking.id,
 			// url: envs.FRONTEND_URL + `/users/${data.PasswordReset.id}`,
 			url: envs.FRONTEND_URL + `/account`,
