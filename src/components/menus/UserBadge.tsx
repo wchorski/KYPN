@@ -4,10 +4,11 @@ import styles from "@styles/menus/userbadge.module.css"
 import Link from "next/link"
 import Image from "next/image"
 import { IconAccountBox } from "@lib/useIcons"
+import type { CSSProperties } from "react"
 
-export function UserBadge({ user }: { user: User }) {
+export function UserBadge({ user, style }: { user: User, style?:CSSProperties }) {
 	return (
-		<div className={styles.user_badge}>
+		<div className={styles.user_badge} style={style}>
 			<figure>
 				{user.image ? (
 					<Image

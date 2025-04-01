@@ -94,7 +94,7 @@ export default async function BookingSinglePage({
 		notes,
 		addons,
 		employees,
-    employee_requests,
+		employee_requests,
 		customer,
 		dateModified,
 		start,
@@ -263,32 +263,23 @@ export default async function BookingSinglePage({
 						</>
 					)}
 
-					{employees.length > 0 && (
+					{(employees.length > 0 || employee_requests.length > 0) && (
 						<>
-							<h2> Employees Assigned </h2>
+							<h2> Staff </h2>
 							<ul
-								className="employees"
+								className="employees grid gap-m"
 								style={{ padding: "0", listStyle: "none" }}
 							>
-								{employees.map((emp) => (
-									<li key={emp.id}>
-										<UserBadge user={emp} />
+								{employees?.map((emp) => (
+									<li key={emp.id} className={"flex"}>
+										<UserBadge user={emp} style={{ flex: "1" }} />
+										<StatusBadge type={"booking"} status={"ASSIGNED"} />
 									</li>
 								))}
-							</ul>
-						</>
-					)}
-          {/* only admin can view this list */}
-					{employee_requests.length > 0 && (
-						<>
-							<h2> Employees Requested </h2>
-							<ul
-								className="employees"
-								style={{ padding: "0", listStyle: "none" }}
-							>
-								{employee_requests.map((emp) => (
-									<li key={emp.id}>
-										<UserBadge user={emp} />
+								{employee_requests?.map((emp) => (
+									<li key={emp.id} className={"flex"}>
+										<UserBadge user={emp} style={{ flex: "1" }} />
+										<StatusBadge type={"booking"} status={"REQUESTED"} />
 									</li>
 								))}
 							</ul>

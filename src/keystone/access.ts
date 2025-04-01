@@ -98,8 +98,8 @@ export const rules = {
 	canViewUsers({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 
-		if (permissions.canManageUsers({ session })) return true
-		if (permissions.canViewUsers({ session })) return true
+		// if (permissions.canManageUsers({ session })) return true
+		// if (permissions.canViewUsers({ session })) return true
 
 		//? allow user to view themselves AND employees on owned booking
 		if (session)
@@ -124,9 +124,33 @@ export const rules = {
 							},
 						},
 					},
+					{
+						bookings: {
+							some: {
+								employee_requests: {
+									some: {
+										id: {
+											equals: session.itemId,
+										},
+									},
+								},
+							},
+						},
+					},
           //? allow customer to view employee if on same booking/gig
           {
 						gigs: {
+							some: {
+								customer: {
+									id: {
+										equals: session.itemId,
+									},
+								},
+							},
+						},
+					},
+          {
+						gig_requests: {
 							some: {
 								customer: {
 									id: {
@@ -329,6 +353,7 @@ export const rules = {
 		// 1. Do they have the permission
 		if (permissions.canManageBookings({ session })) return true
 
+    // TODO probably shouldn't allow employee to change everything about booking
 		// 2. If not, are they the customer or employee?
 		if (session)
 			return {
@@ -337,7 +362,7 @@ export const rules = {
 						employees: {
 							some: {
 								id: {
-									in: [session?.itemId || "no_session.itemId"],
+									equals: session.itemId,
 								},
 							},
 						},
@@ -346,7 +371,7 @@ export const rules = {
 						employee_requests: {
 							some: {
 								id: {
-									in: [session?.itemId || "no_session.itemId"],
+									equals: session.itemId,
 								},
 							},
 						},
