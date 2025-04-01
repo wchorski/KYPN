@@ -110,13 +110,14 @@ export default function AccountDash({ data }: Props) {
 		status: <StatusBadge type={"booking"} status={gig.status} />,
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
 		details: gig.id,
-		actions: (
+		// actions: <>n/a</>,
+		actions: gig.status !== "CANCELED" ? (
 			<EmployeeGigDecisionForm
 				userId={user.id}
 				bookingId={gig.id}
 				decision={gig.status}
 			/>
-		),
+		) : <span className={'sub-text'}  >n/a</span>,
 	}))
 
 	return (
