@@ -1,3 +1,4 @@
+import { employees } from "@styles/booking.module.css"
 import { permissionsList } from "./permissions"
 import type { ListAccessArgs } from "./types"
 
@@ -104,10 +105,27 @@ export const rules = {
 		if (session)
 			return {
 				OR: [
+          //? allow user to view themselves
 					{
 						id: { equals: session.itemId },
 					},
+
+          //? allow employee to view customer if on same booking/gig
 					{
+						bookings: {
+							some: {
+								employees: {
+									some: {
+										id: {
+											equals: session.itemId,
+										},
+									},
+								},
+							},
+						},
+					},
+          //? allow customer to view employee if on same booking/gig
+          {
 						gigs: {
 							some: {
 								customer: {
@@ -120,6 +138,7 @@ export const rules = {
 					},
 				],
 			}
+
 		return false
 	},
 	canManageUsers({ session }: ListAccessArgs) {
@@ -256,7 +275,7 @@ export const rules = {
 						employees: {
 							some: {
 								id: {
-									in: [session?.itemId || "no_session.itemId"],
+									in: [session.itemId],
 								},
 							},
 						},
@@ -265,7 +284,7 @@ export const rules = {
 						employee_requests: {
 							some: {
 								id: {
-									in: [session?.itemId || "no_session.itemId"],
+									in: [session.itemId],
 								},
 							},
 						},
@@ -273,7 +292,7 @@ export const rules = {
 					{
 						customer: {
 							id: {
-								equals: session?.itemId || "no_session.itemId",
+								equals: session.itemId,
 							},
 						},
 					},

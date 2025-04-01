@@ -3,6 +3,9 @@ table {
 	border-spacing: 0;
 	/* margin-block: var(--space-l); */
 }
+thead {
+  text-wrap: nowrap;
+}
 thead th {
 	border-bottom-width: 3px;
 }

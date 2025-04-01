@@ -84,14 +84,14 @@ export default async function AccountPage() {
 					id: session.itemId,
 				},
 				gigsWhere: {
-					end: {
-						gt: today,
-					},
+					// end: {
+					// 	gt: today,
+					// },
 				},
 				gigRequestsWhere: {
-					end: {
-						gt: today,
-					},
+					// end: {
+					// 	gt: today,
+					// },
 				},
 				orderBy: [
 					{
@@ -149,6 +149,7 @@ export default async function AccountPage() {
 	if (userError) return <ErrorPage error={userError} />
 
 	if (!user) return notFound()
+
 	const { gig_requests, gigs } = employeeGigData.user
 
 	const {
