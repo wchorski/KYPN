@@ -18,8 +18,8 @@ model Addon {
   image             String             @default("")
   excerpt           String             @default("")
   price             Int
-  stripeProductId   String             @default("")
-  stripePriceId     String             @default("")
+  stripeProductId   String?            @unique
+  stripePriceId     String?            @unique
   status            String
   author            User?              @relation("Addon_author", fields: [authorId], references: [id])
   authorId          String?            @map("author")
@@ -155,11 +155,9 @@ model Coupon {
   services              Service[]          @relation("Coupon_services")
   dateCreated           DateTime           @default(now())
   dateModified          DateTime           @default(now()) @updatedAt
-  stripeId              String             @default("")
+  stripeId              String?            @unique
   from_CartItem_coupon  CartItem[]         @relation("CartItem_coupon")
   from_OrderItem_coupon OrderItem[]        @relation("OrderItem_coupon")
-
-  @@index([stripeId])
 }
 
 model Event {
@@ -316,14 +314,12 @@ model Product {
   dateModified          DateTime    @default(now())
   categories            Category[]  @relation("Category_products")
   tags                  Tag[]       @relation("Product_tags")
-  stripeProductId       String      @default("")
-  stripePriceId         String      @default("")
+  stripeProductId       String?     @unique
+  stripePriceId         String?     @unique
   orderItems            OrderItem[] @relation("OrderItem_product")
   from_CartItem_product CartItem[]  @relation("CartItem_product")
 
   @@index([authorId])
-  @@index([stripeProductId])
-  @@index([stripePriceId])
 }
 
 model Rental {
@@ -390,22 +386,22 @@ model Service {
   name               String     @unique @default("")
   image              String     @default("")
   excerpt            String     @default("")
-  description        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   price              Int        @default(0)
   durationInHours    Decimal    @default("6") @postgresql.Decimal(5, 2)
   buisnessHourOpen   String?    @default("09:00:00")
   buisnessHourClosed String?    @default("18:00:00")
   buisnessDays       Json       @default("[0,1,2,3,4,5,6]")
   status             String     @default("DRAFT")
+  description        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  author             User?      @relation("Service_author", fields: [authorId], references: [id])
+  authorId           String?    @map("author")
   addons             Addon[]    @relation("Addon_services")
   employees          User[]     @relation("Service_employees")
   locations          Location[] @relation("Location_services")
   bookings           Booking[]  @relation("Booking_service")
   coupons            Coupon[]   @relation("Coupon_services")
-  author             User?      @relation("Service_author", fields: [authorId], references: [id])
-  authorId           String?    @map("author")
-  stripeProductId    String     @default("")
-  stripePriceId      String     @default("")
+  stripeProductId    String?    @unique
+  stripePriceId      String?    @unique
   categories         Category[] @relation("Category_services")
   tags               Tag[]      @relation("Service_tags")
   dateCreated        DateTime   @default(now())
@@ -428,8 +424,8 @@ model SubscriptionItem {
   addons                   Addon[]           @relation("Addon_subscriptionItems")
   user                     User?             @relation("SubscriptionItem_user", fields: [userId], references: [id])
   userId                   String?           @map("user")
-  stripeSubscriptionId     String            @unique @default("")
-  stripeSubscriptionItemId String            @unique @default("")
+  stripeSubscriptionId     String?           @unique
+  stripeSubscriptionItemId String?           @unique
   dateCreated              DateTime          @default(now())
   dateModified             DateTime          @default(now())
   orderItems               OrderItem[]       @relation("OrderItem_subscriptionItem")
@@ -462,7 +458,7 @@ model SubscriptionPlan {
   dateModified      DateTime           @default(now())
   categories        Category[]         @relation("Category_subscriptionPlans")
   tags              Tag[]              @relation("SubscriptionPlan_tags")
-  stripeProductId   String             @unique @default("")
+  stripeProductId   String?            @unique
   stripePriceId     String             @unique @default("")
 
   @@index([authorId])

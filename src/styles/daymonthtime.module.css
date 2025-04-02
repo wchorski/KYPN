@@ -1,10 +1,11 @@
 .daymonthtime :global {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 	/* border: solid 2px var(--c-txt); */
 	/* border-radius: var(--br-sharp); */
-	max-width: 12rem;
+	/* max-width: 12rem; */
+  gap: var(--space-m);
 
 	& time {
 		font-size: 1.5rem;

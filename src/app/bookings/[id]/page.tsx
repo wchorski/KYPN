@@ -29,6 +29,7 @@ import { FiEdit } from "react-icons/fi"
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 import { isDateOlderThanNow } from "@lib/dateCheck"
+import { IconLink } from "@components/elements/IconLink"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -205,15 +206,24 @@ export default async function BookingSinglePage({
 								<td>
 									<label>Location: </label>{" "}
 								</td>
-								<td>
-									{location?.name} {address && `| ${address}`}
+								<td className={"flex"}>
+									<strong>{location?.name}</strong>
+									<span className={"sub-text"}>{address}</span>
+
+									{location?.address !== "n/a" && (
+										<IconLink
+											icon={"external_link"}
+											href={`/locations/${location?.id}`}
+											title={"location details"}
+										/>
+									)}
 								</td>
 							</tr>
 							<tr>
 								<td>
 									<label>Start: </label>{" "}
 								</td>
-								<td className={'flex gap-m'}>
+								<td className={"flex gap-m"}>
 									<DayMonthTime dateString={start} />
 									{!isDateOlderThanNow(start) && (
 										<StatusBadge type={"booking"} status={"PAST"} />

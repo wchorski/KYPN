@@ -98,8 +98,8 @@ export const rules = {
 	canViewUsers({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
 
-		// if (permissions.canManageUsers({ session })) return true
-		// if (permissions.canViewUsers({ session })) return true
+		if (permissions.canManageUsers({ session })) return true
+		if (permissions.canViewUsers({ session })) return true
 
 		//? allow user to view themselves AND employees on owned booking
 		if (session)

@@ -1,13 +1,13 @@
-export function dateFormatLocalDateTime(isoString:string) {
-  const date = new Date(isoString)
+export function dateFormatLocalDateTime(isoString: string) {
+	const date = new Date(isoString)
 
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
+	const year = date.getFullYear()
+	const month = String(date.getMonth() + 1).padStart(2, "0")
+	const day = String(date.getDate()).padStart(2, "0")
+	const hours = String(date.getHours()).padStart(2, "0")
+	const minutes = String(date.getMinutes()).padStart(2, "0")
 
-  return `${year}-${month}-${day}T${hours}:${minutes}`
+	return `${year}-${month}-${day}T${hours}:${minutes}`
 }
 
 export function dateToISOTimezone(
@@ -33,10 +33,7 @@ export function dateToISOTimezone(
 	return dateInTimezone
 }
 
-export function dateTimeToISOTimezone(
-	datetime: string,
-	timeZone: string
-) {
+export function dateTimeToISOTimezone(datetime: string, timeZone: string) {
 	const localTimestamp = new Date(datetime)
 
 	const dateInTimezone = new Date(
@@ -144,14 +141,17 @@ export function timePrettyTo12HourFormat(timeString: string) {
 		minute: "numeric",
 		hour12: true,
 	}
+
 	// @ts-ignore
-	const prettyTime = date.toLocaleTimeString(undefined, options)
-	return prettyTime
+	return date.toLocaleTimeString("en-US", options)
 }
 
-export function datePrettyLocal(date: string|Date, option: "day" | "time" | "full") {
+export function datePrettyLocal(
+	date: string | Date,
+	option: "day" | "time" | "full"
+) {
 	// console.log('pretty date input, ', date);
-	if (!date) return ''
+	if (!date) return ""
 
 	let options = {}
 	switch (option) {
@@ -177,13 +177,22 @@ export function datePrettyLocal(date: string|Date, option: "day" | "time" | "ful
 			}
 			break
 
+		case "time":
+			options = {
+				// timeZone: 'UTC',
+				// timeZone: "America/Chicago",
+				// timeZoneName: "short",
+				hour: "numeric",
+				minute: "numeric",
+				hour12: true,
+			}
+			break
+
 		default:
 			break
 	}
 
 	const newDate = new Date(date)
-
-	// @ts-ignore
 	return newDate.toLocaleString("en-CA", options)
 }
 

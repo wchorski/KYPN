@@ -73,47 +73,7 @@ export const Service: Lists.Service = list({
 				displayMode: "textarea",
 			},
 		}),
-		description: document({
-			componentBlocks,
-			ui: {
-				views: "./src/keystone/blocks",
-			},
-			formatting: {
-				inlineMarks: {
-					bold: true,
-					italic: true,
-					underline: true,
-					strikethrough: true,
-					code: true,
-					superscript: true,
-					subscript: true,
-					keyboard: true,
-				},
-				listTypes: {
-					ordered: true,
-					unordered: true,
-				},
-				alignment: {
-					center: true,
-					end: true,
-				},
-				headingLevels: [2, 3, 4, 5, 6],
-				blockTypes: {
-					blockquote: true,
-					code: true,
-				},
-				softBreaks: true,
-			},
-			layouts: [
-				[1, 1],
-				[1, 1, 1],
-				[2, 1],
-				[1, 2],
-				[1, 2, 1],
-			],
-			links: true,
-			dividers: true,
-		}),
+		
 		price: integer({
 			defaultValue: 0,
 			validation: { isRequired: true, min: 0 },
@@ -170,6 +130,58 @@ export const Service: Lists.Service = list({
 			},
 			validation: { isRequired: true },
 		}),
+    description: document({
+			componentBlocks,
+			ui: {
+				views: "./src/keystone/blocks",
+			},
+			formatting: {
+				inlineMarks: {
+					bold: true,
+					italic: true,
+					underline: true,
+					strikethrough: true,
+					code: true,
+					superscript: true,
+					subscript: true,
+					keyboard: true,
+				},
+				listTypes: {
+					ordered: true,
+					unordered: true,
+				},
+				alignment: {
+					center: true,
+					end: true,
+				},
+				headingLevels: [2, 3, 4, 5, 6],
+				blockTypes: {
+					blockquote: true,
+					code: true,
+				},
+				softBreaks: true,
+			},
+			layouts: [
+				[1, 1],
+				[1, 1, 1],
+				[2, 1],
+				[1, 2],
+				[1, 2, 1],
+			],
+			links: true,
+			dividers: true,
+		}),
+    author: relationship({
+			ref: "User.servicesAuthored",
+			ui: {
+				displayMode: "cards",
+				cardFields: ["name", "email"],
+				// inlineEdit: { fields: ["name", "email"] },
+				linkToItem: true,
+				inlineConnect: true,
+			},
+			many: false,
+		}),
 		addons: relationship({ ref: "Addon.services", many: true }),
 		employees: relationship({ ref: "User.servicesProvided", many: true }),
 		locations: relationship({ ref: "Location.services", many: true }),
@@ -182,17 +194,7 @@ export const Service: Lists.Service = list({
 					"Coupons that are allowed to apply to this item during checkout",
 			},
 		}),
-		author: relationship({
-			ref: "User.servicesAuthored",
-			ui: {
-				displayMode: "cards",
-				cardFields: ["name", "email"],
-				// inlineEdit: { fields: ["name", "email"] },
-				linkToItem: true,
-				inlineConnect: true,
-			},
-			many: false,
-		}),
+		
 		stripeProductId: text({
 			isIndexed: "unique",
 			validation: { isRequired: false },

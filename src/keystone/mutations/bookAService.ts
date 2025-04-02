@@ -167,7 +167,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 								gt: now,
 							},
 							status: {
-								in: ["ACCEPTED", "HOLDING",],
+								in: ["ACCEPTED", "HOLDING"],
 							},
 						},
 						availWhere: {
@@ -247,8 +247,6 @@ export const bookAService = (base: BaseSchemaMeta) =>
 					// google: calRes,
 				},
 			})
-
-			// TODO how to update web cart context without refreshing whole page?
 
 			const cartItem = await sudoContext().db.CartItem.createOne({
 				// query: `

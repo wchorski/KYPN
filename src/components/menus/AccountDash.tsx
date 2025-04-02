@@ -49,10 +49,12 @@ export default function AccountDash({ data }: Props) {
 			datePrettyLocalTime(book.start || ""),
 		service: book.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={book.status} />,
-    // TODO how to handle canceled, post poned, deleted orders?
-    // TODO set `awaiting checkout` and compair to actual cart items
+		// TODO how to handle canceled, post poned, deleted orders?
+		// TODO set `awaiting checkout` and compair to actual cart items
 		order: book?.orderItem?.order?.status ? (
 			<StatusBadge type={"order"} status={book.orderItem.order.status} />
+		) : book.status === "CANCELED" ? (
+			<span className={"sub-text"}>n/a</span>
 		) : (
 			<Link href={`/checkout`} className={"warning"}>
 				awaiting checkout
@@ -112,13 +114,16 @@ export default function AccountDash({ data }: Props) {
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
 		details: gig.id,
 		// actions: <>n/a</>,
-		actions: gig.status !== "CANCELED" ? (
-			<EmployeeGigDecisionForm
-				userId={user.id}
-				bookingId={gig.id}
-				decision={gig.status}
-			/>
-		) : <span className={'sub-text'}  >n/a</span>,
+		actions:
+			gig.status !== "CANCELED" ? (
+				<EmployeeGigDecisionForm
+					userId={user.id}
+					bookingId={gig.id}
+					decision={gig.status}
+				/>
+			) : (
+				<span className={"sub-text"}>n/a</span>
+			),
 	}))
 
 	return (

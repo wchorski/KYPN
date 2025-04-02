@@ -1,3 +1,5 @@
+import type { Decimal } from "@keystone-6/core/types"
+
 export const isDateOlderThanNow = (date:string|Date) => {
   const thisDate = new Date(date)
   const now = new Date()
@@ -103,11 +105,11 @@ export function dateCheckAvail(
 
 export function calcEndTime(
 	start: string | Date,
-	duration: string | undefined
+	durationInHours: string | Decimal | undefined
 ) {
 	const date = new Date(start)
-	if (!duration) return date.toISOString()
-	date.setTime(date.getTime() + Number(duration) * 60 * 60 * 1000)
+	if (!durationInHours) return date.toISOString()
+	date.setTime(date.getTime() + Number(durationInHours) * 60 * 60 * 1000)
 	// console.log('calcendtime, ', date.toISOString());
 
 	return date.toISOString()

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 
 import ErrorMessage from "../ErrorMessage"
 import CartRemoveItem from "./CartRemoveItem"
+import { datePrettyLocal } from "@lib/dateFormatter"
 
 type UpdateCartItem = {
 	id: string
@@ -79,7 +80,7 @@ function BookingItem({ item }: { item: CartItem }) {
 
 	const {
 		quantity,
-		booking: { id, summary, price, service },
+		booking: { id, summary, price, service, start },
 	} = item
 	return (
 		<li className={styles.item}>
@@ -96,6 +97,8 @@ function BookingItem({ item }: { item: CartItem }) {
 				</h5>
 
 				<span className="sub-text">booking</span>
+
+        <time dateTime={start}>{datePrettyLocal(start, 'full')}</time>
 			</div>
 
 			<div className={perItemTotal}>

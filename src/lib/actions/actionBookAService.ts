@@ -17,7 +17,7 @@ export async function actionBookAService(
 	values.addonIds = formData.getAll("addonIds") as string[]
 	// console.log("action: ", { values })
 	const session = await getServerSession(nextAuthOptions)
-	
+
 	// // @ts-ignore
 	// delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
 	// const {  } = values
@@ -28,13 +28,14 @@ export async function actionBookAService(
 
 	let isErrorFlagged = false
 	let bookingId = ""
+  
 	try {
 		// TODO left off seeing how ks catches this mutation
 		const data = (await keystoneContext.withSession(session).graphql.run({
 			// const data = (await keystoneContext.sudo().graphql.run({
 			query: `
-        mutation BookAService($serviceId: String!, $date: String!, $time: String!, $timeZone: String!, $email: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerId: String, $name: String, $phone: String, $notes: String, $amountTotal: Int) {
-          bookAService(serviceId: $serviceId, date: $date, time: $time, timeZone: $timeZone, email: $email, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerId: $customerId, name: $name, phone: $phone, notes: $notes, amount_total: $amountTotal) {
+        mutation BookAService($address: String, $serviceId: String!, $date: String!, $time: String!, $timeZone: String!, $email: String!, $locationId: String, $addonIds: [String], $employeeId: String, $customerId: String, $name: String, $phone: String, $notes: String, $amountTotal: Int) {
+          bookAService(address: $address, serviceId: $serviceId, date: $date, time: $time, timeZone: $timeZone, email: $email, locationId: $locationId, addonIds: $addonIds, employeeId: $employeeId, customerId: $customerId, name: $name, phone: $phone, notes: $notes, amount_total: $amountTotal) {
             id
             quantity
             type
@@ -54,7 +55,6 @@ export async function actionBookAService(
 			variables: values,
 		})) as { bookAService: CartItem }
 
-		
 		bookingId = data.bookAService.booking?.id || ""
 
 		return {

@@ -38,6 +38,8 @@ input AddonWhereUniqueInput {
   id: ID
   name: String
   slug: String
+  stripeProductId: String
+  stripePriceId: String
 }
 
 input AddonWhereInput {
@@ -50,8 +52,8 @@ input AddonWhereInput {
   image: StringFilter
   excerpt: StringFilter
   price: IntFilter
-  stripeProductId: StringFilter
-  stripePriceId: StringFilter
+  stripeProductId: StringNullableFilter
+  stripePriceId: StringNullableFilter
   status: StringFilter
   author: UserWhereInput
   services: ServiceManyRelationFilter
@@ -120,6 +122,21 @@ input IntFilter {
   gt: Int
   gte: Int
   not: IntFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
 }
 
 input ServiceManyRelationFilter {
@@ -395,21 +412,6 @@ input DateTimeNullableFilter {
   gt: DateTime
   gte: DateTime
   not: DateTimeNullableFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: StringNullableFilter
 }
 
 input AnnouncementOrderByInput {
@@ -1041,6 +1043,7 @@ input CouponWhereUniqueInput {
   id: ID
   name: String
   code: String
+  stripeId: String
 }
 
 input CouponWhereInput {
@@ -1063,7 +1066,7 @@ input CouponWhereInput {
   services: ServiceManyRelationFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
-  stripeId: StringFilter
+  stripeId: StringNullableFilter
 }
 
 input IntNullableFilter {
@@ -1870,6 +1873,8 @@ input ProductWhereUniqueInput {
   id: ID
   name: String
   slug: String
+  stripeProductId: String
+  stripePriceId: String
 }
 
 input ProductWhereInput {
@@ -1894,8 +1899,8 @@ input ProductWhereInput {
   dateModified: DateTimeFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-  stripeProductId: StringFilter
-  stripePriceId: StringFilter
+  stripeProductId: StringNullableFilter
+  stripePriceId: StringNullableFilter
   orderItems: OrderItemManyRelationFilter
 }
 
@@ -2278,13 +2283,14 @@ type Service {
   name: String
   image: String
   excerpt: String
-  description: Service_description_Document
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
   status: String
+  description: Service_description_Document
+  author: User
   addons(where: AddonWhereInput! = {}, orderBy: [AddonOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddonWhereUniqueInput): [Addon!]
   addonsCount(where: AddonWhereInput! = {}): Int
   employees(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
@@ -2295,7 +2301,6 @@ type Service {
   bookingsCount(where: BookingWhereInput! = {}): Int
   coupons(where: CouponWhereInput! = {}, orderBy: [CouponOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CouponWhereUniqueInput): [Coupon!]
   couponsCount(where: CouponWhereInput! = {}): Int
-  author: User
   stripeProductId: String
   stripePriceId: String
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
@@ -2313,6 +2318,8 @@ type Service_description_Document {
 input ServiceWhereUniqueInput {
   id: ID
   name: String
+  stripeProductId: String
+  stripePriceId: String
 }
 
 input ServiceWhereInput {
@@ -2328,14 +2335,14 @@ input ServiceWhereInput {
   buisnessHourOpen: StringNullableFilter
   buisnessHourClosed: StringNullableFilter
   status: StringFilter
+  author: UserWhereInput
   addons: AddonManyRelationFilter
   employees: UserManyRelationFilter
   locations: LocationManyRelationFilter
   bookings: BookingManyRelationFilter
   coupons: CouponManyRelationFilter
-  author: UserWhereInput
-  stripeProductId: StringFilter
-  stripePriceId: StringFilter
+  stripeProductId: StringNullableFilter
+  stripePriceId: StringNullableFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
   dateCreated: DateTimeFilter
@@ -2373,19 +2380,19 @@ input ServiceUpdateInput {
   name: String
   image: String
   excerpt: String
-  description: JSON
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
   status: String
+  description: JSON
+  author: UserRelateToOneForUpdateInput
   addons: AddonRelateToManyForUpdateInput
   employees: UserRelateToManyForUpdateInput
   locations: LocationRelateToManyForUpdateInput
   bookings: BookingRelateToManyForUpdateInput
   coupons: CouponRelateToManyForUpdateInput
-  author: UserRelateToOneForUpdateInput
   stripeProductId: String
   stripePriceId: String
   categories: CategoryRelateToManyForUpdateInput
@@ -2403,19 +2410,19 @@ input ServiceCreateInput {
   name: String
   image: String
   excerpt: String
-  description: JSON
   price: Int
   durationInHours: Decimal
   buisnessHourOpen: String
   buisnessHourClosed: String
   buisnessDays: [Int!]
   status: String
+  description: JSON
+  author: UserRelateToOneForCreateInput
   addons: AddonRelateToManyForCreateInput
   employees: UserRelateToManyForCreateInput
   locations: LocationRelateToManyForCreateInput
   bookings: BookingRelateToManyForCreateInput
   coupons: CouponRelateToManyForCreateInput
-  author: UserRelateToOneForCreateInput
   stripeProductId: String
   stripePriceId: String
   categories: CategoryRelateToManyForCreateInput
@@ -2470,8 +2477,8 @@ input SubscriptionItemWhereInput {
   notes: StringFilter
   addons: AddonManyRelationFilter
   user: UserWhereInput
-  stripeSubscriptionId: StringFilter
-  stripeSubscriptionItemId: StringFilter
+  stripeSubscriptionId: StringNullableFilter
+  stripeSubscriptionItemId: StringNullableFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
   orderItems: OrderItemManyRelationFilter
@@ -2610,7 +2617,7 @@ input SubscriptionPlanWhereInput {
   dateModified: DateTimeFilter
   categories: CategoryManyRelationFilter
   tags: TagManyRelationFilter
-  stripeProductId: StringFilter
+  stripeProductId: StringNullableFilter
   stripePriceId: StringFilter
 }
 

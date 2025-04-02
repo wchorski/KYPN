@@ -44,6 +44,7 @@ import { TimePicker } from "./TimePicker"
 import { Callout } from "@components/blocks/Callout"
 import { bg_c_reverse_theme } from "@styles/colorthemes.module.css"
 import { useCart } from "@components/hooks/CartStateContext"
+import { calcEndTime } from "@lib/dateCheck"
 
 type Fields = {
 	// event: string,
@@ -86,6 +87,7 @@ type StateRed = {
 	buisnessHours: { start: string; end: string }
 	location: Location | undefined
 	locationOptions: SelectOption[]
+	address: string
 	staff?:
 		| {
 				id: string
@@ -119,6 +121,7 @@ type FormAsideAction =
 	| { type: "SET_TIME"; payload: string }
 	| { type: "SET_TOTAL"; payload: number }
 	| { type: "SET_BOOKING_ID"; payload: string }
+	| { type: "SET_ADDRESS"; payload: string }
 	| { type: "ADDON_CHECKBOX"; payload: { value: string; isChecked: boolean } }
 	| { type: "SET_BLACKOUT_DATES"; payload: Date[] }
 	| { type: "SET_PARTIAL_DATES"; payload: DayTimes[] }
@@ -172,6 +175,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		buisnessHours: { start: "00:00:00", end: "23:59:00" },
 		addonOptions: [],
 		locationOptions: [],
+		address: "",
 		staffOptions: [],
 		date: prevBooking?.date || "",
 		location: undefined,
@@ -292,6 +296,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 			case "SET_CUSTOMER":
 				return { ...state, customer: action.payload }
+
+			case "SET_ADDRESS":
+				return { ...state, address: action.payload }
 
 			case "RESET":
 				return defaultstateRed
@@ -578,6 +585,12 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								required={stateRed.location?.address === "n/a"}
 								defaultValue={state.values?.address}
 								error={state.valueErrors?.address}
+								onChange={(e) =>
+									dispatchRed({
+										type: "SET_ADDRESS",
+										payload: e.currentTarget.value,
+									})
+								}
 							/>
 
 							<SelectField
@@ -791,8 +804,8 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						) : (
 							<>
 								<Link href={`/bookings/${state.id}`}> Booking Status </Link>
-                <br />
-								<Link href={'/account#bookings'}> Account bookings ⇢ </Link> 
+								<br />
+								<Link href={"/account#bookings"}> Account bookings ⇢ </Link>
 							</>
 						)}
 					</div>
@@ -808,13 +821,34 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 					<tbody>
 						<tr>
 							<td> Service: </td>
-							<td> {stateRed.service?.name} </td>
+							<td>
+								{" "}
+								{stateRed.service?.name}{" "}
+								{stateRed.service?.durationInHours && (
+									<small className="sub-text">
+										| {stateRed.service?.durationInHours.toString()} hours
+									</small>
+								)}
+							</td>
 						</tr>
 						<tr>
 							<td> Location: </td>
 							<td>
-								{stateRed.location?.name || (
-									<span className="sub-text"> n/a </span>
+								<strong>
+									{stateRed.location?.name || (
+										<span className="sub-text"> n/a </span>
+									)}
+								</strong>
+								{stateRed.location?.address &&
+								stateRed.location?.address !== "n/a" ? (
+									<span className={"sub-text"}>
+										{" "}
+										{stateRed.location?.address}
+									</span>
+								) : stateRed.address ? (
+									<span className={"sub-text"}> {stateRed.address}</span>
+								) : (
+									<></>
 								)}
 							</td>
 						</tr>
@@ -827,16 +861,49 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							</td>
 						</tr>
 						<tr>
-							<td> Start Date: </td>
+							<td> Start: </td>
 							<td>
 								{stateRed.date ? (
-									datePrettyLocal(stateRed.date + "T00:00-0800", "day")
+									datePrettyLocal(stateRed.date + "T00:00:00", "day")
 								) : (
-									<span className="sub-text"> n/a </span>
+									<> </>
 								)}
 								{stateRed.time
 									? " @ " + timePrettyTo12HourFormat(stateRed.time)
 									: ""}
+							</td>
+						</tr>
+						<tr>
+							<td> End: </td>
+							<td>
+								{stateRed.date &&
+								stateRed.time &&
+								stateRed.service?.durationInHours ? (
+									datePrettyLocal(
+										calcEndTime(
+											stateRed.date + "T" + stateRed.time,
+											stateRed.service.durationInHours
+										),
+										"day"
+									)
+								) : (
+									<></>
+								)}
+
+								{stateRed.date &&
+								stateRed.time &&
+								stateRed.service?.durationInHours ? (
+									" @ " +
+									datePrettyLocal(
+										calcEndTime(
+											stateRed.date + "T" + stateRed.time,
+											stateRed.service.durationInHours
+										),
+										"time"
+									)
+								) : (
+									<></>
+								)}
 							</td>
 						</tr>
 						<tr>

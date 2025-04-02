@@ -226,7 +226,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 						// data: { status: "HOLDING" },
 						data: {
 							status:
-								cartItem.booking?.price === 0
+								cartItem.booking?.status === "ACCEPTED"
+									? "ACCEPTED"
+									: cartItem.booking?.price === 0
 									? "RSVP"
 									: paymentStatus === "paid"
 									? "HOLDING"
