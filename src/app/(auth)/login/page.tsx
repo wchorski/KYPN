@@ -49,7 +49,8 @@ export default async function LoginPage({ searchParams }: Props) {
 					<Callout intent={"warning"}>
 						<p>
 							{message}
-							<br />
+						</p>
+						<p>
 							<small>
 								You will return back to the previous page after login
 							</small>

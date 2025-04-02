@@ -160,10 +160,14 @@ export const Order: Lists.Order = list({
 						)
 
 					const totalAfterAmountOff =
-						salesTotal + subscriptionSubTotal + rentalTotal + item.fees - discount.amount_off
+						salesTotal +
+						subscriptionSubTotal +
+						rentalTotal +
+						item.fees -
+						discount.amount_off
 					const percentToDecimal = discount.percent_off / 100
 
-          // console.log('ORDER TOTAL: ', totalAfterAmountOff - totalAfterAmountOff * percentToDecimal);
+					// console.log('ORDER TOTAL: ', totalAfterAmountOff - totalAfterAmountOff * percentToDecimal);
 					return totalAfterAmountOff - totalAfterAmountOff * percentToDecimal
 				},
 			}),
@@ -201,12 +205,23 @@ export const Order: Lists.Order = list({
 				},
 			}),
 		}),
-    stripeInvoiceId: text({
+		stripeInvoiceId: text({
 			isIndexed: "unique",
 			validation: { isRequired: false },
+      defaultValue: null,
+      db: { isNullable: true },
 		}),
-		stripeCheckoutSessionId: text(),
+		stripeCheckoutSessionId: text({
+			isIndexed: "unique",
+			validation: { isRequired: false },
+      defaultValue: null,
+      db: { isNullable: true },
+		}),
 		stripePaymentIntent: text({
+      isIndexed: "unique",
+			validation: { isRequired: false },
+      defaultValue: null,
+      db: { isNullable: true },
 			ui: {
 				description: `https://dashboard.stripe.com/payments/STIPEPAYMENTINTENT`,
 			},

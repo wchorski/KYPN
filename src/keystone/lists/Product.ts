@@ -202,76 +202,16 @@ export const Product: Lists.Product = list({
 					many: true,
 				}),
 				stripeProductId: text({
-					isIndexed: true,
-					hooks: {
-						validate: {
-							create: async ({ resolvedData, context, addValidationError }) => {
-								//? custom `unique` validation that also allows the field to be empty is not using stripe at all
-								if (!resolvedData.stripeProductId) return
-								const subPlans = await context.sudo().db.Product.findMany({
-									where: {
-										stripeProductId: {
-											equals: resolvedData.stripeProductId,
-										},
-									},
-								})
-								if (subPlans.length > 0)
-									addValidationError(
-										"!!! Product can not share same stripeProductId with others"
-									)
-							},
-							update: async ({ resolvedData, context, addValidationError }) => {
-								if (!resolvedData.stripeProductId) return
-								const subPlans = await context.sudo().db.Product.findMany({
-									where: {
-										stripeProductId: {
-											equals: resolvedData.stripeProductId,
-										},
-									},
-								})
-								if (subPlans.length > 1)
-									addValidationError(
-										"!!! Product can not share same stripeProductId with others"
-									)
-							},
-						},
-					},
+					isIndexed: "unique",
+					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
 				}),
 				stripePriceId: text({
-					isIndexed: true,
-					hooks: {
-						validate: {
-							create: async ({ resolvedData, context, addValidationError }) => {
-								//? custom `unique` validation that also allows the field to be empty is not using stripe at all
-								if (!resolvedData.stripePriceId) return
-								const subPlans = await context.sudo().db.Product.findMany({
-									where: {
-										stripePriceId: {
-											equals: resolvedData.stripePriceId,
-										},
-									},
-								})
-								if (subPlans.length > 0)
-									addValidationError(
-										"!!! Product can not share same stripePriceId with others"
-									)
-							},
-							update: async ({ resolvedData, context, addValidationError }) => {
-								if (!resolvedData.stripePriceId) return
-								const subPlans = await context.sudo().db.Product.findMany({
-									where: {
-										stripePriceId: {
-											equals: resolvedData.stripePriceId,
-										},
-									},
-								})
-								if (subPlans.length > 1)
-									addValidationError(
-										"!!! Product can not share same stripePriceId with others"
-									)
-							},
-						},
-					},
+					isIndexed: "unique",
+					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
 				}),
 			},
 		}),

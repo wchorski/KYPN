@@ -75,8 +75,18 @@ export const Addon: Lists.Addon = list({
 			validation: { isRequired: true, min: 0 },
 		}),
     // TODO subscription price. billing_interval is taken from subscriptionPlan
-		stripeProductId: text(),
-		stripePriceId: text(),
+		stripeProductId: text({
+      isIndexed: "unique",
+			validation: { isRequired: false },
+      defaultValue: null,
+      db: { isNullable: true },
+    }),
+		stripePriceId: text({
+      isIndexed: "unique",
+			validation: { isRequired: false },
+      defaultValue: null,
+      db: { isNullable: true },
+    }),
 		// TODO instead of "out of stock" add `stockCount` as to not run into privacy issues
 		status: select({
 			options: [

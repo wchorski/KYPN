@@ -1404,6 +1404,8 @@ type Order {
 input OrderWhereUniqueInput {
   id: ID
   stripeInvoiceId: String
+  stripeCheckoutSessionId: String
+  stripePaymentIntent: String
 }
 
 input OrderWhereInput {
@@ -1414,9 +1416,9 @@ input OrderWhereInput {
   email: StringFilter
   notes: StringFilter
   fees: IntFilter
-  stripeInvoiceId: StringFilter
-  stripeCheckoutSessionId: StringFilter
-  stripePaymentIntent: StringFilter
+  stripeInvoiceId: StringNullableFilter
+  stripeCheckoutSessionId: StringNullableFilter
+  stripePaymentIntent: StringNullableFilter
   shipping_address: StringFilter
   status: StringNullableFilter
   items: OrderItemManyRelationFilter
@@ -2905,7 +2907,7 @@ input UserWhereInput {
   password: StringFilter
   url: StringFilter
   isActive: BooleanFilter
-  stripeCustomerId: StringFilter
+  stripeCustomerId: StringNullableFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeNullableFilter
   buisnessHourOpen: StringNullableFilter

@@ -1,4 +1,4 @@
-import { graphql,group, list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 import {
 	integer,
 	relationship,
@@ -11,7 +11,7 @@ import {
 import { codeFormat } from "../../lib/slugFormat"
 import { stripeCouponCreate, stripeCouponDelete } from "../../lib/stripe"
 import { isLoggedIn, permissions, rules } from "../access"
-import type { Duration} from "../types";
+import type { Duration } from "../types"
 import type { Lists } from ".keystone/types"
 
 // TODO figoure out coupons
@@ -195,37 +195,12 @@ export const Coupon: Lists.Coupon = list({
 				// 	ref: "Tag.products",
 				// 	many: true,
 				// }),
-				stripeId: text({ isIndexed: true, hooks: {
-          validate: {
-            create: async ({ resolvedData, context, addValidationError }) => {
-              //? custom `unique` validation that also allows the field to be empty is not using stripe at all
-              if(!resolvedData.stripeId) return
-              const coupons = await context
-                .sudo()
-                .db.Coupon.findMany({
-                  where: {
-                    stripeId: {
-                      equals: resolvedData.stripeId,
-                    },
-                  },
-                })
-              if(coupons.length > 0) addValidationError('!!! Coupon can not share same stripeId with others')
-            },
-            update: async ({ resolvedData, context, addValidationError }) => {
-              if(!resolvedData.stripeId) return
-              const coupons = await context
-                .sudo()
-                .db.Coupon.findMany({
-                  where: {
-                    stripeId: {
-                      equals: resolvedData.stripeId as string,
-                    },
-                  },
-                })
-              if(coupons.length > 1) addValidationError('!!! Coupon can not share same stripeId with others')
-            },
-          },
-        }, }),
+				stripeId: text({
+					isIndexed: "unique",
+					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
+				}),
 			},
 		}),
 	},
@@ -277,7 +252,6 @@ export const Coupon: Lists.Coupon = list({
 					if (!res) return
 
 					resolvedData.stripeId = res.id
-
 				})
 			},
 			//? for now not allowing any updating of coupon, just create a new one

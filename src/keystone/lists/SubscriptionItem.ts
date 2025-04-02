@@ -1,6 +1,6 @@
 import "dotenv/config"
 
-import { graphql, group,list } from "@keystone-6/core"
+import { graphql, group, list } from "@keystone-6/core"
 import {
 	checkbox,
 	integer,
@@ -95,7 +95,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 				},
 			}),
 		}),
-    // TODO remove this. discounts will provide any price changes
+		// TODO remove this. discounts will provide any price changes
 		custom_price: integer(),
 
 		price: virtual({
@@ -244,14 +244,18 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 		...group({
 			label: "Metadata",
 			fields: {
-        // TODO may cause problems if bundling subscriptions?
+				// TODO may cause problems if bundling subscriptions?
 				stripeSubscriptionId: text({
 					isIndexed: "unique",
 					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
 				}),
 				stripeSubscriptionItemId: text({
-					isIndexed: 'unique',
+					isIndexed: "unique",
 					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
 				}),
 				dateCreated: timestamp({
 					defaultValue: { kind: "now" },
@@ -305,7 +309,7 @@ export const SubscriptionItem: Lists.SubscriptionItem = list({
 						status: resolvedData.status as TypeSubsItem["status"],
 					})
 			},
-			delete: async ({ item,  }) => {
+			delete: async ({ item }) => {
 				await stripeSubscriptionUpdate({
 					subItemId: item.id,
 					stripeSubscriptionId: item.stripeSubscriptionId,

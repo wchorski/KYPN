@@ -65,11 +65,6 @@ export const OrderItem: Lists.OrderItem = list({
 				}),
 			},
 		}),
-    // todo moving to Order.ts
-		// stripeInvoiceId: text({
-		// 	isIndexed: "unique",
-		// 	validation: { isRequired: false },
-		// }),
 		quantity: integer({ validation: { isRequired: true, min: 1 } }),
 		rentalDays: integer({
 			validation: { isRequired: true, min: 0 },

@@ -90,7 +90,7 @@ export const POST = async (request: NextRequest) => {
 			)
 			await updateSubscriptionDelinquent(stripePayload.data.object)
 			break
-      
+
 		// case "payment_intent.created":
 		// 	break
 
@@ -333,7 +333,6 @@ async function createSubscriptionOrder({
 					stripeCheckoutSessionId: id,
 					status: status === "complete" ? "PAYMENT_RECIEVED" : "PROCESSING",
 					user: { connect: { stripeCustomerId: customer as string } },
-					// stripeCheckoutSessionId: // this isn't a checkout session
 					items: orderItems,
 					fees: 0,
 				},

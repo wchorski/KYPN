@@ -208,9 +208,9 @@ model Order {
   email                   String      @default("")
   notes                   String      @default("")
   fees                    Int         @default(0)
-  stripeInvoiceId         String      @unique @default("")
-  stripeCheckoutSessionId String      @default("")
-  stripePaymentIntent     String      @default("")
+  stripeInvoiceId         String?     @unique
+  stripeCheckoutSessionId String?     @unique
+  stripePaymentIntent     String?     @unique
   shipping_address        String      @default("")
   status                  String?     @default("REQUESTED")
   items                   OrderItem[] @relation("OrderItem_order")
@@ -510,7 +510,7 @@ model User {
   password           String             @default("")
   url                String             @default("")
   isActive           Boolean            @default(true)
-  stripeCustomerId   String             @unique @default("")
+  stripeCustomerId   String?            @unique
   dateCreated        DateTime           @default(now())
   dateModified       DateTime?          @default(now()) @updatedAt
   buisnessHourOpen   String?            @default("09:00:00")

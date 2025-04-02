@@ -89,7 +89,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 			const couponItem = cartItems.find((item) => item.coupon)?.coupon
 
 			const amountTotal = calcTotalPrice(cartItems)
-      // TODO I'll worry about fees later
+			// TODO I'll worry about fees later
 			// const transactionFees =
 			// 	(session.stripe?.amount_total || amountTotal) - amountTotal
 
@@ -145,7 +145,7 @@ export const checkout = (base: BaseSchemaMeta) =>
 										},
 									}
 
-                //? in it's own mutation
+								//? in it's own mutation
 								// case item.subscriptionItem !== null:
 								// 	return {
 								// 		type: item.type,
@@ -187,8 +187,12 @@ export const checkout = (base: BaseSchemaMeta) =>
 					fees: 0,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
 					user: { connect: { id: customerId } },
-					stripeCheckoutSessionId: session.stripe?.id || "",
-					stripePaymentIntent: session.stripe?.payment_intent || "",
+					...(session.stripe?.id
+						? { stripeCheckoutSessionId: session.stripe.id }
+						: {}),
+					...(session.stripe?.payment_intent
+						? { stripePaymentIntent: session.stripe.payment_intent }
+						: {}),
 					//TODO maybe not secure
 					...(session.stripe?.payment_status === "paid" || amountTotal === 0
 						? { status: "PAYMENT_RECIEVED" }

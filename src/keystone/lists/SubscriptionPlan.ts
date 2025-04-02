@@ -10,7 +10,7 @@ import {
 	virtual,
 } from "@keystone-6/core/fields"
 import { document } from "@keystone-6/fields-document"
-import type {  Billing_Interval  } from "@ks/types"
+import type { Billing_Interval } from "@ks/types"
 
 import { envs } from "../../../envs"
 import { slugFormat } from "../../lib/slugFormat"
@@ -39,10 +39,16 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 		},
 	},
 
-  ui: {
-		
+	ui: {
 		listView: {
-			initialColumns: ["name", "price", "status", "billing_interval", "trial_period_days", "stockMax"],
+			initialColumns: [
+				"name",
+				"price",
+				"status",
+				"billing_interval",
+				"trial_period_days",
+				"stockMax",
+			],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},
 		//? maybe I'd prefer email? idk
@@ -215,11 +221,13 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 					ref: "Tag.subscriptionPlans",
 					many: true,
 				}),
-        stripeProductId: text({
+				stripeProductId: text({
 					isIndexed: "unique",
 					validation: { isRequired: false },
+					defaultValue: null,
+					db: { isNullable: true },
 				}),
-        // TODO get rid of this crazy logic
+				// TODO get rid of this crazy logic
 				// stripeProductId: text({
 				// 	isIndexed: true,
 				// 	validation: { isRequired: false },
@@ -265,7 +273,7 @@ export const SubscriptionPlan: Lists.SubscriptionPlan = list({
 					isIndexed: "unique",
 					validation: { isRequired: false },
 				}),
-        // TODO get rid of this crazy logic
+				// TODO get rid of this crazy logic
 				// stripePriceId: text({
 				// 	isIndexed: true,
 				// 	validation: { isRequired: false },

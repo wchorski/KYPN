@@ -63,7 +63,10 @@ export const Service: Lists.Service = list({
 				itemView: { fieldMode: "hidden" },
 			},
 		}),
-		name: text({ isIndexed: "unique", validation: { isRequired: true, length: { min: 3 } } }),
+		name: text({
+			isIndexed: "unique",
+			validation: { isRequired: true, length: { min: 3 } },
+		}),
 		image: text(),
 		excerpt: text({
 			ui: {
@@ -190,8 +193,18 @@ export const Service: Lists.Service = list({
 			},
 			many: false,
 		}),
-		stripeProductId: text(),
-		stripePriceId: text(),
+		stripeProductId: text({
+			isIndexed: "unique",
+			validation: { isRequired: false },
+			defaultValue: null,
+			db: { isNullable: true },
+		}),
+		stripePriceId: text({
+			isIndexed: "unique",
+			validation: { isRequired: false },
+			defaultValue: null,
+			db: { isNullable: true },
+		}),
 		...group({
 			label: "Metadata",
 			// description: 'Group description',
