@@ -107,9 +107,8 @@ export const checkoutSubscription = (base: BaseSchemaMeta) =>
 			} as OrderItemCreateInput
 
 			const order = await sudoContext.db.Order.createOne({
-				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					// fees: transactionFees,
+					fees: 0,
 					...(newOrderItem ? { items: { create: newOrderItem } } : {}),
 					user: { connect: { id: customerId } },
 					stripeCheckoutSessionId: session.stripe?.id || "",

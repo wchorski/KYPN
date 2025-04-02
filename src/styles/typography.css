@@ -138,7 +138,8 @@ ol:not([class]) {
 	list-style-position: outside;
 	padding-left: var(--space-l);
 	max-width: calc(var(--w-contentmax) - 20px);
-	display: grid;
+	display: flex;
+  flex-direction: column;
 	gap: var(--space-s);
 	align-content: center;
 }

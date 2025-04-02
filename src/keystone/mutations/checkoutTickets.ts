@@ -139,8 +139,8 @@ export const checkoutTickets = (base: BaseSchemaMeta) =>
 			const order = await sudoContext.db.Order.createOne({
 				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
-					total: amountTotal,
-					ticketItems: { create: ticketItems },
+					// total: amountTotal,
+					// ticketItems: { create: ticketItems },
 					user: userId ? { connect: { id: userId } } : null,
 					stripeCheckoutSessionId: stripeSession.id || 'NO_STRIPE_PLUGIN',
 					stripePaymentIntent: stripeSession.payment_intent || 'FREE or NO_STRIPE_PLUGIN',

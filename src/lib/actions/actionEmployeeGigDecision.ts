@@ -32,7 +32,7 @@ export async function actionEmployeeGigDecision(
 			variables: {
 				where: { id: bookingId },
 				data:
-					decision === "CONFIRMED"
+					decision === "ACCEPTED"
 						? {
 								status: decision,
 								employee_requests: {
@@ -103,7 +103,7 @@ function validateValues({}: EmployeeGigDecisionValues) {
 export type EmployeeGigDecisionValues = {
 	userId: string
 	bookingId: string
-	decision: "" | "CONFIRMED" | "DECLINED" | string | null
+	decision: "" | "ACCEPTED" | "DECLINED" | string | null
 }
 
 export type EmployeeGigDecisionState = {

@@ -21,7 +21,7 @@ type Props = {
 }
 
 const decisionOptions = [
-	{ value: "CONFIRMED", label: "Confirm" },
+	{ value: "ACCEPTED", label: "Accept" },
 	{ value: "DECLINED", label: "Decline" },
 ]
 

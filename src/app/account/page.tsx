@@ -33,6 +33,7 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import fetchBookings from "@lib/fetchdata/fetchBookings"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,
@@ -51,6 +52,12 @@ export default async function AccountPage() {
 		USER_DASH_QUERY,
 		session
 	)
+
+
+  // TODO fetch bookings, only if they are in future 
+  // show past bookings in seperate link
+  // const { bookings, error: errorBookings } = await fetchBookings(today, BOOKINGS_QUERY, session)
+
 
 	const orders = (await keystoneContext
 		.withSession(session)
@@ -146,7 +153,7 @@ export default async function AccountPage() {
 		dateSelectedString: today,
 	})
 
-	if (userError) return <ErrorPage error={userError} />
+	if (userError || error) return <ErrorPage error={userError || error} />
 
 	if (!user) return notFound()
 
@@ -242,6 +249,22 @@ export default async function AccountPage() {
 	)
 }
 // todo move subscriptions to seperate fetch so i can order them by date
+
+const BOOKINGS_QUERY = `
+  id
+  price
+  start
+  service {
+    id
+    name
+  }
+  status
+  orderItem {
+    order {
+      status
+    }
+  }
+`
 const USER_DASH_QUERY = `
   id
   name

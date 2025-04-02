@@ -28,6 +28,7 @@ import { FiEdit } from "react-icons/fi"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { isDateOlderThanNow } from "@lib/dateCheck"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,
@@ -212,8 +213,11 @@ export default async function BookingSinglePage({
 								<td>
 									<label>Start: </label>{" "}
 								</td>
-								<td>
+								<td className={'flex gap-m'}>
 									<DayMonthTime dateString={start} />
+									{!isDateOlderThanNow(start) && (
+										<StatusBadge type={"booking"} status={"PAST"} />
+									)}
 								</td>
 							</tr>
 							<tr>
@@ -273,7 +277,7 @@ export default async function BookingSinglePage({
 								{employees?.map((emp) => (
 									<li key={emp.id} className={"flex"}>
 										<UserBadge user={emp} style={{ flex: "1" }} />
-										<StatusBadge type={"booking"} status={"ASSIGNED"} />
+										<StatusBadge type={"booking"} status={"ACCEPTED"} />
 									</li>
 								))}
 								{employee_requests?.map((emp) => (

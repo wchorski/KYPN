@@ -50,6 +50,7 @@ export default function AccountDash({ data }: Props) {
 		service: book.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={book.status} />,
     // TODO how to handle canceled, post poned, deleted orders?
+    // TODO set `awaiting checkout` and compair to actual cart items
 		order: book?.orderItem?.order?.status ? (
 			<StatusBadge type={"order"} status={book.orderItem.order.status} />
 		) : (

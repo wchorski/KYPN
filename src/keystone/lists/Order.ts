@@ -163,7 +163,7 @@ export const Order: Lists.Order = list({
 						salesTotal + subscriptionSubTotal + rentalTotal + item.fees - discount.amount_off
 					const percentToDecimal = discount.percent_off / 100
 
-          console.log('ORDER TOTAL: ', totalAfterAmountOff - totalAfterAmountOff * percentToDecimal);
+          // console.log('ORDER TOTAL: ', totalAfterAmountOff - totalAfterAmountOff * percentToDecimal);
 					return totalAfterAmountOff - totalAfterAmountOff * percentToDecimal
 				},
 			}),

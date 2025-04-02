@@ -32,7 +32,7 @@ export type StatusType =
 			status?:
 				| Booking["status"]
 				| ""
-				| "CONFIRMED"
+				| "ACCEPTED"
 				| "DECLINED"
 				| string
 				| null

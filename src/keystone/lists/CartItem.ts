@@ -9,7 +9,7 @@ import {
 } from "@keystone-6/core/fields"
 
 import { hasOnlyOneValue } from "../../lib/utils"
-import { permissions, rules } from "../access"
+import { isLoggedIn, permissions, rules } from "../access"
 import type {
 	CartItem as TCartItem,
 	Coupon,
@@ -25,12 +25,14 @@ export const CartItem: Lists.CartItem = list({
 	access: {
 		filter: {
 			query: rules.canViewCart,
+			update: rules.canManageCart,
+			delete: rules.canManageCart,
 		},
 		operation: {
 			query: () => true,
-			create: permissions.canManageCart,
-			update: permissions.canManageCart,
-			delete: permissions.canManageCart,
+			create: () => true,
+			update: isLoggedIn,
+			delete: isLoggedIn,
 		},
 	},
 

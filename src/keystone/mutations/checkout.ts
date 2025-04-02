@@ -89,8 +89,9 @@ export const checkout = (base: BaseSchemaMeta) =>
 			const couponItem = cartItems.find((item) => item.coupon)?.coupon
 
 			const amountTotal = calcTotalPrice(cartItems)
-			const transactionFees =
-				(session.stripe?.amount_total || amountTotal) - amountTotal
+      // TODO I'll worry about fees later
+			// const transactionFees =
+			// 	(session.stripe?.amount_total || amountTotal) - amountTotal
 
 			const newOrderItems: OrderItemCreateInput[] = await (async () => {
 				const theseOrderItems = await Promise.all(
@@ -180,10 +181,10 @@ export const checkout = (base: BaseSchemaMeta) =>
 			JSON.stringify({ newOrderItems }, null, 2)
 
 			const order = await sudoContext.db.Order.createOne({
-				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
 					// subTotal: amountTotal,
-					fees: transactionFees,
+					// fees: transactionFees,
+					fees: 0,
 					...(newOrderItems ? { items: { create: newOrderItems } } : {}),
 					user: { connect: { id: customerId } },
 					stripeCheckoutSessionId: session.stripe?.id || "",
@@ -224,8 +225,8 @@ export const checkout = (base: BaseSchemaMeta) =>
 								cartItem.booking?.price === 0
 									? "RSVP"
 									: paymentStatus === "paid"
-									? "PAID"
-									: "HOLDING",
+									? "HOLDING"
+									: "REQUESTED",
 						},
 					})),
 			})

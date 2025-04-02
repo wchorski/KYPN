@@ -134,8 +134,7 @@ export default async function fetchBookingFormData({session}:Props){
         },
         status: {
           in: [
-            "CONFIRMED",
-            "DOWNPAYMENT",
+            "ACCEPTED",
             "HOLDING"
           ]
         },

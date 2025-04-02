@@ -311,6 +311,7 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 				data: {
 					// stripeCheckoutSessionId: null,
 					// stripePaymentIntent: null,
+          fees: 0,
 					email: fakeEmail,
 					status: orderStatuses[0],
 					// ticketItems: { create: tickets },

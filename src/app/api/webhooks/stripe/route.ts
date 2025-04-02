@@ -90,8 +90,9 @@ export const POST = async (request: NextRequest) => {
 			)
 			await updateSubscriptionDelinquent(stripePayload.data.object)
 			break
-		case "payment_intent.created":
-			break
+      
+		// case "payment_intent.created":
+		// 	break
 
 		case "product.created":
 			console.log("🐸 product.created")
@@ -148,7 +149,8 @@ export const POST = async (request: NextRequest) => {
 async function updateSubscriptionDelinquent(stripeInvoice: Stripe.Invoice) {
 	console.log({ stripeInvoice })
 	const { subscription } = stripeInvoice
-  if(!subscription) return console.log('### 💳 stripe-wh no subscription on this invoice');
+	if (!subscription)
+		return console.log("### 💳 stripe-wh no subscription on this invoice")
 	const subCount = await keystoneContext.sudo().db.SubscriptionItem.count({
 		where: {
 			stripeSubscriptionId: { equals: subscription as string },
@@ -184,6 +186,7 @@ async function createSubscriptionOrder({
 	// console.log(stripePayload.data.object)
 
 	if (stripeInvoice) {
+		console.log({ stripeInvoice })
 		const {
 			id,
 			subscription,
@@ -230,17 +233,21 @@ async function createSubscriptionOrder({
 			await keystoneContext.sudo().db.Order.createOne({
 				data: {
 					stripePaymentIntent: payment_intent as string,
-					stripeInvoiceId: id,
+					...(id ? { stripeInvoiceId: id } : {}),
 					status: status === "paid" ? "PAYMENT_RECIEVED" : "PROCESSING",
 					user: { connect: { stripeCustomerId: customer as string } },
 					// stripeCheckoutSessionId: // this isn't a checkout session
 					items: orderItems,
+					fees: 0,
 				},
 			})
 		}
 	}
 
 	if (stripeCheckoutSesh && createdsubscriptionItems) {
+		console.log({ stripeCheckoutSesh })
+		console.log({ createdsubscriptionItems })
+
 		const {
 			id,
 			subscription,
@@ -328,6 +335,7 @@ async function createSubscriptionOrder({
 					user: { connect: { stripeCustomerId: customer as string } },
 					// stripeCheckoutSessionId: // this isn't a checkout session
 					items: orderItems,
+					fees: 0,
 				},
 			})
 		}

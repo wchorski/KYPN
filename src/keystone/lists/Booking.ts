@@ -176,13 +176,16 @@ export const Booking: Lists.Booking = list({
 		name: text(),
 		status: select({
 			options: [
-				{ label: "Confirmed", value: "CONFIRMED" },
+        // TODO maybe make as "ASSIGNED" instead of confirmed to not confuse with order status?
+				// { label: "Confirmed", value: "CONFIRMED" },
+        //? removing anything to do with money. 
+				// { label: "Paid", value: "PAID" },
+				// { label: "Down Payment", value: "DOWNPAYMENT" },
+				{ label: "Accepted", value: "ACCEPTED" },
 				{ label: "Postponed", value: "POSTPONED" },
 				{ label: "Canceled", value: "CANCELED" },
 				{ label: "Lead", value: "LEAD" },
-				{ label: "Paid", value: "PAID" },
 				{ label: "RSVP", value: "RSVP" },
-				{ label: "Down Payment", value: "DOWNPAYMENT" },
 				{ label: "Holding", value: "HOLDING" },
 				{ label: "Requested", value: "REQUESTED" },
 				{ label: "Declined", value: "DECLINED" },

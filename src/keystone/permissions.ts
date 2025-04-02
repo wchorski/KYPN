@@ -68,7 +68,7 @@ export const permissionFields = {
         defaultValue: false,
         label: "Tickets Manager: Can update and delete any Ticket",
       }),
-      canManageCart: checkbox({
+      canManageCarts: checkbox({
         defaultValue: false,
         label: "Cart Manager: Can see and manage any Cart or Cart Item",
       }),

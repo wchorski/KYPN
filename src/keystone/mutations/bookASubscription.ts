@@ -107,7 +107,6 @@ export const bookASubscription = (base: BaseSchemaMeta) =>
 			} as CartItemCreateInput
 
 			const cartItem = await sudoContext.db.CartItem.createOne({
-				// const order = await context.withSession(session).db.Order.createOne({
 				data: {
 					// subTotal: subscriptionPlan.price,
 					// fees: transactionFees,

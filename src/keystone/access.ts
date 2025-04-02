@@ -105,12 +105,12 @@ export const rules = {
 		if (session)
 			return {
 				OR: [
-          //? allow user to view themselves
+					//? allow user to view themselves
 					{
 						id: { equals: session.itemId },
 					},
 
-          //? allow employee to view customer if on same booking/gig
+					//? allow employee to view customer if on same booking/gig
 					{
 						bookings: {
 							some: {
@@ -137,8 +137,8 @@ export const rules = {
 							},
 						},
 					},
-          //? allow customer to view employee if on same booking/gig
-          {
+					//? allow customer to view employee if on same booking/gig
+					{
 						gigs: {
 							some: {
 								customer: {
@@ -149,7 +149,7 @@ export const rules = {
 							},
 						},
 					},
-          {
+					{
 						gig_requests: {
 							some: {
 								customer: {
@@ -353,7 +353,7 @@ export const rules = {
 		// 1. Do they have the permission
 		if (permissions.canManageBookings({ session })) return true
 
-    // TODO probably shouldn't allow employee to change everything about booking
+		// TODO probably shouldn't allow employee to change everything about booking
 		// 2. If not, are they the customer or employee?
 		if (session)
 			return {
@@ -538,10 +538,21 @@ export const rules = {
 		if (!isLoggedIn({ session })) return false
 
 		// 1. Do they have the permission
-		if (permissions.canManageCart({ session })) return true
-		if (!session) return false
+		if (permissions.canManageCarts({ session })) return true
+
 		// 2. If not, do they own this item?
-		return { user: { id: { equals: session?.itemId || "no_session.itemId" } } }
+		if (session) return { user: { id: { equals: session.itemId } } }
+		return false
+	},
+	canManageCart({ session }: ListAccessArgs) {
+		if (!isLoggedIn({ session })) return false
+
+		// 1. Do they have the permission
+		if (permissions.canManageCarts({ session })) return true
+		// if (!session) return false
+		// 2. If not, do they own this item?
+		if (session) return { user: { id: { equals: session.itemId } } }
+		return false
 	},
 	canManageOrders({ session }: ListAccessArgs) {
 		if (!isLoggedIn({ session })) return false
@@ -564,7 +575,7 @@ export const rules = {
 		if (!isLoggedIn({ session })) return false
 
 		// 1. Do they have the permission
-		if (permissions.canManageCart({ session })) return true
+		if (permissions.canManageCarts({ session })) return true
 		if (!session) return false
 		// 2. If not, do they own this item?
 		return {

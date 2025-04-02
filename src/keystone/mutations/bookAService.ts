@@ -167,7 +167,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 								gt: now,
 							},
 							status: {
-								in: ["CONFIRMED", "DOWNPAYMENT", "HOLDING", "PAID"],
+								in: ["ACCEPTED", "HOLDING",],
 							},
 						},
 						availWhere: {
