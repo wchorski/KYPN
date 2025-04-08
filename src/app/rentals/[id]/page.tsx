@@ -185,7 +185,7 @@ export default async function RentalSinglePage({
 									<label>Start: </label>{" "}
 								</td>
 								<td>
-									<DayMonthTime dateString={start} />
+									<DayMonthTime dateString={start} timeZone={timeZone}/>
 								</td>
 							</tr>
 							<tr>
@@ -193,7 +193,7 @@ export default async function RentalSinglePage({
 									<label>End: </label>{" "}
 								</td>
 								<td>
-									<DayMonthTime dateString={end} />
+									<DayMonthTime dateString={end} timeZone={timeZone}/>
 								</td>
 							</tr>
 							<tr>

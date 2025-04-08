@@ -330,7 +330,7 @@ async function createSubscriptionOrder({
 						? { stripePaymentIntent: payment_intent as string }
 						: {}),
 					...(invoice ? { stripeInvoiceId: invoice as string } : {}),
-					stripeCheckoutSessionId: id,
+					...(id ? { stripeCheckoutSessionId: id } : {}),
 					status: status === "complete" ? "PAYMENT_RECIEVED" : "PROCESSING",
 					user: { connect: { stripeCustomerId: customer as string } },
 					items: orderItems,

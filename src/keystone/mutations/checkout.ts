@@ -72,6 +72,7 @@ export const checkout = (base: BaseSchemaMeta) =>
           booking {
             id
             price
+            status
           }
           rental {
             id

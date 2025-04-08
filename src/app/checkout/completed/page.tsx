@@ -186,8 +186,8 @@ async function StripeCheckoutCheck({
 								status={stripeCheckoutSession.payment_status}
 							/>
 						</li>
-						<li>checkout_id: {stripeCheckoutSession.id}</li>
-						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li>
+						{/* <li>checkout_id: {stripeCheckoutSession.id}</li>
+						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li> */}
 					</ul>
           <br />
           <Link href={`/account#orders`} className={'button medium'} > View My Account</Link>

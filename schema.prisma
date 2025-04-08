@@ -365,7 +365,7 @@ model Role {
   canManageBookings          Boolean @default(false)
   canManageEvents            Boolean @default(false)
   canManageTickets           Boolean @default(false)
-  canManageCart              Boolean @default(false)
+  canManageCarts             Boolean @default(false)
   canManageOrders            Boolean @default(false)
   canManageServices          Boolean @default(false)
   canManageSubscriptionPlans Boolean @default(false)

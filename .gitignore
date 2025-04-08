@@ -53,6 +53,7 @@ yarn-error.log*
 .env*
 !.env.example
 !.env.prod.example
+docker/images/**
 
 # vercel
 .vercel

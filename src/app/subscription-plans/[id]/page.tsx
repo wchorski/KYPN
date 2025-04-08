@@ -246,7 +246,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 }
 
 function canEdit(author: User, session: Session | null) {
-	if (!session) return false
+	if (!session || !author) return false
 	if (session.data?.role?.canManageProducts) return true
 	if (author.id === session.itemId) return true
 	return false

@@ -11,7 +11,11 @@ import type {
 	Ticket,
 	User,
 } from "@ks/types"
-import { datePrettyLocalDay, datePrettyLocalTime } from "@lib/dateFormatter"
+import {
+	datePrettyLocalDay,
+	datePrettyLocalTime,
+	timeStampPrettyLocale,
+} from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import styles from "@styles/menus/dashboard.module.css"
 
@@ -43,10 +47,7 @@ export default function AccountDash({ data }: Props) {
 	} = data
 
 	const bookingCells = user?.bookings?.map((book: Booking) => ({
-		date:
-			datePrettyLocalDay(book.start || "") +
-			" " +
-			datePrettyLocalTime(book.start || ""),
+		start: timeStampPrettyLocale(book.start, book.timeZone, "full"),
 		service: book.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={book.status} />,
 		// TODO how to handle canceled, post poned, deleted orders?
@@ -66,8 +67,7 @@ export default function AccountDash({ data }: Props) {
 	}))
 
 	const orderCells = orders?.map((order) => ({
-		date: datePrettyLocalDay(order.dateCreated || ""),
-		time: datePrettyLocalTime(order.dateCreated || ""),
+		created: timeStampPrettyLocale(order.dateCreated, "", "full"),
 		total: moneyFormatter(order.total),
 		count: order.count,
 		status: <StatusBadge type={"order"} status={order.status} />,
@@ -84,7 +84,7 @@ export default function AccountDash({ data }: Props) {
 	)
 
 	const rentalCells = rentals?.map((item) => ({
-		start: datePrettyLocalDay(item.start),
+		start: timeStampPrettyLocale(item.start, item.timeZone, "full"),
 		days: item.days,
 		status: <StatusBadge type={"rental"} status={item.status} />,
 		address: item.address,
@@ -94,10 +94,7 @@ export default function AccountDash({ data }: Props) {
 
 	// todo add employee gig to table. try to make both gigs and requests into one table, but may just split to make it easiuer
 	const gigCells = gigs.map((gig) => ({
-		date:
-			datePrettyLocalDay(gig.start || "") +
-			" " +
-			datePrettyLocalTime(gig.start || ""),
+		start: timeStampPrettyLocale(gig.start, gig.timeZone, "full"),
 		service: gig.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={gig.status} />,
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
@@ -105,10 +102,7 @@ export default function AccountDash({ data }: Props) {
 	}))
 
 	const gigRequestCells = gig_requests.map((gig) => ({
-		date:
-			datePrettyLocalDay(gig.start || "") +
-			" " +
-			datePrettyLocalTime(gig.start || ""),
+		start: timeStampPrettyLocale(gig.start, gig.timeZone, "full"),
 		service: gig.service?.name || "-- service not selected --",
 		status: <StatusBadge type={"booking"} status={gig.status} />,
 		// end: datePrettyLocalDay(book.end || '') + ' ' + datePrettyLocalTime(book.end || ''),
@@ -143,7 +137,7 @@ export default function AccountDash({ data }: Props) {
 
 					<Table
 						caption=""
-						headers={["service", "date", "status", "order", "details"]}
+						headers={["service", "start", "status", "order", "details"]}
 						cells={bookingCells}
 						route={`/bookings`}
 					/>
@@ -155,7 +149,7 @@ export default function AccountDash({ data }: Props) {
 
 					<Table
 						caption=""
-						headers={["service", "date", "status", "details"]}
+						headers={["service", "start", "status", "details"]}
 						cells={gigCells}
 						route={`/bookings`}
 					/>
@@ -168,7 +162,7 @@ export default function AccountDash({ data }: Props) {
 
 					<Table
 						caption=""
-						headers={["service", "date", "status", "actions", "details"]}
+						headers={["service", "start", "status", "actions", "details"]}
 						cells={gigRequestCells}
 						route={`/bookings`}
 					/>
@@ -246,7 +240,7 @@ export default function AccountDash({ data }: Props) {
 
 					<Table
 						caption=""
-						headers={["date", "time", "total", "count", "status", "details"]}
+						headers={["created", "total", "count", "status", "details"]}
 						cells={orderCells}
 						route={`/orders`}
 					/>

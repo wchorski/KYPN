@@ -179,6 +179,8 @@ export const QUERY_USER_CART = `
       id
       price
       summary
+      start
+      timeZone
       service {
         image
       }

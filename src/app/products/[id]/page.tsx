@@ -59,7 +59,7 @@ export async function generateMetadata(
 			images: [String(image), ...previousImages],
 			title: summary,
 			description: excerpt,
-			url: envs.FRONTEND_URL + "/events/" + params.id,
+			url: envs.FRONTEND_URL + "/events/" + id,
 			type: "article",
 		},
 		keywords: tags?.map((tag) => tag.name).join(", "),
@@ -240,7 +240,7 @@ export default async function ProductById({ params }: Props) {
 }
 
 function canEdit(author: User, session: Session | null) {
-	if (!session) return false
+	if (!session || !author) return false
 	if (session.data?.role?.canManageProducts) return true
 	if (author.id === session.itemId) return true
 	return false

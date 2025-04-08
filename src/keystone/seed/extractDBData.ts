@@ -88,7 +88,7 @@ const query = `
       canCreateAvailability
       canManageEvents
       canManageTickets
-      canManageCart
+      canManageCarts
       canManageOrders
       canManageLocations
       canViewPrivateLocations

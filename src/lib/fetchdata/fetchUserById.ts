@@ -45,7 +45,7 @@ export const query = `
     canViewUsers
     canManageUsers
     canManageRoles
-    canManageCart
+    canManageCarts
     canManageOrders
   }
   dateCreated

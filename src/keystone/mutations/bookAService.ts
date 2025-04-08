@@ -68,6 +68,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// const start = new Date(date + "T" + time).toISOString()
 
 			const start = dateToISOTimezone(date, time, timeZone)
+			console.log("mut: after dateToISOTimezone", { start })
 
 			// SERVICE
 			// const service = await context.withSession(session).query.Service.findOne({
@@ -89,7 +90,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			const end = calcEndTime(start, service.durationInHours)
 
 			// const day = new Date(start).getDay()
-			const day = start.getDay()
+			const day = new Date(start).getDay()
 			if (!service.buisnessDays?.includes(day))
 				throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
 
@@ -218,6 +219,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// )
 			// const priceTotal = service.price + addonsCombinedPrice
 
+			console.log("mut: right before new booking", { start })
 			// BOOKING
 			const newBooking = await sudoContext().db.Booking.createOne({
 				data: {

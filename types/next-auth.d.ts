@@ -39,7 +39,7 @@ declare module "next-auth" {
 				canCreateAvailability: boolean
 				canManageEvents: boolean
 				canManageTickets: boolean
-				canManageCart: boolean
+				canManageCarts: boolean
 				canManageOrders: boolean
 				canManageLocations: boolean
 				canManageServices: boolean

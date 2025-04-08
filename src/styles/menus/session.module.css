@@ -2,9 +2,16 @@
   margin: 0;
 
   & > img {
-    padding-right: 1rem;
+    /* padding-right: 1rem; */
     width: 100%;
-    transform: scale(2) translateY(2px);
+    object-fit: contain;
+    /* transform: scale(2) translateY(2px); */
+  }
+
+  & > svg{
+
+    font-size: 2.2rem;
+    
   }
 }
 
@@ -19,11 +26,7 @@
   border: none;
   height: 100%;
 
-  & svg{
-    margin-right: .5rem;
-    font-size: 1.5rem;
-    
-  }
+  
 
   & .account-toggle {
     padding: 0.8rem;

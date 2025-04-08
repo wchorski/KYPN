@@ -2113,7 +2113,7 @@ type Role {
   canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
-  canManageCart: Boolean
+  canManageCarts: Boolean
   canManageOrders: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
@@ -2157,7 +2157,7 @@ input RoleWhereInput {
   canManageBookings: BooleanFilter
   canManageEvents: BooleanFilter
   canManageTickets: BooleanFilter
-  canManageCart: BooleanFilter
+  canManageCarts: BooleanFilter
   canManageOrders: BooleanFilter
   canManageServices: BooleanFilter
   canManageSubscriptionPlans: BooleanFilter
@@ -2191,7 +2191,7 @@ input RoleOrderByInput {
   canManageBookings: OrderDirection
   canManageEvents: OrderDirection
   canManageTickets: OrderDirection
-  canManageCart: OrderDirection
+  canManageCarts: OrderDirection
   canManageOrders: OrderDirection
   canManageServices: OrderDirection
   canManageSubscriptionPlans: OrderDirection
@@ -2223,7 +2223,7 @@ input RoleUpdateInput {
   canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
-  canManageCart: Boolean
+  canManageCarts: Boolean
   canManageOrders: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean
@@ -2261,7 +2261,7 @@ input RoleCreateInput {
   canManageBookings: Boolean
   canManageEvents: Boolean
   canManageTickets: Boolean
-  canManageCart: Boolean
+  canManageCarts: Boolean
   canManageOrders: Boolean
   canManageServices: Boolean
   canManageSubscriptionPlans: Boolean

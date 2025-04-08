@@ -213,6 +213,9 @@ blockquote {
 	display: grid;
 }
 
+.gap-0 {
+	gap: 0;
+}
 .gap-s {
 	gap: var(--space-s);
 }

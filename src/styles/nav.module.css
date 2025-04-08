@@ -25,9 +25,13 @@
 		& li {
 			display: flex;
 			flex-direction: column;
-			align-items: flex-end;
+			align-items: center;
 		}
 	}
+
+  & button {
+    box-shadow: none;
+  }
 }
 
 .utility {
@@ -68,7 +72,8 @@ ul.menu_main {
 	position: absolute;
 	top: 100%;
 	background-color: var(--c-nav);
-	backdrop-filter: blur(10px);
+  /* TODO blur on top of blur creates dark spots */
+	/* backdrop-filter: blur(10px); */
 	width: 100%;
 	height: 100vh;
 	/* //TODO need better way of setting height without f'ing up mobile drawer */
@@ -135,6 +140,7 @@ button.navwich {
 		transform: translateX(0);
 		position: initial;
 		background-color: transparent;
+    backdrop-filter: none;
 	}
 
 	button.navwich {

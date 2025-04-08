@@ -3,11 +3,7 @@
 import { graphql } from "@keystone-6/core"
 import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
 
-import type {
-	Context,
-	OrderItemCreateInput} from ".keystone/types";
-
-
+import type { Context, OrderItemCreateInput } from ".keystone/types"
 
 type StripeSession = {
 	stripe?: {
@@ -111,10 +107,13 @@ export const checkoutSubscription = (base: BaseSchemaMeta) =>
 					fees: 0,
 					...(newOrderItem ? { items: { create: newOrderItem } } : {}),
 					user: { connect: { id: customerId } },
-					stripeCheckoutSessionId: session.stripe?.id || "",
+					...(session.stripe?.id
+						? { stripeCheckoutSessionId: session.stripe.id }
+						: {}),
 					stripePaymentIntent: session.stripe?.payment_intent || "",
 					//TODO maybe not secure
-					...(session.stripe?.payment_status === "paid" || subscriptionPlan.price === 0
+					...(session.stripe?.payment_status === "paid" ||
+					subscriptionPlan.price === 0
 						? { status: "PAYMENT_RECIEVED" }
 						: { status: "REQUESTED" }),
 				},

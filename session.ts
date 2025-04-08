@@ -14,10 +14,17 @@ import { User } from "./src/keystone/types"
 
 // WARNING: you need to change this
 // console.log(process.env.NEXTAUTH_URL);
-const NODE_ENV = process.env.NODE_ENV
-const NEXTAUTH_URL = envs.NEXTAUTH_URL!
+const {
+	GOOGLE_AUTH_ID,
+	GOOGLE_AUTH_SECRET,
+	GITHUB_AUTH_ID,
+	GITHUB_AUTH_SECRET,
+	NEXTAUTH_URL,
+	NEXTAUTH_SECRET,
+	NODE_ENV,
+} = envs
 
-const sessionSecret = envs.NEXTAUTH_SECRET
+const sessionSecret = NEXTAUTH_SECRET
 const useSecureCookies = NEXTAUTH_URL.startsWith("https://")
 const cookiePrefix = useSecureCookies ? "__Secure-" : ""
 const hostName = new URL(NEXTAUTH_URL).hostname
@@ -55,7 +62,7 @@ const userQuery = `
       canCreateAvailability
       canManageEvents
       canManageTickets
-      canManageCart
+      canManageCarts
       canManageOrders
       canManageLocations
       canViewPrivateLocations
@@ -108,7 +115,7 @@ export const nextAuthOptions: NextAuthOptions = {
           id
         `,
 			})
-			
+
 			if (!author) {
 				console.log("### no user found in db")
 			}
@@ -166,15 +173,15 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			return {
 				...session,
-        //TODO why isn't spread ...session giving other user props?
-        user: {
-          id: foundUser.id,
-          name: foundUser.name,
-          nameLast: foundUser.nameLast,
-          image: foundUser.image,
-          email: foundUser.email,
-          dateCreated: foundUser.dateCreated,
-        },
+				//TODO why isn't spread ...session giving other user props?
+				user: {
+					id: foundUser.id,
+					name: foundUser.name,
+					nameLast: foundUser.nameLast,
+					image: foundUser.image,
+					email: foundUser.email,
+					dateCreated: foundUser.dateCreated,
+				},
 				authId: token.sub,
 				id: foundUser?.id,
 				stripeCustomerId: foundUser?.stripeCustomerId,
@@ -206,14 +213,22 @@ export const nextAuthOptions: NextAuthOptions = {
 	},
 	providers: [
 		// allow anyone with a GitHub account to sign up as an author
-		GithubProvider({
-			clientId: envs.GITHUB_AUTH_ID,
-			clientSecret: envs.GITHUB_AUTH_SECRET,
-		}),
-		GoogleProvider({
-			clientId: envs.GOOGLE_AUTH_ID,
-			clientSecret: envs.GOOGLE_AUTH_SECRET,
-		}),
+		...(GITHUB_AUTH_ID && GITHUB_AUTH_SECRET
+			? [
+					GithubProvider({
+						clientId: GITHUB_AUTH_ID,
+						clientSecret: GITHUB_AUTH_SECRET,
+					}),
+			  ]
+			: []),
+		...(GOOGLE_AUTH_ID && GOOGLE_AUTH_SECRET
+			? [
+					GoogleProvider({
+						clientId: GOOGLE_AUTH_ID,
+						clientSecret: GOOGLE_AUTH_SECRET,
+					}),
+			  ]
+			: []),
 
 		CredentialProvider({
 			name: "credentials",
@@ -233,7 +248,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
 				const sudoContext = (await getKeystoneContext()).sudo()
 				// check if the user exists in keystone
-        const data = (await sudoContext.graphql.run({
+				const data = (await sudoContext.graphql.run({
 					query: `
             query Users($where: UserWhereInput!) {
               users(where: $where) {
@@ -273,7 +288,7 @@ export const nextAuthOptions: NextAuthOptions = {
 					console.log("!!! no password set for User")
 					return null
 				}
-        
+
 				// const match = (credentials?.password === foundUser.password)
 				const isPasswordMatch = await bcrypt.compare(
 					credentials?.password,
@@ -281,7 +296,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				)
 				// if(!match) return {status: 401, message: 'incorrect password'}
 
-        //? proper way to compair strings in case insensative manor. but do i even need it?
+				//? proper way to compair strings in case insensative manor. but do i even need it?
 				// if (isPasswordMatch && (credentials.email.localeCompare(foundUser.email, undefined, { sensitivity: 'base' }) === 0)) {
 				if (isPasswordMatch) {
 					console.log("### user is authenticated, ", foundUser.email)
@@ -290,19 +305,22 @@ export const nextAuthOptions: NextAuthOptions = {
 						id: foundUser.id,
 						authId: foundUser.email,
 						role: foundUser.role,
-            email: foundUser.email,
+						email: foundUser.email,
 						user: {
-              id: foundUser.id,
-              name: foundUser.name,
+							id: foundUser.id,
+							name: foundUser.name,
 							email: foundUser.email,
-              image: foundUser.image,
+							image: foundUser.image,
 							stripeCustomerId: foundUser.stripeCustomerId,
 						},
 					}
 				}
 
 				// login failed catch all
-				console.log("!!!!! login no work. Passwords did not match ", credentials?.email)
+				console.log(
+					"!!!!! login no work. Passwords did not match ",
+					credentials?.email
+				)
 				return null
 			},
 		}),

@@ -45,6 +45,7 @@ import { Callout } from "@components/blocks/Callout"
 import { bg_c_reverse_theme } from "@styles/colorthemes.module.css"
 import { useCart } from "@components/hooks/CartStateContext"
 import { calcEndTime } from "@lib/dateCheck"
+import { StatusBadge } from "@components/StatusBadge"
 
 type Fields = {
 	// event: string,
@@ -788,7 +789,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 				) : (
 					<div className={formStyles.success_message}>
 						<BsFillBookmarkFill />
-						<h2> Booking Requested! </h2>
+						<h2>
+							{" "}
+							Booking <StatusBadge type={"booking"} status={"REQUESTED"} />{" "}
+						</h2>
 						<p>{state.success}</p>
 						{!session ? (
 							<Callout intent={"warning"}>
@@ -814,7 +818,6 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 			<aside
 				key={stateRed.addonOptions.length}
-				style={{ maxWidth: "20rem" }}
 				className={"sticky"}
 			>
 				<table>
@@ -826,7 +829,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								{stateRed.service?.name}{" "}
 								{stateRed.service?.durationInHours && (
 									<small className="sub-text">
-										| {stateRed.service?.durationInHours.toString()} hours
+										- {stateRed.service?.durationInHours.toString()} hours
 									</small>
 								)}
 							</td>
@@ -843,10 +846,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								stateRed.location?.address !== "n/a" ? (
 									<span className={"sub-text"}>
 										{" "}
-										{stateRed.location?.address}
+										- {stateRed.location?.address}
 									</span>
 								) : stateRed.address ? (
-									<span className={"sub-text"}> {stateRed.address}</span>
+									<span className={"sub-text"}> - {stateRed.address}</span>
 								) : (
 									<></>
 								)}

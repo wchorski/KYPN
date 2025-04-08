@@ -114,6 +114,7 @@ export default async function AccountPage() {
               id
               start
               end
+              timeZone
               summary
               status
               service {
@@ -124,6 +125,7 @@ export default async function AccountPage() {
               id
               start
               end
+              timeZone
               summary
               status
               service {
@@ -274,6 +276,7 @@ const USER_DASH_QUERY = `
     id
     price
     start
+    timeZone
     service {
       id
       name

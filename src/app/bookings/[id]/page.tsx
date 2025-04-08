@@ -101,6 +101,7 @@ export default async function BookingSinglePage({
 		dateModified,
 		start,
 		end,
+    timeZone,
 		revision,
 	} = booking
 
@@ -208,7 +209,7 @@ export default async function BookingSinglePage({
 								</td>
 								<td className={"flex"}>
 									<strong>{location?.name}</strong>
-									<span className={"sub-text"}>{address}</span>
+									<address className={"sub-text"}>{address}</address>
 
 									{location?.address !== "n/a" && (
 										<IconLink
@@ -224,7 +225,7 @@ export default async function BookingSinglePage({
 									<label>Start: </label>{" "}
 								</td>
 								<td className={"flex gap-m"}>
-									<DayMonthTime dateString={start} />
+									<DayMonthTime dateString={start} timeZone={timeZone} />
 									{!isDateOlderThanNow(start) && (
 										<StatusBadge type={"booking"} status={"PAST"} />
 									)}
@@ -235,7 +236,7 @@ export default async function BookingSinglePage({
 									<label>End: </label>{" "}
 								</td>
 								<td>
-									<DayMonthTime dateString={end} />
+									<DayMonthTime dateString={end} timeZone={timeZone} />
 								</td>
 							</tr>
 							<tr>
@@ -375,5 +376,6 @@ const QUERY_BOOKING_RECIEPT = `
 		dateModified
 		start
 		end
+    timeZone
 		revision
   `

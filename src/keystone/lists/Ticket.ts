@@ -141,6 +141,7 @@ export const Ticket: Lists.Ticket = list({
 		status: select({
 			options: [
 				{ label: "Pending", value: "PENDING" },
+        // TODO move all money related statuses to orderItem?
 				{ label: "Paid", value: "PAID" },
 				// better way of saying `FREE`
 				{ label: "RSVP", value: "RSVP" },
@@ -148,6 +149,7 @@ export const Ticket: Lists.Ticket = list({
 				{ label: "Attended", value: "ATTENDED" },
 				{ label: "Canceled", value: "CANCELED" },
 				{ label: "Rejected", value: "REJECTED" },
+        // TODO change to expired?
 				{ label: "Past", value: "PAST" },
 			],
 			defaultValue: "PENDING",

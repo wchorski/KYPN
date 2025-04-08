@@ -1,4 +1,8 @@
-import styles, { session_btn, session_image, sub_menu } from "@styles/menus/session.module.css"
+import styles, {
+	session_btn,
+	session_image,
+	sub_menu,
+} from "@styles/menus/session.module.css"
 import { desktop_label } from "@styles/nav.module.css"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
@@ -10,8 +14,6 @@ import { nextAuthOptions } from "@/session"
 import { NavLink } from "./NavLink"
 import SignOutButton from "./SignOutButton"
 import { IconAccountBox } from "@lib/useIcons"
-
-
 
 type Props = {
 	label: string
@@ -29,21 +31,25 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 			id="session-badge"
 			aria-label="account menu link"
 		>
-			<NavLink href={`/account`} className={session_btn}>
-				<figure className={session_image} >
+			<NavLink
+				href={`/account`}
+				className={[session_btn, "flex", "gap-0"].join(" ")}
+				style={{ padding: "0" }}
+			>
+				<figure className={session_image}>
 					{session.user.image ? (
 						<Image
 							src={session.user.image}
 							alt={"user avatar"}
-							width={20}
-							height={20}
-              unoptimized={true}
+							width={50}
+							height={50}
+							unoptimized={true}
 						/>
 					) : (
 						<IconAccountBox />
 					)}
 				</figure>
-				<span className={desktop_label} >{label}</span>
+				<span className={desktop_label} style={{ padding: "var(--space-m)" }}>{label}</span>
 			</NavLink>
 
 			<ul className={sub_menu}>
@@ -53,24 +59,20 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 					<span className={"sub-text"}>{session?.user?.email}</span>
 				</li>
 				<li>
-					{" "}
 					<NavLink className="button" href={`/account`}>
-						{" "}
-						My Account{" "}
-					</NavLink>{" "}
+						My Account
+					</NavLink>
 				</li>
 				{session?.data.role && session?.data.role.name === "admin" && (
 					<>
 						<li>
 							<NavLink href={envs.CMS_URL} className="button">
-								{" "}
-								Admin Dashboard{" "}
+								Admin Dashboard
 							</NavLink>
 						</li>
 						<li>
 							<Link href={`/admin`} className="button">
-								{" "}
-								Admin Tools{" "}
+								Admin Tools
 							</Link>
 						</li>
 					</>

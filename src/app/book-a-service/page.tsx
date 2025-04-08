@@ -60,14 +60,19 @@ export default async function BookingsPage({ searchParams }: Props) {
 		<main className={page_layout}>
 			<header className={layout_wide}>
 				<h1> Book a Service </h1>
+				<p>
+					To start a request, Provide the event date & time and choose from
+					available <Link href={`/services`}>services</Link> and preferred
+					staff.
+				</p>
 				{!session && (
 					<Callout intent={"warning"}>
 						<p>
 							Looks like you are browsing as a guest.{" "}
-							<CallbackLink>Login</CallbackLink>
-							to add any bookings to you're account. Don't have an account?{" "}
-							<CallbackLink href={"/register"}>Register</CallbackLink>
-							for a new one
+							<CallbackLink>Login</CallbackLink> to add any bookings to you're
+							account. Don't have an account?{" "}
+							<CallbackLink href={"/register"}>Register</CallbackLink> for a new
+							one
 						</p>
 					</Callout>
 				)}
