@@ -2,7 +2,7 @@
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#000",
     "titleBar.inactiveForeground": "#1f1f1fcc",
-    "titleBar.activeBackground": "#abdbe8",
+    "titleBar.activeBackground": "#b48ae7",
     "titleBar.inactiveBackground": "#a6a6a6cc"
   },
   "emmet.includeLanguages": {

@@ -14,7 +14,7 @@
 	--breakout-size: calc((var(--w-content-breakout) - var(--content-max-width)));
 
 	display: grid;
-	row-gap: var(--space-m);
+	/* row-gap: var(--space-m); */
 
 	/* //? if you update this don't forget about the media query below
   //todo maybe add a [layout_sidebar] as to propery set gaps and stuff */
@@ -37,7 +37,7 @@
 	grid-column: 1/-1;
 	grid-row: 1;
 	grid-template-columns: inherit;
-	padding-top: var(--space-l);
+	/* padding-top: var(--space-l); */
 }
 .page_layout > header > .page_title {
 	grid-column: layout_wide;
