@@ -5,8 +5,8 @@ import { NoData } from "@components/elements/NoData"
 import { TicketList } from "@components/events/TicketList"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { StatusBadge } from "@components/StatusBadge"
-import type {  OrderItem  } from "@ks/types"
-import { datePrettyLocal } from "@lib/dateFormatter"
+import type { OrderItem } from "@ks/types"
+import { datePrettyLocal, timeStampPrettyLocale } from "@lib/dateFormatter"
 import { fetchOrder } from "@lib/fetchdata/fetchOrder"
 import moneyFormatter from "@lib/moneyFormatter"
 import { sortOrderItems } from "@lib/sortUtils"
@@ -201,14 +201,17 @@ export default async function OrderByIdPage({ params }: Props) {
 // }
 
 function BookingOrderItem({ item }: { item: OrderItem }) {
-	const { summary, price, service, id } = item.booking
+	const { summary, price, service, id, start, timeZone } = item.booking
 	return (
 		<li className={styles.item}>
 			<ImageDynamic photoIn={service?.image} />
+			<div>
+				<Link href={`/bookings/${id}`}>
+					<h5>{summary}</h5>
+				</Link>
+				<time dateTime={start}>{timeStampPrettyLocale(start, timeZone, "full")}</time>
+			</div>
 
-			<Link href={`/bookings/${id}`}>
-				<h5>{summary}</h5>
-			</Link>
 			<div className={perItemTotal}>
 				<p>{moneyFormatter(price * item.quantity)}</p>
 				<em>Booking</em>
@@ -235,6 +238,8 @@ const query = `
       id
       summary
       price
+      start
+      timeZone
       service {
         image
       }

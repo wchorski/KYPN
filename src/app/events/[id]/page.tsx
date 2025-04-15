@@ -210,7 +210,9 @@ export default async function EventByID({ params }: Props) {
 							)}
 
 							{!session ? (
-								<CallbackLink>Login to Purchase</CallbackLink>
+								<CallbackLink className="button medium">
+									Login to Purchase
+								</CallbackLink>
 							) : session?.data.role === null ? (
 								<VerifyEmailCard email={session.user.email} />
 							) : (

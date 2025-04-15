@@ -25,13 +25,12 @@
 		& li {
 			display: flex;
 			flex-direction: column;
-			align-items: center;
 		}
 	}
 
-  & button {
-    box-shadow: none;
-  }
+	& button {
+		box-shadow: none;
+	}
 }
 
 .utility {
@@ -72,24 +71,30 @@ ul.menu_main {
 	position: absolute;
 	top: 100%;
 	background-color: var(--c-nav);
-  /* TODO blur on top of blur creates dark spots */
+	/* TODO blur on top of blur creates dark spots */
 	/* backdrop-filter: blur(10px); */
 	width: 100%;
 	height: 100vh;
 	/* //TODO need better way of setting height without f'ing up mobile drawer */
 	/* height: 100%; */
-	transition-property: max-height, background, transform;
+	transition-property: max-height, background, transform, backdrop-filter,
+		filter;
 	transition-duration: 0.7s;
 	padding: 0;
 	margin: 0;
 	/* max-height: 0; */
 	transform: translateX(110%);
 	overflow: hidden;
+
+	& li {
+		align-items: center;
+	}
 }
 
 ul.open {
 	/* max-height: 70vh; */
 	transform: translateX(0);
+	backdrop-filter: blur(10px);
 }
 
 .navlink {
@@ -123,7 +128,7 @@ button.navwich {
 	align-content: center;
 	background-color: transparent;
 	color: var(--c-txt);
-  height: 100%;
+	height: 100%;
 	&:hover,
 	&:active {
 		color: var(--c-primary);
@@ -140,7 +145,7 @@ button.navwich {
 		transform: translateX(0);
 		position: initial;
 		background-color: transparent;
-    backdrop-filter: none;
+		backdrop-filter: none;
 	}
 
 	button.navwich {
@@ -151,7 +156,7 @@ button.navwich {
 /* // link or button */
 .active {
 	color: var(--c-primary) !important;
-  border-color: var(--c-primary);
+	border-color: var(--c-primary);
 }
 
 @media screen and (width < 600px) {

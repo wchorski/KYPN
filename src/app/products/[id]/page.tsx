@@ -151,7 +151,7 @@ export default async function ProductById({ params }: Props) {
 					<h1>{name}</h1>
 
 					{!session ? (
-						<CallbackLink>Login to Purchase</CallbackLink>
+						<CallbackLink className="button medium">Login to Purchase</CallbackLink>
 					) : session?.data.role === null ? (
 						<VerifyEmailCard email={session.user.email} />
 					) : !["PUBLIC", "PRIVATE"].includes(status) ? (

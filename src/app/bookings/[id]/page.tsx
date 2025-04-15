@@ -101,8 +101,9 @@ export default async function BookingSinglePage({
 		dateModified,
 		start,
 		end,
-    timeZone,
+		timeZone,
 		revision,
+		orderItem,
 	} = booking
 
 	return (
@@ -241,11 +242,24 @@ export default async function BookingSinglePage({
 							</tr>
 							<tr>
 								<td>
-									<label>Price: </label>{" "}
+									<label>Service Price: </label>{" "}
 								</td>
 								<td>
 									{" "}
 									<span className="price">{moneyFormatter(price)}</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Order Total: </label>{" "}
+								</td>
+								<td>
+									{" "}
+									<span className="price">
+										{moneyFormatter(orderItem.order.total)}
+									</span>{" "}
+									<em>Includes all order items + discounts</em>{" "}
+									<Link href={`/orders/${orderItem.order.id}`}>Full Order</Link>
 								</td>
 							</tr>
 						</tbody>
@@ -378,4 +392,12 @@ const QUERY_BOOKING_RECIEPT = `
 		end
     timeZone
 		revision
+    orderItem {
+      id
+      total
+      order {
+        total
+        id
+      }
+    }
   `

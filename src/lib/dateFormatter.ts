@@ -238,7 +238,7 @@ export function timePrettyTo12HourFormat(timeString: string) {
 
 export function timeStampPrettyLocale(
 	timeStamp: string,
-	timeZone = "client",
+	timeZone = "standard",
 	option: "day" | "time" | "full"
 	// option: "day" | "time" | "full"
 ) {
