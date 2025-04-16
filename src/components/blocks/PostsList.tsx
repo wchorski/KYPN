@@ -15,13 +15,20 @@ type Props = {
   style?: any,
 }
 
+const query = `
+  id
+  title
+  featured_image
+  excerpt
+`
+
 // any type is a bug workaround
 // @ts-ignore
 export async function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props):ReactElement<any, any> {
   
   const session = await getServerSession(nextAuthOptions)
   const categoryIds = categories.flatMap(cat => cat.id)
-  const { posts, error} = await fetchPosts({page: 1, categoryIds, session})
+  const { posts, error} = await fetchPosts({page: 1, categoryIds, session, query})
 
   return (
     <Section 

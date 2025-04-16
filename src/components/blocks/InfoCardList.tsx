@@ -1,8 +1,8 @@
 import { ImageDynamic } from "@components/elements/ImageDynamic"
-import type { StatusType } from "@components/StatusBadge";
+import type { StatusType } from "@components/StatusBadge"
 import { StatusBadge } from "@components/StatusBadge"
 import { featured_image } from "@styles/articles.module.css"
-import  {
+import {
 	carditem,
 	cardlist,
 	content_wrap,
@@ -12,7 +12,7 @@ import Link from "next/link"
 import type { ReactNode } from "react"
 
 export type InfoCard = {
-  id:string,
+	id: string
 	header: string
 	content?: string | ReactNode
 	children?: ReactNode
@@ -55,22 +55,21 @@ export function InfoCardItem({
 					/>
 				</div>
 			)}
-      <Link href={`/service/${item.id}`}>
-					<figure className={featured_image}>
-						<ImageDynamic photoIn={item.imageSrc} key={item.id} />
-					</figure>
-				</Link>
-			
+			<Link href={`/service/${item.id}`}>
+				<figure className={featured_image}>
+					<ImageDynamic photoIn={item.imageSrc} key={item.id} />
+				</figure>
+			</Link>
+
 			<header>
 				{/* <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure> */}
 				<h3>{item.header}</h3>
 			</header>
 
 			<div className={content_wrap}>
-        <p>
-          {item.content}
-          {children}
-        </p>
+				{item.content}
+				{children}
+
 				{item.buttonLink && (
 					<Link href={item.buttonLink} className="button medium">
 						{item.buttonLabel ? item.buttonLabel : "view"}

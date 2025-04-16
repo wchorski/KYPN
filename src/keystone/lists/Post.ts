@@ -54,6 +54,7 @@ export const Post: Lists.Post = list({
 				"dateCreated",
 				"dateModified",
 				"author",
+        "categories"
 			],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},

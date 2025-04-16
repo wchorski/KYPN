@@ -1,32 +1,36 @@
 import { keystoneContext } from "@ks/context"
-import type {  Post  } from "@ks/types"
+import type { Post } from "@ks/types"
 
 import { envs } from "@/envs"
 
 const perPage = envs.PERPAGE
 
 type Props = {
-  query:string,
+	query: string
 	page?: number
 	categoryIds?: string[]
+	categoryNames?: string[]
 	tagIds?: string[]
 	session: any
 }
 
 // export async function fetchPosts(page:number, categoryIds:string[], session:any){
 export async function fetchPosts({
-  query,
+	query,
 	page = 1,
-	categoryIds,
+	categoryIds = [],
+	categoryNames = [],
 	tagIds,
 	session,
 }: Props) {
 	try {
 		const context = keystoneContext.withSession(session)
-    //TODO how to type this correctly?
+		//TODO how to type this correctly?
 		let where: any = {
-			...(categoryIds && categoryIds.length > 0
+			...(categoryIds.length > 0
 				? { categories: { some: { id: { in: categoryIds } } } }
+				: categoryNames.length > 0
+				? { categories: { some: { name: { in: categoryNames } } } }
 				: {}),
 			...(tagIds && tagIds.length > 0
 				? { tags: { some: { id: { in: tagIds } } } }
@@ -46,7 +50,7 @@ export async function fetchPosts({
 				},
 			],
 			where,
-			query: query,
+			query,
 		})) as Post[]
 
 		return { posts, count }

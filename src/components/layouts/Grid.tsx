@@ -33,6 +33,7 @@ type Props = {
 	isAuto?: boolean
 	colWidth?: string
 	alignContent?: CSSProperties["alignContent"]
+	placeItems?: CSSProperties["placeItems"]
 	layoutWidth?: string
 	gridColumn?: CSSProperties["gridColumn"]
 }
@@ -54,6 +55,7 @@ export function Grid({
 	isAuto = true,
 	colWidth,
 	alignContent = "center",
+  placeItems = "center",
 	layoutWidth,
 	gridColumn,
 }: Props) {
@@ -120,7 +122,7 @@ export function Grid({
 		return (
 			<div id={id} className={classNms} style={inlineStyles}>
 				{children.map((child, i) => (
-					<div key={i} className={grid_item} style={{ alignContent }}>
+					<div key={i} className={grid_item} style={{ alignContent, placeItems }}>
 						{child}
 					</div>
 				))}

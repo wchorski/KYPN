@@ -216,3 +216,7 @@ a:has(svg, span) {
 	color: var(--c-seperator);
 	font-size: 4cqh;
 }
+
+.text-balance {
+  text-wrap: balance;
+}
