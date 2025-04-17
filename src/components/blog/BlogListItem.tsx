@@ -1,6 +1,6 @@
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
 import { StatusBadge } from "@components/StatusBadge"
-import type {  Post, User  } from "@ks/types"
+import type { Post, User } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 // import styles from "@styles/blog/blog.module.scss";
 import styles from "@styles/articles.module.css"
@@ -19,6 +19,7 @@ type Props = {
 	featured_image: string
 	featured_video: string
 	dateModified: string
+	dateCreated: string
 	author: User
 	status: Post["status"]
 
@@ -34,6 +35,7 @@ export const BlogListItem = ({
 	featured_image,
 	featured_video,
 	dateModified,
+  dateCreated,
 	author,
 	buttonText = "read more",
 	status,
@@ -74,7 +76,7 @@ export const BlogListItem = ({
 				</Link>
 			)}
 
-			<div className="wrapper">
+			
 				<header style={{ position: "relative" }}>
 					<Link href={`/posts/${slug}`} className="title">
 						<h3> {title} </h3>
@@ -90,12 +92,20 @@ export const BlogListItem = ({
 								</span>
 							</Link>
 						)}
-						<time dateTime={dateModified} title="Publication update date">
+						{dateCreated && (
+							<time dateTime={dateCreated} title="Publication publish date">
+								<span className="sub-text">
+									<FiCalendar />
+									{datePrettyLocal(dateCreated, "day")}
+								</span>
+							</time>
+						)}
+						{/* <time dateTime={dateModified} title="Publication update date">
 							<span className="sub-text">
 								<FiCalendar />
 								{datePrettyLocal(dateModified, "day")}
 							</span>
-						</time>
+						</time> */}
 					</div>
 				</header>
 
@@ -111,7 +121,7 @@ export const BlogListItem = ({
           <AddToCart id={id} />
           <ProductDelete id={id}> Delete </ProductDelete>
         </div> */}
-			</div>
+			
 		</article>
 	)
 }

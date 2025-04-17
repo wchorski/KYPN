@@ -88,8 +88,9 @@
 }
 
 .page_layout,
-.page_layout > .layout_full,
-.page_layout > .layout_wide {
+/* //TODO i removed `>` direct selector, could mess up a bunch of other stuff idk */
+.page_layout  .layout_full,
+.page_layout  .layout_wide {
 	& > :is(div:global(.flex), div:global(.grid)) {
 		grid-column: layout_site;
 	}
@@ -118,6 +119,10 @@
 .page_layout > .layout_site_to_wide:not(div:global(.flex), figure, img),
 .page_layout > .layout_wide:not(div:global(.flex), figure, img) {
 	display: grid;
+}
+.layout_site > div:not([class]),
+.layout_full > div:not([class]) {
+	grid-column: layout_wide;
 }
 
 /* //todo use to have direct `>` selector, but is more flexible if not */
