@@ -45,7 +45,7 @@ export const Service: Lists.Service = list({
 				"price",
 				"durationInHours",
 				"status",
-				"dateCreated",
+				"categories",
 			],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},

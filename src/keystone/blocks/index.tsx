@@ -15,6 +15,7 @@ import { infocard } from "./infocard"
 import { infocardlist } from "./infocardlist"
 import { mediatext } from "./mediatext"
 import { postslist } from "./postslist"
+import { pricetable } from "./pricetable"
 import { quote } from "./quote"
 import { section } from "./section"
 import { sociallinknav } from "./sociallinknav"
@@ -27,6 +28,7 @@ import { youtubeVideo } from "./youtube-video"
 export const componentBlocks = {
 	callout,
 	// slider,
+  pricetable,
 	mediatext,
 	section,
 	postslist,

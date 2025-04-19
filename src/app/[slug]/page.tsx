@@ -20,6 +20,7 @@ import { notFound } from "next/navigation"
 import type { CSSProperties } from "react"
 
 import { envs } from "@/envs"
+import { DocumentContentClientFetch } from "@components/DocumentContentClientFetch"
 export const revalidate = 5
 
 type Props = {
@@ -107,6 +108,8 @@ export default async function PageBySlug({ params }: Props) {
 				)}
 
 				<BlockRender document={content?.document} />
+				<hr />
+				{/* <DocumentContentClientFetch slug={slug} /> */}
 			</div>
 			{template === "WITH_TABLEOFCONTENTS" && (
 				<AsideBar aria_label="Page Sidebar">

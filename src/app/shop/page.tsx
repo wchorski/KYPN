@@ -1,13 +1,18 @@
-import type { InfoCard} from "@components/blocks/InfoCardList";
+import type { InfoCard } from "@components/blocks/InfoCardList"
 import { InfoCardList } from "@components/blocks/InfoCardList"
 import { ArticleList } from "@components/layouts/ArticleList"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { Pagination } from "@components/Pagination"
-import type {  Addon, Product, Service, SubscriptionPlan  } from "@ks/types"
+import type { Addon, Product, Service, SubscriptionPlan } from "@ks/types"
 import fetchProducts from "@lib/fetchdata/fetchProducts"
 import fetchServicesAndAddons from "@lib/fetchdata/fetchServicesAndAddons"
 import fetchSubscriptonPlans from "@lib/fetchdata/fetchSubscriptonPlans"
-import { layout_site, page_layout } from "@styles/layout.module.css"
+import {
+	layout_full,
+	layout_site,
+	layout_wide,
+	page_layout,
+} from "@styles/layout.module.css"
 import type { Metadata } from "next"
 import { getServerSession } from "next-auth"
 
@@ -57,8 +62,11 @@ export default async function ShopPage({ params, searchParams }: Props) {
 		return <ErrorPage error={error || errorProducts || subErrors} />
 	return (
 		<main className={page_layout}>
-			<header className={layout_site}>
-				<h1> Shop </h1>
+			<header className={layout_full} style={{ marginTop: "3rem" }}>
+				<div className={layout_wide}>
+					<h1 style={{ textAlign: "center" }}> Shop </h1>
+					<hr className={layout_full} />
+				</div>
 			</header>
 			<div className={layout_site}>
 				<Content
@@ -112,14 +120,14 @@ function Content({
 	return (
 		<>
 			{products.length > 0 && (
-				<section style={{marginBottom: '20vh'}}>
+				<section style={{ marginBottom: "20vh" }}>
 					<h2 id="products">Products</h2>
 					<ArticleList items={products} type={"product"} buttonText={"view"} />
 					<Pagination route="/products" page={currPage} count={productsCount} />
 				</section>
 			)}
 			{subscriptionPlans.length > 0 && (
-				<section style={{marginBottom: '20vh'}}>
+				<section style={{ marginBottom: "20vh" }}>
 					<h2 id="subscription-plans">Subscription Plans</h2>
 					<ArticleList
 						items={subscriptionPlans}
@@ -135,7 +143,7 @@ function Content({
 			)}
 
 			{services.length > 0 && (
-				<section style={{marginBottom: '20vh'}}>
+				<section style={{ marginBottom: "20vh" }}>
 					<h2 id="services">Services</h2>
 					<ArticleList items={services} type={"service"} />
 					<Pagination
@@ -146,7 +154,7 @@ function Content({
 				</section>
 			)}
 			{addons.length > 0 && (
-				<section className={'mvh-m'}>
+				<section className={"mvh-m"}>
 					<hr />
 					<h2 id="addons">Add-Ons</h2>
 					<InfoCardList items={infocardAddons || []} />

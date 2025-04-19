@@ -91,15 +91,14 @@
 /* //TODO i removed `>` direct selector, could mess up a bunch of other stuff idk */
 .page_layout  .layout_full,
 .page_layout  .layout_wide {
-	& > :is(div:global(.flex), div:global(.grid)) {
+	& > :is(div:global(.flex), div:global(.grid), table) {
 		grid-column: layout_site;
 	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
 		grid-column: layout_wide;
 	}
 	/* //? must target with `:global` as to not get hash id */
-	&
-		> :is(
+	& > :is(
 			blockquote,
 			pre,
 			div:global(.gallery),

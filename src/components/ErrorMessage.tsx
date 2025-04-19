@@ -8,6 +8,7 @@ import { MdError } from "react-icons/md"
 import { envs } from "@/envs"
 
 import Flex from "./layouts/Flex"
+import { layout_site } from "@styles/layout.module.css";
 
 type Props = {
 	error: object | null | undefined | unknown
@@ -33,7 +34,7 @@ const ErrorContents = ({ error, children }: any) => {
 		error.networkError.result.errors?.length
 	) {
 		return error.networkError.result.errors.map((error: any, i: any) => (
-			<div className={styles.error_comp} key={i}>
+			<div className={[styles.error_comp, layout_site].join(" ")} key={i}>
 				<strong>
 					{" "}
 					<MdError style={{ color: "red" }} />{" "}
@@ -46,7 +47,7 @@ const ErrorContents = ({ error, children }: any) => {
 		))
 	}
 	return (
-		<div className={styles.error_comp}>
+		<div className={[styles.error_comp, layout_site].join(" ")}>
 			<Flex alignItems={"center"}>
 				<div>
 					{" "}

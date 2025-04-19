@@ -1,0 +1,174 @@
+.content {
+	padding: 1rem;
+	padding-top: 0;
+	color: var(--c-txt);
+
+	& ul {
+		list-style-image: url("/marker.svg");
+	}
+	& ol {
+		list-style-image: initial;
+		list-style-type: lower-alpha;
+
+		& li {
+			margin-bottom: 1rem;
+		}
+		& li::marker {
+			color: var(--c-primary);
+		}
+	}
+
+	& li {
+		margin-bottom: 0.5rem;
+		line-height: 1rem;
+	}
+
+	& ul,
+	& ol {
+		margin: 0;
+		padding: 0.7rem;
+	}
+}
+
+.pricetable {
+	grid-column: layout_site;
+  width: 100%;
+	--border: solid 1px var(--c-primary);
+	border-collapse: separate;
+	overflow: hidden;
+	position: relative;
+	margin: 1rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, clamp(5rem, 23rem, 100%));
+  /* grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); */
+  grid-template-rows: auto auto auto;
+  gap: var(--space-m);
+  justify-content: center;
+
+  & > article {
+    display: grid;
+    grid-template-rows: subgrid;
+    background-color: var(--c-txt-bg);
+    grid-row: span 3;
+
+    & > a > header:hover, 
+    & > a > h3:hover {
+      filter: brightness(1.1);
+      transform: scale(1.01);
+      text-decoration: none;
+    }
+
+    & > a > header {
+      transition-property: transform, filter;
+      transition-duration: 0.3s;
+
+      & > h3 {
+        transition-property: transform, filter;
+        transition-duration: 0.3s;
+      }
+      
+      & > figure {
+        /* width: 100%; */
+        height: 14rem;
+        margin: 0;
+        background-color: var(--c-txt-bg);
+        border-bottom: solid 5px var(--c-primary);
+        background-size: cover;
+        position: relative;
+        & > img {
+          /* object-fit: contain; */
+          object-fit: cover !important;
+        }
+      }
+    
+      & > h3 {
+        background-color: var(--c-primary);
+        box-shadow: 1px 1px 1px black;
+        text-align: center;
+        margin: 0 1rem;
+        margin-top: -1rem;
+        margin-bottom: 1em;
+        padding: 0.6rem;
+        border-radius: var(--br-dull);
+        font-size: 1rem;
+        color: var(--c-txt-primary);
+      }
+    }
+
+    & > footer {
+      border-bottom: var(--border);
+      border-radius: 0 0 var(--br-dull) var(--br-dull);
+      display: grid;
+      text-align: right;
+      justify-content: end;
+      gap: var(--space-ms);
+      padding: var(--space-m);
+      font-size: 1.5rem;
+    }
+  }
+
+	/* & .mobile-only {
+		display: none;
+	} */
+}
+
+@media (min-width: 650px) {
+	table.pricetable::before {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 40%;
+		background: rgba(101, 101, 101, 0.03);
+		z-index: 1;
+		transform: skewY(-5deg) scale(1.5);
+		pointer-events: none;
+	}
+}
+
+@media (max-width: 650px) {
+	table.pricetable :global {
+		& thead,
+		& tfoot {
+			display: none;
+		}
+
+		& td {
+			display: grid;
+			color: var(--c-txt);
+			/* grid-template-columns: 15ch auto; */
+			gap: 0.5rem;
+			padding: 0.5rem 1rem;
+		}
+
+		& td:first-child {
+			padding-top: 2rem;
+		}
+		& td:last-child {
+			padding-bottom: 2rem;
+		}
+
+		& td {
+			border-bottom: var(--border);
+			border-top: var(--border);
+			border-radius: var(--br-dull);
+			margin-bottom: 4em;
+		}
+
+		& a.button {
+			padding: 1rem;
+		}
+
+		& .price {
+			font-size: 2rem;
+			margin: 1rem;
+			text-align: center;
+			display: inline-block;
+		}
+
+		& .mobile-only {
+			display: block;
+		}
+	}
+}

@@ -40,6 +40,8 @@ import { Fragment } from "react"
 
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
+import { PriceTable } from "./PriceTable"
+import { PriceGridTable } from "./PriceGridTable"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -119,6 +121,9 @@ type CustomRendererProps = ComponentProps<typeof DocumentRenderer>
 const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	hero: (props) => {
 		return <Hero {...props} />
+	},
+	pricetable: (props) => {
+		return <PriceGridTable {...props} />
 	},
 	callout: (props) => {
 		return <Callout {...props} />

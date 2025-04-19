@@ -1,3 +1,4 @@
+import { envs } from "@/envs"
 import { useEffect, useState } from "react"
 
 // const API_URI =  || 'http://localhost:3000/api/graphql'
@@ -20,9 +21,10 @@ export function useFetchGraphQL(
 			try {
 				const res = await fetch(
           //? it's possible to call the CMS api route
-          // envs.CMS_URL + 
+          envs.CMS_URL
           //? can use web app with yoga gql api (best option to keep it self reliant)
-          `/api/graphql`, {
+          // `/api/graphql`
+          , {
 					method: "POST",
 					body: JSON.stringify({ query, variables }),
 					headers: { "Content-Type": "application/json" },
