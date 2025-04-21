@@ -119,6 +119,12 @@ const nextConfig = {
 			},
 			{
 				protocol: "https",
+				hostname: "images.pexels.com",
+				port: "",
+				pathname: "/photos/**",
+			},
+			{
+				protocol: "https",
 				hostname: "cloutdrive.williamusic.com",
 				port: "",
 				pathname: "/**",

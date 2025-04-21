@@ -93,11 +93,11 @@ export const BlogListItem = ({
 							</Link>
 						)}
 						{dateCreated && (
-							<time dateTime={dateCreated} title="Publication publish date">
-								<span className="sub-text">
-									<FiCalendar />
+							<time className="sub-text" dateTime={dateCreated} title="Publication publish date">
+								
+									<FiCalendar />{" "}
 									{datePrettyLocal(dateCreated, "day")}
-								</span>
+								
 							</time>
 						)}
 						{/* <time dateTime={dateModified} title="Publication update date">

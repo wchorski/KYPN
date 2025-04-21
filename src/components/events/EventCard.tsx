@@ -1,5 +1,5 @@
 import { IconLink } from "@components/elements/IconLink"
-import type {  Event  } from "@ks/types"
+import type { Event } from "@ks/types"
 import {
 	datePrettyLocalDayShort,
 	datePrettyLocalTime,
@@ -20,9 +20,9 @@ import { ImageDynamic } from "../elements/ImageDynamic"
 export function EventCard({ image, start, summary, location, id }: Event) {
 	return (
 		<article className={event_article}>
-			<div>
+			<figure style={{ margin: "0" }}>
 				<ImageDynamic photoIn={image} />
-			</div>
+			</figure>
 
 			<div className={content}>
 				<time dateTime={start} className={date_start}>
@@ -46,7 +46,7 @@ export function EventCard({ image, start, summary, location, id }: Event) {
 							<address>
 								<MdLocationOn />
 								{location?.name}
-								<br />
+								{" "}
 								{location?.address}
 								{/* {address.street} <br /> */}
 								{/* {address.town} <br /> */}
