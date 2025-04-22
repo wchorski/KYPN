@@ -191,7 +191,7 @@ export type Announcement = Lists.Announcement.Item & {
 	// start: string
 	// end: string
 	colorTheme: ColorsTheme
-	// type: "MAINTENANCE" | "NORMAL" | "CRITICAL" | "SALE"
+	type: "MAINTENANCE" | "NORMAL" | "CRITICAL" | "SALE" | string
 	content: {
 		document: any
 	}

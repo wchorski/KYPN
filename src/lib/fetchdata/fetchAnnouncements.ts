@@ -13,6 +13,7 @@ export default async function fetchAnnouncements(session:any){
         colorTheme
         id
         link
+        type
         content {
           document
         }

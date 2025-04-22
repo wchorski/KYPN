@@ -1,25 +1,80 @@
+/* .MAINTENANCE {
+
+  border-image-slice: 13 12 12 12;
+  border-image-width: 12px 12px 12px 12px;
+  border-image-outset: 0px 0px 0px 0px;
+  border-image-repeat: repeat repeat;
+  border-image-source: repeating-linear-gradient(
+		45deg,
+		hsl(61, 41%, 56%),
+		hsl(61, 41%, 56%) 10px,
+		hsl(61, 37%, 44%) 10px,
+		hsl(61, 37%, 44%) 20px
+	);
+  border-style: solid; 
+} */
+
+.MAINTENANCE {
+	background-color: var(--c-txt-bg);
+	position: relative;
+
+	& > div {
+		background-color: var(--c-txt-bg);
+		margin: var(--space-s);
+		padding: var(--space-s);
+	}
+}
+.MAINTENANCE::before {
+	--angle: 0deg;
+	content: "";
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background: yellow;
+	background: repeating-linear-gradient(
+		45deg,
+		hsl(61, 89%, 65%),
+		hsl(61, 89%, 65%) 10px,
+		hsl(61, 37%, 44%) 10px,
+		hsl(61, 37%, 44%) 20px
+	);
+	background-size: 200% 200%;
+	animation: barberpole 28s linear infinite;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+	padding: 8px;
+	z-index: 0;
+}
+
+@keyframes barberpole {
+	100% {
+		background-position: 100% 100%;
+	}
+}
 
 .debug {
-  border-color: yellow;
-  border-style: dashed;
-  border-width: var(--space-xxs);
-  padding: var(--space-xxs);
-  background: color-mix(in srgb, yellow 20%, transparent 60%);
+	border-color: yellow;
+	border-style: dashed;
+	border-width: var(--space-xxs);
+	padding: var(--space-xxs);
+	background: color-mix(in srgb, yellow 20%, transparent 60%);
 }
-.success, .error {
-  border-width: var(--space-xxs);
-  border-left-width: var(--space-s);
-  border-style: solid;
+.success,
+.error {
+	border-width: var(--space-xxs);
+	border-left-width: var(--space-s);
+	border-style: solid;
 	padding-inline: var(--space-m);
 	padding-block: var(--space-s);
-  color: var(--c-header);
+	color: var(--c-header);
 }
 
 .success {
-  border-color: var(--c-success);
+	border-color: var(--c-success);
 }
 .error {
-  border-color: var(--c-error);
+	border-color: var(--c-error);
 }
 
 .sub-text {
@@ -48,15 +103,15 @@ h6 {
 }
 
 .glass-bg::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  /* width: 100%;
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	/* width: 100%;
   height: 100%; */
-  backdrop-filter: blur(7px);
+	backdrop-filter: blur(7px);
 }
 
 .overlay {
@@ -129,7 +184,6 @@ input[type="button"] {
 	transition-timing-function: cubic-bezier(0, 0.57, 0, 0.99);
 }
 
-
 .button,
 button,
 input[type="submit"],
@@ -155,14 +209,14 @@ button {
 }
 
 a,
-button, 
+button,
 .button {
-  &:disabled {
-    /* border-color: var(--c-disabled); */
-    border-color: transparent !important;
-    color: var(--c-disabled);
-  }
-} 
+	&:disabled {
+		/* border-color: var(--c-disabled); */
+		border-color: transparent !important;
+		color: var(--c-disabled);
+	}
+}
 
 pre,
 code {

@@ -2,7 +2,8 @@ import ErrorMessage from "@components/ErrorMessage"
 import { SchedualCalendar } from "@components/SchedualCalendar"
 import fetchEvents from "@lib/fetchdata/fetchEvents"
 import {
-  layout_site,
+  layout_hidden,
+	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
@@ -31,26 +32,34 @@ type Props = {
 const today = new Date()
 
 export default async function EventsPage({ params, searchParams }: Props) {
-  const { date }  = await searchParams
-  const session = await getServerSession(nextAuthOptions);
-	const dateParam = date|| today.toDateString()
+	const { date } = await searchParams
+	const session = await getServerSession(nextAuthOptions)
+	const dateParam = date || today.toDateString()
 	const dateString = new Date(dateParam).toDateString()
-	const { events, count, error } = await fetchEvents(dateString, QUERY_EVENTS, session)
+	const { events, count, error } = await fetchEvents(
+		dateString,
+		QUERY_EVENTS,
+		session
+	)
 
 	if (error) return <ErrorMessage error={error} />
 
 	return (
 		<main className={page_layout}>
 			<header className={layout_wide}>
-				<h1> Events </h1>
+				<h1 className={layout_hidden}> Events </h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
-				<section className={layout_site} >
-          {/* //TODO delete event calendar comp */}
+				<section className={layout_site}>
+					{/* //TODO delete event calendar comp */}
 					{/* <EventsCalendar date={date} events={events} /> */}
-          <SchedualCalendar date={dateString} events={events} isSearchParam={date ? true : false}/>
+					<SchedualCalendar
+						date={dateString}
+						events={events}
+						isSearchParam={date ? true : false}
+					/>
 				</section>
-        {/* <br />
+				{/* <br />
         <br />
 				<section>
           <h2>Upcoming Events</h2>

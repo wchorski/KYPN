@@ -61,7 +61,7 @@ export default async function BookingsPage({ searchParams }: Props) {
 			<header className={layout_wide}>
 				<h1> Book a Service </h1>
 				<p>
-					To start a request, Provide the event date & time and choose from
+					To start a request, provide the event date, time, and location. Choose from the
 					available <Link href={`/services`}>services</Link> and preferred
 					staff.
 				</p>

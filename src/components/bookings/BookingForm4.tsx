@@ -46,6 +46,8 @@ import { bg_c_reverse_theme } from "@styles/colorthemes.module.css"
 import { useCart } from "@components/hooks/CartStateContext"
 import { calcEndTime } from "@lib/dateCheck"
 import { StatusBadge } from "@components/StatusBadge"
+import Flex from "@components/layouts/Flex"
+import { layout_wide } from "@styles/layout.module.css"
 
 type Fields = {
 	// event: string,
@@ -538,232 +540,230 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	}
 
 	return (
-		// <div className={formStyles.grid_wrap}>
-		<Grid layout={"1_1"} alignContent={"start"}>
-			<div>
-				{!state.cartItem ? (
-					<form action={action} ref={formRef} className={form}>
-						<fieldset>
-							<legend> The What </legend>
+		// <Grid layout={"1_1"} alignContent={"start"}>
+		<Flex className={layout_wide} style={{ gridColumn: "layout_wide" }}>
+			{!state.cartItem ? (
+				<form
+					action={action}
+					ref={formRef}
+					className={form}
+					style={{ maxWidth: "35rem" }}
+				>
+					<fieldset>
+						<legend> The What </legend>
 
-							<SelectField
-								name={"serviceId"}
-								label={"service"}
-								defaultValue={prevBooking?.serviceId || state.values?.serviceId}
-								required={true}
-								onChange={(e) => {
-									dispatchRed({
-										type: "SET_SERVICE",
-										payload: e.currentTarget.value,
-									})
-								}}
-								options={serviceOptions}
-								error={state.valueErrors?.serviceId}
-							/>
+						<SelectField
+							name={"serviceId"}
+							label={"service"}
+							defaultValue={prevBooking?.serviceId || state.values?.serviceId}
+							required={true}
+							onChange={(e) => {
+								dispatchRed({
+									type: "SET_SERVICE",
+									payload: e.currentTarget.value,
+								})
+							}}
+							options={serviceOptions}
+							error={state.valueErrors?.serviceId}
+						/>
 
-							<SelectField
-								name={"locationId"}
-								label={"location"}
-								defaultValue={
-									prevBooking?.locationId || state.values?.locationId
-								}
-								required={true}
-								onChange={(e) =>
-									dispatchRed({
-										type: "SET_LOCATION",
-										payload: e.currentTarget.value,
-									})
-								}
-								options={stateRed.locationOptions}
-								error={state.valueErrors?.locationId}
-							/>
+						<SelectField
+							name={"locationId"}
+							label={"location"}
+							defaultValue={prevBooking?.locationId || state.values?.locationId}
+							required={true}
+							onChange={(e) =>
+								dispatchRed({
+									type: "SET_LOCATION",
+									payload: e.currentTarget.value,
+								})
+							}
+							options={stateRed.locationOptions}
+							error={state.valueErrors?.locationId}
+						/>
 
-							<InputField
-								label={"Event Address"}
-								name={"address"}
-								type={stateRed.location?.address === "n/a" ? "text" : "hidden"}
-								placeholder="123 Rainbow Rd, Mushroom KI 10203"
-								required={stateRed.location?.address === "n/a"}
-								defaultValue={state.values?.address}
-								error={state.valueErrors?.address}
-								onChange={(e) =>
-									dispatchRed({
-										type: "SET_ADDRESS",
-										payload: e.currentTarget.value,
-									})
-								}
-							/>
+						<InputField
+							label={"Event Address"}
+							name={"address"}
+							type={stateRed.location?.address === "n/a" ? "text" : "hidden"}
+							placeholder="123 Rainbow Rd, Mushroom KI 10203"
+							required={stateRed.location?.address === "n/a"}
+							defaultValue={state.values?.address}
+							error={state.valueErrors?.address}
+							onChange={(e) =>
+								dispatchRed({
+									type: "SET_ADDRESS",
+									payload: e.currentTarget.value,
+								})
+							}
+						/>
 
-							<SelectField
-								name={"employeeId"}
-								label={"staff member"}
-								defaultValue={
-									prevBooking?.employeeId || state.values?.employeeId
-								}
-								required={true}
-								onChange={(e) => {
-									dispatchRed({
-										type: "SET_STAFF",
-										payload: e.currentTarget.value,
-									})
-									findPartialDays(e.currentTarget.value)
-								}}
-								options={stateRed.staffOptions}
-								error={state.valueErrors?.employeeId}
-							/>
+						<SelectField
+							name={"employeeId"}
+							label={"staff member"}
+							defaultValue={prevBooking?.employeeId || state.values?.employeeId}
+							required={true}
+							onChange={(e) => {
+								dispatchRed({
+									type: "SET_STAFF",
+									payload: e.currentTarget.value,
+								})
+								findPartialDays(e.currentTarget.value)
+							}}
+							options={stateRed.staffOptions}
+							error={state.valueErrors?.employeeId}
+						/>
 
-							{addons.length > 0 && (
-								<>
-									<h5> Add-Ons</h5>
-									{stateRed.addonOptions.length === 0 && (
-										<p className="subtext"> no addons available </p>
-									)}
-									<div className={formStyles.addons_wrap}>
-										{stateRed.addonOptions.map((addon) => (
-											<label
-												key={addon.id}
-												htmlFor={addon.id}
-												className={"checkbox"}
-											>
-												<input
-													name={"addonIds"}
-													value={addon.id}
-													type={"checkbox"}
-													readOnly={false}
-													defaultChecked={addon.isChecked}
-													onChange={(e) => {
-														dispatchRed({
-															type: "ADDON_CHECKBOX",
-															payload: {
-																value: e.currentTarget.value,
-																isChecked: e.currentTarget.checked,
-															},
-														})
-													}}
-												/>
-												<span>
-													<strong> {moneyFormatter(addon.price || 0)} </strong>
-													{addon.name}
-												</span>
-											</label>
-										))}
-									</div>
-								</>
-							)}
-						</fieldset>
+						{addons.length > 0 && (
+							<>
+								<h5> Add-Ons</h5>
+								{stateRed.addonOptions.length === 0 && (
+									<p className="subtext"> no addons available </p>
+								)}
+								<div className={formStyles.addons_wrap}>
+									{stateRed.addonOptions.map((addon) => (
+										<label
+											key={addon.id}
+											htmlFor={addon.id}
+											className={"checkbox"}
+										>
+											<input
+												name={"addonIds"}
+												value={addon.id}
+												type={"checkbox"}
+												readOnly={false}
+												defaultChecked={addon.isChecked}
+												onChange={(e) => {
+													dispatchRed({
+														type: "ADDON_CHECKBOX",
+														payload: {
+															value: e.currentTarget.value,
+															isChecked: e.currentTarget.checked,
+														},
+													})
+												}}
+											/>
+											<span>
+												<strong> {moneyFormatter(addon.price || 0)} </strong>
+												{addon.name}
+											</span>
+										</label>
+									))}
+								</div>
+							</>
+						)}
+					</fieldset>
 
-						<fieldset>
-							<legend> The When </legend>
-							<InputField
-								name={"date"}
-								label={"day of event"}
-								// type={"date"}
-								type={"hidden"}
-								// defaultValue={prevBooking?.date || state.values?.date}
-								value={stateRed.date}
-								required={true}
-								onChange={(e) =>
-									dispatchRed({
-										type: "SET_DATE",
-										payload: e.currentTarget.value,
-									})
-								}
-								// style={{ pointerEvents: "none", display: "none" }}
-								error={state.valueErrors?.date}
-								ref={dateRef}
-							/>
-							<h5>Day of Event</h5>
-							<CalendarDatePicker
-								blackoutDays={stateRed.blackoutDates}
-								// blackoutDays={[]}
-								buisnessDays={stateRed.service?.buisnessDays || []}
-								onDateCallback={onDateCallback}
-							/>
-							<p className={"error"}>{state.valueErrors?.date}</p>
+					<fieldset>
+						<legend> The When </legend>
+						<InputField
+							name={"date"}
+							label={"day of event"}
+							// type={"date"}
+							type={"hidden"}
+							// defaultValue={prevBooking?.date || state.values?.date}
+							value={stateRed.date}
+							required={true}
+							onChange={(e) =>
+								dispatchRed({
+									type: "SET_DATE",
+									payload: e.currentTarget.value,
+								})
+							}
+							// style={{ pointerEvents: "none", display: "none" }}
+							error={state.valueErrors?.date}
+							ref={dateRef}
+						/>
+						<h5>Day of Event</h5>
+						<CalendarDatePicker
+							blackoutDays={stateRed.blackoutDates}
+							// blackoutDays={[]}
+							buisnessDays={stateRed.service?.buisnessDays || []}
+							onDateCallback={onDateCallback}
+						/>
+						<p className={"error"}>{state.valueErrors?.date}</p>
 
-							<h5>Start Time</h5>
-							<InputField
-								name={"time"}
-								// type={"time"}
-								type={"hidden"}
-								// defaultValue={prevBooking?.time || state.values?.time}
-								value={stateRed.time}
-								required={true}
-								onChange={(e) => {
-									dispatchRed({
-										type: "SET_TIME",
-										payload: e.currentTarget.value,
-									})
-									handleBlackoutTimes(e.currentTarget.value)
-								}}
-								error={state.valueErrors?.time}
-								ref={timeRef}
-							/>
-							{/* //TODO collaps to drawer other time buttons when picked */}
-							<TimePicker
-								key={dateRef.current?.value}
-								onTimeCallback={onTimeCallback}
-								times={handleBlackoutTimes(stateRed.date)}
-								pickedTime={stateRed.time}
-								// todo setting 'service' to empty string causes error here
-								buisnessHours={{
-									start: stateRed.service?.buisnessHourOpen || "00:00:00",
-									end: stateRed.service?.buisnessHourClosed || "23:59:00",
-								}}
-								// partialDates={partialDates}
-								// serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
-							/>
-							<p className={"error"}>{state.valueErrors?.time}</p>
+						<h5>Start Time</h5>
+						<InputField
+							name={"time"}
+							// type={"time"}
+							type={"hidden"}
+							// defaultValue={prevBooking?.time || state.values?.time}
+							value={stateRed.time}
+							required={true}
+							onChange={(e) => {
+								dispatchRed({
+									type: "SET_TIME",
+									payload: e.currentTarget.value,
+								})
+								handleBlackoutTimes(e.currentTarget.value)
+							}}
+							error={state.valueErrors?.time}
+							ref={timeRef}
+						/>
+						{/* //TODO collaps to drawer other time buttons when picked */}
+						<TimePicker
+							key={dateRef.current?.value}
+							onTimeCallback={onTimeCallback}
+							times={handleBlackoutTimes(stateRed.date)}
+							pickedTime={stateRed.time}
+							// todo setting 'service' to empty string causes error here
+							buisnessHours={{
+								start: stateRed.service?.buisnessHourOpen || "00:00:00",
+								end: stateRed.service?.buisnessHourClosed || "23:59:00",
+							}}
+							// partialDates={partialDates}
+							// serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
+						/>
+						<p className={"error"}>{state.valueErrors?.time}</p>
 
-							<SelectField
-								name={"timeZone"}
-								label={"event time zone"}
-								defaultValue={
-									(timeZoneOptions && timeZoneOptions[0].value) || ""
-								}
-								required={true}
-								options={timeZoneOptions || []}
-								error={state.valueErrors?.timeZone}
-							/>
-						</fieldset>
+						<SelectField
+							name={"timeZone"}
+							label={"event time zone"}
+							defaultValue={(timeZoneOptions && timeZoneOptions[0].value) || ""}
+							required={true}
+							options={timeZoneOptions || []}
+							error={state.valueErrors?.timeZone}
+						/>
+					</fieldset>
 
-						<fieldset>
-							<legend> The Who </legend>
-							<InputField
-								name={"customerId"}
-								type={"hidden"}
-								required={false}
-								defaultValue={session?.itemId || state.values?.customerId}
-								error={state.valueErrors?.customerId}
-							/>
+					<fieldset>
+						<legend> The Who </legend>
+						<InputField
+							name={"customerId"}
+							type={"hidden"}
+							required={false}
+							defaultValue={session?.itemId || state.values?.customerId}
+							error={state.valueErrors?.customerId}
+						/>
 
-							<InputField
-								name={"name"}
-								type={"text"}
-								required={true}
-								defaultValue={session?.user?.name || state.values?.name}
-								error={state.valueErrors?.name}
-							/>
+						<InputField
+							name={"name"}
+							type={"text"}
+							required={true}
+							defaultValue={session?.user?.name || state.values?.name}
+							error={state.valueErrors?.name}
+						/>
 
-							<InputField
-								name={"email"}
-								type={"email"}
-								placeholder="my-inbox@mail.lan"
-								required={true}
-								defaultValue={session?.user?.email || state.values?.email}
-								error={state.valueErrors?.email}
-							/>
+						<InputField
+							name={"email"}
+							type={"email"}
+							placeholder="my-inbox@mail.lan"
+							required={true}
+							defaultValue={session?.user?.email || state.values?.email}
+							error={state.valueErrors?.email}
+						/>
 
-							<InputField
-								name={"phone"}
-								type={"tel"}
-								placeholder="000 000-0000"
-								required={false}
-								defaultValue={state.values?.phone}
-								error={state.valueErrors?.phone}
-							/>
-							{/* // TODO switch phone to tel */}
-							{/* <InputField
+						<InputField
+							name={"phone"}
+							type={"tel"}
+							placeholder="000 000-0000"
+							required={false}
+							defaultValue={state.values?.phone}
+							error={state.valueErrors?.phone}
+						/>
+						{/* // TODO switch phone to tel */}
+						{/* <InputField
 								name={"tel"}
 								type={"tel"}
                 placeholder="000 000-0000"
@@ -771,55 +771,51 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								defaultValue={formState.fieldValues.tel}
 								error={formState.errors?.tel}
 							/> */}
-							<TextareaField
-								name="notes"
-								placeholder="..."
-								defaultValue={state.values?.notes}
-								required={false}
-								error={state.valueErrors?.notes}
-							/>
-						</fieldset>
-						{!state.success ? (
-							<SubmitButton label={"Request Booking"} />
-						) : (
-							<p className={"success"}>{state.success}</p>
-						)}
-						<p className={"error"}>{state.error}</p>
-					</form>
-				) : (
-					<div className={formStyles.success_message}>
-						<BsFillBookmarkFill />
-						<h2>
-							{" "}
-							Booking <StatusBadge type={"booking"} status={"REQUESTED"} />{" "}
-						</h2>
-						<p>{state.success}</p>
-						{!session ? (
-							<Callout intent={"warning"}>
-								<p>
-									You created this booking as a guest. Make sure to save this
-									page to your records. A follow up email or phone call will be
-									made with the contact provided
-								</p>
-								<p className={["pill", bg_c_reverse_theme].join(" ")}>
-									CartItemId: {state.cartItem.id}
-								</p>
-							</Callout>
-						) : (
-							<>
-								<Link href={`/bookings/${state.id}`}> Booking Status </Link>
-								<br />
-								<Link href={"/account#bookings"}> Account bookings ⇢ </Link>
-							</>
-						)}
-					</div>
-				)}
-			</div>
+						<TextareaField
+							name="notes"
+							placeholder="..."
+							defaultValue={state.values?.notes}
+							required={false}
+							error={state.valueErrors?.notes}
+						/>
+					</fieldset>
+					{!state.success ? (
+						<SubmitButton label={"Request Booking"} />
+					) : (
+						<p className={"success"}>{state.success}</p>
+					)}
+					<p className={"error"}>{state.error}</p>
+				</form>
+			) : (
+				<div className={formStyles.success_message}>
+					<BsFillBookmarkFill />
+					<h2>
+						{" "}
+						Booking <StatusBadge type={"booking"} status={"REQUESTED"} />{" "}
+					</h2>
+					<p>{state.success}</p>
+					{!session ? (
+						<Callout intent={"warning"}>
+							<p>
+								You created this booking as a guest. Make sure to save this page
+								to your records. A follow up email or phone call will be made
+								with the contact provided
+							</p>
+							<p className={["pill", bg_c_reverse_theme].join(" ")}>
+								CartItemId: {state.cartItem.id}
+							</p>
+						</Callout>
+					) : (
+						<>
+							<Link href={`/bookings/${state.id}`}> Booking Status </Link>
+							<br />
+							<Link href={"/account#bookings"}> Account bookings ⇢ </Link>
+						</>
+					)}
+				</div>
+			)}
 
-			<aside
-				key={stateRed.addonOptions.length}
-				className={"sticky"}
-			>
+			<aside key={stateRed.addonOptions.length} className={"sticky"}>
 				<table>
 					<tbody>
 						<tr>
@@ -941,7 +937,6 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 					</tbody>
 				</table>
 			</aside>
-		</Grid>
-		// </div>
+		</Flex>
 	)
 }
