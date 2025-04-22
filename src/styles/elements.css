@@ -4,7 +4,7 @@ table {
 	/* margin-block: var(--space-l); */
 }
 thead {
-  text-wrap: nowrap;
+	text-wrap: nowrap;
 }
 thead th {
 	border-bottom-width: 3px;
@@ -283,5 +283,9 @@ s {
 }
 
 p:empty {
+	display: none;
+}
+
+.hidden {
 	display: none;
 }

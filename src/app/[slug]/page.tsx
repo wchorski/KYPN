@@ -85,11 +85,14 @@ export default async function PageBySlug({ params }: Props) {
 			</header>
 
 			<div
+				id="main-page-content"
 				className={[
 					page_content,
 					template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full,
 				].join(" ")}
 			>
+				{/* <p className={"screen-reader-text"}>Start of main page content</p> */}
+        
 				{status !== "PUBLIC" && (
 					<Card
 						// className={"siteWrapper"}
@@ -108,7 +111,7 @@ export default async function PageBySlug({ params }: Props) {
 				)}
 
 				<BlockRender document={content?.document} />
-				<hr />
+
 				{/* <DocumentContentClientFetch slug={slug} /> */}
 			</div>
 			{template === "WITH_TABLEOFCONTENTS" && (

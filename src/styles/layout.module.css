@@ -36,8 +36,19 @@
 .page_layout > header {
 	grid-column: 1/-1;
 	grid-row: 1;
-	grid-template-columns: inherit;
+	grid-template-columns: subgrid;
+	text-align: center;
+	padding-top: 10vw;
+	/* border-bottom: solid 1px var(--c-seperator); */
 	/* padding-top: var(--space-l); */
+}
+
+.layout_hidden {
+	display: none;
+}
+
+.page_layout > header:has(h1:not(.layout_hidden)) {
+  border-bottom: solid 1px var(--c-seperator);
 }
 .page_layout > header > .page_title {
 	grid-column: layout_wide;
@@ -60,8 +71,19 @@
 	grid-row: 2;
 	grid-column: layout_breakout;
 	/* //TODO why does this break a lot of the layouts? */
-	/* grid-template-columns: inherit;
-  display: grid; */
+	/* ? use subgrid instead of inherit. inherit created a copied nested grid. subgrid follows the parent grid exactly */
+	display: grid;
+	grid-template-columns: subgrid;
+}
+
+
+.page_layout > .page_content {
+  padding-top: 8vw;
+}
+
+/*? prevents gaps between header and content on custom made pages */
+.page_layout > .page_content > section:first-child {
+  margin-top: -8vw;
 }
 
 .page_layout > aside,
@@ -84,7 +106,7 @@
 .page_layout > footer {
 	grid-column: layout_wide;
 	grid-row: 3;
-	grid-template-columns: inherit;
+	grid-template-columns: subgrid;
 }
 
 .page_layout,
@@ -98,7 +120,8 @@
 		grid-column: layout_wide;
 	}
 	/* //? must target with `:global` as to not get hash id */
-	& > :is(
+	&
+		> :is(
 			blockquote,
 			pre,
 			div:global(.gallery),
@@ -127,7 +150,7 @@
 /* //todo use to have direct `>` selector, but is more flexible if not */
 .page_layout .layout_full {
 	grid-column: layout_full;
-	grid-template-columns: inherit;
+	grid-template-columns: subgrid;
 }
 
 .page_layout .layout_site {

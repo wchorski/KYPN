@@ -96,7 +96,7 @@ export async function PriceGridTable({ items = [] }: Props) {
 
 						<div className={styles.content}>{content}</div>
 
-						<footer className={getColorTheme('bg_c_primary')} >
+						<footer className={getColorTheme("bg_c_primary")}>
 							{/* <span className="price">
 								{moneyFormatter(service.price)}
 							</span> */}
@@ -111,7 +111,7 @@ export async function PriceGridTable({ items = [] }: Props) {
 								}
 								className="button medium"
 							>
-								{item.buttonLabel}
+								{item.buttonLabel || "Book Now"}
 							</Link>
 						</footer>
 					</article>

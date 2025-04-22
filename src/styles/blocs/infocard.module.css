@@ -1,11 +1,12 @@
 .cardlist {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: stretch;
 	gap: 1rem;
 	padding-inline: 0;
 	list-style: none;
+
 
 	& li {
 		min-width: 16rem;

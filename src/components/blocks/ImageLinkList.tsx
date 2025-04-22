@@ -1,4 +1,4 @@
-import styles from '@styles/blocs/imagelinks.module.scss'
+import styles from '@styles/blocs/imagelinks.module.css'
 import Link from "next/link"
 import type { ReactNode } from "react"
 import { LuExternalLink } from "react-icons/lu";

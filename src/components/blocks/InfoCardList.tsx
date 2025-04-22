@@ -8,6 +8,7 @@ import {
 	content_wrap,
 	statusBadge,
 } from "@styles/blocs/infocard.module.css"
+import { layout_site } from "@styles/layout.module.css"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
@@ -28,7 +29,7 @@ type Props = {
 
 export function InfoCardList({ items }: Props) {
 	return (
-		<ul className={cardlist}>
+		<ul className={cardlist} style={{ gridColumn: "layout_site" }}>
 			{items.map((item, i) => (
 				<li key={i}>
 					<InfoCardItem item={item} />
@@ -71,7 +72,11 @@ export function InfoCardItem({
 				{children}
 
 				{item.buttonLink && (
-					<Link href={item.buttonLink} className="button medium">
+					<Link
+						href={item.buttonLink}
+						className="button medium"
+						style={{ marginLeft: "auto" }}
+					>
 						{item.buttonLabel ? item.buttonLabel : "view"}
 					</Link>
 				)}

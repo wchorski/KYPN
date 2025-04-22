@@ -14,27 +14,25 @@ export const pricetable = component({
 	schema: {
 		items: fields.array(
 			fields.object({
-				imageSrc: fields.url({
-					label: "Image URL",
-					// defaultValue:
-					// 	"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-				}),
-				title: fields.text({
-					label: "Title",
-				}),
 				service: fields.relationship({
 					label: "Service",
 					listKey: "Service",
 					selection: "id name price durationInHours image",
 					many: false,
 				}),
+				imageSrc: fields.url({
+					label: "Image Override",
+					// defaultValue:
+					// 	"https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
+				}),
+				title: fields.text({
+					label: "Title Override",
+				}),
 				buttonLink: fields.url({
-					label: "Button Link",
-					defaultValue: "/pricing",
+					label: "Button Link Override",
 				}),
 				buttonLabel: fields.url({
-					label: "Button Label",
-					defaultValue: "Book Now",
+					label: "Button Label Override",
 				}),
 				content: fields.child({
 					kind: "block",
@@ -58,8 +56,9 @@ export const pricetable = component({
 				}}
 			>
 				{props.fields.items.elements.map((item, i) => {
-          console.log(item.fields.service);
-          if(!item.fields.service.value?.data) return <p>no item found for id: {item.fields.service.value?.id}</p>
+					console.log(item.fields.service)
+					if (!item.fields.service.value?.data)
+						return <p>no item found for id: {item.fields.service.value?.id}</p>
 					return (
 						<Box
 							key={i}
@@ -78,7 +77,10 @@ export const pricetable = component({
 							<NotEditable>
 								<img
 									role="presentation"
-									src={item.fields.imageSrc.value || item.fields.service.value.data.image}
+									src={
+										item.fields.imageSrc.value ||
+										item.fields.service.value.data.image
+									}
 									style={{
 										objectFit: "cover",
 										objectPosition: "center center",
@@ -98,7 +100,14 @@ export const pricetable = component({
 									{item.fields.title.value ||
 										item.fields.service.value?.data.name}
 								</h3>
+							</NotEditable>
 
+							<div style={{ color: "#99a4b6", lineHeight: "30px" }}>
+								{item.fields.content.element}
+							</div>
+
+							<NotEditable>
+                <hr />
 								<div>
 									<h6>
 										{" "}
@@ -111,13 +120,8 @@ export const pricetable = component({
 								</div>
 							</NotEditable>
 
-							<div style={{ color: "#99a4b6", lineHeight: "30px" }}>
-								{" "}
-								{item.fields.content.element}{" "}
-							</div>
-
 							<NotEditable>
-								<button>{item.fields.buttonLabel.value}</button>
+								<button>{item.fields.buttonLabel.value || "Book Now"}</button>
 							</NotEditable>
 						</Box>
 					)

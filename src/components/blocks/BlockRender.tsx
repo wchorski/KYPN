@@ -23,19 +23,16 @@ import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
 // import styles from '@styles/blocs/blockrenderer.module.scss'
 import { Card } from "@components/layouts/Card"
 import { Grid } from "@components/layouts/Grid"
-import type {
-	DocumentRendererProps} from "@keystone-6/document-renderer";
-import {
-	DocumentRenderer
-} from "@keystone-6/document-renderer"
-import type {  GridLayout  } from "@ks/types"
+import type { DocumentRendererProps } from "@keystone-6/document-renderer"
+import { DocumentRenderer } from "@keystone-6/document-renderer"
+import type { GridLayout, SpaceSize } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
 import {
 	layout_content,
 	layout_full,
 	layout_wide,
 } from "@styles/layout.module.css"
-import type { ComponentProps} from "react";
+import type { ComponentProps } from "react"
 import { Fragment } from "react"
 
 import { Blockquote } from "./Blockquote"
@@ -60,7 +57,8 @@ const renderers: DocumentRendererProps["renderers"] = {
 				// todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
 				layout: props.layout.join("_") as GridLayout,
 				isAuto: false,
-        style: {marginBlock: '10vh'}
+				gap: "xl" as SpaceSize,
+				style: { marginBlock: "10vh" },
 			}
 			return <Grid {...propsOverride} />
 		},
@@ -149,14 +147,16 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 			layout: "1",
 			imageSrc: "",
 		}
-    const colorThemeStyle = getColorTheme(props.colorTheme)
+		const colorThemeStyle = getColorTheme(props.colorTheme)
 		return (
 			<section
-				className={[layout_full, colorThemeStyle].join(' ')}
+				className={[layout_full, colorThemeStyle].join(" ")}
 				style={{
-					...(props.imageSrc ? {backgroundImage: `url(${props.imageSrc})`}: {}),
+					...(props.imageSrc
+						? { backgroundImage: `url(${props.imageSrc})` }
+						: {}),
 					padding: "var(--space-m)",
-          marginBlock: '10vh',
+					marginBlock: "10vh",
 				}}
 			>
 				<Grid {...props} />
