@@ -2,9 +2,7 @@
 
 import { graphql } from "@keystone-6/core"
 import type { BaseSchemaMeta } from "@keystone-6/core/dist/declarations/src/types/schema/graphql-ts-schema"
-import { getServerSession } from "next-auth"
 
-import { nextAuthOptions } from "../../../session"
 import {
 	calcEndTime,
 	dateCheckAvail,

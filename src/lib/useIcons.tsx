@@ -13,6 +13,7 @@ import {
 	FaYoutube,
 } from "react-icons/fa"
 import { FaRepeat } from "react-icons/fa6"
+import { GrDocumentText } from "react-icons/gr";
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { ImDownload } from "react-icons/im";
 import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
@@ -20,7 +21,6 @@ import { PiFlagBannerFoldLight, PiSpinnerThin } from "react-icons/pi";
 import { RiCoupon2Line,RiExternalLinkLine,RiFileEditFill } from "react-icons/ri"
 import { SiBandlab } from "react-icons/si"
 import { TbCalendarRepeat,TbCheck, TbExclamationCircle, TbShoppingBag, TbShoppingBagPlus } from "react-icons/tb"
-import { GrDocumentText } from "react-icons/gr";
 
 export const IconExternalLink = () => <RiExternalLinkLine />
 export const IconDocumentPage = () => <GrDocumentText />

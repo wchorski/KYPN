@@ -1,4 +1,5 @@
 import styles from "@styles/error.module.scss"
+import { layout_site } from "@styles/layout.module.css";
 import Link from "next/link"
 import PropTypes from "prop-types"
 import type { ReactNode } from "react";
@@ -8,7 +9,6 @@ import { MdError } from "react-icons/md"
 import { envs } from "@/envs"
 
 import Flex from "./layouts/Flex"
-import { layout_site } from "@styles/layout.module.css";
 
 type Props = {
 	error: object | null | undefined | unknown

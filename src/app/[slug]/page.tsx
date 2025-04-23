@@ -20,7 +20,6 @@ import { notFound } from "next/navigation"
 import type { CSSProperties } from "react"
 
 import { envs } from "@/envs"
-import { DocumentContentClientFetch } from "@components/DocumentContentClientFetch"
 export const revalidate = 5
 
 type Props = {

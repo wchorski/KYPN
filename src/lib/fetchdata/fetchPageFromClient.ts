@@ -1,10 +1,7 @@
 "use client"
 import { keystoneContext } from "@ks/context"
-import type { Page } from "@ks/types"
-import { getServerSession, Session } from "next-auth"
+import type { Session } from "next-auth"
 
-import { nextAuthOptions } from "@/session"
-import { useFetchGraphQL } from "@hooks/useFetchGraphql"
 
 export default async function fetchPage(slug: string, query: string, session:Session) {
   try {

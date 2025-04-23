@@ -1,10 +1,9 @@
 // cred - chatgpt lol
 import {table} from "@styles/elements/table.module.css"
-import Link from "next/link"
 import React from "react"
 
-import { NoData } from "./NoData"
 import { IconLink } from "./IconLink"
+import { NoData } from "./NoData"
 
 interface TableProps {
 	caption: string

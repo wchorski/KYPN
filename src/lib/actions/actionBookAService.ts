@@ -1,11 +1,11 @@
 "use server"
-import { nextAuthOptions } from "@/session"
 import { keystoneContext } from "@ks/context"
-import { Booking, CartItem } from "@ks/types"
+import type { CartItem } from "@ks/types";
 import { emailRegex } from "@lib/regexPatterns"
 import { plainObj } from "@lib/utils"
 import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
+
+import { nextAuthOptions } from "@/session"
 
 export async function actionBookAService(
 	prevState: BookAServiceState,

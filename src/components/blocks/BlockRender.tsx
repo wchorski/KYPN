@@ -37,7 +37,6 @@ import { Fragment } from "react"
 
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
-import { PriceTable } from "./PriceTable"
 import { PriceGridTable } from "./PriceGridTable"
 
 // By default the DocumentRenderer will render unstyled html elements.

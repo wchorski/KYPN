@@ -1,8 +1,8 @@
 import { LoadingAnim } from "@components/elements/LoadingAnim"
+import { stack_grid } from "@styles/elements/button.module.css"
+import { hidden } from "@styles/menus/form.module.scss"
 import type { ReactNode } from "react"
 import { useFormStatus } from "react-dom"
-import { hidden } from "@styles/menus/form.module.scss"
-import { stack_grid } from "@styles/elements/button.module.css"
 
 type SubmitButtonsProps = {
 	label?: string

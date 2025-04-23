@@ -13,14 +13,13 @@ import type {
 } from "@ks/types"
 import {
 	datePrettyLocalDay,
-	datePrettyLocalTime,
 	timeStampPrettyLocale,
 } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import styles from "@styles/menus/dashboard.module.css"
+import Link from "next/link"
 
 import { VerifyEmailCard } from "./VerifyEmailCard"
-import Link from "next/link"
 
 type Props = {
 	data: {

@@ -1,5 +1,4 @@
 import { Card } from "@components/layouts/Card";
-import { bg_c_reverse_theme } from "@styles/colorthemes.module.css";
 
 export function PasswordRequirements() {
 	return (

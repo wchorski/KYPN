@@ -1,13 +1,14 @@
 //* work around for document data that doesn't hydrate on first fetch
-import Link from "next/link"
-import { ReactNode } from "react"
-import styles from "@styles/blocs/pricetable.module.css"
-import { formatHours } from "../../lib/dateFormatter"
-import { keystoneContext } from "@ks/context"
-import { Service } from "@ks/types"
 import { PriceTag } from "@components/ecommerce/PriceTag"
-import Image from "next/image"
+import { keystoneContext } from "@ks/context"
+import type { Service } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
+import styles from "@styles/blocs/pricetable.module.css"
+import Image from "next/image"
+import Link from "next/link"
+import type { ReactNode } from "react"
+
+import { formatHours } from "../../lib/dateFormatter"
 
 type Props = {
 	items: {

@@ -1,11 +1,11 @@
 //* html table format 
 // data fetch doesn't hydrate rich text relationship data
-import Link from "next/link"
-import { ReactNode } from "react"
 import styles from "@styles/blocs/pricetable.module.css"
-import moneyFormatter from "../../lib/moneyFormatter"
+import Link from "next/link"
+import type { ReactNode } from "react"
+
 import { formatHours } from "../../lib/dateFormatter"
-import { item } from "@styles/ecommerce/cart.module.css"
+import moneyFormatter from "../../lib/moneyFormatter"
 
 type Props = {
 	items: {

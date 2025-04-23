@@ -1,5 +1,7 @@
+import { Callout } from "@components/blocks/Callout"
 import { BookingForm } from "@components/bookings/BookingForm4"
 import ErrorMessage from "@components/ErrorMessage"
+import { CallbackLink } from "@components/menus/CallbackLink"
 import fetchBookingFormData from "@lib/fetchdata/fetchBookingFormInfo"
 import { plainObj } from "@lib/utils"
 import {
@@ -8,14 +10,12 @@ import {
 	page_layout,
 } from "@styles/layout.module.css"
 import type { Metadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { Callout } from "@components/blocks/Callout"
-import Link from "next/link"
-import { CallbackLink } from "@components/menus/CallbackLink"
 
 export const metadata: Metadata = {
 	title: "Book a Service | " + envs.SITE_TITLE,
@@ -69,8 +69,8 @@ export default async function BookingsPage({ searchParams }: Props) {
 					<Callout intent={"warning"}>
 						<p>
 							Looks like you are browsing as a guest.{" "}
-							<CallbackLink>Login</CallbackLink> to add any bookings to you're
-							account. Don't have an account?{" "}
+							<CallbackLink>Login</CallbackLink> to add any bookings to you&apos;re
+							account. Don&apos;t have an account?{" "}
 							<CallbackLink href={"/register"}>Register</CallbackLink> for a new
 							one
 						</p>

@@ -1,5 +1,5 @@
 ARG PRODUCTION_PLATFORM
-FROM --platform=$PRODUCTION_PLATFORM node:21-alpine AS base
+FROM --platform=$PRODUCTION_PLATFORM node:22-alpine AS base
 
 FROM base AS builder
 WORKDIR /app
@@ -53,7 +53,9 @@ RUN \
   fi
 
 # Learn more here: https://nextjs.org/telemetry
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV TURBO_TELEMETRY_DISABLED=1
+# RUN turbo telemetry disable
 
 FROM base AS runner
 WORKDIR /app

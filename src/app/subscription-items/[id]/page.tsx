@@ -3,6 +3,7 @@ import { PriceTag } from "@components/ecommerce/PriceTag"
 import { IconLink } from "@components/elements/IconLink"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { NoData } from "@components/elements/NoData"
+import { Table } from "@components/elements/Table"
 import ErrorMessage from "@components/ErrorMessage"
 import { SubscriptionUpdateForm } from "@components/forms/SubscriptionUpdateForm"
 import { Card } from "@components/layouts/Card"
@@ -34,7 +35,6 @@ import { CgExternal } from "react-icons/cg"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { Table } from "@components/elements/Table"
 
 // export const metadata: Metadata = {
 //   title: 'Booking | ' + envs.SITE_TITLE,

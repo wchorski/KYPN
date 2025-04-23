@@ -1,9 +1,8 @@
-import { ImageDynamic } from "@components/elements/ImageDynamic"
 import type { User } from "@ks/types"
-import styles from "@styles/menus/userbadge.module.css"
-import Link from "next/link"
-import Image from "next/image"
 import { IconAccountBox } from "@lib/useIcons"
+import styles from "@styles/menus/userbadge.module.css"
+import Image from "next/image"
+import Link from "next/link"
 import type { CSSProperties } from "react"
 
 export function UserBadge({ user, style }: { user: User, style?:CSSProperties }) {

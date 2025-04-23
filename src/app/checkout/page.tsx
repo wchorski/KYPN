@@ -1,3 +1,4 @@
+import { CartEmptyMessage } from "@components/ecommerce/CartEmptyMessage"
 import { CartItemsList } from "@components/ecommerce/CartItemsList"
 import { CartTotal } from "@components/ecommerce/CartTotal"
 import { CheckoutCartForm } from "@components/ecommerce/CheckoutCartForm"
@@ -19,7 +20,6 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { CartEmptyMessage } from "@components/ecommerce/CartEmptyMessage"
 
 export const metadata: Metadata = {
 	title: `Checkout | ` + envs.SITE_TITLE,

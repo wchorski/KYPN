@@ -13,6 +13,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import React, { useCallback, useEffect, useState } from "react"
 
 import { envs } from "@/envs"
+
 import { CartEmptyMessage } from "./CartEmptyMessage"
 
 if (!envs.STRIPE_PUBLIC_KEY)

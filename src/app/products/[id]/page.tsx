@@ -4,6 +4,7 @@ import { IconLink } from "@components/elements/IconLink"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
 import { CallbackLink } from "@components/menus/CallbackLink"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { StatusBadge } from "@components/StatusBadge"
@@ -12,18 +13,18 @@ import { isEmptyDocument } from "@lib/contentHelpers"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import fetchProduct from "@lib/fetchdata/fetchProduct"
 import moneyFormatter from "@lib/moneyFormatter"
+import { category_list } from "@styles/categories.module.css"
 import {
 	featured_img,
 	price_text,
 	product_page,
 } from "@styles/ecommerce/product.module.css"
-import { category_list } from "@styles/categories.module.css"
-import { tags_list } from "@styles/tags.module.css"
 import {
 	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
+import { tags_list } from "@styles/tags.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -32,7 +33,6 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import Flex from "@components/layouts/Flex"
 
 export async function generateMetadata(
 	{ params }: Props,

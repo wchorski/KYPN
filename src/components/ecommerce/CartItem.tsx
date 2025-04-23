@@ -3,6 +3,7 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { useCart } from "@components/hooks/CartStateContext"
 import Flex from "@components/layouts/Flex"
 import type { CartItem } from "@ks/types"
+import { timeStampPrettyLocale } from "@lib/dateFormatter"
 import moneyFormatter from "@lib/moneyFormatter"
 import { IconCoupon } from "@lib/useIcons"
 import styles, { perItemTotal } from "@styles/ecommerce/cart.module.css"
@@ -11,7 +12,6 @@ import { useEffect, useState } from "react"
 
 import ErrorMessage from "../ErrorMessage"
 import CartRemoveItem from "./CartRemoveItem"
-import { datePrettyLocal, timeStampPrettyLocale } from "@lib/dateFormatter"
 
 type UpdateCartItem = {
 	id: string

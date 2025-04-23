@@ -27,20 +27,22 @@ export function findAllHeadings(arr: any) {
 			acc.push(newItem)
 		}
 
-		for (let key in item) {
-			const typedKey = key as keyof KSHeading
+		const nested = Object.keys(item).flatMap(key => {
+      const typedKey = key as keyof KSHeading
+      const value = item[typedKey]
 
-			if (Array.isArray(item[typedKey])) {
-				acc = acc.concat(findAllHeadings(item[typedKey]))
-			} else if (
-				typeof item[typedKey] === "object" &&
-				item[typedKey] !== null
-			) {
-				acc = acc.concat(findAllHeadings([item[typedKey]]))
-			}
-		}
+      if (Array.isArray(value)) {
+        return findAllHeadings(value)
+      }
 
-		return acc
+      if (typeof value === 'object' && value !== null) {
+        return findAllHeadings([value])
+      }
+
+      return []
+    })
+
+    return acc.concat(nested)
 	}, [])
 }
 

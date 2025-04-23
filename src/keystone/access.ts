@@ -1,4 +1,3 @@
-import { employees } from "@styles/booking.module.css"
 import { permissionsList } from "./permissions"
 import type { ListAccessArgs } from "./types"
 

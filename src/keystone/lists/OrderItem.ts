@@ -3,7 +3,6 @@ import {
 	integer,
 	relationship,
 	select,
-	text,
 	timestamp,
 	virtual,
 } from "@keystone-6/core/fields"

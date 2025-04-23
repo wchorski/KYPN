@@ -1,12 +1,11 @@
 "use server"
 import { keystoneContext } from "@ks/context"
-import { redirect, RedirectType } from "next/navigation"
+import type { CartItem } from "@ks/types"
+import { plainObj } from "@lib/utils"
 import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { CartItem } from "@ks/types"
-import { plainObj } from "@lib/utils"
 
 export async function actionTicketToCart(
 	prevState: TicketCheckoutState,

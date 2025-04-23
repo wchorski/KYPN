@@ -1,6 +1,7 @@
 keystone.db
 Dockerfile
 Dockerfile*
+docker
 compose*
 .dockerignore
 node_modules
@@ -9,8 +10,11 @@ README.md
 .keystone
 .next
 .react-email
+.turbo
+.vscode
 .git*
-.*
+.env*
+.env
 .env.dev
 .env.local
 !.env.prod

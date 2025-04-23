@@ -1,8 +1,7 @@
 "use client"
 
-import { LoadingAnim, LoadingAnimSpinner } from "@components/elements/LoadingAnim"
+import { LoadingAnimSpinner } from "@components/elements/LoadingAnim"
 import { useCart } from "@components/hooks/CartStateContext"
-import { IconSpinnerLines } from "@lib/useIcons"
 import styles from "@styles/ecommerce/cart.module.css"
 import { stack_grid } from "@styles/elements/button.module.css"
 import { hidden } from "@styles/menus/form.module.scss"

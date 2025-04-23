@@ -19,6 +19,7 @@ import {
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import moneyFormatter from "@lib/moneyFormatter"
 import { plainObj } from "@lib/utils"
+import { category_list } from "@styles/categories.module.css"
 import styleProduct from "@styles/ecommerce/productSingle.module.css"
 import styles from "@styles/events/event.module.css"
 import {
@@ -27,15 +28,15 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
+import { tags_list } from "@styles/tags.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { Session } from "next-auth"
 import { getServerSession } from "next-auth"
-import { category_list } from "@styles/categories.module.css"
+
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import { tags_list } from "@styles/tags.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,

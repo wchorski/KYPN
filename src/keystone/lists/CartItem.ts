@@ -9,13 +9,13 @@ import {
 } from "@keystone-6/core/fields"
 
 import { hasOnlyOneValue } from "../../lib/utils"
-import { isLoggedIn, permissions, rules } from "../access"
+import { isLoggedIn, rules } from "../access"
 import type {
 	CartItem as TCartItem,
 	Coupon,
 	Event,
-	Rental,
 	Product,
+	Rental,
 } from "../types"
 import type { Lists } from ".keystone/types"
 

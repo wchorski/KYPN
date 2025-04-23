@@ -17,7 +17,7 @@ import * as React from "react"
 
 import { envs } from "../../envs"
 import type { Booking } from "../keystone/types"
-import { datePrettyLocal, timeStampPrettyLocale } from "../lib/dateFormatter"
+import { timeStampPrettyLocale } from "../lib/dateFormatter"
 import { emailStyles } from "./emailStyes"
 
 const {

@@ -15,7 +15,7 @@ import type { Lists } from ".keystone/types"
 var bcrypt = require("bcryptjs")
 import { envs } from "../../../envs"
 import { calcTotalPrice } from "../../lib/calcTotalPrice"
-import { stripeCustomerCreate, stripeCustomerUpdate } from "../../lib/stripe"
+import { stripeCustomerCreate } from "../../lib/stripe"
 import { timesArray } from "../../lib/timeArrayCreator"
 // import { timesArray } from "../../lib/timeArrayCreator"
 import { permissions, rules } from "../access"

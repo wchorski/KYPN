@@ -1,19 +1,20 @@
+import { IconAccountBox } from "@lib/useIcons"
 import styles, {
 	session_btn,
 	session_image,
 	sub_menu,
 } from "@styles/menus/session.module.css"
 import { desktop_label } from "@styles/nav.module.css"
+import Image from "next/image"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import type { ReactElement } from "react"
-import Image from "next/image"
+
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 
 import { NavLink } from "./NavLink"
 import SignOutButton from "./SignOutButton"
-import { IconAccountBox } from "@lib/useIcons"
 
 type Props = {
 	label: string

@@ -33,7 +33,6 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import fetchBookings from "@lib/fetchdata/fetchBookings"
 
 export const metadata: Metadata = {
 	title: "Account | " + envs.SITE_TITLE,

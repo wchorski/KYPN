@@ -5,6 +5,7 @@ import { IconLink } from "@components/elements/IconLink"
 import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
+import Flex from "@components/layouts/Flex"
 import { CallbackLink } from "@components/menus/CallbackLink"
 import { DialogPopup } from "@components/menus/DialogPopup"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
@@ -13,6 +14,8 @@ import type { User } from "@ks/types"
 import { isEmptyDocument } from "@lib/contentHelpers"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
+import { category_list } from "@styles/categories.module.css"
+import { bg_c_accent } from "@styles/colorthemes.module.css"
 import {
 	featured_img,
 	price_text,
@@ -23,6 +26,7 @@ import {
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
+import { tags_list } from "@styles/tags.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -31,10 +35,6 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
-import Flex from "@components/layouts/Flex"
-import { category_list } from "@styles/categories.module.css"
-import { tags_list } from "@styles/tags.module.css"
-import { bg_c_accent } from "@styles/colorthemes.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,

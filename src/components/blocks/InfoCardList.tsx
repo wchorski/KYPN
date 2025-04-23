@@ -8,7 +8,6 @@ import {
 	content_wrap,
 	statusBadge,
 } from "@styles/blocs/infocard.module.css"
-import { layout_site } from "@styles/layout.module.css"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
