@@ -1,18 +1,19 @@
 import { Section } from "@components/blocks/Section"
 import { BlogList } from "@components/blog/BlogList"
+import ErrorMessage from "@components/ErrorMessage"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
-import type { ReactElement } from "react"
 
 import { nextAuthOptions } from "@/session"
 
 type Props = {
-  header:string,
-  imageSrc?:string,
-  color:string,
-  colorOverlay:string,
-  categories: { id:string }[]
-  style?: any,
+	header: string
+	imageSrc?: string
+	color: string
+	colorOverlay: string
+	categories: { id: string }[]
+	authors: { id: string }[]
+	style?: any
 }
 
 const query = `
@@ -24,36 +25,46 @@ const query = `
 
 // any type is a bug workaround
 // @ts-ignore
-export async function PostsList({header, color, colorOverlay, imageSrc, categories,}:Props):ReactElement<any, any> {
-  
-  const session = await getServerSession(nextAuthOptions)
-  const categoryIds = categories.flatMap(cat => cat.id)
-  const { posts, error} = await fetchPosts({page: 1, categoryIds, session, query})
+export async function PostsList({
+	header,
+	color,
+	colorOverlay,
+	imageSrc,
+	categories,
+	authors,
+}: Props) {
+	const session = await getServerSession(nextAuthOptions)
+	const categoryIds = categories.flatMap((cat) => cat.id)
+	const authorIds = authors?.flatMap((user) => user.id)
+	const { posts, error } = await fetchPosts({
+		page: 1,
+		categoryIds,
+		authorIds,
+		session,
+		query,
+	})
 
-  return (
-    <Section 
-      layout={'1'} 
-      styles={{
-        backgroundColor: color,
-        backgroundImage: `url(${imageSrc})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      }}
-      overlay={colorOverlay}
-    >
-      
-        <h2 style={{textAlign: 'center', margin: '4rem', zIndex: '1'}}> 
-          {header}
-        </h2>
+	if (!error) return <ErrorMessage error={error} />
 
-        <BlogList posts={posts} />
-      
+	return (
+		<Section
+			layout={"1"}
+			styles={{
+				backgroundColor: color,
+				backgroundImage: `url(${imageSrc})`,
+				backgroundPosition: "center",
+				backgroundSize: "cover",
+			}}
+			overlay={colorOverlay}
+		>
+			<h2 style={{ textAlign: "center", margin: "4rem", zIndex: "1" }}>
+				{header}
+			</h2>
 
-
-    </Section>
-  )
+			<BlogList posts={posts} />
+		</Section>
+	)
 }
-
 
 export const QUERY_POSTS_PAGINATED = `
   query Posts($where: PostWhereInput!, $orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int!) {

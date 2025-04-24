@@ -13,16 +13,21 @@ button,
 	transition-duration: 0.3s;
 }
 
+a {
+	transition-duration: var(--anim-duration-fast);
+	transition-property: color, background;
+}
+
 @media (prefers-reduced-motion: no-preference) {
 	html {
 		scroll-behavior: smooth;
 	}
 
-  @keyframes barberpole {
-    100% {
-      background-position: 100% 100%;
-    }
-  }
+	@keyframes barberpole {
+		100% {
+			background-position: 100% 100%;
+		}
+	}
 }
 
 :is(h1, h2, h3, h4, h5, h6).targeted,
@@ -42,7 +47,10 @@ button,
 .anim_border_spin {
 	/* display: grid;
 	grid-template-areas: "stack"; */
-	position: relative;
+	position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 
 	/* & span {
 		grid-area: stack;
@@ -54,7 +62,7 @@ button,
 		content: "";
 		pointer-events: none;
 		/* grid-area: stack; */
-		position: absolute;
+		
 
 		height: 1px;
 		/* place-self: end; */
@@ -196,11 +204,11 @@ button,
 
 @keyframes trans_down_flick {
 	0% {
-    transform: translate(-50%, 100%);
-    opacity: 0.1;
+		transform: translate(-50%, 100%);
+		opacity: 0.1;
 	}
 	100% {
-    transform: translate(-50%, -8%);
-    opacity: 1;
+		transform: translate(-50%, -8%);
+		opacity: 1;
 	}
 }

@@ -9,6 +9,8 @@ type Props = {
 	query: string
 	page?: number
 	categoryIds?: string[]
+	authorIds?: string[]
+	authorEmails?: string[]
 	categoryNames?: string[]
 	tagIds?: string[]
 	session: any
@@ -19,6 +21,8 @@ export async function fetchPosts({
 	query,
 	page = 1,
 	categoryIds = [],
+	authorIds = [],
+	authorEmails = [],
 	categoryNames = [],
 	tagIds,
 	session,
@@ -31,6 +35,11 @@ export async function fetchPosts({
 				? { categories: { some: { id: { in: categoryIds } } } }
 				: categoryNames.length > 0
 				? { categories: { some: { name: { in: categoryNames } } } }
+				: {}),
+			...(authorIds.length > 0
+				? { author: { some: { id: { in: authorIds } } } }
+				: authorEmails.length > 0
+				? { author: { some: { email: { in: authorEmails } } } }
 				: {}),
 			...(tagIds && tagIds.length > 0
 				? { tags: { some: { id: { in: tagIds } } } }

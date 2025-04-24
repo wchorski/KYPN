@@ -1,0 +1,14 @@
+.glass {
+	background-color: var(--c-glass);
+	backdrop-filter: blur(1px);
+}
+
+.glass_bg::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	backdrop-filter: blur(7px);
+}

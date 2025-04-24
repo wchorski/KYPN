@@ -191,7 +191,6 @@ input[type="button"] {
 	margin-right: var(--space-xs);
 	display: inline-block;
 	text-align: center;
-	font-size: 11px;
 	letter-spacing: 0.1rem;
 	white-space: nowrap;
 	border-radius: var(--br-dull);

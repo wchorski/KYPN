@@ -14,7 +14,7 @@
 // import plugins if you need
 // import lgThumbnail from 'lightgallery/plugins/thumbnail';
 // import lgZoom from 'lightgallery/plugins/zoom';
-import styles, { gallery } from "@styles/blocs/imagegallery.module.scss"
+import styles, { gallery } from "@styles/blocs/imagegallery.module.css"
 import type { CSSProperties} from "react";
 
 type Image = {

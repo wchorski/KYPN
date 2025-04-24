@@ -1,11 +1,12 @@
-@import './vars.css';
+/* ? must import in `layout.tsx` */
+/* @import './vars.css';
 @import './colors.css';
 @import './site-layout.css';
 @import './typography.css';
 @import './elements.css';
 @import './animations.css';
 @import './skeleton/normalize.css';
-@import './media.css';
+@import './media.css'; */
 
 
 html{
@@ -25,6 +26,10 @@ body {
 
   /* overflow-x: hidden; */
 
+}
+
+main {
+  position: relative;
 }
 
 /* // https://css-tricks.com/snippets/css/accessibilityseo-friendly-css-hiding/ */

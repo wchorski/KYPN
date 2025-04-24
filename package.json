@@ -21,7 +21,7 @@
     "ks:dev": "keystone dev",
     "ks:nextdev": "next dev .keystone/admin --port 3001",
     "ks:build": "keystone build",
-    "ks:build_no_ui": " keystone build --no-ui",
+    "ks:build_no_ui": "keystone build --no-ui",
     "ks:start": "keystone prisma migrate deploy && keystone start",
     "ks:startmigrations": "keystone start --with-migrations",
     "ks:watch": "keystone dev --no-server",
@@ -67,7 +67,7 @@
     "sass": "^1.86.0",
     "slate-dom": "^0.112.2",
     "stripe": "17.7.0",
-    "turbo": "^2.4.4",
+    "turbo": "^2.5.0",
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "devDependencies": {

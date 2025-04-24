@@ -127,6 +127,9 @@ import allStyles, {
 } from "../styles/colorthemes.module.css"
 ```
 
+> [!warning] Do not use any capitol letters in css filename
+> for some reason addin a capitol letter (even in camal case) causes build errors NOT when building with `pnpm build` but when building docker images 😠
+
 ### Build on Local Machine
 
 Test out a production build using the provided `package.json` scripts.
@@ -182,3 +185,5 @@ node v21
 
 ## Todo
 - [ ] move all docker related files into `docker` folder (still make it easy to build from root dir)
+- [ ] remove `--no-check-certificate` from `Dockerfile.web.standalone` and `Dockerfile.cms`. For some reason I'm getting cert error and this bypasses that (naughty)
+- [ ] figure out why Dockerfile build errors when upgrading `node:21-alpine` to v22 or the latest v23

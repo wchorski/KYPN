@@ -97,7 +97,7 @@ h6 {
 	color: var(--c-header);
 }
 
-.glass {
+/* .glass {
 	background-color: var(--c-glass);
 	backdrop-filter: blur(1px);
 }
@@ -109,10 +109,8 @@ h6 {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	/* width: 100%;
-  height: 100%; */
 	backdrop-filter: blur(7px);
-}
+} */
 
 .overlay {
 	position: relative;
@@ -170,7 +168,7 @@ select:focus {
 	outline: 0;
 }
 
-.button,
+/* .button,
 button,
 input[type="submit"],
 input[type="reset"],
@@ -182,26 +180,29 @@ input[type="button"] {
 	transition-property: color, border;
 	transition-duration: 0.1s;
 	transition-timing-function: cubic-bezier(0, 0.57, 0, 0.99);
-}
+} */
 
-.button,
-button,
-input[type="submit"],
-input[type="reset"],
-input[type="button"] {
-	&:focus:not(:disabled),
-	&:hover:not(:disabled) {
-		color: var(--c-secondary);
-		border-color: var(--c-secondary);
-		outline: 0;
-	}
-}
+/* TODO maybe switch to `:disabled !important` instead as to avoid this mess of `:not(:disabled) */
+/* .button:hover:not(:disabled),
+.button:focus:not(:disabled),
+button:hover:not(:disabled),
+button:focus:not(:disabled),
+input[type="submit"]:hover:not(:disabled),
+input[type="submit"]:focus:not(:disabled),
+input[type="reset"]:hover:not(:disabled),
+input[type="reset"]:focus:not(:disabled),
+input[type="button"]:hover:not(:disabled),
+input[type="button"]:focus:not(:disabled) {
+	color: var(--c-secondary);
+	border-color: var(--c-secondary);
+	outline: 0;
+} */
 /* //https://stackoverflow.com/questions/4350786/is-it-correct-to-combine-active-and-hover-pseudo-selector-like-aactivehover */
 
-a,
+/* a,
 .button,
 button {
-	&:active:active:not(:disabled),
+	&:active:not(:disabled),
 	&:hover:not(:disabled) {
 		color: var(--c-accent);
 		border-color: var(--c-accent);
@@ -212,11 +213,10 @@ a,
 button,
 .button {
 	&:disabled {
-		/* border-color: var(--c-disabled); */
 		border-color: transparent !important;
-		color: var(--c-disabled);
+		color: var(--c-disabled) !important;
 	}
-}
+} */
 
 pre,
 code {
@@ -233,11 +233,11 @@ ol {
 	}
 }
 
-a {
+/* a {
 	color: var(--c-primary);
 	transition-duration: var(--anim-duration-fast);
 	transition-property: color, background;
-}
-a:hover {
+} */
+/* a:hover {
 	color: var(--c-secondary);
-}
+} */

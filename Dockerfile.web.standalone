@@ -1,10 +1,12 @@
 ARG PRODUCTION_PLATFORM
-FROM --platform=${PRODUCTION_PLATFORM:-linux/amd64} node:22-alpine AS base
+FROM --platform=${PRODUCTION_PLATFORM:-linux/amd64} node:21-alpine AS base
+# FROM --platform=${PRODUCTION_PLATFORM:-linux/amd64} node:22 AS base
 
 FROM base AS builder
 # # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-##? causine new build error `failed to fetch dl-cdn.alpinelinux.org...`
-RUN apk add --no-cache libc6-compat
+##? causine new build error `failed to fetch dl-cdn.alpinelinux.org...` i think this is a temporary issue with the domain
+##! `--no-check-certificate` is a work around and should be removed once I have no
+RUN apk add --no-cache --no-check-certificate libc6-compat
 WORKDIR /app
 
 # COPY package.json yarn.lock package-lock.json pnpm-lock.yaml ./
@@ -47,7 +49,7 @@ RUN \
 
 RUN \
   if [ -f pnpm-lock.yaml ]; then \ 
-    corepack enable pnpm && pnpm tbuild; \
+    corepack enable pnpm && pnpm build; \
   elif [ -f yarn.lock ]; then \ 
     yarn run build; \
   elif [ -f package-lock.json ]; then \ 
@@ -70,7 +72,8 @@ RUN \
 # Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
-RUN turbo telemetry disable
+##? why does this throw error "turbo: not found"
+# RUN turbo telemetry disable
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -105,5 +108,5 @@ ENV PORT=$WEB_PORT
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
-# CMD [ "node", "server.js"]
+# CMD HOSTNAME="0.0.0.0" node server.js
+CMD [ "node", "server.js"]

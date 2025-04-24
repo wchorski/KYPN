@@ -161,9 +161,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 							<li>
 								<Link className="author" href={`/users/${author?.id}`}>
 									<span className="sub-text">
-										{" "}
-										<CgProfile />
-										{author?.name}
+										<CgProfile /> {author?.name}
 									</span>
 								</Link>
 							</li>

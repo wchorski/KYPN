@@ -1,7 +1,9 @@
 ARG PRODUCTION_PLATFORM
-FROM --platform=$PRODUCTION_PLATFORM node:22-alpine AS base
+FROM --platform=$PRODUCTION_PLATFORM node:21-alpine AS base
 
 FROM base AS builder
+##! `--no-check-certificate` is a work around and should be removed once I have no
+RUN apk add --no-cache --no-check-certificate openssl openssl-dev
 WORKDIR /app
 
 # COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -55,6 +57,7 @@ RUN \
 # Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
+##? why does this throw error "turbo: not found"
 # RUN turbo telemetry disable
 
 FROM base AS runner

@@ -1,19 +1,9 @@
 .gallery {
 	width: 100%;
 
-	// display: flex;
-	// flex-wrap: wrap;
-	// justify-content: center;
-	// gap: 10px;
 
-	// img.objectContain{
-	//   object-fit: contain;
-	// }
-	// img.objectCover{
-	//   object-fit: cover;
-	// }
-  img {
-    // border: dashed hotpink 2px;
+  & img {
+
     width: 100%;
     height: 100%;
   
@@ -31,26 +21,14 @@
   gap: 10px;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   grid-template-rows: masonry;
-	// a {
-	// 	width: calc(33.33% - 10px); // Adjust column width and gap as needed
-	// 	margin-bottom: 10px;
-	// }
-}
 
-// a {
-// 	overflow: hidden;
-// }
+}
 
 
 .grid {
 	display: grid;
 	width: 100%;
 	grid-template-columns: repeat(1, 1fr);
-
-	// > a {
-	//   width: calc(25% - 10px); // Adjust column width and gap as needed
-	//   // margin-bottom: 10px;
-	// }
 }
 
 .gap_1 {

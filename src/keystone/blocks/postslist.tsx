@@ -19,10 +19,15 @@ export const postslist = component({
       label: 'Fallback background color',
       defaultValue: 'gray'
     }),
- 
     categories: fields.relationship({
       label: 'Categories',
       listKey: 'Category',
+      selection: 'name',
+      many: true,
+    }),
+    authors: fields.relationship({
+      label: 'Authors',
+      listKey: 'User',
       selection: 'name',
       many: true,
     })
