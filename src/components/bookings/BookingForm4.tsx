@@ -617,7 +617,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							<>
 								<h5> Add-Ons</h5>
 								{stateRed.addonOptions.length === 0 && (
-									<p className="subtext"> no addons available </p>
+									<p className="sub-text"> no addons available </p>
 								)}
 								<div className={formStyles.addons_wrap}>
 									{stateRed.addonOptions.map((addon) => (

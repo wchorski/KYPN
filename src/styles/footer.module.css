@@ -2,17 +2,10 @@
   padding-top: var(--space-l);
   margin-top: var(--space-xl);
   background-color: var(--c-footer);
-  // min-height: 4rem;
-  // padding: 2rem 0;
+  
   position: sticky;
   top: 100%;
   color: var(--c-text-sub);
-  // text-align: center;
-  // font-size: 1rem;
-
-  // display: grid;
-  // grid-template-columns: minmax(0, 1fr) minmax(0, calc(var(--w-sitemax))) minmax(0, 1fr);
-  // align-content: flex-start;
 }
 
 .terms_privacy_list {
@@ -24,12 +17,12 @@
   margin: 0;
   list-style: none;
 
-  li::after{
+  & li::after{
     content: "•";
     color: var(--c-dark);
     margin-inline: 0.5rem;
   }
-  li:last-child::after{
+  & li:last-child::after{
     content: "";
 
   }

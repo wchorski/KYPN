@@ -37,7 +37,7 @@ export function PriceTag({
 								<em>null</em>
 							</span>
 
-							<small className="subtext">price not set</small>
+							<small className="sub-text">price not set</small>
 						</span>
 					</>
 				)
@@ -101,7 +101,7 @@ export function PriceTag({
 					<>
 						<small className="currency"> {currency} </small>
 						<span className="amount"> {money.replace(currency, "")} </span>
-						<small className="subtext">{subtext}</small>
+						<small className="sub-text">{subtext}</small>
 					</>
 				)
 

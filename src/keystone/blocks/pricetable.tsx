@@ -59,7 +59,7 @@ export const pricetable = component({
 				{props.fields.items.elements.map((item, i) => {
 					console.log(item.fields.service)
 					if (!item.fields.service.value?.data)
-						return <p>no item found for id: {item.fields.service.value?.id}</p>
+						return <p key={i}>no item found for id: {item.fields.service.value?.id}</p>
 					return (
 						<Box
 							key={i}
@@ -76,6 +76,7 @@ export const pricetable = component({
 							}}
 						>
 							<NotEditable>
+								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img
 									role="presentation"
 									src={
@@ -89,6 +90,7 @@ export const pricetable = component({
 										width: "100%",
 										borderRadius: 4,
 									}}
+                  alt="service image"
 								/>
 
 								<h3

@@ -1,6 +1,8 @@
-import { DatabaseProvider } from "@keystone-6/core/types"
+import type { DatabaseProvider } from "@keystone-6/core/types"
 
 require("dotenv").config()
+
+const latestYear = new Date().getFullYear().toString()
 
 // Packages and Runtime
 const NODE_ENV = process.env.NODE_ENV || 'development'
@@ -24,6 +26,7 @@ const CMS_URL = `${CMS_PROTOCAL}://${CMS_DOMAIN}:${CMS_PORT}`
 // Website Frontend
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL!
 const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE!
+const COPYWRITE = process.env.NEXT_PUBLIC_COPYWRITE || `© ${SITE_TITLE} ${latestYear}`
 const SITE_DESCRIPTION = process.env.NEXT_PUBLIC_SITE_DESCRIPTION!
 const PERPAGE = Number(process.env.NEXT_PUBLIC_PERPAGE) || 20
 const TIMEZONES = process.env.TIMEZONES ? process.env.TIMEZONES.split(',') : ['America/Chicago']
@@ -89,6 +92,7 @@ const DATABASE_URL = (() => {
 })()
 
 export const envs = {
+  COPYWRITE,
   COLOR_PRIMARY,
   COLOR_TXT_PRIMARY,
   BASIC_USER_ROLE_NAME,

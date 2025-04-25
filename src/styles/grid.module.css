@@ -1,6 +1,7 @@
 .grid {
 	display: grid;
 	justify-content: center;
+  grid-template-columns: 1fr;
 }
 .grid_item {
   width: 100%;

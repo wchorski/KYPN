@@ -172,7 +172,7 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 								<td>
 									{" "}
 									{String(durationInHours)}{" "}
-									<small className="subtext"> hours </small>{" "}
+									<small className="sub-text"> hours </small>{" "}
 								</td>
 							</tr>
 							<tr>

@@ -118,13 +118,39 @@
 	/* grid-template-columns: subgrid; */
 }
 
+
 .page_layout,
 /* //TODO i removed `>` direct selector, could mess up a bunch of other stuff idk */
 .page_layout .layout_full,
-.page_layout .layout_site,
-.page_layout .layout_wide {
+.page_layout .layout_site {
 	& > :is(div:global(.flex), div:global(.grid), table) {
 		grid-column: layout_site;
+	}
+	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
+		grid-column: layout_wide;
+	}
+	/* //? must target with `:global` as to not get hash id */
+	&
+		> :is(
+			blockquote,
+			pre,
+			div:global(.gallery),
+			div:global(.card),
+			div:global(.youtubeVideo)
+		) {
+		grid-column: layout_breakout;
+		margin-block: var(--space-l);
+	}
+
+	& > :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav) {
+		grid-column: layout_content;
+	}
+}
+
+/* TODO kinda ugly duplication just to make sure nothing spills out of `layout_wide` */
+.page_layout .layout_wide {
+  & > :is(div:global(.flex), div:global(.grid), table) {
+		grid-column: layout_wide;
 	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
 		grid-column: layout_wide;

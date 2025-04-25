@@ -37,10 +37,10 @@ export function ImageBlock({
 				priority={isPriority}
 			/>
 			<figcaption
-				className={[image_caption, "subtext"].join(" ")}
+				className={[image_caption, "sub-text"].join(" ")}
 				style={
 					{
-						"--display-caption": isCaption ? "contents" : "none",
+						"--display-caption": isCaption ? "visible" : "collapse",
 					} as CSSProperties
 				}
 			>

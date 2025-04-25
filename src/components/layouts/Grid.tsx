@@ -12,7 +12,6 @@ import {
 	grid,
 	grid_item,
 } from "@styles/grid.module.css"
-import { layout_site, layout_wide } from "@styles/layout.module.css"
 import type { CSSProperties, ReactNode } from "react"
 
 type Props = {
@@ -92,25 +91,40 @@ export function Grid({
 				return layoutWidth
 
 			case layoutArray.length > 2:
-				return layout_site
+				return "layout_site"
 
 			default:
-				return layout_wide
+				return "layout_wide"
 		}
 	})()
+
+	//! override issues
+	// const layout_width = (() => {
+	// 	switch (true) {
+	// 		case layoutWidth !== undefined:
+	// 			return layoutWidth
+
+	// 		case layoutArray.length > 2:
+	// 			return layout_site
+
+	// 		default:
+	// 			return layout_wide
+	// 	}
+	// })()
 
 	const classNms = [
 		"grid",
 		grid,
 		// isAuto ? auto : layoutStyle,
 		layoutStyle ? layoutStyle : auto,
-		layout_width,
+		// layout_width,
 		className,
 	].join(" ")
 	// todo trying global instead of module
 	// const stylesArr = [styleModule.section, styleModule[`grid_${layout}`] ]
 	const inlineStyles = {
 		"--col-width": colWidth,
+    gridColumn: layout_width,
 		alignItems: verticalAlign,
 		justifyItems: horizontalAlign,
 		gap: gap ? `var(--space-${gap})` : "0",
