@@ -34,7 +34,6 @@ import {
 } from "@styles/layout.module.css"
 import type { ComponentProps } from "react"
 import { Fragment } from "react"
-
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
 import { PriceGridTable } from "./PriceGridTable"
@@ -166,6 +165,7 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	iframe: (props) => {
 		return <IFrame {...props} />
 	},
+	
 	postslist: (props) => {
 		return <PostsList {...props} />
 	},

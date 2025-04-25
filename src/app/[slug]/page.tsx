@@ -71,18 +71,20 @@ export default async function PageBySlug({ params }: Props) {
 		>
 			<header
 				className={[
-					template !== "FULLWIDTH_WITHHEADER"
-						? "screen-reader-text"
-						: undefined,
+					// template !== "FULLWIDTH_WITHHEADER"
+					// 	? "screen-reader-text"
+					// 	: undefined,
 					layout_site,
 				].join(" ")}
 				//? not accessable
-				// style={{
-				//   ...(template !== 'FULLWIDTH_WITHHEADER' ? {display: 'none'} : {})
-				// }}
+				style={{
+					...(template !== "FULLWIDTH_WITHHEADER"
+						? { visibility: "collapse", height: "0" }
+						: {}),
+				}}
 			>
 				<h1>{title}</h1>
-        <hr className={layout_wide} />
+				<hr className={layout_wide} />
 			</header>
 
 			<div
@@ -93,7 +95,7 @@ export default async function PageBySlug({ params }: Props) {
 				].join(" ")}
 			>
 				{/* <p className={"screen-reader-text"}>Start of main page content</p> */}
-        
+
 				{status !== "PUBLIC" && (
 					<Card
 						// className={"siteWrapper"}

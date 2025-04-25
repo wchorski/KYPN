@@ -1,6 +1,6 @@
 import { keystoneContext } from "@ks/context"
 import type { Post } from "@ks/types"
-
+import { type PostWhereInput } from ".keystone/types"
 import { envs } from "@/envs"
 
 const perPage = envs.PERPAGE
@@ -30,19 +30,19 @@ export async function fetchPosts({
 	try {
 		const context = keystoneContext.withSession(session)
 		//TODO how to type this correctly?
-		let where: any = {
+		let where: PostWhereInput | undefined = {
 			...(categoryIds.length > 0
 				? { categories: { some: { id: { in: categoryIds } } } }
 				: categoryNames.length > 0
 				? { categories: { some: { name: { in: categoryNames } } } }
 				: {}),
-			...(authorIds.length > 0
-				? { author: { some: { id: { in: authorIds } } } }
-				: authorEmails.length > 0
-				? { author: { some: { email: { in: authorEmails } } } }
-				: {}),
 			...(tagIds && tagIds.length > 0
 				? { tags: { some: { id: { in: tagIds } } } }
+				: {}),
+			...(authorIds.length > 0
+				? { author: { id: { in: authorIds } } }
+				: authorEmails.length > 0
+				? { author: { email: { in: authorEmails } } }
 				: {}),
 		}
 

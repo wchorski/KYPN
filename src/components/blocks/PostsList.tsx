@@ -1,10 +1,10 @@
-import { Section } from "@components/blocks/Section"
 import { BlogList } from "@components/blog/BlogList"
 import ErrorMessage from "@components/ErrorMessage"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getServerSession } from "next-auth"
 
 import { nextAuthOptions } from "@/session"
+import { layout_site, layout_wide } from "@styles/layout.module.css"
 
 type Props = {
 	header: string
@@ -23,8 +23,6 @@ const query = `
   excerpt
 `
 
-// any type is a bug workaround
-// @ts-ignore
 export async function PostsList({
 	header,
 	color,
@@ -36,6 +34,7 @@ export async function PostsList({
 	const session = await getServerSession(nextAuthOptions)
 	const categoryIds = categories.flatMap((cat) => cat.id)
 	const authorIds = authors?.flatMap((user) => user.id)
+
 	const { posts, error } = await fetchPosts({
 		page: 1,
 		categoryIds,
@@ -44,54 +43,30 @@ export async function PostsList({
 		query,
 	})
 
-	if (!error) return <ErrorMessage error={error} />
+	if (error) return <ErrorMessage error={error} />
+	if (posts?.length === 0) return <p>no posts found</p>
 
 	return (
-		<Section
-			layout={"1"}
-			styles={{
+		<section
+			className={layout_wide}
+			style={{
+				// display: "grid",
+				// gridTemplateColumns: "subgrid",
+				// gridColumn: "layout_site",
 				backgroundColor: color,
 				backgroundImage: `url(${imageSrc})`,
 				backgroundPosition: "center",
 				backgroundSize: "cover",
 			}}
-			overlay={colorOverlay}
+			// overlay={colorOverlay}
 		>
-			<h2 style={{ textAlign: "center", margin: "4rem", zIndex: "1" }}>
-				{header}
-			</h2>
+			{header && (
+				<h2 style={{ textAlign: "center", margin: "4rem", zIndex: "1" }}>
+					{header}
+				</h2>
+			)}
 
-			<BlogList posts={posts} />
-		</Section>
+			<BlogList posts={posts} style={{ gridColumn: "layout_wide" }} />
+		</section>
 	)
 }
-
-export const QUERY_POSTS_PAGINATED = `
-  query Posts($where: PostWhereInput!, $orderBy: [PostOrderByInput!]!, $take: Int, $skip: Int!) {
-    posts(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
-      id
-      title
-      featured_image
-      featured_video
-      author {
-        id
-        name
-        nameLast
-      }
-      dateModified
-      excerpt
-      pinned
-      slug
-      status
-      template
-      tags {
-        id
-        name
-      }
-      categories {
-        id
-        name
-      }
-    }
-  }
-`

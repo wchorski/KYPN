@@ -38,7 +38,7 @@
 	grid-column: 1/-1;
 	grid-row: 1;
 	/* grid-template-columns: subgrid; */
-	text-align: center;
+	/* text-align: center; */
 	padding-top: 10vw;
 	/* border-bottom: solid 1px var(--c-seperator); */
 	/* padding-top: var(--space-l); */
@@ -47,8 +47,7 @@
 .layout_full,
 .layout_site,
 .layout_wide,
-.layout_breakout,
-.layout_content {
+.layout_breakout {
   display: grid;
   grid-template-columns: subgrid;
 }
