@@ -1,6 +1,5 @@
 // note - tried to use styled components but something was overriding
 import styles from "@styles/blocs/callout.module.css"
-import { layout_breakout } from "@styles/layout.module.css"
 import type { CSSProperties, ReactNode } from "react";
 import React from "react"
 
@@ -23,7 +22,7 @@ export function Callout({
 		styles.callout,
 		styles[intent],
 		className,
-		layout_breakout,
+		
 	].join(" ")
 	return (
 		<div className={cls} style={style}>

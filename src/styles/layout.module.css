@@ -90,10 +90,11 @@
 	padding-top: 8vw;
 } */
 
+/* ? was a quick fix for gap between header and content, but i think i don't need it anymore */
 /*? prevents gaps between header and content on custom made pages */
-.page_layout > .page_content > section:first-child {
+/* .page_layout > .page_content > section:first-child {
 	margin-top: -8vw;
-}
+} */
 
 .page_layout > aside,
 .page_layout > .page_sidebar {

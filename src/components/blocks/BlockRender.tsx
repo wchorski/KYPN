@@ -34,6 +34,7 @@ import {
 } from "@styles/layout.module.css"
 import type { ComponentProps } from "react"
 import { Fragment } from "react"
+
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
 import { PriceGridTable } from "./PriceGridTable"
@@ -138,13 +139,13 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 		return <SliderSlick {...props} />
 	},
 	section: (props) => {
-		const propsOverride = {
-			...props,
-			// todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
-			// nestedBlock: true,
-			layout: "1",
-			imageSrc: "",
-		}
+		// const propsOverride = {
+		// 	...props,
+		// 	// todo `nestedBlock` hacky way but it works (fixes difference between editor block vs web dev added)
+		// 	// nestedBlock: true,
+		// 	layout: "1",
+		// 	imageSrc: "",
+		// }
 		const colorThemeStyle = getColorTheme(props.colorTheme)
 		return (
 			<section

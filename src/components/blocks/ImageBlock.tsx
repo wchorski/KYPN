@@ -15,11 +15,11 @@ type Props = {
 }
 //todo add lightbox
 export function ImageBlock({
-	color,
+	// color,
 	imageSrc,
 	alt,
-	padding = 0,
-	border = 0,
+	// padding = 0,
+	// border = 0,
 	width = 400,
 	height = 200,
 	isCaption = true,
