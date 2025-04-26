@@ -4,6 +4,7 @@ import styles, {
 	header,
 	hide_on_mobile,
 	reveal_on_mobile,
+  schedual_calendar_wrap,
 } from "@styles/events/calendar.module.css"
 import { events_list } from "@styles/events/events.module.css"
 import { layout_content } from "@styles/layout.module.css"
@@ -47,7 +48,7 @@ export function SchedualCalendar({ date, events = [], bookings = [], isSearchPar
 	}
 
 	return (
-		<div className={["schedual-calendar-wrap"].join(" ")}>
+		<div className={schedual_calendar_wrap}>
 			<header className={header}>
 				<Link
 					href={`?${new URLSearchParams({

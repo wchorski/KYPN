@@ -29,7 +29,6 @@ export const infocardlist = component({
         }),
         color: fields.text({
           label: 'Fallback background color',
-          defaultValue: 'paleblue'
         }),
       })
     ),

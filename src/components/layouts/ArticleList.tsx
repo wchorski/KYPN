@@ -9,7 +9,7 @@ import { StatusBadge } from "@components/StatusBadge"
 import type { Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
-import styles, { post_card } from "@styles/articles.module.css"
+import styles, { list, post_card } from "@styles/articles.module.css"
 import Link from "next/link"
 
 import Flex from "./Flex"
@@ -25,7 +25,7 @@ export function ArticleList({ items = [], type, buttonText }: Props) {
 	if (!items) return <NoData name={type} />
 	// return <pre>{JSON.stringify(/{ items }, null, 2)}</pre>
 	return (
-		<GridList gap="1rem" colMinWidth="18rem">
+		<GridList gap="1rem" colMinWidth="18rem" className={list}>
 			{items.map((item: any, i: number) => (
 				<ArticleItem item={item} key={i} type={type} buttonText={buttonText} />
 			))}
@@ -129,7 +129,7 @@ export function ArticleItem({
 					/>
 				</figure>
 			) : (
-				<Link href={link} >
+				<Link href={link}>
 					<figure className={[styles.featured_image].join(" ")}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 					</figure>
@@ -155,12 +155,9 @@ export function ArticleItem({
 						<time
 							dateTime={String(dateModified)}
 							title="Publication update date"
-              className="sub-text"
+							className="sub-text"
 						>
-							
-								<IconCalendar />{" "}
-								{datePrettyLocal(String(dateModified), "day")}
-							
+							<IconCalendar /> {datePrettyLocal(String(dateModified), "day")}
 						</time>
 					</div>
 				)}

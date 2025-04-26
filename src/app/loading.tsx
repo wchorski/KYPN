@@ -19,6 +19,7 @@ export default async function LoadingPage() {
 			></div>
 			<header className={layout_site}>
 				<h1 style={{ visibility: "hidden" }}> Loading Page</h1>
+        <LoadingAnim />
 			</header>
 			<div
 				className={[page_content, layout_site].join(" ")}

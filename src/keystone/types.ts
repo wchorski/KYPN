@@ -4,7 +4,10 @@
 // To get full List and GraphQL API type support, uncomment them here and use them below
 // import type { KeystoneListsTypeInfo } from './.keystone/schema-types';
 
-import type { KeystoneGraphQLAPI, KeystoneListsAPI } from "@keystone-6/core/types"
+import type {
+	KeystoneGraphQLAPI,
+	KeystoneListsAPI,
+} from "@keystone-6/core/types"
 
 //todo hopefully types will be auto imported from keystone context.
 // for now we will manually import types
@@ -174,6 +177,12 @@ export type Page = Lists.Page.Item & {
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
+	template:
+		| "FULLWIDTH"
+		| "FULLWIDTH_WITHHEADER"
+		| "WITHSIDEBAR"
+		| "WITH_TABLEOFCONTENTS"
+		| "BLANK"
 }
 export type Post = Lists.Post.Item & {
 	typeof: "post"
@@ -288,7 +297,7 @@ export type Product = Lists.Product.Item & {
 	categories: Category[]
 	author: User
 	rentals: Rental
-  status: 'DRAFT'|'PRIVATE'|'PUBLIC'|'OUT_OF_STOCK'|'ARCHIVED'
+	status: "DRAFT" | "PRIVATE" | "PUBLIC" | "OUT_OF_STOCK" | "ARCHIVED"
 }
 
 export type Rental = Lists.Rental.Item & {
@@ -427,7 +436,7 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 	//? these are redefined because ks sees them as `Date` but really it's just ISO string
 	dateCreated: string
 	dateModified: string
-  trial_end: string
+	trial_end: string
 	status:
 		| "ACTIVE"
 		| "TRIAL"
@@ -437,11 +446,11 @@ export type SubscriptionItem = Lists.SubscriptionItem.Item & {
 		| "PAUSED"
 		| "DELINQUENT"
 		| "REQUESTED"
-  //? relationships
-  user: User
+	//? relationships
+	user: User
 	addons: Addon[]
-  coupon: Coupon
-  orderItems: OrderItem[]
+	coupon: Coupon
+	orderItems: OrderItem[]
 }
 export type Addon = Lists.Addon.Item & {
 	author?: User
@@ -449,7 +458,7 @@ export type Addon = Lists.Addon.Item & {
 	bookings?: Booking[]
 	categories: Category[]
 	tags: Tag[]
-  // price:number
+	// price:number
 }
 
 //** Schema Lists END */

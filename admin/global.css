@@ -42,6 +42,14 @@ table th {
   border-bottom-width: 4px;
 }
 
+div[data-slate-node="value"] {
+  background-color: var(--c-body);
+  color: var(--c-txt);
+}
+/* @media (prefers-color-scheme: dark) {
+
+} */
+
 /* todo work on this dark mode override
 @media (prefers-color-scheme: dark) {
 

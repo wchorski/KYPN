@@ -13,6 +13,7 @@ type Props = {
   flexDirection?:CSSProperties['flexDirection']
 }
 
+// TODO putting `layout` stylings will probably set it to grid
 export default function Flex({
 	paddingInline = 0,
 	paddingBlock = 0,

@@ -80,8 +80,8 @@ export default async function BlogFeedPage({ params, searchParams }: Props) {
 		>
 			<header className={layout_full} style={{ marginTop: "3rem" }}>
 				<div className={layout_wide}>
-					<h1 style={{ textAlign: "center" }}> Blog </h1>
-					<hr className={layout_wide} />
+					<h1 style={{ textAlign: "center", display: "none" }}> Blog </h1>
+					{/* <hr className={layout_wide} /> */}
 				</div>
 			</header>
 

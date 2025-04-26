@@ -30,7 +30,6 @@ export const infocard = component({
     }),
     color: fields.text({
       label: 'Fallback background color',
-      defaultValue: 'Gainsboro'
     }),
     padding: fields.integer({
       label: 'Padding',

@@ -1,23 +1,23 @@
-.timepickerlist :global{
-  column-count: 3;
-  min-height: 11em;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: var(--space-ms);
-  /* flex-direction: column; */
+.timepickerlist :global {
+	column-count: 4;
+	min-height: 11em;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	/* display: flex; */
+	/* flex-wrap: wrap; */
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: var(--space-ms);
+	/* flex-direction: column; */
 
-  & li{
-    /* width: 6em; */
-    animation-duration: .3s;
-    animation-name: reveal;
-    animation-timing-function: ease;
-  }
-  /* li:nth-child(n+1):nth-child(-n+4),
+	& li {
+		/* width: 6em; */
+		animation-duration: 0.3s;
+		animation-name: reveal;
+		animation-timing-function: ease;
+	}
+	/* li:nth-child(n+1):nth-child(-n+4),
   li:nth-child(8n+1),
   li:nth-child(8n+2),
   li:nth-child(8n+3),
@@ -25,36 +25,44 @@
     border-bottom: solid #959595 1px;
   } */
 
-  & button{
-    border-radius: 50px;
-    min-width: 5rem;
-    border: solid 1px var(--c-txt-sub);
-    padding: var(--space-ms);
-    width: 100%;
-    
-    &:hover, &focus{
-      border: solid 1px var(--c-accent);
-      
-    }
-  }
+	& button {
+		border-radius: 50px;
+		min-width: 5rem;
+		border: solid 1px var(--c-txt-sub);
+		padding: var(--space-ms);
+		width: 100%;
 
+		&:hover,
+		&focus {
+			border: solid 1px var(--c-accent);
+		}
+	}
 
-  
-
-  @keyframes reveal {
-    0% { 
-      transform: translateX(-3px);
-      opacity: 0.4;
-    }
-    100% { 
-      transform: translateX(0px);
-      opacity: 1;
-    }
-  }
+	@keyframes reveal {
+		0% {
+			transform: translateX(-3px);
+			opacity: 0.4;
+		}
+		100% {
+			transform: translateX(0px);
+			opacity: 1;
+		}
+	}
 }
 
 .active_time_chip {
-  background-color: var(--c-accent);
-  border: solid 1px var(--c-accent);
-  color: var(--c-txt-accent);
+	background-color: var(--c-accent);
+	border: solid 1px var(--c-accent);
+	color: var(--c-txt-accent);
+}
+
+@media screen and (width < 455px) {
+	.timepickerlist {
+		grid-template-columns: auto auto auto;
+	}
+}
+@media screen and (width < 355px) {
+	.timepickerlist {
+		grid-template-columns: auto auto;
+	}
 }

@@ -48,8 +48,8 @@
 .layout_site,
 .layout_wide,
 .layout_breakout {
-  display: grid;
-  grid-template-columns: subgrid;
+	display: grid;
+	grid-template-columns: subgrid;
 }
 
 .layout_hidden {
@@ -64,10 +64,10 @@
 }
 
 /* TODO how do i keep footer always just below view */
-/* main.page_layout {
-	min-height: 100vh;
-	min-height: 100dvh;
-} */
+main.page_layout {
+	min-height: 70vh;
+	min-height: 70dvh;
+}
 
 /* how am i gonna fix this? */
 /* .page_content {
@@ -78,23 +78,12 @@
 
 .page_layout > .page_content {
 	grid-row: 2;
-	grid-column: layout_breakout;
+	grid-column: layout_full;
 	/* //TODO why does this break a lot of the layouts? */
 	/* ? use subgrid instead of inherit. inherit created a copied nested grid. subgrid follows the parent grid exactly */
 	display: grid;
-	/* grid-template-columns: subgrid; */
+	grid-template-columns: subgrid;
 }
-
-/* TODO make sure header adds enough space between nav and main content even when header has no elements shown */
-/* .page_layout > .page_content {
-	padding-top: 8vw;
-} */
-
-/* ? was a quick fix for gap between header and content, but i think i don't need it anymore */
-/*? prevents gaps between header and content on custom made pages */
-/* .page_layout > .page_content > section:first-child {
-	margin-top: -8vw;
-} */
 
 .page_layout > aside,
 .page_layout > .page_sidebar {
@@ -119,12 +108,19 @@
 	/* grid-template-columns: subgrid; */
 }
 
-
 .page_layout,
 /* //TODO i removed `>` direct selector, could mess up a bunch of other stuff idk */
 .page_layout .layout_full,
-.page_layout .layout_site {
-	& > :is(div:global(.flex), div:global(.grid), table) {
+.page_layout .layout_site,
+.page_layout .page_content {
+	&
+		> :is(
+      .layout_site,
+			div:global(.flex),
+			div:global(.grid),
+			table
+			/* div:not(.page_content) */
+		) {
 		grid-column: layout_site;
 	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
@@ -143,14 +139,14 @@
 		margin-block: var(--space-l);
 	}
 
-	& > :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav) {
+	& > :is(.layout_content, h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav, a, button) {
 		grid-column: layout_content;
 	}
 }
 
 /* TODO kinda ugly duplication just to make sure nothing spills out of `layout_wide` */
 .page_layout .layout_wide {
-  & > :is(div:global(.flex), div:global(.grid), table) {
+	& > :is(div:global(.flex), div:global(.grid), table, div) {
 		grid-column: layout_wide;
 	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
@@ -169,7 +165,7 @@
 		margin-block: var(--space-l);
 	}
 
-	& > :is(h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav) {
+	& > :is(.layout_content, h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav, a, button) {
 		grid-column: layout_content;
 	}
 }

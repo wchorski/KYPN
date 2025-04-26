@@ -3,8 +3,6 @@ import {
 	fields,
 	NotEditable,
 } from "@keystone-6/fields-document/component-blocks"
-import { keystoneContext } from "../context"
-import { Post } from "../types"
 import React from "react"
 
 export const postslist = component({
@@ -24,7 +22,6 @@ export const postslist = component({
 		}),
 		color: fields.text({
 			label: "Fallback background color",
-			defaultValue: "gray",
 		}),
 		categories: fields.relationship({
 			label: "Categories",
@@ -53,8 +50,8 @@ export const postslist = component({
 					<>
 						<h5>Authors Filter</h5>
 						<ul>
-							{props.fields.authors.value.map((user) => (
-								<li>{user.label}</li>
+							{props.fields.authors.value.map((user, i) => (
+								<li key={i}>{user.label}</li>
 							))}
 						</ul>
 					</>
@@ -66,8 +63,8 @@ export const postslist = component({
 					<>
 						<h5>Categories Filter</h5>
 						<ul>
-							{props.fields.categories.value.map((cat) => (
-								<li>{cat.label}</li>
+							{props.fields.categories.value.map((cat, i) => (
+								<li key={i}>{cat.label}</li>
 							))}
 						</ul>
 					</>
@@ -76,7 +73,6 @@ export const postslist = component({
 				)}
 
 				<h5>View frontend to see the list of posts</h5>
-				
 			</NotEditable>
 		)
 	},

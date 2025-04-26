@@ -1,4 +1,6 @@
-
+.schedual_calendar_wrap {
+  grid-column: layout_site;
+}
 .header :global{
   width: 100%;
   display: flex;

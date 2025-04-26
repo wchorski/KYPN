@@ -540,7 +540,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 	return (
 		// <Grid layout={"1_1"} alignContent={"start"}>
-		<Flex className={layout_wide} style={{ gridColumn: "layout_wide" }}>
+		<Flex style={{ gridColumn: "layout_wide" }}>
 			{!state.cartItem ? (
 				<form
 					action={action}

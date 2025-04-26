@@ -8,14 +8,22 @@ button,
 	&.pending {
 		cursor: progress;
 	}
-
-	transition-property: color, background;
-	transition-duration: 0.3s;
 }
 
-a {
+a,
+button {
 	transition-duration: var(--anim-duration-fast);
-	transition-property: color, background;
+	transition-property: color, background, filter, -webkit-filter, transform;
+}
+
+a:not([disabled]):hover,
+button:not([disabled]):hover {
+	filter: brightness(1.3);
+}
+a:not([disabled]):active,
+button:not([disabled]):active {
+	filter: brightness(0.9);
+  transform: scale(0.99);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -48,9 +56,9 @@ a {
 	/* display: grid;
 	grid-template-areas: "stack"; */
 	position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
 
 	/* & span {
 		grid-area: stack;
@@ -62,7 +70,6 @@ a {
 		content: "";
 		pointer-events: none;
 		/* grid-area: stack; */
-		
 
 		height: 1px;
 		/* place-self: end; */

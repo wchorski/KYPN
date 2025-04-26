@@ -15,8 +15,7 @@ export const contactform = component({
 			defaultValue: "",
 		}),
 		color: fields.text({
-			label: "Fallback background color",
-			defaultValue: "",
+			label: "Fallback background color"
 		}),
 
 		buttonLabel: fields.text({

@@ -240,8 +240,8 @@ export default async function BlogPostBySlug({ params }: Props) {
 						</Flex>
 					</AsideBar>
 				)}
-
 				<footer className={layout_wide}>
+					<hr />
 					<Flex>
 						<Card maxWidth="20rem">
 							<h4 className="categories">Categories: </h4>

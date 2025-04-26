@@ -50,7 +50,9 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 						<IconAccountBox />
 					)}
 				</figure>
-				<span className={desktop_label} style={{ padding: "var(--space-m)" }}>{label}</span>
+				<span className={desktop_label} style={{ padding: "var(--space-m)" }}>
+					{session.user.name || label}
+				</span>
 			</NavLink>
 
 			<ul className={sub_menu}>
@@ -60,21 +62,15 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 					<span className={"sub-text"}>{session?.user?.email}</span>
 				</li>
 				<li>
-					<NavLink className="button" href={`/account`}>
-						My Account
-					</NavLink>
+					<Link href={`/account`}>My Account</Link>
 				</li>
 				{session?.data.role && session?.data.role.name === "admin" && (
 					<>
 						<li>
-							<NavLink href={envs.CMS_URL} className="button">
-								Admin Dashboard
-							</NavLink>
+							<Link href={envs.CMS_URL}>Admin Dashboard</Link>
 						</li>
 						<li>
-							<Link href={`/admin`} className="button">
-								Admin Tools
-							</Link>
+							<Link href={`/admin`}>Admin Tools</Link>
 						</li>
 					</>
 				)}

@@ -1,3 +1,24 @@
+/* TODO add color theme for button, links, :hover, :focus, :active,  */
+.theme_base {
+	display: initial;
+	& a {
+		color: var(--c-primary);
+	}
+	& nav a {
+		color: unset;
+	}
+
+	& :global(.button) {
+		background-color: var(--c-primary);
+		color: var(--c-txt-primary);
+	}
+
+	& button[disabled] {
+		border-color: var(--c-seperator);
+		background-color: var(--c-disabled);
+	}
+}
+
 .bg_c_plain {
 	background-color: var(--c-txt-bg);
 	color: var(--c-txt);
@@ -19,18 +40,24 @@
 	& a {
 		color: var(--c-header);
 	}
+
+	& :global(.button),
+	& button {
+		color: var(--c-primary);
+		background-color: var(--c-txt-bg);
+	}
 }
 
 .bg_c_secondary :global {
 	background-color: var(--c-secondary);
-	color: var(--c-txt-primary);
+	color: var(--c-txt-secondary-h);
 	& h1,
 	& h2,
 	& h3,
 	& h4,
 	& h5,
 	& h6 {
-		color: var(--c-txt-primary-h);
+		color: var(--c-txt-secondary-h);
 	}
 }
 .outline_c_secondary {
@@ -45,32 +72,44 @@
 	border-color: var(--c-tertiary);
 	border-style: solid;
 
-	& button {
+	& button,
+	& .button {
+		color: var(--c-tertiary);
 		border-color: var(--c-tertiary);
 	}
 }
 
 .bg_c_tertiary :global {
-	background-color: var(--c-tertiary);
-	color: var(--c-txt-primary);
+	background-color: var(--c-txt-bg);
+	border-width: var(--space-xxs);
+	border-color: var(--c-tertiary);
+	border-style: solid;
+
 	& h1,
 	& h2,
 	& h3,
 	& h4,
 	& h5,
 	& h6 {
-		color: var(--c-txt-primary-h);
+		color: var(--c-tertiary);
+	}
+
+	& a {
+		color: var(--c-tertiary);
+	}
+
+	& button,
+	& :global(.button) {
+		/* color: var(--c-tertiary); */
+		border-color: var(--c-tertiary);
 	}
 }
 .bg_c_accent :global {
-	position: relative;
-	z-index: 1;
-	background-color: var(--c-accent);
-	color: var(--c-txt-primary);
-
-	& > * {
-		z-index: 1;
-	}
+	/* color: var(--c-accent); */
+	background-color: var(--c-txt-bg);
+	border-left-width: var(--space-s);
+	border-left-style: solid;
+	border-color: var(--c-accent);
 
 	& h1,
 	& h2,
@@ -78,19 +117,15 @@
 	& h4,
 	& h5,
 	& h6 {
-		background-image: linear-gradient(
-			to right,
-			var(--c-accent),
-			var(--c-accent)
-		);
-
-		color: var(--c-txt-primary-h);
-
-		display: inline;
-		background-size: 100% 10%;
-		background-repeat: no-repeat;
-		background-position: 0 105%;
+		color: var(--c-accent);
 		text-shadow: var(--shadow-4);
+	}
+
+	& button,
+	& :global(.button) {
+		background-color: var(--c-primary);
+		color: var(--c-txt-primary);
+		border-color: var(--c-primary);
 	}
 }
 /* //todo set colors from status.module.css to here for other components to use */
@@ -109,6 +144,10 @@
 	& h5,
 	& h6 {
 		color: var(--c-txt-rev);
+	}
+
+	& a {
+		color: var(--c-secondary);
 	}
 }
 
@@ -131,14 +170,17 @@
 	/* --c-primary: color-mix(in hsl, blue, black 1%); */
 }
 
-/* TODO add color theme for button, links, :hover, :focus, :active,  */
+.gradient_accent_teriary {
+	background-image: linear-gradient(
+		to right,
+		var(--c-accent),
+		var(--c-tertiary)
+	);
 
-.theme_base {
-	display: initial;
-	& a {
-		color: var(--c-primary);
-	}
-	& nav a {
-		color: unset;
-	}
+	color: var(--c-txt-primary-h);
+
+	display: inline;
+	background-size: 100% 10%;
+	background-repeat: no-repeat;
+	background-position: 0 105%;
 }

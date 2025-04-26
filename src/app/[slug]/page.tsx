@@ -55,7 +55,7 @@ export default async function PageBySlug({ params }: Props) {
 		)
 	if (!page) return notFound()
 
-	const { id, title, status, template, content } = page
+	const { id, title, status, template = "FULLWIDTH", content } = page
 
 	const tableOfContentLinks = findAllHeadings(content?.document)
 
@@ -78,7 +78,9 @@ export default async function PageBySlug({ params }: Props) {
 				].join(" ")}
 				//? not accessable
 				style={{
-					...(template !== "FULLWIDTH_WITHHEADER"
+					...(!["FULLWIDTH_WITHHEADER", "WITH_TABLEOFCONTENTS"].includes(
+						template
+					)
 						? { visibility: "collapse", height: "0" }
 						: {}),
 				}}
@@ -91,7 +93,7 @@ export default async function PageBySlug({ params }: Props) {
 				id="main-page-content"
 				className={[
 					page_content,
-					template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full,
+					// template === "WITH_TABLEOFCONTENTS" ? layout_content : layout_full,
 				].join(" ")}
 			>
 				{/* <p className={"screen-reader-text"}>Start of main page content</p> */}

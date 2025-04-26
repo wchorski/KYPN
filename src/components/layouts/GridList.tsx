@@ -9,6 +9,7 @@ type ProdProps = {
 	gap?: string
   paddingInline?: string
   style?:CSSProperties
+  className?:string
 }
 
 export function GridList({
@@ -16,13 +17,15 @@ export function GridList({
 	gap = ".3rem",
   paddingInline = '0',
   style,
+  className,
 	children,
 }: ProdProps): ReactElement<any, any> {
-	const cls = ["unstyled", grid, auto].join(" ")
+	const cls = ["unstyled", grid, auto, className].join(" ")
 	const styles = {
     paddingInline,
 		"--col-min-width": colMinWidth,
 		gap,
+    gridColumn: '1/-1',
     ...style
 	} as CSSProperties
 

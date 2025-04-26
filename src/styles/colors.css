@@ -232,12 +232,3 @@ ol {
 		fill: var(--c-txt);
 	}
 }
-
-/* a {
-	color: var(--c-primary);
-	transition-duration: var(--anim-duration-fast);
-	transition-property: color, background;
-} */
-/* a:hover {
-	color: var(--c-secondary);
-} */

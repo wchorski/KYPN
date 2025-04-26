@@ -18,7 +18,6 @@ export const sociallinknav = component({
 		// }),
 		color: fields.text({
 			label: "Fallback background color",
-			defaultValue: "gray",
 		}),
 		facebook: fields.text({
 			label: "Facebook Page Link",
