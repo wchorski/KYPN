@@ -76,6 +76,7 @@ export default async function BookingsPage({ searchParams }: Props) {
 						</p>
 					</Callout>
 				)}
+        <hr />
 			</header>
 			<div className={[page_content, layout_wide].join(" ")}>
 				<BookingForm

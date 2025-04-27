@@ -1,20 +1,23 @@
 import { BlockRender } from "@components/blocks/BlockRender"
-import { ImageBlock } from "@components/blocks/ImageBlock"
 import { PriceTag } from "@components/ecommerce/PriceTag"
 import { IconLink } from "@components/elements/IconLink"
+import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
 import Flex from "@components/layouts/Flex"
-import { Grid } from "@components/layouts/Grid"
 import { StatusBadge } from "@components/StatusBadge"
+import { isEmptyDocument } from "@lib/contentHelpers"
 import { daysOfWeek } from "@lib/dateCheck"
 import { timePretty } from "@lib/dateFormatter"
 import fetchService from "@lib/fetchdata/fetchService"
 import { category_list } from "@styles/categories.module.css"
+import { featured } from "@styles/events/event.module.css"
+import { _1_1, grid } from "@styles/grid.module.css"
 import {
 	layout_wide,
 	page_content,
 	page_layout,
+	sticky_aside,
 } from "@styles/layout.module.css"
 import { tags_list } from "@styles/tags.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
@@ -26,12 +29,12 @@ import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 
 export async function generateMetadata(
-	{ params, searchParams }: Props,
+	{ params }: Props,
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
-	const { service, error } = await fetchService({ id, query: QUERY, session })
+	const { service } = await fetchService({ id, query: QUERY, session })
 
 	if (!service)
 		return {
@@ -100,20 +103,65 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 	} = service
 
 	return (
-		<main className={page_layout}>
-			<Grid
-				layout={"1_2"}
-				alignContent={"start"}
-				style={{ marginTop: "var(--space-xxl)", gridColumn: "layout_site" }}
-				gap={"xl"}
+		<main className={page_layout} style={{ paddingTop: "var(--space-l)" }}>
+			<article
+				className={[grid, _1_1].join(" ")}
+				style={{ gridColumn: "layout_wide", gap: "var(--space-ml)" }}
 			>
-				<header style={{ position: "sticky", top: "var(--space-xxl)" }}>
-					<ImageBlock
-						imageSrc={image}
-						alt={`Featured Image for ${name} Service`}
-						isCaption={false}
-						isPriority={true}
-					/>
+				<header>
+					<div
+						className={[sticky_aside, grid].join(" ")}
+						style={{ gap: "var(--space-ms)" }}
+					>
+						<figure className={featured}>
+							<ImageDynamic
+								photoIn={image}
+								priority={true}
+								alt={`Featured Image for ${name} Service`}
+							/>
+						</figure>
+
+						<Flex>
+							<ul className={category_list}>
+								{categories?.map((cat) => (
+									<li key={cat.id}>
+										<Link href={`/search?categories=${cat.id}`}>
+											{cat.name}
+										</Link>
+									</li>
+								))}
+							</ul>
+
+							<ul className={tags_list}>
+								{tags?.map((tag) => (
+									<li key={tag.id}>
+										<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Flex>
+
+						{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
+							<Card
+								direction={"row"}
+								gap={"var(--space-m)"}
+								verticleAlign={"center"}
+							>
+								<StatusBadge type={"service"} status={status} />
+								{(author?.id === session?.itemId ||
+									session?.data?.role?.canManagePosts) && (
+									<IconLink
+										icon={"edit"}
+										href={envs.CMS_URL + `/services/${id}`}
+										label={"edit"}
+									/>
+								)}
+							</Card>
+						)}
+					</div>
+				</header>
+
+				<div className={page_content}>
 					<h1> {name} </h1>
 					<Link
 						href={`/book-a-service?serviceId=${id}`}
@@ -121,44 +169,6 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 					>
 						Book this Service
 					</Link>
-					<Flex>
-						<ul className={category_list}>
-							{categories?.map((cat) => (
-								<li key={cat.id}>
-									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
-								</li>
-							))}
-						</ul>
-
-						<ul className={tags_list}>
-							{tags?.map((tag) => (
-								<li key={tag.id}>
-									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
-								</li>
-							))}
-						</ul>
-					</Flex>
-					
-					{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
-						<Card
-							direction={"row"}
-							gap={"var(--space-m)"}
-							verticleAlign={"center"}
-						>
-							<StatusBadge type={"service"} status={status} />
-							{(author?.id === session?.itemId ||
-								session?.data?.role?.canManagePosts) && (
-								<IconLink
-									icon={"edit"}
-									href={envs.CMS_URL + `/services/${id}`}
-									label={"edit"}
-								/>
-							)}
-						</Card>
-					)}
-				</header>
-
-				<div className={page_content}>
 					<table>
 						<tbody>
 							<tr>
@@ -189,11 +199,13 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 							</tr>
 						</tbody>
 					</table>
-					<Card>
-						<BlockRender document={description.document} />
-					</Card>
+					{!isEmptyDocument(description?.document) && (
+						<Card>
+							<BlockRender document={description.document} />
+						</Card>
+					)}
 				</div>
-			</Grid>
+			</article>
 			<footer className={layout_wide}>
 				<hr />
 				<Flex>

@@ -42,11 +42,11 @@ type Props = {
 	params: {
 		slug: string | string[] | undefined
 	}
-	searchParams: { [key: string]: string | string[] | undefined }
+	// searchParams: { [key: string]: string | string[] | undefined }
 }
 
 export async function generateMetadata(
-	{ params, searchParams }: Props,
+	{ params }: Props,
 	parent: ResolvingMetadata
 ): Promise<Metadata> {
 	// read route params
@@ -102,19 +102,18 @@ export default async function BlogPostBySlug({ params }: Props) {
 	const {
 		id,
 		title,
-		pinned,
 		status,
 		featured_image,
 		featured_video,
-		excerpt,
 		dateModified,
 		dateCreated,
 		template,
-		// allow_comments,
 		author,
-		categories,
-		tags,
 		content,
+		// excerpt,
+		// pinned,
+		// categories,
+		// tags,
 	} = post
 
 	const tableOfContentLinks = findAllHeadings(content?.document)
@@ -132,7 +131,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					} as CSSProperties
 				}
 			>
-				<Header bgImage={featured_image} className={page_layout}>
+				<Header bgImage={featured_image} className={''}>
 					<figure
 						className={featured_image_wrap}
 						style={

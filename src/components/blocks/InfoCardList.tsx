@@ -45,38 +45,46 @@ export function InfoCardItem({
 	item: InfoCard
 	children?: ReactNode
 }) {
+	const { statusType, buttonLabel, buttonLink, id, imageSrc, content, header } =
+		item
+
 	return (
 		<article className={carditem}>
-			{item.statusType?.status !== "PUBLIC" && (
+			{statusType?.status !== "PUBLIC" && (
 				<div className={statusBadge}>
 					<StatusBadge
-						type={item.statusType?.type || "any"}
-						status={item.statusType?.status}
+						type={statusType?.type || "any"}
+						status={statusType?.status}
 					/>
 				</div>
 			)}
-			<Link href={`/service/${item.id}`}>
+			{buttonLink ? (
+				<Link href={buttonLink}>
+					<figure className={featured_image}>
+						<ImageDynamic photoIn={imageSrc} key={id} />
+					</figure>
+				</Link>
+			) : (
 				<figure className={featured_image}>
-					<ImageDynamic photoIn={item.imageSrc} key={item.id} />
+					<ImageDynamic photoIn={imageSrc} key={id} />
 				</figure>
-			</Link>
+			)}
 
 			<header>
-				{/* <figure style={{backgroundImage: `url(${item.imageSrc})`}}></figure> */}
-				<h3>{item.header}</h3>
+				<h3>{header}</h3>
 			</header>
 
 			<div className={content_wrap}>
-				{item.content}
+				{content}
 				{children}
 
-				{item.buttonLink && (
+				{buttonLink && (
 					<Link
-						href={item.buttonLink}
+						href={buttonLink}
 						className="button medium"
 						style={{ marginLeft: "auto" }}
 					>
-						{item.buttonLabel ? item.buttonLabel : "view"}
+						{buttonLabel || "view"}
 					</Link>
 				)}
 			</div>

@@ -71,3 +71,8 @@
 		grid-template-columns: 1fr 2fr 1fr;
 	}
 }
+
+/* .sticky_2col_grid {
+  display: grid;
+  grid-template-columns: ;
+} */

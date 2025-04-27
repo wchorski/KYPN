@@ -2,7 +2,7 @@ import ErrorMessage from "@components/ErrorMessage"
 import { SchedualCalendar } from "@components/SchedualCalendar"
 import fetchEvents from "@lib/fetchdata/fetchEvents"
 import {
-  layout_hidden,
+	layout_hidden,
 	layout_site,
 	layout_wide,
 	page_content,
@@ -46,7 +46,7 @@ export default async function EventsPage({ params, searchParams }: Props) {
 
 	return (
 		<main className={page_layout}>
-			<header className={layout_wide}>
+			<header className={layout_wide} style={{ display: "none" }}>
 				<h1 className={layout_hidden}> Events </h1>
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>

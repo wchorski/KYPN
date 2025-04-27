@@ -110,14 +110,14 @@ main.page_layout {
 
 .page_layout,
 /* //TODO i removed `>` direct selector, could mess up a bunch of other stuff idk */
-.page_layout .layout_full,
-.page_layout .layout_site,
-.page_layout .page_content {
+.layout_full,
+.layout_site,
+.page_content {
 	&
 		> :is(
       .layout_site,
-			div:global(.flex),
-			div:global(.grid),
+			:global(.flex),
+			:global(.grid),
 			table
 			/* div:not(.page_content) */
 		) {
@@ -139,14 +139,31 @@ main.page_layout {
 		margin-block: var(--space-l);
 	}
 
-	& > :is(.layout_content, h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav, a, button) {
+	&
+		> :is(
+			.layout_content,
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6,
+			p,
+			span,
+			ul,
+			ol,
+			form,
+			nav,
+			a,
+			button
+		) {
 		grid-column: layout_content;
 	}
 }
 
 /* TODO kinda ugly duplication just to make sure nothing spills out of `layout_wide` */
 .page_layout .layout_wide {
-	& > :is(div:global(.flex), div:global(.grid), table, div) {
+	& > :is(:global(.flex), :global(.grid), table, div) {
 		grid-column: layout_wide;
 	}
 	& > :is(figure, img, article, iframe, div:global(.mediatext)) {
@@ -165,14 +182,31 @@ main.page_layout {
 		margin-block: var(--space-l);
 	}
 
-	& > :is(.layout_content, h1, h2, h3, h4, h5, h6, p, span, ul, ol, form, nav, a, button) {
+	&
+		> :is(
+			.layout_content,
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6,
+			p,
+			span,
+			ul,
+			ol,
+			form,
+			nav,
+			a,
+			button
+		) {
 		grid-column: layout_content;
 	}
 }
 
-.page_layout > .layout_full:not(div:global(.flex), figure, img, nav),
-.page_layout > .layout_site_to_wide:not(div:global(.flex), figure, img),
-.page_layout > .layout_wide:not(div:global(.flex), figure, img) {
+.page_layout > .layout_full:not(:global(.flex), figure, img, nav),
+.page_layout > .layout_site_to_wide:not(:global(.flex), figure, img),
+.page_layout > .layout_wide:not(:global(.flex), figure, img) {
 	display: grid;
 }
 .layout_site > div:not([class]),
@@ -269,4 +303,10 @@ main.page_layout {
 	& > * {
 		grid-column: auto;
 	}
+}
+
+.sticky_aside {
+	position: sticky;
+	top: var(--space-xl);
+  height: fit-content;
 }

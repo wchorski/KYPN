@@ -20,10 +20,9 @@ import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import moneyFormatter from "@lib/moneyFormatter"
 import { plainObj } from "@lib/utils"
 import { category_list } from "@styles/categories.module.css"
-import styleProduct from "@styles/ecommerce/productSingle.module.css"
-import styles from "@styles/events/event.module.css"
+import { featured } from "@styles/events/event.module.css"
+import { _1_1, grid } from "@styles/grid.module.css"
 import {
-	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
@@ -96,19 +95,19 @@ export default async function EventByID({ params }: Props) {
 	const {
 		image,
 		summary,
-		excerpt,
 		description,
-		tickets = [],
 		price,
 		start,
-		end,
-		seats,
 		hosts,
 		cohosts,
 		location,
 		categories,
 		tags,
 		status,
+		// excerpt,
+		// tickets = [],
+		// end,
+		// seats,
 	} = event
 
 	async function onClose() {
@@ -122,7 +121,7 @@ export default async function EventByID({ params }: Props) {
 	}
 
 	return (
-		<main className={page_layout}>
+		<main className={page_layout} style={{ paddingTop: "var(--space-l)" }}>
 			<DialogPopup title={summary} onClose={onClose} onOk={onOk} buttonLabel="">
 				<p>{datePrettyLocal(start, "full")}</p>
 				{session ? (
@@ -138,17 +137,18 @@ export default async function EventByID({ params }: Props) {
 			</DialogPopup>
 
 			<article
-				className={[styleProduct.product, page_content, layout_site].join(" ")}
+				className={[grid, _1_1].join(" ")}
+				style={{ gridColumn: "layout_site", gap: "var(--space-ml)" }}
 			>
-				<header className={"sticky"}>
-					<div className="container">
-						<picture className={styles.featured}>
+				{/* <article className={[styleProduct.product].join(" ")}> */}
+				<header>
+					<div style={{ position: "sticky", top: "9rem" }}>
+						<figure className={featured}>
 							<ImageDynamic photoIn={image} priority={true} />
-						</picture>
+						</figure>
 
 						{/* <AddToCalendar summary={summary} start={start} end={end} /> */}
 
-						{/* <hr /> */}
 						<Flex>
 							<ul className={category_list}>
 								{categories?.map((cat) => (
@@ -171,16 +171,14 @@ export default async function EventByID({ params }: Props) {
 					</div>
 				</header>
 
-				<div className={"scroll-over"}>
+				<div
+					// className={"scroll-over"}
+					className={page_content}
+				>
 					<h1>{summary}</h1>
 
 					<div
-						className="info-cont"
-						style={{
-							display: "grid",
-							alignContent: "center",
-							height: "100%",
-						}}
+					// className="info-cont"
 					>
 						<ul className="meta unstyled padding-0">
 							<li>{datePrettyLocalDay(start || "")}</li>
@@ -190,9 +188,7 @@ export default async function EventByID({ params }: Props) {
 								<li>
 									<Link href={`/locations/${location.id}`}>
 										<address>
-											{location?.name}
-											<br />
-											{location?.address}
+											{location?.name} {location?.address}
 										</address>
 									</Link>
 								</li>
@@ -232,12 +228,13 @@ export default async function EventByID({ params }: Props) {
 					)}
 				</div>
 			</article>
-			<footer>
+			{/* </div> */}
+			<footer className={layout_wide}>
 				{/* //todo have multiple hosts */}
 				{/* {session && (host?.id === session.id || session.isAdmin) && ( */}
 				{canViewHostPanel([...hosts, ...cohosts], session) && (
 					<section className={layout_wide}>
-						<Card>
+						<Card colorTheme="bg_c_tertiary">
 							<h2> Host Panel </h2>
 
 							<h3>Hosts</h3>
