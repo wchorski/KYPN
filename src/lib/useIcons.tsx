@@ -16,13 +16,17 @@ import { FaRepeat } from "react-icons/fa6"
 import { GrDocumentText } from "react-icons/gr";
 import { HiCalendar, HiOutlineCalendar, HiOutlineTicket } from "react-icons/hi"
 import { ImDownload } from "react-icons/im";
-import { MdAccountCircle, MdOutlineAccountBox, } from "react-icons/md"
+import { IoMdTime } from "react-icons/io"
+import { MdAccountCircle, MdLocationPin, MdOutlineAccountBox, } from "react-icons/md"
 import { PiFlagBannerFoldLight, PiSpinnerThin } from "react-icons/pi";
 import { RiCoupon2Line,RiExternalLinkLine,RiFileEditFill } from "react-icons/ri"
 import { SiBandlab } from "react-icons/si"
 import { TbCalendarRepeat,TbCheck, TbExclamationCircle, TbShoppingBag, TbShoppingBagPlus } from "react-icons/tb"
 
+
 export const IconExternalLink = () => <RiExternalLinkLine />
+export const IconLocationPin = () => <MdLocationPin />
+export const IconClockTime = () => <IoMdTime />
 export const IconDocumentPage = () => <GrDocumentText />
 
 export const IconCoupon = () => <RiCoupon2Line />

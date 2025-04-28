@@ -18,6 +18,7 @@ import {
 } from "@lib/dateFormatter"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import moneyFormatter from "@lib/moneyFormatter"
+import { IconCalendar, IconClockTime } from "@lib/useIcons"
 import { plainObj } from "@lib/utils"
 import { category_list } from "@styles/categories.module.css"
 import { featured } from "@styles/events/event.module.css"
@@ -153,7 +154,7 @@ export default async function EventByID({ params }: Props) {
 							<ul className={category_list}>
 								{categories?.map((cat) => (
 									<li key={cat.id}>
-										<Link href={`/search?categories=${cat.id}`}>
+										<Link href={`/categories?ids=${cat.id}`}>
 											{cat.name}
 										</Link>
 									</li>
@@ -163,7 +164,7 @@ export default async function EventByID({ params }: Props) {
 							<ul className={tags_list}>
 								{tags?.map((tag) => (
 									<li key={tag.id}>
-										<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+										<Link href={`/tags?ids=${tag.id}`}>{tag.name}</Link>
 									</li>
 								))}
 							</ul>
@@ -180,17 +181,31 @@ export default async function EventByID({ params }: Props) {
 					<div
 					// className="info-cont"
 					>
-						<ul className="meta unstyled padding-0">
-							<li>{datePrettyLocalDay(start || "")}</li>
-							<li>{datePrettyLocalTime(start || "")}</li>
+						<ul className="meta unstyled padding-0 gap-m">
+							<li>
+								<IconCalendar /> {datePrettyLocalDay(start || "")}
+							</li>
+							<li>
+								<IconClockTime /> {datePrettyLocalTime(start || "")}
+							</li>
 							{/* <li> capacity: {seats}</li> */}
 							{location && (
 								<li>
+									{/* <IconLocationPin />{" "}
 									<Link href={`/locations/${location.id}`}>
 										<address>
 											{location?.name} {location?.address}
 										</address>
-									</Link>
+									</Link> */}
+									<IconLink
+										href={`/locations/${location.id}`}
+										icon={"location"}
+										style={{ gap: "0" }}
+									>
+										<address>
+											{location?.name} {location?.address}
+										</address>
+									</IconLink>
 								</li>
 							)}
 						</ul>

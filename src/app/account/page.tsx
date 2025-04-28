@@ -52,11 +52,9 @@ export default async function AccountPage() {
 		session
 	)
 
-
-  // TODO fetch bookings, only if they are in future 
-  // show past bookings in seperate link
-  // const { bookings, error: errorBookings } = await fetchBookings(today, BOOKINGS_QUERY, session)
-
+	// TODO fetch bookings, only if they are in future
+	// show past bookings in seperate link
+	// const { bookings, error: errorBookings } = await fetchBookings(today, BOOKINGS_QUERY, session)
 
 	const orders = (await keystoneContext
 		.withSession(session)
@@ -232,7 +230,7 @@ export default async function AccountPage() {
 		<main className={page_layout}>
 			<header
 				className={layout_site}
-				style={{ display: session.data.role ? "none" : "initial" }}
+				style={{ visibility: session.data.role ? "hidden" : "initial" }}
 			>
 				<h1 style={{ display: "none" }}> Account </h1>
 
@@ -251,21 +249,21 @@ export default async function AccountPage() {
 }
 // todo move subscriptions to seperate fetch so i can order them by date
 
-const BOOKINGS_QUERY = `
-  id
-  price
-  start
-  service {
-    id
-    name
-  }
-  status
-  orderItem {
-    order {
-      status
-    }
-  }
-`
+// const BOOKINGS_QUERY = `
+//   id
+//   price
+//   start
+//   service {
+//     id
+//     name
+//   }
+//   status
+//   orderItem {
+//     order {
+//       status
+//     }
+//   }
+// `
 const USER_DASH_QUERY = `
   id
   name

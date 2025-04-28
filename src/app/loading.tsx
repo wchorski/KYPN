@@ -1,6 +1,5 @@
 import { LoadingAnim } from "@components/elements/LoadingAnim"
 import {
-	layout_full,
 	layout_site,
 	page_content,
 	page_layout,
@@ -12,18 +11,15 @@ export default async function LoadingPage() {
 	// if (!users) return <NoDataFoundPage><p>No users found</p></NoDataFoundPage>
 
 	return (
-		<main className={[page_layout].join(" ")}>
-			<div
-				className={["anim_border_spin", layout_full].join(" ")}
-				aria-label="page loading animation strip"
-			></div>
-			<header className={layout_site}>
-				<h1 style={{ visibility: "hidden" }}> Loading Page</h1>
-        <LoadingAnim />
+		<main className={[page_layout, "anim_border_spin top"].join(" ")}>
+			<header className={[layout_site].join(" ")}>
+				<h1 style={{ display: "none" }} aria-label="loading page header">
+					Loading Page
+				</h1>
 			</header>
 			<div
-				className={[page_content, layout_site].join(" ")}
-				style={{ display: "grid", placeContent: "center" }}
+				className={[page_content, layout_site, "skeleton-card"].join(" ")}
+				style={{ display: "grid", placeContent: "center", minHeight: "40vh" }}
 			>
 				<LoadingAnim />
 			</div>

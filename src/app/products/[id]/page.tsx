@@ -132,7 +132,7 @@ export default async function ProductById({ params }: Props) {
 						<ul className={category_list}>
 							{categories?.map((cat) => (
 								<li key={cat.id}>
-									<Link href={`/search?categories=${cat.id}`}>{cat.name}</Link>
+									<Link href={`/categories?ids=${cat.id}`}>{cat.name}</Link>
 								</li>
 							))}
 						</ul>
@@ -140,7 +140,7 @@ export default async function ProductById({ params }: Props) {
 						<ul className={tags_list}>
 							{tags?.map((tag) => (
 								<li key={tag.id}>
-									<Link href={`/search?tags=${tag.id}`}>{tag.name}</Link>
+									<Link href={`/tags?ids=${tag.id}`}>{tag.name}</Link>
 								</li>
 							))}
 						</ul>

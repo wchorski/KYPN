@@ -9,6 +9,7 @@ import fetchCategories from "@lib/fetchdata/fetchCats"
 import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import {
 	layout_site,
+	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
@@ -34,12 +35,12 @@ export const metadata: Metadata = {
 	description: envs.SITE_DESCRIPTION,
 }
 
-export default async function CategoriesPage({ params, searchParams }: Props) {
+export default async function CategoriesPage({ searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { page, ids } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = ids?.split(",") || []
-  
+
 	const {
 		posts,
 		count,
@@ -72,8 +73,8 @@ export default async function CategoriesPage({ params, searchParams }: Props) {
 					{" "}
 					Categories {categories ? ":" : null}
 				</h1>
-				<p style={{ marginTop: 0, color: "var(--c-primary)" }}>
-					{categories?.map((c) => c.name).join(", ")}
+				<p style={{ marginTop: "var(--space-s)" }}>
+					({count}) {categories?.map((c) => c.name).join(", ")}
 				</p>
 			</header>
 
@@ -81,8 +82,8 @@ export default async function CategoriesPage({ params, searchParams }: Props) {
 				<h4>Posts: </h4>
 				{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
 			</div>
-			<hr />
-			<footer className={layout_site}>
+			<footer className={layout_wide}>
+				<hr />
 				<Flex>
 					<Card>
 						<h4> All Categories</h4>

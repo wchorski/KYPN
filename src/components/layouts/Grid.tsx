@@ -39,10 +39,8 @@ type Props = {
 }
 
 export function Grid({
-	pad = 1,
-	imageSrc,
+  imageSrc,
 	color,
-	col,
 	layout = "1_1",
 	children,
 	content,
@@ -52,13 +50,15 @@ export function Grid({
 	className = "",
 	verticalAlign = "start",
 	horizontalAlign = "start",
-	isAuto = true,
 	colWidth,
-	alignContent = "center",
-	placeItems,
-	// placeContent = "stretch",
 	layoutWidth,
 	gridColumn,
+	// pad = 1,
+	// col,
+	// isAuto = true,
+	alignContent,
+	// placeItems,
+	// placeContent = "stretch",
 }: Props) {
 	const layoutStyle = (() => {
 		switch (layout) {
@@ -142,6 +142,7 @@ export function Grid({
 						key={i}
 						className={grid_item}
 						// style={{ alignContent: "center", justifyContent: "center" }}
+            style={{alignContent}}
 					>
 						{child}
 					</div>

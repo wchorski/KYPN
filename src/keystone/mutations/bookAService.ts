@@ -66,7 +66,6 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// const start = new Date(date + "T" + time).toISOString()
 
 			const start = dateToISOTimezone(date, time, timeZone)
-			console.log("mut: after dateToISOTimezone", { start })
 
 			// SERVICE
 			// const service = await context.withSession(session).query.Service.findOne({
@@ -217,7 +216,6 @@ export const bookAService = (base: BaseSchemaMeta) =>
 			// )
 			// const priceTotal = service.price + addonsCombinedPrice
 
-			console.log("mut: right before new booking", { start })
 			// BOOKING
 			const newBooking = await sudoContext().db.Booking.createOne({
 				data: {

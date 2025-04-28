@@ -1,4 +1,4 @@
-import Map from "@components/blocks/Map"
+import { IconLink } from "@components/elements/IconLink"
 import ErrorMessage from "@components/ErrorMessage"
 import fetchLocation from "@lib/fetchdata/fetchLocation"
 import { layout_content, page_layout } from "@styles/layout.module.css"
@@ -9,14 +9,11 @@ import { getServerSession } from "next-auth"
 import { nextAuthOptions } from "@/session"
 
 type Props = {
-	searchParams: { q: string }
+	// searchParams: { q: string }
 	params: { id: string }
 }
 
-export default async function LocationByIdPage({
-	params,
-	searchParams,
-}: Props) {
+export default async function LocationByIdPage({ params }: Props) {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { location, error } = await fetchLocation({
@@ -30,6 +27,12 @@ export default async function LocationByIdPage({
 
 	const { name, address, notes } = location
 
+	function isAddressURL(address: string) {
+		if (address.startsWith("/") || address.startsWith("http")) return true
+
+		return false
+	}
+
 	return (
 		<main className={page_layout}>
 			<header className={layout_content}>
@@ -37,10 +40,16 @@ export default async function LocationByIdPage({
 			</header>
 			<div className={layout_content}>
 				<article className={styles.location}>
-					<address>{address}</address>
+					{isAddressURL(address) ? (
+						<IconLink icon={"location"} href={address} className={'button medium'}>
+							<address>{address}</address>
+						</IconLink>
+					) : (
+						<address>{address}</address>
+					)}
 					<br />
 					<p>{notes}</p>
-					{address && <Map address={address} />}
+					{/* {address && <Map address={address} />} */}
 				</article>
 			</div>
 		</main>

@@ -67,6 +67,7 @@
 main.page_layout {
 	min-height: 70vh;
 	min-height: 70dvh;
+  align-content: start;
 }
 
 /* how am i gonna fix this? */

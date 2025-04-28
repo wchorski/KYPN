@@ -18,7 +18,7 @@ export type DashNavData = {
 }[]
 
 export function DashNav({ dashNavData }: Props) {
-	const { hash, setHash, removeHash } = useUrlHash()
+	const { hash, setHash } = useUrlHash()
 
 	const navListItems = (navData: DashNavData): JSX.Element[] => {
 		return navData

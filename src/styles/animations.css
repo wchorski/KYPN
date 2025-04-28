@@ -51,14 +51,13 @@ button:not([disabled]):active {
 	z-index: 0;
 	opacity: 1;
 }
-
+.anim_border_spin.top::before {
+  top: 0;
+}
 .anim_border_spin {
 	/* display: grid;
 	grid-template-areas: "stack"; */
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
+  position: relative;
 
 	/* & span {
 		grid-area: stack;
@@ -69,9 +68,11 @@ button:not([disabled]):active {
 	&::before {
 		content: "";
 		pointer-events: none;
+    position: absolute;
 		/* grid-area: stack; */
-
-		height: 1px;
+    grid-column: 1/-1;
+    grid-row: 1;
+		height: 2px;
 		/* place-self: end; */
 		background-color: var(--c-txt);
 		bottom: 0;
@@ -217,5 +218,24 @@ button:not([disabled]):active {
 	100% {
 		transform: translate(-50%, -8%);
 		opacity: 1;
+	}
+}
+
+.skeleton-card {
+  animation-name: bg_wipe;
+	animation-duration: 1000ms;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-fill-mode: both;
+	animation-timing-function: ease-out;
+  background-color: var(--c-txt-bg);
+}
+
+@keyframes bg_wipe {
+	0% {
+		opacity: 0.1;
+	}
+	100% {
+		opacity: 0.3;
 	}
 }

@@ -67,7 +67,7 @@
     "sass": "^1.86.0",
     "slate-dom": "^0.112.2",
     "stripe": "17.7.0",
-    "turbo": "^2.5.0",
+    "turbo": "^2.5.2",
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "devDependencies": {
