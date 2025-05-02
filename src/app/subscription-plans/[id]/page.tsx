@@ -17,12 +17,11 @@ import { plainObj } from "@lib/utils"
 import { category_list } from "@styles/categories.module.css"
 import { bg_c_accent } from "@styles/colorthemes.module.css"
 import {
-	featured_img,
 	price_text,
-	product_page,
 } from "@styles/ecommerce/product.module.css"
+import { featured } from "@styles/events/event.module.css"
+import { _1_1, grid } from "@styles/grid.module.css"
 import {
-	layout_site,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
@@ -75,8 +74,8 @@ export async function generateMetadata(
 		// 	url: host.email,
 		// })),
 		authors: {
-			name: author?.name || '',
-			url: author?.email || '',
+			name: author?.name || "",
+			url: author?.email || "",
 		},
 	}
 }
@@ -109,71 +108,75 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 		name,
 		description,
 		price,
-		stockMax,
 		author,
 		categories,
 		tags,
 		status,
 		billing_interval,
 		addons,
+		// stockMax,
 	} = subscriptionPlan
 
-	const addonOptions = addons.map((ad) => ({
-		name: ad.name,
-		label: ad.name,
-		id: ad.id,
-		isChecked: false,
-		price: ad.price,
-	}))
+	// const addonOptions = addons.map((ad) => ({
+	// 	name: ad.name,
+	// 	label: ad.name,
+	// 	id: ad.id,
+	// 	isChecked: false,
+	// 	price: ad.price,
+	// }))
 
 	return (
 		<main className={page_layout}>
-			<article className={[product_page, page_content, layout_site].join(" ")}>
-				<header className={"sticky"}>
-					<figure className={featured_img}>
-						{/* <figcaption>
-							<StatusBadge type={"product"} status={status} />
-						</figcaption> */}
-						<ImageDynamic photoIn={image} priority={true} />
-					</figure>
+			<article
+				className={[grid, _1_1].join(" ")}
+				style={{ gridColumn: "layout_site", gap: "var(--space-ml)" }}
+			>
+				<header>
+					<div style={{ position: "sticky", top: "9rem" }}>
+						<figure className={featured}>
+							<ImageDynamic photoIn={image} priority={true} />
+						</figure>
 
-					{canEdit(author, session) && (
-						<Card direction={"row"} gap={"var(--space-m)"}>
-							<StatusBadge status={status} type={"product"} />
-							<IconLink
-								icon={"edit"}
-								label={"Edit"}
-								href={envs.CMS_URL + `/subscription-plans/${id}`}
-							>
-								<span>Edit Product Details</span>
-							</IconLink>
-						</Card>
-					)}
+						{canEdit(author, session) && (
+							<Card direction={"row"} gap={"var(--space-m)"}>
+								<StatusBadge status={status} type={"product"} />
+								<IconLink
+									icon={"edit"}
+									label={"Edit"}
+									href={envs.CMS_URL + `/subscription-plans/${id}`}
+								>
+									<span>Edit Product Details</span>
+								</IconLink>
+							</Card>
+						)}
 
-					<Flex>
-						<ul className={category_list}>
-							{categories?.map((cat) => (
-								<li key={cat.id}>
-									<Link href={`/categories?ids=${cat.id}`}>{cat.name}</Link>
-								</li>
-							))}
-						</ul>
+						<Flex>
+							<ul className={category_list}>
+								{categories?.map((cat) => (
+									<li key={cat.id}>
+										<Link href={`/categories?ids=${cat.id}`}>{cat.name}</Link>
+									</li>
+								))}
+							</ul>
 
-						<ul className={tags_list}>
-							{tags?.map((tag) => (
-								<li key={tag.id}>
-									<Link href={`/tags?ids=${tag.id}`}>{tag.name}</Link>
-								</li>
-							))}
-						</ul>
-					</Flex>
+							<ul className={tags_list}>
+								{tags?.map((tag) => (
+									<li key={tag.id}>
+										<Link href={`/tags?ids=${tag.id}`}>{tag.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Flex>
+					</div>
 				</header>
 
-				<div className={"scroll-over"}>
+				<div className={page_content}>
 					<h1>{name}</h1>
 
 					{!session ? (
-						<CallbackLink className={'button medium'} >Login to Purchase</CallbackLink>
+						<CallbackLink className={"button medium"}>
+							Login to Purchase
+						</CallbackLink>
 					) : session?.data.role === null ? (
 						<VerifyEmailCard email={session.user.email} />
 					) : !["PUBLIC", "PRIVATE"].includes(status) ? (
@@ -199,7 +202,9 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 								{subscriptionPlan.trial_period_days > 0 && (
 									<>
 										<br />
-										<small className={["sub-text", 'pill', bg_c_accent].join(' ')} >
+										<small
+											className={["sub-text", "pill", bg_c_accent].join(" ")}
+										>
 											includes {subscriptionPlan.trial_period_days} day trial
 											period
 										</small>

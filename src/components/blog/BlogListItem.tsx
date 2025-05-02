@@ -34,8 +34,8 @@ export const BlogListItem = ({
 	excerpt,
 	featured_image,
 	featured_video,
-	dateModified,
-  dateCreated,
+	// dateModified,
+	dateCreated,
 	author,
 	buttonText = "read more",
 	status,
@@ -63,7 +63,7 @@ export const BlogListItem = ({
 					/>
 				</figure>
 			) : (
-				<Link href={`/posts/${slug}`}>
+				<Link href={slug ? `/posts/${slug}` : `posts/id/${id}`}>
 					<figure className={styles.featured_image}>
 						<ImageDynamic photoIn={featured_image} key={id} />
 						{/* <Image
@@ -76,52 +76,51 @@ export const BlogListItem = ({
 				</Link>
 			)}
 
-			
-				<header style={{ position: "relative" }}>
-					<Link href={`/posts/${slug}`} className="title">
-						<h3> {title} </h3>
-					</Link>
+			<header style={{ position: "relative" }}>
+				<Link href={`/posts/${slug}`} className="title">
+					<h3> {title} </h3>
+				</Link>
 
-					<div className={styles.meta}>
-						{author && (
-							<Link className="author" href={`/users/${author?.id}`}>
-								<span className="sub-text">
-									{" "}
-									<CgProfile />
-									{author?.name}
-								</span>
-							</Link>
-						)}
-						{dateCreated && (
-							<time className="sub-text" dateTime={dateCreated} title="Publication publish date">
-								
-									<FiCalendar />{" "}
-									{datePrettyLocal(dateCreated, "day")}
-								
-							</time>
-						)}
-						{/* <time dateTime={dateModified} title="Publication update date">
+				<div className={styles.meta}>
+					{author && (
+						<Link className="author" href={`/users/${author?.id}`}>
+							<span className="sub-text">
+								{" "}
+								<CgProfile />
+								{author?.name}
+							</span>
+						</Link>
+					)}
+					{dateCreated && (
+						<time
+							className="sub-text"
+							dateTime={dateCreated}
+							title="Publication publish date"
+						>
+							<FiCalendar /> {datePrettyLocal(dateCreated, "day")}
+						</time>
+					)}
+					{/* <time dateTime={dateModified} title="Publication update date">
 							<span className="sub-text">
 								<FiCalendar />
 								{datePrettyLocal(dateModified, "day")}
 							</span>
 						</time> */}
-					</div>
-				</header>
+				</div>
+			</header>
 
-				<p className="excerpt">
-					{excerpt}{" "}
-					<Link className="readmore" href={`/posts/${slug}`}>
-						<em>{buttonText}</em>
-					</Link>{" "}
-				</p>
+			<p className="excerpt">
+				{excerpt}{" "}
+				<Link className="readmore" href={`/posts/${slug}`}>
+					<em>{buttonText}</em>
+				</Link>{" "}
+			</p>
 
-				{/* <div className="menu admin">
+			{/* <div className="menu admin">
           <Link href={{ pathname: '/shop/products/update', query: { id: id }, }}> Edit ✏️ </Link>
           <AddToCart id={id} />
           <ProductDelete id={id}> Delete </ProductDelete>
         </div> */}
-			
 		</article>
 	)
 }

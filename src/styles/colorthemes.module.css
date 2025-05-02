@@ -1,6 +1,6 @@
 /* TODO add color theme for button, links, :hover, :focus, :active,  */
 .theme_base {
-  /* ? caused sticky nav to un-stick */
+	/* ? caused sticky nav to un-stick */
 	/* display: initial; */
 
 	& a {
@@ -87,9 +87,9 @@
 	border-color: var(--c-tertiary);
 	border-style: solid;
 
-  & :is(h1, h2, h3, h4, h5, h6):first-child {
-    color: var(--c-tertiary);
-  }
+	& :is(h1, h2, h3, h4, h5, h6):first-child {
+		color: var(--c-tertiary);
+	}
 	/* & h1,
 	& h2,
 	& h3,
@@ -105,9 +105,9 @@
 
 	& button,
 	& :global(.button) {
-		/* color: var(--c-tertiary); */
+		color: var(--c-txt-primary);
 		border-color: var(--c-tertiary);
-    background-color: var(--c-tertiary);
+		background-color: var(--c-tertiary);
 	}
 }
 .bg_c_accent :global {

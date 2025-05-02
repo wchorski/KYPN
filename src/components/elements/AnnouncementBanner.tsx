@@ -7,13 +7,13 @@ import type { ReactElement } from "react"
 
 import { nextAuthOptions } from "@/session"
 
-type Props = {
-  prop?:string
-}
+// type Props = {
+//   prop?:string
+// }
 
 // any type is a bug workaround
 // @ts-ignore
-export async function AnnouncementBanner ({ prop }:Props):ReactElement<any, any> {
+export async function AnnouncementBanner ():ReactElement<any, any> {
 
   const session = await getServerSession(nextAuthOptions)
   const {announcements, error } = await fetchAnnouncements(session)

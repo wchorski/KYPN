@@ -26,17 +26,17 @@ export const metadata: Metadata = {
 	description: envs.SITE_DESCRIPTION,
 }
 
-type Props = {
-	searchParams: { q: string }
-	params: { id: string }
-}
+// type Props = {
+// 	searchParams: { q: string }
+// 	params: { id: string }
+// }
 
 // throw new Error(
 // TODO
 // 	"allow payment installments with /lib/stripe > stripeCreateInstallmentPayment"
 // )
 
-export default async function CheckoutPage({ params, searchParams }: Props) {
+export default async function CheckoutPage() {
 	const session = await getServerSession(nextAuthOptions)
 	// const { data, error } = await fetch()
 	// if (error) return <ErrorPage error={error} ><p>data fetch error </p></ErrorPage>

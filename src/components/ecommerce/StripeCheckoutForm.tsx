@@ -42,7 +42,7 @@ export function StripeCheckoutForm({ user, email }: Props) {
 		const stripeResponse = await postStripeSession({ cartItems, user, email })
 		if (!stripeResponse.clientSecret) {
 			console.error("No clientSecret received from backend!")
-      setClientSecret(null)
+			setClientSecret(null)
 		} else {
 			setClientSecret(stripeResponse.clientSecret)
 		}
@@ -78,7 +78,7 @@ export function StripeCheckoutForm({ user, email }: Props) {
 		return <CartEmptyMessage />
 
 	return (
-		<div id="stripe-checkout">
+		<div id="stripe-checkout" style={{ gridColumn: "layout_site" }}>
 			<EmbeddedCheckoutProvider
 				stripe={stripePromise}
 				// options={options}

@@ -6,6 +6,7 @@
   overflow: hidden;
   justify-content: center;
   align-items: stretch;
+  box-sizing: border-box;
 
   interpolate-size: allow-keywords;
   transition: height, max-height 0.5s;

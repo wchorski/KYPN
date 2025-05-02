@@ -72,7 +72,7 @@ export default async function SubscriptionPlansPage({ searchParams }: Props) {
 			<header className={layout_full} style={{ marginTop: "3rem" }}>
 				<div className={layout_wide}>
 					<h1 style={{ textAlign: "center" }}> Subscription Plans </h1>
-					<hr className={layout_full} />
+					<hr />
 				</div>
 			</header>
 

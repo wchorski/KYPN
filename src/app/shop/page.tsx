@@ -11,6 +11,7 @@ import {
 	layout_full,
 	layout_site,
 	layout_wide,
+	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
 import type { Metadata } from "next"
@@ -64,11 +65,11 @@ export default async function ShopPage({ params, searchParams }: Props) {
 		<main className={page_layout}>
 			<header className={layout_full} style={{ marginTop: "3rem" }}>
 				<div className={layout_wide}>
-					<h1 style={{ textAlign: "center" }}> Shop </h1>
-					<hr className={layout_full} />
+					<h1 style={{ textAlign: "center", display: "none" }}> Shop </h1>
+					{/* <hr className={layout_full} /> */}
 				</div>
 			</header>
-			<div className={layout_site}>
+			<div className={page_content}>
 				<Content
 					services={services}
 					addons={addons}
@@ -120,14 +121,14 @@ function Content({
 	return (
 		<>
 			{products.length > 0 && (
-				<section style={{ marginBottom: "20vh" }}>
+				<section style={{ marginBottom: "20vh" }} className={layout_site}>
 					<h2 id="products">Products</h2>
 					<ArticleList items={products} type={"product"} buttonText={"view"} />
 					<Pagination route="/products" page={currPage} count={productsCount} />
 				</section>
 			)}
 			{subscriptionPlans.length > 0 && (
-				<section style={{ marginBottom: "20vh" }}>
+				<section style={{ marginBottom: "20vh" }} className={layout_site}>
 					<h2 id="subscription-plans">Subscription Plans</h2>
 					<ArticleList
 						items={subscriptionPlans}
@@ -143,7 +144,7 @@ function Content({
 			)}
 
 			{services.length > 0 && (
-				<section style={{ marginBottom: "20vh" }}>
+				<section style={{ marginBottom: "20vh" }} className={layout_site}>
 					<h2 id="services">Services</h2>
 					<ArticleList items={services} type={"service"} />
 					<Pagination
@@ -154,7 +155,10 @@ function Content({
 				</section>
 			)}
 			{addons.length > 0 && (
-				<section className={"mvh-m"}>
+				<section
+					className={layout_site}
+					// className={"mvh-m"}
+				>
 					<hr />
 					<h2 id="addons">Add-Ons</h2>
 					<InfoCardList items={infocardAddons || []} />
