@@ -1,20 +1,21 @@
-import React from "react"
-import { envs } from "../../envs"
+import type { NavigationProps } from "@keystone-6/core/admin-ui/components"
 import {
+	ListNavItems,
 	NavigationContainer,
 	NavItem,
-	ListNavItems,
 } from "@keystone-6/core/admin-ui/components"
-import type { NavigationProps } from "@keystone-6/core/admin-ui/components"
-import { useSession } from "next-auth/react"
-import { PiUsersThreeFill } from "react-icons/pi"
-import { BsFilePostFill, BsFillTicketPerforatedFill } from "react-icons/bs"
-import { IoBookmarks } from "react-icons/io5"
-import { FaTags } from "react-icons/fa6"
-import { TiShoppingCart } from "react-icons/ti"
-import { MdOutlineInventory2 } from "react-icons/md"
-import type { CSSProperties } from "react"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
+import type { CSSProperties } from "react"
+import React from "react"
+import { BsFilePostFill, BsFillTicketPerforatedFill } from "react-icons/bs"
+import { FaTags } from "react-icons/fa6"
+import { IoBookmarks } from "react-icons/io5"
+import { MdOutlineInventory2 } from "react-icons/md"
+import { PiUsersThreeFill } from "react-icons/pi"
+import { TiShoppingCart } from "react-icons/ti"
+
+import { envs } from "../../envs"
 
 export function CustomNavigation({
 	authenticatedItem,
@@ -28,7 +29,10 @@ export function CustomNavigation({
 		display: "flex",
 		gap: ".3rem",
 		flexDirection: "column",
+    minHeight: '90px'
 	} as CSSProperties
+
+
 
 	const lineSeperator = { border: "solid 1px #9999991f" } as CSSProperties
 

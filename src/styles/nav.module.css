@@ -39,7 +39,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-  height: 100%;
+  /* causes overflow */
+  /* height: 100%; */
 
 	& > li {
 		height: 100%;

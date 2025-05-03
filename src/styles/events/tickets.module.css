@@ -2,7 +2,7 @@ ul.tickets :global {
   padding: 0;
   margin: 0;
 
-  & li{
+  & > li{
     border: solid 1px var(--c-primary);
     margin-bottom: .2em;
     border-radius: var(--br-dull);
@@ -12,7 +12,7 @@ ul.tickets :global {
     flex-wrap: wrap;
     gap: var(--space-m);
 
-    & .qrbutton{
+    & > .qrbutton{
       margin-left: auto;
 
       display: grid;
@@ -33,8 +33,14 @@ ul.tickets :global {
   box-shadow: var(--boxs-1);
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   border-radius: var(--br-soft);
+}
+
+@media screen and (width < 837px) {
+  .ticket {
+    flex-wrap: wrap;
+  }
 }
 
 .meta_short{

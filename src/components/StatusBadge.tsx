@@ -47,6 +47,7 @@ export type StatusType =
   | { type: "any"; status?: string | null | undefined }
 
 export function StatusBadge({ type, status }: StatusType) {
+  // TODO add an icon depending on what `type` is chosen
 	if (!status) return null
   //@ts-ignore
 	const stylesArr = [styles.status, styles[status], 'status-badge'].join(" ")

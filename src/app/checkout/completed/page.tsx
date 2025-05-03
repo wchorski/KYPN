@@ -1,4 +1,3 @@
-
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
 const stripe = require("stripe")(envs.STRIPE_SECRET)
@@ -186,11 +185,12 @@ async function StripeCheckoutCheck({
 								status={stripeCheckoutSession.payment_status}
 							/>
 						</li>
-						{/* <li>checkout_id: {stripeCheckoutSession.id}</li>
-						<li>payment_intent: {stripeCheckoutSession.payment_intent}</li> */}
 					</ul>
-          <br />
-          <Link href={`/account#orders`} className={'button medium'} > View My Account</Link>
+					<br />
+					<Link href={`/account#orders`} className={"button medium"}>
+						{" "}
+						View My Account
+					</Link>
 
 					{/* <h3>Stripe Checkout Session Response Debug</h3>
 					<p>
@@ -199,6 +199,21 @@ async function StripeCheckoutCheck({
 					</p>
 					<pre>{JSON.stringify(stripeCheckoutSession, null, 2)}</pre> */}
 				</div>
+				<footer>
+          <hr />
+					<table style={{ gridColumn: "layout_breakout" }}>
+						<tbody>
+							<tr>
+								<td>checkout_id</td>
+								<td>{stripeCheckoutSession.id}</td>
+							</tr>
+							<tr>
+								<td>payment_intent</td>
+								<td>{stripeCheckoutSession.payment_intent}</td>
+							</tr>
+						</tbody>
+					</table>
+				</footer>
 			</main>
 		)
 	}

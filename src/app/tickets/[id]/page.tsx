@@ -3,7 +3,6 @@ import { QRCode } from "@components/elements/QRCodeSVG"
 import ErrorMessage from "@components/ErrorMessage"
 import ErrorPage from "@components/layouts/ErrorPage"
 import { DialogPopup } from "@components/menus/DialogPopup"
-import { LoginToViewPage } from "@components/menus/LoginToViewPage"
 import { VerifyEmailCard } from "@components/menus/VerifyEmailCard"
 import { StatusBadge } from "@components/StatusBadge"
 import { TicketRedeemForm } from "@components/tickets/TicketRedeemForm"
@@ -34,15 +33,15 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-	searchParams: { q: string }
+	// searchParams: { q: string }
 	params: { id: string }
 }
 
-export default async function TicketByIdPage({ params, searchParams }: Props) {
+export default async function TicketByIdPage({ params }: Props) {
 	const { id } = params
 
 	const session = await getServerSession(nextAuthOptions)
-	if (!session) return <LoginToViewPage />
+	if (!session) return notFound()
 
 	const {
 		ticket,
@@ -88,7 +87,20 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 			</DialogPopup>
 
 			<header className={layout_wide}>
-				<h1> Ticket </h1>
+				<h1 style={{ display: "none" }}> Ticket </h1>
+
+				{(hostIds.includes(session.itemId) ||
+					session.data.role.canManageTickets) && (
+					<>
+						<Link
+							className={"button large"}
+							href={`?${new URLSearchParams({ popup: "modal" })}`}
+						>
+							Redeem Ticket
+						</Link>
+						<hr />
+					</>
+				)}
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<article
@@ -120,7 +132,12 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						<li>{holder?.email || email}</li>
 					</ul>
 
-					<div className={[qrcode_wrap, "border-dash-march"].join(" ")}>
+					<div
+						className={[
+							qrcode_wrap,
+							["PAID", "RSVP"].includes(status) ? "border-dash-march" : "",
+						].join(" ")}
+					>
 						{["PAID", "RSVP"].includes(status) ? (
 							<QRCode text={envs.FRONTEND_URL + `/tickets/${id}?popup=modal`} />
 						) : (
@@ -128,19 +145,10 @@ export default async function TicketByIdPage({ params, searchParams }: Props) {
 						)}
 					</div>
 				</article>
-
-				<footer style={{ marginTop: "var(--space-l)" }}>
-					{(hostIds.includes(session.itemId) ||
-						session.data.role.canManageTickets) && (
-						<Link
-							className={"button large"}
-							href={`?${new URLSearchParams({ popup: "modal" })}`}
-						>
-							Redeem Ticket
-						</Link>
-					)}
-				</footer>
 			</div>
+			{/* <footer style={{ marginTop: "var(--space-l)" }}>
+        
+			</footer> */}
 		</main>
 	)
 }

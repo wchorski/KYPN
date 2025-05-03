@@ -18,11 +18,11 @@ import {
 } from "@lib/dateFormatter"
 import { fetchEvent } from "@lib/fetchdata/fetchEvent"
 import moneyFormatter from "@lib/moneyFormatter"
-import { IconCalendar, IconClockTime } from "@lib/useIcons"
+import { IconCalendar, IconClockTime, IconLocationPin } from "@lib/useIcons"
 import { plainObj } from "@lib/utils"
 import { category_list } from "@styles/categories.module.css"
 import { featured } from "@styles/events/event.module.css"
-import { _1_1, grid } from "@styles/grid.module.css"
+import { _1_1, grid, grid_icon_and_text_list } from "@styles/grid.module.css"
 import {
 	layout_wide,
 	page_content,
@@ -122,7 +122,7 @@ export default async function EventByID({ params }: Props) {
 	}
 
 	return (
-		<main className={page_layout} style={{ paddingTop: "var(--space-l)" }}>
+		<main className={page_layout} style={{ paddingTop: "var(--space-ml)" }}>
 			<DialogPopup title={summary} onClose={onClose} onOk={onOk} buttonLabel="">
 				<p>{datePrettyLocal(start, "full")}</p>
 				{session ? (
@@ -143,7 +143,7 @@ export default async function EventByID({ params }: Props) {
 			>
 				{/* <article className={[styleProduct.product].join(" ")}> */}
 				<header>
-					<div style={{ position: "sticky", top: "9rem" }}>
+					<div style={{ position: "sticky", top: "7rem" }}>
 						<figure className={featured}>
 							<ImageDynamic photoIn={image} priority={true} />
 						</figure>
@@ -154,9 +154,7 @@ export default async function EventByID({ params }: Props) {
 							<ul className={category_list}>
 								{categories?.map((cat) => (
 									<li key={cat.id}>
-										<Link href={`/categories?ids=${cat.id}`}>
-											{cat.name}
-										</Link>
+										<Link href={`/categories?ids=${cat.id}`}>{cat.name}</Link>
 									</li>
 								))}
 							</ul>
@@ -178,10 +176,11 @@ export default async function EventByID({ params }: Props) {
 				>
 					<h1>{summary}</h1>
 
-					<div
-					// className="info-cont"
-					>
-						<ul className="meta unstyled padding-0 gap-m">
+					<Flex gap={"l"}>
+						<ul
+							className={["meta unstyled padding-0 gap-m", grid_icon_and_text_list].join(' ')}
+							style={{ maxWidth: "32ch" }}
+						>
 							<li>
 								<IconCalendar /> {datePrettyLocalDay(start || "")}
 							</li>
@@ -191,13 +190,13 @@ export default async function EventByID({ params }: Props) {
 							{/* <li> capacity: {seats}</li> */}
 							{location && (
 								<li>
-									{/* <IconLocationPin />{" "}
+									<IconLocationPin />{" "}
 									<Link href={`/locations/${location.id}`}>
 										<address>
 											{location?.name} {location?.address}
 										</address>
-									</Link> */}
-									<IconLink
+									</Link>
+									{/* <IconLink
 										href={`/locations/${location.id}`}
 										icon={"location"}
 										style={{ gap: "0" }}
@@ -205,33 +204,33 @@ export default async function EventByID({ params }: Props) {
 										<address>
 											{location?.name} {location?.address}
 										</address>
-									</IconLink>
+									</IconLink> */}
 								</li>
 							)}
 						</ul>
-					</div>
 
-					<Card>
-						<Flex justifyContent={"space-between"} alignItems={"center"}>
-							{price > 0 ? (
-								<span style={{ alignContent: "center" }}>
-									{moneyFormatter(price)} per Ticket
-								</span>
-							) : (
-								<span style={{ alignContent: "center" }}>RSVP</span>
-							)}
+						<Card style={{ flex: "1" }}>
+							<Flex justifyContent={"space-between"} alignItems={"center"}>
+								{price > 0 ? (
+									<span style={{ alignContent: "center" }}>
+										{moneyFormatter(price)} per Ticket
+									</span>
+								) : (
+									<span style={{ alignContent: "center" }}>RSVP</span>
+								)}
 
-							{!session ? (
-								<CallbackLink className="button medium">
-									Login to Purchase
-								</CallbackLink>
-							) : session?.data.role === null ? (
-								<VerifyEmailCard email={session.user.email} />
-							) : (
-								<AddTicketButton date={start} status={status} />
-							)}
-						</Flex>
-					</Card>
+								{!session ? (
+									<CallbackLink className="button medium">
+										Login to Purchase
+									</CallbackLink>
+								) : session?.data.role === null ? (
+									<VerifyEmailCard email={session.user.email} />
+								) : (
+									<AddTicketButton date={start} status={status} />
+								)}
+							</Flex>
+						</Card>
+					</Flex>
 					{!isEmptyDocument(description?.document) && (
 						<>
 							<br />

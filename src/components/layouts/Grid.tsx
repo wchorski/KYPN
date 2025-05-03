@@ -41,7 +41,7 @@ type Props = {
 export function Grid({
   imageSrc,
 	color,
-	layout = "1_1",
+	layout = "1",
 	children,
 	content,
 	id,

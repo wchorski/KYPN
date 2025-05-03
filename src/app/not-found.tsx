@@ -1,11 +1,7 @@
 import { Header } from "@components/elements/Header"
-import {
-	layout_wide,
-	page_content,
-	page_layout,
-} from "@styles/layout.module.css"
+import RouteBackButton from "@components/menus/RouteBackButton"
+import { page_content, page_layout } from "@styles/layout.module.css"
 import type { Metadata } from "next"
-import Link from "next/link"
 import type { ReactNode } from "react"
 
 import { envs } from "@/envs"
@@ -35,7 +31,7 @@ export default function NoDataFoundError404({ children }: Props) {
 				</h1>
 			</Header>
 
-			<div className={[page_content, layout_wide].join(" ")}>
+			<div className={[page_content].join(" ")} style={{ textAlign: "center" }}>
 				<p className={styles.watermark}>
 					<span>4</span>
 					<span>0</span>
@@ -46,38 +42,11 @@ export default function NoDataFoundError404({ children }: Props) {
 				{!children && <p> This page does not exist. </p>}
 
 				<p>
-					<Link
-						href={`/`}
-						// onClick={handleLink}
-					>
+					<RouteBackButton style={{ marginInline: "auto" }}>
 						⇠ Return to previous Page
-					</Link>
+					</RouteBackButton>
 				</p>
 			</div>
 		</main>
-	)
-}
-
-function Main2(children: ReactNode) {
-	return (
-		<>
-			<center>
-				<p className={styles.watermark}>
-					<span>4</span>
-					<span>0</span>
-					<span>4</span>
-				</p>
-
-				{children}
-				{!children && <p> This page does not exist. </p>}
-
-				<Link
-					href={`/`}
-					// onClick={handleLink}
-				>
-					⇠ Return to previous Page
-				</Link>
-			</center>
-		</>
 	)
 }
