@@ -9,18 +9,16 @@ import { StatusBadge } from "@components/StatusBadge"
 import { findAllHeadings } from "@lib/contentHelpers"
 import fetchPage from "@lib/fetchdata/fetchPage"
 import {
-	layout_content,
-	layout_full,
 	layout_site,
 	layout_wide,
 	page_content,
 	page_layout,
 } from "@styles/layout.module.css"
-import type { ResolvingMetadata } from "next"
 import { notFound } from "next/navigation"
 import type { CSSProperties } from "react"
 
 import { envs } from "@/envs"
+const { SITE_TITLE } = envs
 export const revalidate = 5
 
 type Props = {
@@ -31,13 +29,15 @@ type Props = {
 
 export async function generateMetadata(
 	{ params }: Props,
-	parent: ResolvingMetadata
+	// parent: ResolvingMetadata
 ) {
 	const { slug } = await params
 	const { page, error } = await fetchPage(slug, QUERY_PAGE)
-
+  if(error) return {
+    title: "error | " + SITE_TITLE,
+  }
 	return {
-		title: page?.title || "404" + " | " + envs.SITE_TITLE,
+		title: slug === "home" ? SITE_TITLE : `${page?.title} | ${SITE_TITLE}` ,
 		description: envs.SITE_DESCRIPTION,
 	}
 }
