@@ -1,0 +1,13 @@
+.scroll_into_view {
+  animation: fade-in linear;
+  animation-timeline: view(250px);
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0.3;
+  } 
+  100% {
+    opacity: 1.0;
+  }
+}
