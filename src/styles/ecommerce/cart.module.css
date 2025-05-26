@@ -118,7 +118,7 @@ button.remove {
 .shoppingcart :global {
 	padding: 20px;
 	position: relative;
-	background: var(--c-desaturated);
+	background: var(--c-body);
 	position: fixed;
 	/* height: 100%; */
   height: 100vh;
@@ -187,8 +187,8 @@ button.knob {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background-color: var(--c-desaturated);
 	border: none;
+	border-bottom: var(--c-primary) 2px solid;
 	padding: 0.5rem 1rem;
 	font-size: 2rem;
 	transition: all 0.3s;

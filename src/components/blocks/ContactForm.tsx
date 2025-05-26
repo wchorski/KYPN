@@ -3,14 +3,11 @@ import { SubmitButton } from "@components/forms/SubmitButton"
 import { InputField } from "@components/InputField"
 import { TextareaField } from "@components/TextareaField"
 import { useForm } from "@hooks/useForm"
-import type {
-	ContactState} from "@lib/actions/actionContactFormSubmit";
-import {
-	actionContactFormSubmit
-} from "@lib/actions/actionContactFormSubmit"
+import type { ContactState } from "@lib/actions/actionContactFormSubmit"
+import { actionContactFormSubmit } from "@lib/actions/actionContactFormSubmit"
 import { form } from "@styles/menus/form.module.scss"
 import { useSession } from "next-auth/react"
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react"
 
 type Props = {
 	header?: string
@@ -84,6 +81,7 @@ export function ContactForm({
 					defaultValue={session?.user?.email || ""}
 					// defaultValue={state.values?.email}
 					error={state.valueErrors?.email}
+					required={true}
 				/>
 
 				<InputField

@@ -15,16 +15,11 @@ import { isEmptyDocument } from "@lib/contentHelpers"
 import fetchSubscriptionPlan from "@lib/fetchdata/fetchSubscriptionPlan"
 import { plainObj } from "@lib/utils"
 import { category_list } from "@styles/categories.module.css"
-import { bg_c_accent } from "@styles/colorthemes.module.css"
-import {
-	price_text,
-} from "@styles/ecommerce/product.module.css"
+import { bg_c_primary } from "@styles/colorthemes.module.css"
+import { price_text } from "@styles/ecommerce/product.module.css"
 import { featured } from "@styles/events/event.module.css"
 import { _1_1, grid } from "@styles/grid.module.css"
-import {
-	page_content,
-	page_layout,
-} from "@styles/layout.module.css"
+import { page_content, page_layout } from "@styles/layout.module.css"
 import { tags_list } from "@styles/tags.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
@@ -203,7 +198,7 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									<>
 										<br />
 										<small
-											className={["sub-text", "pill", bg_c_accent].join(" ")}
+											className={["sub-text", "pill", bg_c_primary].join(" ")}
 										>
 											includes {subscriptionPlan.trial_period_days} day trial
 											period
@@ -211,8 +206,13 @@ export default async function SubscriptionPlanByIdPage({ params }: Props) {
 									</>
 								)}
 							</span>
-
-							<p>Subscription</p>
+							<IconLink
+                className="button medium"
+								icon={"subscription"}
+								href={`/subscription-plan/${id}?popup=modal`}
+							>
+								Start Subscription
+							</IconLink>
 						</Card>
 					)}
 

@@ -30,6 +30,7 @@ type Props = {
 	searchParams: {
 		[key: string]: string | string[] | undefined
 		categories: string | undefined
+		categoryNames: string | undefined
 		page: string | undefined
 	}
 }
@@ -41,14 +42,16 @@ export const metadata: Metadata = {
 
 export default async function BlogFeedPage({ params, searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
-	const { page, categories } = await searchParams
+	const { page, categories, categoryNames } = await searchParams
 	const currPage = Number(page) || 1
 	const categoryIds = categories?.split(",") || []
+	const categoryNms = categoryNames?.split(",") || []
 
 	const { posts, count, error } = await fetchPosts({
 		query: QUERY_POSTS_ARTICLES,
 		page: currPage,
 		categoryIds,
+    categoryNames: categoryNms,
 		session,
 	})
 
@@ -133,6 +136,7 @@ const QUERY_POSTS_ARTICLES = `
     nameLast
   }
   dateModified
+  dateCreated
   excerpt
   pinned
   slug

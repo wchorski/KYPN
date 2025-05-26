@@ -17,9 +17,9 @@ services:
     networks:
       - this
 
-  backend:
-    container_name: ${IMAGE_BASE_NAME}-backend
-    image: ${IMAGE_BASE_NAME}-backend:latest # rename ALL 'cutefruit-kypn' to a unique name 
+  cms:
+    container_name: ${IMAGE_BASE_NAME}-cms
+    image: ${IMAGE_BASE_NAME}-cms:latest # rename ALL 'cutefruit-kypn' to a unique name 
     restart: unless-stopped
     env_file:
       - .env.prod
@@ -39,9 +39,9 @@ services:
     depends_on:
       - db
 
-  frontend:
-    container_name: ${IMAGE_BASE_NAME}-frontend
-    image: ${IMAGE_BASE_NAME}-frontend:latest # rename ALL 'cutefruit-kypn' to a unique name 
+  web:
+    container_name: ${IMAGE_BASE_NAME}-web
+    image: ${IMAGE_BASE_NAME}-web:latest # rename ALL 'cutefruit-kypn' to a unique name 
     restart: unless-stopped
     env_file:
       - .env.prod

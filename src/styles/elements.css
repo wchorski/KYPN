@@ -289,3 +289,7 @@ p:empty {
 .hidden {
 	display: none;
 }
+
+.mtauto {
+  margin-top: auto;
+}

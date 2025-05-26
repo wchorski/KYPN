@@ -42,8 +42,9 @@ export async function SessionBadge({ label }: Props): ReactElement<any, any> {
 						<Image
 							src={session.user.image}
 							alt={"user avatar"}
-							width={50}
-							height={50}
+							// width={50}
+							// height={50}
+              fill={true}
 							unoptimized={true}
 						/>
 					) : (

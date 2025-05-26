@@ -19,7 +19,7 @@ import moneyFormatter, {
 } from "@lib/moneyFormatter"
 import { IconCoupon, IconUserAccountAvatar } from "@lib/useIcons"
 import { booking_single } from "@styles/booking.module.css"
-import { bg_c_accent, bg_c_tertiary } from "@styles/colorthemes.module.css"
+import { bg_c_primary, bg_c_tertiary } from "@styles/colorthemes.module.css"
 import { item, perItemTotal } from "@styles/ecommerce/cart.module.css"
 import {
 	layout_breakout,
@@ -120,7 +120,7 @@ export default async function SubscriptionItemByIdPage({
 						href={`?${new URLSearchParams({ popup: "modal" })}`}
 					/>
 					{trial_end && isDateOlderThanNow(trial_end) && (
-						<div className={["pill", bg_c_accent].join(" ")}>
+						<div className={["pill", bg_c_primary].join(" ")}>
 							<span>Trial Ends: </span>
 							<time dateTime={trial_end}>
 								{datePrettyLocal(trial_end, "day")}

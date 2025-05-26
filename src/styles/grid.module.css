@@ -42,7 +42,7 @@
 ._1_1_1_1 {
 	grid-template-columns: repeat(
 		auto-fit,
-		minmax(calc(var(--w-sitemax) * 0.25), 1fr)
+		minmax(calc(var(--w-sitemax) * 0.20), 1fr)
 	);
 }
 

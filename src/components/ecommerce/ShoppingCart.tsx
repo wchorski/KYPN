@@ -14,7 +14,7 @@ import { CouponAddToCartForm } from "./CouponAddToCartForm"
 export function ShoppingCart() {
 	const elementRef = useRef<HTMLDivElement | null>(null)
 
-	const { isOpen, closeCart, cartItems, cartCount } = useCart()
+	const { isOpen, closeCart, cartItems } = useCart()
 
 	const handleClickOutside = useCallback(
 		(e: MouseEvent) => {

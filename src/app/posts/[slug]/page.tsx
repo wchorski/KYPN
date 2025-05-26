@@ -131,7 +131,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 					} as CSSProperties
 				}
 			>
-				<Header bgImage={featured_image} className={''}>
+				<Header bgImage={featured_image} className={""}>
 					<figure
 						className={featured_image_wrap}
 						style={
@@ -208,7 +208,10 @@ export default async function BlogPostBySlug({ params }: Props) {
 					<hr />
 				</Header>
 
-				<div className={[page_content, layout_full].join(" ")}>
+				<div
+					className={[page_content, layout_full].join(" ")}
+					style={{ paddingTop: "var(--space-xl)" }}
+				>
 					{featured_video && (
 						<div className="featured_video">
 							<YouTubeVideo url={featured_video} altText="featured video" />

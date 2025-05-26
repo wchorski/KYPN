@@ -1,6 +1,6 @@
 import type {  ColorsTheme, SpaceSize  } from "@ks/types"
 import { getColorTheme } from "@lib/styleHelpers"
-import { card } from "@styles/card.module.scss"
+import { card } from "@styles/card.module.css"
 import type { CSSProperties, ReactNode } from "react"
 
 type Props = {

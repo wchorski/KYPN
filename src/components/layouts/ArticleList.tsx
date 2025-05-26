@@ -154,10 +154,10 @@ export function ArticleItem({
 
 						<time
 							dateTime={String(dateModified)}
-							title="Publication update date"
+							title="Publication created date"
 							className="sub-text"
 						>
-							<IconCalendar /> {datePrettyLocal(String(dateModified), "day")}
+							<IconCalendar /> {datePrettyLocal(String(dateCreated), "day")}
 						</time>
 					</div>
 				)}
