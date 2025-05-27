@@ -180,7 +180,7 @@ blockquote {
 	margin-left: var(--space-m);
 	background-color: hsla(0, 0%, 0%, 0.11);
 
-	&:last-child {
+	& > p:last-child {
 		margin-bottom: 0;
 	}
 }

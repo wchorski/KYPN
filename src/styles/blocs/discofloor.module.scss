@@ -1,43 +1,43 @@
 .disco {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	row-gap: 20px;
+  column-gap: 39px;
+  // outline: yellow 1px solid;
 
-  @keyframes pulse {
-    0%{
-      opacity: 0;
-      filter: blur(20px);
-    }
-    // 60%{
-    //   opacity: 0;
-    //   filter: blur(20px);
-    // }
-    // 90%{
-    //   opacity: 0;
-    //   filter: blur(10px);
-    // }
-    // 95%{
-    //   opacity: .5;
-    //   filter: blur(10px);
-    // }
-    100%{
-      opacity: .9;
-      filter: blur(30px);
-    }
-  }
+	@keyframes pulse {
+		0% {
+      transform: scale(0.8);
+			opacity: 0;
+			filter: blur(10px);
+      animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		}
+		3% {
+      transform: scale(1.0);
+			opacity: 0.9;
+			filter: blur(3px);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+		}
+		100% {
+      transform: scale(0.4);
+			opacity: 0;
+			filter: blur(10px);
+		}
+	}
 }
 
 .grid_item {
-  aspect-ratio: 1/ 1;
-  display: flex;
-  align-items: center;
-  padding: 5%;
-  background-color: #1E1E1E;
-  color: #fff;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  animation-name: pulse;
-  opacity: 0;
-  
+	aspect-ratio: 1/ 1;
+	display: flex;
+	align-items: center;
+	padding: 5%;
+	background-color: #1e1e1e;
+	color: #fff;
+	animation-duration: 3s;
+	animation-iteration-count: infinite;
+	// animation-direction: alternate;
+	animation-direction: normal;
+	animation-name: pulse;
+	animation-timing-function: ease-out;
+	opacity: 0;
 }

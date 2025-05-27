@@ -9,7 +9,7 @@ import {
 	statusBadge,
 } from "@styles/blocs/infocard.module.css"
 import Link from "next/link"
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 
 export type InfoCard = {
 	id: string
@@ -24,11 +24,12 @@ export type InfoCard = {
 
 type Props = {
 	items: InfoCard[]
+	style?: CSSProperties
 }
 
-export function InfoCardList({ items }: Props) {
+export function InfoCardList({ items, style }: Props) {
 	return (
-		<ul className={cardlist} style={{ gridColumn: "layout_site" }}>
+		<ul className={cardlist} style={{ gridColumn: "layout_site", ...style }}>
 			{items.map((item, i) => (
 				<li key={i}>
 					<InfoCardItem item={item} />

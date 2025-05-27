@@ -38,6 +38,10 @@ import { Fragment } from "react"
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
 import { PriceGridTable } from "./PriceGridTable"
+import { ArticleList } from "@components/layouts/ArticleList"
+import { fetchPosts } from "@lib/fetchdata/fetchPosts"
+import { getServerSession } from "next-auth"
+import { nextAuthOptions } from "@/session"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -166,10 +170,44 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	iframe: (props) => {
 		return <IFrame {...props} />
 	},
-	
-	postslist: (props) => {
-		return <PostsList {...props} />
+
+	// postslist: (props) => {
+	// 	return <PostsList {...props} />
+	// },
+	postslist: async (props) => {
+		const session = await getServerSession(nextAuthOptions)
+		const { posts, error } = await fetchPosts({
+			page: 1,
+			categoryIds: props.categories.flatMap((cat: { id: string }) => cat.id),
+			// authorIds: [],
+			session,
+			query: `
+        id
+        slug
+        title
+        featured_image
+        excerpt
+        dateCreated
+        status
+        author {
+          id
+          name
+        }
+      `,
+		})
+		return (
+			<section style={{ gridColumn: "layout_site" }}>
+				<ArticleList
+					// {...props}
+					items={posts}
+					type={"post"}
+				/>
+			</section>
+		)
 	},
+	// postslist: (props) => {
+	// 	return <ArticleList {...props} type={"post"} />
+	// },
 	card: (props) => {
 		return <Card {...props} />
 	},

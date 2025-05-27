@@ -97,7 +97,7 @@ function BookingItem({ item }: { item: CartItem }) {
 				</h5>
 
 				<span className="sub-text">booking</span>
-
+        <br />
 				<time dateTime={start}>
 					{timeStampPrettyLocale(start, timeZone, "full")}
 				</time>

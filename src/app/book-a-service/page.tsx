@@ -65,7 +65,7 @@ export default async function BookingsPage({ searchParams }: Props) {
 					available <Link href={`/services`}>services</Link> and preferred
 					staff.
 				</p>
-				{!session && (
+				{/* {!session && (
 					<Callout intent={"warning"}>
 						<p>
 							Looks like you are browsing as a guest.{" "}
@@ -75,7 +75,7 @@ export default async function BookingsPage({ searchParams }: Props) {
 							one
 						</p>
 					</Callout>
-				)}
+				)} */}
         <hr />
 			</header>
 			<div className={[page_content, layout_wide].join(" ")}>

@@ -449,7 +449,7 @@ model SubscriptionPlan {
   status            String             @default("DRAFT")
   price             Int
   billing_interval  String             @default("month")
-  trial_period_days Int                @default(10)
+  trial_period_days Int                @default(1)
   stockMax          Int
   addons            Addon[]            @relation("Addon_subscriptionPlans")
   coupons           Coupon[]           @relation("Coupon_subscriptionPlans")
