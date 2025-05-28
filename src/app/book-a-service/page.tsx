@@ -1,7 +1,5 @@
-import { Callout } from "@components/blocks/Callout"
 import { BookingForm } from "@components/bookings/BookingForm4"
 import ErrorMessage from "@components/ErrorMessage"
-import { CallbackLink } from "@components/menus/CallbackLink"
 import fetchBookingFormData from "@lib/fetchdata/fetchBookingFormInfo"
 import { plainObj } from "@lib/utils"
 import {
@@ -60,10 +58,10 @@ export default async function BookingsPage({ searchParams }: Props) {
 		<main className={page_layout}>
 			<header className={layout_wide}>
 				<h1> Book a Service </h1>
-				<p>
-					To start a request, provide the event date, time, and location. Choose from the
-					available <Link href={`/services`}>services</Link> and preferred
-					staff.
+				<p className={"sub-text"}>
+					To start a request, provide the event date, time, and location. Choose
+					from the available <Link href={`/services`}>services</Link> and
+					preferred staff.
 				</p>
 				{/* {!session && (
 					<Callout intent={"warning"}>
@@ -76,7 +74,7 @@ export default async function BookingsPage({ searchParams }: Props) {
 						</p>
 					</Callout>
 				)} */}
-        <hr />
+				<hr />
 			</header>
 			<div className={[page_content, layout_wide].join(" ")}>
 				<BookingForm

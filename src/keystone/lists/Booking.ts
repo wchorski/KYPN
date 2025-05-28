@@ -24,7 +24,7 @@ import {
 import { mailBooking } from "../../lib/mail"
 import { isLoggedIn, permissions, rules } from "../access"
 import { componentBlocks } from "../blocks"
-import type { Addon,Service, User } from "../types";
+import type { Addon, Service, User } from "../types"
 import type { Lists } from ".keystone/types"
 
 // const EMAIL_ADDRESS = 'y@m'
@@ -138,7 +138,7 @@ export const Booking: Lists.Booking = list({
             `,
 					})) as Service
 
-          // console.log(service);
+					// console.log(service);
 
 					const addons = await context.query.Addon.findMany({
 						where: {
@@ -176,9 +176,9 @@ export const Booking: Lists.Booking = list({
 		name: text(),
 		status: select({
 			options: [
-        // TODO maybe make as "ASSIGNED" instead of confirmed to not confuse with order status?
+				// TODO maybe make as "ASSIGNED" instead of confirmed to not confuse with order status?
 				// { label: "Confirmed", value: "CONFIRMED" },
-        //? removing anything to do with money. 
+				//? removing anything to do with money.
 				// { label: "Paid", value: "PAID" },
 				// { label: "Down Payment", value: "DOWNPAYMENT" },
 				{ label: "Accepted", value: "ACCEPTED" },
@@ -269,6 +269,7 @@ export const Booking: Lists.Booking = list({
 			},
 		}),
 		orderItem: relationship({ ref: "OrderItem.booking", many: false }),
+		cartItem: relationship({ ref: "CartItem.booking", many: false }),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },
 			validation: { isRequired: true },
@@ -293,7 +294,7 @@ export const Booking: Lists.Booking = list({
 				// if (!resolvedData.service?.connect?.id || !resolvedData.service?.connect?.name)
 				// 	throw new Error("!!! No Service selected for booking")
 
-        // TODO move this to hooks:validate
+				// TODO move this to hooks:validate
 				if (resolvedData.service?.connect?.id) {
 					const service = await context.db.Service.findOne({
 						where: { id: resolvedData.service.connect.id },

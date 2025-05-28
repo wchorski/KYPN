@@ -3,8 +3,10 @@
 	position: relative;
 	height: 30px;
 	width: 30px;
-  border-radius: 50%;
+  border-radius: 35%;
   overflow: clip;
+  display: grid;
+  place-content: center;
 
 	& > img {
 		/* padding-right: 1rem; */

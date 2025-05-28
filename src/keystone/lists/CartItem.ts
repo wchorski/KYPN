@@ -145,7 +145,7 @@ export const CartItem: Lists.CartItem = list({
 		user: relationship({ ref: "User.cart" }),
 		coupon: relationship({ ref: "Coupon" }),
 		product: relationship({ ref: "Product" }),
-		booking: relationship({ ref: "Booking" }),
+		booking: relationship({ ref: "Booking.cartItem" }),
 		rental: relationship({ ref: "Rental" }),
 		event: relationship({ ref: "Event" }),
 		// subscriptionItem: relationship({ ref: "SubscriptionItem" }),

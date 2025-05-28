@@ -550,6 +550,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 				>
 					<fieldset>
 						<legend> The What </legend>
+						<p className={"sub-text"}>
+							Choose the service, staff, and location you would like to book
+						</p>
 
 						<SelectField
 							name={"serviceId"}
@@ -655,6 +658,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 					<fieldset>
 						<legend> The When </legend>
+						<p className={"sub-text"}>
+							Hold the date and time. Blackout dates will update according to
+							staff and service picked.
+						</p>
 						<InputField
 							name={"date"}
 							label={"day of event"}
@@ -728,6 +735,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 					<fieldset>
 						<legend> The Who </legend>
+						<p className={"sub-text"}>
+							Let us know if you&apos;re booking for yourself or for someone
+							else. Note down any unique requests.
+						</p>
 						<InputField
 							name={"customerId"}
 							type={"hidden"}
@@ -800,9 +811,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 								to your records. A follow up email or phone call will be made
 								with the contact provided
 							</p>
-							<p className={["pill", bg_c_reverse_theme].join(" ")}>
+							<pre>
 								CartItemId: {state.cartItem.id}
-							</p>
+							</pre>
 						</Callout>
 					) : (
 						<>

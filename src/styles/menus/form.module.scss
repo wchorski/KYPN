@@ -97,6 +97,8 @@
 	box-shadow: var(--shadow-1);
 	background-color: var(--c-txt-bg-darker);
 	height: fit-content;
+	display: grid;
+	gap: var(--space-m);
 
 	label {
 		display: grid;
@@ -359,7 +361,7 @@
 .input_label :global {
 	display: grid;
 	gap: 0.2rem;
-  flex: 1;
+	flex: 1;
 
 	span.label:first-child {
 		font-weight: bold;
@@ -465,33 +467,32 @@ label.coupon {
 
 fieldset.inline_w_submit {
 	display: flex;
-  // flex-wrap: wrap;
-  margin: 0;
+	// flex-wrap: wrap;
+	margin: 0;
 
-  & label {
-    width: 100%;
-  }
-
-  & {
-    input {
-      width: 100%;
-    }
-  }
-
-	& label > span:first-child {
-      
-			display: none;
+	& label {
+		width: 100%;
 	}
 
-  & button[type="submit"]{
-    font-size: 1rem;
-    padding: var(--space-s);
-    margin-left: auto;
-  }
+	& {
+		input {
+			width: 100%;
+		}
+	}
+
+	& label > span:first-child {
+		display: none;
+	}
+
+	& button[type="submit"] {
+		font-size: 1rem;
+		padding: var(--space-s);
+		margin-left: auto;
+	}
 }
 
 fieldset.stand_alone {
-  border-width: 2px;
-  border-color: var(--c-seperator);
-  padding: var(--space-m);
+	border-width: 2px;
+	border-color: var(--c-seperator);
+	padding: var(--space-m);
 }

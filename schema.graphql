@@ -542,6 +542,7 @@ type Booking {
   secretNotes: String
   revision: Int
   orderItem: OrderItem
+  cartItem: CartItem
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -578,6 +579,7 @@ input BookingWhereInput {
   secretNotes: StringFilter
   revision: IntFilter
   orderItem: OrderItemWhereInput
+  cartItem: CartItemWhereInput
   dateCreated: DateTimeFilter
   dateModified: DateTimeFilter
 }
@@ -631,6 +633,7 @@ input BookingUpdateInput {
   secretNotes: String
   revision: Int
   orderItem: OrderItemRelateToOneForUpdateInput
+  cartItem: CartItemRelateToOneForUpdateInput
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -668,6 +671,12 @@ input OrderItemRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input CartItemRelateToOneForUpdateInput {
+  create: CartItemCreateInput
+  connect: CartItemWhereUniqueInput
+  disconnect: Boolean
+}
+
 input BookingUpdateArgs {
   where: BookingWhereUniqueInput!
   data: BookingUpdateInput!
@@ -693,6 +702,7 @@ input BookingCreateInput {
   secretNotes: String
   revision: Int
   orderItem: OrderItemRelateToOneForCreateInput
+  cartItem: CartItemRelateToOneForCreateInput
   dateCreated: DateTime
   dateModified: DateTime
   google: JSON
@@ -721,6 +731,11 @@ input UserRelateToManyForCreateInput {
 input OrderItemRelateToOneForCreateInput {
   create: OrderItemCreateInput
   connect: OrderItemWhereUniqueInput
+}
+
+input CartItemRelateToOneForCreateInput {
+  create: CartItemCreateInput
+  connect: CartItemWhereUniqueInput
 }
 
 type CartItem {
