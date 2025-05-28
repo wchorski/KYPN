@@ -1,34 +1,35 @@
 "use client"
-// import LightGallery from 'lightgallery/react';
+import LightGallery from "lightgallery/react"
 
 // import styles
-//TODO bring back the light box
-// import 'lightgallery/css/lightgallery.css';
-// import 'lightgallery/css/lg-zoom.css';
-// import 'lightgallery/css/lg-thumbnail.css';
+// TODO bring back the light box
+import "lightgallery/css/lightgallery.css"
+import "lightgallery/css/lg-zoom.css"
+import "lightgallery/css/lg-thumbnail.css"
 
 // // If you want you can use SCSS instead of css
 // import 'lightgallery/scss/lightgallery.scss';
 // import 'lightgallery/scss/lg-zoom.scss';
 
 // import plugins if you need
-// import lgThumbnail from 'lightgallery/plugins/thumbnail';
-// import lgZoom from 'lightgallery/plugins/zoom';
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+
 import styles, { gallery } from "@styles/blocs/imagegallery.module.css"
-import type { CSSProperties} from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react"
 
 type Image = {
 	src: string
 	alt: string
 	caption?: string
-	objFit?: CSSProperties['objectFit']
+	objFit?: CSSProperties["objectFit"]
 }
 
 type Props = {
 	items: Image[]
 	layout: "grid" | "masonry"
 	columns: number
-	objectFit: CSSProperties['objectFit']
+	objectFit: CSSProperties["objectFit"]
 	gap: number
 }
 
@@ -80,24 +81,27 @@ export function ImageGallery(props: Props) {
 		layout = "grid",
 	} = props
 
-	// const lightGallery = useRef<any>(null);
+	const lightGallery = useRef<any>(null);
 
-	// const onInit = useCallback((detail:any) => {
-	//   if(detail) lightGallery.current = detail.instance;
+	const onInit = useCallback((detail:any) => {
+	  if(detail) lightGallery.current = detail.instance;
 
-	// }, [])
+	}, [])
 
-	// useEffect(() => {
-	//   lightGallery.current.refresh();
-	// }, [items]);
+	useEffect(() => {
+	  lightGallery.current.refresh();
+	}, [items]);
 
 	const colName = `col_${columns}`
 	const gapName = `gap_${gap}`
 
 	if (items.length > 0)
 		return (
-			<div
-				className={[
+			<LightGallery
+				onInit={onInit}
+				speed={500}
+				plugins={[lgThumbnail, lgZoom]}
+				elementClassNames={[
 					"gallery",
 					// @ts-ignore
 					styles[colName],
@@ -116,13 +120,38 @@ export function ImageGallery(props: Props) {
 						key={i}
 					/>
 				))}
-			</div>
+			</LightGallery>
 		)
+	// if (items.length > 0)
+	// 	return (
+	// 		<div
+	// 			className={[
+	// 				"gallery",
+	// 				// @ts-ignore
+	// 				styles[colName],
+	// 				// @ts-ignore
+	// 				styles[gapName],
+	// 				styles[layout],
+	// 				gallery,
+	// 			].join(" ")}
+	// 		>
+	// 			{items.map((img, i) => (
+	// 				<ImageFrame
+	// 					src={img.src}
+	// 					alt={img.alt}
+	// 					objFit={objectFit}
+	// 					caption={img.caption}
+	// 					key={i}
+	// 				/>
+	// 			))}
+	// 		</div>
+	// 	)
 
 	return null
 }
 // todo try using Lightbox gallery again?
-/* <LightGallery
+{
+	/* <LightGallery
   onInit={onInit}
   speed={500}
   plugins={[lgThumbnail, lgZoom]}
@@ -139,6 +168,7 @@ export function ImageGallery(props: Props) {
     <ImageFrame src={img.src} alt={img.alt} objFit={objFit} caption={img.caption} key={i}/>
   ))}
 </LightGallery> */
+}
 
 function ImageFrame({ src, alt, caption, objFit }: Image) {
 	return (
