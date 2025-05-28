@@ -10,6 +10,7 @@ import {
 	layout_wide,
 	page_content,
 	page_layout,
+	sticky_aside,
 } from "@styles/layout.module.css"
 import type { Metadata, ResolvingMetadata } from "next"
 import Link from "next/link"
@@ -18,6 +19,14 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { _1_1, grid } from "@styles/grid.module.css"
+import { isEmptyDocument } from "@lib/contentHelpers"
+import { StatusBadge } from "@components/StatusBadge"
+import { IconLink } from "@components/elements/IconLink"
+import Flex from "@components/layouts/Flex"
+import { tags_list } from "@styles/tags.module.css"
+import { category_list } from "@styles/categories.module.css"
+import { featured } from "@styles/events/event.module.css"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -38,7 +47,7 @@ type Props = {
 	params: { id: string }
 }
 
-export default async function AddonByIdPage({ params, searchParams }: Props) {
+export default async function AddonByIdPage({ params }: Props) {
 	const { id } = await params
 	const session = await getServerSession(nextAuthOptions)
 	const { addon, error } = await fetchAddon({ id, query: QUERY, session })
@@ -51,47 +60,101 @@ export default async function AddonByIdPage({ params, searchParams }: Props) {
 		)
 	if (!addon) return notFound()
 
-	const { name, excerpt, price, image, services, categories, tags } = addon
+	const {
+		name,
+		excerpt,
+		price,
+		image,
+		services,
+		categories,
+		tags,
+		author,
+		status,
+	} = addon
 
 	return (
-		<main className={page_layout}>
-			<header style={{ marginTop: "5rem", display: "grid" }}>
-				<Grid className={layout_breakout} layout={'1_1'}>
-					<div>
-						<h1> {name} </h1>
-						<p className="sub-text">add-on</p>
+		<main className={page_layout} style={{ paddingTop: "var(--space-l)" }}>
+			<article
+				className={[grid, _1_1].join(" ")}
+				style={{ gridColumn: "layout_wide", gap: "var(--space-ml)" }}
+			>
+				<header>
+					<div
+						className={[sticky_aside, grid].join(" ")}
+						style={{ gap: "var(--space-ms)" }}
+					>
+						<figure className={featured}>
+							<ImageDynamic
+								photoIn={image}
+								priority={true}
+								alt={`Featured Image for ${name} Service`}
+							/>
+						</figure>
+
+						<Flex>
+							<ul className={category_list}>
+								{categories?.map((cat) => (
+									<li key={cat.id}>
+										<Link href={`/categories?ids=${cat.id}`}>{cat.name}</Link>
+									</li>
+								))}
+							</ul>
+
+							<ul className={tags_list}>
+								{tags?.map((tag) => (
+									<li key={tag.id}>
+										<Link href={`/tags?ids=${tag.id}`}>{tag.name}</Link>
+									</li>
+								))}
+							</ul>
+						</Flex>
+
+						{(session?.data.role?.canManagePosts || status !== "PUBLIC") && (
+							<Card
+								direction={"row"}
+								gap={"var(--space-m)"}
+								verticleAlign={"center"}
+							>
+								<StatusBadge type={"service"} status={status} />
+								{(author?.id === session?.itemId ||
+									session?.data?.role?.canManagePosts) && (
+									<IconLink
+										icon={"edit"}
+										href={envs.CMS_URL + `/services/${id}`}
+										label={"edit"}
+									/>
+								)}
+							</Card>
+						)}
 					</div>
-					<ImageDynamic photoIn={image} />
-				</Grid>
-			</header>
-			<div className={page_content}>
-				<section className={layout_wide}>
-					<PriceTag price={price} />
-					<Card>
-						<p> {excerpt} </p>
-					</Card>
+				</header>
 
-					<p>
-						<Link href={`/services#addons`}> Other Addons </Link>
-					</p>
-				</section>
-				<hr />
-				<section className={layout_wide}>
-					<h2> Related Services </h2>
-					<List>
-						{services?.map((serv) => (
-							<div key={serv.id}>
-								<Link href={`/services/${serv.id}`}>{serv.name}</Link>
-							</div>
-						))}
-					</List>
+				<div className={page_content}>
+					<h1> {name} </h1>
 
-					<Link href={`/book-a-service`} className="button large">
-						{" "}
-						Book a Service{" "}
-					</Link>
-				</section>
-			</div>
+					<PriceTag price={price} style={{ fontSize: "var(--space-l)" }} />
+					{excerpt && (
+						<Card>
+							<p>{excerpt}</p>
+						</Card>
+					)}
+				</div>
+			</article>
+
+			<hr />
+			<footer className={layout_wide}>
+				<h2> Related Services </h2>
+				<p className={"sub-text"}>
+					Upon checkout, customize your packages with this add-ons
+				</p>
+				<List>
+					{services?.map((serv) => (
+						<div key={serv.id}>
+							<Link href={`/services/${serv.id}`}>{serv.name}</Link>
+						</div>
+					))}
+				</List>
+			</footer>
 		</main>
 	)
 }
@@ -102,6 +165,7 @@ const QUERY = `
   excerpt
   price
   image
+  status
   services {
     id
     name
@@ -112,6 +176,11 @@ const QUERY = `
   }
   tags {
     id
+    name
+  }
+  author {
+    id
+    email
     name
   }
 `

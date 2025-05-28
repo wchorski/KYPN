@@ -6,7 +6,7 @@ import { ImageDynamic } from "@components/elements/ImageDynamic"
 import { NoData } from "@components/elements/NoData"
 import { GridList } from "@components/layouts/GridList"
 import { StatusBadge } from "@components/StatusBadge"
-import type { Post, Product, Service, SubscriptionPlan } from "@ks/types"
+import type { Addon, Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
 import styles, { list, post_card } from "@styles/articles.module.css"
@@ -16,8 +16,14 @@ import Flex from "./Flex"
 export const revalidate = 5
 
 type Props = {
-	type: "post" | "product" | "service" | "subscriptionPlan"
-	items: Post[] | Product[] | Service[] | SubscriptionPlan[] | undefined
+	type: "post" | "product" | "service" | "subscriptionPlan" | "addon"
+	items:
+		| Post[]
+		| Product[]
+		| Service[]
+		| SubscriptionPlan[]
+		| Addon[]
+		| undefined
 	buttonText?: string
 }
 
@@ -52,6 +58,10 @@ type ArticleItem = {
 			type: "subscriptionPlan"
 			item: SubscriptionPlan
 	  }
+	| {
+			type: "addon"
+			item: Addon
+	  }
 )
 
 export function ArticleItem({
@@ -71,6 +81,8 @@ export function ArticleItem({
 			case "service":
 			case "subscriptionPlan":
 				return item.image
+			case "addon":
+				return item.image
 
 			default:
 				return undefined
@@ -84,6 +96,8 @@ export function ArticleItem({
 			case "product":
 			case "service":
 			case "subscriptionPlan":
+				return item.name
+			case "addon":
 				return item.name
 
 			default:
@@ -102,7 +116,7 @@ export function ArticleItem({
 				return `/subscription-plans/${item.id}`
 
 			default:
-				return ""
+				return `/${type + "s"}/${id}`
 		}
 	})()
 
@@ -213,6 +227,21 @@ export function ArticleItem({
 							href={`/subscription-plans/${item.id}?popup=modal`}
 						/>
 					</>
+				) : type === "addon" ? (
+					<Flex justifyContent={"space-between"} alignItems={"center"}>
+						<PriceTag price={item.price} hideZeroCents={true} />
+						<Link className="readmore" href={link}>
+							<em>{buttonText}</em>
+						</Link>
+						{/* <AddToCartForm
+							type={"SALE"}
+							eventId={undefined}
+							productId={item.id}
+							// subscriptionPlanId={undefined}
+							itemStatus={status || ""}
+							buttonText={"Buy"}
+						/> */}
+					</Flex>
 				) : (
 					<Link className="readmore" href={link}>
 						<em>{buttonText}</em>
