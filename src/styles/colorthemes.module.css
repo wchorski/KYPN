@@ -176,6 +176,13 @@
 	/* --c-primary: color-mix(in hsl, blue, black 1%); */
 }
 
+.c_theme_dark {
+  /* TODO how to override color set in `body`? */
+  color: #d3d3d3;
+	--c-txt: #d3d3d3;
+	--c-header: hsl(195, 100%, 98%);
+}
+
 .gradient_accent_teriary {
 	background-image: linear-gradient(
 		to right,

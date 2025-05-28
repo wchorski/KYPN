@@ -3,11 +3,22 @@
 	gap: var(--space-ms);
 	flex-wrap: wrap;
 }
+@media (prefers-color-scheme: light) {
+	.nav {
+		--c-nav: rgba(0, 0, 0, 0.829);
+	}
+}
+@media (prefers-color-scheme: light) {
+	.nav {
+		--c-nav: rgba(255, 255, 255, 0.773);
+	}
+}
 
 .nav {
 	grid-column: layout_full;
 	backdrop-filter: blur(10px);
 	background-color: var(--c-nav);
+	/* background-color: green; */
 	width: 100%;
 	overflow-x: clip;
 
@@ -39,8 +50,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-  /* causes overflow */
-  /* height: 100%; */
+	/* causes overflow */
+	/* height: 100%; */
 
 	& > li {
 		height: 100%;
@@ -100,8 +111,8 @@ ul.open {
 	backdrop-filter: blur(10px);
 }
 
-.nav:has(.open){
-  position: fixed; 
+.nav:has(.open) {
+	position: fixed;
 }
 
 .navlink {

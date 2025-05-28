@@ -43,16 +43,16 @@
 @media (prefers-color-scheme: light) {
   :root {
     --c-body: hsl(0, 0%, 93%);
-    --c-nav: rgba(0, 0, 0, 0.78);
+    --c-nav: rgba(255, 255, 255, 0.78);
     --c-footer: rgb(36, 36, 36);
     --c-code-bg: rgb(32, 30, 30);
     --c-code: rgb(214, 209, 209);
     --c-header: hsl(193, 37%, 10%);
-    --c-txt: #7b7a7a;
+    --c-txt: #3f3f3f;
     --c-txt-rev: white;
     --c-txt-bg: hsl(0, 0%, 100%);
     --c-txt-bg-rev: hsl(197deg 8.74% 24.25%);
-    --c-txt-bg-darker: hsl(190, 7%, 84%);
+    --c-txt-bg-darker: #f7f7f7;
     --c-txt-primary: rgb(44, 44, 44);
     --c-txt-primary-h: black;
     --c-txt-accent: black;
@@ -101,7 +101,7 @@
       #00000010,
       #00000080
     );
-    --shadow-1: 3px 2px 10px #00000026;
+    --shadow-1: 3px 2px 2px #00000026;
     --shadow-2: 2px 0px 10px #0000003b;
     --shadow-3: 2px 4px 6px rgba(73, 73, 73, 0.45);
     --shadow-4: 3px 3px 4px #0000004d;

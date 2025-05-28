@@ -168,14 +168,14 @@ export default async function BlogPostBySlug({ params }: Props) {
 						{dateCreated && (
 							<li>
 								<time dateTime={String(dateCreated)} title="date first posted">
-									<span className="sub-text">
-										<TbCalendarMonth />
+									<span className="sub-text flex gap-s">
+										<TbCalendarMonth /> {" "}
 										{datePrettyLocal(String(dateCreated), "day")}
 									</span>
 								</time>
 							</li>
 						)}
-						{dateModified && (
+						{/* {dateModified && (
 							<li>
 								<time
 									dateTime={String(dateModified)}
@@ -187,7 +187,7 @@ export default async function BlogPostBySlug({ params }: Props) {
 									</span>
 								</time>
 							</li>
-						)}
+						)} */}
 						<li>
 							<ShareButton textToCopy={envs.FRONTEND_URL + `/posts/id/${id}`} />
 						</li>
