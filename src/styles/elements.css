@@ -78,37 +78,6 @@ button {
 	}
 }
 
-/* form,
-fieldset {
-	padding: var(--space-m);
-
-	& label {
-		gap: var(--space-ms);
-	}
-	& label:has(
-			input[type="email"],
-			input[type="number"],
-			input[type="search"],
-			input[type="text"],
-			input[type="tel"],
-			input[type="url"],
-			input[type="password"],
-			textarea,
-			select
-		) {
-		display: grid;
-	}
-
-	& label:has(input[type="checkbox"], input[type="radio"]) {
-		display: flex;
-		align-content: center;
-		cursor: pointer;
-
-		input {
-			width: var(--space-ml);
-		}
-	}
-} */
 input[type="checkbox"],
 input[type="radio"],
 select {

@@ -28,12 +28,11 @@ export const Page: Lists.Page = list({
 		},
 	},
 
-  ui: {
+	ui: {
 		hideCreate: (args) => !permissions.canManagePages(args),
 		hideDelete: (args) => !permissions.canManagePages(args),
 		isHidden: (args) => !permissions.canManagePages(args),
 	},
-  
 
 	fields: {
 		title: text({ validation: { isRequired: true, length: { min: 3 } } }),
@@ -42,8 +41,7 @@ export const Page: Lists.Page = list({
 			validation: { isRequired: true },
 			hooks: {
 				resolveInput: ({ inputData, operation }) => {
-          
-          if (operation === "create") {          
+					if (operation === "create" || operation === "update") {
 						if (inputData.slug) {
 							return slugFormat(inputData.slug)
 						} else if (inputData.title) {
@@ -57,8 +55,17 @@ export const Page: Lists.Page = list({
 					"Warning! Changing the slug will break links that were previously shared",
 			},
 		}),
-		dateCreated: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
-		dateModified: timestamp({ defaultValue: { kind: "now" }, validation: { isRequired: true }, }),
+		dateCreated: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+		}),
+		dateModified: timestamp({
+			defaultValue: { kind: "now" },
+			validation: { isRequired: true },
+			db: {
+				updatedAt: true,
+			},
+		}),
 		status: select({
 			options: [
 				{ label: "Draft", value: "DRAFT" },
@@ -173,10 +180,6 @@ export const Page: Lists.Page = list({
 				if (currUserId && !resolvedData.author) {
 					resolvedData.author = { connect: { id: currUserId } }
 				}
-			}
-
-			if (operation === "update") {
-				resolvedData.dateModified = new Date().toISOString()
 			}
 		},
 	},

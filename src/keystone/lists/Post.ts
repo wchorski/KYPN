@@ -54,7 +54,7 @@ export const Post: Lists.Post = list({
 				"dateCreated",
 				"dateModified",
 				"author",
-        "categories"
+				"categories",
 			],
 			initialSort: { field: "dateCreated", direction: "DESC" },
 		},
@@ -78,7 +78,7 @@ export const Post: Lists.Post = list({
 			validation: { isRequired: true },
 			hooks: {
 				resolveInput: ({ inputData, operation }) => {
-					if (operation === "create") {
+					if (operation === "create" || operation || "update") {
 						if (inputData.slug) {
 							return slugFormat(inputData.slug)
 						} else if (inputData.title) {
@@ -210,6 +210,9 @@ export const Post: Lists.Post = list({
 				dateModified: timestamp({
 					defaultValue: { kind: "now" },
 					validation: { isRequired: true },
+					db: {
+						updatedAt: true,
+					},
 				}),
 			},
 		}),
@@ -222,9 +225,6 @@ export const Post: Lists.Post = list({
 				if (currUserId && !resolvedData.author) {
 					resolvedData.author = { connect: { id: currUserId } }
 				}
-			}
-			if (operation === "update") {
-				resolvedData.dateModified = new Date().toISOString()
 			}
 		},
 	},

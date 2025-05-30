@@ -38,7 +38,14 @@ export const CartItem: Lists.CartItem = list({
 
 	ui: {
 		listView: {
-			initialColumns: ["user", "email", "type", "quantity", "subTotal", "dateModified"],
+			initialColumns: [
+				"user",
+				"email",
+				"type",
+				"quantity",
+				"subTotal",
+				"dateModified",
+			],
 			initialSort: { field: "dateModified", direction: "DESC" },
 		},
 	},
@@ -129,7 +136,7 @@ export const CartItem: Lists.CartItem = list({
 
 					// TODO does this take into account addons added to booking?
 					if (item.bookingId) {
-            // TODO a work around. kinda lazy but shouldn't be sensative info
+						// TODO a work around. kinda lazy but shouldn't be sensative info
 						const booking = await context.sudo().query.Booking.findOne({
 							where: { id: item.bookingId || "no_product" },
 							query: `price`,
@@ -273,7 +280,7 @@ export const CartItem: Lists.CartItem = list({
 				console.log(
 					"🐸🐸🐸 check that cartItem can only have one of item type 🐸🐸🐸"
 				)
-				
+
 				if (!hasOnlyOne)
 					throw new Error(
 						`!!! Cart Item can only have one of [${validationStrings.join(

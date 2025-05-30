@@ -152,7 +152,8 @@ textarea,
 select {
 	background-color: var(--c-txt-bg);
 	border-color: var(--c-seperator);
-	box-shadow: var(--shadow-1), var(--shadow-1-inset);
+  /* TODO did not update from var >:[ */
+	box-shadow: 2px 1px 2px #00000026, var(--shadow-1-inset);
 }
 
 input[type="email"]:focus,

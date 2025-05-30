@@ -53,6 +53,7 @@
     --c-txt-bg: hsl(0, 0%, 100%);
     --c-txt-bg-rev: hsl(197deg 8.74% 24.25%);
     --c-txt-bg-darker: #f7f7f7;
+    --c-form-bg: #f7f7f7;
     --c-txt-primary: rgb(44, 44, 44);
     --c-txt-primary-h: black;
     --c-txt-accent: black;
@@ -123,6 +124,7 @@
     --c-txt-bg: hsl(197deg 8.74% 24.25%);
     --c-txt-bg-rev: hsl(198, 20%, 84%);
     --c-txt-bg-darker: #151819;
+    --c-form-bg: #151819;
     --c-txt-primary: rgb(44, 44, 44);
     --c-txt-primary-h: black;
     --c-txt-accent: black;

@@ -59,7 +59,7 @@
 		padding: var(--space-xs);
 		font-size: small;
 		border: none;
-		background-color: var(--c-txt-bg-darker);
+		// background-color: var(--c-txt-bg-darker);
 		color: var(--c-error);
 		margin-top: calc(var(--space-ms) * -1);
 		padding-top: var(--space-ms);
@@ -95,7 +95,9 @@
 	padding: 1rem;
 	border-radius: var(--br-soft);
 	box-shadow: var(--shadow-1);
-	background-color: var(--c-txt-bg-darker);
+  /* TODO did not update from var >:[ */
+	// background-color: var(--c-txt-bg-darker);
+	background-color: var(--c-form-bg);
 	height: fit-content;
 	display: grid;
 	gap: var(--space-m);

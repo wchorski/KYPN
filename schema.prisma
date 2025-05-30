@@ -253,7 +253,7 @@ model Page {
   title          String     @default("")
   slug           String     @unique @default("")
   dateCreated    DateTime   @default(now())
-  dateModified   DateTime   @default(now())
+  dateModified   DateTime   @default(now()) @updatedAt
   status         String?    @default("DRAFT")
   template       String?    @default("FULLWIDTH")
   pinned         Int?       @default(0)
@@ -287,7 +287,7 @@ model Post {
   categories     Category[] @relation("Category_posts")
   tags           Tag[]      @relation("Post_tags")
   dateCreated    DateTime   @default(now())
-  dateModified   DateTime   @default(now())
+  dateModified   DateTime   @default(now()) @updatedAt
 
   @@index([authorId])
 }
