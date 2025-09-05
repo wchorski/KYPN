@@ -5,6 +5,7 @@
   background-size: cover;
   background-position: center;
   text-shadow: var(--shadow-1);
+  box-sizing: border-box;
 
   & > * {
     grid-column: 1;

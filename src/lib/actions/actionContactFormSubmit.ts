@@ -12,7 +12,7 @@ export async function actionContactFormSubmit(
   const values = Object.fromEntries(formData) as ContactValues
   // // @ts-ignore
   // delete values["$ACTION_REF_1"]; delete values["$ACTION_1:0"]; delete values["$ACTION_1:1"];  delete values["$ACTION_KEY"];
-  const { name, tel, date, time, email, notes, customerId } = values
+  const { name, tel, date, time = "00:00:00", email, notes, customerId } = values
   values.tel = formatFlattenUSPhoneNumber(tel)
   const valueErrors = validateForm(values)
   if (valueErrors)
@@ -39,7 +39,7 @@ export async function actionContactFormSubmit(
 		return {
 			id: data.contact.id,
 			url: envs.FRONTEND_URL + `/contact`,
-			success: `Got it! Expect a follow up with the contact provided. \n\nemail: ${email} \nphone: ${prettyUSNumber(
+			success: `Got it! One of our experts will connect with you with more information. \n\nemail: ${email} \nphone: ${prettyUSNumber(
 				tel
 			)} \n`,
 		}

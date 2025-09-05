@@ -32,6 +32,21 @@ export const Page: Lists.Page = list({
 		hideCreate: (args) => !permissions.canManagePages(args),
 		hideDelete: (args) => !permissions.canManagePages(args),
 		isHidden: (args) => !permissions.canManagePages(args),
+    listView: {
+			// todo how to hide list items if `session.itemId` === `item.authorId`
+			// defaultFieldMode: ({session, context}) => {
+			//   // if(permissions.canManagePosts({session, context})) return 'read'
+			//   // if(session.itemId === item.authorId) return 'edit'
+			//   return 'hidden'
+			// },
+			initialColumns: [
+				"title",
+				"slug",
+				"status",
+				"dateCreated",
+			],
+			initialSort: { field: "dateCreated", direction: "DESC" },
+		},
 	},
 
 	fields: {

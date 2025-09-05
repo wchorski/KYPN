@@ -1,6 +1,6 @@
 import { PasswordResetForm } from "@components/forms/PasswordResetForm"
 import {
-  layout_breakout,
+  layout_wide,
   layout_content,
 	page_content,
 	page_layout,
@@ -20,7 +20,7 @@ export default async function PasswordResetPage({ searchParams }: Props) {
 		<main
 		 className={page_layout}
 		>
-			<header className={layout_breakout} >
+			<header className={layout_wide} >
 				<h1> Password Reset </h1>
 			</header>
 

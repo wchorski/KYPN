@@ -16,6 +16,7 @@ type Props = {
 	isName?: boolean
 	isPhone?: boolean
 	isDate?: boolean
+	isTime?: boolean
 	isNotes?: boolean
 	style?: CSSProperties
 }
@@ -27,6 +28,7 @@ export function ContactForm({
 	isName = true,
 	isPhone = true,
 	isDate = true,
+	isTime = true,
 	isNotes = true,
 	style,
 }: Props) {
@@ -75,6 +77,15 @@ export function ContactForm({
 					error={state.valueErrors?.customerId}
 				/>
 
+        <InputField
+					name={"name"}
+          required={true}
+					type={isName ? "text" : "hidden"}
+					autoComplete={"name given-name family-name nickname"}
+					defaultValue={state.values?.name}
+					error={state.valueErrors?.name}
+				/>
+
 				<InputField
 					name={"email"}
 					type={"email"}
@@ -85,24 +96,18 @@ export function ContactForm({
 				/>
 
 				<InputField
-					name={"name"}
-					type={isName ? "text" : "hidden"}
-					autoComplete={"name given-name family-name nickname"}
-					defaultValue={state.values?.name}
-					error={state.valueErrors?.name}
-				/>
-
-				<InputField
 					name={"tel"}
 					label={"phone number"}
 					type={isPhone ? "tel" : "hidden"}
 					autoComplete="tel tel-local tel-national"
 					defaultValue={state.values?.tel}
 					error={state.valueErrors?.tel}
+          placeholder="000 000-0000"
 				/>
 
 				<InputField
 					name={"date"}
+          label={"Event Date"}
 					type={isDate ? "date" : "hidden"}
 					defaultValue={state.values?.date}
 					error={state.valueErrors?.date}
@@ -110,7 +115,7 @@ export function ContactForm({
 
 				<InputField
 					name={"time"}
-					type={isDate ? "time" : "hidden"}
+					type={isTime ? "time" : "hidden"}
 					defaultValue={state.values?.time}
 					error={state.valueErrors?.time}
 				/>
