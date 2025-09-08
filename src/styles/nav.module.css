@@ -76,6 +76,7 @@
 }
 
 ul.menu_main {
+  position: absolute;
 	grid-column: layout_full !important;
 	display: flex;
 	border-radius: 0 0 var(--br-dull) var(--br-dull);
@@ -102,7 +103,20 @@ ul.menu_main {
 
 	& li {
 		align-items: center;
+    z-index: 1;
 	}
+}
+
+ul.menu_main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.656);
+  filter: blur(20px);
+  z-index: 0;
 }
 
 ul.open {

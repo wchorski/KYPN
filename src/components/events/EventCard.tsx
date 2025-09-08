@@ -42,12 +42,16 @@ export function EventCard({ image, start, summary, location, id }: Event) {
 					</time>
 
 					{location && (
-						<Link href={`/locations/${location.id}`}>
+						<Link
+							href={
+								location.address
+									? location.address
+									: `/locations/${location.id}`
+							}
+						>
 							<address>
 								<MdLocationOn />
-								{location?.name}
-								{" "}
-								{location?.address}
+								{location?.name} {location?.address}
 								{/* {address.street} <br /> */}
 								{/* {address.town} <br /> */}
 								{/* {address.country} <br /> */}

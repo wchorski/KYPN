@@ -84,7 +84,11 @@ export async function PriceGridTable({ items = [] }: Props) {
 								{/* <figure style={{ backgroundImage: `url(${imageSrc || service.image})` }}></figure> */}
 								<figure>
 									<Image
-										src={imageSrc || service.image}
+										src={
+											imageSrc ||
+											service.image ||
+											"/assets/placeholder.png"
+										}
 										alt={`featured product image for ${service.name}`}
 										fill={true}
 										// width={300}
