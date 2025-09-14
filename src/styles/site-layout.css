@@ -29,6 +29,7 @@
 		& > header {
 			grid-area: headr;
 			grid-column: 1 / -1;
+      box-sizing: border-box;
 		}
 
 		& > nav {

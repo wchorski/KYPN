@@ -1,26 +1,42 @@
-import { carousel, carouselImage, carouselItem, title } from '@styles/blocs/carousel.module.css';
-import React from 'react';
+import {
+	carousel,
+	carouselImage,
+	carouselItem,
+	title,
+} from "@styles/blocs/carousel.module.css"
+import Image from "next/image"
+import React from "react"
 
 type CarouselProps = {
-  items: {
-    title: string;
-    imageSrc: string;
-  }[];
-};
+	items: {
+		title: string
+		imageSrc: string
+	}[]
+}
 
 export function Carousel({ items = [] }: CarouselProps) {
-  return (
-    <div className={carousel}>
-      {items.map((item, i) => {
-        return (
-          <figure key={i} className={carouselItem}>
-            <img role="presentation" src={item.imageSrc} className={carouselImage} alt={`${item.title} video thumbnail`} />
-            <figcaption className={title}>{item.title}</figcaption>
-          </figure>
-        );
-      })}
-    </div>
-  );
+	return (
+		<div className={carousel}>
+			{items.map((item, i) => {
+				return (
+					<figure key={i} className={carouselItem}>
+						{/* <img role="presentation" src={item.imageSrc} className={carouselImage} alt={`${item.title} video thumbnail`} /> */}
+						<Image
+							role={"presentation"}
+							src={item.imageSrc}
+							className={carouselImage}
+							alt={`${item.title} video thumbnail`}
+              // fill={true}
+              width={100}
+              height={100}
+              objectFit={'contain'}
+						/>
+						<figcaption className={title}>{item.title}</figcaption>
+					</figure>
+				)
+			})}
+		</div>
+	)
 }
 
 // const StyledCarousel = styled.div`

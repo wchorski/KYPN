@@ -35,6 +35,7 @@
 }
 
 .page_layout > header {
+  box-sizing: border-box;
 	grid-column: 1/-1;
 	grid-row: 1;
 	/* grid-template-columns: subgrid; */

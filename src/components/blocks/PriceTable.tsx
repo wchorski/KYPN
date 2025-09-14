@@ -1,4 +1,4 @@
-//* html table format 
+//* html table format
 // data fetch doesn't hydrate rich text relationship data
 import styles from "@styles/blocs/pricetable.module.css"
 import Link from "next/link"
@@ -28,10 +28,14 @@ type Props = {
 
 export function PriceTable({ items = [] }: Props) {
 	// console.log(JSON.stringify({ items }, null, 2))
-  items.forEach(item => {
-    console.log(JSON.stringify(item.service, null, 2))
-  })
+	items.forEach((item) => {
+		console.log(JSON.stringify(item.service, null, 2))
+	})
 	// console.log(items[0].service.data?.name)
+
+	function getFeatureImage(src: string) {
+		return src || "http://kirby.wikia.com/wiki/File:KRTDL_Kirby_Hi3.png"
+	}
 
 	return (
 		<>
@@ -40,9 +44,11 @@ export function PriceTable({ items = [] }: Props) {
 					<tr>
 						{items.map((item, i) => (
 							<th key={i}>
-								<header className={styles.header}>
+								<header>
 									<figure
-										style={{ backgroundImage: `url(${item.imageSrc})` }}
+										style={{
+											backgroundImage: `url(${getFeatureImage(item.imageSrc)})`,
+										}}
 									></figure>
 									<h3>{item.title || item.service.data?.name}</h3>
 								</header>
@@ -60,9 +66,11 @@ export function PriceTable({ items = [] }: Props) {
 								data-price={moneyFormatter(item.service.data?.price)}
 								data-button={item.buttonLabel}
 							>
-								<header className={["mobile-only", styles.header].join(" ")}>
+								<header className={"mobile-only"}>
 									<figure
-										style={{ backgroundImage: `url(${item.imageSrc})` }}
+										style={{
+											backgroundImage: `url(${getFeatureImage(item.imageSrc)})`,
+										}}
 									></figure>
 									<h3>{item.title || item.service.data?.name}</h3>
 									<div className="meta">
@@ -91,7 +99,7 @@ export function PriceTable({ items = [] }: Props) {
 					<tr>
 						{items.map((item, i) => (
 							<td key={i}>
-								<footer className={styles.footer}>
+								<footer>
 									<div className="meta">
 										<span>
 											{" "}

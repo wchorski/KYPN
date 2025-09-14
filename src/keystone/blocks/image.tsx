@@ -29,6 +29,9 @@ export const image = component({
       label: 'Frame Width',
       defaultValue: '400'
     }),
+    caption: fields.text({
+      label: "Caption",
+    })
   },
   preview: function Quote(props) {
 

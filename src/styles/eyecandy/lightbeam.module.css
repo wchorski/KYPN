@@ -1,0 +1,117 @@
+.light_beam_wrap {
+  position: relative;
+  overflow-x: clip;
+  min-height: 30vh;
+}
+.light_beam {
+	z-index: 0;
+	position: absolute;
+	top: var(--y, 0);
+	left: var(--x, 0);
+	width: 0;
+	height: 0;
+	transform-origin: left bottom;
+	transition: all 0.3s ease;
+	pointer-events: none;
+	animation-name: sweep;
+	animation-duration: 4s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-delay: var(--anim-delay, 0ms);
+  filter: blur(var(--light-diffuse, 11px));
+	/* animation: sweep 4s ease-in-out infinite alternate,
+		pulse var(--anim-delay, 0ms) ease-in-out infinite; */
+}
+
+.light_beam_cone {
+	position: absolute;
+	width: 200px;
+	height: 1200px;
+	background: linear-gradient(
+		180deg,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 150, 255, 0.8) 10%,
+		rgba(0, 150, 255, 0.4) 30%,
+		rgba(0, 150, 255, 0.1) 70%,
+		rgba(0, 150, 255, 0.05) 100%
+	);
+	clip-path: polygon(45% 0%, 55% 0%, 100% 100%, 0% 100%);
+	transform: translateX(-50%);
+
+	filter: blur(2px) brightness(var(--light-brightness, 1));
+}
+
+.light_beam_core {
+	position: absolute;
+	width: 100px;
+	height: 1200px;
+	background: linear-gradient(
+		180deg,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 150, 255, 1) 10%,
+		rgba(0, 150, 255, 0.8) 20%,
+		rgba(0, 150, 255, 0.3) 60%,
+		rgba(0, 150, 255, 0.1) 100%
+	);
+	clip-path: polygon(47% 0%, 53% 0%, 80% 100%, 20% 100%);
+	transform: translateX(-50%);
+	filter: brightness(var(--light-brightness, 1));
+}
+
+.particles {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.particle {
+	position: absolute;
+	width: 3px;
+	height: 3px;
+	background: rgba(255, 255, 255, 0.8);
+	border-radius: 50%;
+	animation: float 6s linear infinite;
+}
+
+@keyframes sweep {
+	0% {
+		transform: translateX(-50%) rotate(-40deg);
+	}
+  /* ? makes center position ease-in-out too */
+	/* 50% {
+		transform: translateX(-50%) rotate(0deg);
+	} */
+	100% {
+		transform: translateX(-50%) rotate(40deg);
+	}
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 0.8;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(0) translateX(0) scale(0);
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-800px) translateX(50px) scale(0);
+		opacity: 0;
+	}
+}

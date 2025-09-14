@@ -8,10 +8,11 @@ type Props = {
 	border?: number
 	imageSrc: string
 	alt: string
-	width?: number|`${number}`
-	height?: number|`${number}`
+	width?: number | `${number}`
+	height?: number | `${number}`
 	isCaption?: boolean
 	isPriority?: boolean
+	caption?: string
 }
 //todo add lightbox
 export function ImageBlock({
@@ -24,6 +25,7 @@ export function ImageBlock({
 	height = 200,
 	isCaption = true,
 	isPriority = false,
+	caption,
 }: Props) {
 	return (
 		<figure className={image_wrap}>
@@ -40,11 +42,11 @@ export function ImageBlock({
 				className={[image_caption, "sub-text"].join(" ")}
 				style={
 					{
-						"--display-caption": isCaption ? "visible" : "collapse",
+						"--display-caption": isCaption && caption ? "visible" : "collapse",
 					} as CSSProperties
 				}
 			>
-				{alt}
+				{caption}
 			</figcaption>
 		</figure>
 	)
