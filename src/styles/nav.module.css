@@ -76,7 +76,7 @@
 }
 
 ul.menu_main {
-  position: absolute;
+	position: absolute;
 	grid-column: layout_full !important;
 	display: flex;
 	border-radius: 0 0 var(--br-dull) var(--br-dull);
@@ -103,20 +103,8 @@ ul.menu_main {
 
 	& li {
 		align-items: center;
-    z-index: 1;
+		z-index: 1;
 	}
-}
-
-ul.menu_main::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.656);
-  filter: blur(20px);
-  z-index: 0;
 }
 
 ul.open {
@@ -167,6 +155,13 @@ button.navwich {
 }
 
 /* //todo stop it from revealing and animating during breakpoint switch */
+
+/* // link or button */
+.active {
+	color: var(--c-primary) !important;
+	border-color: var(--c-primary);
+}
+
 @media screen and (width > 600px) {
 	ul.menu_main {
 		flex-direction: row;
@@ -183,22 +178,20 @@ button.navwich {
 		display: none;
 	}
 }
-/* @media screen and (width < 600px) {
-  .menu_main {
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-} */
-
-/* // link or button */
-.active {
-	color: var(--c-primary) !important;
-	border-color: var(--c-primary);
-}
 
 @media screen and (width < 600px) {
 	.desktop_label {
 		display: none;
+	}
+	ul.menu_main::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background-color: var(--c-nav);
+		backdrop-filter: blur(25px);
+		z-index: 0;
 	}
 }

@@ -195,9 +195,6 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 			session
 		)
 		if (error) <ErrorMessage error={error} />
-		console.log("EVENTS")
-		console.log(events)
-		// return <p>heyyy events</p>
 		if (events && events?.length > 0)
 			return (
 				<>

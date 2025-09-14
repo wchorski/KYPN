@@ -83,6 +83,7 @@
 
 //todo don't make global
 .form :global {
+  backdrop-filter: blur(15px);
 	// display: grid;
 	// gap: 3rem;
 	//todo may want to reconsider this for forms with better layouts
