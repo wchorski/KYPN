@@ -1,5 +1,5 @@
-import { BlogList } from "@components/blog/BlogList"
 import { NoData } from "@components/elements/NoData"
+import { ArticleList } from "@components/layouts/ArticleList"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
 import Flex from "@components/layouts/Flex"
@@ -80,7 +80,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
 
 			<div className={[page_content, layout_site].join(" ")}>
 				<h4>Posts: </h4>
-				{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
+				{posts && posts?.length > 0 ? <ArticleList items={posts} type={"post"} /> : <NoData />}
 			</div>
 			<footer className={layout_wide}>
 				<hr />

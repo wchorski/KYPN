@@ -1,5 +1,5 @@
-import { BlogList } from "@components/blog/BlogList"
 import { NoData } from "@components/elements/NoData"
+import { ArticleList } from "@components/layouts/ArticleList"
 import { Card } from "@components/layouts/Card"
 import ErrorPage from "@components/layouts/ErrorPage"
 import Flex from "@components/layouts/Flex"
@@ -34,16 +34,16 @@ export const metadata: Metadata = {
 	description: envs.SITE_DESCRIPTION,
 }
 
-export default async function TagsPage({ params, searchParams }: Props) {
+export default async function TagsPage({ searchParams }: Props) {
 	const session = await getServerSession(nextAuthOptions)
 	const { page, ids } = await searchParams
 	const currPage = Number(page) || 1
 	const tagIds = ids?.split(",") || []
 	const {
 		posts,
-		count,
+		// count,
 		error: postsError,
-	} = await fetchPosts({ page: currPage, tagIds, session })
+	} = await fetchPosts({ query: QUERY_POSTS_ARTICLES, page: currPage, tagIds, session })
 	const { tags, error: tagsError } = await fetchTags(tagIds)
 
 	if (postsError || tagsError) return <ErrorPage error={postsError || tagsError} ><p>data fetch error </p></ErrorPage>
@@ -59,7 +59,7 @@ export default async function TagsPage({ params, searchParams }: Props) {
 			</header>
 			<div className={[page_content, layout_site].join(" ")}>
 				<h4>Posts: </h4>
-				{posts && posts?.length > 0 ? <BlogList posts={posts} /> : <NoData />}
+				{posts && posts?.length > 0 ? <ArticleList items={posts} type={"post"} /> : <NoData />}
 			</div>
 			<hr />
 			<footer className={layout_site}>
@@ -73,3 +73,29 @@ export default async function TagsPage({ params, searchParams }: Props) {
 		</main>
 	)
 }
+
+const QUERY_POSTS_ARTICLES = `
+  id
+  title
+  featured_image
+  featured_video
+  author {
+    id
+    name
+    nameLast
+  }
+  dateModified
+  excerpt
+  pinned
+  slug
+  status
+  template
+  tags {
+    id
+    name
+  }
+  categories {
+    id
+    name
+  }
+`

@@ -1,7 +1,9 @@
 import { keystoneContext } from "@ks/context"
 import type { Post } from "@ks/types"
-import { type PostWhereInput } from ".keystone/types"
+
 import { envs } from "@/envs"
+
+import { type PostWhereInput } from ".keystone/types"
 
 const perPage = envs.PERPAGE
 
@@ -14,6 +16,7 @@ type Props = {
 	categoryNames?: string[]
 	tagIds?: string[]
 	session: any
+  quantity?: number
 }
 
 // export async function fetchPosts(page:number, categoryIds:string[], session:any){
@@ -26,6 +29,7 @@ export async function fetchPosts({
 	categoryNames = [],
 	tagIds,
 	session,
+  quantity = perPage,
 }: Props) {
 	try {
 		const context = keystoneContext.withSession(session)
@@ -51,8 +55,8 @@ export async function fetchPosts({
 		})) as number
 
 		const posts = (await context.query.Post.findMany({
-			skip: page * perPage - perPage,
-			take: perPage,
+			skip: page * quantity - quantity,
+			take: quantity,
 			orderBy: [
 				{
 					dateCreated: "desc",

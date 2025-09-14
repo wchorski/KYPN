@@ -6,6 +6,7 @@ import { callout } from "./callout"
 import { card } from "./card"
 import { carousel } from "./carousel"
 import { contactform } from "./contactform"
+import { eventslist } from "./eventslist"
 import { hero } from "./hero"
 import { iframe } from "./iframe"
 import { image } from "./image"
@@ -32,6 +33,7 @@ export const componentBlocks = {
 	mediatext,
 	section,
 	postslist,
+  eventslist,
 	image,
 	infocard,
 	infocardlist,

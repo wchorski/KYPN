@@ -12,7 +12,6 @@ import { InfoCard } from "@components/blocks/InfoCard"
 import { InfoCardList } from "@components/blocks/InfoCardList"
 import { MediaText } from "@components/blocks/MediaText"
 import { Paragraph } from "@components/blocks/ParagraphBlock"
-import { PostsList } from "@components/blocks/PostsList"
 import { Quote } from "@components/blocks/Quote"
 import SliderSlick from "@components/blocks/SliderSlick"
 import { SocialLinkNav } from "@components/blocks/SocialLinkNav"
@@ -20,28 +19,34 @@ import { Table } from "@components/blocks/Table"
 import { Tweet } from "@components/blocks/Tweet"
 import { VideoLocal } from "@components/blocks/VideoLocal"
 import { YouTubeVideo } from "@components/blocks/YouTubeVideo"
+import { List } from "@components/elements/List"
+import ErrorMessage from "@components/ErrorMessage"
+import { EventCard } from "@components/events/EventCard"
+import { ArticleList } from "@components/layouts/ArticleList"
 // import styles from '@styles/blocs/blockrenderer.module.scss'
 import { Card } from "@components/layouts/Card"
 import { Grid } from "@components/layouts/Grid"
 import type { DocumentRendererProps } from "@keystone-6/document-renderer"
 import { DocumentRenderer } from "@keystone-6/document-renderer"
 import type { GridLayout, SpaceSize } from "@ks/types"
+import type { Event } from "@ks/types"
+import fetchEvents from "@lib/fetchdata/fetchEvents"
+import { fetchPosts } from "@lib/fetchdata/fetchPosts"
 import { getColorTheme } from "@lib/styleHelpers"
 import {
 	layout_content,
 	layout_full,
 	layout_wide,
 } from "@styles/layout.module.css"
+import { getServerSession } from "next-auth"
 import type { ComponentProps } from "react"
 import { Fragment } from "react"
+
+import { nextAuthOptions } from "@/session"
 
 import { Blockquote } from "./Blockquote"
 import { CodeBlock } from "./CodeBlock"
 import { PriceGridTable } from "./PriceGridTable"
-import { ArticleList } from "@components/layouts/ArticleList"
-import { fetchPosts } from "@lib/fetchdata/fetchPosts"
-import { getServerSession } from "next-auth"
-import { nextAuthOptions } from "@/session"
 
 // By default the DocumentRenderer will render unstyled html elements.
 // We're customising how headings are rendered here but you can customise
@@ -170,10 +175,61 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	iframe: (props) => {
 		return <IFrame {...props} />
 	},
+	eventslist: async (props) => {
+		const now = new Date().toISOString()
+		const session = await getServerSession(nextAuthOptions)
+		const { events, error } = await fetchEvents(
+			now,
+			`
+        id
+        summary
+        start
+        image
+        excerpt
+        location {
+          id
+          address
+          name
+        }
+      `,
+			session
+		)
+		if (error) <ErrorMessage error={error} />
+		console.log("EVENTS")
+		console.log(events)
+		// return <p>heyyy events</p>
+		if (events && events?.length > 0)
+			return (
+				<>
+					<List
+						style={{
+							gridColumn: "layout_wide",
+						}}
+					>
+						{events.map((event: Event) => (
+							<EventCard key={event.id} {...event} />
+						))}
+					</List>
+				</>
+			)
+		// if no posts do not render anything
+		return <p>nahhhthin nahhthin</p>
 
-	// postslist: (props) => {
-	// 	return <PostsList {...props} />
-	// },
+		// {
+		// 	events && events?.length > 0 ? (
+		// 		<List
+		// 			style={{
+		// 				gridColumn: "layout_wide",
+		// 				marginBlock: "var(--space-l)",
+		// 			}}
+		// 		>
+		// 			{events.map((event: Event) => (
+		// 				<EventCard key={event.id} {...event} />
+		// 			))}
+		// 		</List>
+		// 	) : null
+		// }
+	},
 	postslist: async (props) => {
 		const session = await getServerSession(nextAuthOptions)
 		const { posts, error } = await fetchPosts({
@@ -195,19 +251,20 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
         }
       `,
 		})
-		return (
-			<section style={{ gridColumn: "layout_site" }}>
-				<ArticleList
-					// {...props}
-					items={posts}
-					type={"post"}
-				/>
-			</section>
-		)
+		if (error) <ErrorMessage error={error} />
+		if (posts && posts?.length > 0)
+			return (
+				<section style={{ gridColumn: "layout_site" }}>
+					<ArticleList
+						// {...props}
+						items={posts}
+						type={"post"}
+					/>
+				</section>
+			)
+		// if no posts do not render anything
+		return null
 	},
-	// postslist: (props) => {
-	// 	return <ArticleList {...props} type={"post"} />
-	// },
 	card: (props) => {
 		return <Card {...props} />
 	},
