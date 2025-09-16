@@ -504,7 +504,7 @@ model User {
   email              String             @unique @default("")
   password           String             @default("")
   url                String             @default("")
-  isActive           Boolean            @default(true)
+  isPublic           Boolean            @default(false)
   stripeCustomerId   String?            @unique
   dateCreated        DateTime           @default(now())
   dateModified       DateTime?          @default(now()) @updatedAt

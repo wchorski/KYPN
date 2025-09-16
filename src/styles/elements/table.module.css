@@ -34,7 +34,7 @@ table.table {
     border-right: none;
   }
   & tr:nth-of-type(2n) {
-    background-color: #9898983b;
+    background-color: #98989816;
   }
   & td{
     color: var(--c-txt-dark);

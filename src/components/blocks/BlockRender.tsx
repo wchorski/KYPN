@@ -229,9 +229,12 @@ const customComponentRenderers: CustomRendererProps["componentBlocks"] = {
 	},
 	postslist: async (props) => {
 		const session = await getServerSession(nextAuthOptions)
+    const categoryIds = props.categories.flatMap((cat: { id: string }) => cat.id)
+    const authorIds = props.authors.flatMap((author: { id: string }) => author.id)
 		const { posts, error } = await fetchPosts({
 			page: 1,
-			categoryIds: props.categories.flatMap((cat: { id: string }) => cat.id),
+			categoryIds: categoryIds,
+      authorIds: authorIds,
 			// authorIds: [],
 			session,
 			query: `

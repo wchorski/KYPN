@@ -33,9 +33,7 @@ article.post_card {
     margin: 0;
 	}
 	& > footer {
-		grid-area: footer;
-	}
-	& > footer {
+    grid-area: footer;
 		display: flex;
 		justify-content: flex-end;
 		flex-wrap: wrap;
@@ -44,9 +42,10 @@ article.post_card {
 		align-items: center;
 		margin-top: var(--space-m);
 
-		& data {
+    /* TODO for somereason effects `read more` button */
+		/* & data {
 			font-size: 2rem;
-		}
+		} */
 
 		& > div {
 			width: 100%;
@@ -94,6 +93,10 @@ article.post_card {
 			1rem * (var(--font-size-multi) * 3)
 		); */
 	}
+}
+
+.read_more {
+  margin-left: auto;
 }
 
 .meta {

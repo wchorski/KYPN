@@ -27,7 +27,7 @@ export const query = `
   name
   nameLast
   email
-  isActive
+  isPublic
   image
   posts {
     id

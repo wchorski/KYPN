@@ -95,7 +95,11 @@ export const rules = {
 	},
 
 	canViewUsers({ session }: ListAccessArgs) {
-		if (!isLoggedIn({ session })) return false
+		// TODO allow anonymous user to view employee page (for Public posts)
+		// don't let password leaks!!!
+		// if (!isLoggedIn({ session })) return false
+		// maybe do a PUBLIC boolean?
+		if (!isLoggedIn({ session })) return { isPublic: { equals: true } }
 
 		if (permissions.canManageUsers({ session })) return true
 		if (permissions.canViewUsers({ session })) return true

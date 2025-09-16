@@ -2,7 +2,10 @@
 import { IconLabel } from "@components/elements/IconLabel"
 import { useUrlHash } from "@hooks/useUrlHash"
 import type { TOCLink } from "@ks/types"
-import styles, { heading_fix, table_of_contents } from "@styles/tableofcontents.module.css"
+import styles, {
+	heading_fix,
+	table_of_contents,
+} from "@styles/tableofcontents.module.css"
 import { VscListTree } from "react-icons/vsc"
 
 // interface Heading {
@@ -60,7 +63,9 @@ export function TableOfContents({ headerObjs }: Props) {
 							slug={item.slug}
 						/>
 						{nestedItems.length > 0 && (
-							<ul>{renderList(nestedItems, currentLevel + 1)}</ul>
+							<ul className="unstyled">
+								{renderList(nestedItems, currentLevel + 1)}
+							</ul>
 						)}
 					</li>
 				)
@@ -77,14 +82,22 @@ export function TableOfContents({ headerObjs }: Props) {
 		setHash(hash)
 
 		//todo doing this looses out on using the `:target` class and have to use class switch `.targeted` instead
-    //todo but i want to keep history clean of inner page navigation
+		//todo but i want to keep history clean of inner page navigation
 		// e.preventDefault()
 		// router.replace(`#${hash}`)
 	}
 
 	return (
-		<nav aria-label="Table of contents" title="Table of contents" className={table_of_contents}>
-			<IconLabel icon={<VscListTree />} label="Table of Contents" className={heading_fix}/>
+		<nav
+			aria-label="Table of contents"
+			title="Table of contents"
+			className={table_of_contents}
+		>
+			<IconLabel
+				icon={<VscListTree />}
+				label="Table of Contents"
+				className={heading_fix}
+			/>
 			<ul className="unstyled">{renderList(headerObjs)}</ul>
 		</nav>
 	)
@@ -101,10 +114,7 @@ type TOCLinkProps = {
 
 function TOCLink({ onClick, slug, text }: TOCLinkProps) {
 	return (
-		<a
-			href={`#${slug}`}
-			onClick={(e) => onClick(e, slug)}
-		>
+		<a href={`#${slug}`} onClick={(e) => onClick(e, slug)}>
 			{text}
 		</a>
 	)

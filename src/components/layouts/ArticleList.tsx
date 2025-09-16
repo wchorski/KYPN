@@ -9,7 +9,7 @@ import { StatusBadge } from "@components/StatusBadge"
 import type { Addon, Post, Product, Service, SubscriptionPlan } from "@ks/types"
 import { datePrettyLocal } from "@lib/dateFormatter"
 import { IconCalendar, IconUserAccountAvatar } from "@lib/useIcons"
-import styles, { list, post_card } from "@styles/articles.module.css"
+import styles, { list, post_card, read_more } from "@styles/articles.module.css"
 import Link from "next/link"
 
 import Flex from "./Flex"
@@ -230,7 +230,7 @@ export function ArticleItem({
 				) : type === "addon" ? (
 					<Flex justifyContent={"space-between"} alignItems={"center"}>
 						<PriceTag price={item.price} hideZeroCents={true} />
-						<Link className="readmore" href={link}>
+						<Link className={read_more} href={link}>
 							<em>{buttonText}</em>
 						</Link>
 						{/* <AddToCartForm
@@ -243,7 +243,7 @@ export function ArticleItem({
 						/> */}
 					</Flex>
 				) : (
-					<Link className="readmore" href={link}>
+					<Link className={read_more} href={link}>
 						<em>{buttonText}</em>
 					</Link>
 				)}

@@ -185,7 +185,6 @@ type Customer = {
 	email: string
 	name: string
 	nameLast?: string
-	isActive: boolean
 }
 
 export async function stripeCustomerCreate({
@@ -193,7 +192,6 @@ export async function stripeCustomerCreate({
 	email,
 	name,
 	nameLast,
-	isActive,
 }: Customer) {
 	if (!envs.STRIPE_SECRET) return
 
@@ -208,7 +206,7 @@ export async function stripeCustomerCreate({
 				email,
 				name,
 				nameLast,
-				isActive,
+				
 			})
 		}
 	}
@@ -216,9 +214,6 @@ export async function stripeCustomerCreate({
 	const customer = await stripeConfig.customers.create({
 		email: email,
 		name: name + (nameLast ? ` ${nameLast}` : ""),
-		metadata: {
-			isActive: String(isActive),
-		},
 	})
 
 	if (!customer) return Promise.reject(new Error("Customer creation failed"))
@@ -232,7 +227,6 @@ type CustomerUpdate = {
 	email?: string
 	name?: string
 	nameLast?: string
-	isActive: boolean
 }
 
 export async function stripeCustomerUpdate({
@@ -241,13 +235,11 @@ export async function stripeCustomerUpdate({
 	email,
 	name,
 	nameLast,
-	isActive,
 }: CustomerUpdate) {
 	const customer = await stripeConfig.customers.update(stripeCustomerId, {
 		...(email ? { email } : {}),
 		...(name ? { name: name + (nameLast ? ` ${nameLast}` : "") } : {}),
 		metadata: {
-			...(isActive ? { isActive: String(isActive) } : {}),
 			...(userId ? { userId } : {}),
 		},
 	})

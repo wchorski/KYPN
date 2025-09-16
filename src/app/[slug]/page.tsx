@@ -27,17 +27,16 @@ type Props = {
 	}
 }
 
-export async function generateMetadata(
-	{ params }: Props,
+export async function generateMetadata({ params }: Props) {
 	// parent: ResolvingMetadata
-) {
 	const { slug } = await params
 	const { page, error } = await fetchPage(slug, QUERY_PAGE)
-  if(error) return {
-    title: "error | " + SITE_TITLE,
-  }
+	if (error)
+		return {
+			title: "error | " + SITE_TITLE,
+		}
 	return {
-		title: slug === "home" ? SITE_TITLE : `${page?.title} | ${SITE_TITLE}` ,
+		title: slug === "home" ? SITE_TITLE : `${page?.title} | ${SITE_TITLE}`,
 		description: envs.SITE_DESCRIPTION,
 	}
 }
@@ -85,7 +84,7 @@ export default async function PageBySlug({ params }: Props) {
 						: {}),
 				}}
 			>
-				<h1>{title}</h1>
+				<h1 style={{ textAlign: "center" }}>{title}</h1>
 				<hr className={layout_wide} />
 			</header>
 

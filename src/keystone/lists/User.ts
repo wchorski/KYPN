@@ -110,6 +110,8 @@ export const User: Lists.User = list({
 				// },
 			},
 			access: {
+				// Prevents anyone from querying password unless they can manage users
+				// TODO maybe i should only allow one's self to query password
 				read: ({ session, context, listKey, fieldKey, operation, item }) =>
 					permissions.canManageUsers({ session }),
 			},
@@ -127,12 +129,18 @@ export const User: Lists.User = list({
 			},
 		}),
 		url: text(),
-		isActive: checkbox({ defaultValue: true }),
+		isPublic: checkbox({
+			defaultValue: false,
+			ui: {
+				description:
+					"User's name, email, and image can be viewed by ANY site visitors. Useful for bloggers or employees",
+			},
+		}),
 		stripeCustomerId: text({
 			isIndexed: "unique",
 			validation: { isRequired: false },
-      defaultValue: null,
-      db: { isNullable: true },
+			defaultValue: null,
+			db: { isNullable: true },
 		}),
 		dateCreated: timestamp({
 			defaultValue: { kind: "now" },
@@ -241,25 +249,11 @@ export const User: Lists.User = list({
 					email: String(resolvedData.email),
 					name: String(resolvedData.name),
 					nameLast: String(resolvedData.nameLast),
-					isActive: resolvedData.isActive ? resolvedData.isActive : false,
 				}).then((res) => {
 					if (!res) return
 					resolvedData.stripeCustomerId = res.id
 				})
 			},
-			// update: async ({resolvedData, item}) => {
-			//   console.log('🐸 if email changed and authId is an email (regex) then update to match');
-			//   await stripeCustomerUpdate({
-			//     stripeCustomerId: resolvedData.stripeCustomerId?.toString() || item.stripeCustomerId,
-			//     email: String(resolvedData.email),
-			// 		name: String(resolvedData.name),
-			// 		nameLast: String(resolvedData.nameLast),
-			// 		isActive: resolvedData.isActive ? Boolean(resolvedData.isActive) : item.isActive,
-			//   }).then(res => {
-			//     if(!res) return
-			//     resolvedData.stripeCustomerId = res.id
-			//   })
-			// },
 		},
 		async afterOperation({ operation, context, item }) {
 			if (operation === "create") {

@@ -2858,7 +2858,7 @@ type User {
   email: String
   password: String
   url: String
-  isActive: Boolean
+  isPublic: Boolean
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -2928,7 +2928,7 @@ input UserWhereInput {
   email: StringFilter
   password: StringFilter
   url: StringFilter
-  isActive: BooleanFilter
+  isPublic: BooleanFilter
   stripeCustomerId: StringNullableFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeNullableFilter
@@ -2985,7 +2985,7 @@ input UserOrderByInput {
   email: OrderDirection
   password: OrderDirection
   url: OrderDirection
-  isActive: OrderDirection
+  isPublic: OrderDirection
   stripeCustomerId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
@@ -3002,7 +3002,7 @@ input UserUpdateInput {
   email: String
   password: String
   url: String
-  isActive: Boolean
+  isPublic: Boolean
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
@@ -3072,7 +3072,7 @@ input UserCreateInput {
   email: String
   password: String
   url: String
-  isActive: Boolean
+  isPublic: Boolean
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime

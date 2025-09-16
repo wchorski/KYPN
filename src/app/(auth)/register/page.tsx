@@ -1,6 +1,7 @@
+import { Header } from "@components/elements/Header"
 import { ActionRegsiterForm } from "@components/forms/ActionRegisterForm"
 import {
-  layout_breakout,
+	layout_breakout,
 	layout_content,
 	page_content,
 	page_layout,
@@ -21,16 +22,12 @@ type Props = {
 
 export default async function RegisterPage({ params, searchParams }: Props) {
 	return (
-		<main
-		className={page_layout}
-		>
-			<header className={layout_breakout} >
-				<h1> Register an Account </h1>
-			</header>
+		<main className={page_layout}>
+			<Header>
+				<h1 className="hidden"> Register an Account </h1>
+			</Header>
 
-			<div
-			className={[page_content, layout_content].join(" ")}
-			>
+			<div className={[page_content, layout_content].join(" ")}>
 				{/* <RegsiterForm /> */}
 				<ActionRegsiterForm />
 			</div>

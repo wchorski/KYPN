@@ -55,7 +55,7 @@ const query = `
       phone
       email
       url
-      isActive
+      isPublic
       stripeCustomerId
       dateCreated
       dateModified
