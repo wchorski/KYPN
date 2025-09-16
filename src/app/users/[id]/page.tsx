@@ -30,6 +30,7 @@ export default async function UserByIdPage({ params }: Props) {
 	const { posts, error: errorPosts } = await fetchPosts({
 		query: `
       id
+      slug
       title
       featured_image
       excerpt

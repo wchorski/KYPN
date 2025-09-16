@@ -9,7 +9,7 @@ export const image = component({
       label: 'Image URL',
       defaultValue: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809',
     }),
-    alt: fields.url({
+    alt: fields.text({
       label: 'Image Alt Text',
       defaultValue: '',
     }),

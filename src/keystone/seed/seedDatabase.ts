@@ -18,12 +18,11 @@ export const seedDatabase = async (context: Context) => {
 		context
 	)
 
-
 	await seedSchemaItems("Coupon", "code", allDataJson.coupons, context)
 	await seedSchemaItems("Location", "address", allDataJson.locations, context)
 	await seedSchemaItems("Addon", "name", allDataJson.addons, context)
 	await seedSchemaItems("Service", "name", allDataJson.services, context)
-  //? "cannot create if a booking in the past"
+	//? "cannot create if a booking in the past"
 	// await seedSchemaItems("Booking", "secretNotes", allDataJson.bookings, context)
 
 	await seedSchemaItems("Event", "summary", allDataJson.events, context)
@@ -45,7 +44,6 @@ const seedSchemaItems = async (
 	seedJson: any[],
 	context: Context
 ) => {
-
 	const { db: sudoDB } = context.sudo()
 
 	//@ts-ignore
@@ -88,7 +86,6 @@ const seedSchemaItems = async (
 			//? virtual field
 			delete item.redemptions
 		})
-
 	}
 
 	//? remove id as new database will create new ids
@@ -228,14 +225,17 @@ const seedSchemaItems = async (
 			: {}),
 	}))
 
-	//@ts-ignore
-	const createdItems = await sudoDB[schemaType].createMany({
-		data: formattedItems,
-	})
-
-	createdItems.map((item: any) => {
-		console.log(` + ${schemaType}: ` + item[compairKey])
-	})
+	try {
+		//@ts-ignore
+		const createdItems = await sudoDB[schemaType].createMany({
+			data: formattedItems,
+		})
+		createdItems.map((item: any) => {
+			console.log(` + ${schemaType}: ` + item[compairKey])
+		})
+	} catch (error) {
+		console.log("❌❌❌ seedDatabase.ts ERROR: ", JSON.stringify(error, null, 2))
+	}
 
 	// if (schemaType === "Service") seedBookings(createdItems, context)
 	//? I must auto create tickets based off events because Event and Ticket have no `unique` fields
@@ -311,7 +311,7 @@ async function seedTicketOrders(events: Lists.Event.Item[], context: Context) {
 				data: {
 					// stripeCheckoutSessionId: null,
 					// stripePaymentIntent: null,
-          fees: 0,
+					fees: 0,
 					email: fakeEmail,
 					status: orderStatuses[0],
 					// ticketItems: { create: tickets },
