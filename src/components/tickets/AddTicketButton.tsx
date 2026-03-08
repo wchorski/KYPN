@@ -5,11 +5,12 @@ import Link from "next/link"
 type Props = {
 	date: string | undefined
 	status: Event["status"]
+	isFree?: boolean
 }
 
 const now = new Date()
 
-export function AddTicketButton({ date, status }: Props) {
+export function AddTicketButton({ date, status, isFree = false }: Props) {
 	const startDate = new Date(String(date))
 
 	// if(now > startDate) return (
@@ -36,7 +37,7 @@ export function AddTicketButton({ date, status }: Props) {
 			}}
 			// onClick={() => setIsPopup(true)}
 		>
-			<span>Get Tickets</span>
+			<span>{isFree ? "RSVP ": "Get Tickets"}</span>
 		</Link>
 	)
 }

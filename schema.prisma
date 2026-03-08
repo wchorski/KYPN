@@ -387,9 +387,9 @@ model Service {
   excerpt            String     @default("")
   price              Int        @default(0)
   durationInHours    Decimal    @default("6") @postgresql.Decimal(5, 2)
-  buisnessHourOpen   String?    @default("09:00:00")
-  buisnessHourClosed String?    @default("18:00:00")
-  buisnessDays       Json       @default("[0,1,2,3,4,5,6]")
+  businessHourOpen   String?    @default("09:00:00")
+  businessHourClosed String?    @default("18:00:00")
+  businessDays       Json       @default("[0,1,2,3,4,5,6]")
   status             String     @default("DRAFT")
   description        Json       @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
   author             User?      @relation("Service_author", fields: [authorId], references: [id])
@@ -508,8 +508,8 @@ model User {
   stripeCustomerId   String?            @unique
   dateCreated        DateTime           @default(now())
   dateModified       DateTime?          @default(now()) @updatedAt
-  buisnessHourOpen   String?            @default("09:00:00")
-  buisnessHourClosed String?            @default("18:00:00")
+  businessHourOpen   String?            @default("09:00:00")
+  businessHourClosed String?            @default("18:00:00")
   role               Role?              @relation("User_role", fields: [roleId], references: [id])
   roleId             String?            @map("role")
   posts              Post[]             @relation("Post_author")

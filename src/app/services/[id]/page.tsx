@@ -91,9 +91,9 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 		price,
 		image,
 		durationInHours,
-		buisnessHourClosed,
-		buisnessHourOpen,
-		buisnessDays,
+		businessHourClosed,
+		businessHourOpen,
+		businessDays,
 		addons,
 		locations,
 		categories,
@@ -185,18 +185,19 @@ export default async function ServiceByIdPage({ params, searchParams }: Props) {
 									<small className="sub-text"> hours </small>{" "}
 								</td>
 							</tr>
-							<tr>
-								<td> Buisness Days: </td>
-								<td> {daysOfWeek(buisnessDays as number[]).join(", ")} </td>
-							</tr>
-							<tr>
-								<td> Buisness Hours: </td>
+							{/* <tr>
+								<td> Business Days: </td>
+								<td> {daysOfWeek(businessDays as number[]).join(", ")} </td>
+							</tr> */}
+							{/* TODO add optional hide show */}
+							{/* <tr>
+								<td> Business Hours: </td>
 								<td>
 									{" "}
-									{timePretty(buisnessHourOpen || "")} -{" "}
-									{timePretty(buisnessHourClosed || "")}{" "}
+									{timePretty(businessHourOpen || "")} -{" "}
+									{timePretty(businessHourClosed || "")}{" "}
 								</td>
-							</tr>
+							</tr> */}
 						</tbody>
 					</table>
 					{!isEmptyDocument(description?.document) && (
@@ -251,9 +252,9 @@ const QUERY = `
   price
   image
   durationInHours
-  buisnessHourOpen
-  buisnessHourClosed
-  buisnessDays
+  businessHourOpen
+  businessHourClosed
+  businessDays
   addons {
     id
     name

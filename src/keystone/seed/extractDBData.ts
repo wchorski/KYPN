@@ -59,8 +59,8 @@ const query = `
       stripeCustomerId
       dateCreated
       dateModified
-      buisnessHourOpen
-      buisnessHourClosed
+      businessHourOpen
+      businessHourClosed
       role {
         name
         id
@@ -268,9 +268,9 @@ const query = `
       }
       price
       durationInHours
-      buisnessHourOpen
-      buisnessHourClosed
-      buisnessDays
+      businessHourOpen
+      businessHourClosed
+      businessDays
       status
       addons {
         id

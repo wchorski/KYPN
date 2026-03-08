@@ -46,6 +46,7 @@
     "@stripe/stripe-js": "^6.1.0",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/nodemailer": "^6.4.17",
+    "add-to-calendar-button-react": "^2.13.8",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "fp-ts": "^2.16.9",
@@ -68,7 +69,7 @@
     "sass": "^1.86.0",
     "slate-dom": "^0.112.2",
     "stripe": "17.7.0",
-    "turbo": "^2.5.2",
+    "turbo": "^2.5.6",
     "typescript-plugin-css-modules": "^5.1.0"
   },
   "devDependencies": {

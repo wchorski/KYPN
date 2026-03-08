@@ -27,9 +27,9 @@ export default async function fetchBookingFormData({session}:Props){
         name
         excerpt
         price
-        buisnessHourOpen
-        buisnessHourClosed
-        buisnessDays
+        businessHourOpen
+        businessHourClosed
+        businessDays
         durationInHours
       `,
     }) as Service[]
@@ -100,8 +100,8 @@ export default async function fetchBookingFormData({session}:Props){
       query: `
         id
         name
-        buisnessHourOpen
-        buisnessHourClosed
+        businessHourOpen
+        businessHourClosed
         servicesProvided {
           id
         }

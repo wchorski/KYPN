@@ -2300,9 +2300,9 @@ type Service {
   excerpt: String
   price: Int
   durationInHours: Decimal
-  buisnessHourOpen: String
-  buisnessHourClosed: String
-  buisnessDays: [Int!]
+  businessHourOpen: String
+  businessHourClosed: String
+  businessDays: [Int!]
   status: String
   description: Service_description_Document
   author: User
@@ -2347,8 +2347,8 @@ input ServiceWhereInput {
   excerpt: StringFilter
   price: IntFilter
   durationInHours: DecimalFilter
-  buisnessHourOpen: StringNullableFilter
-  buisnessHourClosed: StringNullableFilter
+  businessHourOpen: StringNullableFilter
+  businessHourClosed: StringNullableFilter
   status: StringFilter
   author: UserWhereInput
   addons: AddonManyRelationFilter
@@ -2382,8 +2382,8 @@ input ServiceOrderByInput {
   excerpt: OrderDirection
   price: OrderDirection
   durationInHours: OrderDirection
-  buisnessHourOpen: OrderDirection
-  buisnessHourClosed: OrderDirection
+  businessHourOpen: OrderDirection
+  businessHourClosed: OrderDirection
   status: OrderDirection
   stripeProductId: OrderDirection
   stripePriceId: OrderDirection
@@ -2397,9 +2397,9 @@ input ServiceUpdateInput {
   excerpt: String
   price: Int
   durationInHours: Decimal
-  buisnessHourOpen: String
-  buisnessHourClosed: String
-  buisnessDays: [Int!]
+  businessHourOpen: String
+  businessHourClosed: String
+  businessDays: [Int!]
   status: String
   description: JSON
   author: UserRelateToOneForUpdateInput
@@ -2427,9 +2427,9 @@ input ServiceCreateInput {
   excerpt: String
   price: Int
   durationInHours: Decimal
-  buisnessHourOpen: String
-  buisnessHourClosed: String
-  buisnessDays: [Int!]
+  businessHourOpen: String
+  businessHourClosed: String
+  businessDays: [Int!]
   status: String
   description: JSON
   author: UserRelateToOneForCreateInput
@@ -2862,8 +2862,8 @@ type User {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  buisnessHourOpen: String
-  buisnessHourClosed: String
+  businessHourOpen: String
+  businessHourClosed: String
   role: Role
   posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
   postsCount(where: PostWhereInput! = {}): Int
@@ -2932,8 +2932,8 @@ input UserWhereInput {
   stripeCustomerId: StringNullableFilter
   dateCreated: DateTimeFilter
   dateModified: DateTimeNullableFilter
-  buisnessHourOpen: StringNullableFilter
-  buisnessHourClosed: StringNullableFilter
+  businessHourOpen: StringNullableFilter
+  businessHourClosed: StringNullableFilter
   role: RoleWhereInput
   posts: PostManyRelationFilter
   pages: PageManyRelationFilter
@@ -2989,8 +2989,8 @@ input UserOrderByInput {
   stripeCustomerId: OrderDirection
   dateCreated: OrderDirection
   dateModified: OrderDirection
-  buisnessHourOpen: OrderDirection
-  buisnessHourClosed: OrderDirection
+  businessHourOpen: OrderDirection
+  businessHourClosed: OrderDirection
 }
 
 input UserUpdateInput {
@@ -3006,8 +3006,8 @@ input UserUpdateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  buisnessHourOpen: String
-  buisnessHourClosed: String
+  businessHourOpen: String
+  businessHourClosed: String
   role: RoleRelateToOneForUpdateInput
   posts: PostRelateToManyForUpdateInput
   pages: PageRelateToManyForUpdateInput
@@ -3076,8 +3076,8 @@ input UserCreateInput {
   stripeCustomerId: String
   dateCreated: DateTime
   dateModified: DateTime
-  buisnessHourOpen: String
-  buisnessHourClosed: String
+  businessHourOpen: String
+  businessHourClosed: String
   role: RoleRelateToOneForCreateInput
   posts: PostRelateToManyForCreateInput
   pages: PageRelateToManyForCreateInput

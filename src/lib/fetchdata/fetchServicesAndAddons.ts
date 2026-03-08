@@ -76,9 +76,9 @@ const queryServices = `
   excerpt
   image
   price
-  buisnessHourOpen
-  buisnessHourClosed
-  buisnessDays
+  businessHourOpen
+  businessHourClosed
+  businessDays
   durationInHours
   status
   dateModified
@@ -101,8 +101,8 @@ const queryServices = `
   employees {
     id
     name
-    buisnessHourOpen
-    buisnessHourClosed
+    businessHourOpen
+    businessHourClosed
     gigs {
       start
       end

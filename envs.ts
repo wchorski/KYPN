@@ -65,7 +65,8 @@ const UMAMI_SCRIPT = process.env.NEXT_PUBLIC_UMAMI_SCRIPT
 const NEXT_PUBLIC__ANALYTICS_LINK =
 	process.env.NEXT_PUBLIC__ANALYTICS_LINK
 
-  const ASSET_REPO = process.env.NEXT_PUBLIC_ASSET_REPO
+const ASSET_REPO = process.env.NEXT_PUBLIC_ASSET_REPO
+const DEFAULT_LOCATION_ADDR = process.env.NEXT_PUBLIC_DEFAULT_LOCATION_ADDR
 
 // const DB_PROTOCAL = (() => {
 //   switch (DB_PROVIDER) {
@@ -92,6 +93,7 @@ const DATABASE_URL = (() => {
 })()
 
 export const envs = {
+  DEFAULT_LOCATION_ADDR,
   COPYWRITE,
   COLOR_PRIMARY,
   COLOR_TXT_PRIMARY,

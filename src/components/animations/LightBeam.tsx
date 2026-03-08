@@ -1,4 +1,5 @@
 type Props = {
+	hue?: number,
 	origin?: {
 		x?: string
 		y?: string
@@ -17,7 +18,7 @@ import {
 } from "@styles/eyecandy/lightbeam.module.css"
 import type { CSSProperties } from "react"
 
-export function LightBeam({ origin, anim, brightness = 1.0, diffuse }: Props) {
+export function LightBeam({ origin, anim, brightness = 1.0, diffuse, hue = 205  }: Props) {
 	return (
 		<div
 			className={light_beam}
@@ -28,11 +29,12 @@ export function LightBeam({ origin, anim, brightness = 1.0, diffuse }: Props) {
 					"--anim-delay": anim?.delay,
 					"--light-brightness": brightness,
 					"--light-diffuse": diffuse,
+					"--c-lightbeam-hue": hue,
 				} as CSSProperties
 			}
 		>
-			<div className={light_beam_cone}></div>
-			<div className={light_beam_core}></div>
+			<div className={light_beam_cone} style={{"--c-lightbeam-hue": hue,} as CSSProperties}></div>
+			<div className={light_beam_core} style={{"--c-lightbeam-hue": hue,} as CSSProperties}></div>
 		</div>
 	)
 }

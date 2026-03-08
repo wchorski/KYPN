@@ -6,12 +6,12 @@ import Calendar from 'react-calendar'
 type iProps = {
   blackoutDays: Date[]
   // setValues: any,
-  buisnessDays: number[],
+  businessDays: number[],
   onDateCallback: (date:string) => void,
   // timeRef: RefObject<HTMLInputElement>,
 }
 
-export const CalendarDatePicker = ({ onDateCallback, blackoutDays, buisnessDays = [1,2,3,4,5,6,7,0]}:iProps) => {
+export const CalendarDatePicker = ({ onDateCallback, blackoutDays, businessDays = [1,2,3,4,5,6,7,0]}:iProps) => {
 
   // const blackoutDates = blackoutStrings.map(date => {return new Date(date).getDate()})
   const [animTrig, setAnimTrig] = useState(0)
@@ -42,7 +42,7 @@ export const CalendarDatePicker = ({ onDateCallback, blackoutDays, buisnessDays 
           // setValues((prev:any) => ({...prev, date: formatDateToYYYYMMDD(date), timeStart: '', timeEnd: ''}))
           onDateCallback(formatDateToYYYYMMDD(date))
         }}
-        tileDisabled={({date}) => blackoutStrings.includes(date.toString()) || !buisnessDays.includes(date.getDay()) }
+        tileDisabled={({date}) => blackoutStrings.includes(date.toString()) || !businessDays.includes(date.getDay()) }
       // value={date}
       />
 

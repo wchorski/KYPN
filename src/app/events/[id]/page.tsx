@@ -37,6 +37,7 @@ import { getServerSession } from "next-auth"
 
 import { envs } from "@/envs"
 import { nextAuthOptions } from "@/session"
+import { AddToCalendar } from "@components/widgets/AddToCalendar"
 
 export async function generateMetadata(
 	{ params }: Props,
@@ -107,7 +108,7 @@ export default async function EventByID({ params }: Props) {
 		status,
 		// excerpt,
 		// tickets = [],
-		// end,
+		end,
 		// seats,
 	} = event
 
@@ -147,8 +148,6 @@ export default async function EventByID({ params }: Props) {
 						<figure className={featured}>
 							<ImageDynamic photoIn={image} priority={true} />
 						</figure>
-
-						{/* <AddToCalendar summary={summary} start={start} end={end} /> */}
 
 						<Flex>
 							<ul className={category_list}>
@@ -207,6 +206,9 @@ export default async function EventByID({ params }: Props) {
 									</IconLink> */}
 								</li>
 							)}
+							<li style={{gridColumn: "2"}}>
+								<AddToCalendar summary={summary} start={start} end={end} location={location.address.startsWith("/") ? envs.FRONTEND_URL + location.address : location.address}/>
+							</li>
 						</ul>
 
 						<Card style={{ flex: "1" }}>
@@ -216,20 +218,21 @@ export default async function EventByID({ params }: Props) {
 										{moneyFormatter(price)} per Ticket
 									</span>
 								) : (
-									<span style={{ alignContent: "center" }}>RSVP</span>
+									<span style={{ alignContent: "center" }}>FREE</span>
 								)}
 
 								{!session ? (
 									<CallbackLink className="button medium">
-										Login to Purchase
+										Login to Reserve
 									</CallbackLink>
 								) : session?.data.role === null ? (
 									<VerifyEmailCard email={session.user.email} />
 								) : (
-									<AddTicketButton date={start} status={status} />
+									<AddTicketButton date={start} status={status} isFree={price === 0}/>
 								)}
 							</Flex>
 						</Card>
+						
 					</Flex>
 					{!isEmptyDocument(description?.document) && (
 						<>

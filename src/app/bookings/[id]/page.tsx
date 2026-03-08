@@ -16,6 +16,7 @@ import moneyFormatter from "@lib/moneyFormatter"
 import { IconUserAccountAvatar } from "@lib/useIcons"
 import { booking_single } from "@styles/booking.module.css"
 import {
+	layout_full,
 	layout_breakout,
 	layout_content,
 	page_layout,
@@ -108,7 +109,11 @@ export default async function BookingSinglePage({
 
 	return (
 		<main className={page_layout}>
-			<header className={layout_breakout}>
+			<header style={{
+				display: "flex",
+  flexDirection: "column",
+  padding: "2rem",
+			}}>
 				<h1>{summary}</h1>
 				<Flex alignItems={"center"}>
 					<StatusBadge type={"booking"} status={status} />{" "}
@@ -212,7 +217,7 @@ export default async function BookingSinglePage({
 									<strong>{location?.name}</strong>
 									<address className={"sub-text"}>{address}</address>
 
-									{location?.address !== "n/a" && (
+									{!location?.address.startsWith('/') && (
 										<IconLink
 											icon={"external_link"}
 											href={`/locations/${location?.id}`}
@@ -256,10 +261,10 @@ export default async function BookingSinglePage({
 								<td>
 									{" "}
 									<span className="price">
-										{moneyFormatter(orderItem.order.total)}
+										{orderItem ? moneyFormatter(orderItem.order.total) : "order not found"}
 									</span>{" "}
 									<em>Includes all order items + discounts</em>{" "}
-									<Link href={`/orders/${orderItem.order.id}`}>Full Order</Link>
+									<Link href={`/orders/${orderItem?.order.id}`}>Full Order</Link>
 								</td>
 							</tr>
 						</tbody>

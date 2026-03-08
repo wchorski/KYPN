@@ -397,7 +397,7 @@ export type Service = Lists.Service.Item & {
 	tags: Tag[]
 	locations: Location[]
 	addons: Addon[]
-	buisnessDays: number[]
+	businessDays: number[]
 	author: User
 }
 

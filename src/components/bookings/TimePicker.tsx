@@ -7,7 +7,7 @@ interface iProps {
   times: string[],
   pickedTime:string,
   onTimeCallback: (time:string) => void,
-  buisnessHours: {
+  businessHours: {
     start: string,
     end: string
   }
@@ -23,10 +23,10 @@ type TimeOpt = {
 const generatedTimes = generateTimesArray()
 
 // todo just start at 00:00:00 and have 15min incraments. then from there filter out times that don't work.
-export function TimePicker({pickedTime, onTimeCallback, times, buisnessHours }:iProps) {
+export function TimePicker({pickedTime, onTimeCallback, times, businessHours }:iProps) {
   
   const [animTrig, setAnimTrig] = useState(0)
-  const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, buisnessHours))
+  const [currentTimes, setCurrentTimes] = useState(filterOutOfBuisness(generatedTimes, businessHours))
 
   function onClick(time:string){
     onTimeCallback(time)
@@ -34,12 +34,12 @@ export function TimePicker({pickedTime, onTimeCallback, times, buisnessHours }:i
   
   useEffect(() => {
     setAnimTrig(animTrig + 1)
-    setCurrentTimes(filterOutOfBuisness(generatedTimes, buisnessHours))
+    setCurrentTimes(filterOutOfBuisness(generatedTimes, businessHours))
     // console.log({currentTimes});
-    // console.log({buisnessHours});
+    // console.log({businessHours});
     // console.log({generatedTimes});
     // return () => 
-  }, [times, buisnessHours])
+  }, [times, businessHours])
   
 
   const listitemStyle = (i:number) => ({
@@ -91,10 +91,10 @@ function TimeButton({timeobj, isDisabled, onClick, pickedTime}:TimeButtonProps) 
 
 
 
-function filterOutOfBuisness(times:TimeOpt[], buisnessHours:{start:string,end:string}){
+function filterOutOfBuisness(times:TimeOpt[], businessHours:{start:string,end:string}){
 
-  const openDate = new Date(`2000-01-01T${buisnessHours.start}`)
-  const closedDate = new Date(`2000-01-01T${buisnessHours.end}`)
+  const openDate = new Date(`2000-01-01T${businessHours.start}`)
+  const closedDate = new Date(`2000-01-01T${businessHours.end}`)
 
   const filteredTimes = times.filter(time => {
     const specificTime = new Date(`2000-01-01T${time.value}`)

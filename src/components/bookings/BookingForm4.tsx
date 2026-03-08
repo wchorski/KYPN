@@ -45,6 +45,7 @@ import { BsFillBookmarkFill } from "react-icons/bs"
 
 import { CalendarDatePicker } from "./Calendar"
 import { TimePicker } from "./TimePicker"
+import { envs } from "@/envs"
 
 type Fields = {
 	// event: string,
@@ -83,8 +84,8 @@ type Props = {
 
 type StateRed = {
 	service?: Service
-	buisnessDays: number[]
-	buisnessHours: { start: string; end: string }
+	businessDays: number[]
+	businessHours: { start: string; end: string }
 	location: Location | undefined
 	locationOptions: SelectOption[]
 	address: string
@@ -171,19 +172,20 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		service: prevBooking?.serviceId
 			? getServicePicked(prevBooking.serviceId)
 			: undefined,
-		buisnessDays: [],
-		buisnessHours: { start: "00:00:00", end: "23:59:00" },
+		businessDays: [],
+		businessHours: { start: "00:00:00", end: "23:59:00" },
 		addonOptions: [],
 		locationOptions: [],
-		address: "",
+		address: locations.find(loc => loc.address === envs.DEFAULT_LOCATION_ADDR)?.address || "",
 		staffOptions: [],
 		date: prevBooking?.date || "",
-		location: undefined,
+		location: locations.find(loc => loc.address === envs.DEFAULT_LOCATION_ADDR),
 		time: prevBooking?.time || "",
 		total: 0,
 		blackoutDates: [],
 		partialDates: [],
 	}
+	
 	const reducer = (state: StateRed, action: FormAsideAction): StateRed => {
 		switch (action.type) {
 			case "SET_SERVICE":
@@ -195,7 +197,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 					loc.services.flatMap((serv) => serv.id).includes(pickedServiceId)
 				)
 				const locationOpts = serviceLocations.map((obj) => {
-					return { value: obj.id, label: obj.name }
+					return { value: obj.id, label: obj.name, selected: serviceLocations.flatMap(loc => loc.address).includes(envs.DEFAULT_LOCATION_ADDR ?? "") }
 				})
 				const foundStaff = employees.filter((emp) =>
 					emp.servicesProvided
@@ -336,7 +338,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 	const initState: BookAServiceState = {
 		values: {
 			serviceId: "",
-			locationId: "",
+			locationId: locations.find(loc => loc.address === envs.DEFAULT_LOCATION_ADDR)?.id || "",
 			addonIds: [],
 			employeeId: "",
 			// start: "",
@@ -402,9 +404,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 		if (!selectedEmpl)
 			return dispatchRed({ type: "SET_BLACKOUT_DATES", payload: [] })
 
-		const buisnessHours = {
-			start: stateRed.service?.buisnessHourOpen || "",
-			end: stateRed.service?.buisnessHourClosed || "",
+		const businessHours = {
+			start: stateRed.service?.businessHourOpen || "",
+			end: stateRed.service?.businessHourClosed || "",
 		}
 
 		selectedEmpl.gigs = gigs.filter((gig) =>
@@ -413,15 +415,15 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 
 		const employeeBusyRanges = findEmployeeBusyRanges(selectedEmpl)
 
-		const buisnessTimeStrings = filterBuisnessTimes(
+		const businessTimeStrings = filterBuisnessTimes(
 			generateTimesArray().map((t) => t.value),
-			buisnessHours
+			businessHours
 		)
 		const uniqueBusyDays = findUniqueDays(employeeBusyRanges)
 
 		const partialDays: DayTimes[] = []
 		const busyDays = uniqueBusyDays.filter((day) => {
-			const openTimes = buisnessTimeStrings.filter((time) => {
+			const openTimes = businessTimeStrings.filter((time) => {
 				const [hours, minutes, seconds] = time.split(":").map(Number)
 				const testStart = new Date(
 					day.getFullYear(),
@@ -585,9 +587,10 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<InputField
 							label={"Event Address"}
 							name={"address"}
-							type={stateRed.location?.address === "n/a" ? "text" : "hidden"}
+							type={stateRed.address === "n/a" ? "text" : "hidden"}
+							// type={stateRed.location?.address === "n/a" ? "text" : "hidden"}
 							placeholder="123 Rainbow Rd, Mushroom KI 10203"
-							required={stateRed.location?.address === "n/a"}
+							required={stateRed.address === "n/a"}
 							defaultValue={state.values?.address}
 							error={state.valueErrors?.address}
 							onChange={(e) =>
@@ -601,6 +604,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<SelectField
 							name={"employeeId"}
 							label={"staff member"}
+							defaultLabel="-- No preference (any staff member) --"
 							defaultValue={prevBooking?.employeeId || state.values?.employeeId}
 							required={true}
 							onChange={(e) => {
@@ -682,7 +686,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 						<CalendarDatePicker
 							blackoutDays={stateRed.blackoutDates}
 							// blackoutDays={[]}
-							buisnessDays={stateRed.service?.buisnessDays || []}
+							businessDays={stateRed.service?.businessDays || []}
 							onDateCallback={onDateCallback}
 						/>
 						<p className={"error"}>{state.valueErrors?.date}</p>
@@ -712,9 +716,9 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 							times={handleBlackoutTimes(stateRed.date)}
 							pickedTime={stateRed.time}
 							// todo setting 'service' to empty string causes error here
-							buisnessHours={{
-								start: stateRed.service?.buisnessHourOpen || "00:00:00",
-								end: stateRed.service?.buisnessHourClosed || "23:59:00",
+							businessHours={{
+								start: stateRed.service?.businessHourOpen || "00:00:00",
+								end: stateRed.service?.businessHourClosed || "23:59:00",
 							}}
 							// partialDates={partialDates}
 							// serviceDuration={Number(getServicePicked(formAside.service?.id || '')?.durationInHours)}
@@ -824,7 +828,7 @@ export function BookingForm({ data, session, timeZoneOptions }: Props) {
 			)}
 
 			<aside key={stateRed.addonOptions.length} className={"sticky"}>
-				<table>
+				<table style={{maxWidth: "36ch"}}>
 					<tbody>
 						<tr>
 							<td> Service: </td>

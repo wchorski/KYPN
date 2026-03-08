@@ -7,10 +7,10 @@ type TimeOpt = {
 }
 
 
-export function findBlackoutDates(busyRanges:DateRange[], buisnessHours:StringRange, serviceDurationHours:number){
-  // const busyDays1 = findEmployeeBusyDays(employee, buisnessHours, serviceDurationHours)
+export function findBlackoutDates(busyRanges:DateRange[], businessHours:StringRange, serviceDurationHours:number){
+  // const busyDays1 = findEmployeeBusyDays(employee, businessHours, serviceDurationHours)
   // const busyRanges = findEmployeeBusyRanges(employee)
-  const busyDays = busyRanges.flatMap(range => calcPartialDays(range, buisnessHours, serviceDurationHours))
+  const busyDays = busyRanges.flatMap(range => calcPartialDays(range, businessHours, serviceDurationHours))
 
   console.log({busyDays});
   
@@ -90,7 +90,7 @@ export function findUniqueDays(dateRanges:StringRange[]) {
 //   return busyRanges
 // }
 
-// function findEmployeeBusyDays(employee:User, buisnessHours:Range, serviceDurationHours:number) {
+// function findEmployeeBusyDays(employee:User, businessHours:Range, serviceDurationHours:number) {
 
 //   const blackoutArray:string[] = []
 
@@ -101,7 +101,7 @@ export function findUniqueDays(dateRanges:StringRange[]) {
 //       end: gig.end,
 //     }
     
-//     const newDates = calcPartialDays(gigRange, buisnessHours, serviceDurationHours)
+//     const newDates = calcPartialDays(gigRange, businessHours, serviceDurationHours)
 //     blackoutArray.push(...newDates)
 
 //   })
@@ -114,7 +114,7 @@ export function findUniqueDays(dateRanges:StringRange[]) {
 //       end: avail.end,
 //     }
 
-//     const newDates = calcPartialDays(availRange, buisnessHours, serviceDurationHours)
+//     const newDates = calcPartialDays(availRange, businessHours, serviceDurationHours)
 //     blackoutArray.push(...newDates)
 
 //   })
@@ -161,11 +161,11 @@ export function isDateRangeAvailable(testStart:Date, testEnd:Date, busyRanges: S
   })
 }
 
-export function filterBuisnessTimes(inputTimes:string[], buisnessTimes:StringRange) {
+export function filterBuisnessTimes(inputTimes:string[], businessTimes:StringRange) {
   const filteredTimes = inputTimes.filter((time) => {
     const currentTime = new Date(`2000-01-01T${time}`)
-    const start = new Date(`2000-01-01T${buisnessTimes.start}`)
-    const end = new Date(`2000-01-01T${buisnessTimes.end}`)
+    const start = new Date(`2000-01-01T${businessTimes.start}`)
+    const end = new Date(`2000-01-01T${businessTimes.end}`)
     // todo might have to use .getTime()
     return currentTime >= start && currentTime <= end
   })
@@ -173,7 +173,7 @@ export function filterBuisnessTimes(inputTimes:string[], buisnessTimes:StringRan
   return filteredTimes
 }
 
-function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDurationHours:number){
+function calcPartialDays(range:DateRange, businessHours:StringRange, serviceDurationHours:number){
 
   const newDates:string[] = []
   const startBusy = range.start
@@ -196,7 +196,7 @@ function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDura
   
     if(startBusyMin > 0){
       // todo, blocks out whole day if there is 
-      if(isFitAnotherServiceBefore(startBusy, buisnessHours, serviceDurationHours)){
+      if(isFitAnotherServiceBefore(startBusy, businessHours, serviceDurationHours)){
         startBusy.setDate(startBusy.getDate() + 1) // do not include partial vacation day, move to next day, zero time
       } 
 
@@ -204,7 +204,7 @@ function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDura
     } 
 
     if(endBusyMin < 1439){
-      // TODO  could reverse. have buisnessHours.end, reverse time by serviceDuration, check to see if another gig can be added
+      // TODO  could reverse. have businessHours.end, reverse time by serviceDuration, check to see if another gig can be added
       endBusy.setDate(endBusy.getDate() - 1) // do not include partial vacation day, move to previous day, zero time
       endBusy.setHours(59); endBusy.setMinutes(59); endBusy.setSeconds(0); endBusy.setMilliseconds(0);
     }
@@ -221,19 +221,19 @@ function calcPartialDays(range:DateRange, buisnessHours:StringRange, serviceDura
 }
 
 // fit another service on day BEFORE employee is busy
-function isFitAnotherServiceBefore(startBusy:Date, buisnessHours:StringRange, serviceDurationHours:number) {
+function isFitAnotherServiceBefore(startBusy:Date, businessHours:StringRange, serviceDurationHours:number) {
 
   const busyDay = new Date(startBusy)
-  const [hours, minutes, seconds] = buisnessHours.start.split(":").map(Number)
-  const buisnessOpen = new Date(busyDay.getFullYear(), busyDay.getMonth(), busyDay.getDate(), hours, minutes, seconds); 
-  const firstServiceEnd = buisnessOpen.setMinutes(buisnessOpen.getMinutes() + (serviceDurationHours * 60))
+  const [hours, minutes, seconds] = businessHours.start.split(":").map(Number)
+  const businessOpen = new Date(busyDay.getFullYear(), busyDay.getMonth(), busyDay.getDate(), hours, minutes, seconds); 
+  const firstServiceEnd = businessOpen.setMinutes(businessOpen.getMinutes() + (serviceDurationHours * 60))
   const gigStart = startBusy.getTime();
   
   
   if (gigStart <= firstServiceEnd) {
     // console.warn('first service slot overlaps with busy day');
     // console.table({
-    //   buisnessOpen,
+    //   businessOpen,
     //   firstServiceEnd,
     //   gigStart,
     // })

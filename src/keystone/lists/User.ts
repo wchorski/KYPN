@@ -153,7 +153,7 @@ export const User: Lists.User = list({
 				updatedAt: true,
 			},
 		}),
-		buisnessHourOpen: select({
+		businessHourOpen: select({
 			options: timesArray(),
 			defaultValue: "09:00:00",
 			ui: {
@@ -161,7 +161,7 @@ export const User: Lists.User = list({
 				createView: { fieldMode: "edit" },
 			},
 		}),
-		buisnessHourClosed: select({
+		businessHourClosed: select({
 			options: timesArray(),
 			defaultValue: "18:00:00",
 			ui: {

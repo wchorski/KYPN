@@ -76,7 +76,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
           name
           durationInHours
           price
-          buisnessDays
+          businessDays
         `,
 			})
 
@@ -88,7 +88,7 @@ export const bookAService = (base: BaseSchemaMeta) =>
 
 			// const day = new Date(start).getDay()
 			const day = new Date(start).getDay()
-			if (!service.buisnessDays?.includes(day))
+			if (!service.businessDays?.includes(day))
 				throw new Error(`CONFLICT: Service not allowed on ${dayOfWeek(day)}s`)
 
 			// Location
