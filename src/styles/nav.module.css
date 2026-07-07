@@ -3,16 +3,6 @@
 	gap: var(--space-ms);
 	flex-wrap: wrap;
 }
-@media (prefers-color-scheme: light) {
-	.nav {
-		--c-nav: rgba(0, 0, 0, 0.829);
-	}
-}
-@media (prefers-color-scheme: light) {
-	.nav {
-		--c-nav: rgba(255, 255, 255, 0.773);
-	}
-}
 
 .nav {
 	grid-column: layout_full;
